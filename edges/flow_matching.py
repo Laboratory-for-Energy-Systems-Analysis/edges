@@ -62,53 +62,24 @@ def process_cf_list(
         consumer_cf = cf.get("consumer", {})
         operator = supplier_cf.get("operator", "equals")
 
-        supplier_match = True
-        for k in filtered_supplier:
-            if k == "classifications":
-                continue
-            val = filtered_supplier.get(k, "")
-            expected = supplier_cf.get(k, "")
-
-            if k == "location" and candidate_suppliers:
-                match = any(
-                    match_operator(loc_val, expected, operator)
-                    for loc_val in candidate_suppliers
-                )
-            else:
-                match = match_operator(val, expected, operator)
-
-            if not match:
-                supplier_match = False
-                break
+        supplier_match = match_flow(
+            flow=supplier_info,
+            criteria=supplier_cf,
+            candidate_locations=candidate_suppliers
+        )
 
         if not supplier_match:
             continue
 
-        consumer_match = True
-        for k in filtered_consumer:
-            if k == "classifications":
-                continue
-
-            if k not in consumer_cf:
-                continue  # Missing field in CF means match anything
-
-            val = filtered_consumer.get(k, "")
-            expected = consumer_cf.get(k, "")
-
-            if k == "location" and candidate_consumers:
-                match = any(
-                    match_operator(loc_val, expected, operator)
-                    for loc_val in candidate_consumers
-                )
-            else:
-                match = match_operator(val, expected, operator)
-
-            if not match:
-                consumer_match = False
-                break
+        consumer_match = match_flow(
+            flow=consumer_info,
+            criteria=consumer_cf,
+            candidate_locations=candidate_consumers
+        )
 
         if not consumer_match:
             continue
+
 
         match_score = 0
         cf_class = supplier_cf.get("classifications")
@@ -153,9 +124,14 @@ def matches_classifications(cf_classifications, dataset_classifications):
                 (scheme, code) for scheme, codes in cf_classifications for code in codes
             ]
 
-    dataset_codes = [
-        (scheme, code.split(":")[0].strip()) for scheme, code in dataset_classifications
-    ]
+    try:
+        dataset_codes = [
+            (scheme, code.split(":")[0].strip()) for scheme, code in dataset_classifications
+        ]
+    except:
+        for classification in dataset_classifications:
+            print(classification)
+        pass
 
     for scheme, code in dataset_codes:
         if any(
@@ -165,6 +141,37 @@ def matches_classifications(cf_classifications, dataset_classifications):
         ):
             return True
     return False
+
+def match_flow(flow: dict, criteria: dict, candidate_locations: list[str] = None) -> bool:
+    operator = criteria.get("operator", "equals")
+    excludes = criteria.get("excludes", [])
+
+    # Handle excludes
+    if excludes:
+        for val in flow.values():
+            if isinstance(val, str) and any(term.lower() in val.lower() for term in excludes):
+                print(f"Flow excluded due to match: {val} contains {excludes}")
+                return False
+            elif isinstance(val, tuple):
+                if any(term.lower() in str(v).lower() for v in val for term in excludes):
+                    print(f"Flow excluded due to match: {val} contains {excludes}")
+                    return False
+
+    # Handle standard field matching
+    for key, target in criteria.items():
+        if key in {"operator", "excludes", "classifications"}:
+            continue
+
+        value = flow.get(key)
+
+        if key == "location" and candidate_locations:
+            if not any(match_operator(loc_val, target, operator) for loc_val in candidate_locations):
+                return False
+        elif value is None or not match_operator(value, target, operator):
+            return False
+
+    return True
+
 
 
 @cache
@@ -193,7 +200,9 @@ def match_operator(value: str, target: str, operator: str) -> bool:
 
 
 def normalize_classification_entries(cf_list: list[dict]) -> list[dict]:
-
+    """
+    Normalize classification entries in a list of CFs.
+    """
     for cf in cf_list:
         supplier = cf.get("supplier", {})
         classifications = supplier.get("classifications")
@@ -234,7 +243,7 @@ def build_cf_index(
 
         supplier = cf.get("supplier", {})
         sig = tuple(
-            sorted((k, supplier[k]) for k in required_supplier_fields if k in supplier)
+            sorted((k, make_hashable(supplier[k])) for k in required_supplier_fields if k in supplier)
         )
 
         index[consumer_loc][sig].append(cf)
@@ -340,25 +349,36 @@ def match_with_index(
         # Match all flows if no fields to match
         return [pos for positions in lookup_mapping.values() for pos in positions]
 
+    MAX_LEN = 60  # max characters to show in logs
+
     for field in required_fields:
+        if field == "excludes":
+            continue
+
         match_target = flow_to_match.get(field)
+        operator_value = flow_to_match.get("operator", "equals")
         field_index = index.get(field, {})
         field_candidates = set()
 
         if operator_value == "equals":
-            # Fast direct lookup.
             for candidate in field_index.get(match_target, []):
                 candidate_key, _ = candidate
                 field_candidates.add(candidate_key)
         else:
-            # For "startswith" or "contains", we iterate over all candidate values.
+            #print(f"[{field}] Target: {str(match_target)[:MAX_LEN]}... Operator: {operator_value}")
             for candidate_value, candidate_list in field_index.items():
-                if match_operator(
-                    value=candidate_value, target=match_target, operator=operator_value
-                ):
-                    for candidate in candidate_list:
-                        candidate_key, _ = candidate
-                        field_candidates.add(candidate_key)
+                try:
+                    result = match_operator(candidate_value, match_target, operator_value)
+                    if result:
+                        #print(f"  ✓ Match: {str(candidate_value)[:MAX_LEN]}")
+                        for candidate in candidate_list:
+                            candidate_key, _ = candidate
+                            field_candidates.add(candidate_key)
+                    else:
+                        pass
+                        # print(f"  ✗ No match: {str(candidate_value)[:MAX_LEN]}")
+                except Exception as e:
+                    print(f"  ! Error matching '{str(candidate_value)[:MAX_LEN]}' → {e}")
 
         # Initialize or intersect candidate sets.
         if candidate_keys is None:
@@ -373,7 +393,11 @@ def match_with_index(
     # Gather positions from the original lookup mapping for all candidate keys.
     matches = []
     for key in candidate_keys:
-        matches.extend(lookup_mapping.get(key, []))
+        for pos in lookup_mapping.get(key, []):
+            raw = reversed_lookup.get(pos)
+            flow = dict(raw) if isinstance(raw, tuple) else raw
+            if flow and match_flow(flow, flow_to_match):
+                matches.append(pos)
 
     if "classifications" in flow_to_match:
         cf_classifications_by_scheme = flow_to_match["classifications"]
@@ -512,7 +536,8 @@ def group_edges_by_signature(
         consumer_idx,
         supplier_info,
         consumer_info,
-        candidate_locs,
+        supplier_candidates,
+        consumer_candidates,
     ) in edge_list:
         s_filtered = normalize_signature_data(supplier_info, required_supplier_fields)
         c_filtered = normalize_signature_data(consumer_info, required_consumer_fields)
@@ -520,26 +545,15 @@ def group_edges_by_signature(
         s_key = make_hashable(s_filtered)
         c_key = make_hashable(c_filtered)
 
-        # Determine candidate location grouping key
-        supplier_sub = (
-            geo.resolve(supplier_info.get("location"), containing=True)
-            if "location" in required_supplier_fields
-            else []
-        )
-        consumer_sub = (
-            geo.resolve(consumer_info.get("location"), containing=True)
-            if "location" in required_consumer_fields
-            else []
-        )
-
         loc_key = (
-            tuple(sorted(set([g for g in supplier_sub if g in weights]))),
-            tuple(sorted(set([g for g in consumer_sub if g in weights]))),
+            tuple(sorted(set(loc for loc in supplier_candidates if loc in weights))),
+            tuple(sorted(set(loc for loc in consumer_candidates if loc in weights))),
         )
 
         grouped[(s_key, c_key, loc_key)].append((supplier_idx, consumer_idx))
 
     return grouped
+
 
 
 def compute_average_cf(

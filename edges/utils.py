@@ -12,6 +12,7 @@ from functools import reduce, cache
 import operator
 import hashlib
 import json
+import math
 
 from bw2data import __version__ as bw2data_version
 
@@ -439,15 +440,15 @@ def validate_parameter_lengths(parameters):
     return lengths.pop()
 
 
-def make_hashable(flow_to_match):
-    def convert(value):
-        if isinstance(value, list):
-            return tuple(value)
-        elif isinstance(value, dict):
-            return tuple(sorted((k, convert(v)) for k, v in value.items()))
-        return value
+def make_hashable(value):
+    def convert(v):
+        if isinstance(v, list):
+            return tuple(convert(i) for i in v)
+        if isinstance(v, dict):
+            return tuple(sorted((k, convert(val)) for k, val in v.items()))
+        return v
 
-    return tuple(sorted((k, convert(v)) for k, v in flow_to_match.items()))
+    return convert(value)
 
 
 @cache
@@ -464,3 +465,14 @@ def get_shares(candidates: tuple):
     if total_weight == 0:
         return list(cand_locs), np.zeros_like(weight_array)
     return list(cand_locs), weight_array / total_weight
+
+def assert_no_nans_in_cf_list(cf_list: list[dict], file_source: str = "<input>"):
+    for i, cf in enumerate(cf_list):
+        for side in ("supplier", "consumer"):
+            entry = cf.get(side, {})
+            for k, v in entry.items():
+                if isinstance(v, float) and math.isnan(v):
+                    raise ValueError(
+                        f"NaN detected in {side} field '{k}' of CF at index {i} "
+                        f"in {file_source}. This field must be removed or filled."
+                    )

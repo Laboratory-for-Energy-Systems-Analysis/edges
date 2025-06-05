@@ -20,6 +20,7 @@ from tqdm import tqdm
 from textwrap import fill
 from functools import lru_cache
 
+
 from .utils import (
     format_data,
     get_flow_matrix_positions,
@@ -27,6 +28,7 @@ from .utils import (
     validate_parameter_lengths,
     get_str,
     make_hashable,
+    assert_no_nans_in_cf_list
 )
 from .matrix_builders import initialize_lcia_matrix, build_technosphere_edges_matrix
 from .flow_matching import (
@@ -233,6 +235,8 @@ class EdgeLCIA:
 
         # Store full method metadata except exchanges and parameters
         self.raw_cfs_data, self.method_metadata = format_data(raw, self.weight)
+        # check for NaNs in the raw CF data
+        assert_no_nans_in_cf_list(self.raw_cfs_data, file_source=self.filepath)
         self.raw_cfs_data = normalize_classification_entries(self.raw_cfs_data)
         self.cfs_number = len(self.raw_cfs_data)
 
@@ -253,7 +257,7 @@ class EdgeLCIA:
             k
             for cf in self.raw_cfs_data
             for k in cf["supplier"].keys()
-            if k not in {"matrix", "operator", "weight", "position"}
+            if k not in {"matrix", "operator", "weight", "position", "excludes"}
         }
 
         self.cf_index = build_cf_index(self.raw_cfs_data, self.required_supplier_fields)
@@ -521,60 +525,29 @@ class EdgeLCIA:
         }
 
     def map_exchanges(self):
-        """
-        Match inventory exchanges to characterization factors based on supplier and consumer criteria.
-
-        This method performs direct matching of biosphere or technosphere exchanges
-        against the CF definitions in the method file. It supports matching based on:
-
-        - Flow `name`, `reference product`, `location`
-        - Matrix type (`biosphere` or `technosphere`)
-        - `classifications` (e.g., CPC codes)
-
-        It populates the internal `cfs_mapping` with the positions and values of matched CFs.
-
-        This is typically the first mapping step after inventory calculation (`lci()`).
-
-        Notes
-        -----
-        - This step only handles CFs with explicit, direct matches.
-        - Exchanges not matched in this step may be handled by subsequent mapping steps:
-          `map_aggregate_locations()`, `map_dynamic_locations()`, etc.
-        - Matching logic uses both string and classification matching with caching for efficiency.
-
-        Raises
-        ------
-        ValueError
-            If required metadata is missing from the inventory (e.g., flow location or classifications).
-        """
-
         self._initialize_weights()
         self._preprocess_lookups()
 
         edges = (
             self.biosphere_edges
-            if all(
-                cf["supplier"].get("matrix") == "biosphere" for cf in self.raw_cfs_data
-            )
+            if all(cf["supplier"].get("matrix") == "biosphere" for cf in self.raw_cfs_data)
             else self.technosphere_edges
         )
 
-        print(f"Mapping {len(edges)} exchanges...")
+        self.logger.info(f"Mapping {len(edges)} exchanges with {len(self.raw_cfs_data)} CFs")
 
-        supplier_index = build_index(
-            self.supplier_lookup, self.required_supplier_fields
-        )
-        consumer_index = build_index(
-            self.consumer_lookup, self.required_consumer_fields
-        )
+        supplier_index = build_index(self.supplier_lookup, self.required_supplier_fields)
+        consumer_index = build_index(self.consumer_lookup, self.required_consumer_fields)
 
         seen_positions = []
 
         for i, cf in enumerate(tqdm(self.raw_cfs_data, desc="Mapping exchanges")):
             supplier_criteria = cf["supplier"]
             consumer_criteria = cf["consumer"]
+            self.logger.info(f"[CF {i}] Supplier: {supplier_criteria}")
+            self.logger.info(f"[CF {i}] Consumer: {consumer_criteria}")
 
-            # Step 1: Classifications filter
+            # --- Step 1: Supplier classification matching ---
             if "classifications" in supplier_criteria:
                 cf_class = supplier_criteria["classifications"]
                 classification_matches = [
@@ -582,15 +555,14 @@ class EdgeLCIA:
                     for idx in self.reversed_supplier_lookup
                     if matches_classifications(
                         cf_class,
-                        dict(self.reversed_supplier_lookup[idx]).get(
-                            "classifications", []
-                        ),
+                        dict(self.reversed_supplier_lookup[idx]).get("classifications", [])
                     )
                 ]
+                self.logger.info(f"[CF {i}] Classification matches: {classification_matches}")
             else:
                 classification_matches = None
 
-            # Step 2: Other filters (location, name, etc.)
+            # --- Step 2: Supplier structural matching ---
             cached_match_with_index.index = supplier_index
             cached_match_with_index.lookup_mapping = self.supplier_lookup
             cached_match_with_index.reversed_lookup = self.reversed_supplier_lookup
@@ -601,47 +573,36 @@ class EdgeLCIA:
 
             nonclass_matches = cached_match_with_index(
                 make_hashable(nonclass_criteria),
-                tuple(
-                    sorted(
-                        {
-                            k
-                            for k in self.required_supplier_fields
-                            if k != "classifications"
-                        }
-                    )
-                ),
+                tuple(sorted(k for k in self.required_supplier_fields if k != "classifications"))
             )
+            self.logger.info(f"[CF {i}] Non-classification matches: {nonclass_matches}")
 
-            # Step 3: Combine
+            # --- Combine supplier candidates ---
             if classification_matches is not None:
-                supplier_candidates = list(
-                    set(classification_matches) & set(nonclass_matches)
-                )
+                supplier_candidates = list(set(classification_matches) & set(nonclass_matches))
             else:
                 supplier_candidates = nonclass_matches
 
-            # --- Consumer matching ---
-            if not any(
-                k
-                for k in consumer_criteria
-                if k not in {"matrix", "weight", "position"}
-            ):
+            self.logger.info(f"[CF {i}] Final supplier candidates: {supplier_candidates}")
+
+            # --- Step 3: Consumer matching ---
+            if not any(k for k in consumer_criteria if k not in {"matrix", "weight", "position"}):
+                # If no constraints, allow all
                 consumer_candidates = list(self.consumer_lookup.values())
-                consumer_candidates = [
-                    pos for sublist in consumer_candidates for pos in sublist
-                ]
+                consumer_candidates = [pos for sublist in consumer_candidates for pos in sublist]
+                self.logger.info(f"[CF {i}] Consumer candidates (unconstrained): {len(consumer_candidates)}")
             else:
                 cached_match_with_index.index = consumer_index
                 cached_match_with_index.lookup_mapping = self.consumer_lookup
-                cached_match_with_index.reversed_lookup = (
-                    self.position_to_technosphere_flows_lookup
-                )
+                cached_match_with_index.reversed_lookup = self.position_to_technosphere_flows_lookup
+
                 consumer_candidates = cached_match_with_index(
                     make_hashable(consumer_criteria),
                     tuple(sorted(self.required_consumer_fields)),
                 )
+                self.logger.info(f"[CF {i}] Consumer candidates (filtered): {consumer_candidates}")
 
-            # --- Combine supplier + consumer ---
+            # --- Step 4: Match against actual edges ---
             positions = [
                 (supplier, consumer)
                 for supplier in supplier_candidates
@@ -650,6 +611,7 @@ class EdgeLCIA:
             ]
 
             positions = [pos for pos in positions if pos not in seen_positions]
+            self.logger.info(f"[CF {i}] Final matched positions: {positions}")
 
             if positions:
                 cf_entry = {
@@ -662,6 +624,8 @@ class EdgeLCIA:
                 }
                 self.cfs_mapping.append(cf_entry)
                 seen_positions.extend(positions)
+            else:
+                self.logger.info(f"[CF {i}] No matches found.")
 
         self._update_unprocessed_edges()
 
@@ -790,6 +754,7 @@ class EdgeLCIA:
                                     consumer_idx,
                                     supplier_info,
                                     consumer_info,
+                                    [],  # suppliers
                                     candidate_locations,
                                 )
                             )

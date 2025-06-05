@@ -130,6 +130,10 @@ class CostLCIA(EdgeLCIA):
                     # we take the value of the first one
                     self.price_vector[position[0]] = cf["value"]
 
+        # print the number of zero values
+        zero_count = np.count_nonzero(self.price_vector == 0)
+        print(f"Number of zero values in price vector: {zero_count}, out of {len(self.price_vector)}")
+
     def infer_missing_costs(self):
         """
         Fill in missing costs for exchanges that lack an assigned price.
