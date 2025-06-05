@@ -28,7 +28,7 @@ from .utils import (
     validate_parameter_lengths,
     get_str,
     make_hashable,
-    assert_no_nans_in_cf_list
+    assert_no_nans_in_cf_list,
 )
 from .matrix_builders import initialize_lcia_matrix, build_technosphere_edges_matrix
 from .flow_matching import (
@@ -530,14 +530,22 @@ class EdgeLCIA:
 
         edges = (
             self.biosphere_edges
-            if all(cf["supplier"].get("matrix") == "biosphere" for cf in self.raw_cfs_data)
+            if all(
+                cf["supplier"].get("matrix") == "biosphere" for cf in self.raw_cfs_data
+            )
             else self.technosphere_edges
         )
 
-        self.logger.info(f"Mapping {len(edges)} exchanges with {len(self.raw_cfs_data)} CFs")
+        self.logger.info(
+            f"Mapping {len(edges)} exchanges with {len(self.raw_cfs_data)} CFs"
+        )
 
-        supplier_index = build_index(self.supplier_lookup, self.required_supplier_fields)
-        consumer_index = build_index(self.consumer_lookup, self.required_consumer_fields)
+        supplier_index = build_index(
+            self.supplier_lookup, self.required_supplier_fields
+        )
+        consumer_index = build_index(
+            self.consumer_lookup, self.required_consumer_fields
+        )
 
         seen_positions = []
 
@@ -555,10 +563,14 @@ class EdgeLCIA:
                     for idx in self.reversed_supplier_lookup
                     if matches_classifications(
                         cf_class,
-                        dict(self.reversed_supplier_lookup[idx]).get("classifications", [])
+                        dict(self.reversed_supplier_lookup[idx]).get(
+                            "classifications", []
+                        ),
                     )
                 ]
-                self.logger.info(f"[CF {i}] Classification matches: {classification_matches}")
+                self.logger.info(
+                    f"[CF {i}] Classification matches: {classification_matches}"
+                )
             else:
                 classification_matches = None
 
@@ -573,34 +585,56 @@ class EdgeLCIA:
 
             nonclass_matches = cached_match_with_index(
                 make_hashable(nonclass_criteria),
-                tuple(sorted(k for k in self.required_supplier_fields if k != "classifications"))
+                tuple(
+                    sorted(
+                        k
+                        for k in self.required_supplier_fields
+                        if k != "classifications"
+                    )
+                ),
             )
             self.logger.info(f"[CF {i}] Non-classification matches: {nonclass_matches}")
 
             # --- Combine supplier candidates ---
             if classification_matches is not None:
-                supplier_candidates = list(set(classification_matches) & set(nonclass_matches))
+                supplier_candidates = list(
+                    set(classification_matches) & set(nonclass_matches)
+                )
             else:
                 supplier_candidates = nonclass_matches
 
-            self.logger.info(f"[CF {i}] Final supplier candidates: {supplier_candidates}")
+            self.logger.info(
+                f"[CF {i}] Final supplier candidates: {supplier_candidates}"
+            )
 
             # --- Step 3: Consumer matching ---
-            if not any(k for k in consumer_criteria if k not in {"matrix", "weight", "position"}):
+            if not any(
+                k
+                for k in consumer_criteria
+                if k not in {"matrix", "weight", "position"}
+            ):
                 # If no constraints, allow all
                 consumer_candidates = list(self.consumer_lookup.values())
-                consumer_candidates = [pos for sublist in consumer_candidates for pos in sublist]
-                self.logger.info(f"[CF {i}] Consumer candidates (unconstrained): {len(consumer_candidates)}")
+                consumer_candidates = [
+                    pos for sublist in consumer_candidates for pos in sublist
+                ]
+                self.logger.info(
+                    f"[CF {i}] Consumer candidates (unconstrained): {len(consumer_candidates)}"
+                )
             else:
                 cached_match_with_index.index = consumer_index
                 cached_match_with_index.lookup_mapping = self.consumer_lookup
-                cached_match_with_index.reversed_lookup = self.position_to_technosphere_flows_lookup
+                cached_match_with_index.reversed_lookup = (
+                    self.position_to_technosphere_flows_lookup
+                )
 
                 consumer_candidates = cached_match_with_index(
                     make_hashable(consumer_criteria),
                     tuple(sorted(self.required_consumer_fields)),
                 )
-                self.logger.info(f"[CF {i}] Consumer candidates (filtered): {consumer_candidates}")
+                self.logger.info(
+                    f"[CF {i}] Consumer candidates (filtered): {consumer_candidates}"
+                )
 
             # --- Step 4: Match against actual edges ---
             positions = [

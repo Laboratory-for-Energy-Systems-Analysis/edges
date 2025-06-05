@@ -65,7 +65,7 @@ def process_cf_list(
         supplier_match = match_flow(
             flow=supplier_info,
             criteria=supplier_cf,
-            candidate_locations=candidate_suppliers
+            candidate_locations=candidate_suppliers,
         )
 
         if not supplier_match:
@@ -74,12 +74,11 @@ def process_cf_list(
         consumer_match = match_flow(
             flow=consumer_info,
             criteria=consumer_cf,
-            candidate_locations=candidate_consumers
+            candidate_locations=candidate_consumers,
         )
 
         if not consumer_match:
             continue
-
 
         match_score = 0
         cf_class = supplier_cf.get("classifications")
@@ -126,7 +125,8 @@ def matches_classifications(cf_classifications, dataset_classifications):
 
     try:
         dataset_codes = [
-            (scheme, code.split(":")[0].strip()) for scheme, code in dataset_classifications
+            (scheme, code.split(":")[0].strip())
+            for scheme, code in dataset_classifications
         ]
     except:
         for classification in dataset_classifications:
@@ -142,18 +142,25 @@ def matches_classifications(cf_classifications, dataset_classifications):
             return True
     return False
 
-def match_flow(flow: dict, criteria: dict, candidate_locations: list[str] = None) -> bool:
+
+def match_flow(
+    flow: dict, criteria: dict, candidate_locations: list[str] = None
+) -> bool:
     operator = criteria.get("operator", "equals")
     excludes = criteria.get("excludes", [])
 
     # Handle excludes
     if excludes:
         for val in flow.values():
-            if isinstance(val, str) and any(term.lower() in val.lower() for term in excludes):
+            if isinstance(val, str) and any(
+                term.lower() in val.lower() for term in excludes
+            ):
                 print(f"Flow excluded due to match: {val} contains {excludes}")
                 return False
             elif isinstance(val, tuple):
-                if any(term.lower() in str(v).lower() for v in val for term in excludes):
+                if any(
+                    term.lower() in str(v).lower() for v in val for term in excludes
+                ):
                     print(f"Flow excluded due to match: {val} contains {excludes}")
                     return False
 
@@ -165,13 +172,15 @@ def match_flow(flow: dict, criteria: dict, candidate_locations: list[str] = None
         value = flow.get(key)
 
         if key == "location" and candidate_locations:
-            if not any(match_operator(loc_val, target, operator) for loc_val in candidate_locations):
+            if not any(
+                match_operator(loc_val, target, operator)
+                for loc_val in candidate_locations
+            ):
                 return False
         elif value is None or not match_operator(value, target, operator):
             return False
 
     return True
-
 
 
 @cache
@@ -243,7 +252,11 @@ def build_cf_index(
 
         supplier = cf.get("supplier", {})
         sig = tuple(
-            sorted((k, make_hashable(supplier[k])) for k in required_supplier_fields if k in supplier)
+            sorted(
+                (k, make_hashable(supplier[k]))
+                for k in required_supplier_fields
+                if k in supplier
+            )
         )
 
         index[consumer_loc][sig].append(cf)
@@ -365,12 +378,14 @@ def match_with_index(
                 candidate_key, _ = candidate
                 field_candidates.add(candidate_key)
         else:
-            #print(f"[{field}] Target: {str(match_target)[:MAX_LEN]}... Operator: {operator_value}")
+            # print(f"[{field}] Target: {str(match_target)[:MAX_LEN]}... Operator: {operator_value}")
             for candidate_value, candidate_list in field_index.items():
                 try:
-                    result = match_operator(candidate_value, match_target, operator_value)
+                    result = match_operator(
+                        candidate_value, match_target, operator_value
+                    )
                     if result:
-                        #print(f"  ✓ Match: {str(candidate_value)[:MAX_LEN]}")
+                        # print(f"  ✓ Match: {str(candidate_value)[:MAX_LEN]}")
                         for candidate in candidate_list:
                             candidate_key, _ = candidate
                             field_candidates.add(candidate_key)
@@ -378,7 +393,9 @@ def match_with_index(
                         pass
                         # print(f"  ✗ No match: {str(candidate_value)[:MAX_LEN]}")
                 except Exception as e:
-                    print(f"  ! Error matching '{str(candidate_value)[:MAX_LEN]}' → {e}")
+                    print(
+                        f"  ! Error matching '{str(candidate_value)[:MAX_LEN]}' → {e}"
+                    )
 
         # Initialize or intersect candidate sets.
         if candidate_keys is None:
@@ -553,7 +570,6 @@ def group_edges_by_signature(
         grouped[(s_key, c_key, loc_key)].append((supplier_idx, consumer_idx))
 
     return grouped
-
 
 
 def compute_average_cf(

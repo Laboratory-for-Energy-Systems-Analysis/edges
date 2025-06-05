@@ -466,6 +466,7 @@ def get_shares(candidates: tuple):
         return list(cand_locs), np.zeros_like(weight_array)
     return list(cand_locs), weight_array / total_weight
 
+
 def assert_no_nans_in_cf_list(cf_list: list[dict], file_source: str = "<input>"):
     for i, cf in enumerate(cf_list):
         for side in ("supplier", "consumer"):
