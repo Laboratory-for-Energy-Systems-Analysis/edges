@@ -60,7 +60,6 @@ def process_cf_list(
     for cf in cf_list:
         supplier_cf = cf.get("supplier", {})
         consumer_cf = cf.get("consumer", {})
-        operator = supplier_cf.get("operator", "equals")
 
         supplier_match = match_flow(
             flow=supplier_info,
@@ -79,6 +78,8 @@ def process_cf_list(
 
         if not consumer_match:
             continue
+
+        print(consumer_match, supplier_match)
 
         match_score = 0
         cf_class = supplier_cf.get("classifications")
@@ -123,15 +124,10 @@ def matches_classifications(cf_classifications, dataset_classifications):
                 (scheme, code) for scheme, codes in cf_classifications for code in codes
             ]
 
-    try:
-        dataset_codes = [
-            (scheme, code.split(":")[0].strip())
-            for scheme, code in dataset_classifications
-        ]
-    except:
-        for classification in dataset_classifications:
-            print(classification)
-        pass
+    dataset_codes = [
+        (scheme, code.split(":")[0].strip())
+        for scheme, code in dataset_classifications
+    ]
 
     for scheme, code in dataset_codes:
         if any(
@@ -155,26 +151,25 @@ def match_flow(
             if isinstance(val, str) and any(
                 term.lower() in val.lower() for term in excludes
             ):
-                print(f"Flow excluded due to match: {val} contains {excludes}")
                 return False
             elif isinstance(val, tuple):
                 if any(
                     term.lower() in str(v).lower() for v in val for term in excludes
                 ):
-                    print(f"Flow excluded due to match: {val} contains {excludes}")
                     return False
 
     # Handle standard field matching
     for key, target in criteria.items():
-        if key in {"operator", "excludes", "classifications"}:
+        if key in {"matrix", "operator", "weight", "position", "excludes"}:
             continue
 
         value = flow.get(key)
 
-        if key == "location" and candidate_locations:
+        if key == "location" and candidate_locations is not None:
             if not any(
-                match_operator(loc_val, target, operator)
-                for loc_val in candidate_locations
+                    match_operator(loc_val.get("location", ""), target, operator)
+                    for loc_val in candidate_locations
+                    if isinstance(loc_val, dict)
             ):
                 return False
         elif value is None or not match_operator(value, target, operator):
@@ -355,7 +350,6 @@ def match_with_index(
     :param required_fields: The required fields for matching.
     :return: A list of matching positions.
     """
-    operator_value = flow_to_match.get("operator", "equals")
     candidate_keys = None
 
     if not required_fields:
@@ -378,20 +372,18 @@ def match_with_index(
                 candidate_key, _ = candidate
                 field_candidates.add(candidate_key)
         else:
-            # print(f"[{field}] Target: {str(match_target)[:MAX_LEN]}... Operator: {operator_value}")
             for candidate_value, candidate_list in field_index.items():
                 try:
                     result = match_operator(
                         candidate_value, match_target, operator_value
                     )
+
                     if result:
-                        # print(f"  ✓ Match: {str(candidate_value)[:MAX_LEN]}")
                         for candidate in candidate_list:
                             candidate_key, _ = candidate
                             field_candidates.add(candidate_key)
                     else:
                         pass
-                        # print(f"  ✗ No match: {str(candidate_value)[:MAX_LEN]}")
                 except Exception as e:
                     print(
                         f"  ! Error matching '{str(candidate_value)[:MAX_LEN]}' → {e}"
@@ -429,11 +421,7 @@ def match_with_index(
             flow = dict(flow)
             if not flow:
                 continue
-            try:
-                dataset_classifications = flow.get("classifications", [])
-            except:
-                print(flow)
-                raise
+            dataset_classifications = flow.get("classifications", [])
 
             if dataset_classifications:
                 for scheme, cf_codes in cf_classifications_by_scheme.items():
@@ -460,10 +448,12 @@ def compute_cf_memoized_factory(
     cf_index, required_supplier_fields, required_consumer_fields, weights, logger
 ):
     @lru_cache(maxsize=None)
-    def compute_cf(s_key, c_key, supplier_candidates, consumer_candidates):
+    def compute_cf(s_key, c_key, supplier_keys, consumer_keys):
+        candidate_suppliers = [dict(k) for k in supplier_keys]
+        candidate_consumers = [dict(k) for k in consumer_keys]
         return compute_average_cf(
-            candidate_suppliers=list(supplier_candidates),
-            candidate_consumers=list(consumer_candidates),
+            candidate_suppliers=candidate_suppliers,
+            candidate_consumers=candidate_consumers,
             supplier_info=dict(s_key),
             consumer_info=dict(c_key),
             weight=weights,
@@ -562,9 +552,12 @@ def group_edges_by_signature(
         s_key = make_hashable(s_filtered)
         c_key = make_hashable(c_filtered)
 
+        supplier_cands_filtered = [c for c in supplier_candidates if c["location"] in weights]
+        consumer_cands_filtered = [c for c in consumer_candidates if c["location"] in weights]
+
         loc_key = (
-            tuple(sorted(set(loc for loc in supplier_candidates if loc in weights))),
-            tuple(sorted(set(loc for loc in consumer_candidates if loc in weights))),
+            tuple(make_hashable(c) for c in supplier_cands_filtered),
+            tuple(make_hashable(c) for c in consumer_cands_filtered),
         )
 
         grouped[(s_key, c_key, loc_key)].append((supplier_idx, consumer_idx))
@@ -593,11 +586,19 @@ def compute_average_cf(
     if not candidate_suppliers and not candidate_consumers:
         return 0, None
 
+    # Extract unique locations from both supplier and consumer flows
+    all_locs = {
+        d["location"]
+        for d in candidate_suppliers + candidate_consumers
+        if "location" in d
+    }
+
     valid_candidates = [
         (loc, weight[loc])
-        for loc in set(candidate_suppliers + candidate_consumers)
+        for loc in all_locs
         if loc in weight and weight[loc] > 0
     ]
+
     if not valid_candidates:
         return 0, None
 
@@ -606,10 +607,14 @@ def compute_average_cf(
         return 0, None
 
     filtered_supplier = {
-        k: supplier_info[k] for k in required_supplier_fields if k in supplier_info
+        k: supplier_info[k]
+        for k in required_supplier_fields
+        if k in supplier_info
     }
     filtered_consumer = {
-        k: consumer_info[k] for k in required_consumer_fields if k in consumer_info
+        k: consumer_info[k]
+        for k in required_consumer_fields
+        if k in consumer_info
     }
 
     if "classifications" in filtered_supplier:
@@ -624,8 +629,8 @@ def compute_average_cf(
     supplier_sig = make_hashable(filtered_supplier)
     matched_cfs = []
 
-    for candidate_location, share in zip(cand_locs, shares):
-        loc_cfs_dict = cf_index.get(candidate_location)
+    for supplier_candidate_location, share in zip(cand_locs, shares):
+        loc_cfs_dict = cf_index.get(supplier_candidate_location)
 
         if loc_cfs_dict is None:
             loc_cfs_dict = cf_index.get("__ANY__")
@@ -633,7 +638,16 @@ def compute_average_cf(
         if not loc_cfs_dict:
             continue
 
-        loc_cfs = loc_cfs_dict.get(supplier_sig, [])
+        # Correct: get operator from CFs if possible (see below)
+        loc_cfs = []
+
+        if supplier_sig in loc_cfs_dict:
+            loc_cfs = loc_cfs_dict[supplier_sig]
+
+        elif any(cf.get("supplier", {}).get("operator", "equals") in {"contains", "startswith"} for cfs in
+                 loc_cfs_dict.values() for cf in cfs):
+            # At least one CF uses a fuzzy match; pass all CFs at this location
+            loc_cfs = [cf for cfs in loc_cfs_dict.values() for cf in cfs]
 
         matched_cfs.extend(
             process_cf_list(

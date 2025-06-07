@@ -576,7 +576,6 @@ class CostLCIA(EdgeLCIA):
                 data.append(entry)
 
         # we add unprocessed_edges
-
         for i, j in self.unprocessed_technosphere_edges:
             consumer = bw2data.get_activity(self.reversed_activity[j])
             supplier = bw2data.get_activity(self.reversed_activity[i])

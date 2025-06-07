@@ -531,13 +531,10 @@ class EdgeLCIA:
         edges = (
             self.biosphere_edges
             if all(
-                cf["supplier"].get("matrix") == "biosphere" for cf in self.raw_cfs_data
+                cf["supplier"].get("matrix") == "biosphere"
+                for cf in self.raw_cfs_data
             )
             else self.technosphere_edges
-        )
-
-        self.logger.info(
-            f"Mapping {len(edges)} exchanges with {len(self.raw_cfs_data)} CFs"
         )
 
         supplier_index = build_index(
@@ -552,8 +549,6 @@ class EdgeLCIA:
         for i, cf in enumerate(tqdm(self.raw_cfs_data, desc="Mapping exchanges")):
             supplier_criteria = cf["supplier"]
             consumer_criteria = cf["consumer"]
-            self.logger.info(f"[CF {i}] Supplier: {supplier_criteria}")
-            self.logger.info(f"[CF {i}] Consumer: {consumer_criteria}")
 
             # --- Step 1: Supplier classification matching ---
             if "classifications" in supplier_criteria:
@@ -568,9 +563,7 @@ class EdgeLCIA:
                         ),
                     )
                 ]
-                self.logger.info(
-                    f"[CF {i}] Classification matches: {classification_matches}"
-                )
+
             else:
                 classification_matches = None
 
@@ -593,7 +586,6 @@ class EdgeLCIA:
                     )
                 ),
             )
-            self.logger.info(f"[CF {i}] Non-classification matches: {nonclass_matches}")
 
             # --- Combine supplier candidates ---
             if classification_matches is not None:
@@ -602,10 +594,6 @@ class EdgeLCIA:
                 )
             else:
                 supplier_candidates = nonclass_matches
-
-            self.logger.info(
-                f"[CF {i}] Final supplier candidates: {supplier_candidates}"
-            )
 
             # --- Step 3: Consumer matching ---
             if not any(
@@ -618,9 +606,6 @@ class EdgeLCIA:
                 consumer_candidates = [
                     pos for sublist in consumer_candidates for pos in sublist
                 ]
-                self.logger.info(
-                    f"[CF {i}] Consumer candidates (unconstrained): {len(consumer_candidates)}"
-                )
             else:
                 cached_match_with_index.index = consumer_index
                 cached_match_with_index.lookup_mapping = self.consumer_lookup
@@ -632,9 +617,6 @@ class EdgeLCIA:
                     make_hashable(consumer_criteria),
                     tuple(sorted(self.required_consumer_fields)),
                 )
-                self.logger.info(
-                    f"[CF {i}] Consumer candidates (filtered): {consumer_candidates}"
-                )
 
             # --- Step 4: Match against actual edges ---
             positions = [
@@ -645,7 +627,6 @@ class EdgeLCIA:
             ]
 
             positions = [pos for pos in positions if pos not in seen_positions]
-            self.logger.info(f"[CF {i}] Final matched positions: {positions}")
 
             if positions:
                 cf_entry = {
@@ -658,8 +639,6 @@ class EdgeLCIA:
                 }
                 self.cfs_mapping.append(cf_entry)
                 seen_positions.extend(positions)
-            else:
-                self.logger.info(f"[CF {i}] No matches found.")
 
         self._update_unprocessed_edges()
 
@@ -797,34 +776,39 @@ class EdgeLCIA:
                                 f"No match or fallback for edge ({supplier_idx}, {consumer_idx})"
                             )
 
+            print(f"prefiltered_groups: {len(prefiltered_groups)}")
+            print(f"remaining_edges: {len(remaining_edges)}")
             # Pass 1
             for sig, group_edges in tqdm(
                 prefiltered_groups.items(), desc="Processing static groups (pass 1)"
             ):
                 supplier_info = group_edges[0][2]
                 consumer_info = group_edges[0][3]
-                candidate_locations = group_edges[0][-1]
 
-                candidate_suppliers = (
-                    candidate_locations
-                    if (
-                        "location" in self.required_supplier_fields
-                        and self.geo.resolve(
+                if "location" in self.required_supplier_fields:
+                    sub_regions = self.geo.resolve(
                             supplier_info.get("location"), containing=True
                         )
+                    if len(sub_regions) > 0:
+                        candidate_suppliers = sub_regions
+                    else:
+                        candidate_suppliers = [supplier_info.get("location")]
+                else:
+                    candidate_suppliers = []
+
+
+                if "location" in self.required_consumer_fields:
+                    sub_regions = self.geo.resolve(
+                        consumer_info.get("location"), containing=True
                     )
-                    else []
-                )
-                candidate_consumers = (
-                    candidate_locations
-                    if (
-                        "location" in self.required_consumer_fields
-                        and self.geo.resolve(
-                            consumer_info.get("location"), containing=True
-                        )
-                    )
-                    else []
-                )
+                    if len(sub_regions) > 0:
+                        candidate_consumers = sub_regions
+                    else:
+                        # If no sub-regions found, fallback to the original location
+                        candidate_consumers = [consumer_info.get("location")]
+                else:
+                    # If no location required, use the candidate locations directly
+                    candidate_consumers = []
 
                 new_cf, matched_cf_obj = compute_average_cf(
                     candidate_suppliers=candidate_suppliers,
@@ -972,42 +956,80 @@ class EdgeLCIA:
                     continue
 
                 consumer_info = self._get_consumer_info(consumer_idx)
-                location = consumer_info.get("location")
-                if location not in ["RoW", "RoE"]:
+                supplier_info = dict(self.reversed_supplier_lookup[supplier_idx])
+
+                supplier_loc = supplier_info.get("location")
+                consumer_loc = consumer_info.get("location")
+
+                # Skip if neither side is dynamic
+                if supplier_loc not in ["RoW", "RoE"] and consumer_loc not in ["RoW", "RoE"]:
                     continue
 
-                supplier_info = dict(self.reversed_supplier_lookup[supplier_idx])
-                sig = self._equality_supplier_signature(supplier_info)
+                # Identify dynamic role
+                dynamic_supplier = supplier_loc in ["RoW", "RoE"]
+                dynamic_consumer = consumer_loc in ["RoW", "RoE"]
 
-                cons_act = self.position_to_technosphere_flows_lookup.get(
-                    consumer_idx, {}
+                # Determine which activity index to use for exclusions
+                activity_idx = (
+                    consumer_idx if dynamic_consumer else supplier_idx
                 )
-                name, reference_product = cons_act.get("name"), cons_act.get(
-                    "reference product"
-                )
-                exclusions = self.technosphere_flows_lookup.get(
-                    (name, reference_product), []
-                )
+
+                # Use it to extract activity info (name, ref prod)
+                act = self.position_to_technosphere_flows_lookup.get(activity_idx, {})
+                name = act.get("name")
+                reference_product = act.get("reference product")
+                exclusions = self.technosphere_flows_lookup.get((name, reference_product), [])
 
                 excluded_subregions = []
                 for loc in exclusions:
                     excluded_subregions.extend(decomposed_exclusions.get(loc, [loc]))
 
-                candidate_consumers = resolve_candidate_consumers(
-                    geo=self.geo,
-                    location="GLO",
-                    weights=self.weights,
-                    containing=True,
-                    exceptions=excluded_subregions,
-                )
+                # Resolve fallback candidate locations
+                candidate_suppliers = []
+                candidate_consumers = []
+                sig = None
 
-                if sig in candidate_supplier_keys:
+                if dynamic_consumer:
+                    candidate_consumers_loc = resolve_candidate_consumers(
+                        geo=self.geo,
+                        location="GLO",
+                        weights=self.weights,
+                        containing=True,
+                        exceptions=excluded_subregions,
+                    )
+                    base_consumer_info = consumer_info.copy()
+
+                    candidate_consumers = [
+                        {**base_consumer_info, "location": loc}
+                        for loc in candidate_consumers_loc
+                    ]
+                    sig = self._equality_supplier_signature(supplier_info)
+
+                if dynamic_supplier:
+                    candidate_suppliers_locs = resolve_candidate_consumers(
+                        geo=self.geo,
+                        location="GLO",
+                        weights=self.weights,
+                        containing=True,
+                        exceptions=excluded_subregions,
+                    )
+                    base_consumer_info = consumer_info.copy()
+
+                    candidate_suppliers = [
+                        {**base_consumer_info, "location": loc}
+                        for loc in candidate_suppliers_locs
+                    ]
+                    sig = self._equality_supplier_signature(supplier_info)
+
+                loc_cfs = self.cf_index.get(sig, [])
+                if sig in candidate_supplier_keys and loc_cfs:
                     prefiltered_groups[sig].append(
                         (
                             supplier_idx,
                             consumer_idx,
                             supplier_info,
                             consumer_info,
+                            candidate_suppliers,
                             candidate_consumers,
                         )
                     )
@@ -1019,21 +1041,21 @@ class EdgeLCIA:
                                 consumer_idx,
                                 supplier_info,
                                 consumer_info,
-                                [],  # suppliers
-                                candidate_consumers,
+                                candidate_suppliers,  # list of dicts
+                                candidate_consumers,  # list of dicts
                             )
                         )
-
             # Pass 1
             for sig, group_edges in tqdm(
                 prefiltered_groups.items(), desc="Processing dynamic groups (pass 1)"
             ):
                 rep_supplier = group_edges[0][2]
                 rep_consumer = group_edges[0][3]
+                candidate_suppliers = group_edges[0][4]
                 candidate_consumers = group_edges[0][-1]
 
                 new_cf, matched_cf_obj = compute_average_cf(
-                    candidate_suppliers=[],
+                    candidate_suppliers=candidate_suppliers,
                     candidate_consumers=candidate_consumers,
                     supplier_info=rep_supplier,
                     consumer_info=rep_consumer,
@@ -1079,11 +1101,17 @@ class EdgeLCIA:
                 weights=self.weights,
             )
 
-            for (s_key, c_key, (_, candidate_consumers)), edge_group in tqdm(
-                grouped_edges.items(), desc="Processing dynamic groups (pass 2)"
-            ):
+            for (s_key, c_key, (supplier_key_tuple, consumer_key_tuple)), edge_group in grouped_edges.items():
+                # Reconstruct full dicts
+                candidate_suppliers = [dict(k) for k in supplier_key_tuple]
+                candidate_consumers = [dict(k) for k in consumer_key_tuple]
+
+                # ✅ Safe hashable input
                 new_cf, matched_cf_obj = compute_cf_memoized(
-                    s_key, c_key, (), candidate_consumers
+                    s_key,
+                    c_key,
+                    supplier_key_tuple,  # <-- still tuples of hashable items
+                    consumer_key_tuple,  # <-- same
                 )
                 if new_cf:
                     for supplier_idx, consumer_idx in edge_group:
@@ -1771,7 +1799,7 @@ class EdgeLCIA:
 
         print(table)
 
-    def generate_cf_table(self) -> pd.DataFrame:
+    def generate_cf_table(self, include_unmatched=False) -> pd.DataFrame:
         """
         Generate a detailed results table of characterized exchanges.
 
@@ -1906,6 +1934,37 @@ class EdgeLCIA:
                         entry["supplier location"] = supplier.get("location")
 
                     data.append(entry)
+
+        if include_unmatched is True:
+            unprocess_exchanges = self.unprocessed_biosphere_edges if is_biosphere else self.unprocessed_technosphere_edges
+            # Add unprocessed exchanges
+            for i, j in unprocess_exchanges:
+                consumer = bw2data.get_activity(self.reversed_activity[j])
+                supplier = bw2data.get_activity(self.reversed_activity[i])
+
+                amount = inventory[i, j]
+                cf_value = None
+                impact = None
+
+                entry = {
+                    "supplier name": supplier["name"],
+                    "consumer name": consumer["name"],
+                    "consumer reference product": consumer.get("reference product"),
+                    "consumer location": consumer.get("location"),
+                    "amount": amount,
+                    "CF": cf_value,
+                    "impact": impact,
+                }
+
+                if is_biosphere:
+                    entry["supplier categories"] = supplier.get("categories")
+                else:
+                    entry["supplier reference product"] = supplier.get(
+                        "reference product"
+                    )
+                    entry["supplier location"] = supplier.get("location")
+
+                data.append(entry)
 
         # Convert to DataFrame
         df = pd.DataFrame(data)
