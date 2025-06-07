@@ -531,8 +531,7 @@ class EdgeLCIA:
         edges = (
             self.biosphere_edges
             if all(
-                cf["supplier"].get("matrix") == "biosphere"
-                for cf in self.raw_cfs_data
+                cf["supplier"].get("matrix") == "biosphere" for cf in self.raw_cfs_data
             )
             else self.technosphere_edges
         )
@@ -787,15 +786,14 @@ class EdgeLCIA:
 
                 if "location" in self.required_supplier_fields:
                     sub_regions = self.geo.resolve(
-                            supplier_info.get("location"), containing=True
-                        )
+                        supplier_info.get("location"), containing=True
+                    )
                     if len(sub_regions) > 0:
                         candidate_suppliers = sub_regions
                     else:
                         candidate_suppliers = [supplier_info.get("location")]
                 else:
                     candidate_suppliers = []
-
 
                 if "location" in self.required_consumer_fields:
                     sub_regions = self.geo.resolve(
@@ -962,7 +960,10 @@ class EdgeLCIA:
                 consumer_loc = consumer_info.get("location")
 
                 # Skip if neither side is dynamic
-                if supplier_loc not in ["RoW", "RoE"] and consumer_loc not in ["RoW", "RoE"]:
+                if supplier_loc not in ["RoW", "RoE"] and consumer_loc not in [
+                    "RoW",
+                    "RoE",
+                ]:
                     continue
 
                 # Identify dynamic role
@@ -970,15 +971,15 @@ class EdgeLCIA:
                 dynamic_consumer = consumer_loc in ["RoW", "RoE"]
 
                 # Determine which activity index to use for exclusions
-                activity_idx = (
-                    consumer_idx if dynamic_consumer else supplier_idx
-                )
+                activity_idx = consumer_idx if dynamic_consumer else supplier_idx
 
                 # Use it to extract activity info (name, ref prod)
                 act = self.position_to_technosphere_flows_lookup.get(activity_idx, {})
                 name = act.get("name")
                 reference_product = act.get("reference product")
-                exclusions = self.technosphere_flows_lookup.get((name, reference_product), [])
+                exclusions = self.technosphere_flows_lookup.get(
+                    (name, reference_product), []
+                )
 
                 excluded_subregions = []
                 for loc in exclusions:
@@ -1101,7 +1102,11 @@ class EdgeLCIA:
                 weights=self.weights,
             )
 
-            for (s_key, c_key, (supplier_key_tuple, consumer_key_tuple)), edge_group in grouped_edges.items():
+            for (
+                s_key,
+                c_key,
+                (supplier_key_tuple, consumer_key_tuple),
+            ), edge_group in grouped_edges.items():
                 # Reconstruct full dicts
                 candidate_suppliers = [dict(k) for k in supplier_key_tuple]
                 candidate_consumers = [dict(k) for k in consumer_key_tuple]
@@ -1936,7 +1941,11 @@ class EdgeLCIA:
                     data.append(entry)
 
         if include_unmatched is True:
-            unprocess_exchanges = self.unprocessed_biosphere_edges if is_biosphere else self.unprocessed_technosphere_edges
+            unprocess_exchanges = (
+                self.unprocessed_biosphere_edges
+                if is_biosphere
+                else self.unprocessed_technosphere_edges
+            )
             # Add unprocessed exchanges
             for i, j in unprocess_exchanges:
                 consumer = bw2data.get_activity(self.reversed_activity[j])

@@ -125,8 +125,7 @@ def matches_classifications(cf_classifications, dataset_classifications):
             ]
 
     dataset_codes = [
-        (scheme, code.split(":")[0].strip())
-        for scheme, code in dataset_classifications
+        (scheme, code.split(":")[0].strip()) for scheme, code in dataset_classifications
     ]
 
     for scheme, code in dataset_codes:
@@ -167,9 +166,9 @@ def match_flow(
 
         if key == "location" and candidate_locations is not None:
             if not any(
-                    match_operator(loc_val.get("location", ""), target, operator)
-                    for loc_val in candidate_locations
-                    if isinstance(loc_val, dict)
+                match_operator(loc_val.get("location", ""), target, operator)
+                for loc_val in candidate_locations
+                if isinstance(loc_val, dict)
             ):
                 return False
         elif value is None or not match_operator(value, target, operator):
@@ -552,8 +551,12 @@ def group_edges_by_signature(
         s_key = make_hashable(s_filtered)
         c_key = make_hashable(c_filtered)
 
-        supplier_cands_filtered = [c for c in supplier_candidates if c["location"] in weights]
-        consumer_cands_filtered = [c for c in consumer_candidates if c["location"] in weights]
+        supplier_cands_filtered = [
+            c for c in supplier_candidates if c["location"] in weights
+        ]
+        consumer_cands_filtered = [
+            c for c in consumer_candidates if c["location"] in weights
+        ]
 
         loc_key = (
             tuple(make_hashable(c) for c in supplier_cands_filtered),
@@ -594,9 +597,7 @@ def compute_average_cf(
     }
 
     valid_candidates = [
-        (loc, weight[loc])
-        for loc in all_locs
-        if loc in weight and weight[loc] > 0
+        (loc, weight[loc]) for loc in all_locs if loc in weight and weight[loc] > 0
     ]
 
     if not valid_candidates:
@@ -607,14 +608,10 @@ def compute_average_cf(
         return 0, None
 
     filtered_supplier = {
-        k: supplier_info[k]
-        for k in required_supplier_fields
-        if k in supplier_info
+        k: supplier_info[k] for k in required_supplier_fields if k in supplier_info
     }
     filtered_consumer = {
-        k: consumer_info[k]
-        for k in required_consumer_fields
-        if k in consumer_info
+        k: consumer_info[k] for k in required_consumer_fields if k in consumer_info
     }
 
     if "classifications" in filtered_supplier:
@@ -644,8 +641,12 @@ def compute_average_cf(
         if supplier_sig in loc_cfs_dict:
             loc_cfs = loc_cfs_dict[supplier_sig]
 
-        elif any(cf.get("supplier", {}).get("operator", "equals") in {"contains", "startswith"} for cfs in
-                 loc_cfs_dict.values() for cf in cfs):
+        elif any(
+            cf.get("supplier", {}).get("operator", "equals")
+            in {"contains", "startswith"}
+            for cfs in loc_cfs_dict.values()
+            for cf in cfs
+        ):
             # At least one CF uses a fuzzy match; pass all CFs at this location
             loc_cfs = [cf for cfs in loc_cfs_dict.values() for cf in cfs]
 
