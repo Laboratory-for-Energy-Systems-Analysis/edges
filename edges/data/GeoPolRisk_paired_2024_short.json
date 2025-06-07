@@ -1,0 +1,3535 @@
+{
+  "name": "GeoPolRisk - country pairs",
+  "unit": "kg copper-eq.",
+  "version": "1.0",
+  "exchanges": [
+  {
+    "supplier": {
+      "name": "antimony production",
+      "reference product": "antimony",
+      "location": "AF",
+      "operator": "startswith",
+      "matrix": "technosphere",
+      "excludes": [
+        "market",
+        "slag"
+      ]
+    },
+    "consumer": {
+      "location": "AE",
+      "matrix": "technosphere"
+    },
+    "value": 0.3945448128379941
+  },
+  {
+    "supplier": {
+      "name": "antimony production",
+      "reference product": "antimony",
+      "location": "AU",
+      "operator": "startswith",
+      "matrix": "technosphere",
+      "excludes": [
+        "market",
+        "slag"
+      ]
+    },
+    "consumer": {
+      "location": "CN",
+      "matrix": "technosphere"
+    },
+    "value": 0.07854869299722697
+  },
+  {
+    "supplier": {
+      "name": "antimony production",
+      "reference product": "antimony",
+      "location": "AU",
+      "operator": "startswith",
+      "matrix": "technosphere",
+      "excludes": [
+        "market",
+        "slag"
+      ]
+    },
+    "consumer": {
+      "location": "OM",
+      "matrix": "technosphere"
+    },
+    "value": 0.2705393138255128
+  },
+  {
+    "supplier": {
+      "name": "antimony production",
+      "reference product": "antimony",
+      "location": "AU",
+      "operator": "startswith",
+      "matrix": "technosphere",
+      "excludes": [
+        "market",
+        "slag"
+      ]
+    },
+    "consumer": {
+      "location": "PA",
+      "matrix": "technosphere"
+    },
+    "value": 22.56791659956404
+  },
+  {
+    "supplier": {
+      "name": "antimony production",
+      "reference product": "antimony",
+      "location": "AU",
+      "operator": "startswith",
+      "matrix": "technosphere",
+      "excludes": [
+        "market",
+        "slag"
+      ]
+    },
+    "consumer": {
+      "location": "ZA",
+      "matrix": "technosphere"
+    },
+    "value": 0.001282865060189906
+  },
+  {
+    "supplier": {
+      "name": "antimony production",
+      "reference product": "antimony",
+      "location": "AT",
+      "operator": "startswith",
+      "matrix": "technosphere",
+      "excludes": [
+        "market",
+        "slag"
+      ]
+    },
+    "consumer": {
+      "location": "JP",
+      "matrix": "technosphere"
+    },
+    "value": 0.3031623622559319
+  },
+  {
+    "supplier": {
+      "name": "antimony production",
+      "reference product": "antimony",
+      "location": "BE",
+      "operator": "startswith",
+      "matrix": "technosphere",
+      "excludes": [
+        "market",
+        "slag"
+      ]
+    },
+    "consumer": {
+      "location": "GR",
+      "matrix": "technosphere"
+    },
+    "value": 3.590197481109541
+  },
+  {
+    "supplier": {
+      "name": "antimony production",
+      "reference product": "antimony",
+      "location": "BE",
+      "operator": "startswith",
+      "matrix": "technosphere",
+      "excludes": [
+        "market",
+        "slag"
+      ]
+    },
+    "consumer": {
+      "location": "US",
+      "matrix": "technosphere"
+    },
+    "value": 1.516077810748191
+  },
+  {
+    "supplier": {
+      "name": "antimony production",
+      "reference product": "antimony",
+      "location": "BO",
+      "operator": "startswith",
+      "matrix": "technosphere",
+      "excludes": [
+        "market",
+        "slag"
+      ]
+    },
+    "consumer": {
+      "location": "AT",
+      "matrix": "technosphere"
+    },
+    "value": 1.634470990760309
+  },
+  {
+    "supplier": {
+      "name": "antimony production",
+      "reference product": "antimony",
+      "location": "BO",
+      "operator": "startswith",
+      "matrix": "technosphere",
+      "excludes": [
+        "market",
+        "slag"
+      ]
+    },
+    "consumer": {
+      "location": "CN",
+      "matrix": "technosphere"
+    },
+    "value": 0.02957124586924715
+  },
+  {
+    "supplier": {
+      "name": "antimony production",
+      "reference product": "antimony",
+      "location": "BO",
+      "operator": "startswith",
+      "matrix": "technosphere",
+      "excludes": [
+        "market",
+        "slag"
+      ]
+    },
+    "consumer": {
+      "location": "DE",
+      "matrix": "technosphere"
+    },
+    "value": 1.111524333546317
+  },
+  {
+    "supplier": {
+      "name": "antimony production",
+      "reference product": "antimony",
+      "location": "BO",
+      "operator": "startswith",
+      "matrix": "technosphere",
+      "excludes": [
+        "market",
+        "slag"
+      ]
+    },
+    "consumer": {
+      "location": "IN",
+      "matrix": "technosphere"
+    },
+    "value": 0.126283212365132
+  },
+  {
+    "supplier": {
+      "name": "antimony production",
+      "reference product": "antimony",
+      "location": "BO",
+      "operator": "startswith",
+      "matrix": "technosphere",
+      "excludes": [
+        "market",
+        "slag"
+      ]
+    },
+    "consumer": {
+      "location": "IT",
+      "matrix": "technosphere"
+    },
+    "value": 0.1452269312860211
+  },
+  {
+    "supplier": {
+      "name": "antimony production",
+      "reference product": "antimony",
+      "location": "BO",
+      "operator": "startswith",
+      "matrix": "technosphere",
+      "excludes": [
+        "market",
+        "slag"
+      ]
+    },
+    "consumer": {
+      "location": "OM",
+      "matrix": "technosphere"
+    },
+    "value": 0.004940235545628557
+  },
+  {
+    "supplier": {
+      "name": "antimony production",
+      "reference product": "antimony",
+      "location": "BO",
+      "operator": "startswith",
+      "matrix": "technosphere",
+      "excludes": [
+        "market",
+        "slag"
+      ]
+    },
+    "consumer": {
+      "location": "VN",
+      "matrix": "technosphere"
+    },
+    "value": 0.1108250450645099
+  },
+  {
+    "supplier": {
+      "name": "antimony production",
+      "reference product": "antimony",
+      "location": "CA",
+      "operator": "startswith",
+      "matrix": "technosphere",
+      "excludes": [
+        "market",
+        "slag"
+      ]
+    },
+    "consumer": {
+      "location": "CL",
+      "matrix": "technosphere"
+    },
+    "value": 0.0007748917603239013
+  },
+  {
+    "supplier": {
+      "name": "antimony production",
+      "reference product": "antimony",
+      "location": "CA",
+      "operator": "startswith",
+      "matrix": "technosphere",
+      "excludes": [
+        "market",
+        "slag"
+      ]
+    },
+    "consumer": {
+      "location": "CN",
+      "matrix": "technosphere"
+    },
+    "value": 1.257148058510032e-08
+  },
+  {
+    "supplier": {
+      "name": "antimony production",
+      "reference product": "antimony",
+      "location": "CA",
+      "operator": "startswith",
+      "matrix": "technosphere",
+      "excludes": [
+        "market",
+        "slag"
+      ]
+    },
+    "consumer": {
+      "location": "IN",
+      "matrix": "technosphere"
+    },
+    "value": 0.4637411102782876
+  },
+  {
+    "supplier": {
+      "name": "antimony production",
+      "reference product": "antimony",
+      "location": "CL",
+      "operator": "startswith",
+      "matrix": "technosphere",
+      "excludes": [
+        "market",
+        "slag"
+      ]
+    },
+    "consumer": {
+      "location": "CA",
+      "matrix": "technosphere"
+    },
+    "value": 0.0005330480861767625
+  },
+  {
+    "supplier": {
+      "name": "antimony production",
+      "reference product": "antimony",
+      "location": "CL",
+      "operator": "startswith",
+      "matrix": "technosphere",
+      "excludes": [
+        "market",
+        "slag"
+      ]
+    },
+    "consumer": {
+      "location": "IN",
+      "matrix": "technosphere"
+    },
+    "value": 0.1238645894949508
+  },
+  {
+    "supplier": {
+      "name": "antimony production",
+      "reference product": "antimony",
+      "location": "CN",
+      "operator": "startswith",
+      "matrix": "technosphere",
+      "excludes": [
+        "market",
+        "slag"
+      ]
+    },
+    "consumer": {
+      "location": "IN",
+      "matrix": "technosphere"
+    },
+    "value": 0.2195540459174386
+  },
+  {
+    "supplier": {
+      "name": "antimony production",
+      "reference product": "antimony",
+      "location": "CN",
+      "operator": "startswith",
+      "matrix": "technosphere",
+      "excludes": [
+        "market",
+        "slag"
+      ]
+    },
+    "consumer": {
+      "location": "OM",
+      "matrix": "technosphere"
+    },
+    "value": 0.2207117029489871
+  },
+  {
+    "supplier": {
+      "name": "antimony production",
+      "reference product": "antimony",
+      "location": "CN",
+      "operator": "startswith",
+      "matrix": "technosphere",
+      "excludes": [
+        "market",
+        "slag"
+      ]
+    },
+    "consumer": {
+      "location": "ZA",
+      "matrix": "technosphere"
+    },
+    "value": 0.744277569000946
+  },
+  {
+    "supplier": {
+      "name": "antimony production",
+      "reference product": "antimony",
+      "location": "CN",
+      "operator": "startswith",
+      "matrix": "technosphere",
+      "excludes": [
+        "market",
+        "slag"
+      ]
+    },
+    "consumer": {
+      "location": "TH",
+      "matrix": "technosphere"
+    },
+    "value": 0.03632774371649278
+  },
+  {
+    "supplier": {
+      "name": "antimony production",
+      "reference product": "antimony",
+      "location": "CN",
+      "operator": "startswith",
+      "matrix": "technosphere",
+      "excludes": [
+        "market",
+        "slag"
+      ]
+    },
+    "consumer": {
+      "location": "US",
+      "matrix": "technosphere"
+    },
+    "value": 0.08812103322706248
+  },
+  {
+    "supplier": {
+      "name": "antimony production",
+      "reference product": "antimony",
+      "location": "CN",
+      "operator": "startswith",
+      "matrix": "technosphere",
+      "excludes": [
+        "market",
+        "slag"
+      ]
+    },
+    "consumer": {
+      "location": "GB",
+      "matrix": "technosphere"
+    },
+    "value": 54.03516436369771
+  },
+  {
+    "supplier": {
+      "name": "antimony production",
+      "reference product": "antimony",
+      "location": "HK",
+      "operator": "startswith",
+      "matrix": "technosphere",
+      "excludes": [
+        "market",
+        "slag"
+      ]
+    },
+    "consumer": {
+      "location": "DE",
+      "matrix": "technosphere"
+    },
+    "value": 0.00784718181053833
+  },
+  {
+    "supplier": {
+      "name": "antimony production",
+      "reference product": "antimony",
+      "location": "CZ",
+      "operator": "startswith",
+      "matrix": "technosphere",
+      "excludes": [
+        "market",
+        "slag"
+      ]
+    },
+    "consumer": {
+      "location": "BG",
+      "matrix": "technosphere"
+    },
+    "value": 1.387103970401865
+  },
+  {
+    "supplier": {
+      "name": "antimony production",
+      "reference product": "antimony",
+      "location": "CD",
+      "operator": "startswith",
+      "matrix": "technosphere",
+      "excludes": [
+        "market",
+        "slag"
+      ]
+    },
+    "consumer": {
+      "location": "CN",
+      "matrix": "technosphere"
+    },
+    "value": 0.004927862695897469
+  },
+  {
+    "supplier": {
+      "name": "antimony production",
+      "reference product": "antimony",
+      "location": "CD",
+      "operator": "startswith",
+      "matrix": "technosphere",
+      "excludes": [
+        "market",
+        "slag"
+      ]
+    },
+    "consumer": {
+      "location": "HK",
+      "matrix": "technosphere"
+    },
+    "value": 7.143284590161043
+  },
+  {
+    "supplier": {
+      "name": "antimony production",
+      "reference product": "antimony",
+      "location": "CD",
+      "operator": "startswith",
+      "matrix": "technosphere",
+      "excludes": [
+        "market",
+        "slag"
+      ]
+    },
+    "consumer": {
+      "location": "MY",
+      "matrix": "technosphere"
+    },
+    "value": 8.637468630934052
+  },
+  {
+    "supplier": {
+      "name": "antimony production",
+      "reference product": "antimony",
+      "location": "CD",
+      "operator": "startswith",
+      "matrix": "technosphere",
+      "excludes": [
+        "market",
+        "slag"
+      ]
+    },
+    "consumer": {
+      "location": "RW",
+      "matrix": "technosphere"
+    },
+    "value": 8.76652584973244
+  },
+  {
+    "supplier": {
+      "name": "antimony production",
+      "reference product": "antimony",
+      "location": "CD",
+      "operator": "startswith",
+      "matrix": "technosphere",
+      "excludes": [
+        "market",
+        "slag"
+      ]
+    },
+    "consumer": {
+      "location": "ZA",
+      "matrix": "technosphere"
+    },
+    "value": 1.624552531446204
+  },
+  {
+    "supplier": {
+      "name": "antimony production",
+      "reference product": "antimony",
+      "location": "CD",
+      "operator": "startswith",
+      "matrix": "technosphere",
+      "excludes": [
+        "market",
+        "slag"
+      ]
+    },
+    "consumer": {
+      "location": "AE",
+      "matrix": "technosphere"
+    },
+    "value": 7.018135191135923
+  },
+  {
+    "supplier": {
+      "name": "antimony production",
+      "reference product": "antimony",
+      "location": "DK",
+      "operator": "startswith",
+      "matrix": "technosphere",
+      "excludes": [
+        "market",
+        "slag"
+      ]
+    },
+    "consumer": {
+      "location": "LV",
+      "matrix": "technosphere"
+    },
+    "value": 9.797181375312418
+  },
+  {
+    "supplier": {
+      "name": "antimony production",
+      "reference product": "antimony",
+      "location": "FR",
+      "operator": "startswith",
+      "matrix": "technosphere",
+      "excludes": [
+        "market",
+        "slag"
+      ]
+    },
+    "consumer": {
+      "location": "BE",
+      "matrix": "technosphere"
+    },
+    "value": 6.017565743215932e-05
+  },
+  {
+    "supplier": {
+      "name": "antimony production",
+      "reference product": "antimony",
+      "location": "FR",
+      "operator": "startswith",
+      "matrix": "technosphere",
+      "excludes": [
+        "market",
+        "slag"
+      ]
+    },
+    "consumer": {
+      "location": "DE",
+      "matrix": "technosphere"
+    },
+    "value": 0.160684766505078
+  },
+  {
+    "supplier": {
+      "name": "antimony production",
+      "reference product": "antimony",
+      "location": "FR",
+      "operator": "startswith",
+      "matrix": "technosphere",
+      "excludes": [
+        "market",
+        "slag"
+      ]
+    },
+    "consumer": {
+      "location": "PT",
+      "matrix": "technosphere"
+    },
+    "value": 0.4048943369845758
+  },
+  {
+    "supplier": {
+      "name": "antimony production",
+      "reference product": "antimony",
+      "location": "DE",
+      "operator": "startswith",
+      "matrix": "technosphere",
+      "excludes": [
+        "market",
+        "slag"
+      ]
+    },
+    "consumer": {
+      "location": "BE",
+      "matrix": "technosphere"
+    },
+    "value": 0.005605548492706048
+  },
+  {
+    "supplier": {
+      "name": "antimony production",
+      "reference product": "antimony",
+      "location": "DE",
+      "operator": "startswith",
+      "matrix": "technosphere",
+      "excludes": [
+        "market",
+        "slag"
+      ]
+    },
+    "consumer": {
+      "location": "BR",
+      "matrix": "technosphere"
+    },
+    "value": 1.563307182046662
+  },
+  {
+    "supplier": {
+      "name": "antimony production",
+      "reference product": "antimony",
+      "location": "DE",
+      "operator": "startswith",
+      "matrix": "technosphere",
+      "excludes": [
+        "market",
+        "slag"
+      ]
+    },
+    "consumer": {
+      "location": "BN",
+      "matrix": "technosphere"
+    },
+    "value": 84.712703142181
+  },
+  {
+    "supplier": {
+      "name": "antimony production",
+      "reference product": "antimony",
+      "location": "GLO",
+      "operator": "startswith",
+      "matrix": "technosphere",
+      "excludes": [
+        "market",
+        "slag"
+      ]
+    },
+    "consumer": {
+      "location": "AU",
+      "matrix": "technosphere"
+    },
+    "value": 0.01500850999553307
+  },
+  {
+    "supplier": {
+      "name": "antimony production",
+      "reference product": "antimony",
+      "location": "GLO",
+      "operator": "startswith",
+      "matrix": "technosphere",
+      "excludes": [
+        "market",
+        "slag"
+      ]
+    },
+    "consumer": {
+      "location": "AT",
+      "matrix": "technosphere"
+    },
+    "value": 3.811037790192134
+  },
+  {
+    "supplier": {
+      "name": "antimony production",
+      "reference product": "antimony",
+      "location": "GLO",
+      "operator": "startswith",
+      "matrix": "technosphere",
+      "excludes": [
+        "market",
+        "slag"
+      ]
+    },
+    "consumer": {
+      "location": "BE",
+      "matrix": "technosphere"
+    },
+    "value": 1.551940969129767
+  },
+  {
+    "supplier": {
+      "name": "antimony production",
+      "reference product": "antimony",
+      "location": "GLO",
+      "operator": "startswith",
+      "matrix": "technosphere",
+      "excludes": [
+        "market",
+        "slag"
+      ]
+    },
+    "consumer": {
+      "location": "BO",
+      "matrix": "technosphere"
+    },
+    "value": 0.0006827840783196783
+  },
+  {
+    "supplier": {
+      "name": "antimony production",
+      "reference product": "antimony",
+      "location": "GLO",
+      "operator": "startswith",
+      "matrix": "technosphere",
+      "excludes": [
+        "market",
+        "slag"
+      ]
+    },
+    "consumer": {
+      "location": "BR",
+      "matrix": "technosphere"
+    },
+    "value": 1.563307182046662
+  },
+  {
+    "supplier": {
+      "name": "antimony production",
+      "reference product": "antimony",
+      "location": "GLO",
+      "operator": "startswith",
+      "matrix": "technosphere",
+      "excludes": [
+        "market",
+        "slag"
+      ]
+    },
+    "consumer": {
+      "location": "BN",
+      "matrix": "technosphere"
+    },
+    "value": 198.6672892348201
+  },
+  {
+    "supplier": {
+      "name": "antimony production",
+      "reference product": "antimony",
+      "location": "GLO",
+      "operator": "startswith",
+      "matrix": "technosphere",
+      "excludes": [
+        "market",
+        "slag"
+      ]
+    },
+    "consumer": {
+      "location": "BG",
+      "matrix": "technosphere"
+    },
+    "value": 1.387103970401865
+  },
+  {
+    "supplier": {
+      "name": "antimony production",
+      "reference product": "antimony",
+      "location": "GLO",
+      "operator": "startswith",
+      "matrix": "technosphere",
+      "excludes": [
+        "market",
+        "slag"
+      ]
+    },
+    "consumer": {
+      "location": "CA",
+      "matrix": "technosphere"
+    },
+    "value": 0.8438538534191109
+  },
+  {
+    "supplier": {
+      "name": "antimony production",
+      "reference product": "antimony",
+      "location": "GLO",
+      "operator": "startswith",
+      "matrix": "technosphere",
+      "excludes": [
+        "market",
+        "slag"
+      ]
+    },
+    "consumer": {
+      "location": "CL",
+      "matrix": "technosphere"
+    },
+    "value": 3.641618558285288
+  },
+  {
+    "supplier": {
+      "name": "antimony production",
+      "reference product": "antimony",
+      "location": "GLO",
+      "operator": "startswith",
+      "matrix": "technosphere",
+      "excludes": [
+        "market",
+        "slag"
+      ]
+    },
+    "consumer": {
+      "location": "CN",
+      "matrix": "technosphere"
+    },
+    "value": 0.7224165698472998
+  },
+  {
+    "supplier": {
+      "name": "antimony production",
+      "reference product": "antimony",
+      "location": "GLO",
+      "operator": "startswith",
+      "matrix": "technosphere",
+      "excludes": [
+        "market",
+        "slag"
+      ]
+    },
+    "consumer": {
+      "location": "HK",
+      "matrix": "technosphere"
+    },
+    "value": 7.143284590161043
+  },
+  {
+    "supplier": {
+      "name": "antimony production",
+      "reference product": "antimony",
+      "location": "GLO",
+      "operator": "startswith",
+      "matrix": "technosphere",
+      "excludes": [
+        "market",
+        "slag"
+      ]
+    },
+    "consumer": {
+      "location": "CZ",
+      "matrix": "technosphere"
+    },
+    "value": 4.070246591601023
+  },
+  {
+    "supplier": {
+      "name": "antimony production",
+      "reference product": "antimony",
+      "location": "GLO",
+      "operator": "startswith",
+      "matrix": "technosphere",
+      "excludes": [
+        "market",
+        "slag"
+      ]
+    },
+    "consumer": {
+      "location": "CD",
+      "matrix": "technosphere"
+    },
+    "value": 33.09368221634075
+  },
+  {
+    "supplier": {
+      "name": "antimony production",
+      "reference product": "antimony",
+      "location": "GLO",
+      "operator": "startswith",
+      "matrix": "technosphere",
+      "excludes": [
+        "market",
+        "slag"
+      ]
+    },
+    "consumer": {
+      "location": "DK",
+      "matrix": "technosphere"
+    },
+    "value": 2.750667240963659
+  },
+  {
+    "supplier": {
+      "name": "antimony production",
+      "reference product": "antimony",
+      "location": "GLO",
+      "operator": "startswith",
+      "matrix": "technosphere",
+      "excludes": [
+        "market",
+        "slag"
+      ]
+    },
+    "consumer": {
+      "location": "FI",
+      "matrix": "technosphere"
+    },
+    "value": 1.087358124323932
+  },
+  {
+    "supplier": {
+      "name": "antimony production",
+      "reference product": "antimony",
+      "location": "GLO",
+      "operator": "startswith",
+      "matrix": "technosphere",
+      "excludes": [
+        "market",
+        "slag"
+      ]
+    },
+    "consumer": {
+      "location": "FR",
+      "matrix": "technosphere"
+    },
+    "value": 3.592927423497458
+  },
+  {
+    "supplier": {
+      "name": "antimony production",
+      "reference product": "antimony",
+      "location": "GLO",
+      "operator": "startswith",
+      "matrix": "technosphere",
+      "excludes": [
+        "market",
+        "slag"
+      ]
+    },
+    "consumer": {
+      "location": "DE",
+      "matrix": "technosphere"
+    },
+    "value": 1.39815142085795
+  },
+  {
+    "supplier": {
+      "name": "antimony production",
+      "reference product": "antimony",
+      "location": "GLO",
+      "operator": "startswith",
+      "matrix": "technosphere",
+      "excludes": [
+        "market",
+        "slag"
+      ]
+    },
+    "consumer": {
+      "location": "GR",
+      "matrix": "technosphere"
+    },
+    "value": 3.59031138737938
+  },
+  {
+    "supplier": {
+      "name": "antimony production",
+      "reference product": "antimony",
+      "location": "GLO",
+      "operator": "startswith",
+      "matrix": "technosphere",
+      "excludes": [
+        "market",
+        "slag"
+      ]
+    },
+    "consumer": {
+      "location": "IN",
+      "matrix": "technosphere"
+    },
+    "value": 1.337998029520165
+  },
+  {
+    "supplier": {
+      "name": "antimony production",
+      "reference product": "antimony",
+      "location": "GLO",
+      "operator": "startswith",
+      "matrix": "technosphere",
+      "excludes": [
+        "market",
+        "slag"
+      ]
+    },
+    "consumer": {
+      "location": "IT",
+      "matrix": "technosphere"
+    },
+    "value": 3.429353249015605
+  },
+  {
+    "supplier": {
+      "name": "antimony production",
+      "reference product": "antimony",
+      "location": "GLO",
+      "operator": "startswith",
+      "matrix": "technosphere",
+      "excludes": [
+        "market",
+        "slag"
+      ]
+    },
+    "consumer": {
+      "location": "JP",
+      "matrix": "technosphere"
+    },
+    "value": 1.856315098546891
+  },
+  {
+    "supplier": {
+      "name": "antimony production",
+      "reference product": "antimony",
+      "location": "GLO",
+      "operator": "startswith",
+      "matrix": "technosphere",
+      "excludes": [
+        "market",
+        "slag"
+      ]
+    },
+    "consumer": {
+      "location": "KE",
+      "matrix": "technosphere"
+    },
+    "value": 7.950410158686177
+  },
+  {
+    "supplier": {
+      "name": "antimony production",
+      "reference product": "antimony",
+      "location": "GLO",
+      "operator": "startswith",
+      "matrix": "technosphere",
+      "excludes": [
+        "market",
+        "slag"
+      ]
+    },
+    "consumer": {
+      "location": "LV",
+      "matrix": "technosphere"
+    },
+    "value": 9.797181375312418
+  },
+  {
+    "supplier": {
+      "name": "antimony production",
+      "reference product": "antimony",
+      "location": "GLO",
+      "operator": "startswith",
+      "matrix": "technosphere",
+      "excludes": [
+        "market",
+        "slag"
+      ]
+    },
+    "consumer": {
+      "location": "MY",
+      "matrix": "technosphere"
+    },
+    "value": 8.637468630934052
+  },
+  {
+    "supplier": {
+      "name": "antimony production",
+      "reference product": "antimony",
+      "location": "GLO",
+      "operator": "startswith",
+      "matrix": "technosphere",
+      "excludes": [
+        "market",
+        "slag"
+      ]
+    },
+    "consumer": {
+      "location": "MX",
+      "matrix": "technosphere"
+    },
+    "value": 0.5876699372704399
+  },
+  {
+    "supplier": {
+      "name": "antimony production",
+      "reference product": "antimony",
+      "location": "GLO",
+      "operator": "startswith",
+      "matrix": "technosphere",
+      "excludes": [
+        "market",
+        "slag"
+      ]
+    },
+    "consumer": {
+      "location": "MZ",
+      "matrix": "technosphere"
+    },
+    "value": 0.3838561391307173
+  },
+  {
+    "supplier": {
+      "name": "antimony production",
+      "reference product": "antimony",
+      "location": "GLO",
+      "operator": "startswith",
+      "matrix": "technosphere",
+      "excludes": [
+        "market",
+        "slag"
+      ]
+    },
+    "consumer": {
+      "location": "NL",
+      "matrix": "technosphere"
+    },
+    "value": 1.015339063479631
+  },
+  {
+    "supplier": {
+      "name": "antimony production",
+      "reference product": "antimony",
+      "location": "GLO",
+      "operator": "startswith",
+      "matrix": "technosphere",
+      "excludes": [
+        "market",
+        "slag"
+      ]
+    },
+    "consumer": {
+      "location": "NI",
+      "matrix": "technosphere"
+    },
+    "value": 18.34320521295873
+  },
+  {
+    "supplier": {
+      "name": "antimony production",
+      "reference product": "antimony",
+      "location": "GLO",
+      "operator": "startswith",
+      "matrix": "technosphere",
+      "excludes": [
+        "market",
+        "slag"
+      ]
+    },
+    "consumer": {
+      "location": "NO",
+      "matrix": "technosphere"
+    },
+    "value": 62.87929219052457
+  },
+  {
+    "supplier": {
+      "name": "antimony production",
+      "reference product": "antimony",
+      "location": "GLO",
+      "operator": "startswith",
+      "matrix": "technosphere",
+      "excludes": [
+        "market",
+        "slag"
+      ]
+    },
+    "consumer": {
+      "location": "OM",
+      "matrix": "technosphere"
+    },
+    "value": 1.478535875821379
+  },
+  {
+    "supplier": {
+      "name": "antimony production",
+      "reference product": "antimony",
+      "location": "GLO",
+      "operator": "startswith",
+      "matrix": "technosphere",
+      "excludes": [
+        "market",
+        "slag"
+      ]
+    },
+    "consumer": {
+      "location": "PA",
+      "matrix": "technosphere"
+    },
+    "value": 22.56791659956404
+  },
+  {
+    "supplier": {
+      "name": "antimony production",
+      "reference product": "antimony",
+      "location": "GLO",
+      "operator": "startswith",
+      "matrix": "technosphere",
+      "excludes": [
+        "market",
+        "slag"
+      ]
+    },
+    "consumer": {
+      "location": "PE",
+      "matrix": "technosphere"
+    },
+    "value": 115.7253089843042
+  },
+  {
+    "supplier": {
+      "name": "antimony production",
+      "reference product": "antimony",
+      "location": "GLO",
+      "operator": "startswith",
+      "matrix": "technosphere",
+      "excludes": [
+        "market",
+        "slag"
+      ]
+    },
+    "consumer": {
+      "location": "PH",
+      "matrix": "technosphere"
+    },
+    "value": 12.41880679728854
+  },
+  {
+    "supplier": {
+      "name": "antimony production",
+      "reference product": "antimony",
+      "location": "GLO",
+      "operator": "startswith",
+      "matrix": "technosphere",
+      "excludes": [
+        "market",
+        "slag"
+      ]
+    },
+    "consumer": {
+      "location": "PL",
+      "matrix": "technosphere"
+    },
+    "value": 4.405085006505904
+  },
+  {
+    "supplier": {
+      "name": "antimony production",
+      "reference product": "antimony",
+      "location": "GLO",
+      "operator": "startswith",
+      "matrix": "technosphere",
+      "excludes": [
+        "market",
+        "slag"
+      ]
+    },
+    "consumer": {
+      "location": "PT",
+      "matrix": "technosphere"
+    },
+    "value": 0.4048943369845758
+  },
+  {
+    "supplier": {
+      "name": "antimony production",
+      "reference product": "antimony",
+      "location": "GLO",
+      "operator": "startswith",
+      "matrix": "technosphere",
+      "excludes": [
+        "market",
+        "slag"
+      ]
+    },
+    "consumer": {
+      "location": "KR",
+      "matrix": "technosphere"
+    },
+    "value": 2.952373154737231
+  },
+  {
+    "supplier": {
+      "name": "antimony production",
+      "reference product": "antimony",
+      "location": "GLO",
+      "operator": "startswith",
+      "matrix": "technosphere",
+      "excludes": [
+        "market",
+        "slag"
+      ]
+    },
+    "consumer": {
+      "location": "RO",
+      "matrix": "technosphere"
+    },
+    "value": 4.281854475466226
+  },
+  {
+    "supplier": {
+      "name": "antimony production",
+      "reference product": "antimony",
+      "location": "GLO",
+      "operator": "startswith",
+      "matrix": "technosphere",
+      "excludes": [
+        "market",
+        "slag"
+      ]
+    },
+    "consumer": {
+      "location": "RU",
+      "matrix": "technosphere"
+    },
+    "value": 0.02811409282088095
+  },
+  {
+    "supplier": {
+      "name": "antimony production",
+      "reference product": "antimony",
+      "location": "GLO",
+      "operator": "startswith",
+      "matrix": "technosphere",
+      "excludes": [
+        "market",
+        "slag"
+      ]
+    },
+    "consumer": {
+      "location": "RW",
+      "matrix": "technosphere"
+    },
+    "value": 8.76652584973244
+  },
+  {
+    "supplier": {
+      "name": "antimony production",
+      "reference product": "antimony",
+      "location": "GLO",
+      "operator": "startswith",
+      "matrix": "technosphere",
+      "excludes": [
+        "market",
+        "slag"
+      ]
+    },
+    "consumer": {
+      "location": "ZA",
+      "matrix": "technosphere"
+    },
+    "value": 3.855808611431688
+  },
+  {
+    "supplier": {
+      "name": "antimony production",
+      "reference product": "antimony",
+      "location": "GLO",
+      "operator": "startswith",
+      "matrix": "technosphere",
+      "excludes": [
+        "market",
+        "slag"
+      ]
+    },
+    "consumer": {
+      "location": "ES",
+      "matrix": "technosphere"
+    },
+    "value": 53.10507860615931
+  },
+  {
+    "supplier": {
+      "name": "antimony production",
+      "reference product": "antimony",
+      "location": "GLO",
+      "operator": "startswith",
+      "matrix": "technosphere",
+      "excludes": [
+        "market",
+        "slag"
+      ]
+    },
+    "consumer": {
+      "location": "SE",
+      "matrix": "technosphere"
+    },
+    "value": 18.67251361484644
+  },
+  {
+    "supplier": {
+      "name": "antimony production",
+      "reference product": "antimony",
+      "location": "GLO",
+      "operator": "startswith",
+      "matrix": "technosphere",
+      "excludes": [
+        "market",
+        "slag"
+      ]
+    },
+    "consumer": {
+      "location": "CH",
+      "matrix": "technosphere"
+    },
+    "value": 0.007536672680789782
+  },
+  {
+    "supplier": {
+      "name": "antimony production",
+      "reference product": "antimony",
+      "location": "GLO",
+      "operator": "startswith",
+      "matrix": "technosphere",
+      "excludes": [
+        "market",
+        "slag"
+      ]
+    },
+    "consumer": {
+      "location": "TH",
+      "matrix": "technosphere"
+    },
+    "value": 2.515472528182627
+  },
+  {
+    "supplier": {
+      "name": "antimony production",
+      "reference product": "antimony",
+      "location": "GLO",
+      "operator": "startswith",
+      "matrix": "technosphere",
+      "excludes": [
+        "market",
+        "slag"
+      ]
+    },
+    "consumer": {
+      "location": "TR",
+      "matrix": "technosphere"
+    },
+    "value": 0.01086503882358581
+  },
+  {
+    "supplier": {
+      "name": "antimony production",
+      "reference product": "antimony",
+      "location": "GLO",
+      "operator": "startswith",
+      "matrix": "technosphere",
+      "excludes": [
+        "market",
+        "slag"
+      ]
+    },
+    "consumer": {
+      "location": "US",
+      "matrix": "technosphere"
+    },
+    "value": 4.247584070057862
+  },
+  {
+    "supplier": {
+      "name": "antimony production",
+      "reference product": "antimony",
+      "location": "GLO",
+      "operator": "startswith",
+      "matrix": "technosphere",
+      "excludes": [
+        "market",
+        "slag"
+      ]
+    },
+    "consumer": {
+      "location": "AE",
+      "matrix": "technosphere"
+    },
+    "value": 7.412680003973917
+  },
+  {
+    "supplier": {
+      "name": "antimony production",
+      "reference product": "antimony",
+      "location": "GLO",
+      "operator": "startswith",
+      "matrix": "technosphere",
+      "excludes": [
+        "market",
+        "slag"
+      ]
+    },
+    "consumer": {
+      "location": "GB",
+      "matrix": "technosphere"
+    },
+    "value": 125.073581822437
+  },
+  {
+    "supplier": {
+      "name": "antimony production",
+      "reference product": "antimony",
+      "location": "GLO",
+      "operator": "startswith",
+      "matrix": "technosphere",
+      "excludes": [
+        "market",
+        "slag"
+      ]
+    },
+    "consumer": {
+      "location": "UZ",
+      "matrix": "technosphere"
+    },
+    "value": 0.2442330347140283
+  },
+  {
+    "supplier": {
+      "name": "antimony production",
+      "reference product": "antimony",
+      "location": "GLO",
+      "operator": "startswith",
+      "matrix": "technosphere",
+      "excludes": [
+        "market",
+        "slag"
+      ]
+    },
+    "consumer": {
+      "location": "VN",
+      "matrix": "technosphere"
+    },
+    "value": 1.895614830962871
+  },
+  {
+    "supplier": {
+      "name": "antimony production",
+      "reference product": "antimony",
+      "location": "GT",
+      "operator": "startswith",
+      "matrix": "technosphere",
+      "excludes": [
+        "market",
+        "slag"
+      ]
+    },
+    "consumer": {
+      "location": "CN",
+      "matrix": "technosphere"
+    },
+    "value": 0.0004581404195102268
+  },
+  {
+    "supplier": {
+      "name": "antimony production",
+      "reference product": "antimony",
+      "location": "GT",
+      "operator": "startswith",
+      "matrix": "technosphere",
+      "excludes": [
+        "market",
+        "slag"
+      ]
+    },
+    "consumer": {
+      "location": "OM",
+      "matrix": "technosphere"
+    },
+    "value": 0.002510047443863558
+  },
+  {
+    "supplier": {
+      "name": "antimony production",
+      "reference product": "antimony",
+      "location": "HN",
+      "operator": "startswith",
+      "matrix": "technosphere",
+      "excludes": [
+        "market",
+        "slag"
+      ]
+    },
+    "consumer": {
+      "location": "CN",
+      "matrix": "technosphere"
+    },
+    "value": 0.00222145175473725
+  },
+  {
+    "supplier": {
+      "name": "antimony production",
+      "reference product": "antimony",
+      "location": "HN",
+      "operator": "startswith",
+      "matrix": "technosphere",
+      "excludes": [
+        "market",
+        "slag"
+      ]
+    },
+    "consumer": {
+      "location": "OM",
+      "matrix": "technosphere"
+    },
+    "value": 0.0563283248599461
+  },
+  {
+    "supplier": {
+      "name": "antimony production",
+      "reference product": "antimony",
+      "location": "IN",
+      "operator": "startswith",
+      "matrix": "technosphere",
+      "excludes": [
+        "market",
+        "slag"
+      ]
+    },
+    "consumer": {
+      "location": "CN",
+      "matrix": "technosphere"
+    },
+    "value": 2.233514442446698e-08
+  },
+  {
+    "supplier": {
+      "name": "antimony production",
+      "reference product": "antimony",
+      "location": "IN",
+      "operator": "startswith",
+      "matrix": "technosphere",
+      "excludes": [
+        "market",
+        "slag"
+      ]
+    },
+    "consumer": {
+      "location": "CZ",
+      "matrix": "technosphere"
+    },
+    "value": 0.3353981830970956
+  },
+  {
+    "supplier": {
+      "name": "antimony production",
+      "reference product": "antimony",
+      "location": "IN",
+      "operator": "startswith",
+      "matrix": "technosphere",
+      "excludes": [
+        "market",
+        "slag"
+      ]
+    },
+    "consumer": {
+      "location": "JP",
+      "matrix": "technosphere"
+    },
+    "value": 1.553152736290959
+  },
+  {
+    "supplier": {
+      "name": "antimony production",
+      "reference product": "antimony",
+      "location": "IR",
+      "operator": "startswith",
+      "matrix": "technosphere",
+      "excludes": [
+        "market",
+        "slag"
+      ]
+    },
+    "consumer": {
+      "location": "CN",
+      "matrix": "technosphere"
+    },
+    "value": 0.008583087555954124
+  },
+  {
+    "supplier": {
+      "name": "antimony production",
+      "reference product": "antimony",
+      "location": "IR",
+      "operator": "startswith",
+      "matrix": "technosphere",
+      "excludes": [
+        "market",
+        "slag"
+      ]
+    },
+    "consumer": {
+      "location": "TR",
+      "matrix": "technosphere"
+    },
+    "value": 0.001522530657776775
+  },
+  {
+    "supplier": {
+      "name": "antimony production",
+      "reference product": "antimony",
+      "location": "IT",
+      "operator": "startswith",
+      "matrix": "technosphere",
+      "excludes": [
+        "market",
+        "slag"
+      ]
+    },
+    "consumer": {
+      "location": "AU",
+      "matrix": "technosphere"
+    },
+    "value": 0.01433028024370003
+  },
+  {
+    "supplier": {
+      "name": "antimony production",
+      "reference product": "antimony",
+      "location": "IT",
+      "operator": "startswith",
+      "matrix": "technosphere",
+      "excludes": [
+        "market",
+        "slag"
+      ]
+    },
+    "consumer": {
+      "location": "AT",
+      "matrix": "technosphere"
+    },
+    "value": 0.02247226663319378
+  },
+  {
+    "supplier": {
+      "name": "antimony production",
+      "reference product": "antimony",
+      "location": "IT",
+      "operator": "startswith",
+      "matrix": "technosphere",
+      "excludes": [
+        "market",
+        "slag"
+      ]
+    },
+    "consumer": {
+      "location": "CZ",
+      "matrix": "technosphere"
+    },
+    "value": 2.280533937724632
+  },
+  {
+    "supplier": {
+      "name": "antimony production",
+      "reference product": "antimony",
+      "location": "IT",
+      "operator": "startswith",
+      "matrix": "technosphere",
+      "excludes": [
+        "market",
+        "slag"
+      ]
+    },
+    "consumer": {
+      "location": "IN",
+      "matrix": "technosphere"
+    },
+    "value": 0.0107080418018338
+  },
+  {
+    "supplier": {
+      "name": "antimony production",
+      "reference product": "antimony",
+      "location": "IT",
+      "operator": "startswith",
+      "matrix": "technosphere",
+      "excludes": [
+        "market",
+        "slag"
+      ]
+    },
+    "consumer": {
+      "location": "KR",
+      "matrix": "technosphere"
+    },
+    "value": 2.937259911080079
+  },
+  {
+    "supplier": {
+      "name": "antimony production",
+      "reference product": "antimony",
+      "location": "IT",
+      "operator": "startswith",
+      "matrix": "technosphere",
+      "excludes": [
+        "market",
+        "slag"
+      ]
+    },
+    "consumer": {
+      "location": "CH",
+      "matrix": "technosphere"
+    },
+    "value": 0.007536672680789782
+  },
+  {
+    "supplier": {
+      "name": "antimony production",
+      "reference product": "antimony",
+      "location": "IT",
+      "operator": "startswith",
+      "matrix": "technosphere",
+      "excludes": [
+        "market",
+        "slag"
+      ]
+    },
+    "consumer": {
+      "location": "US",
+      "matrix": "technosphere"
+    },
+    "value": 2.641073104062655
+  },
+  {
+    "supplier": {
+      "name": "antimony production",
+      "reference product": "antimony",
+      "location": "JP",
+      "operator": "startswith",
+      "matrix": "technosphere",
+      "excludes": [
+        "market",
+        "slag"
+      ]
+    },
+    "consumer": {
+      "location": "DE",
+      "matrix": "technosphere"
+    },
+    "value": 0.0868147767388792
+  },
+  {
+    "supplier": {
+      "name": "antimony production",
+      "reference product": "antimony",
+      "location": "JP",
+      "operator": "startswith",
+      "matrix": "technosphere",
+      "excludes": [
+        "market",
+        "slag"
+      ]
+    },
+    "consumer": {
+      "location": "VN",
+      "matrix": "technosphere"
+    },
+    "value": 0.03860689374983654
+  },
+  {
+    "supplier": {
+      "name": "antimony production",
+      "reference product": "antimony",
+      "location": "KZ",
+      "operator": "startswith",
+      "matrix": "technosphere",
+      "excludes": [
+        "market",
+        "slag"
+      ]
+    },
+    "consumer": {
+      "location": "BE",
+      "matrix": "technosphere"
+    },
+    "value": 1.542658920069289
+  },
+  {
+    "supplier": {
+      "name": "antimony production",
+      "reference product": "antimony",
+      "location": "KZ",
+      "operator": "startswith",
+      "matrix": "technosphere",
+      "excludes": [
+        "market",
+        "slag"
+      ]
+    },
+    "consumer": {
+      "location": "IN",
+      "matrix": "technosphere"
+    },
+    "value": 0.00931935531953668
+  },
+  {
+    "supplier": {
+      "name": "antimony production",
+      "reference product": "antimony",
+      "location": "KZ",
+      "operator": "startswith",
+      "matrix": "technosphere",
+      "excludes": [
+        "market",
+        "slag"
+      ]
+    },
+    "consumer": {
+      "location": "RU",
+      "matrix": "technosphere"
+    },
+    "value": 0.02064444510815564
+  },
+  {
+    "supplier": {
+      "name": "antimony production",
+      "reference product": "antimony",
+      "location": "KZ",
+      "operator": "startswith",
+      "matrix": "technosphere",
+      "excludes": [
+        "market",
+        "slag"
+      ]
+    },
+    "consumer": {
+      "location": "VN",
+      "matrix": "technosphere"
+    },
+    "value": 0.08294690933552921
+  },
+  {
+    "supplier": {
+      "name": "antimony production",
+      "reference product": "antimony",
+      "location": "KG",
+      "operator": "startswith",
+      "matrix": "technosphere",
+      "excludes": [
+        "market",
+        "slag"
+      ]
+    },
+    "consumer": {
+      "location": "CN",
+      "matrix": "technosphere"
+    },
+    "value": 0.003446807121560334
+  },
+  {
+    "supplier": {
+      "name": "antimony production",
+      "reference product": "antimony",
+      "location": "KG",
+      "operator": "startswith",
+      "matrix": "technosphere",
+      "excludes": [
+        "market",
+        "slag"
+      ]
+    },
+    "consumer": {
+      "location": "TR",
+      "matrix": "technosphere"
+    },
+    "value": 0.001081678632609877
+  },
+  {
+    "supplier": {
+      "name": "antimony production",
+      "reference product": "antimony",
+      "location": "KG",
+      "operator": "startswith",
+      "matrix": "technosphere",
+      "excludes": [
+        "market",
+        "slag"
+      ]
+    },
+    "consumer": {
+      "location": "UZ",
+      "matrix": "technosphere"
+    },
+    "value": 0.2442330347140283
+  },
+  {
+    "supplier": {
+      "name": "antimony production",
+      "reference product": "antimony",
+      "location": "LA",
+      "operator": "startswith",
+      "matrix": "technosphere",
+      "excludes": [
+        "market",
+        "slag"
+      ]
+    },
+    "consumer": {
+      "location": "CN",
+      "matrix": "technosphere"
+    },
+    "value": 0.006202547375642009
+  },
+  {
+    "supplier": {
+      "name": "antimony production",
+      "reference product": "antimony",
+      "location": "LT",
+      "operator": "startswith",
+      "matrix": "technosphere",
+      "excludes": [
+        "market",
+        "slag"
+      ]
+    },
+    "consumer": {
+      "location": "IN",
+      "matrix": "technosphere"
+    },
+    "value": 0.03626716098715791
+  },
+  {
+    "supplier": {
+      "name": "antimony production",
+      "reference product": "antimony",
+      "location": "MG",
+      "operator": "startswith",
+      "matrix": "technosphere",
+      "excludes": [
+        "market",
+        "slag"
+      ]
+    },
+    "consumer": {
+      "location": "ES",
+      "matrix": "technosphere"
+    },
+    "value": 51.58801277342905
+  },
+  {
+    "supplier": {
+      "name": "antimony production",
+      "reference product": "antimony",
+      "location": "MX",
+      "operator": "startswith",
+      "matrix": "technosphere",
+      "excludes": [
+        "market",
+        "slag"
+      ]
+    },
+    "consumer": {
+      "location": "CN",
+      "matrix": "technosphere"
+    },
+    "value": 0.002620609329124361
+  },
+  {
+    "supplier": {
+      "name": "antimony production",
+      "reference product": "antimony",
+      "location": "MX",
+      "operator": "startswith",
+      "matrix": "technosphere",
+      "excludes": [
+        "market",
+        "slag"
+      ]
+    },
+    "consumer": {
+      "location": "VN",
+      "matrix": "technosphere"
+    },
+    "value": 0.0513576418955408
+  },
+  {
+    "supplier": {
+      "name": "antimony production",
+      "reference product": "antimony",
+      "location": "MA",
+      "operator": "startswith",
+      "matrix": "technosphere",
+      "excludes": [
+        "market",
+        "slag"
+      ]
+    },
+    "consumer": {
+      "location": "CN",
+      "matrix": "technosphere"
+    },
+    "value": 0.0005072504178936925
+  },
+  {
+    "supplier": {
+      "name": "antimony production",
+      "reference product": "antimony",
+      "location": "MA",
+      "operator": "startswith",
+      "matrix": "technosphere",
+      "excludes": [
+        "market",
+        "slag"
+      ]
+    },
+    "consumer": {
+      "location": "VN",
+      "matrix": "technosphere"
+    },
+    "value": 0.005992809262888256
+  },
+  {
+    "supplier": {
+      "name": "antimony production",
+      "reference product": "antimony",
+      "location": "MZ",
+      "operator": "startswith",
+      "matrix": "technosphere",
+      "excludes": [
+        "market",
+        "slag"
+      ]
+    },
+    "consumer": {
+      "location": "VN",
+      "matrix": "technosphere"
+    },
+    "value": 0.0676355112518564
+  },
+  {
+    "supplier": {
+      "name": "antimony production",
+      "reference product": "antimony",
+      "location": "MM",
+      "operator": "startswith",
+      "matrix": "technosphere",
+      "excludes": [
+        "market",
+        "slag"
+      ]
+    },
+    "consumer": {
+      "location": "CN",
+      "matrix": "technosphere"
+    },
+    "value": 0.09518778715207431
+  },
+  {
+    "supplier": {
+      "name": "antimony production",
+      "reference product": "antimony",
+      "location": "MM",
+      "operator": "startswith",
+      "matrix": "technosphere",
+      "excludes": [
+        "market",
+        "slag"
+      ]
+    },
+    "consumer": {
+      "location": "TH",
+      "matrix": "technosphere"
+    },
+    "value": 2.479144784466135
+  },
+  {
+    "supplier": {
+      "name": "antimony production",
+      "reference product": "antimony",
+      "location": "MM",
+      "operator": "startswith",
+      "matrix": "technosphere",
+      "excludes": [
+        "market",
+        "slag"
+      ]
+    },
+    "consumer": {
+      "location": "VN",
+      "matrix": "technosphere"
+    },
+    "value": 0.5274595413718892
+  },
+  {
+    "supplier": {
+      "name": "antimony production",
+      "reference product": "antimony",
+      "location": "NA",
+      "operator": "startswith",
+      "matrix": "technosphere",
+      "excludes": [
+        "market",
+        "slag"
+      ]
+    },
+    "consumer": {
+      "location": "DE",
+      "matrix": "technosphere"
+    },
+    "value": 0.013845876993379
+  },
+  {
+    "supplier": {
+      "name": "antimony production",
+      "reference product": "antimony",
+      "location": "NL",
+      "operator": "startswith",
+      "matrix": "technosphere",
+      "excludes": [
+        "market",
+        "slag"
+      ]
+    },
+    "consumer": {
+      "location": "BE",
+      "matrix": "technosphere"
+    },
+    "value": 0.003616324910339443
+  },
+  {
+    "supplier": {
+      "name": "antimony production",
+      "reference product": "antimony",
+      "location": "NL",
+      "operator": "startswith",
+      "matrix": "technosphere",
+      "excludes": [
+        "market",
+        "slag"
+      ]
+    },
+    "consumer": {
+      "location": "CZ",
+      "matrix": "technosphere"
+    },
+    "value": 0.0007793927283509823
+  },
+  {
+    "supplier": {
+      "name": "antimony production",
+      "reference product": "antimony",
+      "location": "NL",
+      "operator": "startswith",
+      "matrix": "technosphere",
+      "excludes": [
+        "market",
+        "slag"
+      ]
+    },
+    "consumer": {
+      "location": "FR",
+      "matrix": "technosphere"
+    },
+    "value": 1.781427659404332
+  },
+  {
+    "supplier": {
+      "name": "antimony production",
+      "reference product": "antimony",
+      "location": "NL",
+      "operator": "startswith",
+      "matrix": "technosphere",
+      "excludes": [
+        "market",
+        "slag"
+      ]
+    },
+    "consumer": {
+      "location": "DE",
+      "matrix": "technosphere"
+    },
+    "value": 0.001216987934240428
+  },
+  {
+    "supplier": {
+      "name": "antimony production",
+      "reference product": "antimony",
+      "location": "NL",
+      "operator": "startswith",
+      "matrix": "technosphere",
+      "excludes": [
+        "market",
+        "slag"
+      ]
+    },
+    "consumer": {
+      "location": "GR",
+      "matrix": "technosphere"
+    },
+    "value": 0.0001139062698394779
+  },
+  {
+    "supplier": {
+      "name": "antimony production",
+      "reference product": "antimony",
+      "location": "NL",
+      "operator": "startswith",
+      "matrix": "technosphere",
+      "excludes": [
+        "market",
+        "slag"
+      ]
+    },
+    "consumer": {
+      "location": "IT",
+      "matrix": "technosphere"
+    },
+    "value": 2.14531498849336e-06
+  },
+  {
+    "supplier": {
+      "name": "antimony production",
+      "reference product": "antimony",
+      "location": "NL",
+      "operator": "startswith",
+      "matrix": "technosphere",
+      "excludes": [
+        "market",
+        "slag"
+      ]
+    },
+    "consumer": {
+      "location": "NO",
+      "matrix": "technosphere"
+    },
+    "value": 62.87929219052457
+  },
+  {
+    "supplier": {
+      "name": "antimony production",
+      "reference product": "antimony",
+      "location": "NL",
+      "operator": "startswith",
+      "matrix": "technosphere",
+      "excludes": [
+        "market",
+        "slag"
+      ]
+    },
+    "consumer": {
+      "location": "PL",
+      "matrix": "technosphere"
+    },
+    "value": 0.2437679150418214
+  },
+  {
+    "supplier": {
+      "name": "antimony production",
+      "reference product": "antimony",
+      "location": "NL",
+      "operator": "startswith",
+      "matrix": "technosphere",
+      "excludes": [
+        "market",
+        "slag"
+      ]
+    },
+    "consumer": {
+      "location": "ES",
+      "matrix": "technosphere"
+    },
+    "value": 1.517065832730269
+  },
+  {
+    "supplier": {
+      "name": "antimony production",
+      "reference product": "antimony",
+      "location": "NL",
+      "operator": "startswith",
+      "matrix": "technosphere",
+      "excludes": [
+        "market",
+        "slag"
+      ]
+    },
+    "consumer": {
+      "location": "SE",
+      "matrix": "technosphere"
+    },
+    "value": 2.254907762990018
+  },
+  {
+    "supplier": {
+      "name": "antimony production",
+      "reference product": "antimony",
+      "location": "NZ",
+      "operator": "startswith",
+      "matrix": "technosphere",
+      "excludes": [
+        "market",
+        "slag"
+      ]
+    },
+    "consumer": {
+      "location": "AU",
+      "matrix": "technosphere"
+    },
+    "value": 2.039172984585391e-06
+  },
+  {
+    "supplier": {
+      "name": "antimony production",
+      "reference product": "antimony",
+      "location": "NI",
+      "operator": "startswith",
+      "matrix": "technosphere",
+      "excludes": [
+        "market",
+        "slag"
+      ]
+    },
+    "consumer": {
+      "location": "CN",
+      "matrix": "technosphere"
+    },
+    "value": 0.0001285417886849967
+  },
+  {
+    "supplier": {
+      "name": "antimony production",
+      "reference product": "antimony",
+      "location": "NG",
+      "operator": "startswith",
+      "matrix": "technosphere",
+      "excludes": [
+        "market",
+        "slag"
+      ]
+    },
+    "consumer": {
+      "location": "CN",
+      "matrix": "technosphere"
+    },
+    "value": 0.01224784839616193
+  },
+  {
+    "supplier": {
+      "name": "antimony production",
+      "reference product": "antimony",
+      "location": "NO",
+      "operator": "startswith",
+      "matrix": "technosphere",
+      "excludes": [
+        "market",
+        "slag"
+      ]
+    },
+    "consumer": {
+      "location": "DK",
+      "matrix": "technosphere"
+    },
+    "value": 2.750667240963659
+  },
+  {
+    "supplier": {
+      "name": "antimony production",
+      "reference product": "antimony",
+      "location": "OM",
+      "operator": "startswith",
+      "matrix": "technosphere",
+      "excludes": [
+        "market",
+        "slag"
+      ]
+    },
+    "consumer": {
+      "location": "IN",
+      "matrix": "technosphere"
+    },
+    "value": 0.01844997827821344
+  },
+  {
+    "supplier": {
+      "name": "antimony production",
+      "reference product": "antimony",
+      "location": "PK",
+      "operator": "startswith",
+      "matrix": "technosphere",
+      "excludes": [
+        "market",
+        "slag"
+      ]
+    },
+    "consumer": {
+      "location": "CN",
+      "matrix": "technosphere"
+    },
+    "value": 0.009576508980136634
+  },
+  {
+    "supplier": {
+      "name": "antimony production",
+      "reference product": "antimony",
+      "location": "PK",
+      "operator": "startswith",
+      "matrix": "technosphere",
+      "excludes": [
+        "market",
+        "slag"
+      ]
+    },
+    "consumer": {
+      "location": "FR",
+      "matrix": "technosphere"
+    },
+    "value": 1.743007820805627
+  },
+  {
+    "supplier": {
+      "name": "antimony production",
+      "reference product": "antimony",
+      "location": "PK",
+      "operator": "startswith",
+      "matrix": "technosphere",
+      "excludes": [
+        "market",
+        "slag"
+      ]
+    },
+    "consumer": {
+      "location": "OM",
+      "matrix": "technosphere"
+    },
+    "value": 0.01187060885042086
+  },
+  {
+    "supplier": {
+      "name": "antimony production",
+      "reference product": "antimony",
+      "location": "PK",
+      "operator": "startswith",
+      "matrix": "technosphere",
+      "excludes": [
+        "market",
+        "slag"
+      ]
+    },
+    "consumer": {
+      "location": "TR",
+      "matrix": "technosphere"
+    },
+    "value": 1.599078446922238e-07
+  },
+  {
+    "supplier": {
+      "name": "antimony production",
+      "reference product": "antimony",
+      "location": "PG",
+      "operator": "startswith",
+      "matrix": "technosphere",
+      "excludes": [
+        "market",
+        "slag"
+      ]
+    },
+    "consumer": {
+      "location": "AU",
+      "matrix": "technosphere"
+    },
+    "value": 0.0006761905788484491
+  },
+  {
+    "supplier": {
+      "name": "antimony production",
+      "reference product": "antimony",
+      "location": "PE",
+      "operator": "startswith",
+      "matrix": "technosphere",
+      "excludes": [
+        "market",
+        "slag"
+      ]
+    },
+    "consumer": {
+      "location": "BO",
+      "matrix": "technosphere"
+    },
+    "value": 0.0006827840783196783
+  },
+  {
+    "supplier": {
+      "name": "antimony production",
+      "reference product": "antimony",
+      "location": "PE",
+      "operator": "startswith",
+      "matrix": "technosphere",
+      "excludes": [
+        "market",
+        "slag"
+      ]
+    },
+    "consumer": {
+      "location": "CN",
+      "matrix": "technosphere"
+    },
+    "value": 0.02442703949868294
+  },
+  {
+    "supplier": {
+      "name": "antimony production",
+      "reference product": "antimony",
+      "location": "PE",
+      "operator": "startswith",
+      "matrix": "technosphere",
+      "excludes": [
+        "market",
+        "slag"
+      ]
+    },
+    "consumer": {
+      "location": "VN",
+      "matrix": "technosphere"
+    },
+    "value": 0.02911169168419201
+  },
+  {
+    "supplier": {
+      "name": "antimony production",
+      "reference product": "antimony",
+      "location": "PL",
+      "operator": "startswith",
+      "matrix": "technosphere",
+      "excludes": [
+        "market",
+        "slag"
+      ]
+    },
+    "consumer": {
+      "location": "CZ",
+      "matrix": "technosphere"
+    },
+    "value": 1.09502864854684
+  },
+  {
+    "supplier": {
+      "name": "antimony production",
+      "reference product": "antimony",
+      "location": "PL",
+      "operator": "startswith",
+      "matrix": "technosphere",
+      "excludes": [
+        "market",
+        "slag"
+      ]
+    },
+    "consumer": {
+      "location": "RO",
+      "matrix": "technosphere"
+    },
+    "value": 4.281854475466226
+  },
+  {
+    "supplier": {
+      "name": "antimony production",
+      "reference product": "antimony",
+      "location": "KR",
+      "operator": "startswith",
+      "matrix": "technosphere",
+      "excludes": [
+        "market",
+        "slag"
+      ]
+    },
+    "consumer": {
+      "location": "OM",
+      "matrix": "technosphere"
+    },
+    "value": 0.3248224859018752
+  },
+  {
+    "supplier": {
+      "name": "antimony production",
+      "reference product": "antimony",
+      "location": "RO",
+      "operator": "startswith",
+      "matrix": "technosphere",
+      "excludes": [
+        "market",
+        "slag"
+      ]
+    },
+    "consumer": {
+      "location": "CZ",
+      "matrix": "technosphere"
+    },
+    "value": 0.351853994787884
+  },
+  {
+    "supplier": {
+      "name": "antimony production",
+      "reference product": "antimony",
+      "location": "RU",
+      "operator": "startswith",
+      "matrix": "technosphere",
+      "excludes": [
+        "market",
+        "slag"
+      ]
+    },
+    "consumer": {
+      "location": "CN",
+      "matrix": "technosphere"
+    },
+    "value": 0.1747292226752577
+  },
+  {
+    "supplier": {
+      "name": "antimony production",
+      "reference product": "antimony",
+      "location": "RU",
+      "operator": "startswith",
+      "matrix": "technosphere",
+      "excludes": [
+        "market",
+        "slag"
+      ]
+    },
+    "consumer": {
+      "location": "IN",
+      "matrix": "technosphere"
+    },
+    "value": 0.1335430863380826
+  },
+  {
+    "supplier": {
+      "name": "antimony production",
+      "reference product": "antimony",
+      "location": "RU",
+      "operator": "startswith",
+      "matrix": "technosphere",
+      "excludes": [
+        "market",
+        "slag"
+      ]
+    },
+    "consumer": {
+      "location": "OM",
+      "matrix": "technosphere"
+    },
+    "value": 0.5576159888892102
+  },
+  {
+    "supplier": {
+      "name": "antimony production",
+      "reference product": "antimony",
+      "location": "RU",
+      "operator": "startswith",
+      "matrix": "technosphere",
+      "excludes": [
+        "market",
+        "slag"
+      ]
+    },
+    "consumer": {
+      "location": "VN",
+      "matrix": "technosphere"
+    },
+    "value": 0.9392868911317173
+  },
+  {
+    "supplier": {
+      "name": "antimony production",
+      "reference product": "antimony",
+      "location": "SG",
+      "operator": "startswith",
+      "matrix": "technosphere",
+      "excludes": [
+        "market",
+        "slag"
+      ]
+    },
+    "consumer": {
+      "location": "OM",
+      "matrix": "technosphere"
+    },
+    "value": 0.002741617073401622
+  },
+  {
+    "supplier": {
+      "name": "antimony production",
+      "reference product": "antimony",
+      "location": "ZA",
+      "operator": "startswith",
+      "matrix": "technosphere",
+      "excludes": [
+        "market",
+        "slag"
+      ]
+    },
+    "consumer": {
+      "location": "CN",
+      "matrix": "technosphere"
+    },
+    "value": 0.006676264483914995
+  },
+  {
+    "supplier": {
+      "name": "antimony production",
+      "reference product": "antimony",
+      "location": "ZA",
+      "operator": "startswith",
+      "matrix": "technosphere",
+      "excludes": [
+        "market",
+        "slag"
+      ]
+    },
+    "consumer": {
+      "location": "CD",
+      "matrix": "technosphere"
+    },
+    "value": 33.09368221634075
+  },
+  {
+    "supplier": {
+      "name": "antimony production",
+      "reference product": "antimony",
+      "location": "ZA",
+      "operator": "startswith",
+      "matrix": "technosphere",
+      "excludes": [
+        "market",
+        "slag"
+      ]
+    },
+    "consumer": {
+      "location": "KE",
+      "matrix": "technosphere"
+    },
+    "value": 7.950410158686177
+  },
+  {
+    "supplier": {
+      "name": "antimony production",
+      "reference product": "antimony",
+      "location": "ZA",
+      "operator": "startswith",
+      "matrix": "technosphere",
+      "excludes": [
+        "market",
+        "slag"
+      ]
+    },
+    "consumer": {
+      "location": "GB",
+      "matrix": "technosphere"
+    },
+    "value": 71.03841745873929
+  },
+  {
+    "supplier": {
+      "name": "antimony production",
+      "reference product": "antimony",
+      "location": "SE",
+      "operator": "startswith",
+      "matrix": "technosphere",
+      "excludes": [
+        "market",
+        "slag"
+      ]
+    },
+    "consumer": {
+      "location": "FI",
+      "matrix": "technosphere"
+    },
+    "value": 1.087358124323932
+  },
+  {
+    "supplier": {
+      "name": "antimony production",
+      "reference product": "antimony",
+      "location": "SE",
+      "operator": "startswith",
+      "matrix": "technosphere",
+      "excludes": [
+        "market",
+        "slag"
+      ]
+    },
+    "consumer": {
+      "location": "US",
+      "matrix": "technosphere"
+    },
+    "value": 0.002312122019953262
+  },
+  {
+    "supplier": {
+      "name": "antimony production",
+      "reference product": "antimony",
+      "location": "CH",
+      "operator": "startswith",
+      "matrix": "technosphere",
+      "excludes": [
+        "market",
+        "slag"
+      ]
+    },
+    "consumer": {
+      "location": "DE",
+      "matrix": "technosphere"
+    },
+    "value": 0.002066426423798446
+  },
+  {
+    "supplier": {
+      "name": "antimony production",
+      "reference product": "antimony",
+      "location": "TJ",
+      "operator": "startswith",
+      "matrix": "technosphere",
+      "excludes": [
+        "market",
+        "slag"
+      ]
+    },
+    "consumer": {
+      "location": "CN",
+      "matrix": "technosphere"
+    },
+    "value": 0.2130075278395668
+  },
+  {
+    "supplier": {
+      "name": "antimony production",
+      "reference product": "antimony",
+      "location": "TJ",
+      "operator": "startswith",
+      "matrix": "technosphere",
+      "excludes": [
+        "market",
+        "slag"
+      ]
+    },
+    "consumer": {
+      "location": "IN",
+      "matrix": "technosphere"
+    },
+    "value": 0.1869020576179075
+  },
+  {
+    "supplier": {
+      "name": "antimony production",
+      "reference product": "antimony",
+      "location": "TJ",
+      "operator": "startswith",
+      "matrix": "technosphere",
+      "excludes": [
+        "market",
+        "slag"
+      ]
+    },
+    "consumer": {
+      "location": "NL",
+      "matrix": "technosphere"
+    },
+    "value": 1.015256214700366
+  },
+  {
+    "supplier": {
+      "name": "antimony production",
+      "reference product": "antimony",
+      "location": "TJ",
+      "operator": "startswith",
+      "matrix": "technosphere",
+      "excludes": [
+        "market",
+        "slag"
+      ]
+    },
+    "consumer": {
+      "location": "TR",
+      "matrix": "technosphere"
+    },
+    "value": 0.008260669625354466
+  },
+  {
+    "supplier": {
+      "name": "antimony production",
+      "reference product": "antimony",
+      "location": "TH",
+      "operator": "startswith",
+      "matrix": "technosphere",
+      "excludes": [
+        "market",
+        "slag"
+      ]
+    },
+    "consumer": {
+      "location": "CN",
+      "matrix": "technosphere"
+    },
+    "value": 0.04934452660266449
+  },
+  {
+    "supplier": {
+      "name": "antimony production",
+      "reference product": "antimony",
+      "location": "TH",
+      "operator": "startswith",
+      "matrix": "technosphere",
+      "excludes": [
+        "market",
+        "slag"
+      ]
+    },
+    "consumer": {
+      "location": "VN",
+      "matrix": "technosphere"
+    },
+    "value": 0.04239189621491093
+  },
+  {
+    "supplier": {
+      "name": "antimony production",
+      "reference product": "antimony",
+      "location": "TR",
+      "operator": "startswith",
+      "matrix": "technosphere",
+      "excludes": [
+        "market",
+        "slag"
+      ]
+    },
+    "consumer": {
+      "location": "AT",
+      "matrix": "technosphere"
+    },
+    "value": 2.154094532798631
+  },
+  {
+    "supplier": {
+      "name": "antimony production",
+      "reference product": "antimony",
+      "location": "TR",
+      "operator": "startswith",
+      "matrix": "technosphere",
+      "excludes": [
+        "market",
+        "slag"
+      ]
+    },
+    "consumer": {
+      "location": "IT",
+      "matrix": "technosphere"
+    },
+    "value": 3.284124172414595
+  },
+  {
+    "supplier": {
+      "name": "antimony production",
+      "reference product": "antimony",
+      "location": "TR",
+      "operator": "startswith",
+      "matrix": "technosphere",
+      "excludes": [
+        "market",
+        "slag"
+      ]
+    },
+    "consumer": {
+      "location": "RU",
+      "matrix": "technosphere"
+    },
+    "value": 0.007469647712725316
+  },
+  {
+    "supplier": {
+      "name": "antimony production",
+      "reference product": "antimony",
+      "location": "TR",
+      "operator": "startswith",
+      "matrix": "technosphere",
+      "excludes": [
+        "market",
+        "slag"
+      ]
+    },
+    "consumer": {
+      "location": "SE",
+      "matrix": "technosphere"
+    },
+    "value": 16.41760585185642
+  },
+  {
+    "supplier": {
+      "name": "antimony production",
+      "reference product": "antimony",
+      "location": "US",
+      "operator": "startswith",
+      "matrix": "technosphere",
+      "excludes": [
+        "market",
+        "slag"
+      ]
+    },
+    "consumer": {
+      "location": "BN",
+      "matrix": "technosphere"
+    },
+    "value": 113.9545860926391
+  },
+  {
+    "supplier": {
+      "name": "antimony production",
+      "reference product": "antimony",
+      "location": "US",
+      "operator": "startswith",
+      "matrix": "technosphere",
+      "excludes": [
+        "market",
+        "slag"
+      ]
+    },
+    "consumer": {
+      "location": "CA",
+      "matrix": "technosphere"
+    },
+    "value": 0.843320805332934
+  },
+  {
+    "supplier": {
+      "name": "antimony production",
+      "reference product": "antimony",
+      "location": "US",
+      "operator": "startswith",
+      "matrix": "technosphere",
+      "excludes": [
+        "market",
+        "slag"
+      ]
+    },
+    "consumer": {
+      "location": "CL",
+      "matrix": "technosphere"
+    },
+    "value": 3.640843666524964
+  },
+  {
+    "supplier": {
+      "name": "antimony production",
+      "reference product": "antimony",
+      "location": "US",
+      "operator": "startswith",
+      "matrix": "technosphere",
+      "excludes": [
+        "market",
+        "slag"
+      ]
+    },
+    "consumer": {
+      "location": "CZ",
+      "matrix": "technosphere"
+    },
+    "value": 0.006652434716220421
+  },
+  {
+    "supplier": {
+      "name": "antimony production",
+      "reference product": "antimony",
+      "location": "US",
+      "operator": "startswith",
+      "matrix": "technosphere",
+      "excludes": [
+        "market",
+        "slag"
+      ]
+    },
+    "consumer": {
+      "location": "FR",
+      "matrix": "technosphere"
+    },
+    "value": 0.06849194328749811
+  },
+  {
+    "supplier": {
+      "name": "antimony production",
+      "reference product": "antimony",
+      "location": "US",
+      "operator": "startswith",
+      "matrix": "technosphere",
+      "excludes": [
+        "market",
+        "slag"
+      ]
+    },
+    "consumer": {
+      "location": "DE",
+      "matrix": "technosphere"
+    },
+    "value": 0.01415107090571908
+  },
+  {
+    "supplier": {
+      "name": "antimony production",
+      "reference product": "antimony",
+      "location": "US",
+      "operator": "startswith",
+      "matrix": "technosphere",
+      "excludes": [
+        "market",
+        "slag"
+      ]
+    },
+    "consumer": {
+      "location": "IN",
+      "matrix": "technosphere"
+    },
+    "value": 0.009365391121624348
+  },
+  {
+    "supplier": {
+      "name": "antimony production",
+      "reference product": "antimony",
+      "location": "US",
+      "operator": "startswith",
+      "matrix": "technosphere",
+      "excludes": [
+        "market",
+        "slag"
+      ]
+    },
+    "consumer": {
+      "location": "MX",
+      "matrix": "technosphere"
+    },
+    "value": 0.5876699372704399
+  },
+  {
+    "supplier": {
+      "name": "antimony production",
+      "reference product": "antimony",
+      "location": "US",
+      "operator": "startswith",
+      "matrix": "technosphere",
+      "excludes": [
+        "market",
+        "slag"
+      ]
+    },
+    "consumer": {
+      "location": "NL",
+      "matrix": "technosphere"
+    },
+    "value": 8.199955657241942e-05
+  },
+  {
+    "supplier": {
+      "name": "antimony production",
+      "reference product": "antimony",
+      "location": "US",
+      "operator": "startswith",
+      "matrix": "technosphere",
+      "excludes": [
+        "market",
+        "slag"
+      ]
+    },
+    "consumer": {
+      "location": "NI",
+      "matrix": "technosphere"
+    },
+    "value": 18.34320521295873
+  },
+  {
+    "supplier": {
+      "name": "antimony production",
+      "reference product": "antimony",
+      "location": "US",
+      "operator": "startswith",
+      "matrix": "technosphere",
+      "excludes": [
+        "market",
+        "slag"
+      ]
+    },
+    "consumer": {
+      "location": "PE",
+      "matrix": "technosphere"
+    },
+    "value": 115.7253089843042
+  },
+  {
+    "supplier": {
+      "name": "antimony production",
+      "reference product": "antimony",
+      "location": "US",
+      "operator": "startswith",
+      "matrix": "technosphere",
+      "excludes": [
+        "market",
+        "slag"
+      ]
+    },
+    "consumer": {
+      "location": "PH",
+      "matrix": "technosphere"
+    },
+    "value": 12.41880679728854
+  },
+  {
+    "supplier": {
+      "name": "antimony production",
+      "reference product": "antimony",
+      "location": "US",
+      "operator": "startswith",
+      "matrix": "technosphere",
+      "excludes": [
+        "market",
+        "slag"
+      ]
+    },
+    "consumer": {
+      "location": "PL",
+      "matrix": "technosphere"
+    },
+    "value": 4.161317091464083
+  },
+  {
+    "supplier": {
+      "name": "antimony production",
+      "reference product": "antimony",
+      "location": "US",
+      "operator": "startswith",
+      "matrix": "technosphere",
+      "excludes": [
+        "market",
+        "slag"
+      ]
+    },
+    "consumer": {
+      "location": "KR",
+      "matrix": "technosphere"
+    },
+    "value": 0.01511324365715186
+  },
+  {
+    "supplier": {
+      "name": "antimony production",
+      "reference product": "antimony",
+      "location": "AE",
+      "operator": "startswith",
+      "matrix": "technosphere",
+      "excludes": [
+        "market",
+        "slag"
+      ]
+    },
+    "consumer": {
+      "location": "OM",
+      "matrix": "technosphere"
+    },
+    "value": 0.02645555048253308
+  },
+  {
+    "supplier": {
+      "name": "antimony production",
+      "reference product": "antimony",
+      "location": "GB",
+      "operator": "startswith",
+      "matrix": "technosphere",
+      "excludes": [
+        "market",
+        "slag"
+      ]
+    },
+    "consumer": {
+      "location": "NL",
+      "matrix": "technosphere"
+    },
+    "value": 8.492226924343799e-07
+  },
+  {
+    "supplier": {
+      "name": "antimony production",
+      "reference product": "antimony",
+      "location": "ZW",
+      "operator": "startswith",
+      "matrix": "technosphere",
+      "excludes": [
+        "market",
+        "slag"
+      ]
+    },
+    "consumer": {
+      "location": "CN",
+      "matrix": "technosphere"
+    },
+    "value": 3.571986736643887e-06
+  },
+  {
+    "supplier": {
+      "name": "antimony production",
+      "reference product": "antimony",
+      "location": "ZW",
+      "operator": "startswith",
+      "matrix": "technosphere",
+      "excludes": [
+        "market",
+        "slag"
+      ]
+    },
+    "consumer": {
+      "location": "MZ",
+      "matrix": "technosphere"
+    },
+    "value": 0.3838561391307173
+  },
+  {
+    "supplier": {
+      "name": "antimony production",
+      "reference product": "antimony",
+      "location": "ZW",
+      "operator": "startswith",
+      "matrix": "technosphere",
+      "excludes": [
+        "market",
+        "slag"
+      ]
+    },
+    "consumer": {
+      "location": "ZA",
+      "matrix": "technosphere"
+    },
+    "value": 1.485695645924348
+  }
+]
+}
