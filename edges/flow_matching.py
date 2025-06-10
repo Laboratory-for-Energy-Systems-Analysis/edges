@@ -82,9 +82,9 @@ def process_cf_list(
         cf_cons_class = consumer_cf.get("classifications")
         ds_cons_class = filtered_consumer.get("classifications")
         if (
-                cf_cons_class
-                and ds_cons_class
-                and matches_classifications(cf_cons_class, ds_cons_class)
+            cf_cons_class
+            and ds_cons_class
+            and matches_classifications(cf_cons_class, ds_cons_class)
         ):
             match_score += 1
 
@@ -130,7 +130,6 @@ def matches_classifications(cf_classifications, dataset_classifications):
     return False
 
 
-
 def match_flow(flow: dict, criteria: dict) -> tuple[bool, set[str]]:
     unmatched = set()
     operator = criteria.get("operator", "equals")
@@ -146,7 +145,7 @@ def match_flow(flow: dict, criteria: dict) -> tuple[bool, set[str]]:
                 return False, unmatched
             elif isinstance(val, tuple):
                 if any(
-                        term.lower() in str(v).lower() for v in val for term in excludes
+                    term.lower() in str(v).lower() for v in val for term in excludes
                 ):
                     unmatched.add("excludes")
                     return False, unmatched
@@ -172,7 +171,6 @@ def match_flow(flow: dict, criteria: dict) -> tuple[bool, set[str]]:
             unmatched.add(key)
 
     return (not unmatched), unmatched
-
 
 
 @cache
@@ -228,9 +226,7 @@ def normalize_classification_entries(cf_list: list[dict]) -> list[dict]:
     return cf_list
 
 
-def build_cf_index(
-    raw_cfs: list[dict], required_supplier_fields: set
-) -> dict:
+def build_cf_index(raw_cfs: list[dict], required_supplier_fields: set) -> dict:
     """
     Build a nested CF index:
         cf_index[consumer_location][supplier_signature] → list of CFs
@@ -316,7 +312,6 @@ def build_index(lookup_mapping: dict, required_fields: set) -> dict:
     return index
 
 
-
 def match_with_index(
     flow_to_match: dict,
     index: dict,
@@ -336,13 +331,13 @@ def match_with_index(
     candidate_key_sets = {}
     reason_map = {}
 
-    #print("\n--- MATCH WITH INDEX DEBUG ---")
-    #print("Flow to match:", flow_to_match)
-    #print("Required fields:", required_fields)
+    # print("\n--- MATCH WITH INDEX DEBUG ---")
+    # print("Flow to match:", flow_to_match)
+    # print("Required fields:", required_fields)
 
     # --- Special case: no required fields ---
     if not required_fields:
-        #print("No required fields. Returning all.")
+        # print("No required fields. Returning all.")
         matches = []
         for positions in lookup_mapping.values():
             for pos in positions:
@@ -355,30 +350,29 @@ def match_with_index(
         if field == "excludes":
             continue
 
-
-
         match_target = flow_to_match.get(field)
         operator_value = flow_to_match.get("operator", "equals")
         field_index = index.get(field, {})
         field_candidates = set()
 
-        #print(f"\nField: {field}")
-        #print(f"Match target: {match_target}, Operator: {operator_value}")
+        # print(f"\nField: {field}")
+        # print(f"Match target: {match_target}, Operator: {operator_value}")
 
         if operator_value == "equals":
             entries = field_index.get(match_target, [])
-            #print(f"Entries for '{match_target}' in index: {entries}")
+            # print(f"Entries for '{match_target}' in index: {entries}")
             for candidate in entries:
                 candidate_key, _ = candidate
                 field_candidates.add(candidate_key)
         else:
-            #print(f"Looping over {len(field_index)} keys in field index for operator match...")
+            # print(f"Looping over {len(field_index)} keys in field index for operator match...")
             for candidate_value, candidate_list in field_index.items():
-                if match_operator(value=candidate_value, target=match_target, operator=operator_value):
+                if match_operator(
+                    value=candidate_value, target=match_target, operator=operator_value
+                ):
                     for candidate in candidate_list:
                         candidate_key, _ = candidate
                         field_candidates.add(candidate_key)
-
 
         if field == "location":
             print(f"DEBUG: Candidate keys from location match: {field_candidates}")
@@ -389,7 +383,7 @@ def match_with_index(
             raise
 
         candidate_key_sets[field] = field_candidates
-        #print(f"Candidate keys for field '{field}':", field_candidates)
+        # print(f"Candidate keys for field '{field}':", field_candidates)
 
         if candidate_keys is None:
             candidate_keys = field_candidates
@@ -398,29 +392,35 @@ def match_with_index(
 
         if not candidate_keys:
             failure_fields.add(field)
-            #print(f"No candidates left after filtering for field: {field}")
-            #print(f"field_candidates for failure: {field_candidates}")
+            # print(f"No candidates left after filtering for field: {field}")
+            # print(f"field_candidates for failure: {field_candidates}")
             for key in field_candidates:
-                wrapped_key = key if isinstance(key, tuple) and isinstance(key[0], tuple) else (key,)
+                wrapped_key = (
+                    key
+                    if isinstance(key, tuple) and isinstance(key[0], tuple)
+                    else (key,)
+                )
                 matches_for_key = lookup_mapping.get(wrapped_key, [])
-                #print(f"Wrapped key: {wrapped_key}, matches: {matches_for_key}")
+                # print(f"Wrapped key: {wrapped_key}, matches: {matches_for_key}")
                 for pos in matches_for_key:
                     reason_map.setdefault(pos, set()).add(field)
 
     # --- No valid candidates left after filtering ---
     if not candidate_keys:
-        #print("No valid candidates after index filtering.")
+        # print("No valid candidates after index filtering.")
         if "location" in required_fields:
             for reasons in reason_map.values():
                 reasons.add("location")
-            #print("Added 'location' reason to all failures.")
+            # print("Added 'location' reason to all failures.")
         return [], reason_map
 
     # --- Fine-grained matching using match_flow ---
     matches = []
-    #print("\n--- Fine-grained matching ---")
+    # print("\n--- Fine-grained matching ---")
     for key in candidate_keys:
-        wrapped_key = key if isinstance(key, tuple) and isinstance(key[0], tuple) else (key,)
+        wrapped_key = (
+            key if isinstance(key, tuple) and isinstance(key[0], tuple) else (key,)
+        )
         for pos in lookup_mapping.get(wrapped_key, []):
             flow = reversed_lookup.get(pos)
             flow = dict(flow) if isinstance(flow, tuple) else flow
@@ -432,7 +432,7 @@ def match_with_index(
                 reason_map[pos] = {"perfect match"}
             else:
                 reason_map[pos] = reasons
-            #print(f"pos: {pos}, matched: {matched}, reasons: {reasons}")
+            # print(f"pos: {pos}, matched: {matched}, reasons: {reasons}")
 
     # --- Optional fallback using classifications ---
     if "classifications" in flow_to_match:
@@ -455,19 +455,20 @@ def match_with_index(
                         for s, code in dataset_classifications
                         if s.lower() == scheme.lower()
                     ]
-                    if any(code.startswith(prefix) for prefix in cf_codes for code in relevant_codes):
+                    if any(
+                        code.startswith(prefix)
+                        for prefix in cf_codes
+                        for code in relevant_codes
+                    ):
                         classified_matches.append(pos)
                         break
 
         if classified_matches:
-            #print("Returning classified matches.")
+            # print("Returning classified matches.")
             return classified_matches, {}
 
-    #print("--- MATCH WITH INDEX COMPLETE ---\n")
+    # print("--- MATCH WITH INDEX COMPLETE ---\n")
     return matches, reason_map
-
-
-
 
 
 def compute_cf_memoized_factory(
@@ -523,6 +524,7 @@ def normalize_signature_data(info_dict, required_fields):
 
     return filtered
 
+
 @lru_cache(maxsize=None)
 def resolve_candidate_locations(
     *,
@@ -557,13 +559,9 @@ def resolve_candidate_locations(
         return []
 
     if supplier is True:
-        available_locs = [
-            loc[0] for loc in weights
-        ]
+        available_locs = [loc[0] for loc in weights]
     else:
-        available_locs = [
-            loc[1] for loc in weights
-        ]
+        available_locs = [loc[1] for loc in weights]
     return [loc for loc in candidates if loc in available_locs]
 
 
@@ -617,7 +615,6 @@ def compute_average_cf(
     if not candidate_suppliers and not candidate_consumers:
         return 0, None
 
-
     # calculate all permutations
     valid_location_pairs = [
         (s, c)
@@ -632,18 +629,23 @@ def compute_average_cf(
     filtered_supplier = {
         k: supplier_info[k]
         for k in required_supplier_fields
-        if k in supplier_info and k!="location"
+        if k in supplier_info and k != "location"
     }
     filtered_consumer = {
         k: consumer_info[k]
         for k in required_consumer_fields
-        if k in consumer_info and k!="location"
+        if k in consumer_info and k != "location"
     }
 
     matched_cfs = []
 
-    for candidate_supplier_location, candidate_consumer_location in valid_location_pairs:
-        candidate_cfs = cf_index.get((candidate_supplier_location, candidate_consumer_location))
+    for (
+        candidate_supplier_location,
+        candidate_consumer_location,
+    ) in valid_location_pairs:
+        candidate_cfs = cf_index.get(
+            (candidate_supplier_location, candidate_consumer_location)
+        )
 
         if not candidate_cfs:
             continue
@@ -669,16 +671,16 @@ def compute_average_cf(
             f"No valid weights found for supplier {supplier_info} and consumer {consumer_info}. "
             "Using equal shares."
         )
-        matched_cfs = [
-            (cf, (1.0 / len(matched_cfs))) for cf in matched_cfs
-        ]
+        matched_cfs = [(cf, (1.0 / len(matched_cfs))) for cf in matched_cfs]
     else:
         matched_cfs = [
             (cf, (cf.get("weight", 0) / sum_weights if sum_weights else 1.0))
             for cf in matched_cfs
         ]
 
-    assert np.isclose(sum(share for _, share in matched_cfs), 1), f"Total shares must equal 1. Got: {sum(share for _, share in matched_cfs)}"
+    assert np.isclose(
+        sum(share for _, share in matched_cfs), 1
+    ), f"Total shares must equal 1. Got: {sum(share for _, share in matched_cfs)}"
 
     expressions = [f"({share:.3f} * ({cf['value']}))" for cf, share in matched_cfs]
     expr = " + ".join(expressions)

@@ -459,14 +459,12 @@ def get_shares(candidates: list):
     if not candidates:
         return [], np.array([])
 
-    cand_supplier_locs, cand_consumer_locs , weights = zip(*candidates)
+    cand_supplier_locs, cand_consumer_locs, weights = zip(*candidates)
 
     weight_array = np.array(weights, dtype=float)
     total_weight = weight_array.sum()
     if total_weight == 0:
-        return [
-            (cand_supplier_locs, cand_consumer_locs, 0.0)
-        ]
+        return [(cand_supplier_locs, cand_consumer_locs, 0.0)]
     return [
         (cand_supplier_locs, cand_consumer_locs, weight / total_weight)
         for weight in weight_array
