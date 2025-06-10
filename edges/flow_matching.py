@@ -444,7 +444,9 @@ def match_with_index(
     # --- Final pass to record location mismatches for unmatched flows ---
     if "location" in required_fields:
         expected_location = flow_to_match.get("location")
-        all_positions = {pos for positions in lookup_mapping.values() for pos in positions}
+        all_positions = {
+            pos for positions in lookup_mapping.values() for pos in positions
+        }
         known_positions = set(reason_map.keys()) | set(matches)
 
         for pos in all_positions - known_positions:

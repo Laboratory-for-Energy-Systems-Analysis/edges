@@ -638,8 +638,9 @@ class EdgeLCIA:
             cached_match_with_index.reversed_lookup = self.reversed_supplier_lookup
 
             nonclass_criteria = {
-                k: v for k, v in supplier_criteria.items() if k not in
-                ("classifications", "matrix")
+                k: v
+                for k, v in supplier_criteria.items()
+                if k not in ("classifications", "matrix")
             }
 
             dynamic_supplier_fields = {
@@ -650,9 +651,9 @@ class EdgeLCIA:
                 and k not in ("classifications", "matrix")
             }
 
-            #print("suppliers")
-            #print("make_hashable(nonclass_criteria)", make_hashable(nonclass_criteria))
-            #print("tuple(sorted(dynamic_supplier_fields))", tuple(sorted(dynamic_supplier_fields)))
+            # print("suppliers")
+            # print("make_hashable(nonclass_criteria)", make_hashable(nonclass_criteria))
+            # print("tuple(sorted(dynamic_supplier_fields))", tuple(sorted(dynamic_supplier_fields)))
             nonclass_matches, supplier_reasons = cached_match_with_index(
                 make_hashable(nonclass_criteria),
                 tuple(sorted(dynamic_supplier_fields)),
@@ -686,9 +687,9 @@ class EdgeLCIA:
                     and consumer_criteria.get(k, "") != ""
                 }
 
-                #print("consumers")
-                #print(make_hashable(consumer_criteria))
-                #print(tuple(sorted(dynamic_consumer_fields)))
+                # print("consumers")
+                # print(make_hashable(consumer_criteria))
+                # print(tuple(sorted(dynamic_consumer_fields)))
 
                 consumer_candidates, consumer_reasons = cached_match_with_index(
                     make_hashable(consumer_criteria),
