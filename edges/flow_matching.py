@@ -130,8 +130,9 @@ def matches_classifications(cf_classifications, dataset_classifications):
     return False
 
 
-def match_flow(
-    flow: dict, criteria: dict) -> bool:
+
+def match_flow(flow: dict, criteria: dict) -> tuple[bool, set[str]]:
+    unmatched = set()
     operator = criteria.get("operator", "equals")
     excludes = criteria.get("excludes", [])
 
@@ -141,12 +142,14 @@ def match_flow(
             if isinstance(val, str) and any(
                 term.lower() in val.lower() for term in excludes
             ):
-                return False
+                unmatched.add("excludes")
+                return False, unmatched
             elif isinstance(val, tuple):
                 if any(
                         term.lower() in str(v).lower() for v in val for term in excludes
                 ):
-                    return False
+                    unmatched.add("excludes")
+                    return False, unmatched
 
     # Handle standard field matching
     for key, target in criteria.items():
@@ -154,11 +157,22 @@ def match_flow(
             continue
 
         value = flow.get(key)
+        if value is None:
+            unmatched.add(key)
+            continue
 
-        if value is None or not match_operator(value, target, operator):
-            return False
+        if operator == "equals" and value != target:
+            unmatched.add(key)
+        elif operator == "startswith":
+            if isinstance(value, str) and not value.startswith(target):
+                unmatched.add(key)
+            elif isinstance(value, tuple) and not value[0].startswith(target):
+                unmatched.add(key)
+        elif operator == "contains" and target not in str(value):
+            unmatched.add(key)
 
-    return True
+    return (not unmatched), unmatched
+
 
 
 @cache
@@ -286,24 +300,21 @@ def preprocess_flows(flows_list: list, mandatory_fields: set) -> dict:
     return lookup
 
 
-def build_index(lookup: dict, required_fields: set) -> dict:
-    """
-    Build an inverted index from the lookup dictionary.
-    The index maps each required field to a dict, whose keys are the values
-    from the lookup entries and whose values are lists of tuples:
-    (lookup_key, positions), where lookup_key is the original key from lookup.
-
-    :param lookup: The original lookup dictionary.
-    :param required_fields: The fields to index.
-    :return: A dictionary index.
-    """
+def build_index(lookup_mapping: dict, required_fields: set) -> dict:
     index = {field: {} for field in required_fields}
-    for key, positions in lookup.items():
-        # Each key is assumed to be an iterable of (field, value) pairs.
-        for k, v in key:
-            if k in required_fields:
-                index[k].setdefault(v, []).append((key, positions))
+    for key, positions in lookup_mapping.items():
+        if not isinstance(key, tuple):
+            continue
+        for field_value in key:
+            if (
+                isinstance(field_value, tuple)
+                and len(field_value) == 2
+                and field_value[0] in required_fields
+            ):
+                field, value = field_value
+                index[field].setdefault(value, []).append((key, positions))
     return index
+
 
 
 def match_with_index(
@@ -312,69 +323,120 @@ def match_with_index(
     lookup_mapping: dict,
     required_fields: set,
     reversed_lookup: dict,
-) -> list:
+) -> tuple[list[int], dict[int, set[str]]]:
     """
     Match a flow against the lookup using the inverted index.
-    Supports "equals", "startswith", and "contains" operators.
-
-    :param flow_to_match: The flow to match.
-    :param index: The inverted index produced by build_index().
-    :param lookup_mapping: The original lookup dictionary mapping keys to positions.
-    :param required_fields: The required fields for matching.
-    :return: A list of matching positions.
+    Returns:
+        - list of matching positions
+        - dict mapping positions to sets of failure reasons
+          (includes {"perfect match"} for successful matches).
     """
     candidate_keys = None
+    failure_fields = set()
+    candidate_key_sets = {}
+    reason_map = {}
 
+    #print("\n--- MATCH WITH INDEX DEBUG ---")
+    #print("Flow to match:", flow_to_match)
+    #print("Required fields:", required_fields)
+
+    # --- Special case: no required fields ---
     if not required_fields:
-        # Match all flows if no fields to match
-        return [pos for positions in lookup_mapping.values() for pos in positions]
+        #print("No required fields. Returning all.")
+        matches = []
+        for positions in lookup_mapping.values():
+            for pos in positions:
+                matches.append(pos)
+                reason_map[pos] = {"perfect match"}
+        return matches, reason_map
 
+    # --- Inverted index filtering ---
     for field in required_fields:
         if field == "excludes":
             continue
+
+
 
         match_target = flow_to_match.get(field)
         operator_value = flow_to_match.get("operator", "equals")
         field_index = index.get(field, {})
         field_candidates = set()
 
+        #print(f"\nField: {field}")
+        #print(f"Match target: {match_target}, Operator: {operator_value}")
+
         if operator_value == "equals":
-            # Fast direct lookup.
-            for candidate in field_index.get(match_target, []):
+            entries = field_index.get(match_target, [])
+            #print(f"Entries for '{match_target}' in index: {entries}")
+            for candidate in entries:
                 candidate_key, _ = candidate
                 field_candidates.add(candidate_key)
         else:
-            # For "startswith" or "contains", we iterate over all candidate values.
+            #print(f"Looping over {len(field_index)} keys in field index for operator match...")
             for candidate_value, candidate_list in field_index.items():
-                if match_operator(
-                    value=candidate_value, target=match_target, operator=operator_value
-                ):
+                if match_operator(value=candidate_value, target=match_target, operator=operator_value):
                     for candidate in candidate_list:
                         candidate_key, _ = candidate
                         field_candidates.add(candidate_key)
 
-        # Initialize or intersect candidate sets.
+
+        if field == "location":
+            print(f"DEBUG: Candidate keys from location match: {field_candidates}")
+            print(f"DEBUG: Intersection after location: {candidate_keys}")
+            print(f"DEBUG: Lookup mapping for each candidate:")
+            for key in field_candidates:
+                print(f"  {key}: {lookup_mapping.get(key)}")
+            raise
+
+        candidate_key_sets[field] = field_candidates
+        #print(f"Candidate keys for field '{field}':", field_candidates)
+
         if candidate_keys is None:
             candidate_keys = field_candidates
         else:
             candidate_keys &= field_candidates
 
-        # Early exit if no candidates remain.
         if not candidate_keys:
-            return []
+            failure_fields.add(field)
+            #print(f"No candidates left after filtering for field: {field}")
+            #print(f"field_candidates for failure: {field_candidates}")
+            for key in field_candidates:
+                wrapped_key = key if isinstance(key, tuple) and isinstance(key[0], tuple) else (key,)
+                matches_for_key = lookup_mapping.get(wrapped_key, [])
+                #print(f"Wrapped key: {wrapped_key}, matches: {matches_for_key}")
+                for pos in matches_for_key:
+                    reason_map.setdefault(pos, set()).add(field)
 
-    # Gather positions from the original lookup mapping for all candidate keys.
+    # --- No valid candidates left after filtering ---
+    if not candidate_keys:
+        #print("No valid candidates after index filtering.")
+        if "location" in required_fields:
+            for reasons in reason_map.values():
+                reasons.add("location")
+            #print("Added 'location' reason to all failures.")
+        return [], reason_map
+
+    # --- Fine-grained matching using match_flow ---
     matches = []
+    #print("\n--- Fine-grained matching ---")
     for key in candidate_keys:
-        for pos in lookup_mapping.get(key, []):
-            raw = reversed_lookup.get(pos)
-            flow = dict(raw) if isinstance(raw, tuple) else raw
-            if flow and match_flow(flow, flow_to_match):
+        wrapped_key = key if isinstance(key, tuple) and isinstance(key[0], tuple) else (key,)
+        for pos in lookup_mapping.get(wrapped_key, []):
+            flow = reversed_lookup.get(pos)
+            flow = dict(flow) if isinstance(flow, tuple) else flow
+            if not flow:
+                continue
+            matched, reasons = match_flow(flow, flow_to_match)
+            if matched:
                 matches.append(pos)
+                reason_map[pos] = {"perfect match"}
+            else:
+                reason_map[pos] = reasons
+            #print(f"pos: {pos}, matched: {matched}, reasons: {reasons}")
 
+    # --- Optional fallback using classifications ---
     if "classifications" in flow_to_match:
         cf_classifications_by_scheme = flow_to_match["classifications"]
-
         if isinstance(cf_classifications_by_scheme, tuple):
             cf_classifications_by_scheme = dict(cf_classifications_by_scheme)
 
@@ -386,7 +448,6 @@ def match_with_index(
             if not flow:
                 continue
             dataset_classifications = flow.get("classifications", [])
-
             if dataset_classifications:
                 for scheme, cf_codes in cf_classifications_by_scheme.items():
                     relevant_codes = [
@@ -394,18 +455,19 @@ def match_with_index(
                         for s, code in dataset_classifications
                         if s.lower() == scheme.lower()
                     ]
-                    if any(
-                        code.startswith(prefix)
-                        for prefix in cf_codes
-                        for code in relevant_codes
-                    ):
+                    if any(code.startswith(prefix) for prefix in cf_codes for code in relevant_codes):
                         classified_matches.append(pos)
                         break
 
         if classified_matches:
-            return classified_matches
+            #print("Returning classified matches.")
+            return classified_matches, {}
 
-    return matches
+    #print("--- MATCH WITH INDEX COMPLETE ---\n")
+    return matches, reason_map
+
+
+
 
 
 def compute_cf_memoized_factory(
