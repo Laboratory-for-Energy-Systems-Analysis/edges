@@ -326,18 +326,14 @@ def match_with_index(
         - dict mapping positions to sets of failure reasons
           (includes {"perfect match"} for successful matches).
     """
+
     candidate_keys = None
     failure_fields = set()
     candidate_key_sets = {}
     reason_map = {}
 
-    # print("\n--- MATCH WITH INDEX DEBUG ---")
-    # print("Flow to match:", flow_to_match)
-    # print("Required fields:", required_fields)
-
     # --- Special case: no required fields ---
     if not required_fields:
-        # print("No required fields. Returning all.")
         matches = []
         for positions in lookup_mapping.values():
             for pos in positions:
@@ -347,7 +343,7 @@ def match_with_index(
 
     # --- Inverted index filtering ---
     for field in required_fields:
-        if field == "excludes":
+        if field in ("excludes", "operator", "matrix"):
             continue
 
         match_target = flow_to_match.get(field)
@@ -355,17 +351,12 @@ def match_with_index(
         field_index = index.get(field, {})
         field_candidates = set()
 
-        # print(f"\nField: {field}")
-        # print(f"Match target: {match_target}, Operator: {operator_value}")
-
         if operator_value == "equals":
             entries = field_index.get(match_target, [])
-            # print(f"Entries for '{match_target}' in index: {entries}")
             for candidate in entries:
                 candidate_key, _ = candidate
                 field_candidates.add(candidate_key)
         else:
-            # print(f"Looping over {len(field_index)} keys in field index for operator match...")
             for candidate_value, candidate_list in field_index.items():
                 if match_operator(
                     value=candidate_value, target=match_target, operator=operator_value
@@ -374,16 +365,7 @@ def match_with_index(
                         candidate_key, _ = candidate
                         field_candidates.add(candidate_key)
 
-        if field == "location":
-            print(f"DEBUG: Candidate keys from location match: {field_candidates}")
-            print(f"DEBUG: Intersection after location: {candidate_keys}")
-            print(f"DEBUG: Lookup mapping for each candidate:")
-            for key in field_candidates:
-                print(f"  {key}: {lookup_mapping.get(key)}")
-            raise
-
         candidate_key_sets[field] = field_candidates
-        # print(f"Candidate keys for field '{field}':", field_candidates)
 
         if candidate_keys is None:
             candidate_keys = field_candidates
@@ -392,8 +374,6 @@ def match_with_index(
 
         if not candidate_keys:
             failure_fields.add(field)
-            # print(f"No candidates left after filtering for field: {field}")
-            # print(f"field_candidates for failure: {field_candidates}")
             for key in field_candidates:
                 wrapped_key = (
                     key
@@ -401,22 +381,18 @@ def match_with_index(
                     else (key,)
                 )
                 matches_for_key = lookup_mapping.get(wrapped_key, [])
-                # print(f"Wrapped key: {wrapped_key}, matches: {matches_for_key}")
                 for pos in matches_for_key:
                     reason_map.setdefault(pos, set()).add(field)
 
     # --- No valid candidates left after filtering ---
     if not candidate_keys:
-        # print("No valid candidates after index filtering.")
         if "location" in required_fields:
             for reasons in reason_map.values():
                 reasons.add("location")
-            # print("Added 'location' reason to all failures.")
         return [], reason_map
 
     # --- Fine-grained matching using match_flow ---
     matches = []
-    # print("\n--- Fine-grained matching ---")
     for key in candidate_keys:
         wrapped_key = (
             key if isinstance(key, tuple) and isinstance(key[0], tuple) else (key,)
@@ -432,7 +408,6 @@ def match_with_index(
                 reason_map[pos] = {"perfect match"}
             else:
                 reason_map[pos] = reasons
-            # print(f"pos: {pos}, matched: {matched}, reasons: {reasons}")
 
     # --- Optional fallback using classifications ---
     if "classifications" in flow_to_match:
@@ -464,10 +439,22 @@ def match_with_index(
                         break
 
         if classified_matches:
-            # print("Returning classified matches.")
             return classified_matches, {}
 
-    # print("--- MATCH WITH INDEX COMPLETE ---\n")
+    # --- Final pass to record location mismatches for unmatched flows ---
+    if "location" in required_fields:
+        expected_location = flow_to_match.get("location")
+        all_positions = {pos for positions in lookup_mapping.values() for pos in positions}
+        known_positions = set(reason_map.keys()) | set(matches)
+
+        for pos in all_positions - known_positions:
+            flow = reversed_lookup.get(pos)
+            flow = dict(flow) if isinstance(flow, tuple) else flow
+            if flow:
+                actual_location = flow.get("location")
+                if actual_location != expected_location:
+                    reason_map[pos] = {"location"}
+
     return matches, reason_map
 
 

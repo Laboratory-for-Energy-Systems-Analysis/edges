@@ -638,7 +638,8 @@ class EdgeLCIA:
             cached_match_with_index.reversed_lookup = self.reversed_supplier_lookup
 
             nonclass_criteria = {
-                k: v for k, v in supplier_criteria.items() if k != "classifications"
+                k: v for k, v in supplier_criteria.items() if k not in
+                ("classifications", "matrix")
             }
 
             dynamic_supplier_fields = {
@@ -646,9 +647,12 @@ class EdgeLCIA:
                 for k in self.required_supplier_fields
                 if k in supplier_criteria
                 and supplier_criteria[k] not in (None, "")
-                and k != "classifications"
+                and k not in ("classifications", "matrix")
             }
 
+            #print("suppliers")
+            #print("make_hashable(nonclass_criteria)", make_hashable(nonclass_criteria))
+            #print("tuple(sorted(dynamic_supplier_fields))", tuple(sorted(dynamic_supplier_fields)))
             nonclass_matches, supplier_reasons = cached_match_with_index(
                 make_hashable(nonclass_criteria),
                 tuple(sorted(dynamic_supplier_fields)),
@@ -678,9 +682,13 @@ class EdgeLCIA:
                 dynamic_consumer_fields = {
                     k
                     for k in self.required_consumer_fields
-                    if k not in {"classifications"}
+                    if k not in ("classifications", "matrix")
                     and consumer_criteria.get(k, "") != ""
                 }
+
+                #print("consumers")
+                #print(make_hashable(consumer_criteria))
+                #print(tuple(sorted(dynamic_consumer_fields)))
 
                 consumer_candidates, consumer_reasons = cached_match_with_index(
                     make_hashable(consumer_criteria),
@@ -716,13 +724,15 @@ class EdgeLCIA:
 
             # Only store consumer mismatches due to "location" alone
             for c, reasons in consumer_reasons.items():
-                if self.reversed_activity[c][0][1] == "RER":
-                    print(c, self.reversed_activity[c][0][1], reasons)
                 if reasons == {"location"} or reasons == {"perfect match"}:
                     aggregated_consumer_reasons[c] = reasons
 
         # --- Build unprocessed_edges dict (location-only mismatch on either side) ---
         matched_set = set(seen_positions)
+
+        print(len(all_positions - matched_set), "unmatched edges")
+        print(len(aggregated_supplier_reasons), "supplier_reasons")
+        print(len(aggregated_consumer_reasons), "consumer_reasons")
 
         for s, c in all_positions - matched_set:
             sr = aggregated_supplier_reasons.get(s, set())
@@ -747,6 +757,8 @@ class EdgeLCIA:
                     "supplier": sr,
                     "consumer": cr,
                 }
+
+        print(f"Unprocessed edges: {len(unprocessed_edges)}")
 
         self._update_unprocessed_edges()
 
