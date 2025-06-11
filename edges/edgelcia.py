@@ -20,13 +20,11 @@ from tqdm import tqdm
 from textwrap import fill
 from functools import lru_cache
 
-
 from .utils import (
     format_data,
     get_flow_matrix_positions,
     safe_eval_cached,
     validate_parameter_lengths,
-    get_str,
     make_hashable,
     assert_no_nans_in_cf_list,
 )
@@ -612,6 +610,21 @@ class EdgeLCIA:
         aggregated_supplier_reasons = {}
         aggregated_consumer_reasons = {}
 
+        supplier_fields = {
+            k
+            for k in self.required_supplier_fields
+            if k not in ("classifications", "matrix")
+        }
+
+        consumer_fields = {
+            k
+            for k in self.required_consumer_fields
+            if k not in ("classifications", "matrix")
+        }
+
+        #print("supplier's fields", supplier_fields)
+        #print("consumer's fields", consumer_fields)
+
         for i, cf in enumerate(tqdm(self.raw_cfs_data, desc="Mapping exchanges")):
             supplier_criteria = cf["supplier"]
             consumer_criteria = cf["consumer"]
@@ -637,27 +650,19 @@ class EdgeLCIA:
             cached_match_with_index.lookup_mapping = self.supplier_lookup
             cached_match_with_index.reversed_lookup = self.reversed_supplier_lookup
 
-            nonclass_criteria = {
+            supplier_flow = {
                 k: v
                 for k, v in supplier_criteria.items()
-                if k not in ("classifications", "matrix")
+                if k not in ("matrix", "classifications")
             }
 
-            dynamic_supplier_fields = {
-                k
-                for k in self.required_supplier_fields
-                if k in supplier_criteria
-                and supplier_criteria[k] not in (None, "")
-                and k not in ("classifications", "matrix")
-            }
+            #print("supplier's flow fields", list(supplier_flow.keys()))
 
-            # print("suppliers")
-            # print("make_hashable(nonclass_criteria)", make_hashable(nonclass_criteria))
-            # print("tuple(sorted(dynamic_supplier_fields))", tuple(sorted(dynamic_supplier_fields)))
             nonclass_matches, supplier_reasons = cached_match_with_index(
-                make_hashable(nonclass_criteria),
-                tuple(sorted(dynamic_supplier_fields)),
+                flow_to_match_hashable=make_hashable(supplier_flow),
+                required_fields_tuple=tuple(sorted(supplier_fields)),
             )
+
 
             # Step 3: Combine
             if classification_matches is not None:
@@ -667,34 +672,49 @@ class EdgeLCIA:
             else:
                 supplier_candidates = nonclass_matches
 
-            # --- Consumer matching ---
-            if not any(k in self.required_consumer_fields for k in consumer_criteria):
-                consumer_candidates = list(self.consumer_lookup.values())
-                consumer_candidates = [
-                    pos for sublist in consumer_candidates for pos in sublist
+            # Step 1: Classifications filter
+            if "classifications" in consumer_criteria:
+                cf_class = consumer_criteria["classifications"]
+                classification_matches = [
+                    idx
+                    for idx in self.reversed_consumer_lookup
+                    if matches_classifications(
+                        cf_class,
+                        dict(self.reversed_consumer_lookup[idx]).get(
+                            "classifications", []
+                        ),
+                    )
                 ]
-                consumer_reasons = {"perfect match"}
             else:
-                cached_match_with_index.index = consumer_index
-                cached_match_with_index.lookup_mapping = self.consumer_lookup
-                cached_match_with_index.reversed_lookup = (
-                    self.position_to_technosphere_flows_lookup
-                )
-                dynamic_consumer_fields = {
-                    k
-                    for k in self.required_consumer_fields
-                    if k not in ("classifications", "matrix")
-                    and consumer_criteria.get(k, "") != ""
-                }
+                classification_matches = None
 
-                # print("consumers")
-                # print(make_hashable(consumer_criteria))
-                # print(tuple(sorted(dynamic_consumer_fields)))
+            # Step 2: Other filters (location, name, etc.)
+            cached_match_with_index.index = consumer_index
+            cached_match_with_index.lookup_mapping = self.consumer_lookup
+            cached_match_with_index.reversed_lookup = self.reversed_consumer_lookup
 
-                consumer_candidates, consumer_reasons = cached_match_with_index(
-                    make_hashable(consumer_criteria),
-                    tuple(sorted(dynamic_consumer_fields)),
+            consumer_flow = {
+                k: v
+                for k, v in consumer_criteria.items()
+                if k not in ("matrix", "classifications")
+            }
+
+            #print("consumer's flow fields", list(supplier_flow.keys()))
+
+            nonclass_matches, consumer_reasons = cached_match_with_index(
+                flow_to_match_hashable=make_hashable(consumer_flow),
+                required_fields_tuple=tuple(sorted(consumer_fields)),
+            )
+
+            #raise
+
+            # Step 3: Combine
+            if classification_matches is not None:
+                consumer_candidates = list(
+                    set(classification_matches) & set(nonclass_matches)
                 )
+            else:
+                consumer_candidates = nonclass_matches
 
             # --- Combine supplier + consumer ---
             positions = [
@@ -720,20 +740,33 @@ class EdgeLCIA:
 
             # Only store supplier mismatches due to "location" alone
             for s, reasons in supplier_reasons.items():
-                if reasons == {"location"} or reasons == {"perfect match"}:
+                if reasons == {"location"}:
+                    if s in aggregated_supplier_reasons:
+                        # Only update if not already a perfect match
+                        if aggregated_supplier_reasons[s] != {"perfect match"}:
+                            aggregated_supplier_reasons[s].update(reasons)
+                    else:
+                        aggregated_supplier_reasons[s] = reasons
+                if reasons == {"perfect match"}:
                     aggregated_supplier_reasons[s] = reasons
 
             # Only store consumer mismatches due to "location" alone
             for c, reasons in consumer_reasons.items():
-                if reasons == {"location"} or reasons == {"perfect match"}:
+                if c in aggregated_consumer_reasons:
+                    # Only update if not already a perfect match
+                    if aggregated_consumer_reasons[c] != {"perfect match"}:
+                        aggregated_consumer_reasons[c].update(reasons)
+                else:
+                    aggregated_consumer_reasons[c] = reasons
+                if reasons == {"perfect match"}:
                     aggregated_consumer_reasons[c] = reasons
 
         # --- Build unprocessed_edges dict (location-only mismatch on either side) ---
         matched_set = set(seen_positions)
 
-        print(len(all_positions - matched_set), "unmatched edges")
-        print(len(aggregated_supplier_reasons), "supplier_reasons")
-        print(len(aggregated_consumer_reasons), "consumer_reasons")
+        print(f"Matched {len(matched_set)} edges out of {len(all_positions)} total.")
+        print(f"Len of aggregated supplier reasons: {len(aggregated_supplier_reasons)}")
+        print(f"Len of aggregated consumer reasons: {len(aggregated_consumer_reasons)}")
 
         for s, c in all_positions - matched_set:
             sr = aggregated_supplier_reasons.get(s, set())
@@ -939,89 +972,91 @@ class EdgeLCIA:
                             print("candidate consumers:", candidate_consumer_locations)
 
             # Pass 1
-            for sig, group_edges in tqdm(
-                prefiltered_groups.items(), desc="Processing static groups (pass 1)"
-            ):
-                supplier_info = group_edges[0][2]
-                consumer_info = group_edges[0][3]
-                candidate_supplier_locations = group_edges[0][-2]
-                candidate_consumer_locations = group_edges[0][-1]
+            if len(prefiltered_groups) > 0:
+                for sig, group_edges in tqdm(
+                    prefiltered_groups.items(), desc="Processing static groups (pass 1)"
+                ):
+                    supplier_info = group_edges[0][2]
+                    consumer_info = group_edges[0][3]
+                    candidate_supplier_locations = group_edges[0][-2]
+                    candidate_consumer_locations = group_edges[0][-1]
 
-                new_cf, matched_cf_obj = compute_average_cf(
-                    candidate_suppliers=candidate_supplier_locations,
-                    candidate_consumers=candidate_consumer_locations,
-                    supplier_info=supplier_info,
-                    consumer_info=consumer_info,
-                    weight=self.weights,
+                    new_cf, matched_cf_obj = compute_average_cf(
+                        candidate_suppliers=candidate_supplier_locations,
+                        candidate_consumers=candidate_consumer_locations,
+                        supplier_info=supplier_info,
+                        consumer_info=consumer_info,
+                        weight=self.weights,
+                        required_supplier_fields=self.required_supplier_fields,
+                        required_consumer_fields=self.required_consumer_fields,
+                        cf_index=self.cf_index,
+                        logger=self.logger,
+                    )
+
+                    if new_cf != 0:
+                        for (
+                            supplier_idx,
+                            consumer_idx,
+                            supplier_info,
+                            consumer_info,
+                            _,
+                            _,
+                        ) in group_edges:
+                            add_cf_entry(
+                                cfs_mapping=self.cfs_mapping,
+                                supplier_info=supplier_info,
+                                consumer_info=consumer_info,
+                                direction=direction,
+                                indices=[(supplier_idx, consumer_idx)],
+                                value=new_cf,
+                                uncertainty=None,
+                            )
+
+            # Pass 2
+            if len(remaining_edges) > 0:
+                compute_cf_memoized = compute_cf_memoized_factory(
+                    cf_index=self.cf_index,
                     required_supplier_fields=self.required_supplier_fields,
                     required_consumer_fields=self.required_consumer_fields,
-                    cf_index=self.cf_index,
+                    weights=self.weights,
                     logger=self.logger,
                 )
 
-                if new_cf != 0:
-                    for (
-                        supplier_idx,
-                        consumer_idx,
-                        supplier_info,
-                        consumer_info,
-                        _,
-                        _,
-                    ) in group_edges:
-                        add_cf_entry(
-                            cfs_mapping=self.cfs_mapping,
-                            supplier_info=supplier_info,
-                            consumer_info=consumer_info,
-                            direction=direction,
-                            indices=[(supplier_idx, consumer_idx)],
-                            value=new_cf,
-                            uncertainty=None,
-                        )
-
-            # Pass 2
-            compute_cf_memoized = compute_cf_memoized_factory(
-                cf_index=self.cf_index,
-                required_supplier_fields=self.required_supplier_fields,
-                required_consumer_fields=self.required_consumer_fields,
-                weights=self.weights,
-                logger=self.logger,
-            )
-
-            grouped_edges = group_edges_by_signature(
-                edge_list=remaining_edges,
-                required_supplier_fields=self.required_supplier_fields,
-                required_consumer_fields=self.required_consumer_fields,
-            )
-
-            for (
-                s_key,
-                c_key,
-                (candidate_suppliers, candidate_consumers),
-            ), edge_group in tqdm(
-                grouped_edges.items(), desc="Processing static groups (pass 2)"
-            ):
-                new_cf, matched_cf_obj = compute_cf_memoized(
-                    s_key, c_key, candidate_suppliers, candidate_consumers
+                grouped_edges = group_edges_by_signature(
+                    edge_list=remaining_edges,
+                    required_supplier_fields=self.required_supplier_fields,
+                    required_consumer_fields=self.required_consumer_fields,
                 )
 
-                if candidate_suppliers == ["ZA"]:
-                    print("static")
-                    print(s_key, c_key)
-                    print("candidate suppliers:", candidate_suppliers)
-                    print("candidate consumers:", candidate_consumers)
-                    print("new cf:", new_cf)
+                for (
+                    s_key,
+                    c_key,
+                    (candidate_suppliers, candidate_consumers),
+                ), edge_group in tqdm(
+                    grouped_edges.items(), desc="Processing static groups (pass 2)"
+                ):
+                    new_cf, matched_cf_obj = compute_cf_memoized(
+                        s_key, c_key, candidate_suppliers, candidate_consumers
+                    )
 
-                if new_cf != 0:
-                    for supplier_idx, consumer_idx in edge_group:
-                        add_cf_entry(
-                            cfs_mapping=self.cfs_mapping,
-                            supplier_info=dict(s_key),
-                            consumer_info=dict(c_key),
-                            direction=direction,
-                            indices=[(supplier_idx, consumer_idx)],
-                            value=new_cf,
-                            uncertainty=None,
-                        )
+                    if candidate_suppliers == ["ZA"]:
+                        print("static")
+                        print(s_key, c_key)
+                        print("candidate suppliers:", candidate_suppliers)
+                        print("candidate consumers:", candidate_consumers)
+                        print("new cf:", new_cf)
+
+                    if new_cf != 0:
+                        for supplier_idx, consumer_idx in edge_group:
+                            add_cf_entry(
+                                cfs_mapping=self.cfs_mapping,
+                                supplier_info=dict(s_key),
+                                consumer_info=dict(c_key),
+                                direction=direction,
+                                indices=[(supplier_idx, consumer_idx)],
+                                value=new_cf,
+                                uncertainty=None,
+                            )
 
         self._update_unprocessed_edges()
 
@@ -1189,84 +1224,86 @@ class EdgeLCIA:
                         )
 
             # Pass 1
-            for sig, group_edges in tqdm(
-                prefiltered_groups.items(), desc="Processing dynamic groups (pass 1)"
-            ):
-                rep_supplier = group_edges[0][2]
-                rep_consumer = group_edges[0][3]
-                candidate_supplier_locations = group_edges[0][-2]
-                candidate_consumer_locations = group_edges[0][-1]
+            if len(prefiltered_groups) > 0:
+                for sig, group_edges in tqdm(
+                    prefiltered_groups.items(), desc="Processing dynamic groups (pass 1)"
+                ):
+                    rep_supplier = group_edges[0][2]
+                    rep_consumer = group_edges[0][3]
+                    candidate_supplier_locations = group_edges[0][-2]
+                    candidate_consumer_locations = group_edges[0][-1]
 
-                new_cf, matched_cf_obj = compute_average_cf(
-                    candidate_suppliers=candidate_supplier_locations,
-                    candidate_consumers=candidate_consumer_locations,
-                    supplier_info=rep_supplier,
-                    consumer_info=rep_consumer,
-                    weight=self.weights,
+                    new_cf, matched_cf_obj = compute_average_cf(
+                        candidate_suppliers=candidate_supplier_locations,
+                        candidate_consumers=candidate_consumer_locations,
+                        supplier_info=rep_supplier,
+                        consumer_info=rep_consumer,
+                        weight=self.weights,
+                        required_supplier_fields=self.required_supplier_fields,
+                        required_consumer_fields=self.required_consumer_fields,
+                        cf_index=self.cf_index,
+                        logger=self.logger,
+                    )
+
+                    if new_cf:
+                        for (
+                            supplier_idx,
+                            consumer_idx,
+                            supplier_info,
+                            consumer_info,
+                            _,
+                        ) in group_edges:
+                            add_cf_entry(
+                                cfs_mapping=self.cfs_mapping,
+                                supplier_info=supplier_info,
+                                consumer_info=consumer_info,
+                                direction=direction,
+                                indices=[(supplier_idx, consumer_idx)],
+                                value=new_cf,
+                                uncertainty=None,
+                            )
+
+            # Pass 2
+            if len(remaining_edges) > 0:
+                compute_cf_memoized = compute_cf_memoized_factory(
+                    cf_index=self.cf_index,
                     required_supplier_fields=self.required_supplier_fields,
                     required_consumer_fields=self.required_consumer_fields,
-                    cf_index=self.cf_index,
+                    weights=self.weights,
                     logger=self.logger,
                 )
 
-                if new_cf:
-                    for (
-                        supplier_idx,
-                        consumer_idx,
-                        supplier_info,
-                        consumer_info,
-                        _,
-                    ) in group_edges:
-                        add_cf_entry(
-                            cfs_mapping=self.cfs_mapping,
-                            supplier_info=supplier_info,
-                            consumer_info=consumer_info,
-                            direction=direction,
-                            indices=[(supplier_idx, consumer_idx)],
-                            value=new_cf,
-                            uncertainty=None,
-                        )
-
-            # Pass 2
-            compute_cf_memoized = compute_cf_memoized_factory(
-                cf_index=self.cf_index,
-                required_supplier_fields=self.required_supplier_fields,
-                required_consumer_fields=self.required_consumer_fields,
-                weights=self.weights,
-                logger=self.logger,
-            )
-
-            grouped_edges = group_edges_by_signature(
-                edge_list=remaining_edges,
-                required_supplier_fields=self.required_supplier_fields,
-                required_consumer_fields=self.required_consumer_fields,
-            )
-
-            for (
-                s_key,
-                c_key,
-                (candidate_supplier_locations, candidate_consumer_locations),
-            ), edge_group in tqdm(
-                grouped_edges.items(), desc="Processing dynamic groups (pass 2)"
-            ):
-                new_cf, matched_cf_obj = compute_cf_memoized(
-                    s_key,
-                    c_key,
-                    candidate_supplier_locations,
-                    candidate_consumer_locations,
+                grouped_edges = group_edges_by_signature(
+                    edge_list=remaining_edges,
+                    required_supplier_fields=self.required_supplier_fields,
+                    required_consumer_fields=self.required_consumer_fields,
                 )
 
-                if new_cf:
-                    for supplier_idx, consumer_idx in edge_group:
-                        add_cf_entry(
-                            cfs_mapping=self.cfs_mapping,
-                            supplier_info=dict(s_key),
-                            consumer_info=dict(c_key),
-                            direction=direction,
-                            indices=[(supplier_idx, consumer_idx)],
-                            value=new_cf,
-                            uncertainty=None,
-                        )
+                for (
+                    s_key,
+                    c_key,
+                    (candidate_supplier_locations, candidate_consumer_locations),
+                ), edge_group in tqdm(
+                    grouped_edges.items(), desc="Processing dynamic groups (pass 2)"
+                ):
+                    new_cf, matched_cf_obj = compute_cf_memoized(
+                        s_key,
+                        c_key,
+                        candidate_supplier_locations,
+                        candidate_consumer_locations,
+                    )
+
+                    if new_cf:
+                        for supplier_idx, consumer_idx in edge_group:
+                            add_cf_entry(
+                                cfs_mapping=self.cfs_mapping,
+                                supplier_info=dict(s_key),
+                                consumer_info=dict(c_key),
+                                direction=direction,
+                                indices=[(supplier_idx, consumer_idx)],
+                                value=new_cf,
+                                uncertainty=None,
+                            )
 
         self._update_unprocessed_edges()
 
@@ -1428,81 +1465,83 @@ class EdgeLCIA:
                             )
 
             # Pass 1
-            for sig, group_edges in tqdm(
-                prefiltered_groups.items(), desc="Processing contained groups (pass 1)"
-            ):
-                rep_supplier = group_edges[0][2]
-                rep_consumer = group_edges[0][3]
-                candidate_supplier_locations = group_edges[0][-2]
-                candidate_consumer_locations = group_edges[0][-1]
+            if len(prefiltered_groups) > 0:
+                for sig, group_edges in tqdm(
+                    prefiltered_groups.items(), desc="Processing contained groups (pass 1)"
+                ):
+                    rep_supplier = group_edges[0][2]
+                    rep_consumer = group_edges[0][3]
+                    candidate_supplier_locations = group_edges[0][-2]
+                    candidate_consumer_locations = group_edges[0][-1]
 
-                new_cf, matched_cf_obj = compute_average_cf(
-                    candidate_suppliers=candidate_supplier_locations,
-                    candidate_consumers=candidate_consumer_locations,
-                    supplier_info=rep_supplier,
-                    consumer_info=rep_consumer,
-                    weight=self.weights,
+                    new_cf, matched_cf_obj = compute_average_cf(
+                        candidate_suppliers=candidate_supplier_locations,
+                        candidate_consumers=candidate_consumer_locations,
+                        supplier_info=rep_supplier,
+                        consumer_info=rep_consumer,
+                        weight=self.weights,
+                        required_supplier_fields=self.required_supplier_fields,
+                        required_consumer_fields=self.required_consumer_fields,
+                        cf_index=self.cf_index,
+                        logger=self.logger,
+                    )
+
+                    if new_cf:
+                        for (
+                            supplier_idx,
+                            consumer_idx,
+                            supplier_info,
+                            consumer_info,
+                            _,
+                            _,
+                        ) in group_edges:
+                            add_cf_entry(
+                                cfs_mapping=self.cfs_mapping,
+                                supplier_info=supplier_info,
+                                consumer_info=consumer_info,
+                                direction=direction,
+                                indices=[(supplier_idx, consumer_idx)],
+                                value=new_cf,
+                                uncertainty=None,
+                            )
+
+            # Pass 2
+            if len(remaining_edges) > 0:
+                compute_cf_memoized = compute_cf_memoized_factory(
+                    cf_index=self.cf_index,
                     required_supplier_fields=self.required_supplier_fields,
                     required_consumer_fields=self.required_consumer_fields,
-                    cf_index=self.cf_index,
+                    weights=self.weights,
                     logger=self.logger,
                 )
 
-                if new_cf:
-                    for (
-                        supplier_idx,
-                        consumer_idx,
-                        supplier_info,
-                        consumer_info,
-                        _,
-                        _,
-                    ) in group_edges:
-                        add_cf_entry(
-                            cfs_mapping=self.cfs_mapping,
-                            supplier_info=supplier_info,
-                            consumer_info=consumer_info,
-                            direction=direction,
-                            indices=[(supplier_idx, consumer_idx)],
-                            value=new_cf,
-                            uncertainty=None,
-                        )
-
-            # Pass 2
-            compute_cf_memoized = compute_cf_memoized_factory(
-                cf_index=self.cf_index,
-                required_supplier_fields=self.required_supplier_fields,
-                required_consumer_fields=self.required_consumer_fields,
-                weights=self.weights,
-                logger=self.logger,
-            )
-
-            grouped_edges = group_edges_by_signature(
-                edge_list=remaining_edges,
-                required_supplier_fields=self.required_supplier_fields,
-                required_consumer_fields=self.required_consumer_fields,
-            )
-
-            for (
-                s_key,
-                c_key,
-                (candidate_suppliers, candidate_consumers),
-            ), edge_group in tqdm(
-                grouped_edges.items(), desc="Processing contained groups (pass 2)"
-            ):
-                new_cf, matched_cf_obj = compute_cf_memoized(
-                    s_key, c_key, candidate_suppliers, candidate_consumers
+                grouped_edges = group_edges_by_signature(
+                    edge_list=remaining_edges,
+                    required_supplier_fields=self.required_supplier_fields,
+                    required_consumer_fields=self.required_consumer_fields,
                 )
-                if new_cf:
-                    for supplier_idx, consumer_idx in edge_group:
-                        add_cf_entry(
-                            cfs_mapping=self.cfs_mapping,
-                            supplier_info=dict(s_key),
-                            consumer_info=dict(c_key),
-                            direction=direction,
-                            indices=[(supplier_idx, consumer_idx)],
-                            value=new_cf,
-                            uncertainty=None,
-                        )
+
+                for (
+                    s_key,
+                    c_key,
+                    (candidate_suppliers, candidate_consumers),
+                ), edge_group in tqdm(
+                    grouped_edges.items(), desc="Processing contained groups (pass 2)"
+                ):
+                    new_cf, matched_cf_obj = compute_cf_memoized(
+                        s_key, c_key, candidate_suppliers, candidate_consumers
+                    )
+                    if new_cf:
+                        for supplier_idx, consumer_idx in edge_group:
+                            add_cf_entry(
+                                cfs_mapping=self.cfs_mapping,
+                                supplier_info=dict(s_key),
+                                consumer_info=dict(c_key),
+                                direction=direction,
+                                indices=[(supplier_idx, consumer_idx)],
+                                value=new_cf,
+                                uncertainty=None,
+                            )
 
         self._update_unprocessed_edges()
 
@@ -1647,83 +1686,85 @@ class EdgeLCIA:
                             )
 
             # Pass 1
-            for sig, group_edges in tqdm(
-                prefiltered_groups.items(), desc="Processing global groups (pass 1)"
-            ):
-                rep_supplier = group_edges[0][2]
-                rep_consumer = group_edges[0][3]
+            if len(prefiltered_groups) > 0:
+                for sig, group_edges in tqdm(
+                    prefiltered_groups.items(), desc="Processing global groups (pass 1)"
+                ):
+                    rep_supplier = group_edges[0][2]
+                    rep_consumer = group_edges[0][3]
 
-                new_cf, matched_cf_obj = compute_average_cf(
-                    candidate_suppliers=global_locations,
-                    candidate_consumers=global_locations,
-                    supplier_info=rep_supplier,
-                    consumer_info=rep_consumer,
-                    weight=self.weights,
+                    new_cf, matched_cf_obj = compute_average_cf(
+                        candidate_suppliers=global_locations,
+                        candidate_consumers=global_locations,
+                        supplier_info=rep_supplier,
+                        consumer_info=rep_consumer,
+                        weight=self.weights,
+                        required_supplier_fields=self.required_supplier_fields,
+                        required_consumer_fields=self.required_consumer_fields,
+                        cf_index=self.cf_index,
+                        logger=self.logger,
+                    )
+
+                    if new_cf:
+                        for (
+                            supplier_idx,
+                            consumer_idx,
+                            supplier_info,
+                            consumer_info,
+                            _,
+                            _,
+                        ) in group_edges:
+                            add_cf_entry(
+                                cfs_mapping=self.cfs_mapping,
+                                supplier_info=supplier_info,
+                                consumer_info=consumer_info,
+                                direction=direction,
+                                indices=[(supplier_idx, consumer_idx)],
+                                value=new_cf,
+                                uncertainty=None,
+                            )
+
+            # Pass 2
+            if len(remaining_edges) > 0:
+                compute_cf_memoized = compute_cf_memoized_factory(
+                    cf_index=self.cf_index,
                     required_supplier_fields=self.required_supplier_fields,
                     required_consumer_fields=self.required_consumer_fields,
-                    cf_index=self.cf_index,
+                    weights=self.weights,
                     logger=self.logger,
                 )
 
-                if new_cf:
-                    for (
-                        supplier_idx,
-                        consumer_idx,
-                        supplier_info,
-                        consumer_info,
-                        _,
-                        _,
-                    ) in group_edges:
-                        add_cf_entry(
-                            cfs_mapping=self.cfs_mapping,
-                            supplier_info=supplier_info,
-                            consumer_info=consumer_info,
-                            direction=direction,
-                            indices=[(supplier_idx, consumer_idx)],
-                            value=new_cf,
-                            uncertainty=None,
-                        )
-
-            # Pass 2
-            compute_cf_memoized = compute_cf_memoized_factory(
-                cf_index=self.cf_index,
-                required_supplier_fields=self.required_supplier_fields,
-                required_consumer_fields=self.required_consumer_fields,
-                weights=self.weights,
-                logger=self.logger,
-            )
-
-            grouped_edges = group_edges_by_signature(
-                edge_list=remaining_edges,
-                required_supplier_fields=self.required_supplier_fields,
-                required_consumer_fields=self.required_consumer_fields,
-            )
-
-            for (
-                s_key,
-                c_key,
-                (candidate_suppliers, candidate_consumers),
-            ), edge_group in tqdm(
-                grouped_edges.items(), desc="Processing global groups (pass 2)"
-            ):
-                new_cf, matched_cf_obj = compute_cf_memoized(
-                    s_key, c_key, candidate_suppliers, candidate_consumers
+                grouped_edges = group_edges_by_signature(
+                    edge_list=remaining_edges,
+                    required_supplier_fields=self.required_supplier_fields,
+                    required_consumer_fields=self.required_consumer_fields,
                 )
-                if new_cf:
-                    for supplier_idx, consumer_idx in edge_group:
-                        add_cf_entry(
-                            cfs_mapping=self.cfs_mapping,
-                            supplier_info=dict(s_key),
-                            consumer_info=dict(c_key),
-                            direction=direction,
-                            indices=[(supplier_idx, consumer_idx)],
-                            value=new_cf,
-                            uncertainty=(
-                                matched_cf_obj.get("uncertainty")
-                                if matched_cf_obj
-                                else None
-                            ),
-                        )
+
+                for (
+                    s_key,
+                    c_key,
+                    (candidate_suppliers, candidate_consumers),
+                ), edge_group in tqdm(
+                    grouped_edges.items(), desc="Processing global groups (pass 2)"
+                ):
+                    new_cf, matched_cf_obj = compute_cf_memoized(
+                        s_key, c_key, candidate_suppliers, candidate_consumers
+                    )
+                    if new_cf:
+                        for supplier_idx, consumer_idx in edge_group:
+                            add_cf_entry(
+                                cfs_mapping=self.cfs_mapping,
+                                supplier_info=dict(s_key),
+                                consumer_info=dict(c_key),
+                                direction=direction,
+                                indices=[(supplier_idx, consumer_idx)],
+                                value=new_cf,
+                                uncertainty=(
+                                    matched_cf_obj.get("uncertainty")
+                                    if matched_cf_obj
+                                    else None
+                                ),
+                            )
 
         self._update_unprocessed_edges()
 
