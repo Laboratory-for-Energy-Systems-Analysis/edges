@@ -347,12 +347,12 @@ def match_with_index(
 
     # --- Inverted index filtering ---
     for field in required_fields:
-        #print("field", field)
+        # print("field", field)
         if field in ("excludes", "operator", "matrix"):
             continue
 
         match_target = flow_to_match[field]
-        #print("match_target", match_target)
+        # print("match_target", match_target)
         field_candidates = set()
 
         if match_target == "":
@@ -364,7 +364,7 @@ def match_with_index(
                     field_candidates.add(candidate_key)
         else:
             operator_value = flow_to_match.get("operator", "equals")
-            #print("operator value", operator_value)
+            # print("operator value", operator_value)
             field_index = index[field]
 
             if operator_value == "equals":
@@ -375,7 +375,9 @@ def match_with_index(
             else:
                 for candidate_value, candidate_list in field_index.items():
                     if match_operator(
-                        value=candidate_value, target=match_target, operator=operator_value
+                        value=candidate_value,
+                        target=match_target,
+                        operator=operator_value,
                     ):
                         for candidate in candidate_list:
                             candidate_key, _ = candidate
@@ -384,15 +386,15 @@ def match_with_index(
         candidate_key_sets[field] = field_candidates
 
         if candidate_keys is None:
-            #print("candidate keys is None: initializing: ", field_candidates)
+            # print("candidate keys is None: initializing: ", field_candidates)
             candidate_keys = field_candidates
         else:
-            #print("candidate keys is not None: intersecting: ", field_candidates)
+            # print("candidate keys is not None: intersecting: ", field_candidates)
             candidate_keys &= field_candidates
 
         if not candidate_keys:
-            #print("no candidate keys left after intersection")
-            #print(f"failure fields: {failure_fields}")
+            # print("no candidate keys left after intersection")
+            # print(f"failure fields: {failure_fields}")
             failure_fields.add(field)
             for key in field_candidates:
                 wrapped_key = (
@@ -403,16 +405,16 @@ def match_with_index(
                 matches_for_key = lookup_mapping[wrapped_key]
                 for pos in matches_for_key:
                     reason_map.setdefault(pos, set()).add(field)
-            #print("reason_map after failure: ", reason_map)
+            # print("reason_map after failure: ", reason_map)
 
     # --- No valid candidates left after filtering ---
     if not candidate_keys:
-        #print("no candidate keys left after intersection: exiting early", reason_map)
+        # print("no candidate keys left after intersection: exiting early", reason_map)
         return [], reason_map
 
     # --- Fine-grained matching using match_flow ---
     matches = []
-    #print("fine-grained matching")
+    # print("fine-grained matching")
     for key in candidate_keys:
         wrapped_key = (
             key if isinstance(key, tuple) and isinstance(key[0], tuple) else (key,)
@@ -420,18 +422,17 @@ def match_with_index(
         for pos in lookup_mapping[wrapped_key]:
             flow = reversed_lookup[pos]
             flow = dict(flow) if isinstance(flow, tuple) else flow
-            #print("flow", flow)
+            # print("flow", flow)
             if not flow:
                 continue
             matched, reasons = match_flow(flow, flow_to_match)
-            #print("matched", matched, "reasons", reasons)
+            # print("matched", matched, "reasons", reasons)
             if matched:
                 matches.append(pos)
                 reason_map[pos] = {"perfect match"}
             else:
                 reason_map.setdefault(pos, set()).update(reasons)
-            #print("reason_map", reason_map)
-
+            # print("reason_map", reason_map)
 
     # --- Final pass to record location mismatches for unmatched flows ---
     if required_fields == {"location"}:

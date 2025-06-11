@@ -622,8 +622,8 @@ class EdgeLCIA:
             if k not in ("classifications", "matrix")
         }
 
-        #print("supplier's fields", supplier_fields)
-        #print("consumer's fields", consumer_fields)
+        # print("supplier's fields", supplier_fields)
+        # print("consumer's fields", consumer_fields)
 
         for i, cf in enumerate(tqdm(self.raw_cfs_data, desc="Mapping exchanges")):
             supplier_criteria = cf["supplier"]
@@ -656,13 +656,12 @@ class EdgeLCIA:
                 if k not in ("matrix", "classifications")
             }
 
-            #print("supplier's flow fields", list(supplier_flow.keys()))
+            # print("supplier's flow fields", list(supplier_flow.keys()))
 
             nonclass_matches, supplier_reasons = cached_match_with_index(
                 flow_to_match_hashable=make_hashable(supplier_flow),
                 required_fields_tuple=tuple(sorted(supplier_fields)),
             )
-
 
             # Step 3: Combine
             if classification_matches is not None:
@@ -699,14 +698,14 @@ class EdgeLCIA:
                 if k not in ("matrix", "classifications")
             }
 
-            #print("consumer's flow fields", list(supplier_flow.keys()))
+            # print("consumer's flow fields", list(supplier_flow.keys()))
 
             nonclass_matches, consumer_reasons = cached_match_with_index(
                 flow_to_match_hashable=make_hashable(consumer_flow),
                 required_fields_tuple=tuple(sorted(consumer_fields)),
             )
 
-            #raise
+            # raise
 
             # Step 3: Combine
             if classification_matches is not None:
@@ -1226,7 +1225,8 @@ class EdgeLCIA:
             # Pass 1
             if len(prefiltered_groups) > 0:
                 for sig, group_edges in tqdm(
-                    prefiltered_groups.items(), desc="Processing dynamic groups (pass 1)"
+                    prefiltered_groups.items(),
+                    desc="Processing dynamic groups (pass 1)",
                 ):
                     rep_supplier = group_edges[0][2]
                     rep_consumer = group_edges[0][3]
@@ -1467,7 +1467,8 @@ class EdgeLCIA:
             # Pass 1
             if len(prefiltered_groups) > 0:
                 for sig, group_edges in tqdm(
-                    prefiltered_groups.items(), desc="Processing contained groups (pass 1)"
+                    prefiltered_groups.items(),
+                    desc="Processing contained groups (pass 1)",
                 ):
                     rep_supplier = group_edges[0][2]
                     rep_consumer = group_edges[0][3]
