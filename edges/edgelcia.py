@@ -88,6 +88,34 @@ def add_cf_entry(
     cfs_mapping.append(entry)
 
 
+@staticmethod
+@lru_cache(maxsize=None)
+def _equality_supplier_signature_cached(hashable_supplier_info: tuple) -> tuple:
+    """
+    Cached version of _equality_supplier_signature, keyed by pre-hashable tuple.
+    """
+    info = dict(hashable_supplier_info)
+
+    if "classifications" in info:
+        classifications = info["classifications"]
+
+        if isinstance(classifications, (list, tuple)):
+            try:
+                info["classifications"] = tuple(
+                    sorted((str(s), str(c)) for s, c in classifications)
+                )
+            except Exception:
+                info["classifications"] = ()
+        elif isinstance(classifications, dict):
+            info["classifications"] = tuple(
+                (scheme, tuple(sorted(map(str, codes))))
+                for scheme, codes in sorted(classifications.items())
+            )
+        else:
+            info["classifications"] = ()
+
+    return make_hashable(info)
+
 class EdgeLCIA:
     """
     Class that implements the calculation of the regionalized life cycle impact assessment (LCIA) results.
@@ -275,7 +303,7 @@ class EdgeLCIA:
             consumer = cf.get("consumer", {})
             supplier_location = supplier.get("location", "__ANY__")
             consumer_location = consumer.get("location", "__ANY__")
-            weight = cf.get("weight")
+            weight = cf.get("weight", 0)
 
             self.weights[(supplier_location, consumer_location)] = float(weight)
 
@@ -604,6 +632,19 @@ class EdgeLCIA:
             self.consumer_lookup, self.required_consumer_fields
         )
 
+        # New: build scheme index for fast filtering
+        supplier_class_index = defaultdict(list)
+        for idx, data in self.reversed_supplier_lookup.items():
+            data = dict(data)  # <-- FIX
+            for scheme, _ in data.get("classifications", []):
+                supplier_class_index[scheme.lower().strip()].append((idx, data))
+
+        consumer_class_index = defaultdict(list)
+        for idx, data in self.reversed_consumer_lookup.items():
+            data = dict(data)
+            for scheme, _ in data.get("classifications", []):
+                consumer_class_index[scheme.lower().strip()].append((idx, data))
+
         seen_positions = []
 
         for i, cf in enumerate(tqdm(self.raw_cfs_data, desc="Mapping exchanges")):
@@ -614,15 +655,18 @@ class EdgeLCIA:
             # Step 1: Classifications filter
             if "classifications" in supplier_criteria:
                 cf_class = supplier_criteria["classifications"]
+                relevant = []
+                for scheme in cf_class:
+                    if isinstance(cf_class, dict):
+                        scheme = scheme.lower().strip()
+                    elif isinstance(scheme, tuple):
+                        scheme = scheme[0].lower().strip()
+                    if scheme in supplier_class_index:
+                        relevant.extend(supplier_class_index[scheme])
+
                 classification_matches = [
-                    idx
-                    for idx in self.reversed_supplier_lookup
-                    if matches_classifications(
-                        cf_class,
-                        dict(self.reversed_supplier_lookup[idx]).get(
-                            "classifications", []
-                        ),
-                    )
+                    idx for idx, data in relevant
+                    if matches_classifications(cf_class, data.get("classifications", []))
                 ]
             else:
                 classification_matches = None
@@ -661,15 +705,18 @@ class EdgeLCIA:
             # Step 1: Classifications filter
             if "classifications" in consumer_criteria:
                 cf_class = consumer_criteria["classifications"]
+                relevant = []
+                for scheme in cf_class:
+                    if isinstance(cf_class, dict):
+                        scheme = scheme.lower().strip()
+                    elif isinstance(scheme, tuple):
+                        scheme = scheme[0].lower().strip()
+                    if scheme in supplier_class_index:
+                        relevant.extend(consumer_class_index[scheme])
+
                 classification_matches = [
-                    idx
-                    for idx in self.reversed_consumer_lookup
-                    if matches_classifications(
-                        cf_class,
-                        dict(self.reversed_consumer_lookup[idx]).get(
-                            "classifications", []
-                        ),
-                    )
+                    idx for idx, data in relevant
+                    if matches_classifications(cf_class, data.get("classifications", []))
                 ]
             else:
                 classification_matches = None
@@ -861,7 +908,8 @@ class EdgeLCIA:
                     supplier_info = dict(self.reversed_supplier_lookup[supplier_idx])
                     consumer_info = self._get_consumer_info(consumer_idx)
 
-                    sig = self._equality_supplier_signature(supplier_info)
+                    # sig = self._equality_supplier_signature(supplier_info)
+                    sig = _equality_supplier_signature_cached(make_hashable(supplier_info))
 
                     if sig in candidate_supplier_keys:
                         prefiltered_groups[sig].append(
@@ -1108,7 +1156,8 @@ class EdgeLCIA:
                     else:
                         candidate_consumers_locs = [consumer_loc]
 
-                sig = self._equality_supplier_signature(supplier_info)
+                # sig = self._equality_supplier_signature(supplier_info)
+                sig = _equality_supplier_signature_cached(make_hashable(supplier_info))
                 if sig in candidate_supplier_keys:
                     prefiltered_groups[sig].append(
                         (
@@ -1336,7 +1385,8 @@ class EdgeLCIA:
                     supplier_info = dict(self.reversed_supplier_lookup[supplier_idx])
                     consumer_info = self._get_consumer_info(consumer_idx)
 
-                    sig = self._equality_supplier_signature(supplier_info)
+                    # sig = self._equality_supplier_signature(supplier_info)
+                    sig = _equality_supplier_signature_cached(make_hashable(supplier_info))
 
                     if sig in candidate_supplier_keys:
                         prefiltered_groups[sig].append(
@@ -1553,7 +1603,8 @@ class EdgeLCIA:
                     supplier_info = dict(self.reversed_supplier_lookup[supplier_idx])
                     consumer_info = self._get_consumer_info(consumer_idx)
 
-                    sig = self._equality_supplier_signature(supplier_info)
+                    # sig = self._equality_supplier_signature(supplier_info)
+                    sig = _equality_supplier_signature_cached(make_hashable(supplier_info))
 
                     if sig in candidate_supplier_keys:
                         prefiltered_groups[sig].append(

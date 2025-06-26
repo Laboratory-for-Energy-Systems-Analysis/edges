@@ -10,7 +10,8 @@ act = [
     == "hydrogen production, gaseous, 30 bar, from PEM electrolysis, from offshore wind electricity"
 ][0]
 
-method = ("GeoPolRisk", "paired", "2024", "short")
+# method = ("GeoPolRisk", "paired", "2024", "short")
+method = ('AWARE 2.0', 'Country', 'all', 'yearly')
 
 LCA = EdgeLCIA({act: 1}, method)
 LCA.lci()
