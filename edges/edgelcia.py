@@ -116,6 +116,7 @@ def _equality_supplier_signature_cached(hashable_supplier_info: tuple) -> tuple:
 
     return make_hashable(info)
 
+
 class EdgeLCIA:
     """
     Class that implements the calculation of the regionalized life cycle impact assessment (LCIA) results.
@@ -665,8 +666,11 @@ class EdgeLCIA:
                         relevant.extend(supplier_class_index[scheme])
 
                 classification_matches = [
-                    idx for idx, data in relevant
-                    if matches_classifications(cf_class, data.get("classifications", []))
+                    idx
+                    for idx, data in relevant
+                    if matches_classifications(
+                        cf_class, data.get("classifications", [])
+                    )
                 ]
             else:
                 classification_matches = None
@@ -715,8 +719,11 @@ class EdgeLCIA:
                         relevant.extend(consumer_class_index[scheme])
 
                 classification_matches = [
-                    idx for idx, data in relevant
-                    if matches_classifications(cf_class, data.get("classifications", []))
+                    idx
+                    for idx, data in relevant
+                    if matches_classifications(
+                        cf_class, data.get("classifications", [])
+                    )
                 ]
             else:
                 classification_matches = None
@@ -909,7 +916,9 @@ class EdgeLCIA:
                     consumer_info = self._get_consumer_info(consumer_idx)
 
                     # sig = self._equality_supplier_signature(supplier_info)
-                    sig = _equality_supplier_signature_cached(make_hashable(supplier_info))
+                    sig = _equality_supplier_signature_cached(
+                        make_hashable(supplier_info)
+                    )
 
                     if sig in candidate_supplier_keys:
                         prefiltered_groups[sig].append(
@@ -1386,7 +1395,9 @@ class EdgeLCIA:
                     consumer_info = self._get_consumer_info(consumer_idx)
 
                     # sig = self._equality_supplier_signature(supplier_info)
-                    sig = _equality_supplier_signature_cached(make_hashable(supplier_info))
+                    sig = _equality_supplier_signature_cached(
+                        make_hashable(supplier_info)
+                    )
 
                     if sig in candidate_supplier_keys:
                         prefiltered_groups[sig].append(
@@ -1604,7 +1615,9 @@ class EdgeLCIA:
                     consumer_info = self._get_consumer_info(consumer_idx)
 
                     # sig = self._equality_supplier_signature(supplier_info)
-                    sig = _equality_supplier_signature_cached(make_hashable(supplier_info))
+                    sig = _equality_supplier_signature_cached(
+                        make_hashable(supplier_info)
+                    )
 
                     if sig in candidate_supplier_keys:
                         prefiltered_groups[sig].append(

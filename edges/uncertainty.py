@@ -90,7 +90,9 @@ def sample_cf_distribution(
             samples = random_state.triangular(left, mode, right, size=n)
 
         elif dist_name == "normal":
-            samples = random_state.normal(loc=params["loc"], scale=params["scale"], size=n)
+            samples = random_state.normal(
+                loc=params["loc"], scale=params["scale"], size=n
+            )
             samples = np.clip(samples, params["minimum"], params["maximum"])
 
         elif dist_name == "lognorm":

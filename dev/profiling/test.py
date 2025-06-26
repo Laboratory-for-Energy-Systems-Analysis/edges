@@ -11,7 +11,7 @@ act = [
 ][0]
 
 # method = ("GeoPolRisk", "paired", "2024", "short")
-method = ('AWARE 2.0', 'Country', 'all', 'yearly')
+method = ("AWARE 2.0", "Country", "all", "yearly")
 
 LCA = EdgeLCIA({act: 1}, method)
 LCA.lci()
