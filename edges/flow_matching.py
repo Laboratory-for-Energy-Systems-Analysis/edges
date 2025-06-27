@@ -149,7 +149,7 @@ def match_flow(flow: dict, criteria: dict) -> bool:
 
     # Handle standard field matching
     for key, target in criteria.items():
-        if key in {"matrix", "operator", "weight", "position", "excludes"}:
+        if key in {"matrix", "operator", "weight", "position", "excludes", "classifications"}:
             continue
 
         value = flow.get(key)
@@ -159,7 +159,6 @@ def match_flow(flow: dict, criteria: dict) -> bool:
 
         if value is None or not match_operator(value, target, operator):
             return False
-
     return True
 
 
@@ -252,11 +251,7 @@ def preprocess_flows(flows_list: list, mandatory_fields: set) -> dict:
     """
     Preprocess flows into a lookup dictionary.
     Each flow is keyed by a tuple of selected metadata fields.
-    If no fields are present, falls back to using its position as key.
-
-    :param flows_list: List of flows (dicts with metadata + 'position')
-    :param mandatory_fields: Fields that must be included in the lookup key.
-    :return: A dictionary mapping keys -> list of flow positions
+    If no fields are present, falls back to a single universal key ().
     """
     lookup = {}
 
@@ -271,22 +266,22 @@ def preprocess_flows(flows_list: list, mandatory_fields: set) -> dict:
                 )
             return v
 
-        # Build a hashable key from mandatory fields (if any are present)
-        key_elements = [
-            (k, make_value_hashable(flow[k]))
-            for k in mandatory_fields
-            if k in flow and flow[k] is not None
-        ]
-
-        if key_elements:
+        if mandatory_fields:
+            # Build a hashable key from mandatory fields
+            key_elements = [
+                (k, make_value_hashable(flow[k]))
+                for k in mandatory_fields
+                if k in flow and flow[k] is not None
+            ]
             key = tuple(sorted(key_elements))
         else:
-            # Fallback: use the position as a unique key
-            key = (("position", flow["position"]),)
+            # 🔁 NEW: universal key for empty criteria
+            key = ()
 
         lookup.setdefault(key, []).append(flow["position"])
 
     return lookup
+
 
 
 def build_index(lookup: dict, required_fields: set) -> dict:

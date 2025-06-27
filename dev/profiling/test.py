@@ -1,7 +1,7 @@
 from edges import EdgeLCIA, get_available_methods
 import bw2data, bw2io
 
-bw2data.projects.set_current("ecoinvent-3.10.1-cutoff")
+bw2data.projects.set_current("bw25_ei310")
 
 act = [
     a

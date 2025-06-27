@@ -21,6 +21,7 @@ from textwrap import fill
 from functools import lru_cache
 
 
+
 from .utils import (
     format_data,
     get_flow_matrix_positions,
@@ -412,9 +413,9 @@ class EdgeLCIA:
             return ()
 
         filtered = {
-            k: supplier_info.get(k)
-            for k in self.required_supplier_fields
-            if supplier_info.get(k) is not None
+            k: supplier_info[k]
+            for k in supplier_info
+            if k in self.required_supplier_fields
         }
 
         # Normalize classifications
@@ -453,7 +454,7 @@ class EdgeLCIA:
         """
 
         # Constants for ignored fields
-        IGNORED_FIELDS = {"matrix", "operator", "weight", "classifications"}
+        IGNORED_FIELDS = {"matrix", "operator", "weight", "classifications", "position"}
 
         self.required_consumer_fields = {
             k
@@ -633,18 +634,7 @@ class EdgeLCIA:
             self.consumer_lookup, self.required_consumer_fields
         )
 
-        # New: build scheme index for fast filtering
-        supplier_class_index = defaultdict(list)
-        for idx, data in self.reversed_supplier_lookup.items():
-            data = dict(data)  # <-- FIX
-            for scheme, _ in data.get("classifications", []):
-                supplier_class_index[scheme.lower().strip()].append((idx, data))
-
-        consumer_class_index = defaultdict(list)
-        for idx, data in self.reversed_consumer_lookup.items():
-            data = dict(data)
-            for scheme, _ in data.get("classifications", []):
-                consumer_class_index[scheme.lower().strip()].append((idx, data))
+        classification_match_cache = {}
 
         seen_positions = []
 
@@ -656,22 +646,23 @@ class EdgeLCIA:
             # Step 1: Classifications filter
             if "classifications" in supplier_criteria:
                 cf_class = supplier_criteria["classifications"]
-                relevant = []
-                for scheme in cf_class:
-                    if isinstance(cf_class, dict):
-                        scheme = scheme.lower().strip()
-                    elif isinstance(scheme, tuple):
-                        scheme = scheme[0].lower().strip()
-                    if scheme in supplier_class_index:
-                        relevant.extend(supplier_class_index[scheme])
+                classification_matches = []
+                cf_key = tuple(cf_class)
 
-                classification_matches = [
-                    idx
-                    for idx, data in relevant
-                    if matches_classifications(
-                        cf_class, data.get("classifications", [])
-                    )
-                ]
+                for idx in self.reversed_supplier_lookup:
+                    ds_class = dict(self.reversed_supplier_lookup[idx]).get("classifications", [])
+                    ds_key = tuple(ds_class)
+                    key = (cf_key, ds_key)
+
+                    if key in classification_match_cache:
+                        result = classification_match_cache[key]
+                    else:
+                        result = matches_classifications(cf_key, ds_key)
+                        classification_match_cache[key] = result
+
+                    if result:
+                        classification_matches.append(idx)
+
             else:
                 classification_matches = None
 
@@ -709,22 +700,23 @@ class EdgeLCIA:
             # Step 1: Classifications filter
             if "classifications" in consumer_criteria:
                 cf_class = consumer_criteria["classifications"]
-                relevant = []
-                for scheme in cf_class:
-                    if isinstance(cf_class, dict):
-                        scheme = scheme.lower().strip()
-                    elif isinstance(scheme, tuple):
-                        scheme = scheme[0].lower().strip()
-                    if scheme in supplier_class_index:
-                        relevant.extend(consumer_class_index[scheme])
+                classification_matches = []
+                cf_key = tuple(cf_class)
 
-                classification_matches = [
-                    idx
-                    for idx, data in relevant
-                    if matches_classifications(
-                        cf_class, data.get("classifications", [])
-                    )
-                ]
+                for idx in self.reversed_consumer_lookup:
+                    ds_class = dict(self.reversed_consumer_lookup[idx]).get("classifications", [])
+                    ds_key = tuple(ds_class)
+                    key = (cf_key, ds_key)
+
+                    if key in classification_match_cache:
+                        result = classification_match_cache[key]
+                    else:
+                        result = matches_classifications(cf_key, ds_key)
+                        classification_match_cache[key] = result
+
+                    if result:
+                        classification_matches.append(idx)
+
             else:
                 classification_matches = None
 
@@ -818,7 +810,6 @@ class EdgeLCIA:
         cf_operators = {
             cf["supplier"].get("operator", "equals") for cf in self.raw_cfs_data
         }
-        candidate_supplier_keys = self._cached_supplier_keys
 
         for direction in ["biosphere-technosphere", "technosphere-technosphere"]:
             unprocessed_edges = (
@@ -920,7 +911,7 @@ class EdgeLCIA:
                         make_hashable(supplier_info)
                     )
 
-                    if sig in candidate_supplier_keys:
+                    if sig in self._cached_supplier_keys:
                         prefiltered_groups[sig].append(
                             (
                                 supplier_idx,
@@ -1066,7 +1057,6 @@ class EdgeLCIA:
         cf_operators = {
             cf["supplier"].get("operator", "equals") for cf in self.raw_cfs_data
         }
-        candidate_supplier_keys = self._cached_supplier_keys
 
         for flow in self.technosphere_flows:
             key = (flow["name"], flow.get("reference product"))
@@ -1137,7 +1127,7 @@ class EdgeLCIA:
                         weights=frozenset(k for k, v in self.weights.items()),
                         containing=True,
                         exceptions=suppliers_excluded_subregions,
-                        supplier=True,
+                        supplier=True
                     )
                 else:
                     if supplier_loc is None:
@@ -1154,7 +1144,7 @@ class EdgeLCIA:
                         weights=frozenset(k for k, v in self.weights.items()),
                         containing=True,
                         exceptions=consumers_excluded_subregions,
-                        supplier=False,
+                        supplier=False
                     )
 
                 else:
@@ -1167,7 +1157,7 @@ class EdgeLCIA:
 
                 # sig = self._equality_supplier_signature(supplier_info)
                 sig = _equality_supplier_signature_cached(make_hashable(supplier_info))
-                if sig in candidate_supplier_keys:
+                if sig in self._cached_supplier_keys:
                     prefiltered_groups[sig].append(
                         (
                             supplier_idx,
@@ -1191,6 +1181,7 @@ class EdgeLCIA:
                             )
                         )
 
+
             # Pass 1
             for sig, group_edges in tqdm(
                 prefiltered_groups.items(), desc="Processing dynamic groups (pass 1)"
@@ -1199,6 +1190,8 @@ class EdgeLCIA:
                 rep_consumer = group_edges[0][3]
                 candidate_supplier_locations = group_edges[0][-2]
                 candidate_consumer_locations = group_edges[0][-1]
+
+
 
                 new_cf, matched_cf_obj = compute_average_cf(
                     candidate_suppliers=candidate_supplier_locations,
@@ -1211,6 +1204,7 @@ class EdgeLCIA:
                     cf_index=self.cf_index,
                     logger=self.logger,
                 )
+
 
                 if new_cf:
                     for (
@@ -1308,7 +1302,6 @@ class EdgeLCIA:
         cf_operators = {
             cf["supplier"].get("operator", "equals") for cf in self.raw_cfs_data
         }
-        candidate_supplier_keys = self._cached_supplier_keys
 
         for direction in ["biosphere-technosphere", "technosphere-technosphere"]:
             unprocessed_edges = (
@@ -1399,7 +1392,7 @@ class EdgeLCIA:
                         make_hashable(supplier_info)
                     )
 
-                    if sig in candidate_supplier_keys:
+                    if sig in self._cached_supplier_keys:
                         prefiltered_groups[sig].append(
                             (
                                 supplier_idx,
@@ -1539,7 +1532,6 @@ class EdgeLCIA:
         cf_operators = {
             cf["supplier"].get("operator", "equals") for cf in self.raw_cfs_data
         }
-        candidate_supplier_keys = self._cached_supplier_keys
 
         # Resolve candidate locations for GLO once using utility
         global_locations = resolve_candidate_locations(
@@ -1619,7 +1611,7 @@ class EdgeLCIA:
                         make_hashable(supplier_info)
                     )
 
-                    if sig in candidate_supplier_keys:
+                    if sig in self._cached_supplier_keys:
                         prefiltered_groups[sig].append(
                             (
                                 supplier_idx,
