@@ -5,18 +5,23 @@ bw2data.projects.set_current("bw25_ei310")
 # bw2data.projects.set_current("ecoinvent-3.10-cutoff")
 
 # act = bw2data.Database("ecoinvent-3.10.1-cutoff").random()
-#act = bw2data.Database("ecoinvent-3.10-cutoff").random()
-act = [a for a in bw2data.Database("h2_pem") if a["name"] == "hydrogen production, gaseous, 30 bar, from PEM electrolysis, from offshore wind electricity"][0]
+# act = bw2data.Database("ecoinvent-3.10-cutoff").random()
+act = [
+    a
+    for a in bw2data.Database("h2_pem")
+    if a["name"]
+    == "hydrogen production, gaseous, 30 bar, from PEM electrolysis, from offshore wind electricity"
+][0]
 print(act)
 
 
-method = ('AWARE 2.0', 'Country', 'all', 'yearly')
+method = ("AWARE 2.0", "Country", "all", "yearly")
 
 LCA = EdgeLCIA(
     demand={act: 1},
     method=method,
-    #use_distributions=True,
-    #iterations=100
+    # use_distributions=True,
+    # iterations=100
 )
 LCA.lci()
 

@@ -149,7 +149,14 @@ def match_flow(flow: dict, criteria: dict) -> bool:
 
     # Handle standard field matching
     for key, target in criteria.items():
-        if key in {"matrix", "operator", "weight", "position", "excludes", "classifications"}:
+        if key in {
+            "matrix",
+            "operator",
+            "weight",
+            "position",
+            "excludes",
+            "classifications",
+        }:
             continue
 
         value = flow.get(key)
@@ -281,7 +288,6 @@ def preprocess_flows(flows_list: list, mandatory_fields: set) -> dict:
         lookup.setdefault(key, []).append(flow["position"])
 
     return lookup
-
 
 
 def build_index(lookup: dict, required_fields: set) -> dict:

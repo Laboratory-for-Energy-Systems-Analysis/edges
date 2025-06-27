@@ -21,7 +21,6 @@ from textwrap import fill
 from functools import lru_cache
 
 
-
 from .utils import (
     format_data,
     get_flow_matrix_positions,
@@ -650,7 +649,9 @@ class EdgeLCIA:
                 cf_key = tuple(cf_class)
 
                 for idx in self.reversed_supplier_lookup:
-                    ds_class = dict(self.reversed_supplier_lookup[idx]).get("classifications", [])
+                    ds_class = dict(self.reversed_supplier_lookup[idx]).get(
+                        "classifications", []
+                    )
                     ds_key = tuple(ds_class)
                     key = (cf_key, ds_key)
 
@@ -704,7 +705,9 @@ class EdgeLCIA:
                 cf_key = tuple(cf_class)
 
                 for idx in self.reversed_consumer_lookup:
-                    ds_class = dict(self.reversed_consumer_lookup[idx]).get("classifications", [])
+                    ds_class = dict(self.reversed_consumer_lookup[idx]).get(
+                        "classifications", []
+                    )
                     ds_key = tuple(ds_class)
                     key = (cf_key, ds_key)
 
@@ -1127,7 +1130,7 @@ class EdgeLCIA:
                         weights=frozenset(k for k, v in self.weights.items()),
                         containing=True,
                         exceptions=suppliers_excluded_subregions,
-                        supplier=True
+                        supplier=True,
                     )
                 else:
                     if supplier_loc is None:
@@ -1144,7 +1147,7 @@ class EdgeLCIA:
                         weights=frozenset(k for k, v in self.weights.items()),
                         containing=True,
                         exceptions=consumers_excluded_subregions,
-                        supplier=False
+                        supplier=False,
                     )
 
                 else:
@@ -1181,7 +1184,6 @@ class EdgeLCIA:
                             )
                         )
 
-
             # Pass 1
             for sig, group_edges in tqdm(
                 prefiltered_groups.items(), desc="Processing dynamic groups (pass 1)"
@@ -1190,8 +1192,6 @@ class EdgeLCIA:
                 rep_consumer = group_edges[0][3]
                 candidate_supplier_locations = group_edges[0][-2]
                 candidate_consumer_locations = group_edges[0][-1]
-
-
 
                 new_cf, matched_cf_obj = compute_average_cf(
                     candidate_suppliers=candidate_supplier_locations,
@@ -1204,7 +1204,6 @@ class EdgeLCIA:
                     cf_index=self.cf_index,
                     logger=self.logger,
                 )
-
 
                 if new_cf:
                     for (
