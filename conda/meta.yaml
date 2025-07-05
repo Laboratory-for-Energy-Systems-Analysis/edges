@@ -28,7 +28,7 @@ requirements:
     - bw2analyzer
     - constructive_geometries
     - prettytable
-    - sparse
+    - sparse >=0.13.0
     - highspy
 
 
