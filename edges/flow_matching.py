@@ -4,7 +4,22 @@ from functools import cache, lru_cache
 from typing import Optional
 import numpy as np
 
-from .utils import make_hashable, get_shares
+from .utils import make_hashable
+
+# delete the logs
+with open("flowmatching.log", "w", encoding="utf-8"):
+    pass
+
+# initiate the logger
+logging.basicConfig(
+    filename="flowmatching.log",
+    filemode="a",
+    format="%(asctime)s,%(msecs)d %(name)s %(funcName)s %(levelname)s %(message)s",
+    datefmt="%H:%M:%S",
+    level=logging.INFO,
+)
+
+logger = logging.getLogger(__name__)
 
 
 def preprocess_cfs(cf_list, by="consumer"):
@@ -93,7 +108,12 @@ def process_cf_list(
             best_cf = cf
 
     if best_cf:
+        logger.debug(f"Best matching CF selected with score {best_score}: {best_cf}")
         results.append(best_cf)
+    else:
+        logger.debug(
+            f"No matching CF found for supplier {filtered_supplier} and consumer {filtered_consumer}."
+        )
 
     return results
 
@@ -429,7 +449,7 @@ def match_with_index(
 
 
 def compute_cf_memoized_factory(
-    cf_index, required_supplier_fields, required_consumer_fields, weights, logger
+    cf_index, required_supplier_fields, required_consumer_fields, weights
 ):
     @lru_cache(maxsize=None)
     def compute_cf(s_key, c_key, supplier_candidates, consumer_candidates):
@@ -442,7 +462,6 @@ def compute_cf_memoized_factory(
             cf_index=cf_index,
             required_supplier_fields=required_supplier_fields,
             required_consumer_fields=required_consumer_fields,
-            logger=logger,
         )
 
     return compute_cf
@@ -560,16 +579,14 @@ def compute_average_cf(
     cf_index: dict,
     required_supplier_fields: set = None,
     required_consumer_fields: set = None,
-    logger=None,
 ) -> tuple[str | float, Optional[dict]]:
     """
     Compute the weighted average characterization factor (CF) for a given supplier-consumer pair.
     Supports disaggregated regional matching on both supplier and consumer sides.
     """
-    if logger is None:
-        logger = logging.getLogger(__name__)
 
     if not candidate_suppliers and not candidate_consumers:
+        logger.debug("No candidate suppliers or consumers provided.")
         return 0, None
 
     # calculate all permutations
@@ -581,6 +598,10 @@ def compute_average_cf(
     ]
 
     if len(valid_location_pairs) == 0:
+        logger.debug(
+            f"No valid location pairs found for suppliers {candidate_suppliers} "
+            f"and consumers {candidate_consumers}."
+        )
         return 0, None
 
     filtered_supplier = {
@@ -619,6 +640,10 @@ def compute_average_cf(
         )
 
     if not matched_cfs:
+        logger.debug(
+            f"No matched CFs for supplier {supplier_info} and consumer {consumer_info} "
+            f"with location pairs {valid_location_pairs}."
+        )
         return 0, None
 
     # normalize weights into shares

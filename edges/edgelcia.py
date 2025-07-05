@@ -26,7 +26,6 @@ from .utils import (
     get_flow_matrix_positions,
     safe_eval_cached,
     validate_parameter_lengths,
-    get_str,
     make_hashable,
     assert_no_nans_in_cf_list,
 )
@@ -954,7 +953,6 @@ class EdgeLCIA:
                     required_supplier_fields=self.required_supplier_fields,
                     required_consumer_fields=self.required_consumer_fields,
                     cf_index=self.cf_index,
-                    logger=self.logger,
                 )
 
                 if new_cf != 0:
@@ -987,7 +985,6 @@ class EdgeLCIA:
                 required_supplier_fields=self.required_supplier_fields,
                 required_consumer_fields=self.required_consumer_fields,
                 weights=self.weights,
-                logger=self.logger,
             )
 
             grouped_edges = group_edges_by_signature(
@@ -1206,7 +1203,6 @@ class EdgeLCIA:
                     required_supplier_fields=self.required_supplier_fields,
                     required_consumer_fields=self.required_consumer_fields,
                     cf_index=self.cf_index,
-                    logger=self.logger,
                 )
 
                 if new_cf:
@@ -1239,7 +1235,6 @@ class EdgeLCIA:
                 required_supplier_fields=self.required_supplier_fields,
                 required_consumer_fields=self.required_consumer_fields,
                 weights=self.weights,
-                logger=self.logger,
             )
 
             grouped_edges = group_edges_by_signature(
@@ -1447,7 +1442,6 @@ class EdgeLCIA:
                     required_supplier_fields=self.required_supplier_fields,
                     required_consumer_fields=self.required_consumer_fields,
                     cf_index=self.cf_index,
-                    logger=self.logger,
                 )
 
                 if new_cf:
@@ -1480,7 +1474,6 @@ class EdgeLCIA:
                 required_supplier_fields=self.required_supplier_fields,
                 required_consumer_fields=self.required_consumer_fields,
                 weights=self.weights,
-                logger=self.logger,
             )
 
             grouped_edges = group_edges_by_signature(
@@ -1673,7 +1666,6 @@ class EdgeLCIA:
                     required_supplier_fields=self.required_supplier_fields,
                     required_consumer_fields=self.required_consumer_fields,
                     cf_index=self.cf_index,
-                    logger=self.logger,
                 )
 
                 if new_cf:
@@ -1706,7 +1698,6 @@ class EdgeLCIA:
                 required_supplier_fields=self.required_supplier_fields,
                 required_consumer_fields=self.required_consumer_fields,
                 weights=self.weights,
-                logger=self.logger,
             )
 
             grouped_edges = group_edges_by_signature(
