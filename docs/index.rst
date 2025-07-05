@@ -12,6 +12,7 @@ Welcome to edges documentation!
    quickstart
    user_guide
    methods
+   nomenclature
    api_reference
    api_reference_costs
 
