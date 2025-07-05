@@ -531,11 +531,6 @@ class EdgeLCIA:
                 continue
             excluded_subregions.extend(decomposed_exclusions.get(loc, [loc]))
 
-        if not excluded_subregions:
-            self.logger.info(
-                f"No exclusions found for position {idx} based on exclusions={dict(decomposed_exclusions)}"
-            )
-
         return frozenset(excluded_subregions)
 
     def lci(self) -> None:
@@ -1433,10 +1428,6 @@ class EdgeLCIA:
                                     candidate_consumer_locations,
                                 )
                             )
-                        else:
-                            self.logger.info(
-                                f"No match or fallback for edge ({supplier_idx}, {consumer_idx})"
-                            )
 
             # Pass 1
             for sig, group_edges in tqdm(
@@ -1664,10 +1655,6 @@ class EdgeLCIA:
                                     candidate_suppliers_locations,
                                     candidate_consumers_locations,
                                 )
-                            )
-                        else:
-                            self.logger.info(
-                                f"No match or fallback for edge ({supplier_idx}, {consumer_idx})"
                             )
 
             # Pass 1
