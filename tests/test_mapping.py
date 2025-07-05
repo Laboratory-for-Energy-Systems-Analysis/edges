@@ -3,8 +3,6 @@ from pathlib import Path
 from edges import EdgeLCIA
 from bw2data import Database, projects, get_activity, __version__
 
-from edges.georesolver import GeoResolver
-
 import pandas as pd
 
 pd.set_option("display.max_rows", None)
@@ -12,18 +10,15 @@ pd.set_option("display.max_columns", None)
 pd.set_option("display.width", None)
 pd.set_option("display.max_colwidth", None)
 
-
 # Set up once
 if __version__ < (4, 0, 0):
-    is_bw2 = True
-else:
-    is_bw2 = False
-
-if is_bw2:
+    print("Using Brightway2.")
     projects.set_current("EdgeLCIA-Test")
 else:
+    print("Using Brightway2.5.")
     projects.set_current("EdgeLCIA-Test-bw25")
 
+# Create a test database and activities
 db = Database("lcia-test-db")
 activity_A = get_activity(("lcia-test-db", "A"))
 activity_B = get_activity(("lcia-test-db", "B"))

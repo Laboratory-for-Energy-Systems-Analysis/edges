@@ -58,22 +58,38 @@ def test_safe_eval_cached():
     )
 
 
-def test_get_shares():
-    candidates = [("A", 1), ("B", 2), ("C", 3)]
-    names, shares = get_shares(tuple(candidates))
-    assert names == ["A", "B", "C"]
-    assert shares.shape[0] == 3
-    assert abs(shares.sum() - 1) < 1e-6
-
-
 def test_get_shares_normal_case():
-    items = [("A", 10), ("B", 30)]
-    keys, shares = get_shares(tuple(items))
-    assert keys == ["A", "B"]
-    assert np.allclose(shares, [0.25, 0.75])
+    candidates = (
+        ("A", "X", 10),
+        ("B", "Y", 30),
+    )
+    result = get_shares(candidates)
+
+    # result is [(('A', 'B'), ('X', 'Y'), share_0), (('A', 'B'), ('X', 'Y'), share_1)]
+    assert len(result) == 2
+    assert result[0][0] == ("A", "B")
+    assert result[0][1] == ("X", "Y")
+    assert np.isclose(result[0][2], 0.25)
+    assert np.isclose(result[1][2], 0.75)
+    assert np.isclose(sum(r[2] for r in result), 1.0)
 
 
 def test_get_shares_zero_total():
-    items = [("A", 0), ("B", 0)]
-    keys, shares = get_shares(tuple(items))
-    assert np.allclose(shares, [0.0, 0.0])
+    candidates = (
+        ("A", "X", 0),
+        ("B", "Y", 0),
+    )
+    result = get_shares(candidates)
+    assert result == [(("A", "B"), ("X", "Y"), 0.0)]
+
+
+def test_get_shares_empty():
+    result = get_shares(())
+    assert result[0] == []
+    assert result[1].shape == (0,)
+
+
+def test_get_shares_single_entry():
+    candidates = (("A", "X", 100),)
+    result = get_shares(candidates)
+    assert result == [(("A",), ("X",), 1.0)]

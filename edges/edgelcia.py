@@ -216,23 +216,12 @@ class EdgeLCIA:
         self.random_seed = random_seed if random_seed is not None else 42
         self.random_state = np.random.default_rng(self.random_seed)
 
-        self.lca = bw2calc.LCA(demand=self.demand)
-        self._load_raw_lcia_data()
-        self.cfs_mapping = []
-
         self.logger = logging.getLogger(f"{__name__}.{self.__class__.__name__}")
         self.logger.setLevel(logging.INFO)
 
-        if not self.logger.handlers:
-            fh = logging.FileHandler("edgelcia.log")
-            formatter = logging.Formatter(
-                "%(asctime)s,%(msecs)d %(name)s %(funcName)s %(levelname)s %(message)s",
-                datefmt="%H:%M:%S",
-            )
-            fh.setFormatter(formatter)
-            fh.setLevel(logging.DEBUG)
-            self.logger.addHandler(fh)
-            self.logger.propagate = False
+        self.lca = bw2calc.LCA(demand=self.demand)
+        self._load_raw_lcia_data()
+        self.cfs_mapping = []
 
         self.SAFE_GLOBALS = {
             "__builtins__": None,
@@ -271,9 +260,16 @@ class EdgeLCIA:
         # Extract parameters or scenarios from method file if not already provided
         if not self.parameters:
             self.parameters = raw.get("scenarios", raw.get("parameters", {}))
+        if not self.parameters:
+            self.logger.warning(
+                f"No parameters or scenarios found in method file: {self.filepath}"
+            )
 
         # Fallback to default scenario
         if self.scenario and self.scenario not in self.parameters:
+            self.logger.error(
+                f"Scenario '{self.scenario}' not found in method file. Available scenarios: {list(self.parameters)}"
+            )
             raise ValueError(
                 f"Scenario '{self.scenario}' not found in available parameters: {list(self.parameters)}"
             )
@@ -362,6 +358,11 @@ class EdgeLCIA:
         scenario_name = scenario_name or self.scenario
 
         param_set = self.parameters.get(scenario_name)
+
+        if param_set is None:
+            self.logger.warning(
+                f"No parameter set found for scenario '{scenario_name}'. Using empty defaults."
+            )
 
         resolved = {}
         if param_set is not None:
@@ -501,6 +502,11 @@ class EdgeLCIA:
             fallback = self.position_to_technosphere_flows_lookup.get(consumer_idx, {})
             if fallback and "location" in fallback:
                 info["location"] = fallback["location"]
+            else:
+                self.logger.warning(
+                    f"No location found for consumer_idx {consumer_idx}. "
+                    f"Matching may fail."
+                )
         return info
 
     @lru_cache(maxsize=None)
@@ -508,17 +514,9 @@ class EdgeLCIA:
         """
         Get excluded subregions for a dynamic supplier or consumer.
 
-        Parameters
-        ----------
-        idx : int
-            The position index (supplier or consumer).
-        role : str
-            Either 'supplier' or 'consumer'.
-
-        Returns
-        -------
-        List[str]
-            A flat list of excluded subregions (fully resolved).
+        :param idx: Index of the supplier or consumer flow.
+        :param decomposed_exclusions: A frozenset of decomposed exclusions for the flow.
+        :return: A frozenset of excluded subregions.
         """
         decomposed_exclusions = dict(decomposed_exclusions)
 
@@ -532,6 +530,11 @@ class EdgeLCIA:
             if loc in ["RoW", "RoE"]:
                 continue
             excluded_subregions.extend(decomposed_exclusions.get(loc, [loc]))
+
+        if not excluded_subregions:
+            self.logger.info(
+                f"No exclusions found for position {idx} based on exclusions={dict(decomposed_exclusions)}"
+            )
 
         return frozenset(excluded_subregions)
 
@@ -937,10 +940,6 @@ class EdgeLCIA:
                                     candidate_consumer_locations,
                                 )
                             )
-                        else:
-                            self.logger.info(
-                                f"No match or fallback for edge ({supplier_idx}, {consumer_idx})"
-                            )
 
             # Pass 1
             for sig, group_edges in tqdm(
@@ -981,6 +980,11 @@ class EdgeLCIA:
                             value=new_cf,
                             uncertainty=None,
                         )
+                else:
+                    self.logger.warning(
+                        f"Fallback CF could not be computed for supplier={supplier_info}, consumer={consumer_info} "
+                        f"with candidate suppliers={candidate_supplier_locations} and consumers={candidate_consumer_locations}"
+                    )
 
             # Pass 2
             compute_cf_memoized = compute_cf_memoized_factory(
@@ -1019,6 +1023,11 @@ class EdgeLCIA:
                             value=new_cf,
                             uncertainty=None,
                         )
+                else:
+                    self.logger.warning(
+                        f"Fallback CF could not be computed for supplier={s_key}, consumer={c_key} "
+                        f"with candidate suppliers={candidate_suppliers} and consumers={candidate_consumers}"
+                    )
 
         self._update_unprocessed_edges()
 
@@ -1223,6 +1232,11 @@ class EdgeLCIA:
                             value=new_cf,
                             uncertainty=None,
                         )
+                else:
+                    self.logger.warning(
+                        f"Fallback CF could not be computed for supplier={rep_supplier}, consumer={rep_consumer} "
+                        f"with candidate suppliers={candidate_supplier_locations} and consumers={candidate_consumer_locations}"
+                    )
 
             # Pass 2
             compute_cf_memoized = compute_cf_memoized_factory(
@@ -1264,6 +1278,11 @@ class EdgeLCIA:
                             value=new_cf,
                             uncertainty=None,
                         )
+                else:
+                    self.logger.warning(
+                        f"Fallback CF could not be computed for supplier={s_key}, consumer={c_key} "
+                        f"with candidate suppliers={candidate_supplier_locations} and consumers={candidate_consumer_locations}"
+                    )
 
         self._update_unprocessed_edges()
 
@@ -1423,16 +1442,16 @@ class EdgeLCIA:
             for sig, group_edges in tqdm(
                 prefiltered_groups.items(), desc="Processing contained groups (pass 1)"
             ):
-                rep_supplier = group_edges[0][2]
-                rep_consumer = group_edges[0][3]
+                supplier_info = group_edges[0][2]
+                consumer_info = group_edges[0][3]
                 candidate_supplier_locations = group_edges[0][-2]
                 candidate_consumer_locations = group_edges[0][-1]
 
                 new_cf, matched_cf_obj = compute_average_cf(
                     candidate_suppliers=candidate_supplier_locations,
                     candidate_consumers=candidate_consumer_locations,
-                    supplier_info=rep_supplier,
-                    consumer_info=rep_consumer,
+                    supplier_info=supplier_info,
+                    consumer_info=consumer_info,
                     weight=self.weights,
                     required_supplier_fields=self.required_supplier_fields,
                     required_consumer_fields=self.required_consumer_fields,
@@ -1458,6 +1477,11 @@ class EdgeLCIA:
                             value=new_cf,
                             uncertainty=None,
                         )
+                else:
+                    self.logger.warning(
+                        f"Fallback CF could not be computed for supplier={supplier_info}, consumer={consumer_info} "
+                        f"with candidate suppliers={candidate_supplier_locations} and consumers={candidate_consumer_locations}"
+                    )
 
             # Pass 2
             compute_cf_memoized = compute_cf_memoized_factory(
@@ -1475,26 +1499,34 @@ class EdgeLCIA:
             )
 
             for (
-                s_key,
-                c_key,
+                supplier_info,
+                consumer_info,
                 (candidate_suppliers, candidate_consumers),
             ), edge_group in tqdm(
                 grouped_edges.items(), desc="Processing contained groups (pass 2)"
             ):
                 new_cf, matched_cf_obj = compute_cf_memoized(
-                    s_key, c_key, candidate_suppliers, candidate_consumers
+                    supplier_info,
+                    consumer_info,
+                    candidate_suppliers,
+                    candidate_consumers,
                 )
                 if new_cf:
                     for supplier_idx, consumer_idx in edge_group:
                         add_cf_entry(
                             cfs_mapping=self.cfs_mapping,
-                            supplier_info=dict(s_key),
-                            consumer_info=dict(c_key),
+                            supplier_info=dict(supplier_info),
+                            consumer_info=dict(consumer_info),
                             direction=direction,
                             indices=[(supplier_idx, consumer_idx)],
                             value=new_cf,
                             uncertainty=None,
                         )
+                else:
+                    self.logger.warning(
+                        f"Fallback CF could not be computed for supplier={supplier_info}, consumer={consumer_info} "
+                        f"with candidate suppliers={candidate_suppliers} and consumers={candidate_consumers}"
+                    )
 
         self._update_unprocessed_edges()
 
@@ -1642,14 +1674,14 @@ class EdgeLCIA:
             for sig, group_edges in tqdm(
                 prefiltered_groups.items(), desc="Processing global groups (pass 1)"
             ):
-                rep_supplier = group_edges[0][2]
-                rep_consumer = group_edges[0][3]
+                supplier_info = group_edges[0][2]
+                consumer_info = group_edges[0][3]
 
                 new_cf, matched_cf_obj = compute_average_cf(
                     candidate_suppliers=global_locations,
                     candidate_consumers=global_locations,
-                    supplier_info=rep_supplier,
-                    consumer_info=rep_consumer,
+                    supplier_info=supplier_info,
+                    consumer_info=consumer_info,
                     weight=self.weights,
                     required_supplier_fields=self.required_supplier_fields,
                     required_consumer_fields=self.required_consumer_fields,
@@ -1675,6 +1707,11 @@ class EdgeLCIA:
                             value=new_cf,
                             uncertainty=None,
                         )
+                else:
+                    self.logger.warning(
+                        f"Fallback CF could not be computed for supplier={supplier_info}, consumer={consumer_info} "
+                        f"with candidate suppliers={global_locations} and consumers={global_locations}"
+                    )
 
             # Pass 2
             compute_cf_memoized = compute_cf_memoized_factory(
@@ -1692,21 +1729,24 @@ class EdgeLCIA:
             )
 
             for (
-                s_key,
-                c_key,
+                supplier_info,
+                consumer_info,
                 (candidate_suppliers, candidate_consumers),
             ), edge_group in tqdm(
                 grouped_edges.items(), desc="Processing global groups (pass 2)"
             ):
                 new_cf, matched_cf_obj = compute_cf_memoized(
-                    s_key, c_key, candidate_suppliers, candidate_consumers
+                    supplier_info,
+                    consumer_info,
+                    candidate_suppliers,
+                    candidate_consumers,
                 )
                 if new_cf:
                     for supplier_idx, consumer_idx in edge_group:
                         add_cf_entry(
                             cfs_mapping=self.cfs_mapping,
-                            supplier_info=dict(s_key),
-                            consumer_info=dict(c_key),
+                            supplier_info=dict(supplier_info),
+                            consumer_info=dict(consumer_info),
                             direction=direction,
                             indices=[(supplier_idx, consumer_idx)],
                             value=new_cf,
@@ -1716,6 +1756,11 @@ class EdgeLCIA:
                                 else None
                             ),
                         )
+                else:
+                    self.logger.warning(
+                        f"Fallback CF could not be computed for supplier={supplier_info}, consumer={consumer_info} "
+                        f"with candidate suppliers={candidate_suppliers} and consumers={candidate_consumers}"
+                    )
 
         self._update_unprocessed_edges()
 
@@ -1855,13 +1900,18 @@ class EdgeLCIA:
 
             for cf in self.cfs_mapping:
                 if isinstance(cf["value"], str):
-
-                    value = safe_eval_cached(
-                        cf["value"],
-                        parameters=resolved_params,
-                        scenario_idx=scenario_idx,
-                        SAFE_GLOBALS=self.SAFE_GLOBALS,
-                    )
+                    try:
+                        value = safe_eval_cached(
+                            cf["value"],
+                            parameters=resolved_params,
+                            scenario_idx=scenario_idx,
+                            SAFE_GLOBALS=self.SAFE_GLOBALS,
+                        )
+                    except Exception as e:
+                        self.logger.error(
+                            f"Failed to evaluate symbolic CF '{cf['value']}' with parameters {resolved_params}. Error: {e}"
+                        )
+                        value = 0
                 else:
                     value = cf["value"]
 
@@ -1922,6 +1972,10 @@ class EdgeLCIA:
             len(self.processed_biosphere_edges) + len(self.processed_technosphere_edges)
             == 0
         ):
+            self.logger.warning(
+                "No exchanges were matched or characterized. Score is set to 0."
+            )
+
             self.score = 0
             return
 
@@ -2104,7 +2158,9 @@ class EdgeLCIA:
         """
 
         if not self.scenario_cfs:
-            print("You must run evaluate_cfs() first.")
+            self.logger.warning(
+                "generate_cf_table() called before evaluate_cfs(). Returning empty DataFrame."
+            )
             return pd.DataFrame()
 
         is_biosphere = True if self.technosphere_flow_matrix is None else False

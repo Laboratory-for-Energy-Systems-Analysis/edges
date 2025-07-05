@@ -103,9 +103,8 @@ def test_build_cf_index():
     required_fields = {"location"}
     index = build_cf_index(raw_cfs, required_fields)
 
-    assert "__ANY__" in index
-    assert any(("location", "GLO") in sig for sig in index["__ANY__"])
-    assert any(("location", "US") in sig for sig in index["__ANY__"])
+    assert ("GLO", "__ANY__") in index
+    assert ("US", "__ANY__") in index
 
 
 def test_preprocess_flows():
@@ -154,23 +153,22 @@ def test_compute_average_cf_with_any_fallback():
     raw_cfs = [
         {
             "supplier": {"name": "Oil", "location": "GLO"},
-            "consumer": {},  # No location
+            "consumer": {},  # No required fields
             "value": 10,
         }
     ]
     required_supplier_fields = {"name", "location"}
-    required_consumer_fields = {"location"}  # This will be missing in the test case
+    required_consumer_fields = set()  # <- No required fields
 
-    # Build CF index which does not contain any real location match
     cf_index = build_cf_index(raw_cfs, required_supplier_fields)
 
-    # Create supplier and consumer info to match the CF above
     supplier_info = {"name": "Oil", "location": "GLO"}
-    consumer_info = {"location": "CH"}  # This does not match any CF directly
+    consumer_info = {"location": "CH"}  # Any value — won't be used in matching
+    candidate_consumers = ["__ANY__"]
 
     result, matched_cf = compute_average_cf(
         candidate_suppliers=["GLO"],
-        candidate_consumers=[],
+        candidate_consumers=candidate_consumers,  # not empty!
         supplier_info=supplier_info,
         consumer_info=consumer_info,
         weight={"GLO": 1.0},
@@ -179,6 +177,5 @@ def test_compute_average_cf_with_any_fallback():
         required_consumer_fields=required_consumer_fields,
     )
 
-    assert matched_cf is not None
-    assert isinstance(result, str)
-    assert "10" in result
+    assert matched_cf is not None, f"Expected a matched CF, got {matched_cf}"
+    assert result == "(1.000 * (10))"

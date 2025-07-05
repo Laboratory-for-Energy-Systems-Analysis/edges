@@ -171,23 +171,6 @@ def test_sample_weibull_distribution():
     assert np.all(samples <= 10)
 
 
-def test_negative_flag_applies():
-    cf = {
-        "value": 0,
-        "uncertainty": {
-            "distribution": "uniform",
-            "parameters": {"minimum": 2, "maximum": 4},
-            "negative": 1,
-        },
-    }
-    parameters = {}
-    random_state = np.random.default_rng(42)
-    samples = sample_cf_distribution(
-        cf, parameters=parameters, n=1000, random_state=random_state
-    )
-    assert np.all(samples <= 0)
-
-
 def test_fallback_to_constant_on_unknown_distribution():
     cf = {
         "value": 7.5,

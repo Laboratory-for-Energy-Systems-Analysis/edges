@@ -622,7 +622,8 @@ def compute_average_cf(
         return 0, None
 
     # normalize weights into shares
-    sum_weights = sum(c.get("weight") for c in matched_cfs)
+    sum_weights = sum(c.get("weight", 0.0) for c in matched_cfs)
+
     if sum_weights == 0:
         logger.warning(
             f"No valid weights found for supplier {supplier_info} and consumer {consumer_info}. "
