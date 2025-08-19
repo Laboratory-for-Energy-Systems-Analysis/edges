@@ -5,7 +5,7 @@ import time
 # Start timer
 start_time = time.time()
 # bw2data.projects.set_current("bw25_ei310")
-bw2data.projects.set_current("ecoinvent-3.10.1-cutoff")
+bw2data.projects.set_current("ecoinvent-3.10-cutoff")
 
 act = [
     a
@@ -15,8 +15,8 @@ act = [
 ][0]
 
 # method = ("GeoPolRisk", "paired", "2024", "short")
-method = ("AWARE 2.0", "Country", "all", "yearly")
-# method = ("GeoPolRisk", "paired", "2024")
+# method = ("AWARE 2.0", "Country", "all", "yearly")
+method = ("GeoPolRisk", "paired", "2024")
 
 LCA = EdgeLCIA({act: 1}, method)
 LCA.lci()

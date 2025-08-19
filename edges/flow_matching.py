@@ -3,6 +3,7 @@ from collections import defaultdict
 from functools import cache, lru_cache
 from typing import Optional
 import numpy as np
+from typing import NamedTuple, List, Optional
 
 from .utils import make_hashable
 
@@ -330,122 +331,121 @@ def build_index(lookup: dict, required_fields: set) -> dict:
     return index
 
 
+class MatchResult(NamedTuple):
+    matches: List[int]
+    location_only_rejects: dict[int, str]
+
+
 def match_with_index(
     flow_to_match: dict,
     index: dict,
     lookup_mapping: dict,
     required_fields: set,
     reversed_lookup: dict,
-) -> list:
-    """
-    Match a flow against the lookup using the inverted index.
-    Supports "equals", "startswith", and "contains" operators.
+) -> MatchResult:
+    SPECIAL = {"excludes", "operator", "matrix"}
+    nonloc_fields = [f for f in required_fields if f not in SPECIAL and f != "location"]
+    has_location_constraint = ("location" in required_fields) and (
+        "location" in flow_to_match
+    )
+    op = flow_to_match.get("operator", "equals")
 
-    :param flow_to_match: The flow to match.
-    :param index: The inverted index produced by build_index().
-    :param lookup_mapping: The original lookup dictionary mapping keys to positions.
-    :param required_fields: The required fields for matching.
-    :return: A list of matching positions.
-    """
-    candidate_keys = None
-
-    if not required_fields:
-        # Match all flows if no fields to match
-        return [pos for positions in lookup_mapping.values() for pos in positions]
-
-    for field in required_fields:
-
-        if field in ("excludes", "operator", "matrix"):
-            continue
-
-        match_target = flow_to_match.get(field)
-
-        operator_value = flow_to_match.get("operator", "equals")
+    def field_candidates(field, target, operator_value):
         field_index = index.get(field, {})
-        field_candidates = set()
-
+        out = set()
         if operator_value == "equals":
-            # Fast direct lookup.
-            if match_target == "__ANY__":
-                for candidate_value, candidate_list in field_index.items():
-                    for candidate in candidate_list:
-                        candidate_key, _ = candidate
-                        field_candidates.add(candidate_key)
+            if target == "__ANY__":
+                for _, cand_list in field_index.items():
+                    for key_positions in cand_list:
+                        key_only, _ = key_positions
+                        out.add(key_only)
             else:
-                for candidate in field_index.get(match_target, []):
-                    candidate_key, _ = candidate
-                    field_candidates.add(candidate_key)
+                for key_positions in field_index.get(target, []):
+                    key_only, _ = key_positions
+                    out.add(key_only)
         else:
-            # For "startswith" or "contains", we iterate over all candidate values.
-            if match_target == "__ANY__":
-                for candidate_value, candidate_list in field_index.items():
-                    for candidate in candidate_list:
-                        candidate_key, _ = candidate
-                        field_candidates.add(candidate_key)
+            if target == "__ANY__":
+                for _, cand_list in field_index.items():
+                    for key_positions in cand_list:
+                        key_only, _ = key_positions
+                        out.add(key_only)
             else:
-                for candidate_value, candidate_list in field_index.items():
-                    if match_operator(
-                        value=candidate_value,
-                        target=match_target,
-                        operator=operator_value,
-                    ):
-                        for candidate in candidate_list:
-                            candidate_key, _ = candidate
-                            field_candidates.add(candidate_key)
+                for candidate_value, cand_list in field_index.items():
+                    if match_operator(candidate_value, target, operator_value):
+                        for key_positions in cand_list:
+                            key_only, _ = key_positions
+                            out.add(key_only)
+        return out
 
-        # Initialize or intersect candidate sets.
-        if candidate_keys is None:
-            candidate_keys = field_candidates
-        else:
-            candidate_keys &= field_candidates
-
-        # Early exit if no candidates remain.
-        if not candidate_keys:
+    def gather_positions(keys, ft_for_matchflow):
+        if not keys:
             return []
+        out = []
+        for key in keys:
+            for pos in lookup_mapping.get(key, []):
+                raw = reversed_lookup[pos]
+                flow = dict(raw) if isinstance(raw, tuple) else raw
+                if flow and match_flow(flow, ft_for_matchflow):
+                    out.append(pos)
+        return out
 
-    # Gather positions from the original lookup mapping for all candidate keys.
-    matches = []
-    for key in candidate_keys:
-        for pos in lookup_mapping[key]:
-            raw = reversed_lookup[pos]
-            flow = dict(raw) if isinstance(raw, tuple) else raw
-            if flow and match_flow(flow, flow_to_match):
-                matches.append(pos)
+    # --- SPECIAL CASE: only 'location' is required ---
+    if not nonloc_fields and has_location_constraint:
+        all_keys = set(lookup_mapping.keys())
 
-    if "classifications" in flow_to_match:
-        cf_classifications_by_scheme = flow_to_match["classifications"]
+        # passes when ignoring location (still honors excludes/operator)
+        ft_no_loc = dict(flow_to_match)
+        ft_no_loc.pop("location", None)
+        noloc_positions = gather_positions(all_keys, ft_no_loc)
 
-        if isinstance(cf_classifications_by_scheme, tuple):
-            cf_classifications_by_scheme = dict(cf_classifications_by_scheme)
+        # full matches with location
+        loc_keys = field_candidates("location", flow_to_match.get("location"), op)
+        full_matches = gather_positions(loc_keys, flow_to_match)
 
-        classified_matches = []
+        # everything that passed without location but failed with it
+        loc_only = set(noloc_positions) - set(full_matches)
 
-        for pos in matches:
-            flow = reversed_lookup.get(pos)
-            flow = dict(flow)
-            if not flow:
-                continue
-            dataset_classifications = flow.get("classifications", [])
+        return MatchResult(
+            matches=full_matches,
+            location_only_rejects={pos: "location" for pos in loc_only},
+        )
 
-            if dataset_classifications:
-                for scheme, cf_codes in cf_classifications_by_scheme.items():
-                    relevant_codes = [
-                        code.split(":")[0].strip()
-                        for s, code in dataset_classifications
-                        if s.lower() == scheme.lower()
-                    ]
-                    if any(
-                        code.startswith(prefix)
-                        for prefix in cf_codes
-                        for code in relevant_codes
-                    ):
-                        classified_matches.append(pos)
-                        break
+    # --- NORMAL PATH: there are non-location required fields ---
+    if nonloc_fields:
+        pre_location_keys = None
+        for field in nonloc_fields:
+            cand = field_candidates(field, flow_to_match.get(field), op)
+            pre_location_keys = (
+                cand if pre_location_keys is None else (pre_location_keys & cand)
+            )
+            if not pre_location_keys:
+                return MatchResult(matches=[], location_only_rejects={})
+    else:
+        # no required fields at all
+        pre_location_keys = set(lookup_mapping.keys())
 
-        if classified_matches:
-            return classified_matches
+    # apply location last
+    candidate_keys = pre_location_keys
+    if has_location_constraint:
+        loc_cand = field_candidates("location", flow_to_match.get("location"), op)
+        candidate_keys = pre_location_keys & loc_cand
 
-    return matches
+    # noloc matches (for diagnosing location-only)
+    ft_no_loc = dict(flow_to_match)
+    ft_no_loc.pop("location", None)
+    noloc_matches = gather_positions(pre_location_keys, ft_no_loc)
+
+    # full matches
+    full_matches = gather_positions(candidate_keys, flow_to_match)
+
+    loc_only = (
+        set(noloc_matches) - set(full_matches) if has_location_constraint else set()
+    )
+
+    return MatchResult(
+        matches=full_matches,
+        location_only_rejects={pos: "location" for pos in loc_only},
+    )
 
 
 def compute_cf_memoized_factory(

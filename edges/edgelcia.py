@@ -171,6 +171,7 @@ class EdgeLCIA:
         5. `lcia()`
         6. Optionally: `statistics()`, `generate_df_table()`
         """
+        self.eligible_edges_for_next = None
         self.cf_index = None
         self.scenario_cfs = None
         self.method_metadata = None
@@ -621,6 +622,8 @@ class EdgeLCIA:
             else self.technosphere_edges
         )
 
+        eligible_edges_for_next: set[tuple[int, int]] = set()
+
         print(f"Mapping {len(edges)} exchanges...")
 
         supplier_index = build_index(
@@ -642,7 +645,7 @@ class EdgeLCIA:
             # Step 1: Classifications filter
             if "classifications" in supplier_criteria:
                 cf_class = supplier_criteria["classifications"]
-                classification_matches = []
+                supplier_classification_matches = []
                 cf_key = tuple(cf_class)
 
                 for idx in self.reversed_supplier_lookup:
@@ -659,10 +662,10 @@ class EdgeLCIA:
                         classification_match_cache[key] = result
 
                     if result:
-                        classification_matches.append(idx)
+                        supplier_classification_matches.append(idx)
 
             else:
-                classification_matches = None
+                supplier_classification_matches = None
 
             # Step 2: Other filters (location, name, etc.)
             cached_match_with_index.index = supplier_index
@@ -673,7 +676,7 @@ class EdgeLCIA:
                 k: v for k, v in supplier_criteria.items() if k != "classifications"
             }
 
-            nonclass_matches = cached_match_with_index(
+            supplier_out = cached_match_with_index(
                 make_hashable(nonclass_criteria),
                 tuple(
                     sorted(
@@ -687,18 +690,28 @@ class EdgeLCIA:
             )
 
             # Step 3: Combine
-            if classification_matches is not None:
+            if supplier_classification_matches is not None:
                 supplier_candidates = list(
-                    set(classification_matches) & set(nonclass_matches)
+                    set(supplier_classification_matches) & set(supplier_out.matches)
                 )
             else:
-                supplier_candidates = nonclass_matches
+                supplier_candidates = supplier_out.matches
+
+            # Was location explicitly required on the supplier side of this CF?
+            supplier_location_required = ("location" in supplier_criteria) and (
+                supplier_criteria.get("location") is not None
+            )
+
+            # Near-miss supplier positions (filter by classification if CF specifies it)
+            supplier_loc_only = set(supplier_out.location_only_rejects)
+            if supplier_classification_matches is not None:
+                supplier_loc_only &= set(supplier_classification_matches)
 
             # --- Consumer matching ---
             # Step 1: Classifications filter
             if "classifications" in consumer_criteria:
                 cf_class = consumer_criteria["classifications"]
-                classification_matches = []
+                consumer_classification_matches = []
                 cf_key = tuple(cf_class)
 
                 for idx in self.reversed_consumer_lookup:
@@ -715,10 +728,10 @@ class EdgeLCIA:
                         classification_match_cache[key] = result
 
                     if result:
-                        classification_matches.append(idx)
+                        consumer_classification_matches.append(idx)
 
             else:
-                classification_matches = None
+                consumer_classification_matches = None
 
             # Step 2: Other filters (location, name, etc.)
             cached_match_with_index.index = consumer_index
@@ -729,7 +742,7 @@ class EdgeLCIA:
                 k: v for k, v in consumer_criteria.items() if k != "classifications"
             }
 
-            nonclass_matches = cached_match_with_index(
+            consumer_out = cached_match_with_index(
                 make_hashable(nonclass_criteria),
                 tuple(
                     sorted(
@@ -743,12 +756,20 @@ class EdgeLCIA:
             )
 
             # Step 3: Combine
-            if classification_matches is not None:
+            if consumer_classification_matches is not None:
                 consumer_candidates = list(
-                    set(classification_matches) & set(nonclass_matches)
+                    set(consumer_classification_matches) & set(consumer_out.matches)
                 )
             else:
-                consumer_candidates = nonclass_matches
+                consumer_candidates = consumer_out.matches
+
+            consumer_location_required = ("location" in consumer_criteria) and (
+                consumer_criteria.get("location") is not None
+            )
+
+            consumer_loc_only = set(consumer_out.location_only_rejects)
+            if consumer_classification_matches is not None:
+                consumer_loc_only &= set(consumer_classification_matches)
 
             # --- Combine supplier + consumer ---
             positions = [
@@ -772,7 +793,44 @@ class EdgeLCIA:
                 self.cfs_mapping.append(cf_entry)
                 seen_positions.extend(positions)
 
+            # ---------- Build edge-level allowlist for later geo steps ----------
+
+            # Case A: supplier requires location -> keep edges where supplier is near-miss, consumer is a full match
+            if supplier_location_required and supplier_loc_only:
+                eligible_edges_for_next |= {
+                    (s, c)
+                    for s in supplier_loc_only
+                    for c in consumer_candidates
+                    if (s, c) in edges
+                }
+
+            # Case B: consumer requires location -> keep edges where consumer is near-miss, supplier is a full match
+            if consumer_location_required and consumer_loc_only:
+                eligible_edges_for_next |= {
+                    (s, c)
+                    for s in supplier_candidates
+                    for c in consumer_loc_only
+                    if (s, c) in edges
+                }
+
+            # Case C (optional but useful): both sides require location and both are near-miss
+            # If neither side has a full match, still allow edges where both sides are location near-miss.
+            if (
+                supplier_location_required
+                and consumer_location_required
+                and supplier_loc_only
+                and consumer_loc_only
+            ):
+                eligible_edges_for_next |= {
+                    (s, c)
+                    for s in supplier_loc_only
+                    for c in consumer_loc_only
+                    if (s, c) in edges
+                }
+
         self._update_unprocessed_edges()
+
+        self.eligible_edges_for_next = eligible_edges_for_next
 
     def map_aggregate_locations(self) -> None:
         """
@@ -825,6 +883,13 @@ class EdgeLCIA:
 
             processed_flows = set(processed_flows)
             edges_index = defaultdict(list)
+
+            # let's remove edges that have no chance of qualifying
+            print(f"Len unprocessed edges BEFORE: {len(unprocessed_edges)}")
+            unprocessed_edges = [
+                e for e in unprocessed_edges if e in self.eligible_edges_for_next
+            ]
+            print(f"Len unprocessed edges AFTER: {len(unprocessed_edges)}")
 
             for supplier_idx, consumer_idx in unprocessed_edges:
                 if (supplier_idx, consumer_idx) in processed_flows:
@@ -1095,6 +1160,13 @@ class EdgeLCIA:
             prefiltered_groups = defaultdict(list)
             remaining_edges = []
 
+            # let's remove edges that have no chance of qualifying
+            print(f"Len unprocessed edges BEFORE: {len(unprocessed_edges)}")
+            unprocessed_edges = [
+                e for e in unprocessed_edges if e in self.eligible_edges_for_next
+            ]
+            print(f"Len unprocessed edges AFTER: {len(unprocessed_edges)}")
+
             for supplier_idx, consumer_idx in unprocessed_edges:
                 if (supplier_idx, consumer_idx) in processed_flows:
                     continue
@@ -1325,6 +1397,13 @@ class EdgeLCIA:
 
             processed_flows = set(processed_flows)
             edges_index = defaultdict(list)
+
+            # let's remove edges that have no chance of qualifying
+            print(f"Len unprocessed edges BEFORE: {len(unprocessed_edges)}")
+            unprocessed_edges = [
+                e for e in unprocessed_edges if e in self.eligible_edges_for_next
+            ]
+            print(f"Len unprocessed edges AFTER: {len(unprocessed_edges)}")
 
             for supplier_idx, consumer_idx in unprocessed_edges:
                 if (supplier_idx, consumer_idx) in processed_flows:
@@ -1569,6 +1648,13 @@ class EdgeLCIA:
             )
             processed_flows = set(processed_flows)
             edges_index = defaultdict(list)
+
+            # let's remove edges that have no chance of qualifying
+            print(f"Len unprocessed edges BEFORE: {len(unprocessed_edges)}")
+            unprocessed_edges = [
+                e for e in unprocessed_edges if e in self.eligible_edges_for_next
+            ]
+            print(f"Len unprocessed edges AFTER: {len(unprocessed_edges)}")
 
             for supplier_idx, consumer_idx in unprocessed_edges:
                 if (supplier_idx, consumer_idx) in processed_flows:
