@@ -350,31 +350,36 @@ def match_with_index(
     )
     op = flow_to_match.get("operator", "equals")
 
+    allowed_keys = getattr(cached_match_with_index, "allowed_keys", None)
+
     def field_candidates(field, target, operator_value):
         field_index = index.get(field, {})
         out = set()
         if operator_value == "equals":
             if target == "__ANY__":
                 for _, cand_list in field_index.items():
-                    for key_positions in cand_list:
-                        key_only, _ = key_positions
-                        out.add(key_only)
+                    for key_only, _ in cand_list:
+                        if (allowed_keys is None) or (key_only in allowed_keys):
+                            out.add(key_only)
             else:
-                for key_positions in field_index.get(target, []):
-                    key_only, _ = key_positions
-                    out.add(key_only)
+                for key_only, _ in field_index.get(target, []):
+                    if (allowed_keys is None) or (key_only in allowed_keys):
+                        out.add(key_only)
         else:
+            # startswith / contains
             if target == "__ANY__":
                 for _, cand_list in field_index.items():
-                    for key_positions in cand_list:
-                        key_only, _ = key_positions
-                        out.add(key_only)
+                    for key_only, _ in cand_list:
+                        if (allowed_keys is None) or (key_only in allowed_keys):
+                            out.add(key_only)
             else:
                 for candidate_value, cand_list in field_index.items():
-                    if match_operator(candidate_value, target, operator_value):
-                        for key_positions in cand_list:
-                            key_only, _ = key_positions
-                            out.add(key_only)
+                    if match_operator(
+                        value=candidate_value, target=target, operator=operator_value
+                    ):
+                        for key_only, _ in cand_list:
+                            if (allowed_keys is None) or (key_only in allowed_keys):
+                                out.add(key_only)
         return out
 
     def gather_positions(keys, ft_for_matchflow):
