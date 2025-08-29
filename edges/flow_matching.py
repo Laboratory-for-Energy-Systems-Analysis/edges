@@ -121,6 +121,7 @@ def process_cf_list(
 
 def matches_classifications(cf_classifications, dataset_classifications):
     """Match CF classification codes to dataset classifications."""
+
     if isinstance(cf_classifications, dict):
         cf_classifications = [
             (scheme, code)
@@ -138,7 +139,9 @@ def matches_classifications(cf_classifications, dataset_classifications):
             ]
 
     dataset_codes = [
-        (scheme, code.split(":")[0].strip()) for scheme, code in dataset_classifications
+        (scheme, str(c).split(":")[0].strip())
+        for scheme, codes in dataset_classifications
+        for c in (codes if isinstance(codes, (list, tuple, set)) else [codes])
     ]
 
     for scheme, code in dataset_codes:

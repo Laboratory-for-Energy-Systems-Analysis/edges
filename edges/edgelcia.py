@@ -115,6 +115,46 @@ def _equality_supplier_signature_cached(hashable_supplier_info: tuple) -> tuple:
     return make_hashable(info)
 
 
+def _norm_cls(x):
+    """
+    Normalize 'classifications' to a canonical, hashable form:
+      (("SCHEME", ("code1","code2", ...)), ("SCHEME2", (...)), ...)
+    Accepts:
+      - dict: {"CPC": ["01","02"], "ISIC": ["A"]}
+      - list/tuple of pairs: [("CPC","01"), ("CPC",["02","03"]), ("ISIC","A")]
+    """
+    if not x:
+        return ()
+    # Accumulate into {scheme: set(codes)}
+    bag = {}
+    if isinstance(x, dict):
+        for scheme, codes in x.items():
+            if codes is None:
+                continue
+            if isinstance(codes, (list, tuple, set)):
+                codes_iter = codes
+            else:
+                codes_iter = [codes]
+            bag.setdefault(str(scheme), set()).update(str(c) for c in codes_iter)
+    elif isinstance(x, (list, tuple)):
+        for item in x:
+            if not isinstance(item, (list, tuple)) or len(item) != 2:
+                continue
+            scheme, codes = item
+            if codes is None:
+                continue
+            if isinstance(codes, (list, tuple, set)):
+                codes_iter = codes
+            else:
+                codes_iter = [codes]
+            bag.setdefault(str(scheme), set()).update(str(c) for c in codes_iter)
+    else:
+        return ()
+
+    # Canonical: schemes sorted; codes sorted; all tuples
+    return tuple((scheme, tuple(sorted(bag[scheme]))) for scheme in sorted(bag))
+
+
 class EdgeLCIA:
     """
     Class that implements the calculation of the regionalized life cycle impact assessment (LCIA) results.
@@ -501,22 +541,6 @@ class EdgeLCIA:
                 pos: dict(key) for key, positions in lookup.items() for pos in positions
             }
 
-        def _norm_cls(x):
-            # normalize classifications to a hashable, comparable tuple form
-            if isinstance(x, dict):
-                # {"CPC": ["123", "456"], "NACE": ["A"]} -> (("CPC", ("123","456")), ("NACE", ("A",)))
-                return tuple(
-                    (scheme, tuple(sorted(map(str, codes))))
-                    for scheme, codes in sorted(x.items())
-                )
-            if isinstance(x, (list, tuple)):
-                # [("CPC","123"), ("CPC","456")] -> (("CPC","123"),("CPC","456"))
-                try:
-                    return tuple((str(s), str(c)) for s, c in x)
-                except Exception:
-                    return ()
-            return ()
-
         # ---- Reversed lookups (materialized)
         self.reversed_supplier_lookup_bio = _materialize_reversed(
             self.supplier_lookup_bio
@@ -525,6 +549,13 @@ class EdgeLCIA:
             self.supplier_lookup_tech
         )
         self.reversed_consumer_lookup = _materialize_reversed(self.consumer_lookup)
+
+        # 🔧 Enrich consumer reversed lookup with full metadata fields we may want to prefilter on.
+        # In particular: bring 'classifications' from the actual activity dict.
+        for idx, info in self.reversed_consumer_lookup.items():
+            extra = self.position_to_technosphere_flows_lookup.get(idx, {})
+            if "classifications" in extra and "classifications" not in info:
+                info["classifications"] = extra["classifications"]
 
         # (Optional) Back-compat: a combined supplier_lookup for any legacy call sites
         # If all CFs are biosphere, expose the bio lookup; if all tech, expose tech; else merge.
@@ -567,21 +598,41 @@ class EdgeLCIA:
             for i, d in self.reversed_consumer_lookup.items()
         }
 
-        # (Optional) Explicitly clear any legacy single-matrix reversed supplier to catch stale call sites
-        # self.reversed_supplier_lookup = None
+        def _to_prefix_key_from_norm(norm):
+            # norm is (("SCHEME", ("code", ...)), ...)
+            if not norm:
+                return frozenset()
+            out = []
+            for scheme, codes in norm:
+                for c in codes:
+                    # split only once
+                    cp = c.split(":", 1)[0].strip()
+                    out.append((scheme, cp))
+            return frozenset(out)
+
+        self.supplier_cls_prefix_bio = {
+            i: _to_prefix_key_from_norm(v) for i, v in self.supplier_cls_bio.items()
+        }
+        self.supplier_cls_prefix_tech = {
+            i: _to_prefix_key_from_norm(v) for i, v in self.supplier_cls_tech.items()
+        }
+        self.consumer_cls_prefix = {
+            i: _to_prefix_key_from_norm(v) for i, v in self.consumer_cls.items()
+        }
 
     def _get_consumer_info(self, consumer_idx):
         info = self.reversed_consumer_lookup.get(consumer_idx, {})
-        if "location" not in info:
+        if "location" not in info or "classifications" not in info:
             fallback = self.position_to_technosphere_flows_lookup.get(consumer_idx, {})
-            if fallback and "location" in fallback:
-                loc = fallback["location"]
-                info["location"] = loc
-                self.consumer_loc[consumer_idx] = loc  # keep the fast cache in sync
-            else:
-                self.logger.warning(
-                    f"No location found for consumer_idx {consumer_idx}. Matching may fail."
-                )
+            if fallback:
+                if "location" not in info and "location" in fallback:
+                    loc = fallback["location"]
+                    info["location"] = loc
+                    self.consumer_loc[consumer_idx] = loc
+                if "classifications" not in info and "classifications" in fallback:
+                    cls = fallback["classifications"]
+                    info["classifications"] = cls
+                    self.consumer_cls[consumer_idx] = _norm_cls(cls)
         return info
 
     @lru_cache(maxsize=None)
@@ -810,7 +861,7 @@ class EdgeLCIA:
             # ---------- CONSUMER side ----------
             # Classifications prefilter (use current direction’s consumer adjacency keys)
             if "classifications" in c_crit:
-                cf_key = tuple(c_crit["classifications"])
+                cf_key = _norm_cls(c_crit["classifications"])
                 c_class_hits = []
                 for c_idx in ebc:
                     ds_class = self.consumer_cls.get(c_idx, ())

@@ -15,8 +15,8 @@ act = [
 ][0]
 
 # method = ("GeoPolRisk", "paired", "2024", "short")
-# method = ("AWARE 2.0", "Country", "all", "yearly")
-method = ("GeoPolRisk", "paired", "2024")
+method = ("AWARE 2.0", "Country", "all", "yearly")
+# method = ("GeoPolRisk", "paired", "2024")
 
 LCA = EdgeLCIA({act: 1}, method)
 LCA.lci()
@@ -29,6 +29,8 @@ LCA.map_remaining_locations_to_global()
 
 LCA.evaluate_cfs()
 LCA.lcia()
+df = LCA.generate_cf_table(include_unmatched=False)
+df.to_excel("df_AWARE.xlsx")
 
 # Stop timer
 elapsed_time = time.time() - start_time
