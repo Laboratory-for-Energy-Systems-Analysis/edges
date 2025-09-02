@@ -93,9 +93,6 @@ class GeoResolver:
             exceptions=tuple(exceptions) if exceptions else None,
         )
 
-    def resolve_global(self, exceptions: list[str] | None = None) -> list:
-        return self.resolve("GLO", containing=True, exceptions=exceptions)
-
     def batch(
         self,
         locations: list[str],

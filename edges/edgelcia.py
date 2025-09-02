@@ -51,43 +51,30 @@ from .filesystem_constants import DATA_DIR
 with open("edgelcia.log", "w", encoding="utf-8"):
     pass
 
-# initiate the logger
-logging.basicConfig(
-    filename="edgelcia.log",
-    filemode="a",
-    format="%(asctime)s,%(msecs)d %(name)s %(funcName)s %(levelname)s %(message)s",
-    datefmt="%H:%M:%S",
-    level=logging.INFO,
-)
-
-logger = logging.getLogger(__name__)
-
 
 def add_cf_entry(
     cfs_mapping, supplier_info, consumer_info, direction, indices, value, uncertainty
 ):
+    supplier_entry = dict(supplier_info)
+    consumer_entry = dict(consumer_info)
 
-    if direction == "biosphere-technosphere":
-        supplier_info["matrix"] = "biosphere"
-    else:
-        supplier_info["matrix"] = "technosphere"
-    consumer_info["matrix"] = "technosphere"
+    supplier_entry["matrix"] = (
+        "biosphere" if direction == "biosphere-technosphere" else "technosphere"
+    )
+    consumer_entry["matrix"] = "technosphere"
 
     entry = {
-        "supplier": supplier_info,
-        "consumer": consumer_info,
+        "supplier": supplier_entry,
+        "consumer": consumer_entry,
         "positions": indices,
         "direction": direction,
         "value": value,
     }
-
     if uncertainty is not None:
         entry["uncertainty"] = uncertainty
-
     cfs_mapping.append(entry)
 
 
-@staticmethod
 @lru_cache(maxsize=None)
 def _equality_supplier_signature_cached(hashable_supplier_info: tuple) -> tuple:
     """
@@ -114,6 +101,145 @@ def _equality_supplier_signature_cached(hashable_supplier_info: tuple) -> tuple:
             info["classifications"] = ()
 
     return make_hashable(info)
+
+
+def _collect_cf_prefixes_used_by_method(raw_cfs_data):
+    """
+    Return {scheme_lower: frozenset({prefixes})} of CF codes that will be queried.
+    We only build prefix buckets that we will actually ask for.
+    """
+    needed = {}
+
+    def _push(scheme, code):
+        if code is None:
+            return
+        sc = str(scheme).lower().strip()
+        c = str(code).split(":", 1)[0].strip()
+        if not c:
+            return
+        needed.setdefault(sc, set()).add(c)
+
+    for cf in raw_cfs_data:
+        for side in ("supplier", "consumer"):
+            cls = cf.get(side, {}).get("classifications")
+            if not cls:
+                continue
+            # normalize to (("SCHEME", ("code", ...)), ...)
+            norm = _norm_cls(cls)
+            for scheme, codes in norm:
+                for code in codes:
+                    _push(scheme, code)
+
+    return {k: frozenset(v) for k, v in needed.items()}
+
+
+def _build_prefix_index_restricted(
+    idx_to_norm_classes: dict[int, tuple], required_prefixes: dict[str, frozenset[str]]
+):
+    """
+    Build {scheme: {prefix: set(indices)}} but *only* for prefixes we will query.
+
+    For each dataset code 'base', we generate all progressive prefixes of 'base'
+    and, if a generated prefix is among required_prefixes[scheme], we add the index.
+    This matches your startswith() semantics exactly.
+
+    idx_to_norm_classes is like self.supplier_cls_bio etc.:
+       {pos_idx: (("scheme", ("code1", "code2", ...)), ...)}
+    """
+    out = {
+        scheme: {p: set() for p in prefs} for scheme, prefs in required_prefixes.items()
+    }
+
+    for idx, norm in idx_to_norm_classes.items():
+        if not norm:
+            continue
+        for scheme, codes in norm:
+            sch = str(scheme).lower().strip()
+            wanted = required_prefixes.get(sch)
+            if not wanted:
+                continue
+            for code in codes:
+                base = str(code).split(":", 1)[0].strip()
+                if not base:
+                    continue
+                # generate progressive prefixes: '01.12' -> '0','01','01.','01.1','01.12'
+                # (progressive is safest because your CF can be any prefix)
+                for k in range(1, len(base) + 1):
+                    pref = base[:k]
+                    if pref in wanted:
+                        out[sch][pref].add(idx)
+    return out
+
+
+def _cls_candidates_from_cf(
+    cf_classifications,
+    prefix_index_by_scheme: dict[str, dict[str, set[int]]],
+    adjacency_keys: set[int] | None = None,
+) -> set[int]:
+    """
+    From CF classifications (any allowed format), fetch the union of positions
+    whose dataset codes start with any given CF code (per scheme), using the prefix index.
+    Optionally intersect with current adjacency keys.
+    """
+    if not cf_classifications:
+        return set()
+
+    norm = _norm_cls(cf_classifications)  # (("SCHEME", ("code", ...)), ...)
+    out = set()
+    for scheme, codes in norm:
+        sch = str(scheme).lower().strip()
+        bucket = prefix_index_by_scheme.get(sch)
+        if not bucket:
+            continue
+        for code in codes:
+            pref = str(code).split(":", 1)[0].strip()
+            hits = bucket.get(pref)
+            if hits:
+                out |= hits
+
+    if adjacency_keys is not None:
+        out &= adjacency_keys
+    return out
+
+
+def _norm_cls(x):
+    """
+    Normalize 'classifications' to a canonical, hashable form:
+      (("SCHEME", ("code1","code2", ...)), ("SCHEME2", (...)), ...)
+    Accepts:
+      - dict: {"CPC": ["01","02"], "ISIC": ["A"]}
+      - list/tuple of pairs: [("CPC","01"), ("CPC",["02","03"]), ("ISIC","A")]
+    """
+    if not x:
+        return ()
+    # Accumulate into {scheme: set(codes)}
+    bag = {}
+    if isinstance(x, dict):
+        for scheme, codes in x.items():
+            if codes is None:
+                continue
+            if isinstance(codes, (list, tuple, set)):
+                codes_iter = codes
+            else:
+                codes_iter = [codes]
+            bag.setdefault(str(scheme), set()).update(str(c) for c in codes_iter)
+    elif isinstance(x, (list, tuple)):
+        for item in x:
+            if not isinstance(item, (list, tuple)) or len(item) != 2:
+                continue
+            scheme, codes = item
+            if codes is None:
+                continue
+            if isinstance(codes, (list, tuple, set)):
+                codes_iter = codes
+            else:
+                codes_iter = [codes]
+            bag.setdefault(str(scheme), set()).update(str(c) for c in codes_iter)
+    else:
+        return ()
+
+    # Canonical: schemes sorted; codes sorted; all tuples
+    return tuple((scheme, tuple(sorted(bag[scheme]))) for scheme in sorted(bag))
 
 
 class EdgeLCIA:
@@ -178,7 +304,6 @@ class EdgeLCIA:
         self.weights = None
         self.consumer_lookup = None
         self.reversed_consumer_lookup = None
-        self.reversed_supplier_lookup = None
         self.processed_technosphere_edges = None
         self.processed_biosphere_edges = None
         self.raw_cfs_data = None
@@ -203,7 +328,7 @@ class EdgeLCIA:
         self.ignored_flows = set()
         self.ignored_locations = set()
         self.ignored_method_exchanges = list()
-        self.weight: str = weight
+        self.weight_scheme: str = weight
 
         # Accept both "parameters" and "scenarios" for flexibility
         self.parameters = parameters or {}
@@ -250,7 +375,7 @@ class EdgeLCIA:
             raw = json.load(f)
 
         # Store full method metadata except exchanges and parameters
-        self.raw_cfs_data, self.method_metadata = format_data(raw, self.weight)
+        self.raw_cfs_data, self.method_metadata = format_data(raw, self.weight_scheme)
         # check for NaNs in the raw CF data
         assert_no_nans_in_cf_list(self.raw_cfs_data, file_source=self.filepath)
         self.raw_cfs_data = normalize_classification_entries(self.raw_cfs_data)
@@ -273,9 +398,6 @@ class EdgeLCIA:
                 f"Scenario '{self.scenario}' not found in available parameters: {list(self.parameters)}"
             )
 
-        grouping_mode = self._detect_cf_grouping_mode()
-        self.cfs_lookup = preprocess_cfs(self.raw_cfs_data, by=grouping_mode)
-
         self.required_supplier_fields = {
             k
             for cf in self.raw_cfs_data
@@ -283,7 +405,7 @@ class EdgeLCIA:
             if k not in {"matrix", "operator", "weight", "position", "excludes"}
         }
 
-        self.cf_index = build_cf_index(self.raw_cfs_data, self.required_supplier_fields)
+        self.cf_index = build_cf_index(self.raw_cfs_data)
 
     def _initialize_weights(self):
         if self.weights is not None:
@@ -403,58 +525,24 @@ class EdgeLCIA:
             if edge not in self.processed_technosphere_edges
         ]
 
-    def _equality_supplier_signature(self, supplier_info: dict) -> tuple:
-        """
-        Return a hashable supplier signature based on required supplier fields.
-        If no fields are required, return an empty tuple (matches any supplier).
-        """
-        if not self.required_supplier_fields:
-            return ()
-
-        filtered = {
-            k: supplier_info[k]
-            for k in supplier_info
-            if k in self.required_supplier_fields
-        }
-
-        # Normalize classifications
-        if "classifications" in filtered:
-            classifications = filtered["classifications"]
-
-            # Brightway format: list or tuple of (scheme, code)
-            if isinstance(classifications, (list, tuple)):
-                try:
-                    filtered["classifications"] = tuple(
-                        sorted((str(s), str(c)) for s, c in classifications)
-                    )
-                except Exception:
-                    self.logger.warning(
-                        f"Malformed classification tuples: {classifications}"
-                    )
-                    filtered["classifications"] = ()
-
-            # CF format: dict of scheme -> list of codes
-            elif isinstance(classifications, dict):
-                filtered["classifications"] = tuple(
-                    (scheme, tuple(sorted(map(str, codes))))
-                    for scheme, codes in sorted(classifications.items())
-                )
-            else:
-                self.logger.warning(
-                    f"Unexpected classifications format: {classifications}"
-                )
-                filtered["classifications"] = ()
-
-        return make_hashable(filtered)
-
     def _preprocess_lookups(self):
         """
-        Preprocess supplier and consumer flows into lookup dictionaries.
+        Preprocess supplier and consumer flows into lookup dictionaries and
+        materialized reversed lookups (dict per position) plus hot-field caches.
+
+        Results:
+          - self.supplier_lookup_bio / self.supplier_lookup_tech
+          - self.reversed_supplier_lookup_bio / self.reversed_supplier_lookup_tech
+          - self.supplier_loc_bio / self.supplier_loc_tech
+          - self.supplier_cls_bio / self.supplier_cls_tech
+          - self.consumer_lookup
+          - self.reversed_consumer_lookup
+          - self.consumer_loc / self.consumer_cls
+          - (compat) self.supplier_lookup
         """
 
-        # Constants for ignored fields
+        # ---- What fields are required on the CONSUMER side (ignore control/meta fields)
         IGNORED_FIELDS = {"matrix", "operator", "weight", "classifications", "position"}
-
         self.required_consumer_fields = {
             k
             for cf in self.raw_cfs_data
@@ -462,50 +550,123 @@ class EdgeLCIA:
             if k not in IGNORED_FIELDS
         }
 
-        self.supplier_lookup = preprocess_flows(
-            flows_list=(
-                self.biosphere_flows
-                if all(
-                    cf["supplier"].get("matrix") == "biosphere"
-                    for cf in self.raw_cfs_data
-                )
-                else self.technosphere_flows
-            ),
-            mandatory_fields=self.required_supplier_fields,
-        )
+        # ---- Supplier lookups, per matrix
+        if self.biosphere_flows:
+            self.supplier_lookup_bio = preprocess_flows(
+                flows_list=self.biosphere_flows,
+                mandatory_fields=self.required_supplier_fields,
+            )
+        else:
+            self.supplier_lookup_bio = {}
 
+        if self.technosphere_flows:
+            self.supplier_lookup_tech = preprocess_flows(
+                flows_list=self.technosphere_flows,
+                mandatory_fields=self.required_supplier_fields,
+            )
+        else:
+            self.supplier_lookup_tech = {}
+
+        # ---- Consumer lookup (always technosphere)
         self.consumer_lookup = preprocess_flows(
             flows_list=self.technosphere_flows,
             mandatory_fields=self.required_consumer_fields,
         )
 
-        self.reversed_supplier_lookup = {
-            pos: key
-            for key, positions in self.supplier_lookup.items()
-            for pos in positions
+        # ---- Helpers
+        def _materialize_reversed(lookup: dict[int, list[int]]) -> dict[int, dict]:
+            # map pos -> dict(key) so callers can use it directly (no dict(...) in hot loops)
+            return {
+                pos: dict(key) for key, positions in lookup.items() for pos in positions
+            }
+
+        # ---- Reversed lookups (materialized)
+        self.reversed_supplier_lookup_bio = _materialize_reversed(
+            self.supplier_lookup_bio
+        )
+        self.reversed_supplier_lookup_tech = _materialize_reversed(
+            self.supplier_lookup_tech
+        )
+        self.reversed_consumer_lookup = _materialize_reversed(self.consumer_lookup)
+
+        # 🔧 Enrich consumer reversed lookup with full metadata fields we may want to prefilter on.
+        # In particular: bring 'classifications' from the actual activity dict.
+        for idx, info in self.reversed_consumer_lookup.items():
+            extra = self.position_to_technosphere_flows_lookup.get(idx, {})
+            if "classifications" in extra and "classifications" not in info:
+                info["classifications"] = extra["classifications"]
+
+        # (Optional) Back-compat: a combined supplier_lookup for any legacy call sites
+        # If all CFs are biosphere, expose the bio lookup; if all tech, expose tech; else merge.
+        if self.supplier_lookup_bio and not self.supplier_lookup_tech:
+            self.supplier_lookup = self.supplier_lookup_bio
+        elif self.supplier_lookup_tech and not self.supplier_lookup_bio:
+            self.supplier_lookup = self.supplier_lookup_tech
+        else:
+            # merged view (keys are hashable; positions lists are appended)
+            merged = {}
+            for src in (self.supplier_lookup_bio, self.supplier_lookup_tech):
+                for k, v in src.items():
+                    if k in merged:
+                        merged[k].extend(v)
+                    else:
+                        merged[k] = list(v)
+            self.supplier_lookup = merged
+
+        # ---- Hot-field caches (avoid repeated dict lookups + allocations in tight loops)
+        self.supplier_loc_bio = {
+            i: d.get("location") for i, d in self.reversed_supplier_lookup_bio.items()
+        }
+        self.supplier_loc_tech = {
+            i: d.get("location") for i, d in self.reversed_supplier_lookup_tech.items()
+        }
+        self.consumer_loc = {
+            i: d.get("location") for i, d in self.reversed_consumer_lookup.items()
         }
 
-        self.reversed_consumer_lookup = {
-            pos: key
-            for key, positions in self.consumer_lookup.items()
-            for pos in positions
+        self.supplier_cls_bio = {
+            i: _norm_cls(d.get("classifications"))
+            for i, d in self.reversed_supplier_lookup_bio.items()
         }
+        self.supplier_cls_tech = {
+            i: _norm_cls(d.get("classifications"))
+            for i, d in self.reversed_supplier_lookup_tech.items()
+        }
+        self.consumer_cls = {
+            i: _norm_cls(d.get("classifications"))
+            for i, d in self.reversed_consumer_lookup.items()
+        }
+
+        # --- Build classification prefix indexes (restricted to CF-used codes)
+        self._cf_needed_prefixes = _collect_cf_prefixes_used_by_method(
+            self.raw_cfs_data
+        )
+
+        # Suppliers
+        self.cls_prefidx_supplier_bio = _build_prefix_index_restricted(
+            self.supplier_cls_bio, self._cf_needed_prefixes
+        )
+        self.cls_prefidx_supplier_tech = _build_prefix_index_restricted(
+            self.supplier_cls_tech, self._cf_needed_prefixes
+        )
+        # Consumers (always technosphere)
+        self.cls_prefidx_consumer = _build_prefix_index_restricted(
+            self.consumer_cls, self._cf_needed_prefixes
+        )
 
     def _get_consumer_info(self, consumer_idx):
-        """
-        Returns a dict with consumer flow info, including a fallback for missing fields
-        like 'location' from the position_to_technosphere_flows_lookup.
-        """
-        info = dict(self.reversed_consumer_lookup.get(consumer_idx, {}))
-        if "location" not in info:
+        info = self.reversed_consumer_lookup.get(consumer_idx, {})
+        if "location" not in info or "classifications" not in info:
             fallback = self.position_to_technosphere_flows_lookup.get(consumer_idx, {})
-            if fallback and "location" in fallback:
-                info["location"] = fallback["location"]
-            else:
-                self.logger.warning(
-                    f"No location found for consumer_idx {consumer_idx}. "
-                    f"Matching may fail."
-                )
+            if fallback:
+                if "location" not in info and "location" in fallback:
+                    loc = fallback["location"]
+                    info["location"] = loc
+                    self.consumer_loc[consumer_idx] = loc
+                if "classifications" not in info and "classifications" in fallback:
+                    cls = fallback["classifications"]
+                    info["classifications"] = cls
+                    self.consumer_cls[consumer_idx] = _norm_cls(cls)
         return info
 
     @lru_cache(maxsize=None)
@@ -584,195 +745,263 @@ class EdgeLCIA:
 
     def map_exchanges(self):
         """
-        Match inventory exchanges to characterization factors based on supplier and consumer criteria.
-
-        This method performs direct matching of biosphere or technosphere exchanges
-        against the CF definitions in the method file. It supports matching based on:
-
-        - Flow `name`, `reference product`, `location`
-        - Matrix type (`biosphere` or `technosphere`)
-        - `classifications` (e.g., CPC codes)
-
-        It populates the internal `cfs_mapping` with the positions and values of matched CFs.
-
-        This is typically the first mapping step after inventory calculation (`lci()`).
-
-        Notes
-        -----
-        - This step only handles CFs with explicit, direct matches.
-        - Exchanges not matched in this step may be handled by subsequent mapping steps:
-          `map_aggregate_locations()`, `map_dynamic_locations()`, etc.
-        - Matching logic uses both string and classification matching with caching for efficiency.
-
-        Raises
-        ------
-        ValueError
-            If required metadata is missing from the inventory (e.g., flow location or classifications).
+        Direction-aware matching with per-direction adjacency, indices, and allowlists.
+        Leaves near-misses due to 'location' for later geo steps.
         """
 
         self._initialize_weights()
-        self._preprocess_lookups()
+        self._preprocess_lookups()  # will populate *_bio and *_tech lookups (see patch below)
 
-        edges = (
-            self.biosphere_edges
-            if all(
-                cf["supplier"].get("matrix") == "biosphere" for cf in self.raw_cfs_data
-            )
-            else self.technosphere_edges
+        # ---- Build direction-specific bundles -----------------------------------
+        DIR_BIO = "biosphere-technosphere"
+        DIR_TECH = "technosphere-technosphere"
+
+        # Adjacency + remaining edges per direction
+        def build_adj(edges):
+            ebs, ebc = defaultdict(set), defaultdict(set)
+            rem = set(edges)
+            for s, c in rem:
+                ebs[s].add(c)
+                ebc[c].add(s)
+            return rem, ebs, ebc
+
+        rem_bio, ebs_bio, ebc_bio = build_adj(self.biosphere_edges)
+        rem_tec, ebs_tec, ebc_tec = build_adj(self.technosphere_edges)
+
+        # Build indices once
+        supplier_index_bio = build_index(
+            self.supplier_lookup_bio, self.required_supplier_fields
         )
-
-        print(f"Mapping {len(edges)} exchanges...")
-
-        supplier_index = build_index(
-            self.supplier_lookup, self.required_supplier_fields
+        supplier_index_tec = build_index(
+            self.supplier_lookup_tech, self.required_supplier_fields
         )
         consumer_index = build_index(
             self.consumer_lookup, self.required_consumer_fields
         )
 
+        # Allowlist for later steps (per direction)
+        allow_bio = set()
+        allow_tec = set()
+
+        # Small helpers to select the right bundle per CF
+        def get_dir_bundle(supplier_matrix: str):
+            if supplier_matrix == "biosphere":
+                return (
+                    DIR_BIO,
+                    rem_bio,
+                    ebs_bio,
+                    ebc_bio,
+                    supplier_index_bio,
+                    self.supplier_lookup_bio,
+                    self.reversed_supplier_lookup_bio,
+                )
+            else:
+                return (
+                    DIR_TECH,
+                    rem_tec,
+                    ebs_tec,
+                    ebc_tec,
+                    supplier_index_tec,
+                    self.supplier_lookup_tech,
+                    self.reversed_supplier_lookup_tech,
+                )
+
         classification_match_cache = {}
+        entries_before = len(self.cfs_mapping)
 
-        seen_positions = []
+        # Bind hot locals (micro-optimization)
+        consumer_lookup = self.consumer_lookup
+        reversed_consumer_lookup = self.reversed_consumer_lookup
 
+        # Iterate CFs
         for i, cf in enumerate(tqdm(self.raw_cfs_data, desc="Mapping exchanges")):
-            supplier_criteria = cf["supplier"]
-            consumer_criteria = cf["consumer"]
+            s_crit = cf["supplier"]
+            c_crit = cf["consumer"]
 
-            # --- Supplier matching ---
-            # Step 1: Classifications filter
-            if "classifications" in supplier_criteria:
-                cf_class = supplier_criteria["classifications"]
-                classification_matches = []
-                cf_key = tuple(cf_class)
-
-                for idx in self.reversed_supplier_lookup:
-                    ds_class = dict(self.reversed_supplier_lookup[idx]).get(
-                        "classifications", []
-                    )
-                    ds_key = tuple(ds_class)
-                    key = (cf_key, ds_key)
-
-                    if key in classification_match_cache:
-                        result = classification_match_cache[key]
-                    else:
-                        result = matches_classifications(cf_key, ds_key)
-                        classification_match_cache[key] = result
-
-                    if result:
-                        classification_matches.append(idx)
-
-            else:
-                classification_matches = None
-
-            # Step 2: Other filters (location, name, etc.)
-            cached_match_with_index.index = supplier_index
-            cached_match_with_index.lookup_mapping = self.supplier_lookup
-            cached_match_with_index.reversed_lookup = self.reversed_supplier_lookup
-
-            nonclass_criteria = {
-                k: v for k, v in supplier_criteria.items() if k != "classifications"
-            }
-
-            nonclass_matches = cached_match_with_index(
-                make_hashable(nonclass_criteria),
-                tuple(
-                    sorted(
-                        {
-                            k
-                            for k in self.required_supplier_fields
-                            if k != "classifications"
-                        }
-                    )
-                ),
+            # which direction are we in?
+            dir_name, rem, ebs, ebc, s_index, s_lookup, s_reversed = get_dir_bundle(
+                s_crit.get("matrix", "biosphere")
             )
 
-            # Step 3: Combine
-            if classification_matches is not None:
-                supplier_candidates = list(
-                    set(classification_matches) & set(nonclass_matches)
+            if not rem:
+                # This direction already fully characterized
+                continue
+
+            # ---------- SUPPLIER side ----------
+            # Classifications prefilter (only across current adjacency keys)
+            # ---------- SUPPLIER side ----------
+            if "classifications" in s_crit:
+                # prefix-indexed fetch; intersect with current adjacency supplier keys
+                s_class_hits = _cls_candidates_from_cf(
+                    s_crit["classifications"],
+                    (
+                        self.cls_prefidx_supplier_bio
+                        if dir_name == "biosphere-technosphere"
+                        else self.cls_prefidx_supplier_tech
+                    ),
+                    adjacency_keys=set(ebs.keys()),
                 )
             else:
-                supplier_candidates = nonclass_matches
+                s_class_hits = None
 
-            # --- Consumer matching ---
-            # Step 1: Classifications filter
-            if "classifications" in consumer_criteria:
-                cf_class = consumer_criteria["classifications"]
-                classification_matches = []
-                cf_key = tuple(cf_class)
+            # Non-class matches via cached index (location tested last internally)
+            cached_match_with_index.index = s_index
+            cached_match_with_index.lookup_mapping = s_lookup
+            cached_match_with_index.reversed_lookup = s_reversed
 
-                for idx in self.reversed_consumer_lookup:
-                    ds_class = dict(self.reversed_consumer_lookup[idx]).get(
-                        "classifications", []
+            # ---- Precompute required field tuples (no 'classifications')
+            req_sup_nc = getattr(self, "_req_sup_nc", None)
+            if req_sup_nc is None:
+                self._req_sup_nc = tuple(
+                    sorted(
+                        k
+                        for k in self.required_supplier_fields
+                        if k != "classifications"
                     )
-                    ds_key = tuple(ds_class)
-                    key = (cf_key, ds_key)
+                )
+                self._req_con_nc = tuple(
+                    sorted(
+                        k
+                        for k in self.required_consumer_fields
+                        if k != "classifications"
+                    )
+                )
+            req_sup_nc = self._req_sup_nc
+            req_con_nc = self._req_con_nc
 
-                    if key in classification_match_cache:
-                        result = classification_match_cache[key]
-                    else:
-                        result = matches_classifications(cf_key, ds_key)
-                        classification_match_cache[key] = result
+            s_nonclass = {k: v for k, v in s_crit.items() if k != "classifications"}
+            s_out = cached_match_with_index(make_hashable(s_nonclass), req_sup_nc)
 
-                    if result:
-                        classification_matches.append(idx)
+            # Full supplier candidates (filter by adjacency & classifications)
+            s_cands = s_out.matches
+            if s_class_hits is not None:
+                s_cands = list(set(s_cands) & set(s_class_hits))
+            s_cands = [s for s in s_cands if s in ebs]  # must still have consumers
 
+            # near-miss on location only (also filtered by classifications if present)
+            s_loc_only = set(s_out.location_only_rejects)
+            if s_class_hits is not None:
+                s_loc_only &= set(s_class_hits)
+
+            s_loc_required = ("location" in s_crit) and (
+                s_crit.get("location") is not None
+            )
+
+            # ---------- CONSUMER side ----------
+            # Classifications prefilter (use current direction’s consumer adjacency keys)
+            # ---------- CONSUMER side ----------
+            if "classifications" in c_crit:
+                c_class_hits = _cls_candidates_from_cf(
+                    c_crit["classifications"],
+                    self.cls_prefidx_consumer,
+                    adjacency_keys=set(ebc.keys()),
+                )
             else:
-                classification_matches = None
+                c_class_hits = None
 
-            # Step 2: Other filters (location, name, etc.)
             cached_match_with_index.index = consumer_index
-            cached_match_with_index.lookup_mapping = self.consumer_lookup
-            cached_match_with_index.reversed_lookup = self.reversed_consumer_lookup
+            cached_match_with_index.lookup_mapping = consumer_lookup
+            cached_match_with_index.reversed_lookup = reversed_consumer_lookup
 
-            nonclass_criteria = {
-                k: v for k, v in consumer_criteria.items() if k != "classifications"
-            }
+            c_nonclass = {k: v for k, v in c_crit.items() if k != "classifications"}
+            c_out = cached_match_with_index(make_hashable(c_nonclass), req_con_nc)
 
-            nonclass_matches = cached_match_with_index(
-                make_hashable(nonclass_criteria),
-                tuple(
-                    sorted(
-                        {
-                            k
-                            for k in self.required_consumer_fields
-                            if k != "classifications"
-                        }
-                    )
-                ),
+            c_cands = c_out.matches
+            if c_class_hits is not None:
+                c_cands = list(set(c_cands) & set(c_class_hits))
+            c_cands = [c for c in c_cands if c in ebc]  # must still have suppliers
+
+            c_loc_only = set(c_out.location_only_rejects)
+            if c_class_hits is not None:
+                c_loc_only &= set(c_class_hits)
+
+            c_loc_required = ("location" in c_crit) and (
+                c_crit.get("location") is not None
             )
 
-            # Step 3: Combine
-            if classification_matches is not None:
-                consumer_candidates = list(
-                    set(classification_matches) & set(nonclass_matches)
-                )
-            else:
-                consumer_candidates = nonclass_matches
-
-            # --- Combine supplier + consumer ---
-            positions = [
-                (supplier, consumer)
-                for supplier in supplier_candidates
-                for consumer in consumer_candidates
-                if (supplier, consumer) in edges
-            ]
-
-            positions = [pos for pos in positions if pos not in seen_positions]
+            # ---------- Combine full matches using adjacency intersections ----------
+            positions = []
+            if s_cands and c_cands:
+                cset = set(c_cands)  # build once; reuse later for allowlists too
+                for s in s_cands:
+                    cs = ebs.get(s)
+                    if not cs:
+                        continue
+                    # no generator, no rem check here – pruning below already guards it
+                    for c in cs:
+                        if c in cset:
+                            positions.append((s, c))
 
             if positions:
-                cf_entry = {
-                    "supplier": supplier_criteria,
-                    "consumer": consumer_criteria,
-                    "direction": f"{supplier_criteria['matrix']}-{consumer_criteria['matrix']}",
-                    "positions": positions,
-                    "value": cf["value"],
-                    "uncertainty": cf.get("uncertainty"),
-                }
-                self.cfs_mapping.append(cf_entry)
-                seen_positions.extend(positions)
+                add_cf_entry(
+                    cfs_mapping=self.cfs_mapping,
+                    supplier_info=s_crit,
+                    consumer_info=c_crit,
+                    direction=dir_name,
+                    indices=positions,
+                    value=cf["value"],
+                    uncertainty=cf.get("uncertainty"),
+                )
+
+                # prune matched edges from this direction
+                for s, c in positions:
+                    if (s, c) in rem:
+                        rem.remove((s, c))
+                        ebs[s].discard(c)
+                        if not ebs[s]:
+                            del ebs[s]
+                        ebc[c].discard(s)
+                        if not ebc[c]:
+                            del ebc[c]
+
+            # ---------- Build near-miss allowlists (location-only) ----------
+            # supplier near-miss with consumer full matches
+            if s_loc_required and s_loc_only and c_cands:
+                cset = set(c_cands)
+                bucket = allow_bio if dir_name == DIR_BIO else allow_tec
+                for s in s_loc_only:
+                    cs = ebs.get(s)
+                    if not cs:
+                        continue
+                    hit = cs & cset
+                    if hit:
+                        for c in hit:
+                            if (s, c) in rem:
+                                bucket.add((s, c))
+
+            # consumer near-miss with supplier full matches
+            if c_loc_required and c_loc_only and s_cands:
+                sset = set(s_cands)
+                bucket = allow_bio if dir_name == DIR_BIO else allow_tec
+                for c in c_loc_only:
+                    ss = ebc.get(c)
+                    if not ss:
+                        continue
+                    hit = ss & sset
+                    if hit:
+                        for s in hit:
+                            if (s, c) in rem:
+                                bucket.add((s, c))
+
+            # both sides near-miss (rare but useful)
+            if s_loc_required and c_loc_required and s_loc_only and c_loc_only:
+                cset = set(c_loc_only)
+                bucket = allow_bio if dir_name == DIR_BIO else allow_tec
+                for s in s_loc_only:
+                    cs = ebs.get(s)
+                    if not cs:
+                        continue
+                    hit = cs & cset
+                    if hit:
+                        for c in hit:
+                            if (s, c) in rem:
+                                bucket.add((s, c))
 
         self._update_unprocessed_edges()
+
+        # store per-direction allowlists for later passes
+        self.eligible_edges_for_next_bio = allow_bio
+        self.eligible_edges_for_next_tech = allow_tec
 
     def map_aggregate_locations(self) -> None:
         """
@@ -812,6 +1041,14 @@ class EdgeLCIA:
         }
 
         for direction in ["biosphere-technosphere", "technosphere-technosphere"]:
+
+            # Pick the correct reversed supplier dict for this direction
+            rev_sup = (
+                self.reversed_supplier_lookup_bio
+                if direction == "biosphere-technosphere"
+                else self.reversed_supplier_lookup_tech
+            )
+
             unprocessed_edges = (
                 self.unprocessed_biosphere_edges
                 if direction == "biosphere-technosphere"
@@ -826,13 +1063,20 @@ class EdgeLCIA:
             processed_flows = set(processed_flows)
             edges_index = defaultdict(list)
 
+            # let's remove edges that have no chance of qualifying
+            allowed = (
+                self.eligible_edges_for_next_bio
+                if direction == "biosphere-technosphere"
+                else self.eligible_edges_for_next_tech
+            )
+            if allowed:
+                unprocessed_edges = [e for e in unprocessed_edges if e in allowed]
+
             for supplier_idx, consumer_idx in unprocessed_edges:
                 if (supplier_idx, consumer_idx) in processed_flows:
                     continue
 
-                consumer_loc = dict(self.reversed_consumer_lookup[consumer_idx]).get(
-                    "location"
-                )
+                consumer_loc = self.consumer_loc.get(consumer_idx)
 
                 if not consumer_loc:
                     raise ValueError(
@@ -840,8 +1084,10 @@ class EdgeLCIA:
                         "Ensure all consumer flows have a valid location."
                     )
 
-                supplier_loc = dict(self.reversed_supplier_lookup[supplier_idx]).get(
-                    "location"
+                supplier_loc = (
+                    self.supplier_loc_bio.get(supplier_idx)
+                    if direction == "biosphere-technosphere"
+                    else self.supplier_loc_tech.get(supplier_idx)
                 )
 
                 edges_index[(consumer_loc, supplier_loc)].append(
@@ -903,10 +1149,9 @@ class EdgeLCIA:
 
                 for supplier_idx, consumer_idx in edges:
 
-                    supplier_info = dict(self.reversed_supplier_lookup[supplier_idx])
+                    supplier_info = rev_sup[supplier_idx]
                     consumer_info = self._get_consumer_info(consumer_idx)
 
-                    # sig = self._equality_supplier_signature(supplier_info)
                     sig = _equality_supplier_signature_cached(
                         make_hashable(supplier_info)
                     )
@@ -944,12 +1189,11 @@ class EdgeLCIA:
                 candidate_supplier_locations = group_edges[0][-2]
                 candidate_consumer_locations = group_edges[0][-1]
 
-                new_cf, matched_cf_obj = compute_average_cf(
+                new_cf, matched_cf_obj, agg_uncertainty = compute_average_cf(
                     candidate_suppliers=candidate_supplier_locations,
                     candidate_consumers=candidate_consumer_locations,
                     supplier_info=supplier_info,
                     consumer_info=consumer_info,
-                    weight=self.weights,
                     required_supplier_fields=self.required_supplier_fields,
                     required_consumer_fields=self.required_consumer_fields,
                     cf_index=self.cf_index,
@@ -971,7 +1215,7 @@ class EdgeLCIA:
                             direction=direction,
                             indices=[(supplier_idx, consumer_idx)],
                             value=new_cf,
-                            uncertainty=None,
+                            uncertainty=agg_uncertainty,
                         )
                 else:
                     self.logger.warning(
@@ -1000,7 +1244,7 @@ class EdgeLCIA:
             ), edge_group in tqdm(
                 grouped_edges.items(), desc="Processing static groups (pass 2)"
             ):
-                new_cf, matched_cf_obj = compute_cf_memoized(
+                new_cf, matched_cf_obj, agg_uncertainty = compute_cf_memoized(
                     s_key, c_key, candidate_suppliers, candidate_consumers
                 )
 
@@ -1013,7 +1257,7 @@ class EdgeLCIA:
                             direction=direction,
                             indices=[(supplier_idx, consumer_idx)],
                             value=new_cf,
-                            uncertainty=None,
+                            uncertainty=agg_uncertainty,
                         )
                 else:
                     self.logger.warning(
@@ -1080,6 +1324,14 @@ class EdgeLCIA:
         )
 
         for direction in ["biosphere-technosphere", "technosphere-technosphere"]:
+
+            # Pick the correct reversed supplier dict for this direction
+            rev_sup = (
+                self.reversed_supplier_lookup_bio
+                if direction == "biosphere-technosphere"
+                else self.reversed_supplier_lookup_tech
+            )
+
             unprocessed_edges = (
                 self.unprocessed_biosphere_edges
                 if direction == "biosphere-technosphere"
@@ -1095,15 +1347,28 @@ class EdgeLCIA:
             prefiltered_groups = defaultdict(list)
             remaining_edges = []
 
+            # let's remove edges that have no chance of qualifying
+            allowed = (
+                self.eligible_edges_for_next_bio
+                if direction == "biosphere-technosphere"
+                else self.eligible_edges_for_next_tech
+            )
+            if allowed:
+                unprocessed_edges = [e for e in unprocessed_edges if e in allowed]
+
             for supplier_idx, consumer_idx in unprocessed_edges:
                 if (supplier_idx, consumer_idx) in processed_flows:
                     continue
 
                 consumer_info = self._get_consumer_info(consumer_idx)
-                supplier_info = dict(self.reversed_supplier_lookup[supplier_idx])
+                supplier_info = rev_sup[supplier_idx]
 
-                supplier_loc = supplier_info.get("location")
-                consumer_loc = consumer_info.get("location")
+                supplier_loc = (
+                    self.supplier_loc_bio.get(supplier_idx)
+                    if direction == "biosphere-technosphere"
+                    else self.supplier_loc_tech.get(supplier_idx)
+                )
+                consumer_loc = self.consumer_loc.get(consumer_idx)
 
                 # Skip if neither side is dynamic
                 if supplier_loc not in ["RoW", "RoE"] and consumer_loc not in [
@@ -1159,7 +1424,6 @@ class EdgeLCIA:
                     else:
                         candidate_consumers_locs = [consumer_loc]
 
-                # sig = self._equality_supplier_signature(supplier_info)
                 sig = _equality_supplier_signature_cached(make_hashable(supplier_info))
                 if sig in self._cached_supplier_keys:
                     prefiltered_groups[sig].append(
@@ -1194,12 +1458,11 @@ class EdgeLCIA:
                 candidate_supplier_locations = group_edges[0][-2]
                 candidate_consumer_locations = group_edges[0][-1]
 
-                new_cf, matched_cf_obj = compute_average_cf(
+                new_cf, matched_cf_obj, agg_uncertainty = compute_average_cf(
                     candidate_suppliers=candidate_supplier_locations,
                     candidate_consumers=candidate_consumer_locations,
                     supplier_info=rep_supplier,
                     consumer_info=rep_consumer,
-                    weight=self.weights,
                     required_supplier_fields=self.required_supplier_fields,
                     required_consumer_fields=self.required_consumer_fields,
                     cf_index=self.cf_index,
@@ -1221,7 +1484,7 @@ class EdgeLCIA:
                             direction=direction,
                             indices=[(supplier_idx, consumer_idx)],
                             value=new_cf,
-                            uncertainty=None,
+                            uncertainty=agg_uncertainty,
                         )
                 else:
                     self.logger.warning(
@@ -1250,7 +1513,7 @@ class EdgeLCIA:
             ), edge_group in tqdm(
                 grouped_edges.items(), desc="Processing dynamic groups (pass 2)"
             ):
-                new_cf, matched_cf_obj = compute_cf_memoized(
+                new_cf, matched_cf_obj, agg_uncertainty = compute_cf_memoized(
                     s_key,
                     c_key,
                     candidate_supplier_locations,
@@ -1266,7 +1529,7 @@ class EdgeLCIA:
                             direction=direction,
                             indices=[(supplier_idx, consumer_idx)],
                             value=new_cf,
-                            uncertainty=None,
+                            uncertainty=agg_uncertainty,
                         )
                 else:
                     self.logger.warning(
@@ -1312,6 +1575,14 @@ class EdgeLCIA:
         }
 
         for direction in ["biosphere-technosphere", "technosphere-technosphere"]:
+
+            # Pick the correct reversed supplier dict for this direction
+            rev_sup = (
+                self.reversed_supplier_lookup_bio
+                if direction == "biosphere-technosphere"
+                else self.reversed_supplier_lookup_tech
+            )
+
             unprocessed_edges = (
                 self.unprocessed_biosphere_edges
                 if direction == "biosphere-technosphere"
@@ -1326,13 +1597,20 @@ class EdgeLCIA:
             processed_flows = set(processed_flows)
             edges_index = defaultdict(list)
 
+            # let's remove edges that have no chance of qualifying
+            allowed = (
+                self.eligible_edges_for_next_bio
+                if direction == "biosphere-technosphere"
+                else self.eligible_edges_for_next_tech
+            )
+            if allowed:
+                unprocessed_edges = [e for e in unprocessed_edges if e in allowed]
+
             for supplier_idx, consumer_idx in unprocessed_edges:
                 if (supplier_idx, consumer_idx) in processed_flows:
                     continue
 
-                consumer_loc = dict(self.reversed_consumer_lookup[consumer_idx]).get(
-                    "location"
-                )
+                consumer_loc = self.consumer_loc.get(consumer_idx)
 
                 if not consumer_loc:
                     raise ValueError(
@@ -1340,8 +1618,10 @@ class EdgeLCIA:
                         "Ensure all consumer flows have a valid location."
                     )
 
-                supplier_loc = dict(self.reversed_supplier_lookup[supplier_idx]).get(
-                    "location"
+                supplier_loc = (
+                    self.supplier_loc_bio.get(supplier_idx)
+                    if direction == "biosphere-technosphere"
+                    else self.supplier_loc_tech.get(supplier_idx)
                 )
 
                 edges_index[(consumer_loc, supplier_loc)].append(
@@ -1392,10 +1672,9 @@ class EdgeLCIA:
                     continue
 
                 for supplier_idx, consumer_idx in edges:
-                    supplier_info = dict(self.reversed_supplier_lookup[supplier_idx])
+                    supplier_info = rev_sup[supplier_idx]
                     consumer_info = self._get_consumer_info(consumer_idx)
 
-                    # sig = self._equality_supplier_signature(supplier_info)
                     sig = _equality_supplier_signature_cached(
                         make_hashable(supplier_info)
                     )
@@ -1433,12 +1712,11 @@ class EdgeLCIA:
                 candidate_supplier_locations = group_edges[0][-2]
                 candidate_consumer_locations = group_edges[0][-1]
 
-                new_cf, matched_cf_obj = compute_average_cf(
+                new_cf, matched_cf_obj, agg_uncertainty = compute_average_cf(
                     candidate_suppliers=candidate_supplier_locations,
                     candidate_consumers=candidate_consumer_locations,
                     supplier_info=supplier_info,
                     consumer_info=consumer_info,
-                    weight=self.weights,
                     required_supplier_fields=self.required_supplier_fields,
                     required_consumer_fields=self.required_consumer_fields,
                     cf_index=self.cf_index,
@@ -1460,7 +1738,7 @@ class EdgeLCIA:
                             direction=direction,
                             indices=[(supplier_idx, consumer_idx)],
                             value=new_cf,
-                            uncertainty=None,
+                            uncertainty=agg_uncertainty,
                         )
                 else:
                     self.logger.warning(
@@ -1489,7 +1767,7 @@ class EdgeLCIA:
             ), edge_group in tqdm(
                 grouped_edges.items(), desc="Processing contained groups (pass 2)"
             ):
-                new_cf, matched_cf_obj = compute_cf_memoized(
+                new_cf, matched_cf_obj, agg_uncertainty = compute_cf_memoized(
                     supplier_info,
                     consumer_info,
                     candidate_suppliers,
@@ -1504,7 +1782,7 @@ class EdgeLCIA:
                             direction=direction,
                             indices=[(supplier_idx, consumer_idx)],
                             value=new_cf,
-                            uncertainty=None,
+                            uncertainty=agg_uncertainty,
                         )
                 else:
                     self.logger.warning(
@@ -1557,6 +1835,14 @@ class EdgeLCIA:
         )
 
         for direction in ["biosphere-technosphere", "technosphere-technosphere"]:
+
+            # Pick the correct reversed supplier dict for this direction
+            rev_sup = (
+                self.reversed_supplier_lookup_bio
+                if direction == "biosphere-technosphere"
+                else self.reversed_supplier_lookup_tech
+            )
+
             unprocessed_edges = (
                 self.unprocessed_biosphere_edges
                 if direction == "biosphere-technosphere"
@@ -1570,13 +1856,20 @@ class EdgeLCIA:
             processed_flows = set(processed_flows)
             edges_index = defaultdict(list)
 
+            # let's remove edges that have no chance of qualifying
+            allowed = (
+                self.eligible_edges_for_next_bio
+                if direction == "biosphere-technosphere"
+                else self.eligible_edges_for_next_tech
+            )
+            if allowed:
+                unprocessed_edges = [e for e in unprocessed_edges if e in allowed]
+
             for supplier_idx, consumer_idx in unprocessed_edges:
                 if (supplier_idx, consumer_idx) in processed_flows:
                     continue
 
-                consumer_loc = dict(self.reversed_consumer_lookup[consumer_idx]).get(
-                    "location"
-                )
+                consumer_loc = self.consumer_loc.get(consumer_idx)
 
                 if not consumer_loc:
                     raise ValueError(
@@ -1584,8 +1877,10 @@ class EdgeLCIA:
                         "Ensure all consumer flows have a valid location."
                     )
 
-                supplier_loc = dict(self.reversed_supplier_lookup[supplier_idx]).get(
-                    "location"
+                supplier_loc = (
+                    self.supplier_loc_bio.get(supplier_idx)
+                    if direction == "biosphere-technosphere"
+                    else self.supplier_loc_tech.get(supplier_idx)
                 )
 
                 edges_index[(consumer_loc, supplier_loc)].append(
@@ -1618,10 +1913,9 @@ class EdgeLCIA:
 
                 for supplier_idx, consumer_idx in edges:
 
-                    supplier_info = dict(self.reversed_supplier_lookup[supplier_idx])
+                    supplier_info = rev_sup[supplier_idx]
                     consumer_info = self._get_consumer_info(consumer_idx)
 
-                    # sig = self._equality_supplier_signature(supplier_info)
                     sig = _equality_supplier_signature_cached(
                         make_hashable(supplier_info)
                     )
@@ -1657,15 +1951,19 @@ class EdgeLCIA:
                 supplier_info = group_edges[0][2]
                 consumer_info = group_edges[0][3]
 
-                new_cf, matched_cf_obj = compute_average_cf(
+                new_cf, matched_cf_obj, agg_uncertainty = compute_average_cf(
                     candidate_suppliers=global_locations,
                     candidate_consumers=global_locations,
                     supplier_info=supplier_info,
                     consumer_info=consumer_info,
-                    weight=self.weights,
                     required_supplier_fields=self.required_supplier_fields,
                     required_consumer_fields=self.required_consumer_fields,
                     cf_index=self.cf_index,
+                )
+                unc = (
+                    agg_uncertainty
+                    if agg_uncertainty is not None
+                    else (matched_cf_obj.get("uncertainty") if matched_cf_obj else None)
                 )
 
                 if new_cf:
@@ -1684,7 +1982,7 @@ class EdgeLCIA:
                             direction=direction,
                             indices=[(supplier_idx, consumer_idx)],
                             value=new_cf,
-                            uncertainty=None,
+                            uncertainty=unc,
                         )
                 else:
                     self.logger.warning(
@@ -1713,11 +2011,16 @@ class EdgeLCIA:
             ), edge_group in tqdm(
                 grouped_edges.items(), desc="Processing global groups (pass 2)"
             ):
-                new_cf, matched_cf_obj = compute_cf_memoized(
+                new_cf, matched_cf_obj, agg_uncertainty = compute_cf_memoized(
                     supplier_info,
                     consumer_info,
                     candidate_suppliers,
                     candidate_consumers,
+                )
+                unc = (
+                    agg_uncertainty
+                    if agg_uncertainty is not None
+                    else (matched_cf_obj.get("uncertainty") if matched_cf_obj else None)
                 )
                 if new_cf:
                     for supplier_idx, consumer_idx in edge_group:
@@ -1728,11 +2031,7 @@ class EdgeLCIA:
                             direction=direction,
                             indices=[(supplier_idx, consumer_idx)],
                             value=new_cf,
-                            uncertainty=(
-                                matched_cf_obj.get("uncertainty")
-                                if matched_cf_obj
-                                else None
-                            ),
+                            uncertainty=unc,
                         )
                 else:
                     self.logger.warning(
