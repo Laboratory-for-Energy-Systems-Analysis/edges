@@ -103,6 +103,105 @@ def _equality_supplier_signature_cached(hashable_supplier_info: tuple) -> tuple:
     return make_hashable(info)
 
 
+def _collect_cf_prefixes_used_by_method(raw_cfs_data):
+    """
+    Return {scheme_lower: frozenset({prefixes})} of CF codes that will be queried.
+    We only build prefix buckets that we will actually ask for.
+    """
+    needed = {}
+
+    def _push(scheme, code):
+        if code is None:
+            return
+        sc = str(scheme).lower().strip()
+        c = str(code).split(":", 1)[0].strip()
+        if not c:
+            return
+        needed.setdefault(sc, set()).add(c)
+
+    for cf in raw_cfs_data:
+        for side in ("supplier", "consumer"):
+            cls = cf.get(side, {}).get("classifications")
+            if not cls:
+                continue
+            # normalize to (("SCHEME", ("code", ...)), ...)
+            norm = _norm_cls(cls)
+            for scheme, codes in norm:
+                for code in codes:
+                    _push(scheme, code)
+
+    return {k: frozenset(v) for k, v in needed.items()}
+
+
+def _build_prefix_index_restricted(
+    idx_to_norm_classes: dict[int, tuple], required_prefixes: dict[str, frozenset[str]]
+):
+    """
+    Build {scheme: {prefix: set(indices)}} but *only* for prefixes we will query.
+
+    For each dataset code 'base', we generate all progressive prefixes of 'base'
+    and, if a generated prefix is among required_prefixes[scheme], we add the index.
+    This matches your startswith() semantics exactly.
+
+    idx_to_norm_classes is like self.supplier_cls_bio etc.:
+       {pos_idx: (("scheme", ("code1", "code2", ...)), ...)}
+    """
+    out = {
+        scheme: {p: set() for p in prefs} for scheme, prefs in required_prefixes.items()
+    }
+
+    for idx, norm in idx_to_norm_classes.items():
+        if not norm:
+            continue
+        for scheme, codes in norm:
+            sch = str(scheme).lower().strip()
+            wanted = required_prefixes.get(sch)
+            if not wanted:
+                continue
+            for code in codes:
+                base = str(code).split(":", 1)[0].strip()
+                if not base:
+                    continue
+                # generate progressive prefixes: '01.12' -> '0','01','01.','01.1','01.12'
+                # (progressive is safest because your CF can be any prefix)
+                for k in range(1, len(base) + 1):
+                    pref = base[:k]
+                    if pref in wanted:
+                        out[sch][pref].add(idx)
+    return out
+
+
+def _cls_candidates_from_cf(
+    cf_classifications,
+    prefix_index_by_scheme: dict[str, dict[str, set[int]]],
+    adjacency_keys: set[int] | None = None,
+) -> set[int]:
+    """
+    From CF classifications (any allowed format), fetch the union of positions
+    whose dataset codes start with any given CF code (per scheme), using the prefix index.
+    Optionally intersect with current adjacency keys.
+    """
+    if not cf_classifications:
+        return set()
+
+    norm = _norm_cls(cf_classifications)  # (("SCHEME", ("code", ...)), ...)
+    out = set()
+    for scheme, codes in norm:
+        sch = str(scheme).lower().strip()
+        bucket = prefix_index_by_scheme.get(sch)
+        if not bucket:
+            continue
+        for code in codes:
+            pref = str(code).split(":", 1)[0].strip()
+            hits = bucket.get(pref)
+            if hits:
+                out |= hits
+
+    if adjacency_keys is not None:
+        out &= adjacency_keys
+    return out
+
+
 def _norm_cls(x):
     """
     Normalize 'classifications' to a canonical, hashable form:
@@ -538,17 +637,22 @@ class EdgeLCIA:
             for i, d in self.reversed_consumer_lookup.items()
         }
 
-        def _to_prefix_key_from_norm(norm):
-            # norm is (("SCHEME", ("code", ...)), ...)
-            if not norm:
-                return frozenset()
-            out = []
-            for scheme, codes in norm:
-                for c in codes:
-                    # split only once
-                    cp = c.split(":", 1)[0].strip()
-                    out.append((scheme, cp))
-            return frozenset(out)
+        # --- Build classification prefix indexes (restricted to CF-used codes)
+        self._cf_needed_prefixes = _collect_cf_prefixes_used_by_method(
+            self.raw_cfs_data
+        )
+
+        # Suppliers
+        self.cls_prefidx_supplier_bio = _build_prefix_index_restricted(
+            self.supplier_cls_bio, self._cf_needed_prefixes
+        )
+        self.cls_prefidx_supplier_tech = _build_prefix_index_restricted(
+            self.supplier_cls_tech, self._cf_needed_prefixes
+        )
+        # Consumers (always technosphere)
+        self.cls_prefidx_consumer = _build_prefix_index_restricted(
+            self.consumer_cls, self._cf_needed_prefixes
+        )
 
     def _get_consumer_info(self, consumer_idx):
         info = self.reversed_consumer_lookup.get(consumer_idx, {})
@@ -725,23 +829,18 @@ class EdgeLCIA:
 
             # ---------- SUPPLIER side ----------
             # Classifications prefilter (only across current adjacency keys)
+            # ---------- SUPPLIER side ----------
             if "classifications" in s_crit:
-                cf_key = tuple(s_crit["classifications"])
-                s_class_hits = []
-                for s_idx in ebs:
-                    ds_class = (
-                        self.supplier_cls_bio.get(s_idx, ())
+                # prefix-indexed fetch; intersect with current adjacency supplier keys
+                s_class_hits = _cls_candidates_from_cf(
+                    s_crit["classifications"],
+                    (
+                        self.cls_prefidx_supplier_bio
                         if dir_name == "biosphere-technosphere"
-                        else self.supplier_cls_tech.get(s_idx, ())
-                    )
-                    ds_key = ds_class
-                    key = (cf_key, ds_key)
-                    res = classification_match_cache.get(key)
-                    if res is None:
-                        res = matches_classifications(cf_key, ds_key)
-                        classification_match_cache[key] = res
-                    if res:
-                        s_class_hits.append(s_idx)
+                        else self.cls_prefidx_supplier_tech
+                    ),
+                    adjacency_keys=set(ebs.keys()),
+                )
             else:
                 s_class_hits = None
 
@@ -790,19 +889,13 @@ class EdgeLCIA:
 
             # ---------- CONSUMER side ----------
             # Classifications prefilter (use current direction’s consumer adjacency keys)
+            # ---------- CONSUMER side ----------
             if "classifications" in c_crit:
-                cf_key = _norm_cls(c_crit["classifications"])
-                c_class_hits = []
-                for c_idx in ebc:
-                    ds_class = self.consumer_cls.get(c_idx, ())
-                    ds_key = ds_class
-                    key = (cf_key, ds_key)
-                    res = classification_match_cache.get(key)
-                    if res is None:
-                        res = matches_classifications(cf_key, ds_key)
-                        classification_match_cache[key] = res
-                    if res:
-                        c_class_hits.append(c_idx)
+                c_class_hits = _cls_candidates_from_cf(
+                    c_crit["classifications"],
+                    self.cls_prefidx_consumer,
+                    adjacency_keys=set(ebc.keys()),
+                )
             else:
                 c_class_hits = None
 
