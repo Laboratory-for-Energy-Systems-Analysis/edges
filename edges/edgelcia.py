@@ -1891,11 +1891,11 @@ class EdgeLCIA:
             remaining_edges = []
 
             for (consumer_location, supplier_location), edges in edges_index.items():
-                if any(
-                    x in ("RoW", "RoE", "GLO")
-                    for x in (consumer_location, supplier_location)
-                ):
-                    continue
+                # if any(
+                #    x in ("RoW", "RoE", "GLO")
+                #    for x in (consumer_location, supplier_location)
+                # ):
+                #    continue
 
                 if supplier_location is None:
                     candidate_suppliers_locations = [
