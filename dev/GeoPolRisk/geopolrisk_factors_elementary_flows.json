@@ -106,7 +106,7 @@
         "location": "__ANY__",
         "matrix": "technosphere"
       },
-      "value": 1.85390797856095
+      "value": 0.3808444074971418
     },
     {
       "supplier": {
@@ -121,7 +121,22 @@
         "location": "__ANY__",
         "matrix": "technosphere"
       },
-      "value": 0.007536672680789782
+      "value": 3.592927423497458
+    },
+    {
+      "supplier": {
+        "name": "Arsenic",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "location": "__ANY__",
+        "matrix": "technosphere"
+      },
+      "value": 19.49788873516253
     },
     {
       "supplier": {
@@ -136,7 +151,7 @@
         "location": "__ANY__",
         "matrix": "technosphere"
       },
-      "value": 0.2363308299673218
+      "value": 8.331824982331147
     },
     {
       "supplier": {
@@ -151,7 +166,7 @@
         "location": "__ANY__",
         "matrix": "technosphere"
       },
-      "value": 0.05223003192283289
+      "value": 0.06548459585672464
     },
     {
       "supplier": {
@@ -166,7 +181,7 @@
         "location": "__ANY__",
         "matrix": "technosphere"
       },
-      "value": 0.01047854876637354
+      "value": 0.0388784242637013
     },
     {
       "supplier": {
@@ -181,7 +196,7 @@
         "location": "__ANY__",
         "matrix": "technosphere"
       },
-      "value": 0.05380792600656154
+      "value": 0.04162969391242569
     },
     {
       "supplier": {
@@ -196,7 +211,7 @@
         "location": "__ANY__",
         "matrix": "technosphere"
       },
-      "value": 18.33083344718111
+      "value": 33.77771704442262
     },
     {
       "supplier": {
@@ -211,7 +226,7 @@
         "location": "__ANY__",
         "matrix": "technosphere"
       },
-      "value": 13.11894437739085
+      "value": 8.452588463920625
     },
     {
       "supplier": {
@@ -226,7 +241,7 @@
         "location": "__ANY__",
         "matrix": "technosphere"
       },
-      "value": 1.49435829532378
+      "value": 0.1505817652970141
     },
     {
       "supplier": {
@@ -241,7 +256,7 @@
         "location": "__ANY__",
         "matrix": "technosphere"
       },
-      "value": 1.628705042568065
+      "value": 1.58756225772607
     },
     {
       "supplier": {
@@ -256,7 +271,7 @@
         "location": "__ANY__",
         "matrix": "technosphere"
       },
-      "value": 0.205331401030531
+      "value": 0.1237043631045652
     },
     {
       "supplier": {
@@ -271,7 +286,7 @@
         "location": "__ANY__",
         "matrix": "technosphere"
       },
-      "value": 22.81369394316439
+      "value": 20.36401198804547
     },
     {
       "supplier": {
@@ -286,7 +301,7 @@
         "location": "__ANY__",
         "matrix": "technosphere"
       },
-      "value": 0.00934634850121456
+      "value": 0.1291348013989383
     },
     {
       "supplier": {
@@ -301,7 +316,7 @@
         "location": "__ANY__",
         "matrix": "technosphere"
       },
-      "value": 0.2724720488715686
+      "value": 0.1485806390932546
     },
     {
       "supplier": {
@@ -316,7 +331,7 @@
         "location": "__ANY__",
         "matrix": "technosphere"
       },
-      "value": 0.1271839066181521
+      "value": 0.01412670268100808
     },
     {
       "supplier": {
@@ -331,7 +346,7 @@
         "location": "__ANY__",
         "matrix": "technosphere"
       },
-      "value": 0.01947355325317202
+      "value": 0.003200116320894813
     },
     {
       "supplier": {
@@ -346,7 +361,7 @@
         "location": "__ANY__",
         "matrix": "technosphere"
       },
-      "value": 0.2320980357353152
+      "value": 0.1924027785194038
     },
     {
       "supplier": {
@@ -361,7 +376,7 @@
         "location": "__ANY__",
         "matrix": "technosphere"
       },
-      "value": 228.2592550700038
+      "value": 1992.269385039014
     },
     {
       "supplier": {
@@ -376,7 +391,7 @@
         "location": "__ANY__",
         "matrix": "technosphere"
       },
-      "value": 1.079302777483269
+      "value": 2.215785047230339
     },
     {
       "supplier": {
@@ -391,7 +406,7 @@
         "location": "__ANY__",
         "matrix": "technosphere"
       },
-      "value": 0.0007263309910926501
+      "value": 0.0004772799420026663
     },
     {
       "supplier": {
@@ -406,7 +421,7 @@
         "location": "__ANY__",
         "matrix": "technosphere"
       },
-      "value": 0.01429005811209729
+      "value": 0.03188380502101026
     },
     {
       "supplier": {
@@ -421,7 +436,7 @@
         "location": "__ANY__",
         "matrix": "technosphere"
       },
-      "value": 0.06439042314325291
+      "value": 7.859798761356709e-05
     },
     {
       "supplier": {
@@ -436,7 +451,7 @@
         "location": "__ANY__",
         "matrix": "technosphere"
       },
-      "value": 0.2996015203325907
+      "value": 1.02541851924023
     },
     {
       "supplier": {
@@ -451,7 +466,7 @@
         "location": "__ANY__",
         "matrix": "technosphere"
       },
-      "value": 0.05889558960804051
+      "value": 0.01406884575194963
     },
     {
       "supplier": {
@@ -466,7 +481,7 @@
         "location": "__ANY__",
         "matrix": "technosphere"
       },
-      "value": 18.14734487483058
+      "value": 13.90382702632125
     },
     {
       "supplier": {
@@ -481,7 +496,7 @@
         "location": "__ANY__",
         "matrix": "technosphere"
       },
-      "value": 0.333639116284736
+      "value": 0.07757217758974683
     },
     {
       "supplier": {
@@ -496,7 +511,7 @@
         "location": "__ANY__",
         "matrix": "technosphere"
       },
-      "value": 0.1629550760356488
+      "value": 0.0661203853050308
     },
     {
       "supplier": {
@@ -511,7 +526,7 @@
         "location": "__ANY__",
         "matrix": "technosphere"
       },
-      "value": 0.6259628713962837
+      "value": 39.30632747071738
     },
     {
       "supplier": {
@@ -526,7 +541,7 @@
         "location": "__ANY__",
         "matrix": "technosphere"
       },
-      "value": 3.910221662876849
+      "value": 7.092435859022785
     },
     {
       "supplier": {
@@ -541,7 +556,7 @@
         "location": "__ANY__",
         "matrix": "technosphere"
       },
-      "value": 0.3033347615117788
+      "value": 0.1261652466578137
     },
     {
       "supplier": {
@@ -556,7 +571,7 @@
         "location": "__ANY__",
         "matrix": "technosphere"
       },
-      "value": 1.021925171423326
+      "value": 3.224322180260516
     },
     {
       "supplier": {
@@ -571,7 +586,7 @@
         "location": "__ANY__",
         "matrix": "technosphere"
       },
-      "value": 7.785365690063754
+      "value": 19.07477839513315
     },
     {
       "supplier": {
@@ -586,7 +601,7 @@
         "location": "__ANY__",
         "matrix": "technosphere"
       },
-      "value": 17210.31458925672
+      "value": 27898.85472057349
     },
     {
       "supplier": {
@@ -601,7 +616,7 @@
         "location": "__ANY__",
         "matrix": "technosphere"
       },
-      "value": 0.1051164331018848
+      "value": 0.1023878702719896
     },
     {
       "supplier": {
@@ -616,7 +631,7 @@
         "location": "__ANY__",
         "matrix": "technosphere"
       },
-      "value": 0.02646063906704017
+      "value": 0.06889293438066826
     },
     {
       "supplier": {
@@ -631,7 +646,7 @@
         "location": "__ANY__",
         "matrix": "technosphere"
       },
-      "value": 90.52960782967246
+      "value": 12.40478895468566
     },
     {
       "supplier": {
@@ -646,7 +661,7 @@
         "location": "__ANY__",
         "matrix": "technosphere"
       },
-      "value": 11.80871369834138
+      "value": 67.39680622147803
     },
     {
       "supplier": {
@@ -661,7 +676,7 @@
         "location": "__ANY__",
         "matrix": "technosphere"
       },
-      "value": 613953.3020733153
+      "value": 20272.73154088763
     },
     {
       "supplier": {
@@ -676,7 +691,7 @@
         "location": "__ANY__",
         "matrix": "technosphere"
       },
-      "value": 14.06577386874545
+      "value": 2.451737843728564
     },
     {
       "supplier": {
@@ -691,7 +706,7 @@
         "location": "__ANY__",
         "matrix": "technosphere"
       },
-      "value": 76.46687193913449
+      "value": 1.18083857670791
     },
     {
       "supplier": {
@@ -706,7 +721,7 @@
         "location": "__ANY__",
         "matrix": "technosphere"
       },
-      "value": 0.01015150553275145
+      "value": 0.1299858404411779
     },
     {
       "supplier": {
@@ -721,7 +736,7 @@
         "location": "__ANY__",
         "matrix": "technosphere"
       },
-      "value": 0.01783265967673266
+      "value": 0.008585853597449766
     },
     {
       "supplier": {
@@ -736,7 +751,7 @@
         "location": "__ANY__",
         "matrix": "technosphere"
       },
-      "value": 148.8383989758592
+      "value": 82.89129856349568
     },
     {
       "supplier": {
@@ -751,7 +766,7 @@
         "location": "__ANY__",
         "matrix": "technosphere"
       },
-      "value": 141.117440616787
+      "value": 48.91191148639233
     },
     {
       "supplier": {
@@ -766,7 +781,7 @@
         "location": "__ANY__",
         "matrix": "technosphere"
       },
-      "value": 14.12831016408765
+      "value": 3.555356720862952
     },
     {
       "supplier": {
@@ -781,7 +796,7 @@
         "location": "__ANY__",
         "matrix": "technosphere"
       },
-      "value": 0.8988387739156143
+      "value": 0.1173964336015081
     },
     {
       "supplier": {
@@ -796,7 +811,22 @@
         "location": "__ANY__",
         "matrix": "technosphere"
       },
-      "value": 29.45729909336517
+      "value": 27.46586716652937
+    },
+    {
+      "supplier": {
+        "name": "Uranium",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "location": "__ANY__",
+        "matrix": "technosphere"
+      },
+      "value": 33.34406279466253
     },
     {
       "supplier": {
@@ -811,7 +841,7 @@
         "location": "__ANY__",
         "matrix": "technosphere"
       },
-      "value": 17.31340667013091
+      "value": 12.09214080492863
     },
     {
       "supplier": {
@@ -826,7 +856,7 @@
         "location": "__ANY__",
         "matrix": "technosphere"
       },
-      "value": 0.1361363819215624
+      "value": 0.1630490326905788
     },
     {
       "supplier": {
@@ -841,37 +871,7 @@
         "location": "__ANY__",
         "matrix": "technosphere"
       },
-      "value": 0.4543290392666775
-    },
-    {
-      "supplier": {
-        "name": NaN,
-        "categories": [
-          "natural resource",
-          "in ground"
-        ],
-        "matrix": "biosphere"
-      },
-      "consumer": {
-        "location": "__ANY__",
-        "matrix": "technosphere"
-      },
-      "value": NaN
-    },
-    {
-      "supplier": {
-        "name": NaN,
-        "categories": [
-          "natural resource",
-          "in ground"
-        ],
-        "matrix": "biosphere"
-      },
-      "consumer": {
-        "location": "__ANY__",
-        "matrix": "technosphere"
-      },
-      "value": NaN
+      "value": 0.7065911579786284
     }
   ]
 }
