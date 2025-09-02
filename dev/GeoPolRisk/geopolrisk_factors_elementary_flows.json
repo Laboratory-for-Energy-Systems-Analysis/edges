@@ -1,0 +1,877 @@
+{
+  "name": "GeoPolRisk - elementary flows",
+  "unit": "kg copper-eq.",
+  "version": "1.0",
+  "exchanges": [
+    {
+      "supplier": {
+        "name": "Silicon",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "location": "__ANY__",
+        "matrix": "technosphere"
+      },
+      "value": 11.85781223
+    },
+    {
+      "supplier": {
+        "name": "Potassium",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "location": "__ANY__",
+        "matrix": "technosphere"
+      },
+      "value": 0.297397074
+    },
+    {
+      "supplier": {
+        "name": "Strontium",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "location": "__ANY__",
+        "matrix": "technosphere"
+      },
+      "value": 11.23780594
+    },
+    {
+      "supplier": {
+        "name": "Iridium",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "location": "__ANY__",
+        "matrix": "technosphere"
+      },
+      "value": 16813.59791
+    },
+    {
+      "supplier": {
+        "name": "Ferrosilicon",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "location": "__ANY__",
+        "matrix": "technosphere"
+      },
+      "value": 1.648469856
+    },
+    {
+      "supplier": {
+        "name": "Ruthenium",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "location": "__ANY__",
+        "matrix": "technosphere"
+      },
+      "value": 20312.17118
+    },
+    {
+      "supplier": {
+        "name": "Aluminium",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "location": "__ANY__",
+        "matrix": "technosphere"
+      },
+      "value": 1.85390797856095
+    },
+    {
+      "supplier": {
+        "name": "Antimony",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "location": "__ANY__",
+        "matrix": "technosphere"
+      },
+      "value": 0.007536672680789782
+    },
+    {
+      "supplier": {
+        "name": "Asbestos",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "location": "__ANY__",
+        "matrix": "technosphere"
+      },
+      "value": 0.2363308299673218
+    },
+    {
+      "supplier": {
+        "name": "Baryte",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "location": "__ANY__",
+        "matrix": "technosphere"
+      },
+      "value": 0.05223003192283289
+    },
+    {
+      "supplier": {
+        "name": "Bauxite",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "location": "__ANY__",
+        "matrix": "technosphere"
+      },
+      "value": 0.01047854876637354
+    },
+    {
+      "supplier": {
+        "name": "Bentonite",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "location": "__ANY__",
+        "matrix": "technosphere"
+      },
+      "value": 0.05380792600656154
+    },
+    {
+      "supplier": {
+        "name": "Beryllium",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "location": "__ANY__",
+        "matrix": "technosphere"
+      },
+      "value": 18.33083344718111
+    },
+    {
+      "supplier": {
+        "name": "Bismuth",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "location": "__ANY__",
+        "matrix": "technosphere"
+      },
+      "value": 13.11894437739085
+    },
+    {
+      "supplier": {
+        "name": "Boron",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "location": "__ANY__",
+        "matrix": "technosphere"
+      },
+      "value": 1.49435829532378
+    },
+    {
+      "supplier": {
+        "name": "Cadmium",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "location": "__ANY__",
+        "matrix": "technosphere"
+      },
+      "value": 1.628705042568065
+    },
+    {
+      "supplier": {
+        "name": "Chromite",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "location": "__ANY__",
+        "matrix": "technosphere"
+      },
+      "value": 0.205331401030531
+    },
+    {
+      "supplier": {
+        "name": "Cobalt",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "location": "__ANY__",
+        "matrix": "technosphere"
+      },
+      "value": 22.81369394316439
+    },
+    {
+      "supplier": {
+        "name": "Coking Coal",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "location": "__ANY__",
+        "matrix": "technosphere"
+      },
+      "value": 0.00934634850121456
+    },
+    {
+      "supplier": {
+        "name": "Copper",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "location": "__ANY__",
+        "matrix": "technosphere"
+      },
+      "value": 0.2724720488715686
+    },
+    {
+      "supplier": {
+        "name": "Diatomite",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "location": "__ANY__",
+        "matrix": "technosphere"
+      },
+      "value": 0.1271839066181521
+    },
+    {
+      "supplier": {
+        "name": "Feldspar",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "location": "__ANY__",
+        "matrix": "technosphere"
+      },
+      "value": 0.01947355325317202
+    },
+    {
+      "supplier": {
+        "name": "Fluorspar",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "location": "__ANY__",
+        "matrix": "technosphere"
+      },
+      "value": 0.2320980357353152
+    },
+    {
+      "supplier": {
+        "name": "Gold",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "location": "__ANY__",
+        "matrix": "technosphere"
+      },
+      "value": 228.2592550700038
+    },
+    {
+      "supplier": {
+        "name": "Graphite",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "location": "__ANY__",
+        "matrix": "technosphere"
+      },
+      "value": 1.079302777483269
+    },
+    {
+      "supplier": {
+        "name": "Gypsum",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "location": "__ANY__",
+        "matrix": "technosphere"
+      },
+      "value": 0.0007263309910926501
+    },
+    {
+      "supplier": {
+        "name": "Iron",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "location": "__ANY__",
+        "matrix": "technosphere"
+      },
+      "value": 0.01429005811209729
+    },
+    {
+      "supplier": {
+        "name": "Kaolin",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "location": "__ANY__",
+        "matrix": "technosphere"
+      },
+      "value": 0.06439042314325291
+    },
+    {
+      "supplier": {
+        "name": "Lead",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "location": "__ANY__",
+        "matrix": "technosphere"
+      },
+      "value": 0.2996015203325907
+    },
+    {
+      "supplier": {
+        "name": "Lignite",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "location": "__ANY__",
+        "matrix": "technosphere"
+      },
+      "value": 0.05889558960804051
+    },
+    {
+      "supplier": {
+        "name": "Lithium",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "location": "__ANY__",
+        "matrix": "technosphere"
+      },
+      "value": 18.14734487483058
+    },
+    {
+      "supplier": {
+        "name": "Magnesite",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "location": "__ANY__",
+        "matrix": "technosphere"
+      },
+      "value": 0.333639116284736
+    },
+    {
+      "supplier": {
+        "name": "Manganese",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "location": "__ANY__",
+        "matrix": "technosphere"
+      },
+      "value": 0.1629550760356488
+    },
+    {
+      "supplier": {
+        "name": "Mercury",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "location": "__ANY__",
+        "matrix": "technosphere"
+      },
+      "value": 0.6259628713962837
+    },
+    {
+      "supplier": {
+        "name": "Molybdenum",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "location": "__ANY__",
+        "matrix": "technosphere"
+      },
+      "value": 3.910221662876849
+    },
+    {
+      "supplier": {
+        "name": "Natural gas",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "location": "__ANY__",
+        "matrix": "technosphere"
+      },
+      "value": 0.3033347615117788
+    },
+    {
+      "supplier": {
+        "name": "Nickel",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "location": "__ANY__",
+        "matrix": "technosphere"
+      },
+      "value": 1.021925171423326
+    },
+    {
+      "supplier": {
+        "name": "Niobium",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "location": "__ANY__",
+        "matrix": "technosphere"
+      },
+      "value": 7.785365690063754
+    },
+    {
+      "supplier": {
+        "name": "Palladium",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "location": "__ANY__",
+        "matrix": "technosphere"
+      },
+      "value": 17210.31458925672
+    },
+    {
+      "supplier": {
+        "name": "Crude oil",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "location": "__ANY__",
+        "matrix": "technosphere"
+      },
+      "value": 0.1051164331018848
+    },
+    {
+      "supplier": {
+        "name": "Phosphate",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "location": "__ANY__",
+        "matrix": "technosphere"
+      },
+      "value": 0.02646063906704017
+    },
+    {
+      "supplier": {
+        "name": "Platinum",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "location": "__ANY__",
+        "matrix": "technosphere"
+      },
+      "value": 90.52960782967246
+    },
+    {
+      "supplier": {
+        "name": "Rare earth",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "location": "__ANY__",
+        "matrix": "technosphere"
+      },
+      "value": 11.80871369834138
+    },
+    {
+      "supplier": {
+        "name": "Rhodium",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "location": "__ANY__",
+        "matrix": "technosphere"
+      },
+      "value": 613953.3020733153
+    },
+    {
+      "supplier": {
+        "name": "Selenium",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "location": "__ANY__",
+        "matrix": "technosphere"
+      },
+      "value": 14.06577386874545
+    },
+    {
+      "supplier": {
+        "name": "Silver",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "location": "__ANY__",
+        "matrix": "technosphere"
+      },
+      "value": 76.46687193913449
+    },
+    {
+      "supplier": {
+        "name": "Steam Coal",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "location": "__ANY__",
+        "matrix": "technosphere"
+      },
+      "value": 0.01015150553275145
+    },
+    {
+      "supplier": {
+        "name": "Sulfur",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "location": "__ANY__",
+        "matrix": "technosphere"
+      },
+      "value": 0.01783265967673266
+    },
+    {
+      "supplier": {
+        "name": "Tantalum",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "location": "__ANY__",
+        "matrix": "technosphere"
+      },
+      "value": 148.8383989758592
+    },
+    {
+      "supplier": {
+        "name": "Tellurium",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "location": "__ANY__",
+        "matrix": "technosphere"
+      },
+      "value": 141.117440616787
+    },
+    {
+      "supplier": {
+        "name": "Tin",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "location": "__ANY__",
+        "matrix": "technosphere"
+      },
+      "value": 14.12831016408765
+    },
+    {
+      "supplier": {
+        "name": "Titanium",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "location": "__ANY__",
+        "matrix": "technosphere"
+      },
+      "value": 0.8988387739156143
+    },
+    {
+      "supplier": {
+        "name": "Tungsten",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "location": "__ANY__",
+        "matrix": "technosphere"
+      },
+      "value": 29.45729909336517
+    },
+    {
+      "supplier": {
+        "name": "Vanadium",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "location": "__ANY__",
+        "matrix": "technosphere"
+      },
+      "value": 17.31340667013091
+    },
+    {
+      "supplier": {
+        "name": "Zinc",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "location": "__ANY__",
+        "matrix": "technosphere"
+      },
+      "value": 0.1361363819215624
+    },
+    {
+      "supplier": {
+        "name": "Zirconium",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "location": "__ANY__",
+        "matrix": "technosphere"
+      },
+      "value": 0.4543290392666775
+    },
+    {
+      "supplier": {
+        "name": NaN,
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "location": "__ANY__",
+        "matrix": "technosphere"
+      },
+      "value": NaN
+    },
+    {
+      "supplier": {
+        "name": NaN,
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "location": "__ANY__",
+        "matrix": "technosphere"
+      },
+      "value": NaN
+    }
+  ]
+}
