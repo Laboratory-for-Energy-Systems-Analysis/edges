@@ -1,23 +1,14 @@
-import logging
 from collections import defaultdict
-from functools import cache, lru_cache
-from typing import Optional
+from functools import lru_cache
 import numpy as np
+from copy import deepcopy
+import json
+from typing import NamedTuple, List, Optional
 
 from .utils import make_hashable
 
-# delete the logs
-with open("flowmatching.log", "w", encoding="utf-8"):
-    pass
 
-# initiate the logger
-logging.basicConfig(
-    filename="flowmatching.log",
-    filemode="a",
-    format="%(asctime)s,%(msecs)d %(name)s %(funcName)s %(levelname)s %(message)s",
-    datefmt="%H:%M:%S",
-    level=logging.INFO,
-)
+import logging
 
 logger = logging.getLogger(__name__)
 
@@ -120,6 +111,7 @@ def process_cf_list(
 
 def matches_classifications(cf_classifications, dataset_classifications):
     """Match CF classification codes to dataset classifications."""
+
     if isinstance(cf_classifications, dict):
         cf_classifications = [
             (scheme, code)
@@ -137,7 +129,9 @@ def matches_classifications(cf_classifications, dataset_classifications):
             ]
 
     dataset_codes = [
-        (scheme, code.split(":")[0].strip()) for scheme, code in dataset_classifications
+        (scheme, str(c).split(":")[0].strip())
+        for scheme, codes in dataset_classifications
+        for c in (codes if isinstance(codes, (list, tuple, set)) else [codes])
     ]
 
     for scheme, code in dataset_codes:
@@ -189,7 +183,7 @@ def match_flow(flow: dict, criteria: dict) -> bool:
     return True
 
 
-@cache
+@lru_cache(maxsize=None)
 def match_operator(value: str, target: str, operator: str) -> bool:
     """
     Implements matching for three operator types:
@@ -245,10 +239,10 @@ def normalize_classification_entries(cf_list: list[dict]) -> list[dict]:
     return cf_list
 
 
-def build_cf_index(raw_cfs: list[dict], required_supplier_fields: set) -> dict:
+def build_cf_index(raw_cfs: list[dict]) -> dict:
     """
     Build a nested CF index:
-        cf_index[consumer_location][supplier_signature] → list of CFs
+        cf_index[(supplier_loc, consumer_loc)] → list of CFs
     """
     index = defaultdict(list)
 
@@ -261,7 +255,7 @@ def build_cf_index(raw_cfs: list[dict], required_supplier_fields: set) -> dict:
     return index
 
 
-@cache
+@lru_cache(maxsize=None)
 def cached_match_with_index(flow_to_match_hashable, required_fields_tuple):
     flow_to_match = dict(flow_to_match_hashable)
     required_fields = set(required_fields_tuple)
@@ -330,122 +324,126 @@ def build_index(lookup: dict, required_fields: set) -> dict:
     return index
 
 
+class MatchResult(NamedTuple):
+    matches: List[int]
+    location_only_rejects: dict[int, str]
+
+
 def match_with_index(
     flow_to_match: dict,
     index: dict,
     lookup_mapping: dict,
     required_fields: set,
     reversed_lookup: dict,
-) -> list:
-    """
-    Match a flow against the lookup using the inverted index.
-    Supports "equals", "startswith", and "contains" operators.
+) -> MatchResult:
+    SPECIAL = {"excludes", "operator", "matrix"}
+    nonloc_fields = [f for f in required_fields if f not in SPECIAL and f != "location"]
+    has_location_constraint = ("location" in required_fields) and (
+        "location" in flow_to_match
+    )
+    op = flow_to_match.get("operator", "equals")
 
-    :param flow_to_match: The flow to match.
-    :param index: The inverted index produced by build_index().
-    :param lookup_mapping: The original lookup dictionary mapping keys to positions.
-    :param required_fields: The required fields for matching.
-    :return: A list of matching positions.
-    """
-    candidate_keys = None
+    allowed_keys = getattr(cached_match_with_index, "allowed_keys", None)
 
-    if not required_fields:
-        # Match all flows if no fields to match
-        return [pos for positions in lookup_mapping.values() for pos in positions]
-
-    for field in required_fields:
-
-        if field in ("excludes", "operator", "matrix"):
-            continue
-
-        match_target = flow_to_match.get(field)
-
-        operator_value = flow_to_match.get("operator", "equals")
+    def field_candidates(field, target, operator_value):
         field_index = index.get(field, {})
-        field_candidates = set()
-
+        out = set()
         if operator_value == "equals":
-            # Fast direct lookup.
-            if match_target == "__ANY__":
-                for candidate_value, candidate_list in field_index.items():
-                    for candidate in candidate_list:
-                        candidate_key, _ = candidate
-                        field_candidates.add(candidate_key)
+            if target == "__ANY__":
+                for _, cand_list in field_index.items():
+                    for key_only, _ in cand_list:
+                        if (allowed_keys is None) or (key_only in allowed_keys):
+                            out.add(key_only)
             else:
-                for candidate in field_index.get(match_target, []):
-                    candidate_key, _ = candidate
-                    field_candidates.add(candidate_key)
+                for key_only, _ in field_index.get(target, []):
+                    if (allowed_keys is None) or (key_only in allowed_keys):
+                        out.add(key_only)
         else:
-            # For "startswith" or "contains", we iterate over all candidate values.
-            if match_target == "__ANY__":
-                for candidate_value, candidate_list in field_index.items():
-                    for candidate in candidate_list:
-                        candidate_key, _ = candidate
-                        field_candidates.add(candidate_key)
+            # startswith / contains
+            if target == "__ANY__":
+                for _, cand_list in field_index.items():
+                    for key_only, _ in cand_list:
+                        if (allowed_keys is None) or (key_only in allowed_keys):
+                            out.add(key_only)
             else:
-                for candidate_value, candidate_list in field_index.items():
+                for candidate_value, cand_list in field_index.items():
                     if match_operator(
-                        value=candidate_value,
-                        target=match_target,
-                        operator=operator_value,
+                        value=candidate_value, target=target, operator=operator_value
                     ):
-                        for candidate in candidate_list:
-                            candidate_key, _ = candidate
-                            field_candidates.add(candidate_key)
+                        for key_only, _ in cand_list:
+                            if (allowed_keys is None) or (key_only in allowed_keys):
+                                out.add(key_only)
+        return out
 
-        # Initialize or intersect candidate sets.
-        if candidate_keys is None:
-            candidate_keys = field_candidates
-        else:
-            candidate_keys &= field_candidates
-
-        # Early exit if no candidates remain.
-        if not candidate_keys:
+    def gather_positions(keys, ft_for_matchflow):
+        if not keys:
             return []
+        out = []
+        for key in keys:
+            for pos in lookup_mapping.get(key, []):
+                raw = reversed_lookup[pos]
+                flow = dict(raw) if isinstance(raw, tuple) else raw
+                if flow and match_flow(flow, ft_for_matchflow):
+                    out.append(pos)
+        return out
 
-    # Gather positions from the original lookup mapping for all candidate keys.
-    matches = []
-    for key in candidate_keys:
-        for pos in lookup_mapping[key]:
-            raw = reversed_lookup[pos]
-            flow = dict(raw) if isinstance(raw, tuple) else raw
-            if flow and match_flow(flow, flow_to_match):
-                matches.append(pos)
+    # --- SPECIAL CASE: only 'location' is required ---
+    if not nonloc_fields and has_location_constraint:
+        all_keys = set(lookup_mapping.keys())
 
-    if "classifications" in flow_to_match:
-        cf_classifications_by_scheme = flow_to_match["classifications"]
+        # passes when ignoring location (still honors excludes/operator)
+        ft_no_loc = dict(flow_to_match)
+        ft_no_loc.pop("location", None)
+        noloc_positions = gather_positions(all_keys, ft_no_loc)
 
-        if isinstance(cf_classifications_by_scheme, tuple):
-            cf_classifications_by_scheme = dict(cf_classifications_by_scheme)
+        # full matches with location
+        loc_keys = field_candidates("location", flow_to_match.get("location"), op)
+        full_matches = gather_positions(loc_keys, flow_to_match)
 
-        classified_matches = []
+        # everything that passed without location but failed with it
+        loc_only = set(noloc_positions) - set(full_matches)
 
-        for pos in matches:
-            flow = reversed_lookup.get(pos)
-            flow = dict(flow)
-            if not flow:
-                continue
-            dataset_classifications = flow.get("classifications", [])
+        return MatchResult(
+            matches=full_matches,
+            location_only_rejects={pos: "location" for pos in loc_only},
+        )
 
-            if dataset_classifications:
-                for scheme, cf_codes in cf_classifications_by_scheme.items():
-                    relevant_codes = [
-                        code.split(":")[0].strip()
-                        for s, code in dataset_classifications
-                        if s.lower() == scheme.lower()
-                    ]
-                    if any(
-                        code.startswith(prefix)
-                        for prefix in cf_codes
-                        for code in relevant_codes
-                    ):
-                        classified_matches.append(pos)
-                        break
+    # --- NORMAL PATH: there are non-location required fields ---
+    if nonloc_fields:
+        pre_location_keys = None
+        for field in nonloc_fields:
+            cand = field_candidates(field, flow_to_match.get(field), op)
+            pre_location_keys = (
+                cand if pre_location_keys is None else (pre_location_keys & cand)
+            )
+            if not pre_location_keys:
+                return MatchResult(matches=[], location_only_rejects={})
+    else:
+        # no required fields at all
+        pre_location_keys = set(lookup_mapping.keys())
 
-        if classified_matches:
-            return classified_matches
+    # apply location last
+    candidate_keys = pre_location_keys
+    if has_location_constraint:
+        loc_cand = field_candidates("location", flow_to_match.get("location"), op)
+        candidate_keys = pre_location_keys & loc_cand
 
-    return matches
+    # noloc matches (for diagnosing location-only)
+    ft_no_loc = dict(flow_to_match)
+    ft_no_loc.pop("location", None)
+    noloc_matches = gather_positions(pre_location_keys, ft_no_loc)
+
+    # full matches
+    full_matches = gather_positions(candidate_keys, flow_to_match)
+
+    loc_only = (
+        set(noloc_matches) - set(full_matches) if has_location_constraint else set()
+    )
+
+    return MatchResult(
+        matches=full_matches,
+        location_only_rejects={pos: "location" for pos in loc_only},
+    )
 
 
 def compute_cf_memoized_factory(
@@ -458,7 +456,6 @@ def compute_cf_memoized_factory(
             candidate_consumers=list(consumer_candidates),
             supplier_info=dict(s_key),
             consumer_info=dict(c_key),
-            weight=weights,
             cf_index=cf_index,
             required_supplier_fields=required_supplier_fields,
             required_consumer_fields=required_consumer_fields,
@@ -575,34 +572,34 @@ def compute_average_cf(
     candidate_consumers: list,
     supplier_info: dict,
     consumer_info: dict,
-    weight: dict,
     cf_index: dict,
     required_supplier_fields: set = None,
     required_consumer_fields: set = None,
-) -> tuple[str | float, Optional[dict]]:
+) -> tuple[str | float, Optional[dict], Optional[dict]]:
     """
-    Compute the weighted average characterization factor (CF) for a given supplier-consumer pair.
-    Supports disaggregated regional matching on both supplier and consumer sides.
+    Compute weighted CF and a **canonical** aggregated uncertainty for composite regions.
+    No sampling is performed here.
+    Returns:
+        expr_or_value: str | float
+        matched_cf_obj: Optional[dict]   # present only when exactly 1 CF matched
+        agg_uncertainty: Optional[dict]  # discrete_empirical mixture if >1 CF
     """
-
     if not candidate_suppliers and not candidate_consumers:
         logger.debug("No candidate suppliers or consumers provided.")
-        return 0, None
+        return 0, None, None
 
-    # calculate all permutations
     valid_location_pairs = [
         (s, c)
         for s in candidate_suppliers
         for c in candidate_consumers
-        if cf_index.get((s, c)) or cf_index.get(("__ANY__", "__ANY__"))
+        if cf_index.get((s, c))
     ]
-
-    if len(valid_location_pairs) == 0:
+    if not valid_location_pairs:
         logger.debug(
             f"No valid location pairs found for suppliers {candidate_suppliers} "
             f"and consumers {candidate_consumers}."
         )
-        return 0, None
+        return 0, None, None
 
     filtered_supplier = {
         k: supplier_info[k]
@@ -615,57 +612,126 @@ def compute_average_cf(
         if k in consumer_info and k != "location"
     }
 
-    matched_cfs = []
-
-    for (
-        candidate_supplier_location,
-        candidate_consumer_location,
-    ) in valid_location_pairs:
-        candidate_cfs = cf_index.get(
-            (candidate_supplier_location, candidate_consumer_location)
-        )
-
-        if not candidate_cfs:
+    matched = []
+    for s_loc, c_loc in valid_location_pairs:
+        cands = cf_index.get((s_loc, c_loc))
+        if not cands:
             continue
+        filtered_supplier["location"] = s_loc
+        filtered_consumer["location"] = c_loc
+        matched.extend(process_cf_list(cands, filtered_supplier, filtered_consumer))
 
-        filtered_supplier["location"] = candidate_supplier_location
-        filtered_consumer["location"] = candidate_consumer_location
-
-        matched_cfs.extend(
-            process_cf_list(
-                candidate_cfs,
-                filtered_supplier,
-                filtered_consumer,
-            )
-        )
-
-    if not matched_cfs:
+    if not matched:
         logger.debug(
             f"No matched CFs for supplier {supplier_info} and consumer {consumer_info} "
             f"with location pairs {valid_location_pairs}."
         )
-        return 0, None
+        return 0, None, None
 
-    # normalize weights into shares
-    sum_weights = sum(c.get("weight", 0.0) for c in matched_cfs)
-
-    if sum_weights == 0:
+    total_w = sum(cf.get("weight", 0.0) for cf in matched)
+    if total_w == 0:
         logger.warning(
             f"No valid weights found for supplier {supplier_info} and consumer {consumer_info}. "
             "Using equal shares."
         )
-        matched_cfs = [(cf, (1.0 / len(matched_cfs))) for cf in matched_cfs]
+        matched_cfs = [(cf, 1.0 / len(matched)) for cf in matched]
     else:
-        matched_cfs = [
-            (cf, (cf.get("weight", 0) / sum_weights if sum_weights else 1.0))
-            for cf in matched_cfs
-        ]
+        matched_cfs = [(cf, cf.get("weight", 0.0) / total_w) for cf in matched]
 
     assert np.isclose(
-        sum(share for _, share in matched_cfs), 1
-    ), f"Total shares must equal 1. Got: {sum(share for _, share in matched_cfs)}"
+        sum(s for _, s in matched_cfs), 1.0
+    ), f"Total shares must equal 1. Got: {sum(s for _, s in matched_cfs)}"
 
+    # Weighted expression for deterministic path
     expressions = [f"({share:.3f} * ({cf['value']}))" for cf, share in matched_cfs]
     expr = " + ".join(expressions)
 
-    return (expr, matched_cfs[0][0]) if len(matched_cfs) == 1 else (expr, None)
+    # === NEW: aggregated uncertainty as a hierarchical mixture (no sampling) ===
+    # If only one CF: pass through its uncertainty directly
+    if len(matched_cfs) == 1:
+        single_cf = matched_cfs[0][0]
+        agg_uncertainty = single_cf.get("uncertainty")
+        return (expr, single_cf, agg_uncertainty)
+
+    def _cf_sign(cf_obj) -> int | None:
+        """Infer sign from uncertainty.negative if present, else from numeric value."""
+        neg = (cf_obj.get("uncertainty") or {}).get("negative", None)
+        if neg in (0, 1):
+            return -1 if neg == 1 else +1
+        v = cf_obj.get("value")
+        if isinstance(v, (int, float)):
+            if v < 0:
+                return -1
+            if v > 0:
+                return +1
+        return None  # unknown (e.g., string expr)
+
+    # Try to determine a single aggregate sign across constituents
+    cf_signs = [s for (cf, _sh) in matched_cfs if (s := _cf_sign(cf)) is not None]
+    agg_sign = (
+        cf_signs[0] if (cf_signs and all(s == cf_signs[0] for s in cf_signs)) else None
+    )
+
+    # Build child magnitude distributions (no sampling)
+    child_values = []
+    child_weights = []
+
+    for cf, share in matched_cfs:
+        if share <= 0:
+            continue
+
+        if cf.get("uncertainty") is not None:
+            # Copy child's uncertainty and strip sign to make it magnitude-only
+            u = deepcopy(cf["uncertainty"])
+            u["negative"] = 0
+            child_unc = u
+        else:
+            # Deterministic child → wrap as a 1-point discrete over |value|
+            v = cf.get("value")
+            if isinstance(v, (int, float)):
+                child_unc = {
+                    "distribution": "discrete_empirical",
+                    "parameters": {"values": [abs(v)], "weights": [1.0]},
+                    "negative": 0,
+                }
+            else:
+                # We can’t build a magnitude distribution from a symbolic string deterministically.
+                # Be conservative: skip aggregated-uncertainty so MC still works (deterministic anyway).
+                return (expr, None, None)
+
+        child_values.append(child_unc)
+        child_weights.append(float(share))
+
+    # Normalize weights and optionally canonicalize order for stable keys
+    wsum = sum(child_weights) or 1.0
+    child_weights = [w / wsum for w in child_weights]
+
+    # (Optional but helpful) canonicalize order by serialized child value to stabilize cache keys
+    ordering = sorted(
+        range(len(child_values)),
+        key=lambda i: json.dumps(child_values[i], sort_keys=True),
+    )
+    child_values = [child_values[i] for i in ordering]
+    child_weights = [child_weights[i] for i in ordering]
+    # remove values and weights where weights == 0
+    filtered = [
+        (v, w) for v, w in zip(child_values, child_weights) if w > 0 and v is not None
+    ]
+    if not filtered:
+        return 0, None, None
+    child_values, child_weights = zip(*filtered)
+
+    agg_uncertainty = {
+        "distribution": "discrete_empirical",
+        "parameters": {
+            "values": child_values,  # each is a distribution dict (magnitude-only)
+            "weights": child_weights,  # shares
+        },
+        # IMPORTANT: the sign is carried only at the top level so uptake/release share the same cache key
+        # make_distribution_key() already ignores "negative"
+    }
+    if agg_sign is not None:
+        agg_uncertainty["negative"] = 1 if agg_sign == -1 else 0
+
+    # Multi-CF mixture → no single "matched_cf_obj"
+    return (expr, None, agg_uncertainty)

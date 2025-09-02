@@ -4,10 +4,11 @@ This module contains the Uncertainty class, which is responsible for handling
 
 import numpy as np
 import json
+from copy import deepcopy
 from scipy import stats
-from edges.utils import safe_eval
-
 import hashlib
+
+from edges.utils import safe_eval
 
 
 def get_rng_for_key(key: str, base_seed: int) -> np.random.Generator:
@@ -25,6 +26,53 @@ def make_distribution_key(cf):
     else:
         # No uncertainty block → return None = skip caching
         return None
+
+
+def _canon_atom(item):
+    """
+    Return (canonical_object, fingerprint_string) for a mixture atom.
+    - If item is a nested distribution dict, remove 'negative', and for
+      discrete_empirical recursively canonicalize and sort by fingerprint.
+    - If item is a scalar or expression string, return as-is with a const fingerprint.
+    """
+    if isinstance(item, dict) and "distribution" in item:
+        clean = deepcopy(item)
+        clean.pop("negative", None)
+        dist = clean.get("distribution")
+        params = clean.get("parameters", {})
+
+        if dist == "discrete_empirical":
+            vals = list(params.get("values", []))
+            wts = list(params.get("weights", []))
+            canon_pairs = []
+            for v, w in zip(vals, wts):
+                v_clean, v_fp = _canon_atom(v)
+                canon_pairs.append((v_fp, float(w), v_clean))
+
+            # merge equal atoms (same fingerprint) and normalize; sort by fp
+            merged = {}
+            obj_for = {}
+            for fp, w, v_clean in canon_pairs:
+                merged[fp] = merged.get(fp, 0.0) + float(w)
+                obj_for[fp] = v_clean
+            tot = sum(merged.values()) or 1.0
+            items = sorted(merged.items(), key=lambda kv: kv[0])
+            clean["parameters"] = {
+                "values": [obj_for[fp] for fp, _ in items],
+                "weights": [w / tot for _, w in items],
+            }
+
+        # canonical fingerprint: JSON with sorted keys
+        fp = json.dumps(clean, sort_keys=True)
+        return clean, f"dist:{fp}"
+
+    # scalar or expression
+    if isinstance(item, str):
+        val_repr = item.strip()
+    else:
+        val_repr = item
+    fp = f"const:{repr(val_repr)}"
+    return val_repr, fp
 
 
 def sample_cf_distribution(
@@ -78,6 +126,14 @@ def sample_cf_distribution(
                         SAFE_GLOBALS=SAFE_GLOBALS,
                     )[0]
                 else:
+                    if isinstance(item, str):
+                        # evaluate deterministic expression atom
+                        item = safe_eval(
+                            expr=item,
+                            parameters=parameters,
+                            scenario_idx=0,
+                            SAFE_GLOBALS=SAFE_GLOBALS,
+                        )
                     samples[i] = item
 
         elif dist_name == "uniform":

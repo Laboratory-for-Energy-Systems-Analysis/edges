@@ -100,8 +100,7 @@ def test_build_cf_index():
         {"supplier": {"location": "GLO"}, "consumer": {}, "value": 5},
         {"supplier": {"location": "US"}, "consumer": {}, "value": 10},
     ]
-    required_fields = {"location"}
-    index = build_cf_index(raw_cfs, required_fields)
+    index = build_cf_index(raw_cfs)
 
     assert ("GLO", "__ANY__") in index
     assert ("US", "__ANY__") in index
@@ -160,18 +159,17 @@ def test_compute_average_cf_with_any_fallback():
     required_supplier_fields = {"name", "location"}
     required_consumer_fields = set()  # <- No required fields
 
-    cf_index = build_cf_index(raw_cfs, required_supplier_fields)
+    cf_index = build_cf_index(raw_cfs)
 
     supplier_info = {"name": "Oil", "location": "GLO"}
     consumer_info = {"location": "CH"}  # Any value — won't be used in matching
     candidate_consumers = ["__ANY__"]
 
-    result, matched_cf = compute_average_cf(
+    result, matched_cf, _ = compute_average_cf(
         candidate_suppliers=["GLO"],
         candidate_consumers=candidate_consumers,  # not empty!
         supplier_info=supplier_info,
         consumer_info=consumer_info,
-        weight={"GLO": 1.0},
         cf_index=cf_index,
         required_supplier_fields=required_supplier_fields,
         required_consumer_fields=required_consumer_fields,

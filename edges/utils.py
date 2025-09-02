@@ -4,6 +4,7 @@ Utility functions for the LCIA methods implementation.
 
 import os
 import logging
+from typing import Any
 
 import yaml
 import numpy as np
@@ -33,13 +34,6 @@ import numbers
 from .filesystem_constants import DATA_DIR
 
 
-logging.basicConfig(
-    filename="edgelcia.log",
-    filemode="a",
-    format="%(asctime)s,%(msecs)d %(name)s %(levelname)s %(message)s",
-    datefmt="%H:%M:%S",
-    level=logging.INFO,
-)
 logger = logging.getLogger(__name__)
 
 _eval_cache = {}
@@ -70,17 +64,6 @@ def get_available_methods() -> list:
     )
 
 
-def check_method(impact_method: str) -> str:
-    """
-    Check if the impact method is available.
-    :param impact_method: The impact method to check.
-    :return: The impact method if it is available.
-    """
-    if impact_method not in get_available_methods():
-        raise ValueError(f"Impact method not available: {impact_method}")
-    return impact_method
-
-
 def check_presence_of_required_fields(data: list):
     """
     Check if the required fields are present in the data.
@@ -103,7 +86,7 @@ def check_presence_of_required_fields(data: list):
         ), f"Invalid operator in {cf}."
 
 
-def format_data(data: dict, weight: str) -> [list, dict]:
+def format_data(data: dict, weight: str) -> tuple[list, dict[Any, Any]]:
     """
     Format the data for the LCIA method.
     :param data: The data for the LCIA method.
@@ -263,38 +246,6 @@ def get_flow_matrix_positions(mapping: dict) -> list:
     return result
 
 
-def check_database_references(cfs: list, tech_flows: list, bio_flows: list) -> list:
-    """
-    Check if all locations in the CFs are available in the database.
-    :param cfs: List of characterization factors.
-    :param tech_flows: List of technosphere flows.
-    :param bio_flows: List of biosphere flows.
-    :return: List of CFs with valid locations.
-
-    """
-
-    locations_available = set(x["location"] for x in tech_flows)
-    unavailable_locations = []
-
-    for cf in cfs:
-        if "location" in cf["consumer"]:
-            location = cf["consumer"]["location"]
-            if location not in locations_available:
-                unavailable_locations.append(location)
-
-    logger.info(
-        f"Method locations not found in the database: {set(unavailable_locations)}"
-    )
-
-    # remove the cfs with locations not found in the database
-    for cf in cfs:
-        if "location" in cf["consumer"]:
-            location = cf["consumer"]["location"]
-            if location not in locations_available:
-                cfs.remove(cf)
-    return cfs
-
-
 def get_activities(keys, **kwargs):
     """
     Retrieve multiple activity objects in a single SQL query.
@@ -449,26 +400,6 @@ def make_hashable(value):
         return v
 
     return convert(value)
-
-
-@cache
-def get_shares(candidates: list):
-    """
-    Get the shares of each candidate location based on weights.
-    """
-    if not candidates:
-        return [], np.array([])
-
-    cand_supplier_locs, cand_consumer_locs, weights = zip(*candidates)
-
-    weight_array = np.array(weights, dtype=float)
-    total_weight = weight_array.sum()
-    if total_weight == 0:
-        return [(cand_supplier_locs, cand_consumer_locs, 0.0)]
-    return [
-        (cand_supplier_locs, cand_consumer_locs, weight / total_weight)
-        for weight in weight_array
-    ]
 
 
 def assert_no_nans_in_cf_list(cf_list: list[dict], file_source: str = "<input>"):
