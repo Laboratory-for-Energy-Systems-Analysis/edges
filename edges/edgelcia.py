@@ -6,7 +6,6 @@ LCIA class.
 
 import math
 from collections import defaultdict
-import logging
 import json
 from typing import Optional
 from pathlib import Path
@@ -47,9 +46,9 @@ from .georesolver import GeoResolver
 from .uncertainty import sample_cf_distribution, make_distribution_key, get_rng_for_key
 from .filesystem_constants import DATA_DIR
 
-# delete the logs
-with open("edgelcia.log", "w", encoding="utf-8"):
-    pass
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 def add_cf_entry(
@@ -333,15 +332,14 @@ class EdgeLCIA:
         # Accept both "parameters" and "scenarios" for flexibility
         self.parameters = parameters or {}
 
+        self.logger = logging.getLogger(f"{__name__}.{self.__class__.__name__}")
+
         self.scenario = scenario  # New: store default scenario
         self.scenario_length = validate_parameter_lengths(parameters=self.parameters)
         self.use_distributions = use_distributions
         self.iterations = iterations
         self.random_seed = random_seed if random_seed is not None else 42
         self.random_state = np.random.default_rng(self.random_seed)
-
-        self.logger = logging.getLogger(f"{__name__}.{self.__class__.__name__}")
-        self.logger.setLevel(logging.INFO)
 
         self.lca = bw2calc.LCA(demand=self.demand)
         self._load_raw_lcia_data()
@@ -509,8 +507,10 @@ class EdgeLCIA:
             for pos in cf["positions"]
         }
 
-        print(
-            f"Processed edges: {len(self.processed_biosphere_edges) + len(self.processed_technosphere_edges)}"
+        logger.info(
+            "Processed edges: %d",
+            len(self.processed_biosphere_edges)
+            + len(self.processed_technosphere_edges),
         )
 
         self.unprocessed_biosphere_edges = [
@@ -1034,7 +1034,7 @@ class EdgeLCIA:
         """
 
         self._initialize_weights()
-        print("Handling static regions...")
+        logger.info("Handling static regions…")
 
         cf_operators = {
             cf["supplier"].get("operator", "equals") for cf in self.raw_cfs_data
@@ -1181,47 +1181,48 @@ class EdgeLCIA:
                             )
 
             # Pass 1
-            for sig, group_edges in tqdm(
-                prefiltered_groups.items(), desc="Processing static groups (pass 1)"
-            ):
-                supplier_info = group_edges[0][2]
-                consumer_info = group_edges[0][3]
-                candidate_supplier_locations = group_edges[0][-2]
-                candidate_consumer_locations = group_edges[0][-1]
+            if len(prefiltered_groups) > 0:
+                for sig, group_edges in tqdm(
+                    prefiltered_groups.items(), desc="Processing static groups (pass 1)"
+                ):
+                    supplier_info = group_edges[0][2]
+                    consumer_info = group_edges[0][3]
+                    candidate_supplier_locations = group_edges[0][-2]
+                    candidate_consumer_locations = group_edges[0][-1]
 
-                new_cf, matched_cf_obj, agg_uncertainty = compute_average_cf(
-                    candidate_suppliers=candidate_supplier_locations,
-                    candidate_consumers=candidate_consumer_locations,
-                    supplier_info=supplier_info,
-                    consumer_info=consumer_info,
-                    required_supplier_fields=self.required_supplier_fields,
-                    required_consumer_fields=self.required_consumer_fields,
-                    cf_index=self.cf_index,
-                )
-
-                if new_cf != 0:
-                    for (
-                        supplier_idx,
-                        consumer_idx,
-                        supplier_info,
-                        consumer_info,
-                        _,
-                        _,
-                    ) in group_edges:
-                        add_cf_entry(
-                            cfs_mapping=self.cfs_mapping,
-                            supplier_info=supplier_info,
-                            consumer_info=consumer_info,
-                            direction=direction,
-                            indices=[(supplier_idx, consumer_idx)],
-                            value=new_cf,
-                            uncertainty=agg_uncertainty,
-                        )
-                else:
-                    self.logger.warning(
-                        f"Fallback CF could not be computed for supplier={supplier_info}, consumer={consumer_info} "
-                        f"with candidate suppliers={candidate_supplier_locations} and consumers={candidate_consumer_locations}"
+                    new_cf, matched_cf_obj, agg_uncertainty = compute_average_cf(
+                        candidate_suppliers=candidate_supplier_locations,
+                        candidate_consumers=candidate_consumer_locations,
+                        supplier_info=supplier_info,
+                        consumer_info=consumer_info,
+                        required_supplier_fields=self.required_supplier_fields,
+                        required_consumer_fields=self.required_consumer_fields,
+                        cf_index=self.cf_index,
                     )
+
+                    if new_cf != 0:
+                        for (
+                            supplier_idx,
+                            consumer_idx,
+                            supplier_info,
+                            consumer_info,
+                            _,
+                            _,
+                        ) in group_edges:
+                            add_cf_entry(
+                                cfs_mapping=self.cfs_mapping,
+                                supplier_info=supplier_info,
+                                consumer_info=consumer_info,
+                                direction=direction,
+                                indices=[(supplier_idx, consumer_idx)],
+                                value=new_cf,
+                                uncertainty=agg_uncertainty,
+                            )
+                    else:
+                        self.logger.warning(
+                            f"Fallback CF could not be computed for supplier={supplier_info}, consumer={consumer_info} "
+                            f"with candidate suppliers={candidate_supplier_locations} and consumers={candidate_consumer_locations}"
+                        )
 
             # Pass 2
             compute_cf_memoized = compute_cf_memoized_factory(
@@ -1237,33 +1238,34 @@ class EdgeLCIA:
                 required_consumer_fields=self.required_consumer_fields,
             )
 
-            for (
-                s_key,
-                c_key,
-                (candidate_suppliers, candidate_consumers),
-            ), edge_group in tqdm(
-                grouped_edges.items(), desc="Processing static groups (pass 2)"
-            ):
-                new_cf, matched_cf_obj, agg_uncertainty = compute_cf_memoized(
-                    s_key, c_key, candidate_suppliers, candidate_consumers
-                )
-
-                if new_cf != 0:
-                    for supplier_idx, consumer_idx in edge_group:
-                        add_cf_entry(
-                            cfs_mapping=self.cfs_mapping,
-                            supplier_info=dict(s_key),
-                            consumer_info=dict(c_key),
-                            direction=direction,
-                            indices=[(supplier_idx, consumer_idx)],
-                            value=new_cf,
-                            uncertainty=agg_uncertainty,
-                        )
-                else:
-                    self.logger.warning(
-                        f"Fallback CF could not be computed for supplier={s_key}, consumer={c_key} "
-                        f"with candidate suppliers={candidate_suppliers} and consumers={candidate_consumers}"
+            if len(grouped_edges) > 0:
+                for (
+                    s_key,
+                    c_key,
+                    (candidate_suppliers, candidate_consumers),
+                ), edge_group in tqdm(
+                    grouped_edges.items(), desc="Processing static groups (pass 2)"
+                ):
+                    new_cf, matched_cf_obj, agg_uncertainty = compute_cf_memoized(
+                        s_key, c_key, candidate_suppliers, candidate_consumers
                     )
+
+                    if new_cf != 0:
+                        for supplier_idx, consumer_idx in edge_group:
+                            add_cf_entry(
+                                cfs_mapping=self.cfs_mapping,
+                                supplier_info=dict(s_key),
+                                consumer_info=dict(c_key),
+                                direction=direction,
+                                indices=[(supplier_idx, consumer_idx)],
+                                value=new_cf,
+                                uncertainty=agg_uncertainty,
+                            )
+                    else:
+                        self.logger.warning(
+                            f"Fallback CF could not be computed for supplier={s_key}, consumer={c_key} "
+                            f"with candidate suppliers={candidate_suppliers} and consumers={candidate_consumers}"
+                        )
 
         self._update_unprocessed_edges()
 
@@ -1300,7 +1302,7 @@ class EdgeLCIA:
         """
 
         self._initialize_weights()
-        print("Handling dynamic regions...")
+        logger.info("Handling dynamic regions…")
 
         cf_operators = {
             cf["supplier"].get("operator", "equals") for cf in self.raw_cfs_data
@@ -1450,47 +1452,49 @@ class EdgeLCIA:
                         )
 
             # Pass 1
-            for sig, group_edges in tqdm(
-                prefiltered_groups.items(), desc="Processing dynamic groups (pass 1)"
-            ):
-                rep_supplier = group_edges[0][2]
-                rep_consumer = group_edges[0][3]
-                candidate_supplier_locations = group_edges[0][-2]
-                candidate_consumer_locations = group_edges[0][-1]
+            if len(prefiltered_groups) > 0:
+                for sig, group_edges in tqdm(
+                    prefiltered_groups.items(),
+                    desc="Processing dynamic groups (pass 1)",
+                ):
+                    rep_supplier = group_edges[0][2]
+                    rep_consumer = group_edges[0][3]
+                    candidate_supplier_locations = group_edges[0][-2]
+                    candidate_consumer_locations = group_edges[0][-1]
 
-                new_cf, matched_cf_obj, agg_uncertainty = compute_average_cf(
-                    candidate_suppliers=candidate_supplier_locations,
-                    candidate_consumers=candidate_consumer_locations,
-                    supplier_info=rep_supplier,
-                    consumer_info=rep_consumer,
-                    required_supplier_fields=self.required_supplier_fields,
-                    required_consumer_fields=self.required_consumer_fields,
-                    cf_index=self.cf_index,
-                )
-
-                if new_cf:
-                    for (
-                        supplier_idx,
-                        consumer_idx,
-                        supplier_info,
-                        consumer_info,
-                        _,
-                        _,
-                    ) in group_edges:
-                        add_cf_entry(
-                            cfs_mapping=self.cfs_mapping,
-                            supplier_info=supplier_info,
-                            consumer_info=consumer_info,
-                            direction=direction,
-                            indices=[(supplier_idx, consumer_idx)],
-                            value=new_cf,
-                            uncertainty=agg_uncertainty,
-                        )
-                else:
-                    self.logger.warning(
-                        f"Fallback CF could not be computed for supplier={rep_supplier}, consumer={rep_consumer} "
-                        f"with candidate suppliers={candidate_supplier_locations} and consumers={candidate_consumer_locations}"
+                    new_cf, matched_cf_obj, agg_uncertainty = compute_average_cf(
+                        candidate_suppliers=candidate_supplier_locations,
+                        candidate_consumers=candidate_consumer_locations,
+                        supplier_info=rep_supplier,
+                        consumer_info=rep_consumer,
+                        required_supplier_fields=self.required_supplier_fields,
+                        required_consumer_fields=self.required_consumer_fields,
+                        cf_index=self.cf_index,
                     )
+
+                    if new_cf:
+                        for (
+                            supplier_idx,
+                            consumer_idx,
+                            supplier_info,
+                            consumer_info,
+                            _,
+                            _,
+                        ) in group_edges:
+                            add_cf_entry(
+                                cfs_mapping=self.cfs_mapping,
+                                supplier_info=supplier_info,
+                                consumer_info=consumer_info,
+                                direction=direction,
+                                indices=[(supplier_idx, consumer_idx)],
+                                value=new_cf,
+                                uncertainty=agg_uncertainty,
+                            )
+                    else:
+                        self.logger.warning(
+                            f"Fallback CF could not be computed for supplier={rep_supplier}, consumer={rep_consumer} "
+                            f"with candidate suppliers={candidate_supplier_locations} and consumers={candidate_consumer_locations}"
+                        )
 
             # Pass 2
             compute_cf_memoized = compute_cf_memoized_factory(
@@ -1506,36 +1510,37 @@ class EdgeLCIA:
                 required_consumer_fields=self.required_consumer_fields,
             )
 
-            for (
-                s_key,
-                c_key,
-                (candidate_supplier_locations, candidate_consumer_locations),
-            ), edge_group in tqdm(
-                grouped_edges.items(), desc="Processing dynamic groups (pass 2)"
-            ):
-                new_cf, matched_cf_obj, agg_uncertainty = compute_cf_memoized(
+            if len(grouped_edges) > 0:
+                for (
                     s_key,
                     c_key,
-                    candidate_supplier_locations,
-                    candidate_consumer_locations,
-                )
-
-                if new_cf:
-                    for supplier_idx, consumer_idx in edge_group:
-                        add_cf_entry(
-                            cfs_mapping=self.cfs_mapping,
-                            supplier_info=dict(s_key),
-                            consumer_info=dict(c_key),
-                            direction=direction,
-                            indices=[(supplier_idx, consumer_idx)],
-                            value=new_cf,
-                            uncertainty=agg_uncertainty,
-                        )
-                else:
-                    self.logger.warning(
-                        f"Fallback CF could not be computed for supplier={s_key}, consumer={c_key} "
-                        f"with candidate suppliers={candidate_supplier_locations} and consumers={candidate_consumer_locations}"
+                    (candidate_supplier_locations, candidate_consumer_locations),
+                ), edge_group in tqdm(
+                    grouped_edges.items(), desc="Processing dynamic groups (pass 2)"
+                ):
+                    new_cf, matched_cf_obj, agg_uncertainty = compute_cf_memoized(
+                        s_key,
+                        c_key,
+                        candidate_supplier_locations,
+                        candidate_consumer_locations,
                     )
+
+                    if new_cf:
+                        for supplier_idx, consumer_idx in edge_group:
+                            add_cf_entry(
+                                cfs_mapping=self.cfs_mapping,
+                                supplier_info=dict(s_key),
+                                consumer_info=dict(c_key),
+                                direction=direction,
+                                indices=[(supplier_idx, consumer_idx)],
+                                value=new_cf,
+                                uncertainty=agg_uncertainty,
+                            )
+                    else:
+                        self.logger.warning(
+                            f"Fallback CF could not be computed for supplier={s_key}, consumer={c_key} "
+                            f"with candidate suppliers={candidate_supplier_locations} and consumers={candidate_consumer_locations}"
+                        )
 
         self._update_unprocessed_edges()
 
@@ -1568,7 +1573,7 @@ class EdgeLCIA:
         """
 
         self._initialize_weights()
-        print("Handling contained locations...")
+        logger.info("Handling contained locations…")
 
         cf_operators = {
             cf["supplier"].get("operator", "equals") for cf in self.raw_cfs_data
@@ -1704,47 +1709,49 @@ class EdgeLCIA:
                             )
 
             # Pass 1
-            for sig, group_edges in tqdm(
-                prefiltered_groups.items(), desc="Processing contained groups (pass 1)"
-            ):
-                supplier_info = group_edges[0][2]
-                consumer_info = group_edges[0][3]
-                candidate_supplier_locations = group_edges[0][-2]
-                candidate_consumer_locations = group_edges[0][-1]
+            if len(prefiltered_groups) > 0:
+                for sig, group_edges in tqdm(
+                    prefiltered_groups.items(),
+                    desc="Processing contained groups (pass 1)",
+                ):
+                    supplier_info = group_edges[0][2]
+                    consumer_info = group_edges[0][3]
+                    candidate_supplier_locations = group_edges[0][-2]
+                    candidate_consumer_locations = group_edges[0][-1]
 
-                new_cf, matched_cf_obj, agg_uncertainty = compute_average_cf(
-                    candidate_suppliers=candidate_supplier_locations,
-                    candidate_consumers=candidate_consumer_locations,
-                    supplier_info=supplier_info,
-                    consumer_info=consumer_info,
-                    required_supplier_fields=self.required_supplier_fields,
-                    required_consumer_fields=self.required_consumer_fields,
-                    cf_index=self.cf_index,
-                )
-
-                if new_cf:
-                    for (
-                        supplier_idx,
-                        consumer_idx,
-                        supplier_info,
-                        consumer_info,
-                        _,
-                        _,
-                    ) in group_edges:
-                        add_cf_entry(
-                            cfs_mapping=self.cfs_mapping,
-                            supplier_info=supplier_info,
-                            consumer_info=consumer_info,
-                            direction=direction,
-                            indices=[(supplier_idx, consumer_idx)],
-                            value=new_cf,
-                            uncertainty=agg_uncertainty,
-                        )
-                else:
-                    self.logger.warning(
-                        f"Fallback CF could not be computed for supplier={supplier_info}, consumer={consumer_info} "
-                        f"with candidate suppliers={candidate_supplier_locations} and consumers={candidate_consumer_locations}"
+                    new_cf, matched_cf_obj, agg_uncertainty = compute_average_cf(
+                        candidate_suppliers=candidate_supplier_locations,
+                        candidate_consumers=candidate_consumer_locations,
+                        supplier_info=supplier_info,
+                        consumer_info=consumer_info,
+                        required_supplier_fields=self.required_supplier_fields,
+                        required_consumer_fields=self.required_consumer_fields,
+                        cf_index=self.cf_index,
                     )
+
+                    if new_cf:
+                        for (
+                            supplier_idx,
+                            consumer_idx,
+                            supplier_info,
+                            consumer_info,
+                            _,
+                            _,
+                        ) in group_edges:
+                            add_cf_entry(
+                                cfs_mapping=self.cfs_mapping,
+                                supplier_info=supplier_info,
+                                consumer_info=consumer_info,
+                                direction=direction,
+                                indices=[(supplier_idx, consumer_idx)],
+                                value=new_cf,
+                                uncertainty=agg_uncertainty,
+                            )
+                    else:
+                        self.logger.warning(
+                            f"Fallback CF could not be computed for supplier={supplier_info}, consumer={consumer_info} "
+                            f"with candidate suppliers={candidate_supplier_locations} and consumers={candidate_consumer_locations}"
+                        )
 
             # Pass 2
             compute_cf_memoized = compute_cf_memoized_factory(
@@ -1760,35 +1767,36 @@ class EdgeLCIA:
                 required_consumer_fields=self.required_consumer_fields,
             )
 
-            for (
-                supplier_info,
-                consumer_info,
-                (candidate_suppliers, candidate_consumers),
-            ), edge_group in tqdm(
-                grouped_edges.items(), desc="Processing contained groups (pass 2)"
-            ):
-                new_cf, matched_cf_obj, agg_uncertainty = compute_cf_memoized(
+            if len(grouped_edges) > 0:
+                for (
                     supplier_info,
                     consumer_info,
-                    candidate_suppliers,
-                    candidate_consumers,
-                )
-                if new_cf:
-                    for supplier_idx, consumer_idx in edge_group:
-                        add_cf_entry(
-                            cfs_mapping=self.cfs_mapping,
-                            supplier_info=dict(supplier_info),
-                            consumer_info=dict(consumer_info),
-                            direction=direction,
-                            indices=[(supplier_idx, consumer_idx)],
-                            value=new_cf,
-                            uncertainty=agg_uncertainty,
-                        )
-                else:
-                    self.logger.warning(
-                        f"Fallback CF could not be computed for supplier={supplier_info}, consumer={consumer_info} "
-                        f"with candidate suppliers={candidate_suppliers} and consumers={candidate_consumers}"
+                    (candidate_suppliers, candidate_consumers),
+                ), edge_group in tqdm(
+                    grouped_edges.items(), desc="Processing contained groups (pass 2)"
+                ):
+                    new_cf, matched_cf_obj, agg_uncertainty = compute_cf_memoized(
+                        supplier_info,
+                        consumer_info,
+                        candidate_suppliers,
+                        candidate_consumers,
                     )
+                    if new_cf:
+                        for supplier_idx, consumer_idx in edge_group:
+                            add_cf_entry(
+                                cfs_mapping=self.cfs_mapping,
+                                supplier_info=dict(supplier_info),
+                                consumer_info=dict(consumer_info),
+                                direction=direction,
+                                indices=[(supplier_idx, consumer_idx)],
+                                value=new_cf,
+                                uncertainty=agg_uncertainty,
+                            )
+                    else:
+                        self.logger.warning(
+                            f"Fallback CF could not be computed for supplier={supplier_info}, consumer={consumer_info} "
+                            f"with candidate suppliers={candidate_suppliers} and consumers={candidate_consumers}"
+                        )
 
         self._update_unprocessed_edges()
 
@@ -1820,7 +1828,7 @@ class EdgeLCIA:
         """
 
         self._initialize_weights()
-        print("Handling remaining exchanges...")
+        logger.info("Handling remaining exchanges…")
 
         cf_operators = {
             cf["supplier"].get("operator", "equals") for cf in self.raw_cfs_data
@@ -1891,11 +1899,6 @@ class EdgeLCIA:
             remaining_edges = []
 
             for (consumer_location, supplier_location), edges in edges_index.items():
-                # if any(
-                #    x in ("RoW", "RoE", "GLO")
-                #    for x in (consumer_location, supplier_location)
-                # ):
-                #    continue
 
                 if supplier_location is None:
                     candidate_suppliers_locations = [
@@ -1945,50 +1948,55 @@ class EdgeLCIA:
                             )
 
             # Pass 1
-            for sig, group_edges in tqdm(
-                prefiltered_groups.items(), desc="Processing global groups (pass 1)"
-            ):
-                supplier_info = group_edges[0][2]
-                consumer_info = group_edges[0][3]
+            if len(prefiltered_groups) > 0:
+                for sig, group_edges in tqdm(
+                    prefiltered_groups.items(), desc="Processing global groups (pass 1)"
+                ):
+                    supplier_info = group_edges[0][2]
+                    consumer_info = group_edges[0][3]
 
-                new_cf, matched_cf_obj, agg_uncertainty = compute_average_cf(
-                    candidate_suppliers=global_locations,
-                    candidate_consumers=global_locations,
-                    supplier_info=supplier_info,
-                    consumer_info=consumer_info,
-                    required_supplier_fields=self.required_supplier_fields,
-                    required_consumer_fields=self.required_consumer_fields,
-                    cf_index=self.cf_index,
-                )
-                unc = (
-                    agg_uncertainty
-                    if agg_uncertainty is not None
-                    else (matched_cf_obj.get("uncertainty") if matched_cf_obj else None)
-                )
-
-                if new_cf:
-                    for (
-                        supplier_idx,
-                        consumer_idx,
-                        supplier_info,
-                        consumer_info,
-                        _,
-                        _,
-                    ) in group_edges:
-                        add_cf_entry(
-                            cfs_mapping=self.cfs_mapping,
-                            supplier_info=supplier_info,
-                            consumer_info=consumer_info,
-                            direction=direction,
-                            indices=[(supplier_idx, consumer_idx)],
-                            value=new_cf,
-                            uncertainty=unc,
-                        )
-                else:
-                    self.logger.warning(
-                        f"Fallback CF could not be computed for supplier={supplier_info}, consumer={consumer_info} "
-                        f"with candidate suppliers={global_locations} and consumers={global_locations}"
+                    new_cf, matched_cf_obj, agg_uncertainty = compute_average_cf(
+                        candidate_suppliers=global_locations,
+                        candidate_consumers=global_locations,
+                        supplier_info=supplier_info,
+                        consumer_info=consumer_info,
+                        required_supplier_fields=self.required_supplier_fields,
+                        required_consumer_fields=self.required_consumer_fields,
+                        cf_index=self.cf_index,
                     )
+                    unc = (
+                        agg_uncertainty
+                        if agg_uncertainty is not None
+                        else (
+                            matched_cf_obj.get("uncertainty")
+                            if matched_cf_obj
+                            else None
+                        )
+                    )
+
+                    if new_cf:
+                        for (
+                            supplier_idx,
+                            consumer_idx,
+                            supplier_info,
+                            consumer_info,
+                            _,
+                            _,
+                        ) in group_edges:
+                            add_cf_entry(
+                                cfs_mapping=self.cfs_mapping,
+                                supplier_info=supplier_info,
+                                consumer_info=consumer_info,
+                                direction=direction,
+                                indices=[(supplier_idx, consumer_idx)],
+                                value=new_cf,
+                                uncertainty=unc,
+                            )
+                    else:
+                        self.logger.warning(
+                            f"Fallback CF could not be computed for supplier={supplier_info}, consumer={consumer_info} "
+                            f"with candidate suppliers={global_locations} and consumers={global_locations}"
+                        )
 
             # Pass 2
             compute_cf_memoized = compute_cf_memoized_factory(
@@ -2004,40 +2012,45 @@ class EdgeLCIA:
                 required_consumer_fields=self.required_consumer_fields,
             )
 
-            for (
-                supplier_info,
-                consumer_info,
-                (candidate_suppliers, candidate_consumers),
-            ), edge_group in tqdm(
-                grouped_edges.items(), desc="Processing global groups (pass 2)"
-            ):
-                new_cf, matched_cf_obj, agg_uncertainty = compute_cf_memoized(
+            if len(grouped_edges) > 0:
+                for (
                     supplier_info,
                     consumer_info,
-                    candidate_suppliers,
-                    candidate_consumers,
-                )
-                unc = (
-                    agg_uncertainty
-                    if agg_uncertainty is not None
-                    else (matched_cf_obj.get("uncertainty") if matched_cf_obj else None)
-                )
-                if new_cf:
-                    for supplier_idx, consumer_idx in edge_group:
-                        add_cf_entry(
-                            cfs_mapping=self.cfs_mapping,
-                            supplier_info=dict(supplier_info),
-                            consumer_info=dict(consumer_info),
-                            direction=direction,
-                            indices=[(supplier_idx, consumer_idx)],
-                            value=new_cf,
-                            uncertainty=unc,
-                        )
-                else:
-                    self.logger.warning(
-                        f"Fallback CF could not be computed for supplier={supplier_info}, consumer={consumer_info} "
-                        f"with candidate suppliers={candidate_suppliers} and consumers={candidate_consumers}"
+                    (candidate_suppliers, candidate_consumers),
+                ), edge_group in tqdm(
+                    grouped_edges.items(), desc="Processing global groups (pass 2)"
+                ):
+                    new_cf, matched_cf_obj, agg_uncertainty = compute_cf_memoized(
+                        supplier_info,
+                        consumer_info,
+                        candidate_suppliers,
+                        candidate_consumers,
                     )
+                    unc = (
+                        agg_uncertainty
+                        if agg_uncertainty is not None
+                        else (
+                            matched_cf_obj.get("uncertainty")
+                            if matched_cf_obj
+                            else None
+                        )
+                    )
+                    if new_cf:
+                        for supplier_idx, consumer_idx in edge_group:
+                            add_cf_entry(
+                                cfs_mapping=self.cfs_mapping,
+                                supplier_info=dict(supplier_info),
+                                consumer_info=dict(consumer_info),
+                                direction=direction,
+                                indices=[(supplier_idx, consumer_idx)],
+                                value=new_cf,
+                                uncertainty=unc,
+                            )
+                    else:
+                        self.logger.warning(
+                            f"Fallback CF could not be computed for supplier={supplier_info}, consumer={consumer_info} "
+                            f"with candidate suppliers={candidate_suppliers} and consumers={candidate_consumers}"
+                        )
 
         self._update_unprocessed_edges()
 

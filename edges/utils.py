@@ -35,6 +35,7 @@ from .filesystem_constants import DATA_DIR
 
 
 logger = logging.getLogger(__name__)
+logger.addHandler(logging.NullHandler())
 
 _eval_cache = {}
 
@@ -130,23 +131,41 @@ def add_population_and_gdp_data(data: list, weight: str) -> list:
     # load population data from data/population.yaml
 
     if weight == "population":
-        with open(
-            DATA_DIR / "metadata" / "population.yaml", "r", encoding="utf-8"
-        ) as f:
-            weighting_data = yaml.safe_load(f)
+        path = DATA_DIR / "metadata" / "population.yaml"
+        try:
+            with open(path, "r", encoding="utf-8") as f:
+                weighting_data = yaml.safe_load(f)
+        except FileNotFoundError:
+            logger.error("Population metadata file not found at %s", path)
+            raise
 
     # load GDP data from data/gdp.yaml
     if weight == "gdp":
-        with open(DATA_DIR / "metadata" / "gdp.yaml", "r", encoding="utf-8") as f:
-            weighting_data = yaml.safe_load(f)
+        path = DATA_DIR / "metadata" / "gdp.yaml"
+        try:
+            with open(path, "r", encoding="utf-8") as f:
+                weighting_data = yaml.safe_load(f)
+        except FileNotFoundError:
+            logger.error("GDP metadata file not found at %s", path)
+            raise
 
     # add to the data dictionary
+    missing = 0
     for cf in data:
         for category in ["consumer", "supplier"]:
             if "location" in cf[category]:
                 if "weight" not in cf:
                     k = cf[category]["location"]
-                    cf["weight"] = weighting_data.get(k, 0)
+                    w = weighting_data.get(k, 0)
+                    if not w:
+                        missing += 1
+                    cf["weight"] = w
+    if missing:
+        logger.warning(
+            "Added weights with %d missing entries (defaulted to 0) for weight='%s'",
+            missing,
+            weight,
+        )
 
     return data
 
@@ -207,6 +226,7 @@ def get_flow_matrix_positions(mapping: dict) -> list:
     # Batch retrieve flows using get_activities() (assumed available in bw2data)
     keys = list(mapping.keys())
     flows_objs = get_activities(keys)
+    logger.debug("Resolved %d flow objects for %d keys", len(flows_objs), len(keys))
 
     # Build a lookup mapping both the numeric ID (if available) and (database, code)
     # tuple to the original flow object.
@@ -229,6 +249,7 @@ def get_flow_matrix_positions(mapping: dict) -> list:
                     flow = f
                     break
         if flow is None:
+            logger.error("Flow with key %s not found in fetched objects", k)
             raise KeyError(f"Flow with key {k} not found.")
         data = normalize_flow(flow)
         result.append(
@@ -304,6 +325,12 @@ def get_activities(keys, **kwargs):
             nodes.append(obj)
 
     if len(nodes) != len(keys):
+        logger.error(
+            "Requested %d activities but found %d. Keys (sample): %s",
+            len(keys),
+            len(nodes),
+            keys[:5],
+        )
         raise Exception("Not all requested activity objects were found.")
 
     return nodes

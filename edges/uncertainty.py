@@ -7,13 +7,20 @@ import json
 from copy import deepcopy
 from scipy import stats
 import hashlib
+import logging
 
 from edges.utils import safe_eval
 
 
+logger = logging.getLogger(__name__)
+logger.addHandler(logging.NullHandler())
+
+
 def get_rng_for_key(key: str, base_seed: int) -> np.random.Generator:
     key_digest = int(hashlib.sha256(key.encode()).hexdigest(), 16) % (2**32)
-    return np.random.default_rng(base_seed + key_digest)
+    seed = base_seed + key_digest
+    logger.debug("Creating RNG with derived seed %d for key %s", seed, key)
+    return np.random.default_rng(seed)
 
 
 def make_distribution_key(cf):
@@ -25,6 +32,7 @@ def make_distribution_key(cf):
         return json.dumps(unc_copy, sort_keys=True)
     else:
         # No uncertainty block → return None = skip caching
+        logger.debug("No uncertainty block present; skipping cache key.")
         return None
 
 
@@ -107,7 +115,13 @@ def sample_cf_distribution(
         if dist_name == "discrete_empirical":
             values = params["values"]
             weights = np.array(params["weights"])
-            weights = weights / weights.sum() if weights.sum() != 0 else weights
+            if weights.sum() == 0:
+                logger.warning(
+                    "All weights are zero in discrete_empirical; using equal weights."
+                )
+                weights = np.ones_like(weights, dtype=float) / len(weights)
+            else:
+                weights = weights / weights.sum()
 
             chosen_indices = random_state.choice(len(values), size=n, p=weights)
 
@@ -184,9 +198,15 @@ def sample_cf_distribution(
             samples = np.clip(samples, params["minimum"], params["maximum"])
 
         else:
+            logger.warning(
+                "Unknown distribution '%s'; falling back to constant value.", dist_name
+            )
             samples = np.full(n, cf["value"], dtype=float)
 
     except ValueError as e:
+        logger.error(
+            "Error sampling distribution '%s' with parameters %s", dist_name, params
+        )
         raise ValueError(
             f"Error sampling distribution '{dist_name}' with parameters {params}: {e}"
         )

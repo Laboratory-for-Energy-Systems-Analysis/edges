@@ -11,6 +11,7 @@ from .utils import make_hashable
 import logging
 
 logger = logging.getLogger(__name__)
+logger.addHandler(logging.NullHandler())
 
 
 def preprocess_cfs(cf_list, by="consumer"):
@@ -99,11 +100,13 @@ def process_cf_list(
             best_cf = cf
 
     if best_cf:
-        logger.debug(f"Best matching CF selected with score {best_score}: {best_cf}")
+        logger.debug("Best matching CF selected with score %d: %s", best_score, best_cf)
         results.append(best_cf)
     else:
         logger.debug(
-            f"No matching CF found for supplier {filtered_supplier} and consumer {filtered_consumer}."
+            "No matching CF found for supplier %s and consumer %s.",
+            filtered_supplier,
+            filtered_consumer,
         )
 
     return results
@@ -585,7 +588,7 @@ def compute_average_cf(
         agg_uncertainty: Optional[dict]  # discrete_empirical mixture if >1 CF
     """
     if not candidate_suppliers and not candidate_consumers:
-        logger.debug("No candidate suppliers or consumers provided.")
+        logger.warning("No candidate suppliers or consumers provided.")
         return 0, None, None
 
     valid_location_pairs = [
@@ -596,8 +599,9 @@ def compute_average_cf(
     ]
     if not valid_location_pairs:
         logger.debug(
-            f"No valid location pairs found for suppliers {candidate_suppliers} "
-            f"and consumers {candidate_consumers}."
+            "No valid location pairs found for suppliers %s and consumers %s.",
+            candidate_suppliers,
+            candidate_consumers,
         )
         return 0, None, None
 
@@ -623,16 +627,19 @@ def compute_average_cf(
 
     if not matched:
         logger.debug(
-            f"No matched CFs for supplier {supplier_info} and consumer {consumer_info} "
-            f"with location pairs {valid_location_pairs}."
+            "No matched CFs for supplier %s and consumer %s with location pairs %s.",
+            supplier_info,
+            consumer_info,
+            valid_location_pairs,
         )
         return 0, None, None
 
     total_w = sum(cf.get("weight", 0.0) for cf in matched)
     if total_w == 0:
         logger.warning(
-            f"No valid weights found for supplier {supplier_info} and consumer {consumer_info}. "
-            "Using equal shares."
+            "No valid weights found for supplier %s and consumer %s. Using equal shares.",
+            supplier_info,
+            consumer_info,
         )
         matched_cfs = [(cf, 1.0 / len(matched)) for cf in matched]
     else:

@@ -5,23 +5,15 @@ import logging
 from constructive_geometries import Geomatcher
 from .utils import load_missing_geographies, get_str
 
+logger = logging.getLogger(__name__)
+logger.addHandler(logging.NullHandler())
+
 
 class GeoResolver:
     def __init__(self, weights: dict):
         self.weights = {get_str(k): v for k, v in weights.items()}
         self.weights_key = ",".join(sorted(self.weights.keys()))
-        self.logger = logging.getLogger("GeoResolver")
-        self.logger.setLevel(logging.DEBUG)
-
-        if not self.logger.handlers:
-            fh = logging.FileHandler("georesolver.log")
-            formatter = logging.Formatter(
-                "%(asctime)s %(name)s %(levelname)s: %(message)s", datefmt="%H:%M:%S"
-            )
-            fh.setFormatter(formatter)
-            fh.setLevel(logging.DEBUG)
-            self.logger.addHandler(fh)
-            self.logger.propagate = False
+        self.logger = logging.getLogger(f"{__name__}.{self.__class__.__name__}")
 
         # Dependencies from constructive_geometries and your utils
         self.geo = Geomatcher()
@@ -69,7 +61,7 @@ class GeoResolver:
                         if not containing:
                             break
             except KeyError:
-                self.logger.info(f"Region: {location}. No geometry found.")
+                self.logger.info("Region %s: no geometry found.", location)
 
         return results
 
