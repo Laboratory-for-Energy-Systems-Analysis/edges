@@ -439,3 +439,26 @@ def assert_no_nans_in_cf_list(cf_list: list[dict], file_source: str = "<input>")
                         f"NaN detected in {side} field '{k}' of CF at index {i} "
                         f"in {file_source}: {entry}. This field must be removed or filled."
                     )
+
+
+def _head(seq, n=8):
+    try:
+        seq = list(seq)
+        return seq[:n] + (["…"] if len(seq) > n else [])
+    except Exception:
+        return seq
+
+
+def _short_cf(cf: dict, maxlen=160):
+    """Compact view of a CF for logs."""
+    try:
+        core = {
+            "value": cf.get("value"),
+            "weight": cf.get("weight"),
+            "supplier_loc": cf.get("supplier", {}).get("location"),
+            "consumer_loc": cf.get("consumer", {}).get("location"),
+        }
+        s = json.dumps(core, sort_keys=True)
+        return (s[: maxlen - 1] + "…") if len(s) > maxlen else s
+    except Exception:
+        return str(cf)[:maxlen]

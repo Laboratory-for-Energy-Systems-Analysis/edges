@@ -2,10 +2,10 @@ from collections import defaultdict
 from functools import lru_cache
 import numpy as np
 from copy import deepcopy
-import json
+import json, time
 from typing import NamedTuple, List, Optional
 
-from .utils import make_hashable
+from .utils import make_hashable, _short_cf, _head
 
 
 import logging
@@ -580,120 +580,161 @@ def compute_average_cf(
     required_consumer_fields: set = None,
 ) -> tuple[str | float, Optional[dict], Optional[dict]]:
     """
-    Compute weighted CF and a **canonical** aggregated uncertainty for composite regions.
-    No sampling is performed here.
-    Returns:
-        expr_or_value: str | float
-        matched_cf_obj: Optional[dict]   # present only when exactly 1 CF matched
-        agg_uncertainty: Optional[dict]  # discrete_empirical mixture if >1 CF
+    Compute weighted CF and a canonical aggregated uncertainty for composite regions.
+    Returns: (expr_or_value, matched_cf_obj|None, agg_uncertainty|None)
     """
+    # Optional timing (only if DEBUG)
+    _t0 = time.perf_counter() if logger.isEnabledFor(logging.DEBUG) else None
+
     if not candidate_suppliers and not candidate_consumers:
-        logger.warning("No candidate suppliers or consumers provided.")
+        logger.warning(
+            "CF-AVG: no candidate locations provided | supplier_cands=%s | consumer_cands=%s",
+            candidate_suppliers,
+            candidate_consumers,
+        )
         return 0, None, None
 
+    # -------- Gate 1: location-key presence in cf_index --------
     valid_location_pairs = [
         (s, c)
         for s in candidate_suppliers
         for c in candidate_consumers
         if cf_index.get((s, c))
     ]
-    if not valid_location_pairs:
-        logger.debug(
-            "No valid location pairs found for suppliers %s and consumers %s.",
-            candidate_suppliers,
-            candidate_consumers,
-        )
-        return 0, None, None
 
+    if not valid_location_pairs:
+        if logger.isEnabledFor(logging.DEBUG):
+            # show small sample of what keys do exist for quick diagnosis
+            some_keys = _head(cf_index.keys(), 10)
+            logger.debug(
+                "CF-AVG: no (supplier,consumer) keys in cf_index for candidates "
+                "| suppliers=%s | consumers=%s | sample_index_keys=%s",
+                _head(candidate_suppliers),
+                _head(candidate_consumers),
+                some_keys,
+            )
+        return 0, None, None
+    else:
+        if logger.isEnabledFor(logging.DEBUG):
+            logger.debug(
+                "CF-AVG: %d valid (s,c) keys found (showing up to 10): %s",
+                len(valid_location_pairs),
+                _head(valid_location_pairs, 10),
+            )
+
+    # Build field-filtered views (exclude location; added per-loop)
     filtered_supplier = {
         k: supplier_info[k]
-        for k in required_supplier_fields
+        for k in (required_supplier_fields or ())
         if k in supplier_info and k != "location"
     }
     filtered_consumer = {
         k: consumer_info[k]
-        for k in required_consumer_fields
+        for k in (required_consumer_fields or ())
         if k in consumer_info and k != "location"
     }
 
+    # -------- Gate 2: field/operator/classification match --------
     matched = []
+    total_candidates_seen = 0
+
     for s_loc, c_loc in valid_location_pairs:
-        cands = cf_index.get((s_loc, c_loc))
-        if not cands:
-            continue
+        cands = cf_index.get((s_loc, c_loc)) or []
+        total_candidates_seen += len(cands)
+
         filtered_supplier["location"] = s_loc
         filtered_consumer["location"] = c_loc
-        matched.extend(process_cf_list(cands, filtered_supplier, filtered_consumer))
+
+        got = process_cf_list(cands, filtered_supplier, filtered_consumer)
+        if logger.isEnabledFor(logging.DEBUG) and got:
+            logger.debug(
+                "CF-AVG: matched %d/%d CFs @ (%s,%s); example=%s",
+                len(got),
+                len(cands),
+                s_loc,
+                c_loc,
+                _short_cf(got[0]),
+            )
+        matched.extend(got)
 
     if not matched:
-        logger.debug(
-            "No matched CFs for supplier %s and consumer %s with location pairs %s.",
-            supplier_info,
-            consumer_info,
-            valid_location_pairs,
-        )
+        if logger.isEnabledFor(logging.DEBUG):
+            logger.debug(
+                "CF-AVG: 0 CFs matched after field/classification checks "
+                "| supplier_info=%s | consumer_info=%s | pairs=%s | total_candidates_seen=%d",
+                supplier_info,
+                consumer_info,
+                _head(valid_location_pairs, 10),
+                total_candidates_seen,
+            )
         return 0, None, None
 
+    # Weights
     total_w = sum(cf.get("weight", 0.0) for cf in matched)
     if total_w == 0:
         logger.warning(
-            "No valid weights found for supplier %s and consumer %s. Using equal shares.",
-            supplier_info,
-            consumer_info,
+            "CF-AVG: weights all zero/missing → using equal shares | matched=%d | example=%s",
+            len(matched),
+            _short_cf(matched[0]) if matched else None,
         )
         matched_cfs = [(cf, 1.0 / len(matched)) for cf in matched]
     else:
         matched_cfs = [(cf, cf.get("weight", 0.0) / total_w) for cf in matched]
 
-    assert np.isclose(
-        sum(s for _, s in matched_cfs), 1.0
-    ), f"Total shares must equal 1. Got: {sum(s for _, s in matched_cfs)}"
+    # Safety check on weights; log before assert explodes
+    share_sum = sum(s for _, s in matched_cfs)
+    if logger.isEnabledFor(logging.DEBUG):
+        logger.debug(
+            "CF-AVG: matched=%d | sum_shares=%.6f | example=%s",
+            len(matched_cfs),
+            share_sum,
+            _short_cf(matched_cfs[0][0]) if matched_cfs else None,
+        )
 
-    # Weighted expression for deterministic path
+    assert np.isclose(share_sum, 1.0), f"Total shares must equal 1. Got: {share_sum}"
+
+    # Build deterministic expression (string)
     expressions = [f"({share:.3f} * ({cf['value']}))" for cf, share in matched_cfs]
     expr = " + ".join(expressions)
 
-    # === NEW: aggregated uncertainty as a hierarchical mixture (no sampling) ===
-    # If only one CF: pass through its uncertainty directly
+    # Single CF shortcut (pass-through uncertainty)
     if len(matched_cfs) == 1:
         single_cf = matched_cfs[0][0]
         agg_uncertainty = single_cf.get("uncertainty")
+        if logger.isEnabledFor(logging.DEBUG):
+            dt = (time.perf_counter() - _t0) if _t0 else None
+            logger.debug(
+                "CF-AVG: single CF path | expr=%s | has_unc=%s | dt=%.3f ms",
+                expr,
+                bool(agg_uncertainty),
+                (dt * 1000.0) if dt else -1.0,
+            )
         return (expr, single_cf, agg_uncertainty)
 
+    # Multi-CF aggregated uncertainty
     def _cf_sign(cf_obj) -> int | None:
-        """Infer sign from uncertainty.negative if present, else from numeric value."""
         neg = (cf_obj.get("uncertainty") or {}).get("negative", None)
         if neg in (0, 1):
             return -1 if neg == 1 else +1
         v = cf_obj.get("value")
         if isinstance(v, (int, float)):
-            if v < 0:
-                return -1
-            if v > 0:
-                return +1
-        return None  # unknown (e.g., string expr)
+            return -1 if v < 0 else (+1 if v > 0 else None)
+        return None
 
-    # Try to determine a single aggregate sign across constituents
     cf_signs = [s for (cf, _sh) in matched_cfs if (s := _cf_sign(cf)) is not None]
     agg_sign = (
         cf_signs[0] if (cf_signs and all(s == cf_signs[0] for s in cf_signs)) else None
     )
 
-    # Build child magnitude distributions (no sampling)
-    child_values = []
-    child_weights = []
-
+    child_values, child_weights = [], []
     for cf, share in matched_cfs:
         if share <= 0:
             continue
-
         if cf.get("uncertainty") is not None:
-            # Copy child's uncertainty and strip sign to make it magnitude-only
             u = deepcopy(cf["uncertainty"])
             u["negative"] = 0
             child_unc = u
         else:
-            # Deterministic child → wrap as a 1-point discrete over |value|
             v = cf.get("value")
             if isinstance(v, (int, float)):
                 child_unc = {
@@ -702,43 +743,49 @@ def compute_average_cf(
                     "negative": 0,
                 }
             else:
-                # We can’t build a magnitude distribution from a symbolic string deterministically.
-                # Be conservative: skip aggregated-uncertainty so MC still works (deterministic anyway).
+                if logger.isEnabledFor(logging.DEBUG):
+                    logger.debug(
+                        "CF-AVG: skip agg-unc (symbolic child without unc) | child=%s",
+                        _short_cf(cf),
+                    )
                 return (expr, None, None)
-
         child_values.append(child_unc)
         child_weights.append(float(share))
 
-    # Normalize weights and optionally canonicalize order for stable keys
     wsum = sum(child_weights) or 1.0
     child_weights = [w / wsum for w in child_weights]
 
-    # (Optional but helpful) canonicalize order by serialized child value to stabilize cache keys
     ordering = sorted(
         range(len(child_values)),
         key=lambda i: json.dumps(child_values[i], sort_keys=True),
     )
     child_values = [child_values[i] for i in ordering]
     child_weights = [child_weights[i] for i in ordering]
-    # remove values and weights where weights == 0
+
     filtered = [
         (v, w) for v, w in zip(child_values, child_weights) if w > 0 and v is not None
     ]
     if not filtered:
+        if logger.isEnabledFor(logging.DEBUG):
+            logger.debug("CF-AVG: filtered children empty after cleanup.")
         return 0, None, None
     child_values, child_weights = zip(*filtered)
 
     agg_uncertainty = {
         "distribution": "discrete_empirical",
-        "parameters": {
-            "values": child_values,  # each is a distribution dict (magnitude-only)
-            "weights": child_weights,  # shares
-        },
-        # IMPORTANT: the sign is carried only at the top level so uptake/release share the same cache key
-        # make_distribution_key() already ignores "negative"
+        "parameters": {"values": list(child_values), "weights": list(child_weights)},
     }
     if agg_sign is not None:
         agg_uncertainty["negative"] = 1 if agg_sign == -1 else 0
 
-    # Multi-CF mixture → no single "matched_cf_obj"
+    if logger.isEnabledFor(logging.DEBUG):
+        dt = (time.perf_counter() - _t0) if _t0 else None
+        logger.debug(
+            "CF-AVG: success | children=%d | expr_len=%d | agg_sign=%s | dt=%.3f ms",
+            len(child_values),
+            len(expr),
+            agg_sign,
+            (dt * 1000.0) if dt else -1.0,
+        )
+
     return (expr, None, agg_uncertainty)
