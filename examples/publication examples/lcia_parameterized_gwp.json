@@ -13,8 +13,7 @@
         "matrix": "biosphere"
       },
       "consumer": {
-        "matrix": "technosphere",
-        "type": "process"
+        "matrix": "technosphere"
       },
       "value": "1.0"
     },
@@ -25,8 +24,7 @@
           "matrix": "biosphere"
         },
         "consumer": {
-          "matrix": "technosphere",
-          "type": "process"
+          "matrix": "technosphere"
         },
         "value": "GWP('CH4',H, C_CH4)"
       },
@@ -37,8 +35,7 @@
         "matrix": "biosphere"
       },
       "consumer": {
-        "matrix": "technosphere",
-        "type": "process"
+        "matrix": "technosphere"
       },
       "value": "GWP('N2O',H, C_N2O)"
     }

@@ -11,8 +11,7 @@
           "matrix": "biosphere"
         },
         "consumer": {
-          "matrix": "technosphere",
-          "type": "process"
+          "matrix": "technosphere"
         },
         "value": "1.0"
       },
@@ -23,8 +22,7 @@
           "matrix": "biosphere"
         },
         "consumer": {
-          "matrix": "technosphere",
-          "type": "process"
+          "matrix": "technosphere"
         },
         "value": "28 * (1 + 0.001 * (co2ppm - 410))"
       },
@@ -35,8 +33,7 @@
           "matrix": "biosphere"
         },
         "consumer": {
-          "matrix": "technosphere",
-          "type": "process"
+          "matrix": "technosphere"
         },
         "value": "265 * (1 + 0.0005 * (co2ppm - 410))"
       }

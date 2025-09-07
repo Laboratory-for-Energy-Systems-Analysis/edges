@@ -749,8 +749,10 @@ class EdgeLCIA:
         Leaves near-misses due to 'location' for later geo steps.
         """
 
+        log = self.logger.getChild("map")  # edges.edgelcia.EdgeLCIA.map
+
         self._initialize_weights()
-        self._preprocess_lookups()  # will populate *_bio and *_tech lookups (see patch below)
+        self._preprocess_lookups()  # populates lookups and prefix indexes
 
         # ---- Build direction-specific bundles -----------------------------------
         DIR_BIO = "biosphere-technosphere"
@@ -806,12 +808,56 @@ class EdgeLCIA:
                     self.reversed_supplier_lookup_tech,
                 )
 
-        classification_match_cache = {}
-        entries_before = len(self.cfs_mapping)
+        # --- helpers for concise logging -----------------------------------------
+        def _short(d, limit=180):
+            try:
+                s = str(d)
+            except Exception:
+                s = repr(d)
+            return s if len(s) <= limit else s[: limit - 1] + "…"
+
+        def _count_none(x):
+            return 0 if x is None else (len(x) if hasattr(x, "__len__") else 1)
+
+        # High-level preamble
+        log.debug(
+            "START map_exchanges | biosphere_edges=%d | technosphere_edges=%d | CFs=%d | req_supplier=%s | req_consumer=%s",
+            len(self.biosphere_edges),
+            len(self.technosphere_edges),
+            len(self.raw_cfs_data),
+            sorted(self.required_supplier_fields),
+            sorted(self.required_consumer_fields),
+        )
+        log.debug(
+            "Lookups | supplier_bio=%d keys | supplier_tech=%d keys | consumer=%d keys",
+            len(self.supplier_lookup_bio),
+            len(self.supplier_lookup_tech),
+            len(self.consumer_lookup),
+        )
+
+        matched_positions_total = 0
+        allow_bio_added = 0
+        allow_tec_added = 0
 
         # Bind hot locals (micro-optimization)
         consumer_lookup = self.consumer_lookup
         reversed_consumer_lookup = self.reversed_consumer_lookup
+
+        # ---- Precompute required field tuples (no 'classifications') once
+        req_sup_nc = getattr(self, "_req_sup_nc", None)
+        if req_sup_nc is None:
+            self._req_sup_nc = tuple(
+                sorted(
+                    k for k in self.required_supplier_fields if k != "classifications"
+                )
+            )
+            self._req_con_nc = tuple(
+                sorted(
+                    k for k in self.required_consumer_fields if k != "classifications"
+                )
+            )
+        req_sup_nc = self._req_sup_nc
+        req_con_nc = self._req_con_nc
 
         # Iterate CFs
         for i, cf in enumerate(tqdm(self.raw_cfs_data, desc="Mapping exchanges")):
@@ -825,18 +871,16 @@ class EdgeLCIA:
 
             if not rem:
                 # This direction already fully characterized
+                log.debug("CF[%d] dir=%s skipped: no remaining edges.", i, dir_name)
                 continue
 
             # ---------- SUPPLIER side ----------
-            # Classifications prefilter (only across current adjacency keys)
-            # ---------- SUPPLIER side ----------
             if "classifications" in s_crit:
-                # prefix-indexed fetch; intersect with current adjacency supplier keys
                 s_class_hits = _cls_candidates_from_cf(
                     s_crit["classifications"],
                     (
                         self.cls_prefidx_supplier_bio
-                        if dir_name == "biosphere-technosphere"
+                        if dir_name == DIR_BIO
                         else self.cls_prefidx_supplier_tech
                     ),
                     adjacency_keys=set(ebs.keys()),
@@ -844,51 +888,28 @@ class EdgeLCIA:
             else:
                 s_class_hits = None
 
-            # Non-class matches via cached index (location tested last internally)
             cached_match_with_index.index = s_index
             cached_match_with_index.lookup_mapping = s_lookup
             cached_match_with_index.reversed_lookup = s_reversed
 
-            # ---- Precompute required field tuples (no 'classifications')
-            req_sup_nc = getattr(self, "_req_sup_nc", None)
-            if req_sup_nc is None:
-                self._req_sup_nc = tuple(
-                    sorted(
-                        k
-                        for k in self.required_supplier_fields
-                        if k != "classifications"
-                    )
-                )
-                self._req_con_nc = tuple(
-                    sorted(
-                        k
-                        for k in self.required_consumer_fields
-                        if k != "classifications"
-                    )
-                )
-            req_sup_nc = self._req_sup_nc
-            req_con_nc = self._req_con_nc
-
             s_nonclass = {k: v for k, v in s_crit.items() if k != "classifications"}
             s_out = cached_match_with_index(make_hashable(s_nonclass), req_sup_nc)
 
-            # Full supplier candidates (filter by adjacency & classifications)
-            s_cands = s_out.matches
+            s_matches_raw = list(s_out.matches)  # before adjacency & class refinement
             if s_class_hits is not None:
-                s_cands = list(set(s_cands) & set(s_class_hits))
-            s_cands = [s for s in s_cands if s in ebs]  # must still have consumers
+                s_cands = list(set(s_out.matches) & set(s_class_hits))
+            else:
+                s_cands = list(s_out.matches)
+            # must still have consumers in adjacency
+            s_cands = [s for s in s_cands if s in ebs]
 
-            # near-miss on location only (also filtered by classifications if present)
             s_loc_only = set(s_out.location_only_rejects)
             if s_class_hits is not None:
                 s_loc_only &= set(s_class_hits)
-
             s_loc_required = ("location" in s_crit) and (
                 s_crit.get("location") is not None
             )
 
-            # ---------- CONSUMER side ----------
-            # Classifications prefilter (use current direction’s consumer adjacency keys)
             # ---------- CONSUMER side ----------
             if "classifications" in c_crit:
                 c_class_hits = _cls_candidates_from_cf(
@@ -906,28 +927,82 @@ class EdgeLCIA:
             c_nonclass = {k: v for k, v in c_crit.items() if k != "classifications"}
             c_out = cached_match_with_index(make_hashable(c_nonclass), req_con_nc)
 
-            c_cands = c_out.matches
+            c_matches_raw = list(c_out.matches)
             if c_class_hits is not None:
-                c_cands = list(set(c_cands) & set(c_class_hits))
-            c_cands = [c for c in c_cands if c in ebc]  # must still have suppliers
+                c_cands = list(set(c_out.matches) & set(c_class_hits))
+            else:
+                c_cands = list(c_out.matches)
+            c_cands = [c for c in c_cands if c in ebc]
 
             c_loc_only = set(c_out.location_only_rejects)
             if c_class_hits is not None:
                 c_loc_only &= set(c_class_hits)
-
             c_loc_required = ("location" in c_crit) and (
                 c_crit.get("location") is not None
             )
 
+            # ---- DEBUG: explain empty candidate sets
+            if not s_cands:
+                reason = []
+                if not s_matches_raw:
+                    reason.append("no-index-match")
+                else:
+                    reason.append(f"raw-matches={len(s_matches_raw)}")
+                    if s_class_hits is not None and not (
+                        set(s_matches_raw) & set(s_class_hits)
+                    ):
+                        reason.append("class-filtered-out")
+                    if s_class_hits is None:
+                        reason.append("no-class-filter")
+                    # check adjacency pruning
+                    pruned = [s for s in s_matches_raw if s not in ebs]
+                    if pruned and len(pruned) == len(s_matches_raw):
+                        reason.append("all-pruned-by-adjacency")
+                log.debug(
+                    "CF[%d] dir=%s supplier candidates empty | reasons=%s | s_crit=%s | raw=%d class_hits=%s ebs_keys=%d",
+                    i,
+                    dir_name,
+                    ",".join(reason),
+                    _short(s_crit),
+                    len(s_matches_raw),
+                    _count_none(s_class_hits),
+                    len(ebs),
+                )
+
+            if not c_cands:
+                reason = []
+                if not c_matches_raw:
+                    reason.append("no-index-match")
+                else:
+                    reason.append(f"raw-matches={len(c_matches_raw)}")
+                    if c_class_hits is not None and not (
+                        set(c_matches_raw) & set(c_class_hits)
+                    ):
+                        reason.append("class-filtered-out")
+                    if c_class_hits is None:
+                        reason.append("no-class-filter")
+                    pruned = [c for c in c_matches_raw if c not in ebc]
+                    if pruned and len(pruned) == len(c_matches_raw):
+                        reason.append("all-pruned-by-adjacency")
+                log.debug(
+                    "CF[%d] dir=%s consumer candidates empty | reasons=%s | c_crit=%s | raw=%d class_hits=%s ebc_keys=%d",
+                    i,
+                    dir_name,
+                    ",".join(reason),
+                    _short(c_crit),
+                    len(c_matches_raw),
+                    _count_none(c_class_hits),
+                    len(ebc),
+                )
+
             # ---------- Combine full matches using adjacency intersections ----------
             positions = []
             if s_cands and c_cands:
-                cset = set(c_cands)  # build once; reuse later for allowlists too
+                cset = set(c_cands)
                 for s in s_cands:
                     cs = ebs.get(s)
                     if not cs:
                         continue
-                    # no generator, no rem check here – pruning below already guards it
                     for c in cs:
                         if c in cset:
                             positions.append((s, c))
@@ -942,6 +1017,17 @@ class EdgeLCIA:
                     value=cf["value"],
                     uncertainty=cf.get("uncertainty"),
                 )
+                matched_positions_total += len(positions)
+                log.debug(
+                    "CF[%d] dir=%s MATCH | positions=%d | s_cands=%d c_cands=%d | s_loc_only=%d c_loc_only=%d",
+                    i,
+                    dir_name,
+                    len(positions),
+                    len(s_cands),
+                    len(c_cands),
+                    len(s_loc_only),
+                    len(c_loc_only),
+                )
 
                 # prune matched edges from this direction
                 for s, c in positions:
@@ -953,12 +1039,24 @@ class EdgeLCIA:
                         ebc[c].discard(s)
                         if not ebc[c]:
                             del ebc[c]
+            else:
+                log.debug(
+                    "CF[%d] dir=%s NO-MATCH | s_cands=%d c_cands=%d | s_loc_only=%d c_loc_only=%d | rem=%d",
+                    i,
+                    dir_name,
+                    len(s_cands),
+                    len(c_cands),
+                    len(s_loc_only),
+                    len(c_loc_only),
+                    len(rem),
+                )
 
             # ---------- Build near-miss allowlists (location-only) ----------
             # supplier near-miss with consumer full matches
             if s_loc_required and s_loc_only and c_cands:
                 cset = set(c_cands)
                 bucket = allow_bio if dir_name == DIR_BIO else allow_tec
+                added = 0
                 for s in s_loc_only:
                     cs = ebs.get(s)
                     if not cs:
@@ -968,11 +1066,24 @@ class EdgeLCIA:
                         for c in hit:
                             if (s, c) in rem:
                                 bucket.add((s, c))
+                                added += 1
+                if added:
+                    if dir_name == DIR_BIO:
+                        allow_bio_added += added
+                    else:
+                        allow_tec_added += added
+                    log.debug(
+                        "CF[%d] dir=%s allowlist add (supplier loc-only) | added=%d",
+                        i,
+                        dir_name,
+                        added,
+                    )
 
             # consumer near-miss with supplier full matches
             if c_loc_required and c_loc_only and s_cands:
                 sset = set(s_cands)
                 bucket = allow_bio if dir_name == DIR_BIO else allow_tec
+                added = 0
                 for c in c_loc_only:
                     ss = ebc.get(c)
                     if not ss:
@@ -982,11 +1093,24 @@ class EdgeLCIA:
                         for s in hit:
                             if (s, c) in rem:
                                 bucket.add((s, c))
+                                added += 1
+                if added:
+                    if dir_name == DIR_BIO:
+                        allow_bio_added += added
+                    else:
+                        allow_tec_added += added
+                    log.debug(
+                        "CF[%d] dir=%s allowlist add (consumer loc-only) | added=%d",
+                        i,
+                        dir_name,
+                        added,
+                    )
 
             # both sides near-miss (rare but useful)
             if s_loc_required and c_loc_required and s_loc_only and c_loc_only:
                 cset = set(c_loc_only)
                 bucket = allow_bio if dir_name == DIR_BIO else allow_tec
+                added = 0
                 for s in s_loc_only:
                     cs = ebs.get(s)
                     if not cs:
@@ -996,12 +1120,35 @@ class EdgeLCIA:
                         for c in hit:
                             if (s, c) in rem:
                                 bucket.add((s, c))
+                                added += 1
+                if added:
+                    if dir_name == DIR_BIO:
+                        allow_bio_added += added
+                    else:
+                        allow_tec_added += added
+                    log.debug(
+                        "CF[%d] dir=%s allowlist add (both loc-only) | added=%d",
+                        i,
+                        dir_name,
+                        added,
+                    )
 
         self._update_unprocessed_edges()
 
         # store per-direction allowlists for later passes
         self.eligible_edges_for_next_bio = allow_bio
         self.eligible_edges_for_next_tech = allow_tec
+
+        log.debug(
+            "END map_exchanges | matched_positions=%d | allow_bio=%d | allow_tec=%d | processed_bio=%d | processed_tech=%d | unprocessed_bio=%d | unprocessed_tech=%d",
+            matched_positions_total,
+            len(allow_bio),
+            len(allow_tec),
+            len(self.processed_biosphere_edges),
+            len(self.processed_technosphere_edges),
+            len(self.unprocessed_biosphere_edges),
+            len(self.unprocessed_technosphere_edges),
+        )
 
     def map_aggregate_locations(self) -> None:
         """
