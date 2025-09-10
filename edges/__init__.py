@@ -5,7 +5,7 @@ applying characterization factors conditioned by the context of exchanges.
 
 __all__ = ("EdgeLCIA", "CostLCIA", "get_available_methods")
 
-__version__ = "1.0.1"
+__version__ = "1.0.2"
 
 from .logging_config import setup_package_logging
 from .edgelcia import EdgeLCIA
