@@ -56,6 +56,14 @@ def process_cf_list(
     filtered_supplier: dict,
     filtered_consumer: dict,
 ) -> list:
+    """
+    Select the best-matching CF from a candidate list given supplier/consumer filters.
+
+    :param cf_list: List of candidate CF dictionaries.
+    :param filtered_supplier: Supplier-side fields to match against.
+    :param filtered_consumer: Consumer-side fields to match against.
+    :return: List with the single best CF (or empty if none matched).
+    """
     results = []
     best_score = -1
     best_cf = None
@@ -113,7 +121,13 @@ def process_cf_list(
 
 
 def matches_classifications(cf_classifications, dataset_classifications):
-    """Match CF classification codes to dataset classifications."""
+    """
+    Check if CF classification codes match dataset classifications (prefix logic).
+
+    :param cf_classifications: CF-side classifications (dict or list/tuple).
+    :param dataset_classifications: Dataset classifications as list/tuple pairs.
+    :return: True if at least one scheme/code pair matches by prefix, else False.
+    """
 
     if isinstance(cf_classifications, dict):
         cf_classifications = [
@@ -148,6 +162,14 @@ def matches_classifications(cf_classifications, dataset_classifications):
 
 
 def match_flow(flow: dict, criteria: dict) -> bool:
+    """
+    Match a flow dictionary against criteria with operator and exclude support.
+
+    :param flow: Flow metadata to test.
+    :param criteria: Matching criteria (fields, operator, excludes, classifications).
+    :return: True if all non-special fields match, else False.
+    """
+
     operator = criteria.get("operator", "equals")
     excludes = criteria.get("excludes", [])
 
@@ -215,7 +237,12 @@ def match_operator(value: str, target: str, operator: str) -> bool:
 
 
 def normalize_classification_entries(cf_list: list[dict]) -> list[dict]:
+    """
+    Normalize supplier-side 'classifications' to a flat tuple of (scheme, code).
 
+    :param cf_list: List of CF dictionaries to normalize in-place.
+    :return: The same list with normalized supplier classifications.
+    """
     for cf in cf_list:
         supplier = cf.get("supplier", {})
         classifications = supplier.get("classifications")
@@ -244,8 +271,10 @@ def normalize_classification_entries(cf_list: list[dict]) -> list[dict]:
 
 def build_cf_index(raw_cfs: list[dict]) -> dict:
     """
-    Build a nested CF index:
-        cf_index[(supplier_loc, consumer_loc)] → list of CFs
+    Build a CF index keyed by (supplier_location, consumer_location).
+
+    :param raw_cfs: List of CF dictionaries.
+    :return: Dict mapping (supplier_loc, consumer_loc) -> list of CFs.
     """
     index = defaultdict(list)
 
@@ -260,6 +289,13 @@ def build_cf_index(raw_cfs: list[dict]) -> dict:
 
 @lru_cache(maxsize=None)
 def cached_match_with_index(flow_to_match_hashable, required_fields_tuple):
+    """
+    Cached wrapper of match_with_index using pre-bound globals on the function.
+
+    :param flow_to_match_hashable: Hashable flow dict (e.g., from make_hashable()).
+    :param required_fields_tuple: Tuple of required field names.
+    :return: MatchResult with positions and location-only rejects.
+    """
     flow_to_match = dict(flow_to_match_hashable)
     required_fields = set(required_fields_tuple)
     return match_with_index(
@@ -273,9 +309,11 @@ def cached_match_with_index(flow_to_match_hashable, required_fields_tuple):
 
 def preprocess_flows(flows_list: list, mandatory_fields: set) -> dict:
     """
-    Preprocess flows into a lookup dictionary.
-    Each flow is keyed by a tuple of selected metadata fields.
-    If no fields are present, falls back to a single universal key ().
+    Preprocess flows into a lookup dict keyed by selected metadata fields.
+
+    :param flows_list: Iterable of flow dicts with at least a 'position' key.
+    :param mandatory_fields: Set of fields to include in the key (may be empty).
+    :return: Dict where key is a tuple of (field, value) and value is list of positions.
     """
     lookup = {}
 
@@ -328,6 +366,12 @@ def build_index(lookup: dict, required_fields: set) -> dict:
 
 
 class MatchResult(NamedTuple):
+    """Result container for indexed matching.
+
+    :var matches: List of matched positions.
+    :var location_only_rejects: Map of position -> reason ("location").
+    """
+
     matches: List[int]
     location_only_rejects: dict[int, str]
 
@@ -339,6 +383,16 @@ def match_with_index(
     required_fields: set,
     reversed_lookup: dict,
 ) -> MatchResult:
+    """
+    Match a flow to positions using a per-field inverted index and full criteria.
+
+    :param flow_to_match: Flow fields to match (may include operator/excludes).
+    :param index: Per-field index (from build_index).
+    :param lookup_mapping: Original lookup map: key -> list of positions.
+    :param required_fields: Required fields to consider (including 'location' optionally).
+    :param reversed_lookup: Map of position -> raw flow dict for final validation.
+    :return: MatchResult with full matches and location-only rejects.
+    """
     SPECIAL = {"excludes", "operator", "matrix"}
     nonloc_fields = [f for f in required_fields if f not in SPECIAL and f != "location"]
     has_location_constraint = ("location" in required_fields) and (
@@ -452,6 +506,16 @@ def match_with_index(
 def compute_cf_memoized_factory(
     cf_index, required_supplier_fields, required_consumer_fields, weights
 ):
+    """
+    Factory for a memoized compute_average_cf over signature/location candidates.
+
+    :param cf_index: CF index keyed by (supplier_loc, consumer_loc).
+    :param required_supplier_fields: Required fields for supplier signature.
+    :param required_consumer_fields: Required fields for consumer signature.
+    :param weights: Weight pairs used for region availability checks.
+    :return: Cached function(s_key, c_key, supplier_candidates, consumer_candidates) -> tuple.
+    """
+
     @lru_cache(maxsize=None)
     def compute_cf(s_key, c_key, supplier_candidates, consumer_candidates):
         return compute_average_cf(
@@ -468,6 +532,14 @@ def compute_cf_memoized_factory(
 
 
 def normalize_signature_data(info_dict, required_fields):
+    """
+    Filter and normalize a dict to required fields for signature hashing.
+
+    :param info_dict: Original supplier/consumer info dict.
+    :param required_fields: Required field names to keep.
+    :return: Filtered dict with normalized 'classifications' if present.
+    """
+
     filtered = {k: info_dict[k] for k in required_fields if k in info_dict}
 
     # Normalize classifications
@@ -512,18 +584,15 @@ def resolve_candidate_locations(
     supplier: bool = True,
 ) -> list:
     """
-    Resolve candidate consumer locations from a base location.
+    Resolve candidate locations from a base location using the GeoResolver.
 
-    Parameters:
-    - geo: GeoResolver instance
-    - location: base location string (e.g., "GLO", "CH")
-    - weights: valid weight region codes
-    - containing: if True, return regions containing the location;
-                  if False, return regions contained by the location
-    - exceptions: list of regions to exclude (used with GLO fallback)
-
-    Returns:
-    - list of valid candidate location codes
+    :param geo: GeoResolver instance.
+    :param location: Base location (e.g., "GLO", "CH").
+    :param weights: Frozenset of valid (supplier_loc, consumer_loc) keys.
+    :param containing: If True, return containing regions; else contained regions.
+    :param exceptions: Optional set/list of regions to exclude.
+    :param supplier: If True, validate against supplier side of weight pairs, else consumer.
+    :return: List of valid candidate location codes.
     """
     try:
         candidates = geo.resolve(
@@ -544,6 +613,14 @@ def resolve_candidate_locations(
 def group_edges_by_signature(
     edge_list, required_supplier_fields, required_consumer_fields
 ):
+    """
+    Group edges by (supplier signature, consumer signature, candidate locations).
+
+    :param edge_list: Iterable of (s_idx, c_idx, s_info, c_info, s_cands, c_cands).
+    :param required_supplier_fields: Supplier fields required for signature.
+    :param required_consumer_fields: Consumer fields required for signature.
+    :return: Dict[(s_key, c_key, (s_cands, c_cands))] -> list of (s_idx, c_idx).
+    """
     grouped = defaultdict(list)
 
     for (
@@ -580,8 +657,16 @@ def compute_average_cf(
     required_consumer_fields: set = None,
 ) -> tuple[str | float, Optional[dict], Optional[dict]]:
     """
-    Compute weighted CF and a canonical aggregated uncertainty for composite regions.
-    Returns: (expr_or_value, matched_cf_obj|None, agg_uncertainty|None)
+    Compute a weighted CF expression and aggregated uncertainty for composite regions.
+
+    :param candidate_suppliers: Candidate supplier locations.
+    :param candidate_consumers: Candidate consumer locations.
+    :param supplier_info: Supplier-side criteria (fields used for matching).
+    :param consumer_info: Consumer-side criteria (fields used for matching).
+    :param cf_index: CF index keyed by (supplier_loc, consumer_loc).
+    :param required_supplier_fields: Required supplier fields (exclude location here).
+    :param required_consumer_fields: Required consumer fields (exclude location here).
+    :return: Tuple (expr_or_value, matched_cf_obj_or_None, aggregated_uncertainty_or_None).
     """
     # Optional timing (only if DEBUG)
     _t0 = time.perf_counter() if logger.isEnabledFor(logging.DEBUG) else None

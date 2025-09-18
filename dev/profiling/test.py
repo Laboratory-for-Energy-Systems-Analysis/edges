@@ -1,3 +1,5 @@
+from numpy.f2py.cfuncs import includes
+
 from edges import EdgeLCIA, get_available_methods
 import bw2data, bw2io
 import time
@@ -19,7 +21,7 @@ act = [
 method = ("AWARE 2.0", "Country", "all", "yearly")
 # method = ("GeoPolRisk", "paired", "2024")
 
-LCA = EdgeLCIA({act: 1}, method)
+LCA = EdgeLCIA({act: 1}, method, use_distributions=True, iterations=10000)
 LCA.lci()
 
 LCA.map_exchanges()
@@ -30,6 +32,9 @@ LCA.map_remaining_locations_to_global()
 
 LCA.evaluate_cfs()
 LCA.lcia()
+
+df = LCA.generate_cf_table(include_unmatched=False)
+df.to_excel("df_AWARE.xlsx")
 
 # Stop timer
 elapsed_time = time.time() - start_time

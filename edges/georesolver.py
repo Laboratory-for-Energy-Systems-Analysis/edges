@@ -10,7 +10,20 @@ logger.addHandler(logging.NullHandler())
 
 
 class GeoResolver:
+    """
+    Resolve geographic containment/coverage using constructive_geometries + project weights.
+
+    :param weights: Mapping of (supplier_loc, consumer_loc) tuples to numeric weights.
+    :return: GeoResolver instance.
+    """
+
     def __init__(self, weights: dict):
+        """
+        Initialize the resolver and normalize internal weight keys.
+
+        :param weights: Mapping of (supplier_loc, consumer_loc) -> weight value.
+        :return: None
+        """
         self.weights = {get_str(k): v for k, v in weights.items()}
         self.weights_key = ",".join(sorted(self.weights.keys()))
         self.logger = logging.getLogger(f"{__name__}.{self.__class__.__name__}")
@@ -27,7 +40,13 @@ class GeoResolver:
         exceptions: tuple | None = None,
     ) -> list[str]:
         """
-        Find the locations containing or contained by a given location.
+        Find locations that contain (or are contained by) a given location, filtered by availability.
+
+        :param location: Base location code to resolve from.
+        :param weights_available: Iterable of allowed region codes to consider.
+        :param containing: If True, return regions that contain the base location; else contained regions.
+        :param exceptions: Optional tuple of region codes to exclude.
+        :return: List of matching region codes, filtered and ordered as discovered.
         """
         results = []
 
@@ -69,6 +88,14 @@ class GeoResolver:
     def _cached_lookup(
         self, location: str, containing: bool, exceptions: tuple | None = None
     ) -> list:
+        """
+        Cached backend for resolving candidate locations.
+
+        :param location: Base location code.
+        :param containing: If True, resolve containing regions; else contained regions.
+        :param exceptions: Optional tuple of region codes to exclude.
+        :return: List of candidate region codes.
+        """
         return self.find_locations(
             location=location,
             weights_available=tuple(self.weights.keys()),
@@ -79,6 +106,14 @@ class GeoResolver:
     def resolve(
         self, location: str, containing=True, exceptions: list[str] | None = None
     ) -> list:
+        """
+        Resolve candidate regions for a given location with caching.
+
+        :param location: Base location code.
+        :param containing: If True, resolve containing regions; else contained regions.
+        :param exceptions: Optional list of region codes to exclude.
+        :return: List of candidate region codes.
+        """
         return self._cached_lookup(
             location=get_str(location),
             containing=containing,
@@ -91,6 +126,14 @@ class GeoResolver:
         containing=True,
         exceptions_map: dict[str, list[str]] | None = None,
     ) -> dict[str, list[str]]:
+        """
+        Resolve candidate regions for multiple locations at once.
+
+        :param locations: List of base location codes.
+        :param containing: If True, resolve containing regions; else contained regions.
+        :param exceptions_map: Optional mapping of location -> list of regions to exclude.
+        :return: Dict mapping each input location to its list of candidate region codes.
+        """
         return {
             loc: self.resolve(
                 loc, containing, exceptions_map.get(loc) if exceptions_map else None

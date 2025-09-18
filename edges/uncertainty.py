@@ -1,5 +1,6 @@
 """
-This module contains the Uncertainty class, which is responsible for handling
+Utilities for uncertainty handling: RNG derivation, cache keys, canonicalization,
+and sampling of characterization-factor (CF) uncertainty distributions.
 """
 
 import numpy as np
@@ -17,6 +18,13 @@ logger.addHandler(logging.NullHandler())
 
 
 def get_rng_for_key(key: str, base_seed: int) -> np.random.Generator:
+    """
+    Derive a reproducible RNG from a base seed and a string key.
+
+    :param key: Arbitrary identifier (e.g., CF uncertainty fingerprint).
+    :param base_seed: Base integer seed.
+    :return: Numpy random.Generator instance initialized from derived seed.
+    """
     key_digest = int(hashlib.sha256(key.encode()).hexdigest(), 16) % (2**32)
     seed = base_seed + key_digest
     logger.debug("Creating RNG with derived seed %d for key %s", seed, key)
@@ -24,7 +32,12 @@ def get_rng_for_key(key: str, base_seed: int) -> np.random.Generator:
 
 
 def make_distribution_key(cf):
-    """Generate a hashable cache key for CF uncertainty sampling."""
+    """
+    Generate a stable, hashable cache key for a CF's uncertainty block.
+
+    :param cf: CF dictionary potentially containing an 'uncertainty' entry.
+    :return: JSON string key without 'negative' flag, or None if no uncertainty.
+    """
     unc = cf.get("uncertainty")
     if unc:
         unc_copy = dict(unc)  # shallow copy
@@ -38,10 +51,14 @@ def make_distribution_key(cf):
 
 def _canon_atom(item):
     """
-    Return (canonical_object, fingerprint_string) for a mixture atom.
-    - If item is a nested distribution dict, remove 'negative', and for
-      discrete_empirical recursively canonicalize and sort by fingerprint.
-    - If item is a scalar or expression string, return as-is with a const fingerprint.
+    Canonicalize a mixture atom and return its fingerprint.
+
+    - If ``item`` is a distribution dict, remove 'negative'; for
+      ``discrete_empirical`` recursively canonicalize children and merge duplicates.
+    - If scalar or expression string, return as-is.
+
+    :param item: Scalar, expression string, or distribution dict.
+    :return: Tuple (canonical_object, fingerprint_string).
     """
     if isinstance(item, dict) and "distribution" in item:
         clean = deepcopy(item)
@@ -92,8 +109,20 @@ def sample_cf_distribution(
     SAFE_GLOBALS: dict = None,
 ) -> np.ndarray:
     """
-    Generate n random CF values from the distribution info in the 'uncertainty' key.
-    Falls back to a constant value if no uncertainty. If 'negative' == 1, samples are negated.
+    Draw samples from the CF's uncertainty distribution (or constant fallback).
+
+    If no uncertainty or distributions are disabled, returns a length-``n`` array
+    filled with the (possibly evaluated) deterministic CF value.
+
+    :param cf: CF dictionary with 'value' and optional 'uncertainty' specification.
+    :param n: Number of samples to generate.
+    :param parameters: Parameter dict for evaluating expression atoms.
+    :param random_state: RNG to use for sampling.
+    :param use_distributions: If False, bypass uncertainty and return constants.
+    :param SAFE_GLOBALS: Safe globals for expression evaluation.
+    :return: NumPy array of shape (n,) with sampled CF values.
+
+    :raises ValueError: If sampling fails due to invalid distribution parameters.
     """
     if not use_distributions or cf.get("uncertainty") is None:
         # If value is a string (expression), evaluate once

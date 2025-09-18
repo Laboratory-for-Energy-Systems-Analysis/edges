@@ -54,6 +54,19 @@ logger = logging.getLogger(__name__)
 def add_cf_entry(
     cfs_mapping, supplier_info, consumer_info, direction, indices, value, uncertainty
 ):
+    """
+    Append a characterized-exchange entry to the in-memory CF mapping.
+
+    :param cfs_mapping: Target list that collects CF entries.
+    :param supplier_info: Supplier-side metadata for this CF (matrix, location, classifications, etc.).
+    :param consumer_info: Consumer-side metadata for this CF (location, classifications, etc.).
+    :param direction: Exchange direction the CF applies to.
+    :param indices: Pairs of (supplier_idx, consumer_idx) covered by this CF.
+    :param value: CF value or symbolic expression.
+    :param uncertainty: Optional uncertainty specification for this CF.
+    :return: None
+    """
+
     supplier_entry = dict(supplier_info)
     consumer_entry = dict(consumer_info)
 
@@ -77,7 +90,10 @@ def add_cf_entry(
 @lru_cache(maxsize=None)
 def _equality_supplier_signature_cached(hashable_supplier_info: tuple) -> tuple:
     """
-    Cached version of _equality_supplier_signature, keyed by pre-hashable tuple.
+    Create a normalized, hashable signature for supplier matching (cached).
+
+    :param hashable_supplier_info: Pre-hashable supplier info tuple.
+    :return: A tuple representing the normalized supplier signature.
     """
     info = dict(hashable_supplier_info)
 
@@ -104,8 +120,10 @@ def _equality_supplier_signature_cached(hashable_supplier_info: tuple) -> tuple:
 
 def _collect_cf_prefixes_used_by_method(raw_cfs_data):
     """
-    Return {scheme_lower: frozenset({prefixes})} of CF codes that will be queried.
-    We only build prefix buckets that we will actually ask for.
+    Collect all classification prefixes that appear in a CF method.
+
+    :param data: Raw LCIA method data.
+    :return: A set of prefixes found in CF entries.
     """
     needed = {}
 
@@ -136,14 +154,11 @@ def _build_prefix_index_restricted(
     idx_to_norm_classes: dict[int, tuple], required_prefixes: dict[str, frozenset[str]]
 ):
     """
-    Build {scheme: {prefix: set(indices)}} but *only* for prefixes we will query.
+    Build an index mapping classification prefixes to activities.
 
-    For each dataset code 'base', we generate all progressive prefixes of 'base'
-    and, if a generated prefix is among required_prefixes[scheme], we add the index.
-    This matches your startswith() semantics exactly.
-
-    idx_to_norm_classes is like self.supplier_cls_bio etc.:
-       {pos_idx: (("scheme", ("code1", "code2", ...)), ...)}
+    :param activities: Iterable of activity datasets.
+    :param required_prefixes: Prefixes to include in the index.
+    :return: Dict mapping prefix -> set of activity keys.
     """
     out = {
         scheme: {p: set() for p in prefs} for scheme, prefs in required_prefixes.items()
@@ -176,9 +191,10 @@ def _cls_candidates_from_cf(
     adjacency_keys: set[int] | None = None,
 ) -> set[int]:
     """
-    From CF classifications (any allowed format), fetch the union of positions
-    whose dataset codes start with any given CF code (per scheme), using the prefix index.
-    Optionally intersect with current adjacency keys.
+    Extract classification candidates from a CF entry.
+
+    :param cf: Characterization factor entry.
+    :return: Dict of classification scheme -> list of codes.
     """
     if not cf_classifications:
         return set()
@@ -208,6 +224,9 @@ def _norm_cls(x):
     Accepts:
       - dict: {"CPC": ["01","02"], "ISIC": ["A"]}
       - list/tuple of pairs: [("CPC","01"), ("CPC",["02","03"]), ("ISIC","A")]
+
+    :param c: Classification entry (tuple or dict).
+    :return: Normalized classification tuple.
     """
     if not x:
         return ()
@@ -364,6 +383,12 @@ class EdgeLCIA:
         self._cached_supplier_keys = self._get_candidate_supplier_keys()
 
     def _load_raw_lcia_data(self):
+        """
+        Load and validate raw LCIA data for a given method.
+
+        :param method: Method identifier.
+        :return: Parsed LCIA data structure.
+        """
         if self.filepath is None:
             self.filepath = DATA_DIR / f"{'_'.join(self.method)}.json"
         if not self.filepath.is_file():
@@ -406,6 +431,12 @@ class EdgeLCIA:
         self.cf_index = build_cf_index(self.raw_cfs_data)
 
     def _initialize_weights(self):
+        """
+        Initialize weights for scenarios and parameters.
+
+        :return: None
+        """
+
         if self.weights is not None:
             return
 
@@ -427,6 +458,13 @@ class EdgeLCIA:
             self._geo._cached_lookup.cache_clear()
 
     def _get_candidate_supplier_keys(self):
+        """
+        Get possible supplier activity keys matching a CF entry.
+
+        :param cf: Characterization factor entry.
+        :return: List of supplier activity keys.
+        """
+
         if hasattr(self, "_cached_supplier_keys"):
             return self._cached_supplier_keys
 
@@ -458,6 +496,13 @@ class EdgeLCIA:
         return keys
 
     def _detect_cf_grouping_mode(self):
+        """
+        Detect the grouping mode of a CF entry (e.g. technosphere vs biosphere).
+
+        :param cf: Characterization factor entry.
+        :return: Grouping mode string.
+        """
+
         has_consumer_locations = any(
             "location" in cf.get("consumer", {}) for cf in self.raw_cfs_data
         )
@@ -474,6 +519,14 @@ class EdgeLCIA:
     def _resolve_parameters_for_scenario(
         self, scenario_idx: int, scenario_name: Optional[str] = None
     ) -> dict:
+        """
+        Resolve symbolic parameters for a given scenario.
+
+        :param params: Dict of parameter definitions.
+        :param scenario: Scenario name.
+        :return: Dict of resolved parameter values.
+        """
+
         scenario_name = scenario_name or self.scenario
 
         param_set = self.parameters.get(scenario_name)
@@ -493,6 +546,13 @@ class EdgeLCIA:
         return resolved
 
     def _update_unprocessed_edges(self):
+        """
+        Add new edges to the list of unprocessed edges.
+
+        :param new_edges: Iterable of edges.
+        :return: None
+        """
+
         self.processed_biosphere_edges = {
             pos
             for cf in self.cfs_mapping
@@ -539,6 +599,8 @@ class EdgeLCIA:
           - self.reversed_consumer_lookup
           - self.consumer_loc / self.consumer_cls
           - (compat) self.supplier_lookup
+
+        :return: None
         """
 
         # ---- What fields are required on the CONSUMER side (ignore control/meta fields)
@@ -655,6 +717,13 @@ class EdgeLCIA:
         )
 
     def _get_consumer_info(self, consumer_idx):
+        """
+        Extract consumer information from an exchange.
+
+        :param exc: Exchange dataset.
+        :return: Dict with consumer attributes.
+        """
+
         info = self.reversed_consumer_lookup.get(consumer_idx, {})
         if "location" not in info or "classifications" not in info:
             fallback = self.position_to_technosphere_flows_lookup.get(consumer_idx, {})
@@ -704,6 +773,8 @@ class EdgeLCIA:
         and initializes flow matrices used in downstream CF mapping.
 
         Must be called before `map_exchanges()` or any mapping or evaluation step.
+
+        :return: None
         """
 
         self.lca.lci()
@@ -747,6 +818,8 @@ class EdgeLCIA:
         """
         Direction-aware matching with per-direction adjacency, indices, and allowlists.
         Leaves near-misses due to 'location' for later geo steps.
+
+        :return: None
         """
 
         log = self.logger.getChild("map")  # edges.edgelcia.EdgeLCIA.map
@@ -1178,6 +1251,8 @@ class EdgeLCIA:
         -------
         - Extends `cfs_mapping` with newly matched aggregate CFs.
         - Updates internal lists of `processed_*` and `unprocessed_*` edges.
+
+        :return: None
         """
 
         self._initialize_weights()
@@ -1446,6 +1521,8 @@ class EdgeLCIA:
         -------
         - Adds dynamic-region CFs to `cfs_mapping`
         - Updates internal lists of processed and unprocessed exchanges
+
+        :return: None
         """
 
         self._initialize_weights()
@@ -1717,6 +1794,8 @@ class EdgeLCIA:
         -------
         - Adds fallback CFs to `cfs_mapping`
         - Updates internal tracking of processed edges
+
+        :return: None
         """
 
         self._initialize_weights()
@@ -1972,6 +2051,8 @@ class EdgeLCIA:
         -------
         - Adds fallback CFs to `cfs_mapping`
         - Marks remaining exchanges as processed
+
+        :return: None
         """
 
         self._initialize_weights()
@@ -2243,6 +2324,8 @@ class EdgeLCIA:
         -------
         - Sets `characterization_matrix`
         - Populates `scenario_cfs` with resolved CFs
+
+        :return: None
         """
 
         if self.use_distributions and self.iterations > 1:
@@ -2401,6 +2484,8 @@ class EdgeLCIA:
         - Stores `characterized_inventory` as a matrix or tensor
 
         If no exchanges are matched, the score defaults to 0.
+
+        :return: None
         """
 
         # check that teh sum of processed biosphere and technosphere
@@ -2787,6 +2872,11 @@ class EdgeLCIA:
 
     @property
     def geo(self):
+        """
+        Get the GeoResolver instance for location containment checks.
+
+        :return: GeoResolver object.
+        """
         if getattr(self, "_geo", None) is None:
             self._geo = GeoResolver(self.weights)
         return self._geo
