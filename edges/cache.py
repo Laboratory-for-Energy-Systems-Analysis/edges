@@ -24,6 +24,7 @@ How to use
 
 This module is dependency-light (pandas/pyarrow optional; falls back to CSV).
 """
+
 from __future__ import annotations
 
 from dataclasses import dataclass, asdict
@@ -49,12 +50,15 @@ CACHE_DIR = platformdirs.user_data_path(appname="edges", appauthor="psi-lea")
 # Utilities
 # ---------------------------------------------------------------------------
 
+
 def _sha256_bytes(b: bytes) -> str:
     return hashlib.sha256(b).hexdigest()
 
 
 def _sha256_obj(obj: t.Any) -> str:
-    return hashlib.sha256(json.dumps(obj, sort_keys=True, default=str).encode("utf-8")).hexdigest()
+    return hashlib.sha256(
+        json.dumps(obj, sort_keys=True, default=str).encode("utf-8")
+    ).hexdigest()
 
 
 def _norm_none(x):
@@ -64,6 +68,7 @@ def _norm_none(x):
 # ---------------------------------------------------------------------------
 # Backend interface
 # ---------------------------------------------------------------------------
+
 
 class CacheBackend:
     """Abstract-ish persistence backend.
@@ -184,7 +189,7 @@ class CacheBackend:
         if not rows:
             return
         existing = self.read_eval_rows(eval_key)
-        merged = { (r["cf_hash"], r["scenario_idx"]): r for r in existing }
+        merged = {(r["cf_hash"], r["scenario_idx"]): r for r in existing}
         for r in rows:
             merged[(r["cf_hash"], r["scenario_idx"])] = r
         out = list(merged.values())
@@ -239,6 +244,7 @@ class CacheBackend:
 # Data rows
 # ---------------------------------------------------------------------------
 
+
 @dataclass
 class MappingRow:
     # identity
@@ -288,6 +294,7 @@ class EvalRow:
 # Higher-level caches
 # ---------------------------------------------------------------------------
 
+
 class MethodCache:
     """Persist method-level computed structures (cf_index, prefix sets, fields).
     Caller is responsible to ensure objects are JSON-serializable or converted.
@@ -332,11 +339,13 @@ class MappingCache:
 
     # ---------- key utilities ----------
     @staticmethod
-    def make_context_key(project: str,
-                         method_hash: str,
-                         weights_hash: str,
-                         geo_hash: str,
-                         params_hash: str) -> str:
+    def make_context_key(
+        project: str,
+        method_hash: str,
+        weights_hash: str,
+        geo_hash: str,
+        params_hash: str,
+    ) -> str:
         """Return a fixed-length, filesystem-safe key for this context.
 
         We hash the structured payload so filenames stay small (<255 chars) on all OSes.
@@ -387,7 +396,9 @@ class MappingCache:
     def save_for_context(self, context_key: str, rows: list[MappingRow]) -> None:
         self.backend.write_mapping_rows(context_key, [r.to_dict() for r in rows])
 
-    def append_mapping_rows(self, context_key: str, new_rows: list[MappingRow | dict]) -> int:
+    def append_mapping_rows(
+        self, context_key: str, new_rows: list[MappingRow | dict]
+    ) -> int:
         # read existing (dicts)
         existing = self.backend.read_mapping_rows(context_key)
         # normalize new rows to dicts
@@ -401,6 +412,7 @@ class MappingCache:
 # ---------------------------------------------------------------------------
 # Glue helpers for EdgeLCIA
 # ---------------------------------------------------------------------------
+
 
 class EdgeCacheGlue:
     """Small adapter with pure functions that EdgeLCIA can call.
@@ -456,20 +468,34 @@ class EdgeCacheGlue:
 
     @staticmethod
     def _supplier_sig_from_idx(edge, idx: int, direction: str) -> str:
-        rev = edge.reversed_supplier_lookup_bio if direction == "biosphere-technosphere" else edge.reversed_supplier_lookup_tech
+        rev = (
+            edge.reversed_supplier_lookup_bio
+            if direction == "biosphere-technosphere"
+            else edge.reversed_supplier_lookup_tech
+        )
         info = rev.get(idx, {})
         # reuse the existing normalization
         from .edgelcia import _equality_supplier_signature_cached, make_hashable  # type: ignore
-        return _sha256_obj(tuple(_equality_supplier_signature_cached(make_hashable(info))))
+
+        return _sha256_obj(
+            tuple(_equality_supplier_signature_cached(make_hashable(info)))
+        )
 
     @staticmethod
     def _consumer_sig_from_idx(edge, idx: int) -> str:
         info = edge._get_consumer_info(idx)  # attaches classifications if missing
         # Normalize similar to supplier path
         from .edgelcia import make_hashable  # type: ignore
+
         norm = {
             k: info.get(k)
-            for k in ("name", "reference product", "unit", "location", "classifications")
+            for k in (
+                "name",
+                "reference product",
+                "unit",
+                "location",
+                "classifications",
+            )
             if k in info
         }
         return _sha256_obj(tuple(make_hashable(norm)))
@@ -511,15 +537,21 @@ class EdgeCacheGlue:
                 # Resolve current (i, j) indices from cached act IDs
                 if direction == "biosphere-technosphere":
                     if not hasattr(edge, "_bio_id_to_row"):
-                        edge._bio_id_to_row = {str(v): k for k, v in edge.reversed_biosphere.items()}
+                        edge._bio_id_to_row = {
+                            str(v): k for k, v in edge.reversed_biosphere.items()
+                        }
                     i = edge._bio_id_to_row.get(str(r.supplier_act_id))
                 else:
                     if not hasattr(edge, "_act_id_to_row"):
-                        edge._act_id_to_row = {str(v): k for k, v in edge.reversed_activity.items()}
+                        edge._act_id_to_row = {
+                            str(v): k for k, v in edge.reversed_activity.items()
+                        }
                     i = edge._act_id_to_row.get(str(r.supplier_act_id))
 
                 if not hasattr(edge, "_act_id_to_col"):
-                    edge._act_id_to_col = {str(v): k for k, v in edge.reversed_activity.items()}
+                    edge._act_id_to_col = {
+                        str(v): k for k, v in edge.reversed_activity.items()
+                    }
                 j = edge._act_id_to_col.get(str(r.consumer_act_id))
 
                 # Missing in current inventory -> skip
@@ -539,7 +571,11 @@ class EdgeCacheGlue:
                 )
                 consumer_info = edge._get_consumer_info(j)
 
-                val = r.value_numeric if r.value_numeric is not None else (r.value_expr or 0)
+                val = (
+                    r.value_numeric
+                    if r.value_numeric is not None
+                    else (r.value_expr or 0)
+                )
                 unc = json.loads(r.uncertainty_json) if r.uncertainty_json else None
 
                 add_cf_entry(
@@ -580,24 +616,34 @@ class EdgeCacheGlue:
         for cf in new:
             direction = cf["direction"]
             val = cf.get("value")
-            value_numeric = float(val) if isinstance(val, (int, float, np.floating)) else None
-            value_expr = None if value_numeric is not None else (str(val) if val is not None else None)
-            uncertainty_json = json.dumps(cf.get("uncertainty"), sort_keys=True) if cf.get(
-                "uncertainty") is not None else None
+            value_numeric = (
+                float(val) if isinstance(val, (int, float, np.floating)) else None
+            )
+            value_expr = (
+                None
+                if value_numeric is not None
+                else (str(val) if val is not None else None)
+            )
+            uncertainty_json = (
+                json.dumps(cf.get("uncertainty"), sort_keys=True)
+                if cf.get("uncertainty") is not None
+                else None
+            )
 
-            for (i, j) in cf["positions"]:
-                rows.append({
-                    "direction": direction,
-                    "supplier_act_id": self._supplier_act_id(edge, i, direction),
-                    "consumer_act_id": self._consumer_act_id(edge, j),
-                    "supplier_sig": self._supplier_sig_from_idx(edge, i, direction),
-                    "consumer_sig": self._consumer_sig_from_idx(edge, j),
-                    "value_numeric": value_numeric,
-                    "value_expr": value_expr,
-                    "uncertainty_json": uncertainty_json,
-                })
+            for i, j in cf["positions"]:
+                rows.append(
+                    {
+                        "direction": direction,
+                        "supplier_act_id": self._supplier_act_id(edge, i, direction),
+                        "consumer_act_id": self._consumer_act_id(edge, j),
+                        "supplier_sig": self._supplier_sig_from_idx(edge, i, direction),
+                        "consumer_sig": self._consumer_sig_from_idx(edge, j),
+                        "value_numeric": value_numeric,
+                        "value_expr": value_expr,
+                        "uncertainty_json": uncertainty_json,
+                    }
+                )
 
         # ⬇️ append via cache and return the backend’s count
         written = self.mapping_cache.append_mapping_rows(ctx_key, rows)
         return int(written or 0)
-

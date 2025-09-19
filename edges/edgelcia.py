@@ -56,7 +56,6 @@ except Exception:
     CacheBackend = MappingCache = EdgeCacheGlue = None  # fallback
 
 
-
 def add_cf_entry(
     cfs_mapping, supplier_info, consumer_info, direction, indices, value, uncertainty
 ):
@@ -391,7 +390,9 @@ class EdgeLCIA:
                 self._mapping_cache = MappingCache(backend)
                 self._cache_glue = EdgeCacheGlue(self._mapping_cache)
             except Exception:
-                self.logger.exception("Failed to initialize cache backend. Continuing without cache.")
+                self.logger.exception(
+                    "Failed to initialize cache backend. Continuing without cache."
+                )
                 self._cache_glue = None
 
     def _load_raw_lcia_data(self):
@@ -747,7 +748,9 @@ class EdgeLCIA:
         if not self._cache_glue:
             return 0
         try:
-            written = self._cache_glue.save_new_matches(self, self._cache_last_saved_len)
+            written = self._cache_glue.save_new_matches(
+                self, self._cache_last_saved_len
+            )
             self._cache_last_saved_len = len(self.cfs_mapping)
             return written
         except Exception:
@@ -763,7 +766,6 @@ class EdgeLCIA:
             CacheBackend.default().clear()
         except Exception:
             pass
-
 
     def _get_consumer_info(self, consumer_idx):
         """
@@ -895,13 +897,14 @@ class EdgeLCIA:
         # add preload here
         restored = self._cache_preload_if_any()
         if restored:
-            self.logger.info("Cache restored %d characterized exchange positions.", restored)
+            self.logger.info(
+                "Cache restored %d characterized exchange positions.", restored
+            )
 
         if restored:
             # Count tagged entries (defensive: handle future entries with multiple positions)
             from_cache = sum(
-                1 for cf in self.cfs_mapping
-                if cf.get("origin") == "cache-preload"
+                1 for cf in self.cfs_mapping if cf.get("origin") == "cache-preload"
             )
             pos_from_cache = len(getattr(self, "_cache_restored_positions", []))
 
@@ -910,7 +913,9 @@ class EdgeLCIA:
 
             self.logger.info(
                 "CACHE PROOF: entries_from_cache=%d, positions_from_cache=%d, sample_positions=%s",
-                from_cache, pos_from_cache, sample
+                from_cache,
+                pos_from_cache,
+                sample,
             )
 
         # ---- Build direction-specific bundles -----------------------------------
@@ -944,8 +949,15 @@ class EdgeLCIA:
                         if not ebc[c]:
                             del ebc[c]
 
-        _prune_processed(rem_bio, ebs_bio, ebc_bio, getattr(self, "processed_biosphere_edges", set()))
-        _prune_processed(rem_tec, ebs_tec, ebc_tec, getattr(self, "processed_technosphere_edges", set()))
+        _prune_processed(
+            rem_bio, ebs_bio, ebc_bio, getattr(self, "processed_biosphere_edges", set())
+        )
+        _prune_processed(
+            rem_tec,
+            ebs_tec,
+            ebc_tec,
+            getattr(self, "processed_technosphere_edges", set()),
+        )
 
         # Build indices once
         supplier_index_bio = build_index(
@@ -1271,7 +1283,6 @@ class EdgeLCIA:
                     else:
                         allow_tec_added += added
 
-
             # both sides near-miss (rare but useful)
             if s_loc_required and c_loc_required and s_loc_only and c_loc_only:
                 cset = set(c_loc_only)
@@ -1301,7 +1312,9 @@ class EdgeLCIA:
 
         written = self._cache_save_new()
         if written:
-            self.logger.info("Cache saved %d newly characterized positions (map_exchanges).", written)
+            self.logger.info(
+                "Cache saved %d newly characterized positions (map_exchanges).", written
+            )
         else:
             self.logger.info("No new cache entries to save (map_exchanges).")
 
@@ -1575,9 +1588,11 @@ class EdgeLCIA:
 
         written = self._cache_save_new()
         if written:
-            self.logger.info("Cache saved %d newly characterized positions (%s).",
-                             written, "map_aggregate_locations")  # adapt the label per method
-
+            self.logger.info(
+                "Cache saved %d newly characterized positions (%s).",
+                written,
+                "map_aggregate_locations",
+            )  # adapt the label per method
 
     def map_dynamic_locations(self) -> None:
         """
@@ -1858,9 +1873,11 @@ class EdgeLCIA:
 
         written = self._cache_save_new()
         if written:
-            self.logger.info("Cache saved %d newly characterized positions (%s).",
-                             written, "map_aggregate_locations")  # adapt the label per method
-
+            self.logger.info(
+                "Cache saved %d newly characterized positions (%s).",
+                written,
+                "map_aggregate_locations",
+            )  # adapt the label per method
 
     def map_contained_locations(self) -> None:
         """
@@ -2122,9 +2139,11 @@ class EdgeLCIA:
 
         written = self._cache_save_new()
         if written:
-            self.logger.info("Cache saved %d newly characterized positions (%s).",
-                             written, "map_aggregate_locations")  # adapt the label per method
-
+            self.logger.info(
+                "Cache saved %d newly characterized positions (%s).",
+                written,
+                "map_aggregate_locations",
+            )  # adapt the label per method
 
     def map_remaining_locations_to_global(self) -> None:
         """
@@ -2384,9 +2403,11 @@ class EdgeLCIA:
 
         written = self._cache_save_new()
         if written:
-            self.logger.info("Cache saved %d newly characterized positions (%s).",
-                             written, "map_aggregate_locations")  # adapt the label per method
-
+            self.logger.info(
+                "Cache saved %d newly characterized positions (%s).",
+                written,
+                "map_aggregate_locations",
+            )  # adapt the label per method
 
     def evaluate_cfs(self, scenario_idx: str | int = 0, scenario=None):
         """
