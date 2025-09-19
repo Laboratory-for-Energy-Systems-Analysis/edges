@@ -11,3 +11,4 @@ from .logging_config import setup_package_logging
 from .edgelcia import EdgeLCIA
 from .costs import CostLCIA
 from .utils import get_available_methods
+

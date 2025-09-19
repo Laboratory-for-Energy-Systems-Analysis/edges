@@ -50,6 +50,12 @@ import logging
 
 logger = logging.getLogger(__name__)
 
+try:
+    from edges.cache import CacheBackend, MappingCache, EdgeCacheGlue
+except Exception:
+    CacheBackend = MappingCache = EdgeCacheGlue = None  # fallback
+
+
 
 def add_cf_entry(
     cfs_mapping, supplier_info, consumer_info, direction, indices, value, uncertainty
@@ -278,32 +284,24 @@ class EdgeLCIA:
         use_distributions: Optional[bool] = False,
         random_seed: Optional[int] = None,
         iterations: Optional[int] = 100,
+        cache_enabled: bool = True,
+        cache_backend: Optional[object] = None,
     ):
         """
         Initialize an EdgeLCIA object for exchange-level life cycle impact assessment.
 
-        Parameters
-        ----------
-        demand : dict
-            A Brightway-style demand dictionary defining the functional unit.
-        method : tuple, optional
-            Method name as a tuple (e.g., ("AWARE", "2.0")), used to locate the CF JSON file.
-        weight : str, optional
-            Weighting variable used for region aggregation/disaggregation (e.g., "population", "gdp").
-        parameters : dict, optional
-            Dictionary of parameter values or scenarios for symbolic CF evaluation.
-        scenario : str, optional
-            Name of the default scenario (must match a key in `parameters`).
-        filepath : str, optional
-            Explicit path to the JSON method file; overrides `method` if provided.
-        allowed_functions : dict, optional
-            Additional safe functions available to CF evaluation expressions.
-        use_distributions : bool, optional
-            Whether to interpret CF uncertainty fields and perform Monte Carlo sampling.
-        random_seed : int, optional
-            Seed for reproducible uncertainty sampling.
-        iterations : int, optional
-            Number of Monte Carlo samples to draw if uncertainty is enabled.
+        :param demand: Dictionary of {activity: amount} for the functional unit.
+        :param method: Tuple identifying the LCIA method (e.g. ("AWARE 2.0", "Country", "all", "yearly")).
+        :param weight: Weighting scheme for CFs (e.g. "population", "gdp", or None).
+        :param parameters: Optional dict of parameter definitions for scenarios.
+        :param scenario: Optional scenario name to select a parameter set.
+        :param filepath: Optional path to a JSON file with LCIA method data.
+        :param allowed_functions: Optional dict of user-defined functions for symbolic evaluation.
+        :param use_distributions: Whether to sample from uncertainty distributions.
+        :param random_seed: Seed for random number generation (for reproducibility).
+        :param iterations: Number of Monte Carlo iterations for uncertainty propagation.
+        :param cache_enabled: Whether to enable caching of mapping results.
+        :param cache_backend: Optional custom cache backend instance.
 
         Notes
         -----
@@ -381,6 +379,20 @@ class EdgeLCIA:
             self.SAFE_GLOBALS.update(allowed_functions)
 
         self._cached_supplier_keys = self._get_candidate_supplier_keys()
+
+        self._cache_enabled = bool(cache_enabled)
+        self._cache_last_saved_len = 0  # we’ll track what’s new after each step
+
+        # Lazy cache wiring
+        self._cache_glue = None
+        if self._cache_enabled and EdgeCacheGlue is not None:
+            try:
+                backend = cache_backend or CacheBackend.default()
+                self._mapping_cache = MappingCache(backend)
+                self._cache_glue = EdgeCacheGlue(self._mapping_cache)
+            except Exception:
+                self.logger.exception("Failed to initialize cache backend. Continuing without cache.")
+                self._cache_glue = None
 
     def _load_raw_lcia_data(self):
         """
@@ -716,6 +728,43 @@ class EdgeLCIA:
             self.consumer_cls, self._cf_needed_prefixes
         )
 
+    # ---- Transparent cache helpers -------------------------------------------
+    def _cache_preload_if_any(self):
+        """Restore previously matched edges (if cache exists)."""
+        if not self._cache_glue:
+            self.logger.info("No cache backend configured, skipping preload.")
+            return 0
+        # preconditions: lci() done; lookups ready
+        try:
+            return self._cache_glue.preload_from_cache(self)
+        finally:
+            self.logger.info("Cache preload complete.")
+            # track baseline for 'new rows' to persist later
+            self._cache_last_saved_len = len(self.cfs_mapping)
+
+    def _cache_save_new(self):
+        """Persist only rows added since the last save baseline."""
+        if not self._cache_glue:
+            return 0
+        try:
+            written = self._cache_glue.save_new_matches(self, self._cache_last_saved_len)
+            self._cache_last_saved_len = len(self.cfs_mapping)
+            return written
+        except Exception:
+            self.logger.exception("Failed to save new cache entries.")
+            return 0
+
+    @classmethod
+    def clear_cache(cls):
+        """Public convenience to clear all edges caches."""
+        if CacheBackend is None:
+            return
+        try:
+            CacheBackend.default().clear()
+        except Exception:
+            pass
+
+
     def _get_consumer_info(self, consumer_idx):
         """
         Extract consumer information from an exchange.
@@ -825,7 +874,44 @@ class EdgeLCIA:
         log = self.logger.getChild("map")  # edges.edgelcia.EdgeLCIA.map
 
         self._initialize_weights()
-        self._preprocess_lookups()  # populates lookups and prefix indexes
+        self._preprocess_lookups()
+
+        pre_len = len(self.cfs_mapping)
+        restored = self._cache_preload_if_any()
+        post_len = len(self.cfs_mapping)
+
+        added_entries = self.cfs_mapping[pre_len:post_len]
+        pos_from_cache = [p for cf in added_entries for p in cf.get("positions", ())]
+        n_entries_from_cache = len(added_entries)
+        n_positions_from_cache = len(pos_from_cache)
+
+        self.logger.info(
+            "CACHE PROOF: entries_from_cache=%d, positions_from_cache=%d, sample_positions=%s",
+            n_entries_from_cache,
+            n_positions_from_cache,
+            pos_from_cache[:5],
+        )
+
+        # add preload here
+        restored = self._cache_preload_if_any()
+        if restored:
+            self.logger.info("Cache restored %d characterized exchange positions.", restored)
+
+        if restored:
+            # Count tagged entries (defensive: handle future entries with multiple positions)
+            from_cache = sum(
+                1 for cf in self.cfs_mapping
+                if cf.get("origin") == "cache-preload"
+            )
+            pos_from_cache = len(getattr(self, "_cache_restored_positions", []))
+
+            # Show a few concrete (i, j) pairs as proof
+            sample = getattr(self, "_cache_restored_positions", [])[:5]
+
+            self.logger.info(
+                "CACHE PROOF: entries_from_cache=%d, positions_from_cache=%d, sample_positions=%s",
+                from_cache, pos_from_cache, sample
+            )
 
         # ---- Build direction-specific bundles -----------------------------------
         DIR_BIO = "biosphere-technosphere"
@@ -842,6 +928,24 @@ class EdgeLCIA:
 
         rem_bio, ebs_bio, ebc_bio = build_adj(self.biosphere_edges)
         rem_tec, ebs_tec, ebc_tec = build_adj(self.technosphere_edges)
+
+        def _prune_processed(rem, ebs, ebc, processed):
+            if not processed:
+                return
+            for s, c in list(processed):
+                if (s, c) in rem:
+                    rem.remove((s, c))
+                    if s in ebs:
+                        ebs[s].discard(c)
+                        if not ebs[s]:
+                            del ebs[s]
+                    if c in ebc:
+                        ebc[c].discard(s)
+                        if not ebc[c]:
+                            del ebc[c]
+
+        _prune_processed(rem_bio, ebs_bio, ebc_bio, getattr(self, "processed_biosphere_edges", set()))
+        _prune_processed(rem_tec, ebs_tec, ebc_tec, getattr(self, "processed_technosphere_edges", set()))
 
         # Build indices once
         supplier_index_bio = build_index(
@@ -1145,12 +1249,6 @@ class EdgeLCIA:
                         allow_bio_added += added
                     else:
                         allow_tec_added += added
-                    log.debug(
-                        "CF[%d] dir=%s allowlist add (supplier loc-only) | added=%d",
-                        i,
-                        dir_name,
-                        added,
-                    )
 
             # consumer near-miss with supplier full matches
             if c_loc_required and c_loc_only and s_cands:
@@ -1172,12 +1270,7 @@ class EdgeLCIA:
                         allow_bio_added += added
                     else:
                         allow_tec_added += added
-                    log.debug(
-                        "CF[%d] dir=%s allowlist add (consumer loc-only) | added=%d",
-                        i,
-                        dir_name,
-                        added,
-                    )
+
 
             # both sides near-miss (rare but useful)
             if s_loc_required and c_loc_required and s_loc_only and c_loc_only:
@@ -1199,12 +1292,6 @@ class EdgeLCIA:
                         allow_bio_added += added
                     else:
                         allow_tec_added += added
-                    log.debug(
-                        "CF[%d] dir=%s allowlist add (both loc-only) | added=%d",
-                        i,
-                        dir_name,
-                        added,
-                    )
 
         self._update_unprocessed_edges()
 
@@ -1212,16 +1299,11 @@ class EdgeLCIA:
         self.eligible_edges_for_next_bio = allow_bio
         self.eligible_edges_for_next_tech = allow_tec
 
-        log.debug(
-            "END map_exchanges | matched_positions=%d | allow_bio=%d | allow_tec=%d | processed_bio=%d | processed_tech=%d | unprocessed_bio=%d | unprocessed_tech=%d",
-            matched_positions_total,
-            len(allow_bio),
-            len(allow_tec),
-            len(self.processed_biosphere_edges),
-            len(self.processed_technosphere_edges),
-            len(self.unprocessed_biosphere_edges),
-            len(self.unprocessed_technosphere_edges),
-        )
+        written = self._cache_save_new()
+        if written:
+            self.logger.info("Cache saved %d newly characterized positions (map_exchanges).", written)
+        else:
+            self.logger.info("No new cache entries to save (map_exchanges).")
 
     def map_aggregate_locations(self) -> None:
         """
@@ -1490,6 +1572,12 @@ class EdgeLCIA:
                         )
 
         self._update_unprocessed_edges()
+
+        written = self._cache_save_new()
+        if written:
+            self.logger.info("Cache saved %d newly characterized positions (%s).",
+                             written, "map_aggregate_locations")  # adapt the label per method
+
 
     def map_dynamic_locations(self) -> None:
         """
@@ -1768,6 +1856,12 @@ class EdgeLCIA:
 
         self._update_unprocessed_edges()
 
+        written = self._cache_save_new()
+        if written:
+            self.logger.info("Cache saved %d newly characterized positions (%s).",
+                             written, "map_aggregate_locations")  # adapt the label per method
+
+
     def map_contained_locations(self) -> None:
         """
         Resolve unmatched exchanges by assigning CFs from spatially containing regions.
@@ -2026,6 +2120,12 @@ class EdgeLCIA:
 
         self._update_unprocessed_edges()
 
+        written = self._cache_save_new()
+        if written:
+            self.logger.info("Cache saved %d newly characterized positions (%s).",
+                             written, "map_aggregate_locations")  # adapt the label per method
+
+
     def map_remaining_locations_to_global(self) -> None:
         """
         Assign global fallback CFs to exchanges that remain unmatched after all regional mapping steps.
@@ -2281,6 +2381,12 @@ class EdgeLCIA:
                         )
 
         self._update_unprocessed_edges()
+
+        written = self._cache_save_new()
+        if written:
+            self.logger.info("Cache saved %d newly characterized positions (%s).",
+                             written, "map_aggregate_locations")  # adapt the label per method
+
 
     def evaluate_cfs(self, scenario_idx: str | int = 0, scenario=None):
         """
