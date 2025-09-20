@@ -382,6 +382,11 @@ class EdgeLCIA:
 
         self._cached_supplier_keys = self._get_candidate_supplier_keys()
 
+        self._last_edges_snapshot_bio = set()
+        self._last_edges_snapshot_tech = set()
+        self._last_eval_scenario_name = None
+        self._last_eval_scenario_idx = None
+
     def _load_raw_lcia_data(self):
         """
         Load and validate raw LCIA data for a given method.
@@ -520,29 +525,46 @@ class EdgeLCIA:
         self, scenario_idx: int, scenario_name: Optional[str] = None
     ) -> dict:
         """
-        Resolve symbolic parameters for a given scenario.
-
-        :param params: Dict of parameter definitions.
-        :param scenario: Scenario name.
-        :return: Dict of resolved parameter values.
+        Resolve symbolic parameters for a given scenario, without spamming warnings.
+        - If scenario_name is None, fall back to self.scenario, then first available key.
+        - Warn only if a *provided* scenario_name is missing from parameters.
         """
+        # Determine effective scenario name
+        effective_name = (
+            scenario_name
+            if scenario_name is not None
+            else (self.scenario if self.scenario is not None else None)
+        )
 
-        scenario_name = scenario_name or self.scenario
+        if effective_name is None:
+            # No scenario chosen; if params exist, we can still evaluate constants or
+            # expressions that don't rely on scenario keys. Return empty silently.
+            return {}
 
-        param_set = self.parameters.get(scenario_name)
+        # If we have parameters but the requested name is missing
+        if isinstance(self.parameters, dict) and effective_name not in self.parameters:
+            # Warn only when user explicitly asked for this scenario
+            if scenario_name is not None:
+                self.logger.warning(
+                    f"No parameter set found for scenario '{effective_name}'. Using empty defaults."
+                )
+            return {}
 
-        if param_set is None:
-            self.logger.warning(
-                f"No parameter set found for scenario '{scenario_name}'. Using empty defaults."
-            )
+        param_set = (
+            self.parameters.get(effective_name)
+            if isinstance(self.parameters, dict)
+            else None
+        )
+        if not param_set:
+            return {}
 
+        # Resolve index-aware values
         resolved = {}
-        if param_set is not None:
-            for k, v in param_set.items():
-                if isinstance(v, dict):
-                    resolved[k] = v.get(str(scenario_idx), list(v.values())[-1])
-                else:
-                    resolved[k] = v
+        for k, v in param_set.items():
+            if isinstance(v, dict):
+                resolved[k] = v.get(str(scenario_idx), list(v.values())[-1])
+            else:
+                resolved[k] = v
         return resolved
 
     def _update_unprocessed_edges(self):
@@ -2418,6 +2440,9 @@ class EdgeLCIA:
                 scenario_idx, scenario_name
             )
 
+            self._last_eval_scenario_name = scenario_name
+            self._last_eval_scenario_idx = scenario_idx
+
             for cf in self.cfs_mapping:
                 if isinstance(cf["value"], str):
                     try:
@@ -2529,6 +2554,362 @@ class EdgeLCIA:
                 inventory
             )
             self.score = self.characterized_inventory.sum()
+
+    # --- Add these helpers inside EdgeLCIA -----------------------------------
+    def _covered_positions_from_characterization(self) -> set[tuple[int, int]]:
+        """
+        Return the set of (i, j) positions that already have CF values
+        in the current characterization matrix.
+        Works for both 2D SciPy CSR and 3D sparse.COO matrices.
+        """
+        if self.characterization_matrix is None:
+            return set()
+
+        # Uncertainty mode: 3D (i, j, k) COO
+        if isinstance(self.characterization_matrix, sparse.COO):
+            # coords shape: (3, N); take unique (i, j)
+            if self.characterization_matrix.coords.size == 0:
+                return set()
+            i = self.characterization_matrix.coords[0]
+            j = self.characterization_matrix.coords[1]
+            return set(zip(map(int, i), map(int, j)))
+
+        # Deterministic mode: 2D SciPy sparse
+        ii, jj = self.characterization_matrix.nonzero()
+        return set(zip(ii.tolist(), jj.tolist()))
+
+    def _evaluate_cf_value_for_redo(self, cf: dict, scenario_idx, scenario_name):
+        """
+        Deterministic path: evaluate a single CF value for the redo.
+        Mirrors the logic in evaluate_cfs() for a single entry.
+        """
+        if isinstance(cf["value"], str):
+            try:
+                params = self._resolve_parameters_for_scenario(
+                    scenario_idx, scenario_name
+                )
+                return float(
+                    safe_eval_cached(
+                        cf["value"],
+                        parameters=params,
+                        scenario_idx=scenario_idx,
+                        SAFE_GLOBALS=self.SAFE_GLOBALS,
+                    )
+                )
+            except Exception as e:
+                self.logger.error(
+                    f"Failed to evaluate symbolic CF '{cf['value']}'. Error: {e}"
+                )
+                return 0.0
+        else:
+            return float(cf["value"])
+
+    # --- Main API: redo_lcia --------------------------------------------------
+    def redo_lcia(
+        self,
+        demand: dict | None = None,
+        *,
+        scenario_idx: int | str | None = None,
+        scenario: str | None = None,
+        run_aggregate: bool = True,
+        run_dynamic: bool = True,
+        run_contained: bool = True,
+        run_global: bool = True,
+        recompute_score: bool = True,
+    ) -> None:
+        """
+        Re-run LCI, preserve the existing characterization_matrix, and only map
+        CFs for *new* exchanges that don't already have CF coverage.
+
+        Typical usage after you’ve already done:
+            lci(); map_exchanges(); (other mapping); evaluate_cfs(); lcia()
+
+        Parameters
+        ----------
+        scenario_idx : int|str, optional
+            Scenario index/year to use if we need to evaluate numeric CFs
+            for newly mapped exchanges (deterministic mode).
+            Defaults to the last-used one if available, otherwise 0 or method default.
+        scenario : str, optional
+            Scenario name to use for evaluating symbolic CFs (deterministic mode).
+            Defaults to the last-used one or the class default.
+        run_aggregate, run_dynamic, run_contained, run_global : bool
+            Which fallback mapping passes to run for the *new* edges.
+        recompute_score : bool
+            If True, recompute the LCIA score using the updated inventory.
+
+        Behavior
+        --------
+        - Keeps self.characterization_matrix as-is and adds entries for newly mapped edges.
+        - In deterministic mode, also extends self.scenario_cfs with the new entries
+          so downstream reporting stays consistent.
+        - In uncertainty mode, samples new CFs consistently using the same seeding
+          scheme used in evaluate_cfs() and appends them into the 3D COO.
+
+        Notes
+        -----
+        - This method will NOT remove CFs for edges that disappeared from the inventory;
+          it only adds CFs for the new edges. If you want a “full refresh”, call
+          the usual pipeline again.
+        """
+
+        if self.characterization_matrix is None:
+            raise RuntimeError(
+                "redo_lcia() requires an existing characterization_matrix. "
+                "Run the normal pipeline (map/evaluate) once before calling this."
+            )
+
+        # --- Diagnostics: starting nnz
+        if isinstance(self.characterization_matrix, sparse.COO):
+            start_nnz = len(self.characterization_matrix.data)
+        else:
+            start_nnz = self.characterization_matrix.nnz
+        print(f"[redo_lcia] Starting characterization_matrix nnz = {start_nnz}")
+
+        # 0) Update demand vector if user passed one
+        if demand is not None:
+            self.lca.demand.clear()
+            self.lca.demand.update(demand)
+
+        # 1) Decide direction (tech-only vs bio) once; this doesn’t require LCI
+        only_tech = all(
+            cf["supplier"].get("matrix") == "technosphere" for cf in self.raw_cfs_data
+        )
+
+        # --- Snapshot PREVIOUS inventory edges *before* we call lci()
+        if only_tech:
+            # prefer the last saved snapshot; otherwise fall back to whatever is still in memory
+            prev_edges = getattr(self, "_last_edges_snapshot_tech", None)
+            if not prev_edges:
+                prev_edges = (
+                    set(self.technosphere_edges) if self.technosphere_edges else set()
+                )
+        else:
+            prev_edges = getattr(self, "_last_edges_snapshot_bio", None)
+            if not prev_edges:
+                prev_edges = (
+                    set(self.biosphere_edges) if self.biosphere_edges else set()
+                )
+
+        # 2) Recompute inventory & edges for the *new* demand
+        self.lci()  # updates inventory/edges/lookups/etc.
+
+        # 3) Compute CURRENT edges and restrict mapping to edges that are *new vs previous run*
+        if only_tech:
+            current_edges = set(zip(*self.technosphere_flow_matrix.nonzero()))
+        else:
+            current_edges = set(zip(*self.lca.inventory.nonzero()))
+
+        new_edges = current_edges - prev_edges
+
+        # Also exclude any edges already covered in the existing characterization matrix
+        covered = self._covered_positions_from_characterization()
+        new_edges -= covered
+
+        print(
+            f"[redo_lcia] Identified {len(new_edges)} new edges to map "
+            f"(prev={len(prev_edges)}, current={len(current_edges)}, covered={len(covered)})"
+        )
+
+        # Set the per-direction edge sets for the mapping passes
+        if only_tech:
+            self.biosphere_edges = set()
+            self.technosphere_edges = new_edges
+        else:
+            self.technosphere_edges = set()
+            self.biosphere_edges = new_edges
+
+        if not new_edges:
+            self.logger.info("redo_lcia(): No new exchanges to map.")
+            if recompute_score:
+                self.lcia()
+            # Save snapshot of current edges for the next run
+            if only_tech:
+                self._last_edges_snapshot_tech = current_edges
+            else:
+                self._last_edges_snapshot_bio = current_edges
+            return
+
+        print(f"[redo_lcia] Identified {len(new_edges)} new edges to map")
+
+        if not new_edges:
+            self.logger.info("redo_lcia(): No new exchanges to map.")
+            if recompute_score:
+                self.lcia()
+            return
+
+        # 3) Map only the new edges: snapshot cfs_mapping length to capture the delta later
+        baseline_len = len(self.cfs_mapping)
+
+        # Primary mapping on the restricted edge set
+        self.map_exchanges()
+
+        # Optional fallback passes (these operate only on unprocessed edges, which we’ve
+        # already restricted to the new edges in step 2)
+        if run_aggregate:
+            self.map_aggregate_locations()
+        if run_dynamic:
+            self.map_dynamic_locations()
+        if run_contained:
+            self.map_contained_locations()
+        if run_global:
+            self.map_remaining_locations_to_global()
+
+        # Identify the CF entries created in this redo
+        new_cf_entries = self.cfs_mapping[baseline_len:]
+
+        print(f"[redo_lcia] Mapping produced {len(new_cf_entries)} new CF entries")
+
+        if not new_cf_entries:
+            self.logger.info("redo_lcia(): Mapping produced no applicable CFs.")
+            if recompute_score:
+                self.lcia()
+            return
+
+        # 4) Apply those *new* CFs into the existing characterization_matrix
+        if self.use_distributions and self.iterations > 1:
+            # Uncertainty mode: append (i, j, k) samples to 3D COO
+            cm = self.characterization_matrix
+            assert isinstance(
+                cm, sparse.COO
+            ), "Expected sparse.COO in uncertainty mode."
+
+            # Collect coords/data to append
+            coords_i, coords_j, coords_k, data = [], [], [], []
+            sample_cache = {}
+
+            for cf in new_cf_entries:
+                # Draw (or reuse) samples for this distribution/spec
+                key = make_distribution_key(cf)
+                if key is None:
+                    samples = sample_cf_distribution(
+                        cf=cf,
+                        n=self.iterations,
+                        parameters=self.parameters,
+                        random_state=self.random_state,
+                        use_distributions=self.use_distributions,
+                        SAFE_GLOBALS=self.SAFE_GLOBALS,
+                    )
+                elif key in sample_cache:
+                    samples = sample_cache[key]
+                else:
+                    rng = get_rng_for_key(key, self.random_seed)
+                    samples = sample_cf_distribution(
+                        cf=cf,
+                        n=self.iterations,
+                        parameters=self.parameters,
+                        random_state=rng,
+                        use_distributions=self.use_distributions,
+                        SAFE_GLOBALS=self.SAFE_GLOBALS,
+                    )
+                    sample_cache[key] = samples
+
+                neg = (cf.get("uncertainty") or {}).get("negative", 0)
+                if neg == 1:
+                    samples = -samples
+
+                for i, j in cf["positions"]:
+                    for k in range(self.iterations):
+                        coords_i.append(i)
+                        coords_j.append(j)
+                        coords_k.append(k)
+                        data.append(samples[k])
+
+            if data:
+                # Concatenate to existing COO
+                new_coords = np.array([coords_i, coords_j, coords_k])
+                new_data = np.array(data)
+                # Merge
+                merged_coords = np.concatenate([cm.coords, new_coords], axis=1)
+                merged_data = np.concatenate([cm.data, new_data])
+                self.characterization_matrix = sparse.COO(
+                    coords=merged_coords, data=merged_data, shape=cm.shape
+                )
+
+        else:
+            # Deterministic mode: set values directly in the existing 2D matrix
+            cm = self.characterization_matrix  # SciPy CSR
+            # Decide scenario context (use last known if possible)
+            # Decide scenario context (prefer explicit args, then last-used, then class default, then first available key, else None)
+            scenario_name = (
+                scenario
+                if scenario is not None
+                else (
+                    self._last_eval_scenario_name
+                    if getattr(self, "_last_eval_scenario_name", None) is not None
+                    else (
+                        self.scenario
+                        if self.scenario is not None
+                        else (
+                            next(iter(self.parameters), None)
+                            if isinstance(self.parameters, dict) and self.parameters
+                            else None
+                        )
+                    )
+                )
+            )
+
+            if scenario_idx is None:
+                scenario_idx = (
+                    self._last_eval_scenario_idx
+                    if getattr(self, "_last_eval_scenario_idx", None) is not None
+                    else 0
+                )
+
+            # Also extend scenario_cfs so reporting includes new rows
+            if self.scenario_cfs is None:
+                self.scenario_cfs = []
+
+            for cf in new_cf_entries:
+                val = self._evaluate_cf_value_for_redo(
+                    cf, scenario_idx=scenario_idx, scenario_name=scenario_name
+                )
+                if val == 0:
+                    continue
+                for i, j in cf["positions"]:
+                    cm[i, j] = val
+                # Keep reporting structures in sync
+                self.scenario_cfs.append(
+                    {
+                        "supplier": cf["supplier"],
+                        "consumer": cf["consumer"],
+                        "positions": cf["positions"],
+                        "value": val,
+                    }
+                )
+            # Ensure efficient structure
+            self.characterization_matrix = self.characterization_matrix.tocsr()
+
+        # --- Diagnostics: ending nnz
+        if isinstance(self.characterization_matrix, sparse.COO):
+            end_nnz = len(self.characterization_matrix.data)
+        else:
+            end_nnz = self.characterization_matrix.nnz
+        print(f"[redo_lcia] Ending characterization_matrix nnz = {end_nnz}")
+        print(f"[redo_lcia] Δnnz = {end_nnz - start_nnz}")
+
+        # 5) Update processed/unprocessed tracking and optionally recompute score
+        self._update_unprocessed_edges()
+
+        # Remember last evaluation context (so redo_lcia can be called repeatedly without args)
+        if scenario is not None:
+            self._last_eval_scenario_name = scenario
+        elif getattr(self, "_last_eval_scenario_name", None) is None:
+            self._last_eval_scenario_name = self.scenario
+
+        if scenario_idx is not None:
+            self._last_eval_scenario_idx = scenario_idx
+        elif getattr(self, "_last_eval_scenario_idx", None) is None:
+            self._last_eval_scenario_idx = 0
+
+        if recompute_score:
+            self.lcia()
+
+        # Save the CURRENT inventory edges as the baseline for the next redo
+        if only_tech:
+            self._last_edges_snapshot_tech = current_edges
+        else:
+            self._last_edges_snapshot_bio = current_edges
 
     def statistics(self):
         """
