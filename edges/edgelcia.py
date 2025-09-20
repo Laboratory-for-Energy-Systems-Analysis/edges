@@ -732,9 +732,22 @@ class EdgeLCIA:
     # ---- Transparent cache helpers -------------------------------------------
     def _cache_preload_if_any(self):
         """Restore previously matched edges (if cache exists)."""
-        if not self._cache_glue:
-            self.logger.info("No cache backend configured, skipping preload.")
-            return 0
+        # --- before calling self._cache_glue.preload_from_cache(self)
+        if self._cache_glue:
+            mh = self._cache_glue.method_hash(self)
+            ph = self._cache_glue.params_hash(self)
+            wh = self._cache_glue.weights_hash(self)
+            gh = self._cache_glue.geo_hash(self)
+            proj = getattr(self.lca, "project", "bw2")
+            self.logger.info(
+                "CACHE CTX: project=%s | method=%s | params=%s | weights=%s | geo=%s",
+                proj,
+                mh[:12],
+                ph[:12],
+                wh[:12],
+                gh[:12],
+            )
+
         # preconditions: lci() done; lookups ready
         try:
             return self._cache_glue.preload_from_cache(self)
@@ -894,8 +907,6 @@ class EdgeLCIA:
             pos_from_cache[:5],
         )
 
-        # add preload here
-        restored = self._cache_preload_if_any()
         if restored:
             self.logger.info(
                 "Cache restored %d characterized exchange positions.", restored
@@ -949,6 +960,8 @@ class EdgeLCIA:
                         if not ebc[c]:
                             del ebc[c]
 
+        log.info("REM before prune: bio=%d tech=%d", len(rem_bio), len(rem_tec))
+
         _prune_processed(
             rem_bio, ebs_bio, ebc_bio, getattr(self, "processed_biosphere_edges", set())
         )
@@ -958,6 +971,136 @@ class EdgeLCIA:
             ebc_tec,
             getattr(self, "processed_technosphere_edges", set()),
         )
+
+        log.info("REM after prune:  bio=%d tech=%d", len(rem_bio), len(rem_tec))
+
+        # ---- EARLY RETURN 1: all edges were restored by positive cache
+        if not rem_bio and not rem_tec:
+            log.info(
+                "CF loop skipped: nothing left after processed-prune (cache restored all)."
+            )
+            self.eligible_edges_for_next_bio = set()
+            self.eligible_edges_for_next_tech = set()
+            written = self._cache_save_new()
+            if written:
+                self.logger.info(
+                    "Cache saved %d newly characterized positions (map_exchanges).",
+                    written,
+                )
+            else:
+                self.logger.info("No new cache entries to save (map_exchanges).")
+            log.info("REM final (unmatched): bio=0 tech=0")
+            log.info("ALLOW (loc-only):     bio=0 tech=0")
+            log.info("NON-LOC misses:       bio=0 tech=0")
+            return
+
+        neg = self._cache_glue.preload_negative(self) if self._cache_glue else {}
+
+        def prune_with_negative(rem, direction):
+            if not neg:
+                return rem
+            keep = set()
+            for s, c in rem:
+                # act ids
+                s_id = self._cache_glue._supplier_act_id(self, s, direction)
+                c_id = self._cache_glue._consumer_act_id(self, c)
+                k = (direction, s_id, c_id)
+                sig = neg.get(k)
+                if not sig:
+                    keep.add((s, c))
+                    continue
+                s_sig = self._cache_glue._supplier_sig_from_idx(self, s, direction)
+                c_sig = self._cache_glue._consumer_sig_from_idx(self, c)
+                # only skip if signatures still match → metadata unchanged
+                if sig == (s_sig, c_sig):
+                    continue
+                keep.add((s, c))
+            return keep
+
+        rem_bio = prune_with_negative(rem_bio, DIR_BIO)
+        rem_tec = prune_with_negative(rem_tec, DIR_TECH)
+
+        log.info("REM after neg:    bio=%d tech=%d", len(rem_bio), len(rem_tec))
+
+        # ---- EARLY RETURN 2: positives + negatives already settle everything
+        if not rem_bio and not rem_tec:
+            log.info(
+                "CF loop skipped: nothing left after negative-prune (only cache involved)."
+            )
+            self.eligible_edges_for_next_bio = set()
+            self.eligible_edges_for_next_tech = set()
+            written = self._cache_save_new()
+            if written:
+                self.logger.info(
+                    "Cache saved %d newly characterized positions (map_exchanges).",
+                    written,
+                )
+            else:
+                self.logger.info("No new cache entries to save (map_exchanges).")
+            log.info("REM final (unmatched): bio=0 tech=0")
+            log.info("ALLOW (loc-only):     bio=0 tech=0")
+            log.info("NON-LOC misses:       bio=0 tech=0")
+            return
+
+        # --- Preload cached allowlist (location-only misses from last run)
+        STAGE = "map_exchanges"
+        cached_allow = (
+            self._cache_glue.preload_allow(self, STAGE) if self._cache_glue else {}
+        )
+        allow_bio = set()
+        allow_tec = set()
+
+        def _apply_allow_cache(rem, direction, allow_bucket):
+            if not cached_allow:
+                return rem
+            keep = set()
+            for s, c in rem:
+                s_id = self._cache_glue._supplier_act_id(self, s, direction)
+                c_id = self._cache_glue._consumer_act_id(self, c)
+                key = (direction, s_id, c_id)
+                sigs = cached_allow.get(key)
+                if not sigs:
+                    keep.add((s, c))
+                    continue
+                s_sig_now = self._cache_glue._supplier_sig_from_idx(self, s, direction)
+                c_sig_now = self._cache_glue._consumer_sig_from_idx(self, c)
+                if sigs == (s_sig_now, c_sig_now):
+                    # still a location-only candidate → move to allowlist and drop from rem
+                    allow_bucket.add((s, c))
+                else:
+                    keep.add((s, c))
+            return keep
+
+        rem_bio = _apply_allow_cache(rem_bio, DIR_BIO, allow_bio)
+        rem_tec = _apply_allow_cache(rem_tec, DIR_TECH, allow_tec)
+        log.info(
+            "REM after %s-allow: bio=%d tech=%d | allow_bio=%d allow_tec=%d",
+            STAGE,
+            len(rem_bio),
+            len(rem_tec),
+            len(allow_bio),
+            len(allow_tec),
+        )
+
+        # ---- EARLY RETURN 3: only allowlist edges remain → skip CF loop
+        if not rem_bio and not rem_tec:
+            self.eligible_edges_for_next_bio = allow_bio
+            self.eligible_edges_for_next_tech = allow_tec
+            written = self._cache_save_new()
+            if written:
+                self.logger.info(
+                    "Cache saved %d newly characterized positions (map_exchanges).",
+                    written,
+                )
+            else:
+                self.logger.info("No new cache entries to save (map_exchanges).")
+            log.info("CF loop skipped: only location-only edges (allowlist) remain.")
+            log.info("REM final (unmatched): bio=0 tech=0")
+            log.info(
+                "ALLOW (loc-only):     bio=%d tech=%d", len(allow_bio), len(allow_tec)
+            )
+            log.info("NON-LOC misses:       bio=0 tech=0")
+            return
 
         # Build indices once
         supplier_index_bio = build_index(
@@ -1318,6 +1461,40 @@ class EdgeLCIA:
         else:
             self.logger.info("No new cache entries to save (map_exchanges).")
 
+        log.info("REM final (unmatched): bio=%d tech=%d", len(rem_bio), len(rem_tec))
+        log.info("ALLOW (loc-only):     bio=%d tech=%d", len(allow_bio), len(allow_tec))
+        log.info(
+            "NON-LOC misses:       bio=%d tech=%d",
+            len(rem_bio - allow_bio),
+            len(rem_tec - allow_tec),
+        )
+
+        # ---- NEGATIVE CACHE: save only non-location misses -------------------------
+        # At this point, rem_bio/rem_tec contain edges that did not match by equality.
+        # Remove the location-only near-misses (allow_*). What remains are non-location misses.
+        nonloc_bio = rem_bio - allow_bio
+        nonloc_tec = rem_tec - allow_tec
+
+        # --- Persist non-location misses to negative cache
+        if self._cache_glue:
+            # build flat list of (direction, i, j) that failed for non-location reasons
+            nonloc = []
+            for s, c in rem_bio - allow_bio:
+                nonloc.append(("biosphere-technosphere", s, c))
+            for s, c in rem_tec - allow_tec:
+                nonloc.append(("technosphere-technosphere", s, c))
+            saved_neg = self._cache_glue.save_negative(self, nonloc)
+            log.info("NEGATIVE cache saved: %d non-location misses", saved_neg)
+
+            # --- Persist location-only misses to allowlist cache
+            stage_allow = []
+            for s, c in allow_bio:
+                stage_allow.append(("biosphere-technosphere", s, c))
+            for s, c in allow_tec:
+                stage_allow.append(("technosphere-technosphere", s, c))
+            saved = self._cache_glue.save_allow(self, STAGE, stage_allow)
+            log.info("ALLOW cache saved for %s: %d entries", STAGE, saved)
+
     def map_aggregate_locations(self) -> None:
         """
         Map unmatched exchanges using CFs from broader (aggregated) regions.
@@ -1352,6 +1529,27 @@ class EdgeLCIA:
 
         self._initialize_weights()
         logger.info("Handling static regions…")
+
+        STAGE = "map_aggregate_locations"
+
+        # --- Positive preload so prior results from THIS stage are restored immediately
+        #     (prevents recomputing and shrinks unprocessed_* before we even start)
+        pre_len = len(self.cfs_mapping)
+        restored = self._cache_preload_if_any()
+        post_len = len(self.cfs_mapping)
+        if restored:
+            pos_from_cache = [
+                p
+                for cf in self.cfs_mapping[pre_len:post_len]
+                for p in cf.get("positions", ())
+            ]
+            logger.info(
+                "CACHE PRELOAD (%s): entries=%d positions=%d sample=%s",
+                STAGE,
+                post_len - pre_len,
+                len(pos_from_cache),
+                pos_from_cache[:5],
+            )
 
         cf_operators = {
             cf["supplier"].get("operator", "equals") for cf in self.raw_cfs_data
@@ -1388,6 +1586,66 @@ class EdgeLCIA:
             )
             if allowed:
                 unprocessed_edges = [e for e in unprocessed_edges if e in allowed]
+
+            # --- NEGATIVE cache prune (global, non-location misses)  ############# NEW
+            if getattr(self, "_cache_glue", None):
+                neg = self._cache_glue.preload_negative(self)
+                if neg:
+                    keep = []
+                    for s, c in unprocessed_edges:
+                        s_id = self._cache_glue._supplier_act_id(self, s, direction)
+                        c_id = self._cache_glue._consumer_act_id(self, c)
+                        sigs = neg.get((direction, s_id, c_id))
+                        if not sigs:
+                            keep.append((s, c))
+                            continue
+                        s_sig = self._cache_glue._supplier_sig_from_idx(
+                            self, s, direction
+                        )
+                        c_sig = self._cache_glue._consumer_sig_from_idx(self, c)
+                        # skip only if signatures still match exactly
+                        if sigs != (s_sig, c_sig):
+                            keep.append((s, c))
+                    unprocessed_edges = keep
+
+            # --- STAGE allowlist preload: if an edge was previously "allowed at this stage"
+            #     and its signatures haven't changed, we can skip the heavy grouping work.  ### NEW
+            stage_allow = set()
+            if getattr(self, "_cache_glue", None):
+                allow_rows = self._cache_glue.preload_allow(self, STAGE)
+                if allow_rows:
+                    keep = []
+                    for s, c in unprocessed_edges:
+                        s_id = self._cache_glue._supplier_act_id(self, s, direction)
+                        c_id = self._cache_glue._consumer_act_id(self, c)
+                        sigs = allow_rows.get((direction, s_id, c_id))
+                        if not sigs:
+                            keep.append((s, c))
+                            continue
+                        s_sig = self._cache_glue._supplier_sig_from_idx(
+                            self, s, direction
+                        )
+                        c_sig = self._cache_glue._consumer_sig_from_idx(self, c)
+                        if sigs == (s_sig, c_sig):
+                            stage_allow.add((s, c))  # remember for next stage too
+                        else:
+                            keep.append((s, c))
+                    unprocessed_edges = keep
+            logger.info(
+                "ALLOW PRELOAD (%s): direction=%s | allow=%d | remaining=%d",
+                STAGE,
+                direction,
+                len(stage_allow),
+                len(unprocessed_edges),
+            )
+            # Early exit per direction
+            if not unprocessed_edges:
+                # stash the stage allow so the next stage can use it
+                if direction == "biosphere-technosphere":
+                    self.eligible_edges_for_next_bio = stage_allow
+                else:
+                    self.eligible_edges_for_next_tech = stage_allow
+                continue
 
             for supplier_idx, consumer_idx in unprocessed_edges:
                 if (supplier_idx, consumer_idx) in processed_flows:
@@ -1584,15 +1842,32 @@ class EdgeLCIA:
                             f"with candidate suppliers={candidate_suppliers} and consumers={candidate_consumers}"
                         )
 
+            # Any pairs still unprocessed at the end of this direction, but that we
+            # marked as stage-allow earlier, should be passed to the next stage
+            if direction == "biosphere-technosphere":
+                self.eligible_edges_for_next_bio = stage_allow
+            else:
+                self.eligible_edges_for_next_tech = stage_allow
+
         self._update_unprocessed_edges()
 
         written = self._cache_save_new()
         if written:
             self.logger.info(
-                "Cache saved %d newly characterized positions (%s).",
-                written,
-                "map_aggregate_locations",
-            )  # adapt the label per method
+                "Cache saved %d newly characterized positions (%s).", written, STAGE
+            )
+        else:
+            self.logger.info("No new cache entries to save (%s).", STAGE)
+
+        # Persist this stage's allowlist (for early pruning next run)
+        if getattr(self, "_cache_glue", None):
+            to_save = []
+            for s, c in getattr(self, "eligible_edges_for_next_bio", set()):
+                to_save.append(("biosphere-technosphere", s, c))
+            for s, c in getattr(self, "eligible_edges_for_next_tech", set()):
+                to_save.append(("technosphere-technosphere", s, c))
+            saved = self._cache_glue.save_allow(self, STAGE, to_save)
+            logger.info("ALLOW cache saved for %s: %d entries", STAGE, saved)
 
     def map_dynamic_locations(self) -> None:
         """
@@ -1631,6 +1906,20 @@ class EdgeLCIA:
         self._initialize_weights()
         logger.info("Handling dynamic regions…")
 
+        # ---- Preload mapping cache (proof) -----------------------------------------
+        pre_len = len(self.cfs_mapping)
+        self._cache_preload_if_any()
+        self._cache_preload_if_any()
+        post_len = len(self.cfs_mapping)
+        added_entries = self.cfs_mapping[pre_len:post_len]
+        pos_from_cache = [p for cf in added_entries for p in cf.get("positions", ())]
+        logger.info(
+            "CACHE PRELOAD (map_dynamic_locations): entries=%d positions=%d sample=%s",
+            len(added_entries),
+            len(pos_from_cache),
+            pos_from_cache[:5],
+        )
+
         cf_operators = {
             cf["supplier"].get("operator", "equals") for cf in self.raw_cfs_data
         }
@@ -1652,6 +1941,39 @@ class EdgeLCIA:
             (k, tuple(v)) for k, v in decomposed_exclusions.items()
         )
 
+        # ---- Preload allowlist from prior stage (and previous runs) -----------------
+        # Only keep edges that *should* reach dynamic handling.
+        allowed_pre = set()
+        if self._cache_glue:
+            allow_dict = self._cache_glue.preload_allow(
+                self, stage="map_dynamic_locations"
+            )
+            allowed_pre |= set(allow_dict.keys())  # if keys are (i, j) edges
+            # or
+            allowed_pre |= set(allow_dict.values())  # if values are (i, j) edges
+
+        # Edges promoted by map_exchanges() to be handled by later geo steps
+        if getattr(self, "eligible_edges_for_next_bio", None):
+            allowed_pre |= set(self.eligible_edges_for_next_bio)
+        if getattr(self, "eligible_edges_for_next_tech", None):
+            allowed_pre |= set(self.eligible_edges_for_next_tech)
+
+        # Helper: identify RoW/RoE at either side
+        def _is_dynamic_pair(direction, s_idx, c_idx) -> bool:
+            s_loc = (
+                self.supplier_loc_bio.get(s_idx)
+                if direction == "biosphere-technosphere"
+                else self.supplier_loc_tech.get(s_idx)
+            )
+            c_loc = self.consumer_loc.get(c_idx)
+            return (s_loc in ("RoW", "RoE")) or (c_loc in ("RoW", "RoE"))
+
+        # If everything left is location-only and dynamic, we can skip heavy work later
+        # (We’ll still do the dynamic averaging below; this early check is only to avoid
+        #  building large indexes when there is nothing to do.)
+        # We compute per-direction on the fly.
+
+        # ---- Main per-direction pass ------------------------------------------------
         for direction in ["biosphere-technosphere", "technosphere-technosphere"]:
 
             # Pick the correct reversed supplier dict for this direction
@@ -1676,14 +1998,22 @@ class EdgeLCIA:
             prefiltered_groups = defaultdict(list)
             remaining_edges = []
 
-            # let's remove edges that have no chance of qualifying
-            allowed = (
-                self.eligible_edges_for_next_bio
-                if direction == "biosphere-technosphere"
-                else self.eligible_edges_for_next_tech
+            candidates = []
+            for s_idx, c_idx in unprocessed_edges:
+                if (s_idx, c_idx) in processed_flows:
+                    continue
+                if not _is_dynamic_pair(direction, s_idx, c_idx):
+                    continue
+                if allowed_pre and (s_idx, c_idx) not in allowed_pre:
+                    continue
+                candidates.append((s_idx, c_idx))
+
+            logger.info(
+                "ALLOW PRELOAD (map_dynamic_locations): direction=%s | allow=%d | remaining=%d",
+                direction,
+                len(allowed_pre),
+                len(candidates),
             )
-            if allowed:
-                unprocessed_edges = [e for e in unprocessed_edges if e in allowed]
 
             for supplier_idx, consumer_idx in unprocessed_edges:
                 if (supplier_idx, consumer_idx) in processed_flows:
@@ -1876,48 +2206,61 @@ class EdgeLCIA:
             self.logger.info(
                 "Cache saved %d newly characterized positions (%s).",
                 written,
-                "map_aggregate_locations",
-            )  # adapt the label per method
+                "map_dynamic_locations",
+            )
+
+        # save allowlist for whatever comes next
+        if self._cache_glue:
+            to_save = []
+            allow_bio = getattr(self, "eligible_edges_for_next_bio", set()) or set()
+            allow_tec = getattr(self, "eligible_edges_for_next_tech", set()) or set()
+            for s, c in allow_bio:
+                to_save.append(("biosphere-technosphere", s, c))
+            for s, c in allow_tec:
+                to_save.append(("technosphere-technosphere", s, c))
+            saved = self._cache_glue.save_allow(self, "map_dynamic_locations", to_save)
+            self.logger.info(
+                "ALLOW cache saved for map_dynamic_locations: %d entries", saved
+            )
 
     def map_contained_locations(self) -> None:
         """
         Resolve unmatched exchanges by assigning CFs from spatially containing regions.
-
-        This method assigns a CF to an exchange based on a broader geographic area that
-        contains the exchange's region. For example, if no CF exists for "Québec", but
-        a CF exists for "Canada", that CF will be used.
-
-        It is typically used when the method file contains national-level CFs but the
-        inventory includes subnational or otherwise finer-grained locations.
-
-        Notes
-        -----
-        - Uses a geographic containment hierarchy to resolve matches (e.g., geo aggregation trees).
-        - Only uncharacterized exchanges are considered.
-        - This is conceptually the inverse of `map_aggregate_locations()`.
-
-        Preconditions
-        -------------
-        - `lci()` and `map_exchanges()` must be called
-        - A geo containment structure must be defined or inferred
-
-        Updates
-        -------
-        - Adds fallback CFs to `cfs_mapping`
-        - Updates internal tracking of processed edges
-
-        :return: None
+        (Inverse of map_aggregate_locations: use containing regions instead of contained.)
         """
 
         self._initialize_weights()
         logger.info("Handling contained locations…")
 
+        STAGE = "map_contained_locations"
+
+        # --- Positive preload (restores prior results from THIS context)
+        pre_len = len(self.cfs_mapping)
+        restored = self._cache_preload_if_any()
+        post_len = len(self.cfs_mapping)
+        if restored:
+            pos_from_cache = [
+                p
+                for cf in self.cfs_mapping[pre_len:post_len]
+                for p in cf.get("positions", ())
+            ]
+            logger.info(
+                "CACHE PRELOAD (%s): entries=%d positions=%d sample=%s",
+                STAGE,
+                post_len - pre_len,
+                len(pos_from_cache),
+                pos_from_cache[:5],
+            )
+
         cf_operators = {
             cf["supplier"].get("operator", "equals") for cf in self.raw_cfs_data
         }
 
-        for direction in ["biosphere-technosphere", "technosphere-technosphere"]:
+        # Per-direction allowlists we’ll propagate to whatever comes next
+        stage_allow_bio: set[tuple[int, int]] = set()
+        stage_allow_tec: set[tuple[int, int]] = set()
 
+        for direction in ["biosphere-technosphere", "technosphere-technosphere"]:
             # Pick the correct reversed supplier dict for this direction
             rev_sup = (
                 self.reversed_supplier_lookup_bio
@@ -1935,25 +2278,88 @@ class EdgeLCIA:
                 if direction == "biosphere-technosphere"
                 else self.processed_technosphere_edges
             )
-
             processed_flows = set(processed_flows)
-            edges_index = defaultdict(list)
 
-            # let's remove edges that have no chance of qualifying
+            # Keep only edges that prior stages explicitly allowed to reach here
             allowed = (
-                self.eligible_edges_for_next_bio
+                getattr(self, "eligible_edges_for_next_bio", set())
                 if direction == "biosphere-technosphere"
-                else self.eligible_edges_for_next_tech
+                else getattr(self, "eligible_edges_for_next_tech", set())
             )
             if allowed:
                 unprocessed_edges = [e for e in unprocessed_edges if e in allowed]
 
+            # --- NEGATIVE cache prune (global, non-location misses)
+            if getattr(self, "_cache_glue", None):
+                neg = self._cache_glue.preload_negative(self)
+                if neg:
+                    keep = []
+                    for s, c in unprocessed_edges:
+                        s_id = self._cache_glue._supplier_act_id(self, s, direction)
+                        c_id = self._cache_glue._consumer_act_id(self, c)
+                        sigs = neg.get((direction, s_id, c_id))
+                        if not sigs:
+                            keep.append((s, c))
+                            continue
+                        s_sig = self._cache_glue._supplier_sig_from_idx(
+                            self, s, direction
+                        )
+                        c_sig = self._cache_glue._consumer_sig_from_idx(self, c)
+                        # Skip only if signatures still match exactly
+                        if sigs != (s_sig, c_sig):
+                            keep.append((s, c))
+                    unprocessed_edges = keep
+
+            # --- STAGE allowlist preload (fast-skip edges that we know belong here)
+            stage_allow = set()
+            if getattr(self, "_cache_glue", None):
+                allow_rows = self._cache_glue.preload_allow(
+                    self, STAGE
+                )  # {(dir,s_id,c_id): (s_sig,c_sig)}
+                if allow_rows:
+                    keep = []
+                    for s, c in unprocessed_edges:
+                        s_id = self._cache_glue._supplier_act_id(self, s, direction)
+                        c_id = self._cache_glue._consumer_act_id(self, c)
+                        sigs = allow_rows.get((direction, s_id, c_id))
+                        if not sigs:
+                            keep.append((s, c))
+                            continue
+                        s_sig = self._cache_glue._supplier_sig_from_idx(
+                            self, s, direction
+                        )
+                        c_sig = self._cache_glue._consumer_sig_from_idx(self, c)
+                        if sigs == (s_sig, c_sig):
+                            stage_allow.add(
+                                (s, c)
+                            )  # remember for next stage, and skip here
+                        else:
+                            keep.append((s, c))
+                    unprocessed_edges = keep
+
+            logger.info(
+                "ALLOW PRELOAD (%s): direction=%s | allow=%d | remaining=%d",
+                STAGE,
+                direction,
+                len(stage_allow),
+                len(unprocessed_edges),
+            )
+
+            # Early continue if this direction has nothing left after pruning
+            if not unprocessed_edges:
+                if direction == "biosphere-technosphere":
+                    stage_allow_bio |= stage_allow
+                else:
+                    stage_allow_tec |= stage_allow
+                continue
+
+            # -------- Build candidate groups (same as your original, but unchanged) -----
+            edges_index = defaultdict(list)
             for supplier_idx, consumer_idx in unprocessed_edges:
                 if (supplier_idx, consumer_idx) in processed_flows:
                     continue
 
                 consumer_loc = self.consumer_loc.get(consumer_idx)
-
                 if not consumer_loc:
                     raise ValueError(
                         f"Consumer flow {consumer_idx} has no 'location' field. "
@@ -1979,38 +2385,34 @@ class EdgeLCIA:
                 ):
                     continue
 
-                # 🔁 Use the shared utility function to get subregions
+                # Containing regions: set `containing=False` to go "up" in hierarchy
                 if supplier_location is None:
-                    candidate_suppliers_locations = [
-                        "__ANY__",
-                    ]
+                    candidate_suppliers_locations = ["__ANY__"]
                 else:
                     candidate_suppliers_locations = resolve_candidate_locations(
                         geo=self.geo,
                         location=supplier_location,
                         weights=frozenset(k for k, v in self.weights.items()),
-                        containing=False,
+                        containing=False,  # ← contained → containing
                         supplier=True,
                     )
 
                 if consumer_location is None:
-                    candidate_consumer_locations = [
-                        "__ANY__",
-                    ]
+                    candidate_consumer_locations = ["__ANY__"]
                 else:
                     candidate_consumer_locations = resolve_candidate_locations(
                         geo=self.geo,
                         location=consumer_location,
                         weights=frozenset(k for k, v in self.weights.items()),
-                        containing=False,
+                        containing=False,  # ← contained → containing
                         supplier=False,
                     )
 
+                # If neither side has a containing path, nothing to do for this group
                 if (
                     len(candidate_suppliers_locations) == 0
                     and len(candidate_consumer_locations) == 0
                 ):
-                    # neither the supplier or consumer locations are composite locations
                     continue
 
                 for supplier_idx, consumer_idx in edges:
@@ -2020,7 +2422,6 @@ class EdgeLCIA:
                     sig = _equality_supplier_signature_cached(
                         make_hashable(supplier_info)
                     )
-
                     if sig in self._cached_supplier_keys:
                         prefiltered_groups[sig].append(
                             (
@@ -2045,20 +2446,20 @@ class EdgeLCIA:
                                 )
                             )
 
-            # Pass 1
-            if len(prefiltered_groups) > 0:
+            # Pass 1 (prefiltered)
+            if prefiltered_groups:
                 for sig, group_edges in tqdm(
                     prefiltered_groups.items(),
                     desc="Processing contained groups (pass 1)",
                 ):
                     supplier_info = group_edges[0][2]
                     consumer_info = group_edges[0][3]
-                    candidate_supplier_locations = group_edges[0][-2]
-                    candidate_consumer_locations = group_edges[0][-1]
+                    cand_sup = group_edges[0][-2]
+                    cand_con = group_edges[0][-1]
 
                     new_cf, matched_cf_obj, agg_uncertainty = compute_average_cf(
-                        candidate_suppliers=candidate_supplier_locations,
-                        candidate_consumers=candidate_consumer_locations,
+                        candidate_suppliers=cand_sup,
+                        candidate_consumers=cand_con,
                         supplier_info=supplier_info,
                         consumer_info=consumer_info,
                         required_supplier_fields=self.required_supplier_fields,
@@ -2070,15 +2471,15 @@ class EdgeLCIA:
                         for (
                             supplier_idx,
                             consumer_idx,
-                            supplier_info,
-                            consumer_info,
+                            s_info,
+                            c_info,
                             _,
                             _,
                         ) in group_edges:
                             add_cf_entry(
                                 cfs_mapping=self.cfs_mapping,
-                                supplier_info=supplier_info,
-                                consumer_info=consumer_info,
+                                supplier_info=s_info,
+                                consumer_info=c_info,
                                 direction=direction,
                                 indices=[(supplier_idx, consumer_idx)],
                                 value=new_cf,
@@ -2087,43 +2488,35 @@ class EdgeLCIA:
                     else:
                         self.logger.warning(
                             f"Fallback CF could not be computed for supplier={supplier_info}, consumer={consumer_info} "
-                            f"with candidate suppliers={candidate_supplier_locations} and consumers={candidate_consumer_locations}"
+                            f"with candidate suppliers={cand_sup} and consumers={cand_con}"
                         )
 
-            # Pass 2
+            # Pass 2 (fallback, memoized)
             compute_cf_memoized = compute_cf_memoized_factory(
                 cf_index=self.cf_index,
                 required_supplier_fields=self.required_supplier_fields,
                 required_consumer_fields=self.required_consumer_fields,
                 weights=self.weights,
             )
-
             grouped_edges = group_edges_by_signature(
                 edge_list=remaining_edges,
                 required_supplier_fields=self.required_supplier_fields,
                 required_consumer_fields=self.required_consumer_fields,
             )
 
-            if len(grouped_edges) > 0:
-                for (
-                    supplier_info,
-                    consumer_info,
-                    (candidate_suppliers, candidate_consumers),
-                ), edge_group in tqdm(
+            if grouped_edges:
+                for (s_key, c_key, (cand_sup, cand_con)), edge_group in tqdm(
                     grouped_edges.items(), desc="Processing contained groups (pass 2)"
                 ):
                     new_cf, matched_cf_obj, agg_uncertainty = compute_cf_memoized(
-                        supplier_info,
-                        consumer_info,
-                        candidate_suppliers,
-                        candidate_consumers,
+                        s_key, c_key, cand_sup, cand_con
                     )
                     if new_cf:
                         for supplier_idx, consumer_idx in edge_group:
                             add_cf_entry(
                                 cfs_mapping=self.cfs_mapping,
-                                supplier_info=dict(supplier_info),
-                                consumer_info=dict(consumer_info),
+                                supplier_info=dict(s_key),
+                                consumer_info=dict(c_key),
                                 direction=direction,
                                 indices=[(supplier_idx, consumer_idx)],
                                 value=new_cf,
@@ -2131,51 +2524,69 @@ class EdgeLCIA:
                             )
                     else:
                         self.logger.warning(
-                            f"Fallback CF could not be computed for supplier={supplier_info}, consumer={consumer_info} "
-                            f"with candidate suppliers={candidate_suppliers} and consumers={candidate_consumers}"
+                            f"Fallback CF could not be computed for supplier={s_key}, consumer={c_key} "
+                            f"with candidate suppliers={cand_sup} and consumers={cand_con}"
                         )
 
+            # Carry over this direction’s stage-allow to next stage
+            if direction == "biosphere-technosphere":
+                stage_allow_bio |= stage_allow
+            else:
+                stage_allow_tec |= stage_allow
+
+        # Refresh processed/unprocessed sets after we added entries
         self._update_unprocessed_edges()
 
+        # Save positive cache rows for new matches
         written = self._cache_save_new()
         if written:
             self.logger.info(
-                "Cache saved %d newly characterized positions (%s).",
-                written,
-                "map_aggregate_locations",
-            )  # adapt the label per method
+                "Cache saved %d newly characterized positions (%s).", written, STAGE
+            )
+        else:
+            self.logger.info("No new cache entries to save (%s).", STAGE)
+
+        # Persist this stage's allowlist (for early pruning next run)
+        if getattr(self, "_cache_glue", None):
+            to_save = []
+            for s, c in stage_allow_bio:
+                to_save.append(("biosphere-technosphere", s, c))
+            for s, c in stage_allow_tec:
+                to_save.append(("technosphere-technosphere", s, c))
+            saved = self._cache_glue.save_allow(self, STAGE, to_save)
+            logger.info("ALLOW cache saved for %s: %d entries", STAGE, saved)
+
+        # Expose for the next stage in this run, too
+        self.eligible_edges_for_next_bio = stage_allow_bio
+        self.eligible_edges_for_next_tech = stage_allow_tec
 
     def map_remaining_locations_to_global(self) -> None:
         """
-        Assign global fallback CFs to exchanges that remain unmatched after all regional mapping steps.
-
-        This method ensures that all eligible exchanges are characterized by assigning a CF
-        from the global region ("GLO") when no direct, aggregate, dynamic, or containing region match
-        has been found.
-
-        It is the last step in the regional mapping cascade.
-
-        Notes
-        -----
-        - Uses a weighted global average if multiple CFs exist for the same exchange type.
-        - If no global CF exists for a given exchange, it remains uncharacterized.
-        - This step guarantees that the system-wide score is computable unless coverage is zero.
-
-        Preconditions
-        -------------
-        - `lci()` and `map_exchanges()` must be called
-        - Should follow other mapping steps: `map_aggregate_locations()`, `map_dynamic_locations()`, etc.
-
-        Updates
-        -------
-        - Adds fallback CFs to `cfs_mapping`
-        - Marks remaining exchanges as processed
-
-        :return: None
+        Assign global fallback CFs ("GLO") to exchanges that remain unmatched after all regional mapping steps.
         """
 
         self._initialize_weights()
         logger.info("Handling remaining exchanges…")
+
+        STAGE = "map_remaining_locations_to_global"
+
+        # --- Positive preload (restore prior results for this exact context)
+        pre_len = len(self.cfs_mapping)
+        restored = self._cache_preload_if_any()
+        post_len = len(self.cfs_mapping)
+        if restored:
+            pos_from_cache = [
+                p
+                for cf in self.cfs_mapping[pre_len:post_len]
+                for p in cf.get("positions", ())
+            ]
+            logger.info(
+                "CACHE PRELOAD (%s): entries=%d positions=%d sample=%s",
+                STAGE,
+                post_len - pre_len,
+                len(pos_from_cache),
+                pos_from_cache[:5],
+            )
 
         cf_operators = {
             cf["supplier"].get("operator", "equals") for cf in self.raw_cfs_data
@@ -2188,6 +2599,10 @@ class EdgeLCIA:
             weights=frozenset(k for k, v in self.weights.items()),
             containing=True,
         )
+
+        # Stage allow we’ll propagate (probably empty for the final pass, but consistent)
+        stage_allow_bio: set[tuple[int, int]] = set()
+        stage_allow_tec: set[tuple[int, int]] = set()
 
         for direction in ["biosphere-technosphere", "technosphere-technosphere"]:
 
@@ -2209,23 +2624,87 @@ class EdgeLCIA:
                 else self.processed_technosphere_edges
             )
             processed_flows = set(processed_flows)
-            edges_index = defaultdict(list)
 
-            # let's remove edges that have no chance of qualifying
+            # Keep only edges that earlier stages explicitly allowed to reach here
             allowed = (
-                self.eligible_edges_for_next_bio
+                getattr(self, "eligible_edges_for_next_bio", set())
                 if direction == "biosphere-technosphere"
-                else self.eligible_edges_for_next_tech
+                else getattr(self, "eligible_edges_for_next_tech", set())
             )
             if allowed:
                 unprocessed_edges = [e for e in unprocessed_edges if e in allowed]
 
+            # --- NEGATIVE cache prune (global, non-location misses)
+            if getattr(self, "_cache_glue", None):
+                neg = self._cache_glue.preload_negative(self)
+                if neg:
+                    keep = []
+                    for s, c in unprocessed_edges:
+                        s_id = self._cache_glue._supplier_act_id(self, s, direction)
+                        c_id = self._cache_glue._consumer_act_id(self, c)
+                        sigs = neg.get((direction, s_id, c_id))
+                        if not sigs:
+                            keep.append((s, c))
+                            continue
+                        s_sig = self._cache_glue._supplier_sig_from_idx(
+                            self, s, direction
+                        )
+                        c_sig = self._cache_glue._consumer_sig_from_idx(self, c)
+                        # Skip only if signatures still match exactly
+                        if sigs != (s_sig, c_sig):
+                            keep.append((s, c))
+                    unprocessed_edges = keep
+
+            # --- STAGE allowlist preload (fast-skip edges already destined for this stage)
+            stage_allow = set()
+            if getattr(self, "_cache_glue", None):
+                allow_rows = self._cache_glue.preload_allow(
+                    self, STAGE
+                )  # {(dir,s_id,c_id): (s_sig,c_sig)}
+                if allow_rows:
+                    keep = []
+                    for s, c in unprocessed_edges:
+                        s_id = self._cache_glue._supplier_act_id(self, s, direction)
+                        c_id = self._cache_glue._consumer_act_id(self, c)
+                        sigs = allow_rows.get((direction, s_id, c_id))
+                        if not sigs:
+                            keep.append((s, c))
+                            continue
+                        s_sig = self._cache_glue._supplier_sig_from_idx(
+                            self, s, direction
+                        )
+                        c_sig = self._cache_glue._consumer_sig_from_idx(self, c)
+                        if sigs == (s_sig, c_sig):
+                            stage_allow.add(
+                                (s, c)
+                            )  # remember; skip heavy work for these
+                        else:
+                            keep.append((s, c))
+                    unprocessed_edges = keep
+
+            logger.info(
+                "ALLOW PRELOAD (%s): direction=%s | allow=%d | remaining=%d",
+                STAGE,
+                direction,
+                len(stage_allow),
+                len(unprocessed_edges),
+            )
+
+            # Early continue if nothing left after pruning
+            if not unprocessed_edges:
+                if direction == "biosphere-technosphere":
+                    stage_allow_bio |= stage_allow
+                else:
+                    stage_allow_tec |= stage_allow
+                continue
+
+            # -------- Build candidate groups (unchanged core logic) --------
+            edges_index = defaultdict(list)
             for supplier_idx, consumer_idx in unprocessed_edges:
                 if (supplier_idx, consumer_idx) in processed_flows:
                     continue
 
                 consumer_loc = self.consumer_loc.get(consumer_idx)
-
                 if not consumer_loc:
                     raise ValueError(
                         f"Consumer flow {consumer_idx} has no 'location' field. "
@@ -2248,21 +2727,16 @@ class EdgeLCIA:
             for (consumer_location, supplier_location), edges in edges_index.items():
 
                 if supplier_location is None:
-                    candidate_suppliers_locations = [
-                        "__ANY__",
-                    ]
+                    candidate_suppliers_locations = ["__ANY__"]
                 else:
                     candidate_suppliers_locations = global_locations
 
                 if consumer_location is None:
-                    candidate_consumers_locations = [
-                        "__ANY__",
-                    ]
+                    candidate_consumers_locations = ["__ANY__"]
                 else:
                     candidate_consumers_locations = global_locations
 
                 for supplier_idx, consumer_idx in edges:
-
                     supplier_info = rev_sup[supplier_idx]
                     consumer_info = self._get_consumer_info(consumer_idx)
 
@@ -2295,7 +2769,7 @@ class EdgeLCIA:
                             )
 
             # Pass 1
-            if len(prefiltered_groups) > 0:
+            if prefiltered_groups:
                 for sig, group_edges in tqdm(
                     prefiltered_groups.items(), desc="Processing global groups (pass 1)"
                 ):
@@ -2325,15 +2799,15 @@ class EdgeLCIA:
                         for (
                             supplier_idx,
                             consumer_idx,
-                            supplier_info,
-                            consumer_info,
+                            s_info,
+                            c_info,
                             _,
                             _,
                         ) in group_edges:
                             add_cf_entry(
                                 cfs_mapping=self.cfs_mapping,
-                                supplier_info=supplier_info,
-                                consumer_info=consumer_info,
+                                supplier_info=s_info,
+                                consumer_info=c_info,
                                 direction=direction,
                                 indices=[(supplier_idx, consumer_idx)],
                                 value=new_cf,
@@ -2359,19 +2833,12 @@ class EdgeLCIA:
                 required_consumer_fields=self.required_consumer_fields,
             )
 
-            if len(grouped_edges) > 0:
-                for (
-                    supplier_info,
-                    consumer_info,
-                    (candidate_suppliers, candidate_consumers),
-                ), edge_group in tqdm(
+            if grouped_edges:
+                for (s_key, c_key, (cand_sup, cand_con)), edge_group in tqdm(
                     grouped_edges.items(), desc="Processing global groups (pass 2)"
                 ):
                     new_cf, matched_cf_obj, agg_uncertainty = compute_cf_memoized(
-                        supplier_info,
-                        consumer_info,
-                        candidate_suppliers,
-                        candidate_consumers,
+                        s_key, c_key, cand_sup, cand_con
                     )
                     unc = (
                         agg_uncertainty
@@ -2386,8 +2853,8 @@ class EdgeLCIA:
                         for supplier_idx, consumer_idx in edge_group:
                             add_cf_entry(
                                 cfs_mapping=self.cfs_mapping,
-                                supplier_info=dict(supplier_info),
-                                consumer_info=dict(consumer_info),
+                                supplier_info=dict(s_key),
+                                consumer_info=dict(c_key),
                                 direction=direction,
                                 indices=[(supplier_idx, consumer_idx)],
                                 value=new_cf,
@@ -2395,19 +2862,39 @@ class EdgeLCIA:
                             )
                     else:
                         self.logger.warning(
-                            f"Fallback CF could not be computed for supplier={supplier_info}, consumer={consumer_info} "
-                            f"with candidate suppliers={candidate_suppliers} and consumers={candidate_consumers}"
+                            f"Fallback CF could not be computed for supplier={s_key}, consumer={c_key} "
+                            f"with candidate suppliers={cand_sup} and consumers={cand_con}"
                         )
+
+            # Propagate per-direction stage allow (mostly for consistency/next runs)
+            if direction == "biosphere-technosphere":
+                stage_allow_bio |= stage_allow
+            else:
+                stage_allow_tec |= stage_allow
 
         self._update_unprocessed_edges()
 
         written = self._cache_save_new()
         if written:
             self.logger.info(
-                "Cache saved %d newly characterized positions (%s).",
-                written,
-                "map_aggregate_locations",
-            )  # adapt the label per method
+                "Cache saved %d newly characterized positions (%s).", written, STAGE
+            )
+        else:
+            self.logger.info("No new cache entries to save (%s).", STAGE)
+
+        # Persist this stage's allowlist (for early pruning next run)
+        if getattr(self, "_cache_glue", None):
+            to_save = []
+            for s, c in stage_allow_bio:
+                to_save.append(("biosphere-technosphere", s, c))
+            for s, c in stage_allow_tec:
+                to_save.append(("technosphere-technosphere", s, c))
+            saved = self._cache_glue.save_allow(self, STAGE, to_save)
+            logger.info("ALLOW cache saved for %s: %d entries", STAGE, saved)
+
+        # Expose for any follow-up step (harmless if unused)
+        self.eligible_edges_for_next_bio = stage_allow_bio
+        self.eligible_edges_for_next_tech = stage_allow_tec
 
     def evaluate_cfs(self, scenario_idx: str | int = 0, scenario=None):
         """

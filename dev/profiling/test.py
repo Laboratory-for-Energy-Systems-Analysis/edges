@@ -6,9 +6,9 @@ import time
 
 # Start timer
 start_time = time.time()
-bw2data.projects.set_current("bw25_ei310")
+# bw2data.projects.set_current("bw25_ei310")
 # bw2data.projects.set_current("ecoinvent-3.10.1-cutoff")
-# bw2data.projects.set_current("ecoinvent-3.10-cutoff")
+bw2data.projects.set_current("ecoinvent-3.10-cutoff")
 
 act = [
     a
@@ -24,17 +24,18 @@ method = ("AWARE 2.0", "Country", "all", "yearly")
 LCA = EdgeLCIA({act: 1}, method, use_distributions=True, iterations=10000)
 LCA.lci()
 
+
 LCA.map_exchanges()
 LCA.map_aggregate_locations()
 LCA.map_dynamic_locations()
-LCA.map_contained_locations()
-LCA.map_remaining_locations_to_global()
+# LCA.map_contained_locations()
+# LCA.map_remaining_locations_to_global()
 
 LCA.evaluate_cfs()
 LCA.lcia()
 
-df = LCA.generate_cf_table(include_unmatched=False)
-df.to_excel("df_AWARE.xlsx")
+# df = LCA.generate_cf_table(include_unmatched=False)
+# df.to_excel("df_AWARE.xlsx")
 
 # Stop timer
 elapsed_time = time.time() - start_time
