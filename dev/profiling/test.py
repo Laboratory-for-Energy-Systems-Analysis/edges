@@ -21,15 +21,20 @@ act = [
 method = ("AWARE 2.0", "Country", "all", "yearly")
 # method = ("GeoPolRisk", "paired", "2024")
 
-LCA = EdgeLCIA({act: 1}, method, use_distributions=True, iterations=10000)
+LCA = EdgeLCIA(
+    {act: 1},
+    method,
+    # use_distributions=True,
+    # iterations=10000
+)
 LCA.lci()
 
 
 LCA.map_exchanges()
 LCA.map_aggregate_locations()
 LCA.map_dynamic_locations()
-# LCA.map_contained_locations()
-# LCA.map_remaining_locations_to_global()
+LCA.map_contained_locations()
+LCA.map_remaining_locations_to_global()
 
 LCA.evaluate_cfs()
 LCA.lcia()

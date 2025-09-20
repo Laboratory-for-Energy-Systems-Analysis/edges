@@ -66,14 +66,39 @@ CACHE_DIR = platformdirs.user_data_path(appname="edges", appauthor="psi-lea")
 # ---------------------------------------------------------------------------
 
 
+def _stable_bytes(obj) -> bytes:
+    # Fast deterministic encoder for small, flat structures (tuples, dicts, str, int)
+    # Avoid json; avoid recursion for known shapes.
+    if obj is None:
+        return b"n"
+    if isinstance(obj, (int, float)):
+        return f"f{obj!r}".encode("utf-8")
+    if isinstance(obj, str):
+        s = obj.replace("|", "||")
+        return b"s|" + s.encode("utf-8")
+    if isinstance(obj, tuple):
+        return b"t|" + b"|".join(_stable_bytes(x) for x in obj)
+    if isinstance(obj, list):
+        return b"l|" + b"|".join(_stable_bytes(x) for x in obj)
+    if isinstance(obj, dict):
+        # sort keys once; keys are strings in your usage
+        items = sorted(obj.items(), key=lambda kv: kv[0])
+        return b"d|" + b"|".join(
+            _stable_bytes(k) + b"=" + _stable_bytes(v) for k, v in items
+        )
+    # fallback
+    return f"o|{str(obj)}".encode("utf-8")
+
+
+def _fast_hash(obj: t.Any) -> str:
+    # blake2s is fast and deterministic; short digest is fine for cache keys
+    h = hashlib.blake2s(digest_size=16)
+    h.update(_stable_bytes(obj))
+    return h.hexdigest()
+
+
 def _sha256_bytes(b: bytes) -> str:
     return hashlib.sha256(b).hexdigest()
-
-
-def _sha256_obj(obj: t.Any) -> str:
-    return hashlib.sha256(
-        json.dumps(obj, sort_keys=True, default=str).encode("utf-8")
-    ).hexdigest()
 
 
 def _norm_none(x):
@@ -529,8 +554,7 @@ class MappingCache:
             "geo": geo_hash,
             "params": params_hash,
         }
-        raw = json.dumps(payload, sort_keys=True, separators=(",", ":")).encode("utf-8")
-        return hashlib.sha256(raw).hexdigest()
+        return _fast_hash(payload)
 
     # ---------- load ----------
     def load_for_context(self, context_key: str) -> list[MappingRow]:
@@ -666,12 +690,17 @@ class EdgeCacheGlue:
     # --- Hash builders bound to an EdgeLCIA instance ---
     @staticmethod
     def method_hash(edge) -> str:
-        return _sha256_bytes(edge.filepath.read_bytes())
+        if hasattr(edge, "_ctx_hashes") and "method" in edge._ctx_hashes:
+            return edge._ctx_hashes["method"]
+        h = _fast_hash(edge.filepath.read_bytes())  # or keep sha256 for files
+        if hasattr(edge, "_ctx_hashes"):
+            edge._ctx_hashes["method"] = h
+        return h
 
     @staticmethod
     def params_hash(edge) -> str:
         payload = {"scenario": edge.scenario, "parameters": edge.parameters}
-        return _sha256_obj(payload)
+        return _fast_hash(payload)
 
     @staticmethod
     def weights_hash(edge) -> str:
@@ -695,15 +724,15 @@ class EdgeCacheGlue:
         else:
             payload = w  # unexpected type; still hashable via default=str
 
-        return _sha256_obj(payload)
+        return _fast_hash(payload)
 
     @staticmethod
     def geo_hash(edge) -> str:
         # geo should expose a stable payload if possible; fallback to hash of weights + class name
         payload = getattr(edge.geo, "version_payload", None)
         if callable(payload):
-            return _sha256_obj(payload())
-        return _sha256_obj({"klass": edge.geo.__class__.__name__})
+            return _fast_hash(payload())
+        return _fast_hash({"klass": edge.geo.__class__.__name__})
 
     @staticmethod
     def _supplier_sig_from_idx(edge, idx: int, direction: str) -> str:
@@ -716,7 +745,7 @@ class EdgeCacheGlue:
         # reuse the existing normalization
         from .edgelcia import _equality_supplier_signature_cached, make_hashable  # type: ignore
 
-        return _sha256_obj(
+        return _fast_hash(
             tuple(_equality_supplier_signature_cached(make_hashable(info)))
         )
 
@@ -724,7 +753,7 @@ class EdgeCacheGlue:
     def _consumer_sig_from_idx(edge, idx: int) -> str:
         info = edge._get_consumer_info(idx)  # attaches classifications if missing
         # Normalize similar to supplier path
-        from .edgelcia import make_hashable  # type: ignore
+        from .edgelcia import _equality_consumer_signature_cached, make_hashable
 
         norm = {
             k: info.get(k)
@@ -737,7 +766,9 @@ class EdgeCacheGlue:
             )
             if k in info
         }
-        return _sha256_obj(tuple(make_hashable(norm)))
+        return _fast_hash(
+            tuple(_equality_consumer_signature_cached(make_hashable(norm)))
+        )
 
     @staticmethod
     def _supplier_act_id(edge, i: int, direction: str) -> str:
@@ -752,116 +783,165 @@ class EdgeCacheGlue:
     # ---------- PRELOAD: turn cached rows into add_cf_entry calls ----------
     def preload_from_cache(self, edge) -> int:
         """Attempt to short-circuit mapping using cached rows.
-
-        Returns the number of (i,j) positions that were restored.
+        Returns the number of (i, j) positions that were restored.
         """
+        # --- Build context key once (minimal logging) ------------------------------
+        project = getattr(edge.lca, "project", "bw2")
+        mh = self.method_hash(edge)
+        ph = self.params_hash(edge)
+        wh = self.weights_hash(edge)
+        gh = self.geo_hash(edge)
+        ctx_key = MappingCache.make_context_key(project, mh, wh, gh, ph)
 
-        edge.logger.info(
-            "CACHE CTX: project=%s | method=%s | params=%s | weights=%s | geo=%s",
-            getattr(edge.lca, "project", "bw2"),
-            self.method_hash(edge),
-            self.params_hash(edge),
-            self.weights_hash(edge),
-            self.geo_hash(edge),
-        )
-        ctx_key = MappingCache.make_context_key(
-            getattr(edge.lca, "project", "bw2"),
-            self.method_hash(edge),
-            self.weights_hash(edge),
-            self.geo_hash(edge),
-            self.params_hash(edge),
-        )
-
-        p_parq = self.mapping_cache.backend._map_path(ctx_key, PARQUET_AVAILABLE)
-        p_csv = self.mapping_cache.backend._map_path(ctx_key, parquet=False)
-        edge.logger.info(
-            "CACHE PRELOAD: probe exists parq=%s (%s) csv=%s (%s)",
-            p_parq,
-            p_parq.exists(),
-            p_csv,
-            p_csv.exists(),
-        )
-
-        edge.logger.info("CACHE CTX_KEY (64hex) = %s (len=%d)", ctx_key, len(ctx_key))
-        edge.logger.info("CACHE BACKEND = %s", type(self.mapping_cache).__name__)
-        edge.logger.info("CACHE BACKEND REPR = %r", self.mapping_cache)
-        root_path = getattr(self.mapping_cache.backend, "root", None)
-        edge.logger.info("CACHE BACKEND ROOT = %r", root_path)
-
-        edge.logger.info(
-            "CACHE CTX: project=%s | method=%s | params=%s | weights=%s | geo=%s",
-            getattr(edge.lca, "project", "bw2"),
-            self.method_hash(edge)[:12],
-            self.params_hash(edge)[:12],
-            self.weights_hash(edge)[:12],
-            self.geo_hash(edge)[:12],
-        )
-        edge.logger.info("CACHE PRELOAD: ctx_key=%s", ctx_key)
-        try:
-            edge.logger.info(
-                "CACHE PRELOAD: backing_path=%s",
-                getattr(self.mapping_cache, "backing_path", None),
-            )
-        except Exception:
-            pass
-
+        # Load cached rows (already coerced to MappingRow by MappingCache)
         rows = self.mapping_cache.load_for_context(ctx_key)
-        edge.logger.info(
-            "CACHE PRELOAD: ctx_key=%s | loaded_rows=%d",
-            ctx_key[:16],
-            len(rows) if rows else 0,
-        )
         if not rows:
+            edge.logger.info("CACHE PRELOAD: no rows for ctx=%s", ctx_key[:16])
             return 0
 
-        from .edgelcia import add_cf_entry  # type: ignore
+        # --- Map persisted activity IDs -> current row/col indices -----------------
+        # Build these once. Keep two maps for supplier rows (bio vs tech).
+        # (We stringify keys to match persisted act_id values)
+        if not hasattr(edge, "_bio_id_to_row"):
+            edge._bio_id_to_row = {
+                str(v): k for k, v in edge.reversed_biosphere.items()
+            }
+        if not hasattr(edge, "_act_id_to_row"):
+            edge._act_id_to_row = {str(v): k for k, v in edge.reversed_activity.items()}
+        if not hasattr(edge, "_act_id_to_col"):
+            edge._act_id_to_col = {str(v): k for k, v in edge.reversed_activity.items()}
+
+        # --- Precompute current signature *hashes* for all indices we might touch --
+        # We work with interned sig IDs at runtime; convert to hashes lazily but only once.
+        # Build on-demand helpers if missing.
+        if not hasattr(edge, "_sig_hash"):
+            # Fallback helper: converts a signature id -> stable hash string, with memoization
+            import hashlib
+
+            def _enc(x):
+                if x is None:
+                    return b"n"
+                if isinstance(x, (int, float)):
+                    return f"f{repr(x)}".encode()
+                if isinstance(x, str):
+                    return b"s|" + x.encode()
+                if isinstance(x, tuple):
+                    return b"t|" + b"|".join(_enc(e) for e in x)
+                if isinstance(x, list):
+                    return b"l|" + b"|".join(_enc(e) for e in x)
+                if isinstance(x, dict):
+                    items = sorted(x.items(), key=lambda kv: kv[0])
+                    return b"d|" + b"|".join(_enc(k) + b"=" + _enc(v) for k, v in items)
+                return b"o|" + str(x).encode()
+
+            edge._sig_hash_cache = getattr(edge, "_sig_hash_cache", {})
+
+            def _sig_hash(sig_id: int) -> str:
+                cache = edge._sig_hash_cache
+                hs = cache.get(sig_id)
+                if hs is not None:
+                    return hs
+                tup = edge._sig_intern.get_tuple(sig_id)
+                h = hashlib.blake2s(digest_size=16)
+                h.update(_enc(tup))
+                hs = h.hexdigest()
+                cache[sig_id] = hs
+                return hs
+
+            edge._sig_hash = _sig_hash  # attach
+
+        # Build hash maps index -> hash for supplier (bio & tech) and consumer.
+        # Do this once to avoid per-row hashing.
+        if not hasattr(edge, "_hash_sup_bio"):
+            edge._hash_sup_bio = {}
+            for i in edge.reversed_supplier_lookup_bio.keys():
+                sid = edge.supplier_sig_bio[i]  # interned int id
+                edge._hash_sup_bio[i] = edge._sig_hash(sid)
+
+        if not hasattr(edge, "_hash_sup_tech"):
+            edge._hash_sup_tech = {}
+            for i in edge.reversed_supplier_lookup_tech.keys():
+                sid = edge.supplier_sig_tech[i]
+                edge._hash_sup_tech[i] = edge._sig_hash(sid)
+
+        if not hasattr(edge, "_hash_con"):
+            edge._hash_con = {}
+            for j in edge.reversed_consumer_lookup.keys():
+                cid = edge.consumer_sig[j]
+                edge._hash_con[j] = edge._sig_hash(cid)
+
+        # --- Restore rows ----------------------------------------------------------
+        from .edgelcia import (
+            add_cf_entry,
+        )  # import here to avoid cycles at module import
 
         restored = 0
-        skipped_no_index = 0  # no (i,j) mapping in current inventory
+        skipped_no_index = 0
         skipped_sig_mismatch = 0
         skipped_other = 0
+
+        # To avoid duplicate position emissions (some caches may contain dup rows)
         seen_positions = set()
+
+        # Fast locals
+        bio_id2row = edge._bio_id_to_row
+        act_id2row = edge._act_id_to_row
+        act_id2col = edge._act_id_to_col
+        hash_sup_bio = edge._hash_sup_bio
+        hash_sup_tech = edge._hash_sup_tech
+        hash_con = edge._hash_con
+        rev_sup_bio = edge.reversed_supplier_lookup_bio
+        rev_sup_tech = edge.reversed_supplier_lookup_tech
+        rev_con = edge.reversed_consumer_lookup
+
+        # Helper to normalize persisted sig fields (string hashes or ints)
+        def _as_str(x):
+            if x is None:
+                return None
+            # persisted int? convert to string for consistent compare
+            return str(x)
 
         for r in rows:
             try:
                 direction = r.direction
-                # map supplier index
-                if direction == "biosphere-technosphere":
-                    if not hasattr(edge, "_bio_id_to_row"):
-                        edge._bio_id_to_row = {
-                            str(v): k for k, v in edge.reversed_biosphere.items()
-                        }
-                    i = edge._bio_id_to_row.get(str(r.supplier_act_id))
-                else:
-                    if not hasattr(edge, "_act_id_to_row"):
-                        edge._act_id_to_row = {
-                            str(v): k for k, v in edge.reversed_activity.items()
-                        }
-                    i = edge._act_id_to_row.get(str(r.supplier_act_id))
+                s_id = str(r.supplier_act_id)
+                c_id = str(r.consumer_act_id)
 
-                if not hasattr(edge, "_act_id_to_col"):
-                    edge._act_id_to_col = {
-                        str(v): k for k, v in edge.reversed_activity.items()
-                    }
-                j = edge._act_id_to_col.get(str(r.consumer_act_id))
+                # Map activity IDs to current (i, j)
+                if direction == "biosphere-technosphere":
+                    i = bio_id2row.get(s_id)
+                else:
+                    i = act_id2row.get(s_id)
+                j = act_id2col.get(c_id)
 
                 if i is None or j is None:
                     skipped_no_index += 1
                     continue
 
-                s_sig_now = self._supplier_sig_from_idx(edge, i, direction)
-                c_sig_now = self._consumer_sig_from_idx(edge, j)
-                if s_sig_now != r.supplier_sig or c_sig_now != r.consumer_sig:
+                # Validate signatures quickly (string compare)
+                s_hash_now = (
+                    hash_sup_bio[i]
+                    if direction == "biosphere-technosphere"
+                    else hash_sup_tech[i]
+                )
+                c_hash_now = hash_con[j]
+                if s_hash_now != _as_str(r.supplier_sig) or c_hash_now != _as_str(
+                    r.consumer_sig
+                ):
                     skipped_sig_mismatch += 1
                     continue
 
+                # Compose supplier/consumer info dicts (direct lookup; no copies)
                 supplier_info = (
-                    edge.reversed_supplier_lookup_bio.get(i, {})
+                    rev_sup_bio.get(i, {})
                     if direction == "biosphere-technosphere"
-                    else edge.reversed_supplier_lookup_tech.get(i, {})
+                    else rev_sup_tech.get(i, {})
                 )
-                consumer_info = edge._get_consumer_info(j)
+                consumer_info = rev_con.get(
+                    j, {}
+                )  # already enriched in _preprocess_lookups()
 
+                # Value & uncertainty
                 val = (
                     r.value_numeric
                     if r.value_numeric is not None
@@ -874,18 +954,19 @@ class EdgeCacheGlue:
                     continue
                 seen_positions.add(pos)
 
+                # Emit one position (can't coalesce across different supplier/consumer infos safely)
                 add_cf_entry(
                     cfs_mapping=edge.cfs_mapping,
                     supplier_info=supplier_info,
                     consumer_info=consumer_info,
                     direction=direction,
-                    indices=[(i, j)],
+                    indices=[pos],
                     value=val,
                     uncertainty=unc,
                 )
                 restored += 1
+
             except Exception:
-                # If anything goes wrong for a row, skip it and keep going
                 skipped_other += 1
                 continue
 
@@ -957,7 +1038,24 @@ class EdgeCacheGlue:
         if not new:
             return 0
 
-        rows: list[dict] = []
+        # collect unique signature IDs involved in this batch
+        sup_ids = set()
+        con_ids = set()
+        for cf in new:
+            direction = cf["direction"]
+            for i, j in cf["positions"]:
+                sup_ids.add(
+                    edge.supplier_sig_bio[i]
+                    if direction == "biosphere-technosphere"
+                    else edge.supplier_sig_tech[i]
+                )
+                con_ids.add(edge.consumer_sig[j])
+
+        # compute hash strings once per id
+        sup_hash = {sid: edge._sig_hash(sid) for sid in sup_ids}
+        con_hash = {cid: edge._sig_hash(cid) for cid in con_ids}
+
+        rows = []
         for cf in new:
             direction = cf["direction"]
             val = cf.get("value")
@@ -976,13 +1074,19 @@ class EdgeCacheGlue:
             )
 
             for i, j in cf["positions"]:
+                sid = (
+                    edge.supplier_sig_bio[i]
+                    if direction == "biosphere-technosphere"
+                    else edge.supplier_sig_tech[i]
+                )
+                cid = edge.consumer_sig[j]
                 rows.append(
                     {
                         "direction": direction,
                         "supplier_act_id": self._supplier_act_id(edge, i, direction),
                         "consumer_act_id": self._consumer_act_id(edge, j),
-                        "supplier_sig": self._supplier_sig_from_idx(edge, i, direction),
-                        "consumer_sig": self._consumer_sig_from_idx(edge, j),
+                        "supplier_sig": sup_hash[sid],  # persisted as string
+                        "consumer_sig": con_hash[cid],  # persisted as string
                         "value_numeric": value_numeric,
                         "value_expr": value_expr,
                         "uncertainty_json": uncertainty_json,
