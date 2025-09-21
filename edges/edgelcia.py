@@ -855,6 +855,49 @@ class EdgeLCIA:
         )
         self._cls_hits_cache.clear()
 
+    def _get_supplier_info(self, supplier_idx: int, direction: str) -> dict:
+        """
+        Robustly fetch supplier info for a row index in either direction.
+        Uses filtered reversed lookups first; falls back to the full activity map.
+
+        Ensures we also keep the hot caches (loc/cls) coherent when we fill from fallback.
+        """
+        if direction == "biosphere-technosphere":
+            info = self.reversed_supplier_lookup_bio.get(supplier_idx)
+            if info is not None:
+                return info
+
+            # Fallback for biosphere: minimal metadata (categories via bw2data)
+            # (Biosphere supplier 'location' is typically not used.)
+            try:
+                ds = bw2data.get_activity(self.reversed_biosphere[supplier_idx])
+                info = {
+                    # keep only fields that can participate in signatures/matching
+                    "classifications": ds.get("categories"),
+                }
+            except Exception:
+                info = {}
+
+            # No hot-cache needed for biosphere direction
+            return info
+
+        # --- technosphere-technosphere
+        info = self.reversed_supplier_lookup_tech.get(supplier_idx)
+        if info is not None:
+            return info
+
+        # Fallback to full activity metadata for this position
+        act = self.position_to_technosphere_flows_lookup.get(supplier_idx, {})
+        info = dict(act) if act else {}
+
+        # Normalize optional bits to help later class/location logic
+        if "classifications" in info:
+            self.supplier_cls_tech[supplier_idx] = _norm_cls(info["classifications"])
+        if "location" in info:
+            self.supplier_loc_tech[supplier_idx] = info["location"]
+
+        return info
+
     def _get_consumer_info(self, consumer_idx):
         """
         Extract consumer information from an exchange.
@@ -916,7 +959,7 @@ class EdgeLCIA:
         :return: None
         """
 
-        self.lca.lci()
+        self.lca.lci(factorize=True)
 
         if all(
             cf["supplier"].get("matrix") == "technosphere" for cf in self.raw_cfs_data
@@ -1462,6 +1505,19 @@ class EdgeLCIA:
 
         self._ensure_filtered_lookups_for_current_edges()
 
+        # IMPORTANT: rebuild filtered lookups to cover the (current) unprocessed edges
+        restrict_sup_bio = {s for s, _ in self.unprocessed_biosphere_edges}
+        restrict_sup_tec = {s for s, _ in self.unprocessed_technosphere_edges}
+        restrict_con = {c for _, c in self.unprocessed_biosphere_edges} | {
+            c for _, c in self.unprocessed_technosphere_edges
+        }
+
+        self._preprocess_lookups(
+            restrict_supplier_positions_bio=restrict_sup_bio or None,
+            restrict_supplier_positions_tech=restrict_sup_tec or None,
+            restrict_consumer_positions=restrict_con or None,
+        )
+
         self._initialize_weights()
         logger.info("Handling static regions…")
 
@@ -1578,7 +1634,12 @@ class EdgeLCIA:
 
                 for supplier_idx, consumer_idx in edges:
 
-                    supplier_info = rev_sup[supplier_idx]
+                    supplier_info = self._get_supplier_info(supplier_idx, direction)
+                    if not supplier_info:
+                        # Nothing useful we can use: skip this edge defensively
+                        # (or log at DEBUG)
+                        continue
+
                     consumer_info = self._get_consumer_info(consumer_idx)
 
                     sig = _equality_supplier_signature_cached(
@@ -1734,6 +1795,19 @@ class EdgeLCIA:
 
         self._ensure_filtered_lookups_for_current_edges()
 
+        # IMPORTANT: rebuild filtered lookups to cover the (current) unprocessed edges
+        restrict_sup_bio = {s for s, _ in self.unprocessed_biosphere_edges}
+        restrict_sup_tec = {s for s, _ in self.unprocessed_technosphere_edges}
+        restrict_con = {c for _, c in self.unprocessed_biosphere_edges} | {
+            c for _, c in self.unprocessed_technosphere_edges
+        }
+
+        self._preprocess_lookups(
+            restrict_supplier_positions_bio=restrict_sup_bio or None,
+            restrict_supplier_positions_tech=restrict_sup_tec or None,
+            restrict_consumer_positions=restrict_con or None,
+        )
+
         self._initialize_weights()
         logger.info("Handling dynamic regions…")
 
@@ -1796,7 +1870,11 @@ class EdgeLCIA:
                     continue
 
                 consumer_info = self._get_consumer_info(consumer_idx)
-                supplier_info = rev_sup[supplier_idx]
+                supplier_info = self._get_supplier_info(supplier_idx, direction)
+                if not supplier_info:
+                    # Nothing useful we can use: skip this edge defensively
+                    # (or log at DEBUG)
+                    continue
 
                 supplier_loc = (
                     self.supplier_loc_bio.get(supplier_idx)
@@ -2009,6 +2087,19 @@ class EdgeLCIA:
 
         self._ensure_filtered_lookups_for_current_edges()
 
+        # IMPORTANT: rebuild filtered lookups to cover the (current) unprocessed edges
+        restrict_sup_bio = {s for s, _ in self.unprocessed_biosphere_edges}
+        restrict_sup_tec = {s for s, _ in self.unprocessed_technosphere_edges}
+        restrict_con = {c for _, c in self.unprocessed_biosphere_edges} | {
+            c for _, c in self.unprocessed_technosphere_edges
+        }
+
+        self._preprocess_lookups(
+            restrict_supplier_positions_bio=restrict_sup_bio or None,
+            restrict_supplier_positions_tech=restrict_sup_tec or None,
+            restrict_consumer_positions=restrict_con or None,
+        )
+
         self._initialize_weights()
         logger.info("Handling contained locations…")
 
@@ -2114,7 +2205,11 @@ class EdgeLCIA:
                     continue
 
                 for supplier_idx, consumer_idx in edges:
-                    supplier_info = rev_sup[supplier_idx]
+                    supplier_info = self._get_supplier_info(supplier_idx, direction)
+                    if not supplier_info:
+                        # Nothing useful we can use: skip this edge defensively
+                        # (or log at DEBUG)
+                        continue
                     consumer_info = self._get_consumer_info(consumer_idx)
 
                     sig = _equality_supplier_signature_cached(
@@ -2268,6 +2363,19 @@ class EdgeLCIA:
 
         self._ensure_filtered_lookups_for_current_edges()
 
+        # IMPORTANT: rebuild filtered lookups to cover the (current) unprocessed edges
+        restrict_sup_bio = {s for s, _ in self.unprocessed_biosphere_edges}
+        restrict_sup_tec = {s for s, _ in self.unprocessed_technosphere_edges}
+        restrict_con = {c for _, c in self.unprocessed_biosphere_edges} | {
+            c for _, c in self.unprocessed_technosphere_edges
+        }
+
+        self._preprocess_lookups(
+            restrict_supplier_positions_bio=restrict_sup_bio or None,
+            restrict_supplier_positions_tech=restrict_sup_tec or None,
+            restrict_consumer_positions=restrict_con or None,
+        )
+
         self._initialize_weights()
         logger.info("Handling remaining exchanges…")
 
@@ -2357,7 +2465,11 @@ class EdgeLCIA:
 
                 for supplier_idx, consumer_idx in edges:
 
-                    supplier_info = rev_sup[supplier_idx]
+                    supplier_info = self._get_supplier_info(supplier_idx, direction)
+                    if not supplier_info:
+                        # Nothing useful we can use: skip this edge defensively
+                        # (or log at DEBUG)
+                        continue
                     consumer_info = self._get_consumer_info(consumer_idx)
 
                     sig = _equality_supplier_signature_cached(
@@ -2898,10 +3010,18 @@ class EdgeLCIA:
                 prev_edges = set(zip(*self.lca.inventory.nonzero()))
 
         # 2) Recompute inventory & edges for the *new* demand
-        self.lci()  # updates matrices
+        self.lca.redo_lci(demand=demand)  # updates matrices
 
-        # 3) Compute CURRENT edges
+        only_tech = all(
+            cf["supplier"].get("matrix") == "technosphere" for cf in self.raw_cfs_data
+        )
+
+        # Recompute CURRENT edges from fresh matrices
         if only_tech:
+            # refresh helper & edges
+            self.technosphere_flow_matrix = build_technosphere_edges_matrix(
+                self.lca.technosphere_matrix, self.lca.supply_array
+            )
             current_edges = set(zip(*self.technosphere_flow_matrix.nonzero()))
         else:
             current_edges = set(zip(*self.lca.inventory.nonzero()))
