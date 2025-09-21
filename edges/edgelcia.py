@@ -336,9 +336,9 @@ class EdgeLCIA:
         self.method = method  # Store the method argument in the instance
         self.position_to_technosphere_flows_lookup = None
         self.technosphere_flows_lookup = defaultdict(list)
-        self.technosphere_edges = []
         self.technosphere_flow_matrix = None
-        self.biosphere_edges = []
+        self.technosphere_edges = set()
+        self.biosphere_edges = set()
         self.technosphere_flows = None
         self.biosphere_flows = None
         self.characterized_inventory = None
@@ -388,6 +388,11 @@ class EdgeLCIA:
         self._last_eval_scenario_idx = None
         self._failed_edges_tech: set[tuple[int, int]] = set()
         self._failed_edges_bio: set[tuple[int, int]] = set()
+        self._last_nonempty_edges_snapshot_bio = set()
+        self._last_nonempty_edges_snapshot_tech = set()
+        self._ever_seen_edges_bio: set[tuple[int, int]] = set()
+        self._ever_seen_edges_tech: set[tuple[int, int]] = set()
+        self._flows_version = None
 
     def _load_raw_lcia_data(self):
         """
@@ -609,64 +614,115 @@ class EdgeLCIA:
             if edge not in self.processed_technosphere_edges
         ]
 
-    def _preprocess_lookups(self):
+    def _preprocess_lookups(
+        self,
+        restrict_supplier_positions_bio: set[int] | None = None,
+        restrict_supplier_positions_tech: set[int] | None = None,
+        restrict_consumer_positions: set[int] | None = None,
+    ):
         """
         Preprocess supplier and consumer flows into lookup dictionaries and
         materialized reversed lookups (dict per position) plus hot-field caches.
 
-        Results:
-          - self.supplier_lookup_bio / self.supplier_lookup_tech
-          - self.reversed_supplier_lookup_bio / self.reversed_supplier_lookup_tech
-          - self.supplier_loc_bio / self.supplier_loc_tech
-          - self.supplier_cls_bio / self.supplier_cls_tech
-          - self.consumer_lookup
-          - self.reversed_consumer_lookup
-          - self.consumer_loc / self.consumer_cls
-          - (compat) self.supplier_lookup
+        This version caches *base* lookups built from all flows, then constructs
+        filtered, tiny lookups for just the positions in `restrict_*` for each run.
 
-        :return: None
+        Results populated on self:
+          - supplier lookups (filtered):
+              self.supplier_lookup_bio / self.supplier_lookup_tech
+          - reversed (position -> key dict):
+              self.reversed_supplier_lookup_bio / self.reversed_supplier_lookup_tech
+              self.reversed_consumer_lookup
+          - hot caches:
+              self.supplier_loc_bio / self.supplier_loc_tech
+              self.supplier_cls_bio / self.supplier_cls_tech
+              self.consumer_loc / self.consumer_cls
+          - combined supplier_lookup (back-compat):
+              self.supplier_lookup
+          - prefix indexes (restricted to CF-used codes):
+              self.cls_prefidx_supplier_bio / self.cls_prefidx_supplier_tech
+              self.cls_prefidx_consumer
         """
 
-        # ---- What fields are required on the CONSUMER side (ignore control/meta fields)
+        # ---- Figure out required CONSUMER fields once (ignore control/meta fields)
         IGNORED_FIELDS = {"matrix", "operator", "weight", "classifications", "position"}
-        self.required_consumer_fields = {
-            k
-            for cf in self.raw_cfs_data
-            for k in cf["consumer"].keys()
-            if k not in IGNORED_FIELDS
-        }
+        if (
+            not hasattr(self, "required_consumer_fields")
+            or self.required_consumer_fields is None
+        ):
+            self.required_consumer_fields = {
+                k
+                for cf in self.raw_cfs_data
+                for k in cf["consumer"].keys()
+                if k not in IGNORED_FIELDS
+            }
 
-        # ---- Supplier lookups, per matrix
-        if self.biosphere_flows:
-            self.supplier_lookup_bio = preprocess_flows(
-                flows_list=self.biosphere_flows,
-                mandatory_fields=self.required_supplier_fields,
+        if getattr(self, "_base_supplier_lookup_bio", None) is None:
+            if self.biosphere_flows:
+                self._base_supplier_lookup_bio = preprocess_flows(
+                    flows_list=self.biosphere_flows,
+                    mandatory_fields=self.required_supplier_fields,
+                )
+            else:
+                self._base_supplier_lookup_bio = {}
+
+        if getattr(self, "_base_supplier_lookup_tech", None) is None:
+            if self.technosphere_flows:
+                self._base_supplier_lookup_tech = preprocess_flows(
+                    flows_list=self.technosphere_flows,
+                    mandatory_fields=self.required_supplier_fields,
+                )
+            else:
+                self._base_supplier_lookup_tech = {}
+
+        if getattr(self, "_base_consumer_lookup", None) is None:
+            self._base_consumer_lookup = preprocess_flows(
+                flows_list=self.technosphere_flows or [],
+                mandatory_fields=self.required_consumer_fields,
             )
-        else:
-            self.supplier_lookup_bio = {}
 
-        if self.technosphere_flows:
-            self.supplier_lookup_tech = preprocess_flows(
-                flows_list=self.technosphere_flows,
-                mandatory_fields=self.required_supplier_fields,
-            )
-        else:
-            self.supplier_lookup_tech = {}
+        base_bio = self._base_supplier_lookup_bio
+        base_tech = self._base_supplier_lookup_tech
+        base_con = self._base_consumer_lookup
 
-        # ---- Consumer lookup (always technosphere)
-        self.consumer_lookup = preprocess_flows(
-            flows_list=self.technosphere_flows,
-            mandatory_fields=self.required_consumer_fields,
+        # ---- Filter lookups down to the positions we will actually touch ----------
+        def _filter_lookup(
+            base: dict[tuple, list[int]], allowed: set[int] | None
+        ) -> dict[tuple, list[int]]:
+            if not base:
+                return {}
+            if allowed is None:
+                # No restriction requested
+                return base
+            if not allowed:
+                # Explicitly restrict to empty: return empty
+                return {}
+            out: dict[tuple, list[int]] = {}
+            # Membership test is O(1) with set
+            _allowed = allowed
+            for key, positions in base.items():
+                # positions is a list[int]; keep only those in allowed
+                kept = [p for p in positions if p in _allowed]
+                if kept:
+                    out[key] = kept
+            return out
+
+        self.supplier_lookup_bio = _filter_lookup(
+            base_bio, restrict_supplier_positions_bio
         )
+        self.supplier_lookup_tech = _filter_lookup(
+            base_tech, restrict_supplier_positions_tech
+        )
+        self.consumer_lookup = _filter_lookup(base_con, restrict_consumer_positions)
 
-        # ---- Helpers
-        def _materialize_reversed(lookup: dict[int, list[int]]) -> dict[int, dict]:
-            # map pos -> dict(key) so callers can use it directly (no dict(...) in hot loops)
+        # ---- Reversed lookups (materialized) for filtered sets --------------------
+        # Map each *position* back to the (hashable) key dict used in the lookup
+        def _materialize_reversed(lookup: dict[tuple, list[int]]) -> dict[int, dict]:
+            # dict(key) avoids allocations during hot loops elsewhere
             return {
                 pos: dict(key) for key, positions in lookup.items() for pos in positions
             }
 
-        # ---- Reversed lookups (materialized)
         self.reversed_supplier_lookup_bio = _materialize_reversed(
             self.supplier_lookup_bio
         )
@@ -675,22 +731,21 @@ class EdgeLCIA:
         )
         self.reversed_consumer_lookup = _materialize_reversed(self.consumer_lookup)
 
-        # 🔧 Enrich consumer reversed lookup with full metadata fields we may want to prefilter on.
-        # In particular: bring 'classifications' from the actual activity dict.
-        for idx, info in self.reversed_consumer_lookup.items():
-            extra = self.position_to_technosphere_flows_lookup.get(idx, {})
-            if "classifications" in extra and "classifications" not in info:
-                info["classifications"] = extra["classifications"]
+        # ---- Enrich consumer reversed lookup with activity metadata (classifications) ----
+        # Bring 'classifications' from the activity map if missing (used by class filters)
+        if self.position_to_technosphere_flows_lookup:
+            for idx, info in self.reversed_consumer_lookup.items():
+                extra = self.position_to_technosphere_flows_lookup.get(idx, {})
+                if "classifications" in extra and "classifications" not in info:
+                    info["classifications"] = extra["classifications"]
 
-        # (Optional) Back-compat: a combined supplier_lookup for any legacy call sites
-        # If all CFs are biosphere, expose the bio lookup; if all tech, expose tech; else merge.
+        # ---- Back-compat: merged supplier_lookup view if needed -------------------
         if self.supplier_lookup_bio and not self.supplier_lookup_tech:
             self.supplier_lookup = self.supplier_lookup_bio
         elif self.supplier_lookup_tech and not self.supplier_lookup_bio:
             self.supplier_lookup = self.supplier_lookup_tech
         else:
-            # merged view (keys are hashable; positions lists are appended)
-            merged = {}
+            merged: dict[tuple, list[int]] = {}
             for src in (self.supplier_lookup_bio, self.supplier_lookup_tech):
                 for k, v in src.items():
                     if k in merged:
@@ -699,7 +754,7 @@ class EdgeLCIA:
                         merged[k] = list(v)
             self.supplier_lookup = merged
 
-        # ---- Hot-field caches (avoid repeated dict lookups + allocations in tight loops)
+        # ---- Hot-field caches (avoid dict lookups in tight loops) -----------------
         self.supplier_loc_bio = {
             i: d.get("location") for i, d in self.reversed_supplier_lookup_bio.items()
         }
@@ -723,11 +778,13 @@ class EdgeLCIA:
             for i, d in self.reversed_consumer_lookup.items()
         }
 
-        # --- Build classification prefix indexes (restricted to CF-used codes)
-        self._cf_needed_prefixes = _collect_cf_prefixes_used_by_method(
-            self.raw_cfs_data
-        )
+        # ---- CF-needed classification prefixes (compute once per method) ----------
+        if not hasattr(self, "_cf_needed_prefixes") or self._cf_needed_prefixes is None:
+            self._cf_needed_prefixes = _collect_cf_prefixes_used_by_method(
+                self.raw_cfs_data
+            )
 
+        # ---- Build prefix indexes from the *filtered* caches ----------------------
         # Suppliers
         self.cls_prefidx_supplier_bio = _build_prefix_index_restricted(
             self.supplier_cls_bio, self._cf_needed_prefixes
@@ -838,6 +895,16 @@ class EdgeLCIA:
             for i in self.technosphere_flows
         }
 
+        new_version = (
+            len(self.biosphere_flows) if self.biosphere_flows else 0,
+            len(self.technosphere_flows) if self.technosphere_flows else 0,
+        )
+        if getattr(self, "_flows_version", None) != new_version:
+            self._base_supplier_lookup_bio = None
+            self._base_supplier_lookup_tech = None
+            self._base_consumer_lookup = None
+            self._flows_version = new_version
+
     def map_exchanges(self):
         """
         Direction-aware matching with per-direction adjacency, indices, and allowlists.
@@ -849,7 +916,6 @@ class EdgeLCIA:
         log = self.logger.getChild("map")  # edges.edgelcia.EdgeLCIA.map
 
         self._initialize_weights()
-        self._preprocess_lookups()  # populates lookups and prefix indexes
 
         # ---- Build direction-specific bundles -----------------------------------
         DIR_BIO = "biosphere-technosphere"
@@ -867,15 +933,37 @@ class EdgeLCIA:
         rem_bio, ebs_bio, ebc_bio = build_adj(self.biosphere_edges)
         rem_tec, ebs_tec, ebc_tec = build_adj(self.technosphere_edges)
 
-        # Build indices once
-        supplier_index_bio = build_index(
-            self.supplier_lookup_bio, self.required_supplier_fields
+        if not rem_bio and not rem_tec:
+            self.eligible_edges_for_next_bio = set()
+            self.eligible_edges_for_next_tech = set()
+            self._update_unprocessed_edges()
+            return
+
+        restrict_sup_bio = set(ebs_bio.keys())
+        restrict_sup_tec = set(ebs_tec.keys())
+        restrict_con = set(ebc_bio.keys()) | set(ebc_tec.keys())
+
+        self._preprocess_lookups(
+            restrict_supplier_positions_bio=restrict_sup_bio,
+            restrict_supplier_positions_tech=restrict_sup_tec,
+            restrict_consumer_positions=restrict_con,
         )
-        supplier_index_tec = build_index(
-            self.supplier_lookup_tech, self.required_supplier_fields
+
+        # Build indices once (on the FILTERED lookups)
+        supplier_index_bio = (
+            build_index(self.supplier_lookup_bio, self.required_supplier_fields)
+            if self.supplier_lookup_bio
+            else {}
         )
-        consumer_index = build_index(
-            self.consumer_lookup, self.required_consumer_fields
+        supplier_index_tec = (
+            build_index(self.supplier_lookup_tech, self.required_supplier_fields)
+            if self.supplier_lookup_tech
+            else {}
+        )
+        consumer_index = (
+            build_index(self.consumer_lookup, self.required_consumer_fields)
+            if self.consumer_lookup
+            else {}
         )
 
         # Allowlist for later steps (per direction)
@@ -2618,7 +2706,6 @@ class EdgeLCIA:
         else:
             return float(cf["value"])
 
-    # --- Main API: redo_lcia --------------------------------------------------
     def redo_lcia(
         self,
         demand: dict | None = None,
@@ -2690,56 +2777,95 @@ class EdgeLCIA:
             cf["supplier"].get("matrix") == "technosphere" for cf in self.raw_cfs_data
         )
 
-        # 1) Capture PREVIOUS inventory edges from matrices already in memory
+        # 1) Capture PREVIOUS inventory edges, preferring the last *non-empty* snapshot
         if only_tech:
-            if self.technosphere_flow_matrix is not None:
+            prev_edges = (
+                set(self._last_edges_snapshot_tech)
+                if self._last_edges_snapshot_tech
+                else set(self._last_nonempty_edges_snapshot_tech)
+            )
+            # If we still don't have a snapshot (first run), fall back to matrix in memory
+            if not prev_edges and self.technosphere_flow_matrix is not None:
                 prev_edges = set(zip(*self.technosphere_flow_matrix.nonzero()))
-            else:
-                prev_edges = set()
         else:
-            # biosphere path
-            if getattr(self.lca, "inventory", None) is not None:
+            prev_edges = (
+                set(self._last_edges_snapshot_bio)
+                if self._last_edges_snapshot_bio
+                else set(self._last_nonempty_edges_snapshot_bio)
+            )
+            if not prev_edges and getattr(self.lca, "inventory", None) is not None:
                 prev_edges = set(zip(*self.lca.inventory.nonzero()))
-            else:
-                prev_edges = set()
 
         # 2) Recompute inventory & edges for the *new* demand
         self.lci()  # updates matrices
 
-        # 3) Compute CURRENT edges and restrict to edges that are *new vs previous run*
+        # 3) Compute CURRENT edges
         if only_tech:
             current_edges = set(zip(*self.technosphere_flow_matrix.nonzero()))
         else:
             current_edges = set(zip(*self.lca.inventory.nonzero()))
 
-        new_edges = current_edges - prev_edges
-
-        # Also exclude edges already covered in the characterization matrix
+        # Edges that already have CF coverage in the existing characterization matrix
         covered = self._covered_positions_from_characterization()
-        new_edges -= covered
-
-        # Exclude edges that previously failed to map (so we don't thrash)
+        # Persistently failed edges (don’t thrash on them)
         failed = self._failed_edges_tech if only_tech else self._failed_edges_bio
-        new_edges -= failed
 
-        # Persist the CURRENT snapshot *now* so early returns don't forget it
+        # --- Use cumulative "ever seen" edges to avoid rescanning after tiny runs
         if only_tech:
-            self._last_edges_snapshot_tech = current_edges
+            ever_seen = self._ever_seen_edges_tech
         else:
-            self._last_edges_snapshot_bio = current_edges
+            ever_seen = self._ever_seen_edges_bio
+
+        # Seed ever_seen the first time with the best baseline we have
+        if not ever_seen:
+            baseline_seed = set()
+            if only_tech:
+                if self._last_edges_snapshot_tech:
+                    baseline_seed = set(self._last_edges_snapshot_tech)
+                elif self._last_nonempty_edges_snapshot_tech:
+                    baseline_seed = set(self._last_nonempty_edges_snapshot_tech)
+                elif self.technosphere_flow_matrix is not None:
+                    baseline_seed = set(zip(*self.technosphere_flow_matrix.nonzero()))
+            else:
+                if self._last_edges_snapshot_bio:
+                    baseline_seed = set(self._last_edges_snapshot_bio)
+                elif self._last_nonempty_edges_snapshot_bio:
+                    baseline_seed = set(self._last_nonempty_edges_snapshot_bio)
+                elif getattr(self.lca, "inventory", None) is not None:
+                    baseline_seed = set(zip(*self.lca.inventory.nonzero()))
+            ever_seen |= baseline_seed
+
+        # Compute new edges strictly as (current − covered − failed − ever_seen)
+        new_edges = current_edges - covered - failed - ever_seen
+
+        # --- Restrict mapping to *only* the newly discovered edges
+        if only_tech:
+            self.biosphere_edges = set()
+            self.technosphere_edges = set(new_edges)
+        else:
+            self.technosphere_edges = set()
+            self.biosphere_edges = set(new_edges)
+
+        # Persist the CURRENT snapshot. Also update the "non-empty" snapshot only when non-empty.
+        if only_tech:
+            self._last_edges_snapshot_tech = set(current_edges)
+            if current_edges:
+                self._last_nonempty_edges_snapshot_tech = set(current_edges)
+        else:
+            self._last_edges_snapshot_bio = set(current_edges)
+            if current_edges:
+                self._last_nonempty_edges_snapshot_bio = set(current_edges)
+
+        # Extend the cumulative history so future runs won't rescan these
+        if only_tech:
+            self._ever_seen_edges_tech |= new_edges
+        else:
+            self._ever_seen_edges_bio |= new_edges
 
         print(
             f"[redo_lcia] Identified {len(new_edges)} new edges to map "
-            f"(prev={len(prev_edges)}, current={len(current_edges)}, covered={len(covered)})"
+            f"(current={len(current_edges)}, covered={len(covered)}, ever_seen={len(ever_seen)}, failed={len(failed)})"
         )
-
-        # Set the per-direction edge sets for the mapping passes
-        if only_tech:
-            self.biosphere_edges = set()
-            self.technosphere_edges = new_edges
-        else:
-            self.technosphere_edges = set()
-            self.biosphere_edges = new_edges
 
         if not new_edges:
             self.logger.info("redo_lcia(): No new exchanges to map.")
