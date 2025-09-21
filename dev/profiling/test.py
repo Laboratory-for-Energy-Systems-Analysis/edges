@@ -22,8 +22,8 @@ act = [
 # activities = [a for a in bw2data.Database("h2_pem") if a["name"].startswith("hydrogen")]
 print(act["name"])
 # method = ("GeoPolRisk", "paired", "2024", "short")
-# method = ("AWARE 2.0", "Country", "all", "yearly")
-method = ("GeoPolRisk", "paired", "2024")
+method = ("AWARE 2.0", "Country", "all", "yearly")
+# method = ("GeoPolRisk", "paired", "2024")
 
 LCA = EdgeLCIA(
     {act: 1},

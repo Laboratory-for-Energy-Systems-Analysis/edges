@@ -497,6 +497,35 @@ class EdgeLCIA:
         if hasattr(self, "_geo") and self._geo is not None:
             self._geo._cached_lookup.cache_clear()
 
+    def _ensure_filtered_lookups_for_current_edges(self) -> None:
+        """Make sure filtered lookups + reversed maps exist for the current edge sets."""
+        have = (
+            isinstance(getattr(self, "reversed_consumer_lookup", None), dict)
+            and isinstance(getattr(self, "reversed_supplier_lookup_bio", None), dict)
+            and isinstance(getattr(self, "reversed_supplier_lookup_tech", None), dict)
+        )
+        if have:
+            return
+
+        # If needed, make sure inventory/edges exist
+        if (self.biosphere_edges is None and self.technosphere_edges is None) or (
+            not self.biosphere_edges and not self.technosphere_edges
+        ):
+            self.lci()
+
+        restrict_sup_bio = {s for s, _ in (self.biosphere_edges or [])} or None
+        restrict_sup_tec = {s for s, _ in (self.technosphere_edges or [])} or None
+        restrict_con = (
+            {c for _, c in (self.biosphere_edges or [])}
+            | {c for _, c in (self.technosphere_edges or [])}
+        ) or None
+
+        self._preprocess_lookups(
+            restrict_supplier_positions_bio=restrict_sup_bio,
+            restrict_supplier_positions_tech=restrict_sup_tec,
+            restrict_consumer_positions=restrict_con,
+        )
+
     def _get_candidate_supplier_keys(self):
         """
         Get possible supplier activity keys matching a CF entry.
@@ -940,6 +969,8 @@ class EdgeLCIA:
         Uses pivoted set intersections (iterate on the smaller side) and batch pruning.
         Leaves near-misses due to 'location' for later geo steps.
         """
+
+        self._ensure_filtered_lookups_for_current_edges()
 
         log = self.logger.getChild("map")
         debug = log.isEnabledFor(logging.DEBUG)
@@ -1429,6 +1460,8 @@ class EdgeLCIA:
         :return: None
         """
 
+        self._ensure_filtered_lookups_for_current_edges()
+
         self._initialize_weights()
         logger.info("Handling static regions…")
 
@@ -1698,6 +1731,8 @@ class EdgeLCIA:
 
         :return: None
         """
+
+        self._ensure_filtered_lookups_for_current_edges()
 
         self._initialize_weights()
         logger.info("Handling dynamic regions…")
@@ -1972,6 +2007,8 @@ class EdgeLCIA:
         :return: None
         """
 
+        self._ensure_filtered_lookups_for_current_edges()
+
         self._initialize_weights()
         logger.info("Handling contained locations…")
 
@@ -2228,6 +2265,8 @@ class EdgeLCIA:
 
         :return: None
         """
+
+        self._ensure_filtered_lookups_for_current_edges()
 
         self._initialize_weights()
         logger.info("Handling remaining exchanges…")
