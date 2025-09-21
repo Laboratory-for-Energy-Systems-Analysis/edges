@@ -106,6 +106,8 @@ def process_cf_list(
         if match_score > best_score:
             best_score = match_score
             best_cf = cf
+            if best_score == 2:
+                break
 
     if best_cf:
         logger.debug("Best matching CF selected with score %d: %s", best_score, best_cf)
@@ -288,16 +290,10 @@ def build_cf_index(raw_cfs: list[dict]) -> dict:
 
 
 @lru_cache(maxsize=None)
-def cached_match_with_index(flow_to_match_hashable, required_fields_tuple):
-    """
-    Cached wrapper of match_with_index using pre-bound globals on the function.
-
-    :param flow_to_match_hashable: Hashable flow dict (e.g., from make_hashable()).
-    :param required_fields_tuple: Tuple of required field names.
-    :return: MatchResult with positions and location-only rejects.
-    """
+def cached_match_with_index(flow_to_match_hashable, required_fields_tuple, ctx_id):
     flow_to_match = dict(flow_to_match_hashable)
     required_fields = set(required_fields_tuple)
+    # the contexts live on the function as attributes
     return match_with_index(
         flow_to_match,
         cached_match_with_index.index,

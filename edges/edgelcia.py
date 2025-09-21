@@ -173,7 +173,7 @@ def _build_prefix_index_restricted(
             if not wanted:
                 continue
             for code in codes:
-                base = str(code).split(":", 1)[0].strip()
+                base = str(code)
                 if not base:
                     continue
                 # generate progressive prefixes: '01.12' -> '0','01','01.','01.1','01.12'
@@ -199,7 +199,16 @@ def _cls_candidates_from_cf(
     if not cf_classifications:
         return set()
 
-    norm = _norm_cls(cf_classifications)  # (("SCHEME", ("code", ...)), ...)
+    # if already normalized ((scheme, (codes...)), ...), skip work
+    if (
+        isinstance(cf_classifications, tuple)
+        and cf_classifications
+        and isinstance(cf_classifications[0], tuple)
+    ):
+        norm = cf_classifications
+    else:
+        norm = _norm_cls(cf_classifications)
+
     out = set()
     for scheme, codes in norm:
         sch = str(scheme).lower().strip()
@@ -218,29 +227,19 @@ def _cls_candidates_from_cf(
 
 
 def _norm_cls(x):
-    """
-    Normalize 'classifications' to a canonical, hashable form:
-      (("SCHEME", ("code1","code2", ...)), ("SCHEME2", (...)), ...)
-    Accepts:
-      - dict: {"CPC": ["01","02"], "ISIC": ["A"]}
-      - list/tuple of pairs: [("CPC","01"), ("CPC",["02","03"]), ("ISIC","A")]
+    def _san(c):
+        # strip trailing ":..." and whitespace once
+        return str(c).split(":", 1)[0].strip()
 
-    :param c: Classification entry (tuple or dict).
-    :return: Normalized classification tuple.
-    """
     if not x:
         return ()
-    # Accumulate into {scheme: set(codes)}
     bag = {}
     if isinstance(x, dict):
         for scheme, codes in x.items():
             if codes is None:
                 continue
-            if isinstance(codes, (list, tuple, set)):
-                codes_iter = codes
-            else:
-                codes_iter = [codes]
-            bag.setdefault(str(scheme), set()).update(str(c) for c in codes_iter)
+            it = codes if isinstance(codes, (list, tuple, set)) else [codes]
+            bag.setdefault(str(scheme), set()).update(_san(c) for c in it)
     elif isinstance(x, (list, tuple)):
         for item in x:
             if not isinstance(item, (list, tuple)) or len(item) != 2:
@@ -248,15 +247,10 @@ def _norm_cls(x):
             scheme, codes = item
             if codes is None:
                 continue
-            if isinstance(codes, (list, tuple, set)):
-                codes_iter = codes
-            else:
-                codes_iter = [codes]
-            bag.setdefault(str(scheme), set()).update(str(c) for c in codes_iter)
+            it = codes if isinstance(codes, (list, tuple, set)) else [codes]
+            bag.setdefault(str(scheme), set()).update(_san(c) for c in it)
     else:
         return ()
-
-    # Canonical: schemes sorted; codes sorted; all tuples
     return tuple((scheme, tuple(sorted(bag[scheme]))) for scheme in sorted(bag))
 
 
@@ -393,6 +387,7 @@ class EdgeLCIA:
         self._ever_seen_edges_bio: set[tuple[int, int]] = set()
         self._ever_seen_edges_tech: set[tuple[int, int]] = set()
         self._flows_version = None
+        self._cls_hits_cache = {}
 
     def _load_raw_lcia_data(self):
         """
@@ -414,6 +409,15 @@ class EdgeLCIA:
         # check for NaNs in the raw CF data
         assert_no_nans_in_cf_list(self.raw_cfs_data, file_source=self.filepath)
         self.raw_cfs_data = normalize_classification_entries(self.raw_cfs_data)
+
+        for cf in self.raw_cfs_data:
+            cf["_norm_supplier_cls"] = _norm_cls(
+                cf.get("supplier", {}).get("classifications")
+            )
+            cf["_norm_consumer_cls"] = _norm_cls(
+                cf.get("consumer", {}).get("classifications")
+            )
+
         self.cfs_number = len(self.raw_cfs_data)
 
         # Extract parameters or scenarios from method file if not already provided
@@ -441,6 +445,30 @@ class EdgeLCIA:
         }
 
         self.cf_index = build_cf_index(self.raw_cfs_data)
+
+    def _cls_candidates_from_cf_cached(
+        self, norm_cls, prefix_index_by_scheme, adjacency_keys=None
+    ) -> set[int]:
+        if not norm_cls:
+            return set()
+        cache_key = (id(prefix_index_by_scheme), norm_cls)
+        base = self._cls_hits_cache.get(cache_key)
+        if base is None:
+            out = set()
+            get_scheme = prefix_index_by_scheme.get
+            for scheme, codes in norm_cls:
+                bucket = get_scheme(str(scheme).lower().strip())
+                if not bucket:
+                    continue
+                for code in codes:  # codes already sanitized
+                    hits = bucket.get(code)  # exact prefix bucket
+                    if hits:
+                        out |= hits
+            base = frozenset(out)  # cache as frozenset
+            self._cls_hits_cache[cache_key] = base
+
+        # No extra set() creations — let frozenset intersect in C
+        return base if adjacency_keys is None else (base & adjacency_keys)
 
     def _initialize_weights(self):
         """
@@ -796,6 +824,7 @@ class EdgeLCIA:
         self.cls_prefidx_consumer = _build_prefix_index_restricted(
             self.consumer_cls, self._cf_needed_prefixes
         )
+        self._cls_hits_cache.clear()
 
     def _get_consumer_info(self, consumer_idx):
         """
@@ -908,20 +937,18 @@ class EdgeLCIA:
     def map_exchanges(self):
         """
         Direction-aware matching with per-direction adjacency, indices, and allowlists.
+        Uses pivoted set intersections (iterate on the smaller side) and batch pruning.
         Leaves near-misses due to 'location' for later geo steps.
-
-        :return: None
         """
 
-        log = self.logger.getChild("map")  # edges.edgelcia.EdgeLCIA.map
-
+        log = self.logger.getChild("map")
+        debug = log.isEnabledFor(logging.DEBUG)
         self._initialize_weights()
 
-        # ---- Build direction-specific bundles -----------------------------------
         DIR_BIO = "biosphere-technosphere"
         DIR_TECH = "technosphere-technosphere"
 
-        # Adjacency + remaining edges per direction
+        # ---- Build adjacency once ---------------------------------------------------
         def build_adj(edges):
             ebs, ebc = defaultdict(set), defaultdict(set)
             rem = set(edges)
@@ -939,6 +966,7 @@ class EdgeLCIA:
             self._update_unprocessed_edges()
             return
 
+        # Restrict lookups to positions we might touch (cheap, one-time)
         restrict_sup_bio = set(ebs_bio.keys())
         restrict_sup_tec = set(ebs_tec.keys())
         restrict_con = set(ebc_bio.keys()) | set(ebc_tec.keys())
@@ -949,7 +977,7 @@ class EdgeLCIA:
             restrict_consumer_positions=restrict_con,
         )
 
-        # Build indices once (on the FILTERED lookups)
+        # Build per-direction indexes (filtered view)
         supplier_index_bio = (
             build_index(self.supplier_lookup_bio, self.required_supplier_fields)
             if self.supplier_lookup_bio
@@ -966,11 +994,8 @@ class EdgeLCIA:
             else {}
         )
 
-        # Allowlist for later steps (per direction)
-        allow_bio = set()
-        allow_tec = set()
+        allow_bio, allow_tec = set(), set()
 
-        # Small helpers to select the right bundle per CF
         def get_dir_bundle(supplier_matrix: str):
             if supplier_matrix == "biosphere":
                 return (
@@ -993,44 +1018,12 @@ class EdgeLCIA:
                     self.reversed_supplier_lookup_tech,
                 )
 
-        # --- helpers for concise logging -----------------------------------------
-        def _short(d, limit=180):
-            try:
-                s = str(d)
-            except Exception:
-                s = repr(d)
-            return s if len(s) <= limit else s[: limit - 1] + "…"
-
-        def _count_none(x):
-            return 0 if x is None else (len(x) if hasattr(x, "__len__") else 1)
-
-        # High-level preamble
-        log.debug(
-            "START map_exchanges | biosphere_edges=%d | technosphere_edges=%d | CFs=%d | req_supplier=%s | req_consumer=%s",
-            len(self.biosphere_edges),
-            len(self.technosphere_edges),
-            len(self.raw_cfs_data),
-            sorted(self.required_supplier_fields),
-            sorted(self.required_consumer_fields),
-        )
-        log.debug(
-            "Lookups | supplier_bio=%d keys | supplier_tech=%d keys | consumer=%d keys",
-            len(self.supplier_lookup_bio),
-            len(self.supplier_lookup_tech),
-            len(self.consumer_lookup),
-        )
-
-        matched_positions_total = 0
-        allow_bio_added = 0
-        allow_tec_added = 0
-
-        # Bind hot locals (micro-optimization)
+        # Hot locals
         consumer_lookup = self.consumer_lookup
         reversed_consumer_lookup = self.reversed_consumer_lookup
 
-        # ---- Precompute required field tuples (no 'classifications') once
-        req_sup_nc = getattr(self, "_req_sup_nc", None)
-        if req_sup_nc is None:
+        # Precompute required field lists (no 'classifications')
+        if getattr(self, "_req_sup_nc", None) is None:
             self._req_sup_nc = tuple(
                 sorted(
                     k for k in self.required_supplier_fields if k != "classifications"
@@ -1044,153 +1037,228 @@ class EdgeLCIA:
         req_sup_nc = self._req_sup_nc
         req_con_nc = self._req_con_nc
 
+        if debug:
+            log.debug(
+                "START map_exchanges | bio_edges=%d | tech_edges=%d | CFs=%d | req_supplier=%s | req_consumer=%s",
+                len(self.biosphere_edges),
+                len(self.technosphere_edges),
+                len(self.raw_cfs_data),
+                sorted(self.required_supplier_fields),
+                sorted(self.required_consumer_fields),
+            )
+            log.debug(
+                "Lookups | supplier_bio=%d keys | supplier_tech=%d keys | consumer=%d keys",
+                len(self.supplier_lookup_bio),
+                len(self.supplier_lookup_tech),
+                len(self.consumer_lookup),
+            )
+
+        matched_positions_total = 0
+        allow_bio_added = 0
+        allow_tec_added = 0
+
         # Iterate CFs
         for i, cf in enumerate(tqdm(self.raw_cfs_data, desc="Mapping exchanges")):
+            # Early exit if everything got characterized in both directions
+            if not rem_bio and not rem_tec:
+                break
+
             s_crit = cf["supplier"]
             c_crit = cf["consumer"]
 
-            # which direction are we in?
+            # Direction bundle
             dir_name, rem, ebs, ebc, s_index, s_lookup, s_reversed = get_dir_bundle(
                 s_crit.get("matrix", "biosphere")
             )
-
             if not rem:
-                # This direction already fully characterized
-                log.debug("CF[%d] dir=%s skipped: no remaining edges.", i, dir_name)
+                if debug:
+                    log.debug("CF[%d] dir=%s skipped: no remaining edges.", i, dir_name)
                 continue
 
             # ---------- SUPPLIER side ----------
-            if "classifications" in s_crit:
-                s_class_hits = _cls_candidates_from_cf(
-                    s_crit["classifications"],
+            norm_s = cf.get("_norm_supplier_cls")  # pre-normalized & sanitized once
+            s_class_hits = (
+                self._cls_candidates_from_cf_cached(
+                    norm_s,
                     (
                         self.cls_prefidx_supplier_bio
                         if dir_name == DIR_BIO
                         else self.cls_prefidx_supplier_tech
                     ),
-                    adjacency_keys=set(ebs.keys()),
+                    adjacency_keys=None,  # get base frozenset (no allocation)
                 )
-            else:
-                s_class_hits = None
+                if norm_s
+                else None
+            )
 
+            # Prepare indexed match (cache key includes index context)
             cached_match_with_index.index = s_index
             cached_match_with_index.lookup_mapping = s_lookup
             cached_match_with_index.reversed_lookup = s_reversed
+            s_ctx_id = (id(s_index), id(s_lookup), id(s_reversed))
 
+            # Hashable flow minus classifications (precompute this if you want to squeeze more)
             s_nonclass = {k: v for k, v in s_crit.items() if k != "classifications"}
-            s_out = cached_match_with_index(make_hashable(s_nonclass), req_sup_nc)
-
-            s_matches_raw = list(s_out.matches)  # before adjacency & class refinement
+            s_out = cached_match_with_index(
+                make_hashable(s_nonclass), req_sup_nc, s_ctx_id
+            )
+            s_cands = set(s_out.matches)
             if s_class_hits is not None:
-                s_cands = list(set(s_out.matches) & set(s_class_hits))
-            else:
-                s_cands = list(s_out.matches)
-            # must still have consumers in adjacency
-            s_cands = [s for s in s_cands if s in ebs]
+                # Intersect with precomputed frozenset; no extra set() allocations
+                s_cands &= s_class_hits
 
             s_loc_only = set(s_out.location_only_rejects)
             if s_class_hits is not None:
-                s_loc_only &= set(s_class_hits)
+                s_loc_only &= s_class_hits
             s_loc_required = ("location" in s_crit) and (
                 s_crit.get("location") is not None
             )
 
             # ---------- CONSUMER side ----------
-            if "classifications" in c_crit:
-                c_class_hits = _cls_candidates_from_cf(
-                    c_crit["classifications"],
-                    self.cls_prefidx_consumer,
-                    adjacency_keys=set(ebc.keys()),
+            norm_c = cf.get("_norm_consumer_cls")
+            c_class_hits = (
+                self._cls_candidates_from_cf_cached(
+                    norm_c, self.cls_prefidx_consumer, adjacency_keys=None
                 )
-            else:
-                c_class_hits = None
+                if norm_c
+                else None
+            )
 
             cached_match_with_index.index = consumer_index
             cached_match_with_index.lookup_mapping = consumer_lookup
             cached_match_with_index.reversed_lookup = reversed_consumer_lookup
+            c_ctx_id = (
+                id(consumer_index),
+                id(consumer_lookup),
+                id(reversed_consumer_lookup),
+            )
 
             c_nonclass = {k: v for k, v in c_crit.items() if k != "classifications"}
-            c_out = cached_match_with_index(make_hashable(c_nonclass), req_con_nc)
-
-            c_matches_raw = list(c_out.matches)
+            c_out = cached_match_with_index(
+                make_hashable(c_nonclass), req_con_nc, c_ctx_id
+            )
+            c_cands = set(c_out.matches)
             if c_class_hits is not None:
-                c_cands = list(set(c_out.matches) & set(c_class_hits))
-            else:
-                c_cands = list(c_out.matches)
-            c_cands = [c for c in c_cands if c in ebc]
+                c_cands &= c_class_hits
 
             c_loc_only = set(c_out.location_only_rejects)
             if c_class_hits is not None:
-                c_loc_only &= set(c_class_hits)
+                c_loc_only &= c_class_hits
             c_loc_required = ("location" in c_crit) and (
                 c_crit.get("location") is not None
             )
 
-            # ---- DEBUG: explain empty candidate sets
-            if not s_cands:
+            # ---- DEBUG diagnostics (only if needed) ----------------------------------
+            if debug and not s_cands:
+                s_matches_raw = list(s_out.matches)
                 reason = []
                 if not s_matches_raw:
                     reason.append("no-index-match")
                 else:
                     reason.append(f"raw-matches={len(s_matches_raw)}")
                     if s_class_hits is not None and not (
-                        set(s_matches_raw) & set(s_class_hits)
+                        set(s_matches_raw) & s_class_hits
                     ):
                         reason.append("class-filtered-out")
                     if s_class_hits is None:
                         reason.append("no-class-filter")
-                    # check adjacency pruning
-                    pruned = [s for s in s_matches_raw if s not in ebs]
-                    if pruned and len(pruned) == len(s_matches_raw):
-                        reason.append("all-pruned-by-adjacency")
                 log.debug(
-                    "CF[%d] dir=%s supplier candidates empty | reasons=%s | s_crit=%s | raw=%d class_hits=%s ebs_keys=%d",
+                    "CF[%d] dir=%s supplier candidates empty | reasons=%s | s_crit=%s | raw=%d",
                     i,
                     dir_name,
                     ",".join(reason),
-                    _short(s_crit),
+                    s_crit,
                     len(s_matches_raw),
-                    _count_none(s_class_hits),
-                    len(ebs),
                 )
 
-            if not c_cands:
+            if debug and not c_cands:
+                c_matches_raw = list(c_out.matches)
                 reason = []
                 if not c_matches_raw:
                     reason.append("no-index-match")
                 else:
                     reason.append(f"raw-matches={len(c_matches_raw)}")
                     if c_class_hits is not None and not (
-                        set(c_matches_raw) & set(c_class_hits)
+                        set(c_matches_raw) & c_class_hits
                     ):
                         reason.append("class-filtered-out")
                     if c_class_hits is None:
                         reason.append("no-class-filter")
-                    pruned = [c for c in c_matches_raw if c not in ebc]
-                    if pruned and len(pruned) == len(c_matches_raw):
-                        reason.append("all-pruned-by-adjacency")
                 log.debug(
-                    "CF[%d] dir=%s consumer candidates empty | reasons=%s | c_crit=%s | raw=%d class_hits=%s ebc_keys=%d",
+                    "CF[%d] dir=%s consumer candidates empty | reasons=%s | c_crit=%s | raw=%d",
                     i,
                     dir_name,
                     ",".join(reason),
-                    _short(c_crit),
+                    c_crit,
                     len(c_matches_raw),
-                    _count_none(c_class_hits),
-                    len(ebc),
                 )
 
-            # ---------- Combine full matches using adjacency intersections ----------
+            # ---------- Combine full matches using set intersections ----------
             positions = []
             if s_cands and c_cands:
-                cset = set(c_cands)
-                for s in s_cands:
-                    cs = ebs.get(s)
-                    if not cs:
-                        continue
-                    for c in cs:
-                        if c in cset:
-                            positions.append((s, c))
+                sset = s_cands
+                cset = c_cands
+                ebs_get = ebs.get
+                ebc_get = ebc.get
+
+                # Pick the cheaper side to iterate
+                iterate_suppliers = len(sset) <= len(cset)
+
+                if iterate_suppliers:
+                    # suppliers → consumers
+                    for s in list(sset):
+                        cs = ebs_get(s)
+                        if not cs:
+                            continue
+                        hit = cs & cset
+                        if not hit:
+                            continue
+
+                        positions.extend((s, c) for c in hit)
+
+                        # prune rem, ebs, ebc with minimal lookups
+                        rem.difference_update((s, c) for c in hit)
+
+                        # supplier out-neigh
+                        cs.difference_update(hit)
+                        if not cs:
+                            # keep empty buckets to avoid costly deletes if you prefer;
+                            # but if you want to delete, do it once:
+                            del ebs[s]
+
+                        # consumer in-neigh
+                        for c in hit:
+                            bucket = ebc_get(c)
+                            if bucket:
+                                bucket.discard(s)
+                                if not bucket:
+                                    del ebc[c]
+                else:
+                    # consumers → suppliers
+                    for c in list(cset):
+                        ss = ebc_get(c)
+                        if not ss:
+                            continue
+                        hit = ss & sset
+                        if not hit:
+                            continue
+
+                        positions.extend((s, c) for s in hit)
+
+                        rem.difference_update((s, c) for s in hit)
+
+                        # consumer in-neigh
+                        ss.difference_update(hit)
+                        if not ss:
+                            del ebc[c]
+
+                        # supplier out-neigh
+                        for s in hit:
+                            nb = ebs_get(s)
+                            if nb:
+                                nb.discard(c)
+                                if not nb:
+                                    del ebs[s]
 
             if positions:
                 add_cf_entry(
@@ -1203,28 +1271,18 @@ class EdgeLCIA:
                     uncertainty=cf.get("uncertainty"),
                 )
                 matched_positions_total += len(positions)
-                log.debug(
-                    "CF[%d] dir=%s MATCH | positions=%d | s_cands=%d c_cands=%d | s_loc_only=%d c_loc_only=%d",
-                    i,
-                    dir_name,
-                    len(positions),
-                    len(s_cands),
-                    len(c_cands),
-                    len(s_loc_only),
-                    len(c_loc_only),
-                )
-
-                # prune matched edges from this direction
-                for s, c in positions:
-                    if (s, c) in rem:
-                        rem.remove((s, c))
-                        ebs[s].discard(c)
-                        if not ebs[s]:
-                            del ebs[s]
-                        ebc[c].discard(s)
-                        if not ebc[c]:
-                            del ebc[c]
-            else:
+                if debug:
+                    log.debug(
+                        "CF[%d] dir=%s MATCH | positions=%d | s_cands=%d c_cands=%d | s_loc_only=%d c_loc_only=%d",
+                        i,
+                        dir_name,
+                        len(positions),
+                        len(s_cands),
+                        len(c_cands),
+                        len(s_loc_only),
+                        len(c_loc_only),
+                    )
+            elif debug:
                 log.debug(
                     "CF[%d] dir=%s NO-MATCH | s_cands=%d c_cands=%d | s_loc_only=%d c_loc_only=%d | rem=%d",
                     i,
@@ -1236,87 +1294,90 @@ class EdgeLCIA:
                     len(rem),
                 )
 
-            # ---------- Build near-miss allowlists (location-only) ----------
-            # supplier near-miss with consumer full matches
+            # ---------- Near-miss allowlists (location-only) --------------------------
             if s_loc_required and s_loc_only and c_cands:
-                cset = set(c_cands)
+                cset = c_cands
                 bucket = allow_bio if dir_name == DIR_BIO else allow_tec
                 added = 0
-                for s in s_loc_only:
+                for s in list(s_loc_only):
                     cs = ebs.get(s)
                     if not cs:
                         continue
                     hit = cs & cset
-                    if hit:
-                        for c in hit:
-                            if (s, c) in rem:
-                                bucket.add((s, c))
-                                added += 1
+                    if not hit:
+                        continue
+                    for c in hit:
+                        if (s, c) in rem:
+                            bucket.add((s, c))
+                            added += 1
                 if added:
                     if dir_name == DIR_BIO:
                         allow_bio_added += added
                     else:
                         allow_tec_added += added
-                    log.debug(
-                        "CF[%d] dir=%s allowlist add (supplier loc-only) | added=%d",
-                        i,
-                        dir_name,
-                        added,
-                    )
+                    if debug:
+                        log.debug(
+                            "CF[%d] dir=%s allowlist add (supplier loc-only) | added=%d",
+                            i,
+                            dir_name,
+                            added,
+                        )
 
-            # consumer near-miss with supplier full matches
             if c_loc_required and c_loc_only and s_cands:
-                sset = set(s_cands)
+                sset = s_cands
                 bucket = allow_bio if dir_name == DIR_BIO else allow_tec
                 added = 0
-                for c in c_loc_only:
+                for c in list(c_loc_only):
                     ss = ebc.get(c)
                     if not ss:
                         continue
                     hit = ss & sset
-                    if hit:
-                        for s in hit:
-                            if (s, c) in rem:
-                                bucket.add((s, c))
-                                added += 1
+                    if not hit:
+                        continue
+                    for s in hit:
+                        if (s, c) in rem:
+                            bucket.add((s, c))
+                            added += 1
                 if added:
                     if dir_name == DIR_BIO:
                         allow_bio_added += added
                     else:
                         allow_tec_added += added
-                    log.debug(
-                        "CF[%d] dir=%s allowlist add (consumer loc-only) | added=%d",
-                        i,
-                        dir_name,
-                        added,
-                    )
+                    if debug:
+                        log.debug(
+                            "CF[%d] dir=%s allowlist add (consumer loc-only) | added=%d",
+                            i,
+                            dir_name,
+                            added,
+                        )
 
-            # both sides near-miss (rare but useful)
             if s_loc_required and c_loc_required and s_loc_only and c_loc_only:
                 cset = set(c_loc_only)
                 bucket = allow_bio if dir_name == DIR_BIO else allow_tec
                 added = 0
-                for s in s_loc_only:
+                for s in list(s_loc_only):
                     cs = ebs.get(s)
                     if not cs:
                         continue
                     hit = cs & cset
-                    if hit:
-                        for c in hit:
-                            if (s, c) in rem:
-                                bucket.add((s, c))
-                                added += 1
+                    if not hit:
+                        continue
+                    for c in hit:
+                        if (s, c) in rem:
+                            bucket.add((s, c))
+                            added += 1
                 if added:
                     if dir_name == DIR_BIO:
                         allow_bio_added += added
                     else:
                         allow_tec_added += added
-                    log.debug(
-                        "CF[%d] dir=%s allowlist add (both loc-only) | added=%d",
-                        i,
-                        dir_name,
-                        added,
-                    )
+                    if debug:
+                        log.debug(
+                            "CF[%d] dir=%s allowlist add (both loc-only) | added=%d",
+                            i,
+                            dir_name,
+                            added,
+                        )
 
         self._update_unprocessed_edges()
 
@@ -1324,16 +1385,17 @@ class EdgeLCIA:
         self.eligible_edges_for_next_bio = allow_bio
         self.eligible_edges_for_next_tech = allow_tec
 
-        log.debug(
-            "END map_exchanges | matched_positions=%d | allow_bio=%d | allow_tec=%d | processed_bio=%d | processed_tech=%d | unprocessed_bio=%d | unprocessed_tech=%d",
-            matched_positions_total,
-            len(allow_bio),
-            len(allow_tec),
-            len(self.processed_biosphere_edges),
-            len(self.processed_technosphere_edges),
-            len(self.unprocessed_biosphere_edges),
-            len(self.unprocessed_technosphere_edges),
-        )
+        if debug:
+            log.debug(
+                "END map_exchanges | matched_positions=%d | allow_bio=%d | allow_tec=%d | processed_bio=%d | processed_tech=%d | unprocessed_bio=%d | unprocessed_tech=%d",
+                matched_positions_total,
+                len(allow_bio),
+                len(allow_tec),
+                len(self.processed_biosphere_edges),
+                len(self.processed_technosphere_edges),
+                len(self.unprocessed_biosphere_edges),
+                len(self.unprocessed_technosphere_edges),
+            )
 
     def map_aggregate_locations(self) -> None:
         """

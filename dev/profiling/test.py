@@ -12,20 +12,21 @@ start_time = time.time()
 # bw2data.projects.set_current("ecoinvent-3.10.1-cutoff")
 bw2data.projects.set_current("ecoinvent-3.10-cutoff")
 
-# act = [
-#    a
-#    for a in bw2data.Database("h2_pem")
-#    == "hydrogen production, gaseous, 30 bar, from PEM electrolysis, from offshore wind electricity"
-# ][0]
+act = [
+    a
+    for a in bw2data.Database("h2_pem")
+    if a["name"]
+    == "hydrogen production, gaseous, 30 bar, from PEM electrolysis, from offshore wind electricity"
+][0]
 
-activities = [a for a in bw2data.Database("h2_pem") if a["name"].startswith("hydrogen")]
-print(activities[0]["name"])
+# activities = [a for a in bw2data.Database("h2_pem") if a["name"].startswith("hydrogen")]
+print(act["name"])
 # method = ("GeoPolRisk", "paired", "2024", "short")
-method = ("AWARE 2.0", "Country", "all", "yearly")
-# method = ("GeoPolRisk", "paired", "2024")
+# method = ("AWARE 2.0", "Country", "all", "yearly")
+method = ("GeoPolRisk", "paired", "2024")
 
 LCA = EdgeLCIA(
-    {activities[0]: 1},
+    {act: 1},
     method,
     # use_distributions=True,
     # iterations=10000
@@ -47,17 +48,3 @@ LCA.lcia()
 # Stop timer
 elapsed_time = time.time() - start_time
 print(f"Score: {LCA.score}. Time elapsed: {elapsed_time} seconds.")
-
-for act in activities[1:]:
-    print(act["name"])
-    start_time = time.time()
-
-    LCA.redo_lcia(
-        demand={act: 1},
-    )
-
-    elapsed_time = time.time() - start_time
-    print(f"Score: {LCA.score}. Time elapsed: {elapsed_time} seconds.")
-
-total_elapsed_time = time.time() - total_start_time
-print(f"Total time elapsed: {total_elapsed_time} seconds.")
