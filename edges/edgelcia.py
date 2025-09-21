@@ -386,6 +386,8 @@ class EdgeLCIA:
         self._last_edges_snapshot_tech = set()
         self._last_eval_scenario_name = None
         self._last_eval_scenario_idx = None
+        self._failed_edges_tech: set[tuple[int, int]] = set()
+        self._failed_edges_bio: set[tuple[int, int]] = set()
 
     def _load_raw_lcia_data(self):
         """
@@ -2526,18 +2528,29 @@ class EdgeLCIA:
             self.score = 0
             return
 
-        is_biosphere = len(self.biosphere_edges) > 0
+        # Decide matrix type from the method (stable across runs), not from transient edge sets
+        only_tech = all(
+            cf["supplier"].get("matrix") == "technosphere" for cf in self.raw_cfs_data
+        )
+        is_biosphere = not only_tech
+
+        # Pick inventory once
+        inventory = (
+            self.lca.inventory if is_biosphere else self.technosphere_flow_matrix
+        )
+        if inventory is None:
+            raise RuntimeError(
+                f"Inventory matrix for {'biosphere' if is_biosphere else 'technosphere'} is None. "
+                "Ensure lci() was called and that matrix-type detection does not rely on edge sets."
+            )
 
         if self.use_distributions and self.iterations > 1:
             inventory = (
                 self.lca.inventory if is_biosphere else self.technosphere_flow_matrix
             )
 
-            # Convert 2D inventory to sparse.COO
             inventory_coo = sparse.COO.from_scipy_sparse(inventory)
-
-            # Broadcast inventory shape for multiplication
-            inv_expanded = inventory_coo[:, :, None]  # (i, j, 1)
+            inv_expanded = inventory_coo[:, :, None]
 
             # Element-wise multiply
             characterized = self.characterization_matrix * inv_expanded
@@ -2547,13 +2560,14 @@ class EdgeLCIA:
             self.score = characterized.sum(axis=(0, 1))
 
         else:
-            inventory = (
-                self.lca.inventory if is_biosphere else self.technosphere_flow_matrix
-            )
-            self.characterized_inventory = self.characterization_matrix.multiply(
-                inventory
-            )
-            self.score = self.characterized_inventory.sum()
+            # --- Deterministic path with a small guard against rare NotImplemented
+            cm = self.characterization_matrix.tocsr()
+            inv = inventory.tocsr()  # ensure CSR–CSR
+            prod = cm.multiply(inv)
+            if prod is NotImplemented:  # very rare, but just in case
+                prod = inv.multiply(cm)
+            self.characterized_inventory = prod
+            self.score = prod.sum()
 
     # --- Add these helpers inside EdgeLCIA -----------------------------------
     def _covered_positions_from_characterization(self) -> set[tuple[int, int]]:
@@ -2704,6 +2718,16 @@ class EdgeLCIA:
         covered = self._covered_positions_from_characterization()
         new_edges -= covered
 
+        # Exclude edges that previously failed to map (so we don't thrash)
+        failed = self._failed_edges_tech if only_tech else self._failed_edges_bio
+        new_edges -= failed
+
+        # Persist the CURRENT snapshot *now* so early returns don't forget it
+        if only_tech:
+            self._last_edges_snapshot_tech = current_edges
+        else:
+            self._last_edges_snapshot_bio = current_edges
+
         print(
             f"[redo_lcia] Identified {len(new_edges)} new edges to map "
             f"(prev={len(prev_edges)}, current={len(current_edges)}, covered={len(covered)})"
@@ -2724,12 +2748,6 @@ class EdgeLCIA:
             return
 
         print(f"[redo_lcia] Identified {len(new_edges)} new edges to map")
-
-        if not new_edges:
-            self.logger.info("redo_lcia(): No new exchanges to map.")
-            if recompute_score:
-                self.lcia()
-            return
 
         # 3) Map only the new edges: snapshot cfs_mapping length to capture the delta later
         baseline_len = len(self.cfs_mapping)
@@ -2755,6 +2773,11 @@ class EdgeLCIA:
 
         if not new_cf_entries:
             self.logger.info("redo_lcia(): Mapping produced no applicable CFs.")
+            # These 'new_edges' were attempted and still have no CF — remember them as failed
+            if only_tech:
+                self._failed_edges_tech |= set(new_edges)
+            else:
+                self._failed_edges_bio |= set(new_edges)
             if recompute_score:
                 self.lcia()
             return
