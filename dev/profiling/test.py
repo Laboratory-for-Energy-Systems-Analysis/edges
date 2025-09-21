@@ -4,6 +4,8 @@ from edges import EdgeLCIA, get_available_methods
 import bw2data, bw2io
 import time
 
+
+total_start_time = time.time()
 # Start timer
 start_time = time.time()
 # bw2data.projects.set_current("bw25_ei310")
@@ -46,7 +48,6 @@ LCA.lcia()
 elapsed_time = time.time() - start_time
 print(f"Score: {LCA.score}. Time elapsed: {elapsed_time} seconds.")
 
-
 for act in activities[1:]:
     print(act["name"])
     start_time = time.time()
@@ -57,3 +58,6 @@ for act in activities[1:]:
 
     elapsed_time = time.time() - start_time
     print(f"Score: {LCA.score}. Time elapsed: {elapsed_time} seconds.")
+
+total_elapsed_time = time.time() - total_start_time
+print(f"Total time elapsed: {total_elapsed_time} seconds.")

@@ -2671,30 +2671,28 @@ class EdgeLCIA:
             self.lca.demand.clear()
             self.lca.demand.update(demand)
 
-        # 1) Decide direction (tech-only vs bio) once; this doesn’t require LCI
+        # Decide direction (tech-only vs bio) from CFs (doesn't require lci)
         only_tech = all(
             cf["supplier"].get("matrix") == "technosphere" for cf in self.raw_cfs_data
         )
 
-        # --- Snapshot PREVIOUS inventory edges *before* we call lci()
+        # 1) Capture PREVIOUS inventory edges from matrices already in memory
         if only_tech:
-            # prefer the last saved snapshot; otherwise fall back to whatever is still in memory
-            prev_edges = getattr(self, "_last_edges_snapshot_tech", None)
-            if not prev_edges:
-                prev_edges = (
-                    set(self.technosphere_edges) if self.technosphere_edges else set()
-                )
+            if self.technosphere_flow_matrix is not None:
+                prev_edges = set(zip(*self.technosphere_flow_matrix.nonzero()))
+            else:
+                prev_edges = set()
         else:
-            prev_edges = getattr(self, "_last_edges_snapshot_bio", None)
-            if not prev_edges:
-                prev_edges = (
-                    set(self.biosphere_edges) if self.biosphere_edges else set()
-                )
+            # biosphere path
+            if getattr(self.lca, "inventory", None) is not None:
+                prev_edges = set(zip(*self.lca.inventory.nonzero()))
+            else:
+                prev_edges = set()
 
         # 2) Recompute inventory & edges for the *new* demand
-        self.lci()  # updates inventory/edges/lookups/etc.
+        self.lci()  # updates matrices
 
-        # 3) Compute CURRENT edges and restrict mapping to edges that are *new vs previous run*
+        # 3) Compute CURRENT edges and restrict to edges that are *new vs previous run*
         if only_tech:
             current_edges = set(zip(*self.technosphere_flow_matrix.nonzero()))
         else:
@@ -2702,7 +2700,7 @@ class EdgeLCIA:
 
         new_edges = current_edges - prev_edges
 
-        # Also exclude any edges already covered in the existing characterization matrix
+        # Also exclude edges already covered in the characterization matrix
         covered = self._covered_positions_from_characterization()
         new_edges -= covered
 
@@ -2723,11 +2721,6 @@ class EdgeLCIA:
             self.logger.info("redo_lcia(): No new exchanges to map.")
             if recompute_score:
                 self.lcia()
-            # Save snapshot of current edges for the next run
-            if only_tech:
-                self._last_edges_snapshot_tech = current_edges
-            else:
-                self._last_edges_snapshot_bio = current_edges
             return
 
         print(f"[redo_lcia] Identified {len(new_edges)} new edges to map")
