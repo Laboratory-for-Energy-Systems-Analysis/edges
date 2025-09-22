@@ -2978,7 +2978,7 @@ class EdgeLCIA:
             start_nnz = len(self.characterization_matrix.data)
         else:
             start_nnz = self.characterization_matrix.nnz
-        print(f"[redo_lcia] Starting characterization_matrix nnz = {start_nnz}")
+        self.logger.info(f"Starting characterization_matrix nnz = {start_nnz}")
 
         # 0) Update demand vector if user passed one
         if demand is not None:
@@ -3083,8 +3083,8 @@ class EdgeLCIA:
         else:
             self._ever_seen_edges_bio |= new_edges
 
-        print(
-            f"[redo_lcia] Identified {len(new_edges)} new edges to map "
+        self.logger.info(
+            f"Identified {len(new_edges)} new edges to map "
             f"(current={len(current_edges)}, covered={len(covered)}, ever_seen={len(ever_seen)}, failed={len(failed)})"
         )
 
@@ -3093,8 +3093,6 @@ class EdgeLCIA:
             if recompute_score:
                 self.lcia()
             return
-
-        print(f"[redo_lcia] Identified {len(new_edges)} new edges to map")
 
         # 3) Map only the new edges: snapshot cfs_mapping length to capture the delta later
         baseline_len = len(self.cfs_mapping)
@@ -3116,7 +3114,7 @@ class EdgeLCIA:
         # Identify the CF entries created in this redo
         new_cf_entries = self.cfs_mapping[baseline_len:]
 
-        print(f"[redo_lcia] Mapping produced {len(new_cf_entries)} new CF entries")
+        self.logger.info(f"Mapping produced {len(new_cf_entries)} new CF entries")
 
         if not new_cf_entries:
             self.logger.info("redo_lcia(): Mapping produced no applicable CFs.")
@@ -3248,8 +3246,7 @@ class EdgeLCIA:
             end_nnz = len(self.characterization_matrix.data)
         else:
             end_nnz = self.characterization_matrix.nnz
-        print(f"[redo_lcia] Ending characterization_matrix nnz = {end_nnz}")
-        print(f"[redo_lcia] Δnnz = {end_nnz - start_nnz}")
+        self.logger.info(f"Ending characterization_matrix nnz = {end_nnz}")
 
         # 5) Update processed/unprocessed tracking and optionally recompute score
         self._update_unprocessed_edges()
