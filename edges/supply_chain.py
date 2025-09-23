@@ -4,6 +4,7 @@ from __future__ import annotations
 from dataclasses import dataclass, asdict
 from io import StringIO
 import textwrap as _tw
+import collections
 
 import math
 import time
@@ -11,6 +12,10 @@ from typing import Optional, Sequence, Tuple, Dict, Any, List
 
 import pandas as pd
 import plotly.graph_objects as go
+
+from pathlib import Path
+import os
+import plotly.io as pio
 
 
 try:
@@ -92,6 +97,10 @@ def sankey_from_supply_df(
     color_loss: str = "#FDD835",
     color_other: str = "#9E9E9E",
     col_ref_product: str = "reference product",
+    enable_highlight: bool = True,
+    highlight_top_k: int = 25,
+    highlight_alpha_on: float = 0.9,
+    highlight_alpha_off: float = 0.08,
 ) -> go.Figure:
     """Sankey with last-level specials, untruncated hover labels, per-parent outgoing balancing, and tidy UI."""
     if df.empty:
@@ -118,6 +127,25 @@ def sankey_from_supply_df(
         total_root_score = float(df[col_score].abs().max())
 
     # Helpers
+
+    def _rgba_with_alpha(c: str, a: float) -> str:
+        c = str(c)
+        if c.startswith("rgba("):
+            # replace alpha
+            parts = c[5:-1].split(",")
+            if len(parts) >= 4:
+                parts = [p.strip() for p in parts[:3]] + [f"{a:.3f}"]
+                return f"rgba({','.join(parts)})"
+        if c.startswith("#"):
+            return hex_to_rgba(c, a)
+        # fallback: try to parse "rgb(r,g,b)"
+        if c.startswith("rgb("):
+            parts = c[4:-1].split(",")
+            if len(parts) == 3:
+                parts = [p.strip() for p in parts]
+                return f"rgba({parts[0]},{parts[1]},{parts[2]},{a:.3f})"
+        # last resort: force to grey w/ alpha
+        return f"rgba(150,150,150,{a:.3f})"
 
     def _normalize_special(raw: Any) -> Optional[str]:
         if pd.isna(raw):
@@ -294,8 +322,42 @@ def sankey_from_supply_df(
 
     rows_all = link_rows()
 
+    # --- adjacency for highlight ---------------------------------------------
+    from collections import defaultdict, deque
+
+    # rows_all: list of (s_idx, t_idx, v_signed, prow, crow)
+    children = defaultdict(list)
+    parents = defaultdict(list)
+    for li, (s_idx, t_idx, _v, _prow, _crow) in enumerate(rows_all):
+        children[s_idx].append(t_idx)
+        parents[t_idx].append(s_idx)
+
+    def _descendants(root: int) -> set[int]:
+        out, q = set([root]), deque([root])
+        while q:
+            u = q.popleft()
+            for v in children.get(u, ()):
+                if v not in out:
+                    out.add(v)
+                    q.append(v)
+        return out
+
+    def _ancestors(root: int) -> set[int]:
+        out, q = set([root]), deque([root])
+        while q:
+            v = q.popleft()
+            for u in parents.get(v, ()):
+                if u not in out:
+                    out.add(u)
+                    q.append(u)
+        return out
+
+    # rank links by |value| (absolute contribution), keep top-K as candidates
+    link_abs = [abs(v) for (_s, _t, v, _prow, _crow) in rows_all]
+    order_links = sorted(range(len(rows_all)), key=lambda i: -link_abs[i])
+    topK_idx = order_links[: min(highlight_top_k, len(order_links))]
+
     # Incident magnitudes (for ordering/spacing)
-    import collections
 
     magnitude = collections.defaultdict(float)
     for s, t, v, _, _ in rows_all:
@@ -559,6 +621,55 @@ def sankey_from_supply_df(
     links_cat = links_category(rows_all)
     links_loc = links_by_parentloc(rows_all)
 
+    # --- base color arrays for restyling --------------------------------------
+    node_colors_base = [_rgba_with_alpha(c, 1.0) for c in colors_full]
+    link_colors_cat_base = list(links_cat["color"])
+    link_colors_loc_base = list(links_loc["color"])
+
+    def _make_highlight_state(link_i: int):
+        """Return (node_colors, link_colors_cat, link_colors_loc) for a selected link."""
+        s_idx, t_idx, _v, _prow, _crow = rows_all[link_i]
+
+        # upstream: all ancestors of source; downstream: all descendants of target
+        up_nodes = _ancestors(s_idx)
+        down_nodes = _descendants(t_idx)
+        on_nodes = up_nodes | down_nodes | {s_idx, t_idx}
+
+        # choose links that stay within the upstream DAG or the downstream subtree
+        on_links_mask = [False] * len(rows_all)
+        for j, (sj, tj, _vj, _pr, _cr) in enumerate(rows_all):
+            if (
+                (sj in up_nodes and tj in up_nodes)
+                or (sj in down_nodes and tj in down_nodes)
+                or (j == link_i)
+            ):
+                on_links_mask[j] = True
+
+        # nodes: keep hue, change alpha
+        node_cols = [
+            _rgba_with_alpha(
+                colors_full[i],
+                highlight_alpha_on if i in on_nodes else highlight_alpha_off,
+            )
+            for i in range(len(colors_full))
+        ]
+        # links: keep hue, change alpha
+        link_cols_cat = [
+            _rgba_with_alpha(
+                link_colors_cat_base[j],
+                highlight_alpha_on if on_links_mask[j] else highlight_alpha_off,
+            )
+            for j in range(len(rows_all))
+        ]
+        link_cols_loc = [
+            _rgba_with_alpha(
+                link_colors_loc_base[j],
+                highlight_alpha_on if on_links_mask[j] else highlight_alpha_off,
+            )
+            for j in range(len(rows_all))
+        ]
+        return node_cols, link_cols_cat, link_cols_loc
+
     # Traces (two sankeys)
     def make_trace(link_dict: Dict[str, list]) -> go.Sankey:
         node_dict = dict(
@@ -697,6 +808,64 @@ def sankey_from_supply_df(
             ]
         )
 
+    if enable_highlight and len(rows_all) > 0:
+        # Build button list: "None" + one per candidate link
+        highlight_buttons = []
+
+        # "None" resets to base colors (both traces at once)
+        highlight_buttons.append(
+            dict(
+                label="Highlight: None",
+                method="restyle",
+                args=[
+                    {
+                        "node.color": [node_colors_base, node_colors_base],
+                        "link.color": [link_colors_cat_base, link_colors_loc_base],
+                    },
+                    [0, 1],  # apply to sankey traces 0 and 1
+                ],
+            )
+        )
+
+        # One button per top link
+        for rank, li in enumerate(topK_idx, start=1):
+            s_idx, t_idx, v_signed, prow, crow = rows_all[li]
+            parent_name = node_full_name.get(s_idx, "")
+            child_name = node_full_name.get(t_idx, "")
+            label_txt = f"#{rank}  {child_name} ← {parent_name}"
+
+            node_cols, link_cols_cat, link_cols_loc = _make_highlight_state(li)
+            highlight_buttons.append(
+                dict(
+                    label=label_txt[:80],  # keep the menu readable
+                    method="restyle",
+                    args=[
+                        {
+                            "node.color": [node_cols, node_cols],
+                            "link.color": [link_cols_cat, link_cols_loc],
+                        },
+                        [0, 1],
+                    ],
+                )
+            )
+
+        # Place this dropdown above the plot, next to the color-mode buttons
+        fig.update_layout(
+            updatemenus=list(fig.layout.updatemenus)
+            + [
+                dict(
+                    type="dropdown",
+                    direction="down",
+                    x=1.0,
+                    xanchor="right",
+                    y=1.30,
+                    yanchor="top",
+                    showactive=True,
+                    buttons=highlight_buttons,
+                )
+            ]
+        )
+
     # Width & layout
     if auto_width:
         est_w, autosize_flag = None, True
@@ -748,6 +917,77 @@ def wrap_label(text: str, max_chars: int, max_lines: int) -> str:
         else:
             lines[-1] += "…"
     return "\n".join(lines)
+
+
+def save_sankey_html(
+    fig: go.Figure,
+    path: str,
+    *,
+    title: str = "Supply chain Sankey",
+    offline: bool = True,
+    auto_open: bool = True,
+    modebar_remove: tuple = ("lasso2d", "select2d"),
+) -> str:
+    """
+    Save a Plotly Sankey figure as a standalone HTML file.
+
+    Parameters
+    ----------
+    fig : go.Figure
+        Figure returned by sankey_from_supply_df(...) or SupplyChain.plot_sankey(...).
+    path : str
+        Output file path. '.html' will be added if missing.
+    title : str
+        <title> of the HTML document (browser tab name).
+    offline : bool
+        If True, embed plotly.js inside the HTML (bigger file, fully offline).
+        If False, load plotly.js from CDN (smaller file).
+    auto_open : bool
+        If True, open the file in a browser after writing.
+    modebar_remove : tuple
+        Modebar buttons to remove.
+
+    Returns
+    -------
+    str
+        The (possibly extended) file path that was written.
+    """
+
+    if not path.lower().endswith(".html"):
+        path += ".html"
+
+    out_dir = os.path.dirname(path) or "."
+    Path(out_dir).mkdir(parents=True, exist_ok=True)
+
+    include = True if offline else "cdn"
+    config = {
+        "displaylogo": False,
+        "modeBarButtonsToRemove": list(modebar_remove),
+        # you can add "toImageButtonOptions":{"scale":2} if you want bigger PNG exports
+    }
+
+    # Keep figure layout as-is; just write it out
+    try:
+        pio.write_html(
+            fig,
+            file=path,
+            include_plotlyjs=include,
+            full_html=True,
+            auto_open=auto_open,
+            title=title,  # available in Plotly >=5.0
+            config=config,
+        )
+    except TypeError:
+        # Fallback for older Plotly that doesn't support 'title' in write_html
+        pio.write_html(
+            fig,
+            file=path,
+            include_plotlyjs=include,
+            full_html=True,
+            auto_open=auto_open,
+            config=config,
+        )
+    return path
 
 
 @dataclass
@@ -1343,3 +1583,11 @@ class SupplyChain:
     def plot_sankey(self, df: pd.DataFrame, **kwargs):
         """Convenience method: EdgeSupplyChainScorer.plot_sankey(df, ...)."""
         return sankey_from_supply_df(df, **kwargs)
+
+    def save_html(self, df: pd.DataFrame, path: str, **plot_kwargs) -> str:
+        """
+        Build the Sankey from `df` with plot kwargs, then save to HTML.
+        Returns the final file path.
+        """
+        fig = self.plot_sankey(df, **plot_kwargs)
+        return save_sankey_html(fig, path)

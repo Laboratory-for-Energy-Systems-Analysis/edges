@@ -18,14 +18,14 @@ if not use_example_df:
     ][0]
 
     method = ("AWARE 2.0", "Country", "all", "yearly")
-    method = ("GeoPolRisk", "paired", "2024")
+    # method = ("GeoPolRisk", "paired", "2024")
 
     sc = SupplyChain(
         activity=act,
         method=method,
         amount=1,
-        level=7,
-        cutoff=0.005,
+        level=5,
+        cutoff=0.01,
         redo_flags=dict(
             run_aggregate=True,
             run_dynamic=True,
@@ -73,8 +73,9 @@ else:
     )
     df = pd.read_csv("example_df.csv")
 
-fig = sc.plot_sankey(df, width_max=1800, height_max=800)
-fig.show()
+# fig = sc.plot_sankey(df, width_max=1800, height_max=800, enable_highlight=True)
+sc.save_html(df, "example_sankey.html")
+# fig.show()
 
 # Stop timer
 elapsed_time = time.time() - start_time
