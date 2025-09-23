@@ -5,7 +5,7 @@ import pandas as pd
 
 bw2data.projects.set_current("ecoinvent-3.10-cutoff")
 
-use_example_df = True
+use_example_df = False
 start_time = time.time()
 
 if not use_example_df:
@@ -18,19 +18,23 @@ if not use_example_df:
     ][0]
 
     method = ("AWARE 2.0", "Country", "all", "yearly")
+    method = ("GeoPolRisk", "paired", "2024")
 
     sc = SupplyChain(
         activity=act,
         method=method,
         amount=1,
-        level=5,
-        cutoff=0.01,
+        level=7,
+        cutoff=0.005,
         redo_flags=dict(
             run_aggregate=True,
             run_dynamic=True,
             run_contained=True,
             run_global=True,
         ),
+        collapse_markets=True,
+        debug=False,  # <— turn on logging
+        dbg_max_prints=5000,
     )
 
     # Build initial CM & total score
@@ -65,6 +69,7 @@ else:
             run_contained=True,
             run_global=True,
         ),
+        collapse_markets=True,
     )
     df = pd.read_csv("example_df.csv")
 

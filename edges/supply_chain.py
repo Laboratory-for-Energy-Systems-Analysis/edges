@@ -3,10 +3,10 @@ from __future__ import annotations
 
 from dataclasses import dataclass, asdict
 from io import StringIO
-import textwrap
+import textwrap as _tw
 
 import math
-from collections import defaultdict
+import time
 from typing import Optional, Sequence, Tuple, Dict, Any, List
 
 import pandas as pd
@@ -19,44 +19,6 @@ except ImportError:  # bw2data >= 4.0
     from bw2data.backends import Activity
 
 from .edgelcia import EdgeLCIA
-
-
-def fmt_pct(x) -> str:
-    try:
-        v = 100.0 * float(x)
-    except Exception:
-        return "0%"
-    if v != 0 and abs(v) < 0.01:
-        return "<0.01%"
-    return f"{v:.2f}%"
-
-
-def infer_parents_and_wire_cutoff(df: pd.DataFrame) -> pd.DataFrame:
-    """
-    (Slim) Ensure activity_key/parent_key columns exist.
-    No more special handling for cutoff/loss; SupplyChain now emits
-    correctly parented rows for 'direct emissions' and 'activities below cutoff'.
-    """
-    rows = df.copy()
-    for col in ["activity_key", "parent_key"]:
-        if col not in rows.columns:
-            rows[col] = pd.NA
-    return rows
-
-
-def _wrap_label(text: str, width: int, max_lines: int) -> str:
-    """Wrap to at most `max_lines` with ellipsis if truncated."""
-    if text is None or (isinstance(text, float) and pd.isna(text)):
-        return ""
-    s = str(text)
-    lines = textwrap.wrap(s, width=width) or [s]
-    if len(lines) > max_lines:
-        lines = lines[:max_lines]
-        # make room for ellipsis if the last line is full
-        if len(lines[-1]) >= width:
-            lines[-1] = lines[-1][: max(0, width - 1)]
-        lines[-1] += "…"
-    return "\n".join(lines)
 
 
 # --- helpers for labels
@@ -76,6 +38,14 @@ def make_label_two_lines(name: str, location: str, name_chars: int) -> str:
     return f"{n}\n{loc}" if loc else n
 
 
+def _is_market_name(val: Any) -> bool:
+    """True if the activity 'name' looks like a market node."""
+    if pd.isna(val):
+        return False
+    s = str(val).strip().lower()
+    return s.startswith("market for ") or s.startswith("market group for ")
+
+
 def sankey_from_supply_df(
     df: pd.DataFrame,
     *,
@@ -85,13 +55,11 @@ def sankey_from_supply_df(
     col_name: str = "name",
     col_location: str = "location",
     col_score: str = "score",
-    col_contrib: str = "share_of_total",
     col_amount: str = "amount",
     wrap_chars: int = 18,
     max_label_lines: int = 2,
     use_abs_for_widths: bool = True,
-    add_toggle: bool = True,  # only two buttons: color mode
-    fit_to_screen: bool = True,
+    add_toggle: bool = True,
     base_height: int = 380,
     per_level_px: int = 110,
     per_node_px: int = 6,
@@ -105,7 +73,6 @@ def sankey_from_supply_df(
     node_thickness: int = 18,
     node_pad: int = 12,
     lock_x_by_level: bool = True,
-    # Outgoing-balancing: 'match' (make sum(out)=sum(in)), 'cap' (downscale only), 'none'
     balance_mode: str = "match",
     palette: Sequence[str] = (
         "#636EFA",
@@ -124,10 +91,12 @@ def sankey_from_supply_df(
     color_below: str = "#FB8C00",
     color_loss: str = "#FDD835",
     color_other: str = "#9E9E9E",
+    col_ref_product: str = "reference product",
 ) -> go.Figure:
     """Sankey with last-level specials, untruncated hover labels, per-parent outgoing balancing, and tidy UI."""
     if df.empty:
         raise ValueError("Empty DataFrame")
+
     df = df.copy()
 
     for c in [col_level, col_name, col_score, col_id, col_parent]:
@@ -149,6 +118,25 @@ def sankey_from_supply_df(
         total_root_score = float(df[col_score].abs().max())
 
     # Helpers
+
+    def _normalize_special(raw: Any) -> Optional[str]:
+        if pd.isna(raw):
+            return None
+        s = str(raw).strip().lower()
+        if not s:
+            return None
+        # Direct emissions variants
+        if s.startswith("direct emissions"):
+            # accept "direct emissions", "direct emissions/res. use", etc.
+            return "direct emissions"
+        # Below cutoff variants
+        if s in {"activities below cutoff", "below cutoff"}:
+            return "activities below cutoff"
+        # Loss
+        if s == "loss":
+            return "loss"
+        return None
+
     special_names = {
         "direct emissions": "Direct emissions/Res. use",
         "activities below cutoff": "Activities below cutoff",
@@ -161,11 +149,11 @@ def sankey_from_supply_df(
     }
 
     def is_special(nm: Any) -> bool:
-        return str(nm).strip().lower() in special_names if pd.notna(nm) else False
+        return _normalize_special(nm) in special_names
 
     def special_key(row) -> Optional[Tuple[str, str]]:
-        nm = str(row[col_name]).strip().lower()
-        return (nm, "__GLOBAL__") if nm in special_names else None
+        nm = _normalize_special(row[col_name])
+        return (nm, "__GLOBAL__") if nm else None
 
     def special_label(nm: str) -> str:
         return special_names[nm]
@@ -175,32 +163,6 @@ def sankey_from_supply_df(
         if pd.notna(ak):
             return ak
         return (r.get(col_name), r.get(col_location), r.get("unit"), int(idx))
-
-    def make_label_two_lines(name: str, location: str, name_chars: int) -> str:
-        s = (name or "").strip()
-        if len(s) > name_chars:
-            s = s[: name_chars - 1] + "…"
-        loc = (location or "").strip()
-        return f"{s}\n{loc}" if loc else s
-
-    def wrap_label(text: str, max_chars: int, max_lines: int) -> str:
-        if not text:
-            return ""
-        import textwrap as _tw
-
-        s = str(text).strip()
-        if not s:
-            return ""
-        lines = _tw.wrap(
-            s, width=max_chars, break_long_words=False, break_on_hyphens=False
-        )
-        if len(lines) > max_lines:
-            lines = lines[:max_lines]
-            if len(lines[-1]) >= max_chars:
-                lines[-1] = lines[-1][: max_chars - 1] + "…"
-            else:
-                lines[-1] += "…"
-        return "\n".join(lines)
 
     def hex_to_rgba(h: str, a: float) -> str:
         h = h.lstrip("#")
@@ -214,12 +176,50 @@ def sankey_from_supply_df(
     def palette_cycle(i: int, base: Sequence[str]) -> str:
         return base[i % len(base)]
 
+    # Collect full ref-product text per node index for hover
+    node_full_refprod: Dict[int, str] = {}
+
+    def _row_refprod(row) -> str:
+        """Best-effort: prefer explicit column; else try second item of activity_key tuple."""
+        # explicit column
+        if col_ref_product in df.columns:
+            val = row.get(col_ref_product, None)
+            if pd.notna(val) and val is not None and str(val).strip():
+                return str(val).strip()
+        # infer from activity_key tuple (name, reference product, location)
+        ak = row.get(col_id, None)
+        if (
+            isinstance(ak, tuple)
+            and len(ak) >= 2
+            and pd.notna(ak[1])
+            and ak[1] is not None
+        ):
+            s = str(ak[1]).strip()
+            if s:
+                return s
+        return ""
+
+    df["_is_special"] = df[col_name].apply(is_special)
+
     # Columns (specials live in the *last real* level)
-    levels = sorted(int(l) for l in df[col_level].unique())
+    # Columns: compute the column set from NON-SPECIAL nodes
+    # so specials don't create their own extra column.
+    # (We compute df["_is_special"] above with is_special/normalizer.)
+    levels_all = sorted(int(l) for l in df[col_level].unique())
+
+    non_special_mask = ~df["_is_special"]
+    levels_real = (
+        sorted(int(l) for l in df.loc[non_special_mask, col_level].unique())
+        if non_special_mask.any()
+        else []
+    )
+
+    levels = levels_real if levels_real else levels_all
+
     col_index = {L: i for i, L in enumerate(levels)}
     ncols = len(levels)
-    max_level = int(df[col_level].max())
-    last_col = col_index[max_level]
+    max_real_level = levels[-1]  # last level among REGULAR nodes
+    last_col = col_index[max_real_level]
     level_to_color = {lvl: i for i, lvl in enumerate(levels)}
 
     # Build nodes (visible truncated labels + full label for hover)
@@ -230,7 +230,7 @@ def sankey_from_supply_df(
     node_full_name: Dict[int, str] = {}
     node_full_loc: Dict[int, str] = {}
 
-    df["_is_special"] = df[col_name].apply(is_special)
+    node_key_by_idx: Dict[Any, Any] = {}
 
     for i, r in df.sort_values([col_level]).iterrows():
         L = int(r[col_level])
@@ -240,15 +240,16 @@ def sankey_from_supply_df(
         )
 
         if r["_is_special"]:
-            key = special_key(r)
+            key = special_key(r)  # e.g., ("direct emissions","__GLOBAL__")
             label_disp = special_label(key[0])
             x_val = last_col / max(1, (ncols - 1)) if ncols > 1 else 0.0
             color = SPECIAL_NODE_COLOR.get(key[0], palette[0])
         else:
             key = fallback_key(i, r)
             label_disp = make_label_two_lines(full_name, full_loc, wrap_chars)
-            x_val = col_index[L] / max(1, (ncols - 1)) if ncols > 1 else 0.0
-            color = palette[level_to_color[L] % len(palette)]
+            L_eff = L if L in col_index else max_real_level
+            x_val = col_index[L_eff] / max(1, (ncols - 1)) if ncols > 1 else 0.0
+            color = palette[level_to_color.get(L_eff, 0) % len(palette)]
 
         vis_lbl = wrap_label(label_disp, wrap_chars, max_label_lines)
 
@@ -260,8 +261,14 @@ def sankey_from_supply_df(
             x_full.append(float(max(0.0, min(0.999, x_val))))
             node_full_name[idx] = full_name
             node_full_loc[idx] = full_loc
+            node_full_refprod[idx] = "" if r["_is_special"] else _row_refprod(r)
+        node_key_by_idx[i] = key
 
-        df.at[i, "_node_key"] = key
+    df["_node_key"] = pd.Series(
+        (node_key_by_idx.get(i) for i in df.index),
+        index=df.index,
+        dtype="object",
+    )
 
     # Build link rows (always include below-cutoff)
     def link_rows() -> List[Tuple[int, int, float, Any, Any]]:
@@ -370,7 +377,7 @@ def sankey_from_supply_df(
                 [i for i in idxs if i not in special_indices],
                 key=lambda i: (-magnitude[i], labels_vis[i]),
             )
-            ordered = special_indices + ordered_rest
+            ordered = special_indices + ordered_rest  # specials at top
         else:
             ordered = sorted(idxs, key=lambda i: (-magnitude[i], labels_vis[i]))
         centers0 = proportional_centers(ordered, lo, hi)
@@ -408,35 +415,84 @@ def sankey_from_supply_df(
         child_key = crow["_node_key"]
         child_loc = (
             "—"
-            if (isinstance(child_key, tuple) and child_key[1] == "__GLOBAL__")
+            if (
+                isinstance(child_key, tuple)
+                and len(child_key) == 2
+                and child_key[1] == "__GLOBAL__"
+            )
             else (crow.get(col_location, "") or "—")
         )
 
-        # full, untruncated names
+        # full names (untruncated)
         parent_name = node_full_name.get(s_idx, "")
         child_name = node_full_name.get(t_idx, "")
 
-        amt = crow.get(col_amount, None)
+        # Extract reference product from our (name, ref product, location) tuple keys
+        def _ref_product_from_row(row):
+            ak = row.get(col_id)
+            if isinstance(ak, tuple) and len(ak) >= 2:
+                rp = ak[1]
+                if rp is not None and not (isinstance(rp, float) and pd.isna(rp)):
+                    return str(rp)
+            return None
 
-        # NOTE: reversed direction (child ← parent)
+        parent_rp = _ref_product_from_row(prow)
+        child_rp = _ref_product_from_row(crow)
+
+        # Is the child a special synthetic node?
+        nm_special = None
+        if (
+            isinstance(child_key, tuple)
+            and len(child_key) == 2
+            and child_key[1] == "__GLOBAL__"
+        ):
+            nm_special = child_key[
+                0
+            ]  # "direct emissions" | "activities below cutoff" | "loss"
+
+        # Build extra RP lines
+        extra_lines = []
+        if parent_rp:
+            extra_lines.append(f"<br><i>Parent ref product:</i> {parent_rp}")
+
+        # Prefer a real child's RP; if special node, use our best context
+        child_context = child_rp
+        if not child_context and nm_special == "activities below cutoff":
+            # Summary string prepared in _walk(): e.g. "H2 (40%), O2 (20%), +3 more"
+            child_context = crow.get("collapsed_ref_products")
+
+        if child_context:
+            label = "Child ref product" + (
+                "(s)" if nm_special == "activities below cutoff" else ""
+            )
+            extra_lines.append(f"<br><i>{label}:</i> {child_context}")
+
+        amt = crow.get(col_amount, None)
+        amt_line = (
+            f"<br>Raw amount: {amt:,.5g}"
+            if (amt is not None and not pd.isna(amt))
+            else ""
+        )
+
         return (
             f"<b>{child_name}</b> ← <b>{parent_name}</b>"
             f"<br><i>Child location:</i> {child_loc}"
             f"<br><i>Parent location:</i> {parent_loc}"
             f"<br>Flow: {v_signed:,.5g}"
             f"<br>Contribution of total: {_fmt_pct(rel_total)}"
-            + (
-                f"<br>Raw amount: {amt:,.5g}"
-                if (amt is not None and not pd.isna(amt))
-                else ""
-            )
+            f"{amt_line}" + "".join(extra_lines)
         )
 
-    node_hoverdata = [
-        f"<b>{node_full_name.get(i,'')}</b>"
-        + (f"<br>{node_full_loc.get(i,'')}" if node_full_loc.get(i, "") else "")
-        for i in range(len(labels_vis))
-    ]
+    node_hoverdata = []
+    for i in range(len(labels_vis)):
+        parts = [f"<b>{node_full_name.get(i,'')}</b>"]
+        rp = node_full_refprod.get(i, "")
+        if rp:
+            parts.append(f"<i>Ref. product:</i> {rp}")
+        loc = node_full_loc.get(i, "")
+        if loc:
+            parts.append(loc)
+        node_hoverdata.append("<br>".join(parts))
 
     # ---------- NEW: per-parent balancing factors (based on ABS widths) ----------
     # Compute in/out sums per node (using full set of rows)
@@ -674,6 +730,26 @@ def sankey_from_supply_df(
     return fig
 
 
+def wrap_label(text: str, max_chars: int, max_lines: int) -> str:
+    """Wrap text to at most `max_lines` lines of width `max_chars`,
+    adding an ellipsis on the last line if truncated. Never breaks words/hyphens.
+    """
+    if not text:
+        return ""
+
+    s = str(text).strip()
+    if not s:
+        return ""
+    lines = _tw.wrap(s, width=max_chars, break_long_words=False, break_on_hyphens=False)
+    if len(lines) > max_lines:
+        lines = lines[:max_lines]
+        if len(lines[-1]) >= max_chars:
+            lines[-1] = lines[-1][: max_chars - 1] + "…"
+        else:
+            lines[-1] += "…"
+    return "\n".join(lines)
+
+
 @dataclass
 class SupplyChainRow:
     level: int
@@ -685,26 +761,10 @@ class SupplyChainRow:
     unit: str | None
     activity_key: Tuple[str, str, str] | None
     parent_key: Tuple[str, str, str] | None
+    collapsed_ref_products: str | None = None
 
 
 class SupplyChain:
-    """
-    Supply-chain traversal that *builds on EdgeLCIA*.
-
-    - Keeps a single EdgeLCIA instance and calls `redo_lcia(demand=...)` as it walks.
-    - Uses your exchange-level characterization (and optional scenario handling).
-    - Supports level-depth limit and score-based cutoff like your original code.
-    - Handles negative reference amounts (waste processes) like your helpers.
-
-    Notes
-    -----
-    • You should run a first full mapping on the root activity (via `bootstrap()`)
-      so the characterization matrix exists. Subsequent `redo_lcia` calls will
-      only map *newly discovered* exchanges as needed.
-
-    • If you are still stabilizing the fallback mapping passes, you can pass
-      `redo_flags` (e.g., `run_aggregate=False`) to control which ones run during recursion.
-    """
 
     def __init__(
         self,
@@ -714,13 +774,17 @@ class SupplyChain:
         amount: float = 1.0,
         level: int = 3,
         cutoff: float = 0.01,
-        cutoff_basis: str = "total",  # NEW: "total" or "parent"
+        cutoff_basis: str = "total",
         scenario: str | None = None,
         scenario_idx: int | str = 0,
         use_distributions: bool = False,
         iterations: int = 100,
         random_seed: int | None = None,
         redo_flags: Optional[Dict[str, bool]] = None,
+        collapse_markets: bool = False,
+        debug: bool = False,
+        dbg_max_prints: int = 2000,
+        market_top_k: int = 60,
     ):
         if not isinstance(activity, Activity):
             raise TypeError("`activity` must be a Brightway2 Activity.")
@@ -738,6 +802,7 @@ class SupplyChain:
 
         self.scenario = scenario
         self.scenario_idx = scenario_idx
+        self.collapse_markets = bool(collapse_markets)
 
         self.elcia = EdgeLCIA(
             demand={activity: self.amount},
@@ -756,8 +821,158 @@ class SupplyChain:
             self._redo_flags.update(redo_flags)
 
         self._total_score: Optional[float] = None
+        self._unit_score_cache: Dict[Any, float] = {}
+        self._market_flat_cache: Dict[Any, List[Tuple[Activity, float]]] = {}
+
+        # --- Debugging ---
+        self.debug = bool(debug)
+        self._dbg_prints = 0
+        self._dbg_max_prints = int(dbg_max_prints)
+        self._dbg_muted = False
+
+        self.market_top_k = int(market_top_k)
 
     # ---------- Public API ---------------------------------------------------
+
+    # ---------- Debug helpers ----------
+    def _p(self, msg: str):
+        """Rate-limited debug print."""
+        if not self.debug:
+            return
+        if self._dbg_prints < self._dbg_max_prints:
+            print(msg)
+            self._dbg_prints += 1
+        elif not self._dbg_muted:
+            print("[debug muted after limit]")
+            self._dbg_muted = True
+
+    @staticmethod
+    def _short_act(act: Activity) -> str:
+        try:
+            nm = str(act.get("name"))
+        except Exception:
+            nm = "<?>"
+        try:
+            loc = act.get("location")
+        except Exception:
+            loc = None
+        locs = f" [{loc}]" if loc else ""
+        return nm + locs
+
+    @staticmethod
+    def _is_market_name(val: Any) -> bool:
+        """Return True if an activity name looks like an ecoinvent market."""
+        if val is None or (isinstance(val, float) and pd.isna(val)):
+            return False
+        s = str(val).strip().lower()
+        return s.startswith("market for ") or s.startswith("market group for ")
+
+    def _flatten_market_suppliers(
+        self, market_act: Activity
+    ) -> List[Tuple[Activity, float]]:
+        """Flatten a MARKET into final suppliers with per-unit coefficients. Cached."""
+        mk = self._act_cache_key(market_act)
+        hit = self._market_flat_cache.get(mk)
+        if hit is not None:
+            self._p(
+                f"[flatten] cache HIT for market: {self._short_act(market_act)} → {len(hit)} suppliers"
+            )
+            return hit
+
+        t0 = time.perf_counter()
+        out_pairs: List[Tuple[Activity, float]] = []
+        nodes_visited = 0
+        edges_traversed = 0
+
+        def _dfs(act: Activity, coef: float, path: set):
+            nonlocal nodes_visited, edges_traversed
+            nodes_visited += 1
+            ak = self._act_cache_key(act)
+            if ak in path:
+                self._p(
+                    f"[flatten] cycle @ {self._short_act(act)} (coef {coef:.4g}) → treat as terminal"
+                )
+                out_pairs.append((act, coef))
+                return
+            if not _is_market_name(act.get("name")):
+                out_pairs.append((act, coef))
+                return
+            sups = list(act.technosphere())
+            if not sups:
+                out_pairs.append((act, coef))
+                return
+            path.add(ak)
+            for ex in sups:
+                sup = ex.input
+                amt = float(ex["amount"])
+                edges_traversed += 1
+                _dfs(sup, coef * amt, path)
+            path.remove(ak)
+
+        self._p(
+            f"[flatten] MISS for market: {self._short_act(market_act)} — expanding…"
+        )
+        _dfs(market_act, 1.0, set())
+
+        # aggregate duplicates
+        from collections import defaultdict
+
+        agg: Dict[Any, float] = defaultdict(float)
+        key2act: Dict[Any, Activity] = {}
+        for s, c in out_pairs:
+            k = self._act_cache_key(s)
+            agg[k] += c
+            key2act[k] = s
+
+        flat = [(key2act[k], agg[k]) for k in agg]
+        self._market_flat_cache[mk] = flat
+        dt = time.perf_counter() - t0
+        self._p(
+            f"[flatten] built {len(flat)} suppliers (visited nodes={nodes_visited}, edges={edges_traversed}) "
+            f"in {dt:.3f}s for market {self._short_act(market_act)}"
+        )
+        # If this is insanely large, say so:
+        if len(flat) > 2000:
+            self._p(
+                f"[flatten][WARN] very large supplier set: {len(flat)} for {self._short_act(market_act)}"
+            )
+        return flat
+
+    def _score_per_unit(self, act: Activity) -> float:
+        """Memoized unit score for an activity (uses current scenario/flags)."""
+        k = self._act_cache_key(act)
+        hit = self._unit_score_cache.get(k)
+        if hit is not None:
+            return hit
+        t0 = time.perf_counter()
+        self.elcia.redo_lcia(
+            demand={act: 1.0},
+            scenario_idx=self.scenario_idx,
+            scenario=self.scenario,
+            recompute_score=True,
+            **self._redo_flags,
+        )
+        s = float(self.elcia.score or 0.0)
+        dt = time.perf_counter() - t0
+        self._unit_score_cache[k] = s
+        self._p(
+            f"[unit-score] MISS {self._short_act(act)} → {s:.5g} in {dt:.3f}s (cache size={len(self._unit_score_cache)})"
+        )
+        if dt > 0.5:
+            self._p(f"[unit-score][SLOW] {self._short_act(act)} took {dt:.3f}s")
+        return s
+
+    @staticmethod
+    def _act_cache_key(act: Activity) -> Any:
+        # Prefer unique, stable identifiers if available
+        for attr in ("id", "key"):
+            if hasattr(act, attr):
+                return getattr(act, attr)
+        # Fallback: use db/code if present, else your tuple key
+        try:
+            return (act["database"], act["code"])
+        except Exception:
+            return (act["name"], act.get("reference product"), act.get("location"))
 
     def bootstrap(self) -> float:
         """
@@ -805,7 +1020,6 @@ class SupplyChain:
 
     # ---------- Internals ----------------------------------------------------
 
-    # --- replace _walk(...) entirely with the version below
     def _walk(
         self,
         act: Activity,
@@ -814,13 +1028,17 @@ class SupplyChain:
         parent: Optional[Tuple[str, str, str]],
         _precomputed_score: Optional[float] = None,  # internal: to avoid recompute
     ) -> List[SupplyChainRow]:
-        """
-        Build rows for this node, labeling 'direct emissions' and 'activities below cutoff'
-        here (not in the Sankey function). Only recurse into above-cutoff technosphere children.
-        """
-        # Node score
+        """Traverse one node with lazy market expansion (expand only above-cutoff, top-K)."""
+        indent = "  " * level
+        self._p(
+            f"{indent}→ ENTER level {level}: {self._short_act(act)}  amount={amount:.5g}"
+        )
+
+        # --- Node score ---
+        t0 = time.perf_counter()
         if level == 0:
             node_score = float(self._total_score or 0.0)
+            self._p(f"{indent}[score] root uses precomputed total={node_score:.5g}")
         else:
             if _precomputed_score is None:
                 self.elcia.redo_lcia(
@@ -831,16 +1049,21 @@ class SupplyChain:
                     **self._redo_flags,
                 )
                 node_score = float(self.elcia.score or 0.0)
+                dt = time.perf_counter() - t0
+                self._p(
+                    f"{indent}[score] redo_lcia {self._short_act(act)} → {node_score:.5g} in {dt:.3f}s"
+                )
             else:
                 node_score = float(_precomputed_score)
+                self._p(f"{indent}[score] reused child precomputed={node_score:.5g}")
 
         total = float(self._total_score or 0.0)
         share = (node_score / total) if total != 0 else 0.0
-
         cur_key = self._key(act)
 
-        # simple cycle guard
+        # Cycle guard
         if parent is not None and cur_key == parent:
+            self._p(f"{indent}[cycle] parent == current; emitting LOSS and returning")
             return [
                 SupplyChainRow(
                     level=level,
@@ -869,30 +1092,46 @@ class SupplyChain:
             )
         ]
 
-        # stop at depth limit
+        # Depth limit
         if level >= self.level:
+            self._p(
+                f"{indent}[stop] reached level limit ({self.level}); returning node only"
+            )
             return rows
 
-        # Collect immediate technosphere children and their scores (no recursion yet)
-        children: List[Tuple[Activity, float, float]] = (
-            []
-        )  # (child_act, child_amount, child_score)
-        for exc in act.technosphere():
-            child = exc.input
-            child_amount = amount * float(exc["amount"])
-            # compute child's total score (EdgeLCIA, one-node demand)
-            self.elcia.redo_lcia(
-                demand={child: child_amount},
-                scenario_idx=self.scenario_idx,
-                scenario=self.scenario,
-                recompute_score=True,
-                **self._redo_flags,
-            )
-            child_score = float(self.elcia.score or 0.0)
-            children.append((child, child_amount, child_score))
+        # ----------------------------------------------------------------------
+        # 1) Collect children WITHOUT expanding markets; aggregate & score once.
+        # ----------------------------------------------------------------------
+        from collections import defaultdict
+
+        agg_amounts: Dict[Any, float] = defaultdict(float)
+        key_to_act: Dict[Any, Activity] = {}
+
+        def _add_child(a: Activity, amt: float):
+            k = self._act_cache_key(a)
+            agg_amounts[k] += amt
+            key_to_act[k] = a
+
+        exs = list(act.technosphere())
+        for exc in exs:
+            ch = exc.input
+            ch_amt = amount * float(exc["amount"])
+            _add_child(ch, ch_amt)
+
+        # Score each unique child ONCE with unit scores
+        children: List[Tuple[Activity, float, float]] = []
+        t_score0 = time.perf_counter()
+        for k, amt in agg_amounts.items():
+            a = key_to_act[k]
+            unit = self._score_per_unit(a)
+            children.append((a, amt, unit * amt))
+        dt_score = time.perf_counter() - t_score0
+        self._p(
+            f"{indent}[collect+score] unique_children={len(children)} in {dt_score:.3f}s (unit-cache={len(self._unit_score_cache)})"
+        )
 
         if not children:
-            # no technosphere children → entire node score is direct emissions
+            # Leaf → all is direct emissions
             if node_score != 0.0:
                 rows.append(
                     SupplyChainRow(
@@ -907,28 +1146,107 @@ class SupplyChain:
                         parent_key=cur_key,
                     )
                 )
+            self._p(f"{indent}[leaf] no children; returning")
             return rows
 
-        # Split children by cutoff
-        # basis = 'parent' uses |node_score|, basis = 'total' uses |total|
+        # --- Cutoff split (track BOTH above and below) -----------------------
         denom_parent = abs(node_score)
         denom_total = abs(total)
+        denom_for_cutoff = (
+            denom_parent
+            if (self.cutoff_basis == "parent" and denom_parent > 0)
+            else denom_total
+        )
+        self._p(
+            f"{indent}[cutoff] basis={'parent' if denom_for_cutoff==denom_parent else 'total'} "
+            f"cutoff={self.cutoff:.4g} denom={denom_for_cutoff:.5g}"
+        )
+
+        # Keep explicit lists; we’ll need `below` later to summarize ref products
         above: List[Tuple[Activity, float, float]] = []
         below: List[Tuple[Activity, float, float]] = []
 
         for ch, ch_amt, ch_score in children:
-            if self.cutoff_basis == "parent":
-                denom = denom_parent if denom_parent > 0 else denom_total
+            rel = (abs(ch_score) / denom_for_cutoff) if denom_for_cutoff > 0 else 0.0
+            if rel >= self.cutoff:
+                above.append((ch, ch_amt, ch_score))
             else:
-                denom = denom_total
-            rel = (abs(ch_score) / denom) if denom > 0 else 0.0
-            (above if rel >= self.cutoff else below).append((ch, ch_amt, ch_score))
+                below.append((ch, ch_amt, ch_score))
 
+        self._p(f"{indent}[cutoff] pre-expand above={len(above)}  below={len(below)}")
+
+        # --- Lazy market expansion (only for above-cutoff markets) ----------
+        if self.collapse_markets and above:
+            above_final: List[Tuple[Activity, float, float]] = []
+            below_extra: List[Tuple[Activity, float, float]] = []
+            K = max(0, self.market_top_k)
+
+            for ch, ch_amt, ch_score in above:
+                # Non-market stays as-is
+                if not self._is_market_name(ch.get("name")):
+                    above_final.append((ch, ch_amt, ch_score))
+                    continue
+
+                # Expand market into suppliers
+                t_flat = time.perf_counter()
+                flat = self._flatten_market_suppliers(ch)  # [(sup_act, coef_per_unit)]
+                dt_flat = time.perf_counter() - t_flat
+                self._p(
+                    f"{indent}[expand-market] {self._short_act(ch)} suppliers={len(flat)} "
+                    f"in {dt_flat:.3f}s, top_k={K}, ch_score={ch_score:.5g}"
+                )
+
+                # Rank candidates; compute scores only for top-K
+                flat_sorted = sorted(flat, key=lambda t: abs(t[1]), reverse=True)
+
+                promoted_scores = 0.0
+                promoted_cnt = 0
+                tested_cnt = 0
+
+                for sup, coef in flat_sorted[:K]:
+                    sup_amt = ch_amt * coef
+                    unit = self._score_per_unit(sup)
+                    sup_score = unit * sup_amt
+                    tested_cnt += 1
+                    rel = (
+                        (abs(sup_score) / denom_for_cutoff)
+                        if denom_for_cutoff > 0
+                        else 0.0
+                    )
+                    if rel >= self.cutoff:
+                        above_final.append((sup, sup_amt, sup_score))
+                        promoted_scores += sup_score
+                        promoted_cnt += 1
+                    else:
+                        # supplier exists but fails cutoff → goes to below
+                        below_extra.append((sup, sup_amt, sup_score))
+
+                # Any remainder (untested tail) → treat as residual under the market node
+                residual = ch_score - promoted_scores
+                if abs(residual) > 0:
+                    # We don’t know the exact composition of the tail; attribute residual
+                    # to the market activity so the below-summary can still name something.
+                    below_extra.append((ch, float("nan"), residual))
+
+                self._p(
+                    f"{indent}[expand-market] promoted={promoted_cnt}/{tested_cnt}  "
+                    f"promoted_score={promoted_scores:.5g}  residual→below={residual:.5g}"
+                )
+
+            # Replace above with expanded set; extend below with what fell short
+            above = above_final
+            below.extend(below_extra)
+
+        # --- Balance & specials ---------------------------------------------
         sum_above = sum(cs for _, _, cs in above)
         sum_below = sum(cs for _, _, cs in below)
-
-        # Direct emissions = node − (sum_above + sum_below)
         direct = node_score - (sum_above + sum_below)
+
+        self._p(
+            f"{indent}[balance] node={node_score:.5g} sum_above={sum_above:.5g} "
+            f"sum_below={sum_below:.5g} direct={direct:.5g}"
+        )
+
         if abs(direct) > 0.0:
             rows.append(
                 SupplyChainRow(
@@ -944,8 +1262,29 @@ class SupplyChain:
                 )
             )
 
-        # Collapsed "below cutoff" node (single aggregate)
         if abs(sum_below) > 0.0:
+            # Build a compact summary of ref products among below-cutoff children
+            from collections import defaultdict
+
+            agg_rp = defaultdict(float)
+            for ch, _amt, cs in below:
+                rp = ch.get("reference product") or ""
+                agg_rp[rp] += abs(cs)
+
+            TOPN = 6
+            total_abs = sum(agg_rp.values()) or 0.0
+            items = sorted(agg_rp.items(), key=lambda kv: kv[1], reverse=True)
+            if total_abs > 0:
+                parts = [
+                    f"{(k or '—')} ({v/total_abs*100:.1f}%)" for k, v in items[:TOPN]
+                ]
+            else:
+                parts = [(k or "—") for k, _ in items[:TOPN]]
+            more = max(0, len(items) - TOPN)
+            if more:
+                parts.append(f"+{more} more")
+            rp_summary = ", ".join(parts)
+
             rows.append(
                 SupplyChainRow(
                     level=level + 1,
@@ -957,21 +1296,35 @@ class SupplyChain:
                     unit=None,
                     activity_key=None,
                     parent_key=cur_key,
+                    collapsed_ref_products=rp_summary,  # used by hover
                 )
             )
 
-        # Recurse into above-cutoff children only
-        for ch, ch_amt, ch_score in above:
+        # --- Recurse into the final above-cutoff set ------------------------
+        max_list = 6
+        for idx, (ch, ch_amt, ch_score) in enumerate(above):
+            if idx < max_list:
+                self._p(
+                    f"{indent}[recurse] → child {idx+1}/{len(above)} {self._short_act(ch)} "
+                    f"amt={ch_amt:.5g} score={ch_score:.5g}"
+                )
+            elif idx == max_list:
+                self._p(
+                    f"{indent}[recurse] … {len(above)-max_list} more children (muted)"
+                )
             rows.extend(
                 self._walk(
                     ch,
                     ch_amt,
                     level=level + 1,
                     parent=cur_key,
-                    _precomputed_score=ch_score,  # avoid recompute for top of child
+                    _precomputed_score=ch_score,
                 )
             )
 
+        self._p(
+            f"{indent}← EXIT level {level}: {self._short_act(act)}  produced_rows={len(rows)}"
+        )
         return rows
 
     # ---------- Small helpers ------------------------------------------------
