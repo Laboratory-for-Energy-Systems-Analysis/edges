@@ -27,6 +27,16 @@ except ImportError:  # bw2data >= 4.0
 
 from .edgelcia import EdgeLCIA
 
+from bw2data import __version__ as bw2data_version
+
+if isinstance(bw2data_version, str):
+    bw2data_version = tuple(map(int, bw2data_version.split(".")))
+
+if bw2data_version >= (4, 0, 0):
+    is_bw25 = True
+else:
+    is_bw25 = False
+
 
 # --- helpers for labels
 def truncate_one_line(text: str, max_chars: int) -> str:
@@ -283,6 +293,14 @@ def sankey_from_supply_df(
         # last resort: force to grey w/ alpha
         return f"rgba(150,150,150,{a:.3f})"
 
+    def _append_tag_to_label(lbl: str, tag: str) -> str:
+        """Append a short tag to the *last* line of a 1–2 line label."""
+        parts = lbl.split("\n")
+        if not parts:
+            return tag
+        parts[-1] = f"{parts[-1]}  {tag}"
+        return "\n".join(parts)
+
     def _normalize_special(raw: Any) -> Optional[str]:
         if pd.isna(raw):
             return None
@@ -456,6 +474,13 @@ def sankey_from_supply_df(
         dtype="object",
     )
 
+    rowid_to_nodeidx = {}
+    if "row_id" in df.columns:
+        for _, r in df.iterrows():
+            rid = r.get("row_id", None)
+            if rid is not None and not pd.isna(rid):
+                rowid_to_nodeidx[int(rid)] = key_to_idx[r["_node_key"]]
+
     # --- Per-node score/share for node hover ------------------------------------
     node_score_by_idx = collections.defaultdict(float)
     node_share_by_idx = collections.defaultdict(float)
@@ -479,25 +504,51 @@ def sankey_from_supply_df(
             node_share_by_idx[idx] = sh
 
     # Build link rows (always include below-cutoff)
-    def link_rows() -> List[Tuple[int, int, float, Any, Any]]:
+    def link_rows():
         out = []
+
+        # Fast lookup by row_id if present
+        df_by_rowid = None
+        if "row_id" in df.columns:
+            df_by_rowid = {
+                int(rr["row_id"]): rr
+                for _, rr in df.iterrows()
+                if rr.get("row_id") is not None and not pd.isna(rr.get("row_id"))
+            }
+
         for _, r in df.iterrows():
-            pid = r.get(col_parent)
-            if pd.isna(pid) or pid is None:
-                continue
-            prow = df.loc[df[col_id] == pid]
-            if prow.empty:
-                continue
-            parent_key = prow.iloc[0]["_node_key"]
-            child_key = r["_node_key"]
-            s_idx = key_to_idx.get(parent_key)
-            t_idx = key_to_idx.get(child_key)
+            s_idx, prow = None, None
+
+            # Preferred: wire by parent_row_id (exact instance)
+            pri = r.get("parent_row_id", None)
+            if pri is not None and not pd.isna(pri) and df_by_rowid is not None:
+                pri = int(pri)
+                prow = df_by_rowid.get(pri)
+                if prow is not None:
+                    s_idx = rowid_to_nodeidx.get(pri)
+
+            # Fallback: wire by parent_key (may merge instances)
+            if s_idx is None:
+                pid = r.get(col_parent)
+                if pd.isna(pid) or pid is None:
+                    continue
+                prows = df.loc[df[col_id] == pid]
+                if prows.empty:
+                    continue
+                prow = prows.iloc[0]
+                parent_key = prow["_node_key"]
+                s_idx = key_to_idx.get(parent_key)
+
+            # Target (child)
+            t_idx = key_to_idx.get(r["_node_key"])
             if s_idx is None or t_idx is None:
                 continue
+
             v = float(r[col_score] or 0.0)
             if v == 0:
                 continue
-            out.append((s_idx, t_idx, v, prow.iloc[0], r))
+
+            out.append((s_idx, t_idx, v, prow, r))
         return out
 
     rows_all = link_rows()
@@ -511,6 +562,35 @@ def sankey_from_supply_df(
     for li, (s_idx, t_idx, _v, _prow, _crow) in enumerate(rows_all):
         children[s_idx].append(t_idx)
         parents[t_idx].append(s_idx)
+
+    from collections import defaultdict as _dd
+
+    # Indices of special global nodes
+    _special_idx = {idx for key, idx in key_to_idx.items()
+                    if isinstance(key, tuple) and len(key) == 2 and key[1] == "__GLOBAL__"}
+
+    # Group by full (name, location) for non-special nodes
+    _label_groups = _dd(list)
+    for i in range(len(labels_vis)):
+        if i in _special_idx:
+            continue
+        key = (node_full_name.get(i, "").strip(), node_full_loc.get(i, "").strip())
+        _label_groups[key].append(i)
+
+    _instance_info = {}
+    for (_nm, _loc), idxs in _label_groups.items():
+        if len(idxs) <= 1:
+            continue
+        for pos, idx in enumerate(sorted(idxs), start=1):
+            pars = parents.get(idx, [])
+            if len(pars) == 1:
+                p_name = (node_full_name.get(pars[0], "") or "").strip()
+                short_parent = truncate_one_line(p_name, 16) or "parent"
+                tag = f"⟵ {short_parent}"
+            else:
+                tag = f"[{pos}]"
+            labels_vis[idx] = _append_tag_to_label(labels_vis[idx], tag)
+            _instance_info[idx] = (pos, len(idxs))
 
     def _descendants(root: int) -> set[int]:
         out, q = set([root]), deque([root])
@@ -677,6 +757,11 @@ def sankey_from_supply_df(
             parts.append(f"<i>Node score:</i> {sc:,.6g}")
             if total_root_score:
                 parts.append(f"<i>Share of total:</i> {_fmt_pct(sc/total_root_score)}")
+
+            # If this node label was disambiguated, show the instance number
+            inst = _instance_info.get(i)
+            if inst:
+                parts.append(f"<i>Instance:</i> #{inst[0]} of {inst[1]}")
 
         node_hoverdata.append("<br>".join(parts))
 
@@ -1420,6 +1505,7 @@ def save_html_multi_methods_for_activity(
         offline=offline,
         auto_open=auto_open,
         title="Multi-impact Sankey",
+
     )
 
 
@@ -1435,6 +1521,8 @@ class SupplyChainRow:
     activity_key: Tuple[str, str, str] | None
     parent_key: Tuple[str, str, str] | None
     collapsed_ref_products: str | None = None
+    row_id: int | None = None          # <---
+    parent_row_id: int | None = None   # <---
 
 
 class SupplyChain:
@@ -1504,6 +1592,13 @@ class SupplyChain:
         self._dbg_muted = False
 
         self.market_top_k = int(market_top_k)
+
+        self._row_counter = 0
+
+    def _next_row_id(self) -> int:
+        rid = self._row_counter
+        self._row_counter += 1
+        return rid
 
     # ---------- Public API ---------------------------------------------------
 
@@ -1618,8 +1713,9 @@ class SupplyChain:
         if hit is not None:
             return hit
         t0 = time.perf_counter()
+
         self.elcia.redo_lcia(
-            demand={act: 1.0},
+            demand={act.id if is_bw25 else act: 1.0},
             scenario_idx=self.scenario_idx,
             scenario=self.scenario,
             recompute_score=True,
@@ -1701,14 +1797,8 @@ class SupplyChain:
 
     # ---------- Internals ----------------------------------------------------
 
-    def _walk(
-        self,
-        act: Activity,
-        amount: float,
-        level: int,
-        parent: Optional[Tuple[str, str, str]],
-        _precomputed_score: Optional[float] = None,  # internal: to avoid recompute
-    ) -> List[SupplyChainRow]:
+    def _walk(self, act, amount, level, parent, _precomputed_score=None, _parent_row_id=None):
+
         """Traverse one node with lazy market expansion (expand only above-cutoff, top-K)."""
         indent = "  " * level
         self._p(
@@ -1723,7 +1813,7 @@ class SupplyChain:
         else:
             if _precomputed_score is None:
                 self.elcia.redo_lcia(
-                    demand={act: amount},
+                    demand={ (act.id if is_bw25 else act): amount },
                     scenario_idx=self.scenario_idx,
                     scenario=self.scenario,
                     recompute_score=True,
@@ -1759,6 +1849,7 @@ class SupplyChain:
                 )
             ]
 
+        rid = self._next_row_id()
         rows: List[SupplyChainRow] = [
             SupplyChainRow(
                 level=level,
@@ -1770,14 +1861,34 @@ class SupplyChain:
                 unit=act.get("unit"),
                 activity_key=cur_key,
                 parent_key=parent,
+                row_id=rid,  # <---
+                parent_row_id=_parent_row_id,  # <---
             )
         ]
 
         # Depth limit
         if level >= self.level:
-            self._p(
-                f"{indent}[stop] reached level limit ({self.level}); returning node only"
-            )
+            self._p(f"{indent}[stop] reached level limit ({self.level}); returning node only")
+            return rows
+
+        # Treat unknown-amount nodes as terminals
+        if isinstance(amount, float) and math.isnan(amount):
+            if node_score != 0.0:
+                rows.append(
+                    SupplyChainRow(
+                        level=level + 1,
+                        share_of_total=(node_score / total) if total else 0.0,
+                        score=node_score,
+                        amount=float("nan"),
+                        name="Direct emissions/Res. use",
+                        location=None,
+                        unit=None,
+                        activity_key=None,
+                        parent_key=cur_key,
+                        row_id=self._next_row_id(),
+                        parent_row_id=rid,
+                    )
+                )
             return rows
 
         # ----------------------------------------------------------------------
@@ -1825,6 +1936,8 @@ class SupplyChain:
                         unit=None,
                         activity_key=None,
                         parent_key=cur_key,
+                        row_id=self._next_row_id(),
+                        parent_row_id=rid,
                     )
                 )
             self._p(f"{indent}[leaf] no children; returning")
@@ -1916,11 +2029,10 @@ class SupplyChain:
                         else 0.0
                     )
                     if rel_resid >= self.cutoff:
-                        above_final.append(
-                            (ch, float("nan"), residual)
-                        )  # shows market as residual
+                        # Use 0.0 (not NaN) so recursion yields direct = node_score and shows a direct-emissions link
+                        above_final.append((ch, 0.0, residual))
                     elif abs(residual) > 0:
-                        below_extra.append((ch, float("nan"), residual))
+                        below_extra.append((ch, 0.0, residual))  # harmless either way (we don't recurse into "below")
 
                 self._p(
                     f"{indent}[expand-market] promoted={promoted_cnt}/{tested_cnt}  "
@@ -1953,6 +2065,8 @@ class SupplyChain:
                     unit=None,
                     activity_key=None,
                     parent_key=cur_key,
+                    row_id=self._next_row_id(),
+                    parent_row_id=rid,
                 )
             )
 
@@ -1990,7 +2104,9 @@ class SupplyChain:
                     unit=None,
                     activity_key=None,
                     parent_key=cur_key,
-                    collapsed_ref_products=rp_summary,  # used by hover
+                    collapsed_ref_products=rp_summary,
+                    row_id=self._next_row_id(),
+                    parent_row_id=rid,
                 )
             )
 
@@ -2013,6 +2129,7 @@ class SupplyChain:
                     level=level + 1,
                     parent=cur_key,
                     _precomputed_score=ch_score,
+                    _parent_row_id=rid,
                 )
             )
 

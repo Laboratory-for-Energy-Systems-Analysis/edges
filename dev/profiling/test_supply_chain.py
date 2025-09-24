@@ -3,9 +3,10 @@ import bw2data
 import time
 import pandas as pd
 
-bw2data.projects.set_current("ecoinvent-3.10-cutoff")
+#bw2data.projects.set_current("ecoinvent-3.10-cutoff")
+bw2data.projects.set_current("bw25_ei310")
 
-use_example_df = True
+use_example_df = False
 start_time = time.time()
 
 if not use_example_df:
@@ -17,8 +18,8 @@ if not use_example_df:
         == "hydrogen production, gaseous, 30 bar, from PEM electrolysis, from offshore wind electricity"
     ][0]
 
-    method = ("AWARE 2.0", "Country", "all", "yearly")
-    # method = ("GeoPolRisk", "paired", "2024")
+    # method = ("AWARE 2.0", "Country", "all", "yearly")
+    method = ("GeoPolRisk", "paired", "2024")
     # method = ("ImpactWorld+ 2.1", "Particulate matter formation", "midpoint")
     # method = ("RELICS", "copper", "primary")
 
@@ -49,6 +50,7 @@ if not use_example_df:
     print("Total score:", total_score, "Reference amount:", ref_amount)
 
     df.to_csv("example_df.csv")
+    print(f"Saved dataframe to example_df.csv with {len(df)} rows.")
 
 else:
 
@@ -80,11 +82,13 @@ else:
 # fig = sc.plot_sankey(df, width_max=1800, height_max=800, enable_highlight=True)
 sc.save_html(
     df,
-    "example_sankey.html",
-    y_spacing="by_score",
-    node_instance_mode="by_parent",
-    node_thickness=8,  # or 10 / 8
-    node_pad=2,  # a bit tighter spacing
+    path="example_sankey.html",
+    y_spacing="linear",
+    height_max=1000,
+    width_max=1800,
+    node_instance_mode="by_parent",  # or "by_child_level" / "by_level"
+    node_thickness=12,  # or 10 / 8
+    node_pad=8,  # a bit tighter spacing
 )
 # fig.show()
 

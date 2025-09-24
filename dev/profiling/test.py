@@ -10,7 +10,8 @@ total_start_time = time.time()
 start_time = time.time()
 # bw2data.projects.set_current("bw25_ei310")
 # bw2data.projects.set_current("ecoinvent-3.10.1-cutoff")
-bw2data.projects.set_current("ecoinvent-3.10-cutoff")
+# bw2data.projects.set_current("ecoinvent-3.10-cutoff")
+bw2data.projects.set_current("bw25_ei310")
 
 act = [
     a
@@ -24,7 +25,7 @@ print(act["name"])
 # method = ("GeoPolRisk", "paired", "2024", "short")
 # method = ("AWARE 2.0", "Country", "all", "yearly")
 # method = ("GeoPolRisk", "paired", "2024")
-method = ("RELICS", "copper", "primary")
+method = ("RELICS", "copper", "secondary")
 
 LCA = EdgeLCIA(
     {act: 1},

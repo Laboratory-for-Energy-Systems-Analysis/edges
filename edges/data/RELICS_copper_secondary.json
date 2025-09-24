@@ -1,0 +1,39 @@
+{
+  "name": "RELICS - Copper, secondary",
+  "unit": "kg",
+  "version": "1.0",
+  "exchanges": [
+    {
+      "supplier": {
+        "name": "treatment of",
+        "reference product": "copper, cathode",
+        "operator": "startswith",
+        "matrix": "technosphere",
+        "excludes": [
+          "market"
+        ]
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1.0
+    },
+    {
+        "supplier": {
+          "name": "treatment of",
+          "reference product": "copper, anode",
+          "operator": "startswith",
+          "matrix": "technosphere",
+          "excludes": [
+            "market",
+            "slime"
+          ]
+        },
+        "consumer": {
+          "matrix": "technosphere"
+        },
+        "value": 1.0
+      }
+
+  ]
+}
