@@ -566,8 +566,11 @@ def sankey_from_supply_df(
     from collections import defaultdict as _dd
 
     # Indices of special global nodes
-    _special_idx = {idx for key, idx in key_to_idx.items()
-                    if isinstance(key, tuple) and len(key) == 2 and key[1] == "__GLOBAL__"}
+    _special_idx = {
+        idx
+        for key, idx in key_to_idx.items()
+        if isinstance(key, tuple) and len(key) == 2 and key[1] == "__GLOBAL__"
+    }
 
     # Group by full (name, location) for non-special nodes
     _label_groups = _dd(list)
@@ -1505,7 +1508,6 @@ def save_html_multi_methods_for_activity(
         offline=offline,
         auto_open=auto_open,
         title="Multi-impact Sankey",
-
     )
 
 
@@ -1521,8 +1523,8 @@ class SupplyChainRow:
     activity_key: Tuple[str, str, str] | None
     parent_key: Tuple[str, str, str] | None
     collapsed_ref_products: str | None = None
-    row_id: int | None = None          # <---
-    parent_row_id: int | None = None   # <---
+    row_id: int | None = None  # <---
+    parent_row_id: int | None = None  # <---
 
 
 class SupplyChain:
@@ -1797,8 +1799,9 @@ class SupplyChain:
 
     # ---------- Internals ----------------------------------------------------
 
-    def _walk(self, act, amount, level, parent, _precomputed_score=None, _parent_row_id=None):
-
+    def _walk(
+        self, act, amount, level, parent, _precomputed_score=None, _parent_row_id=None
+    ):
         """Traverse one node with lazy market expansion (expand only above-cutoff, top-K)."""
         indent = "  " * level
         self._p(
@@ -1813,7 +1816,7 @@ class SupplyChain:
         else:
             if _precomputed_score is None:
                 self.elcia.redo_lcia(
-                    demand={ (act.id if is_bw25 else act): amount },
+                    demand={(act.id if is_bw25 else act): amount},
                     scenario_idx=self.scenario_idx,
                     scenario=self.scenario,
                     recompute_score=True,
@@ -1868,7 +1871,9 @@ class SupplyChain:
 
         # Depth limit
         if level >= self.level:
-            self._p(f"{indent}[stop] reached level limit ({self.level}); returning node only")
+            self._p(
+                f"{indent}[stop] reached level limit ({self.level}); returning node only"
+            )
             return rows
 
         # Treat unknown-amount nodes as terminals
@@ -2032,7 +2037,9 @@ class SupplyChain:
                         # Use 0.0 (not NaN) so recursion yields direct = node_score and shows a direct-emissions link
                         above_final.append((ch, 0.0, residual))
                     elif abs(residual) > 0:
-                        below_extra.append((ch, 0.0, residual))  # harmless either way (we don't recurse into "below")
+                        below_extra.append(
+                            (ch, 0.0, residual)
+                        )  # harmless either way (we don't recurse into "below")
 
                 self._p(
                     f"{indent}[expand-market] promoted={promoted_cnt}/{tested_cnt}  "
