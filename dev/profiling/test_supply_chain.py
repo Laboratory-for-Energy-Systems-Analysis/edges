@@ -5,7 +5,7 @@ import pandas as pd
 
 bw2data.projects.set_current("ecoinvent-3.10-cutoff")
 
-use_example_df = False
+use_example_df = True
 start_time = time.time()
 
 if not use_example_df:
@@ -19,22 +19,26 @@ if not use_example_df:
 
     method = ("AWARE 2.0", "Country", "all", "yearly")
     # method = ("GeoPolRisk", "paired", "2024")
+    # method = ("ImpactWorld+ 2.1", "Particulate matter formation", "midpoint")
+    # method = ("RELICS", "copper", "primary")
 
     sc = SupplyChain(
         activity=act,
         method=method,
         amount=1,
-        level=5,
+        level=8,
         cutoff=0.01,
+        cutoff_basis="total",  # "total" or "parent"
         redo_flags=dict(
-            run_aggregate=True,
-            run_dynamic=True,
-            run_contained=True,
-            run_global=True,
+            run_aggregate=False,
+            run_dynamic=False,
+            run_contained=False,
+            run_global=False,
         ),
-        collapse_markets=True,
+        collapse_markets=False,
         debug=False,  # <— turn on logging
         dbg_max_prints=5000,
+        market_top_k=100,
     )
 
     # Build initial CM & total score
@@ -69,12 +73,19 @@ else:
             run_contained=True,
             run_global=True,
         ),
-        collapse_markets=True,
+        collapse_markets=False,
     )
     df = pd.read_csv("example_df.csv")
 
 # fig = sc.plot_sankey(df, width_max=1800, height_max=800, enable_highlight=True)
-sc.save_html(df, "example_sankey.html")
+sc.save_html(
+    df,
+    "example_sankey.html",
+    y_spacing="by_score",
+    node_instance_mode="by_parent",
+    node_thickness=8,  # or 10 / 8
+    node_pad=2,  # a bit tighter spacing
+)
 # fig.show()
 
 # Stop timer

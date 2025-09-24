@@ -13,8 +13,10 @@ from typing import Optional, Sequence, Tuple, Dict, Any, List
 import pandas as pd
 import plotly.graph_objects as go
 
-from pathlib import Path
 import os
+from pathlib import Path
+import html
+import re
 import plotly.io as pio
 
 
@@ -51,6 +53,138 @@ def _is_market_name(val: Any) -> bool:
     return s.startswith("market for ") or s.startswith("market group for ")
 
 
+# --- Multi-method (multi-impact) HTML export ---------------------------------
+def save_sankey_html_multi(
+    label_to_df: Dict[str, pd.DataFrame],
+    path: str,
+    *,
+    title: str = "Supply chain Sankey — multiple impact categories",
+    offline: bool = True,
+    auto_open: bool = True,
+    plot_kwargs: Optional[Dict[str, Any]] = None,
+    modebar_remove: tuple = ("lasso2d", "select2d"),
+) -> str:
+    """
+    Save several Sankey figures (one per impact category) into a single tabbed HTML.
+
+    Parameters
+    ----------
+    label_to_df : {label: DataFrame}
+        Keys are tab labels (e.g., method names); values are the dataframes to plot.
+    path : str
+        Output file path; '.html' will be appended if missing.
+    title : str
+        Browser tab title.
+    offline : bool
+        If True, embed plotly.js once into the file. Otherwise load from CDN.
+    auto_open : bool
+        If True, open the file in a browser after writing.
+    plot_kwargs : dict
+        Extra kwargs forwarded to sankey_from_supply_df (e.g., width_max, height_max).
+    modebar_remove : tuple
+        Modebar buttons to remove in each figure.
+
+    Returns
+    -------
+    str : the file path written.
+    """
+
+    plot_kwargs = plot_kwargs or {}
+    if not path.lower().endswith(".html"):
+        path += ".html"
+    Path(os.path.dirname(path) or ".").mkdir(parents=True, exist_ok=True)
+
+    # Build one figure per label
+    pieces: List[tuple[str, str]] = []
+    include = "cdn" if not offline else True
+    config = {"displaylogo": False, "modeBarButtonsToRemove": list(modebar_remove)}
+
+    def _slug(s: str) -> str:
+        s2 = re.sub(r"\s+", "-", s.strip())
+        s2 = re.sub(r"[^A-Za-z0-9\-_]", "", s2)
+        return s2 or "tab"
+
+    first = True
+    for label, df in label_to_df.items():
+        fig = sankey_from_supply_df(df, **plot_kwargs)
+        # include plotly.js only once
+        html_snippet = pio.to_html(
+            fig,
+            include_plotlyjs=(include if first else False),
+            full_html=False,
+            config=config,
+        )
+        pieces.append((label, html_snippet))
+        first = False
+
+    # Simple tab UI (CSS+JS) and body with all figures (hidden except first)
+    # We wrap each snippet in a container <div class="tab-pane"> and switch display via JS.
+    tabs_html = []
+    panes_html = []
+    for i, (label, snippet) in enumerate(pieces):
+        tab_id = f"tab-{_slug(label)}"
+        active = "active" if i == 0 else ""
+        tabs_html.append(
+            f'<button class="tab-btn {active}" onclick="showTab(\'{tab_id}\', this)">{html.escape(label)}</button>'
+        )
+        panes_html.append(
+            f'<div id="{tab_id}" class="tab-pane {active}">{snippet}</div>'
+        )
+
+    full = f"""<!DOCTYPE html>
+        <html>
+        <head>
+        <meta charset="utf-8"/>
+        <title>{html.escape(title)}</title>
+        <style>
+          body {{ font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif; margin: 0; }}
+          .tabs {{ position: sticky; top: 0; background: #fafafa; border-bottom: 1px solid #eee; padding: 8px; z-index: 10; display: flex; flex-wrap: wrap; gap: 6px; }}
+          .tab-btn {{ border: 1px solid #ddd; background: #fff; border-radius: 6px; padding: 6px 10px; cursor: pointer; }}
+          .tab-btn.active {{ background: #0d6efd; color: white; border-color: #0d6efd; }}
+          .tab-pane {{ display: none; padding: 8px; }}
+          .tab-pane.active {{ display: block; }}
+        </style>
+        </head>
+        <body>
+          <div class="tabs">
+            {''.join(tabs_html)}
+          </div>
+          {''.join(panes_html)}
+        <script>
+          function showTab(id, btn) {{
+            document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            const el = document.getElementById(id);
+            if (el) el.classList.add('active');
+            if (btn) btn.classList.add('active');
+            // Force Plotly to resize when switching tabs (in case container size changed)
+            if (window.Plotly && el) {{
+              el.querySelectorAll('.js-plotly-plot').forEach(plot => {{
+                try {{ window.Plotly.Plots.resize(plot); }} catch(e) {{}}
+              }});
+            }}
+          }}
+          // Ensure first tab active on load
+          (function() {{
+            const firstPane = document.querySelector('.tab-pane');
+            const firstBtn = document.querySelector('.tab-btn');
+            if (firstPane) firstPane.classList.add('active');
+            if (firstBtn) firstBtn.classList.add('active');
+          }})();
+        </script>
+        </body>
+        </html>"""
+
+    with open(path, "w", encoding="utf-8") as f:
+        f.write(full)
+
+    if auto_open:
+        import webbrowser
+
+        webbrowser.open(f"file://{os.path.abspath(path)}")
+    return path
+
+
 def sankey_from_supply_df(
     df: pd.DataFrame,
     *,
@@ -69,7 +203,7 @@ def sankey_from_supply_df(
     per_level_px: int = 110,
     per_node_px: int = 6,
     height_min: int = 460,
-    height_max: int = 1600,
+    height_max: int = 1200,
     auto_width: bool = False,
     per_level_width: int = 250,
     per_node_width: int = 2,
@@ -78,7 +212,7 @@ def sankey_from_supply_df(
     node_thickness: int = 18,
     node_pad: int = 12,
     lock_x_by_level: bool = True,
-    balance_mode: str = "match",
+    balance_mode: str = "none",
     palette: Sequence[str] = (
         "#636EFA",
         "#EF553B",
@@ -101,6 +235,8 @@ def sankey_from_supply_df(
     highlight_top_k: int = 25,
     highlight_alpha_on: float = 0.9,
     highlight_alpha_off: float = 0.08,
+    y_spacing: str = "linear",  # "equal" | "sqrt" | "linear" | "by_score"
+    node_instance_mode: str = "merge",  # "merge" | "by_parent" | "by_child_level"
 ) -> go.Figure:
     """Sankey with last-level specials, untruncated hover labels, per-parent outgoing balancing, and tidy UI."""
     if df.empty:
@@ -260,6 +396,28 @@ def sankey_from_supply_df(
 
     node_key_by_idx: Dict[Any, Any] = {}
 
+    def _node_key_for_row(idx, r) -> Any:
+        if r["_is_special"]:
+            return special_key(r)  # keep specials global
+
+        base = fallback_key(idx, r)  # usually the activity_key tuple
+        mode = (node_instance_mode or "merge").lower()
+
+        if mode == "merge":
+            return base
+
+        elif mode == "by_parent":
+            # one instance per (activity, parent)
+            return ("by_parent", base, r.get(col_parent))
+
+        elif mode == "by_child_level":
+            # one instance per (activity, child level) – useful if the same activity appears at multiple levels
+            return ("by_level", base, int(r[col_level]))
+
+        else:
+            # fallback to old behavior if an unknown value is passed
+            return base
+
     for i, r in df.sort_values([col_level]).iterrows():
         L = int(r[col_level])
         full_name = str(r[col_name]) if pd.notna(r[col_name]) else ""
@@ -273,7 +431,7 @@ def sankey_from_supply_df(
             x_val = last_col / max(1, (ncols - 1)) if ncols > 1 else 0.0
             color = SPECIAL_NODE_COLOR.get(key[0], palette[0])
         else:
-            key = fallback_key(i, r)
+            key = _node_key_for_row(i, r)
             label_disp = make_label_two_lines(full_name, full_loc, wrap_chars)
             L_eff = L if L in col_index else max_real_level
             x_val = col_index[L_eff] / max(1, (ncols - 1)) if ncols > 1 else 0.0
@@ -297,6 +455,28 @@ def sankey_from_supply_df(
         index=df.index,
         dtype="object",
     )
+
+    # --- Per-node score/share for node hover ------------------------------------
+    node_score_by_idx = collections.defaultdict(float)
+    node_share_by_idx = collections.defaultdict(float)
+
+    accumulate_for_merge = (node_instance_mode or "merge").lower() == "merge"
+    for _, r in df.iterrows():
+        idx = key_to_idx.get(r["_node_key"])
+        if idx is None:
+            continue
+        sc = float(r.get(col_score) or 0.0)
+        sh = (
+            float(r.get("share_of_total"))
+            if "share_of_total" in df.columns and pd.notna(r.get("share_of_total"))
+            else ((sc / total_root_score) if total_root_score else 0.0)
+        )
+        if r["_is_special"] or accumulate_for_merge:
+            node_score_by_idx[idx] += sc
+            node_share_by_idx[idx] += sh
+        else:
+            node_score_by_idx[idx] = sc
+            node_share_by_idx[idx] = sh
 
     # Build link rows (always include below-cutoff)
     def link_rows() -> List[Tuple[int, int, float, Any, Any]]:
@@ -374,80 +554,6 @@ def sankey_from_supply_df(
         c = col_from_x(x_full[idx])
         nodes_by_col[c].append(idx)
 
-    # Figure height
-    max_nodes_in_col = max((len(v) for v in nodes_by_col.values()), default=1)
-    required_px = int(max_nodes_in_col * (node_thickness + node_pad) + 110)
-    n_nodes = len(labels_vis)
-    est_h_soft = int(
-        base_height
-        + per_level_px * (len(levels) - 1)
-        + per_node_px * math.sqrt(max(1, n_nodes))
-    )
-    est_h = max(height_min, required_px, est_h_soft)
-    est_h = min(est_h, height_max)
-
-    # y positions (proportional + min-gap)
-    def proportional_centers(order: List[int], lo: float, hi: float) -> List[float]:
-        if not order:
-            return []
-        weights = [max(1e-12, magnitude[i]) for i in order]
-        total = float(sum(weights))
-        fracs = [w / total for w in weights]
-        span = hi - lo
-        centers, cum = [], 0.0
-        for f in fracs:
-            centers.append(lo + (cum + 0.5 * f) * span)
-            cum += f
-        return centers
-
-    def enforce_min_gap(
-        centers: List[float], lo: float, hi: float, min_gap: float
-    ) -> List[float]:
-        if not centers:
-            return []
-        y = centers[:]
-        for i in range(1, len(y)):
-            if y[i] - y[i - 1] < min_gap:
-                y[i] = y[i - 1] + min_gap
-        if y[-1] > hi:
-            old_lo, old_hi = y[0], y[-1]
-            if old_hi - old_lo < 1e-9:
-                return [lo + k * (hi - lo) / (len(y) - 1) for k in range(len(y))]
-            y = [lo + (p - old_lo) * (hi - lo) / (old_hi - old_lo) for p in y]
-        for i in range(len(y) - 2, -1, -1):
-            if y[i + 1] - y[i] < min_gap:
-                y[i] = y[i + 1] - min_gap
-        return [max(lo, min(hi, v)) for v in y]
-
-    min_gap = (node_thickness + node_pad) / float(est_h)
-    y_full = [0.5] * len(labels_vis)
-
-    # Specials first in last column
-    special_order_keys = [
-        ("direct emissions", "__GLOBAL__"),
-        ("activities below cutoff", "__GLOBAL__"),
-        ("loss", "__GLOBAL__"),
-    ]
-    special_indices = [key_to_idx[k] for k in special_order_keys if k in key_to_idx]
-
-    for c, idxs in nodes_by_col.items():
-        if not idxs:
-            continue
-        lo, hi = 0.04, 0.96
-        if c == last_col:
-            ordered_rest = sorted(
-                [i for i in idxs if i not in special_indices],
-                key=lambda i: (-magnitude[i], labels_vis[i]),
-            )
-            ordered = special_indices + ordered_rest  # specials at top
-        else:
-            ordered = sorted(idxs, key=lambda i: (-magnitude[i], labels_vis[i]))
-        centers0 = proportional_centers(ordered, lo, hi)
-        centers = enforce_min_gap(centers0, lo, hi, min_gap)
-        for i, y in zip(ordered, centers):
-            y_full[i] = y
-
-    # Parent-location palette
     from collections import Counter
 
     parent_locs = [(prow.get(col_location, "") or "—") for _, _, _, prow, _ in rows_all]
@@ -468,11 +574,34 @@ def sankey_from_supply_df(
             return "<0.01%"
         return f"{v:.2f}%"
 
+    def _rp_from_index_or_row(node_idx: int, row) -> str:
+        """Prefer the per-node cache; if empty, re-infer from the row."""
+        rp = (node_full_refprod.get(node_idx) or "").strip()
+        if not rp:
+            # reuse the same logic you used to build node_full_refprod
+            try:
+                # try explicit column if present
+                if col_ref_product in df.columns:
+                    val = row.get(col_ref_product, None)
+                    if pd.notna(val) and val is not None and str(val).strip():
+                        return str(val).strip()
+            except Exception:
+                pass
+            # fallback to activity_key tuple
+            ak = row.get(col_id, None)
+            if (
+                isinstance(ak, tuple)
+                and len(ak) >= 2
+                and pd.notna(ak[1])
+                and ak[1] is not None
+            ):
+                return str(ak[1]).strip()
+        return rp
+
     def make_hover_link(s_idx: int, t_idx: int, v_signed: float, prow, crow) -> str:
         # % of total
         rel_total = (abs(v_signed) / abs(total_root_score)) if total_root_score else 0.0
 
-        # locations
         parent_loc = prow.get(col_location, "") or "—"
         child_key = crow["_node_key"]
         child_loc = (
@@ -485,23 +614,14 @@ def sankey_from_supply_df(
             else (crow.get(col_location, "") or "—")
         )
 
-        # full names (untruncated)
         parent_name = node_full_name.get(s_idx, "")
         child_name = node_full_name.get(t_idx, "")
 
-        # Extract reference product from our (name, ref product, location) tuple keys
-        def _ref_product_from_row(row):
-            ak = row.get(col_id)
-            if isinstance(ak, tuple) and len(ak) >= 2:
-                rp = ak[1]
-                if rp is not None and not (isinstance(rp, float) and pd.isna(rp)):
-                    return str(rp)
-            return None
+        # --- Reference products (read from the per-node cache, not the row) ---
+        parent_rp = _rp_from_index_or_row(s_idx, prow)
+        child_rp = _rp_from_index_or_row(t_idx, crow)
 
-        parent_rp = _ref_product_from_row(prow)
-        child_rp = _ref_product_from_row(crow)
-
-        # Is the child a special synthetic node?
+        # If the child is the special "below cutoff" node, use the summary string
         nm_special = None
         if (
             isinstance(child_key, tuple)
@@ -511,23 +631,17 @@ def sankey_from_supply_df(
             nm_special = child_key[
                 0
             ]  # "direct emissions" | "activities below cutoff" | "loss"
+            if not child_rp and nm_special == "activities below cutoff":
+                child_rp = (crow.get("collapsed_ref_products") or "").strip()
 
-        # Build extra RP lines
         extra_lines = []
         if parent_rp:
             extra_lines.append(f"<br><i>Parent ref product:</i> {parent_rp}")
-
-        # Prefer a real child's RP; if special node, use our best context
-        child_context = child_rp
-        if not child_context and nm_special == "activities below cutoff":
-            # Summary string prepared in _walk(): e.g. "H2 (40%), O2 (20%), +3 more"
-            child_context = crow.get("collapsed_ref_products")
-
-        if child_context:
+        if child_rp:
             label = "Child ref product" + (
                 "(s)" if nm_special == "activities below cutoff" else ""
             )
-            extra_lines.append(f"<br><i>{label}:</i> {child_context}")
+            extra_lines.append(f"<br><i>{label}:</i> {child_rp}")
 
         amt = crow.get(col_amount, None)
         amt_line = (
@@ -548,43 +662,75 @@ def sankey_from_supply_df(
     node_hoverdata = []
     for i in range(len(labels_vis)):
         parts = [f"<b>{node_full_name.get(i,'')}</b>"]
-        rp = node_full_refprod.get(i, "")
+
+        rp = (node_full_refprod.get(i, "") or "").strip()
         if rp:
             parts.append(f"<i>Ref. product:</i> {rp}")
-        loc = node_full_loc.get(i, "")
+
+        loc = (node_full_loc.get(i, "") or "").strip()
         if loc:
             parts.append(loc)
+
+        # Add node score and share
+        sc = node_score_by_idx.get(i, None)
+        if sc is not None:
+            parts.append(f"<i>Node score:</i> {sc:,.6g}")
+            if total_root_score:
+                parts.append(f"<i>Share of total:</i> {_fmt_pct(sc/total_root_score)}")
+
         node_hoverdata.append("<br>".join(parts))
 
-    # ---------- NEW: per-parent balancing factors (based on ABS widths) ----------
-    # Compute in/out sums per node (using full set of rows)
-    in_abs = collections.defaultdict(float)
-    out_abs = collections.defaultdict(float)
-    for s_idx, t_idx, v_signed, _, _ in rows_all:
-        a = abs(v_signed)
-        out_abs[s_idx] += a
-        in_abs[t_idx] += a
-
-    # Determine per-parent scale for outgoing links
+    # ---------- Forward pass scaling: make outgoing == actually-received incoming ----------
     balance_mode = str(balance_mode).lower()
-    out_scale = collections.defaultdict(lambda: 1.0)
-    for node_idx in range(len(labels_vis)):
-        out_sum = out_abs.get(node_idx, 0.0)
-        in_sum = in_abs.get(node_idx, 0.0)
-        if out_sum <= 0:
-            out_scale[node_idx] = 1.0
-            continue
-        if balance_mode == "match" and in_sum > 0:
-            out_scale[node_idx] = in_sum / out_sum  # may up- or down-scale
-        elif balance_mode == "cap" and in_sum > 0:
-            out_scale[node_idx] = min(1.0, in_sum / out_sum)  # only downscale
-        else:
-            out_scale[node_idx] = 1.0
+
+    # base (unscaled) absolute link widths
+    base_vals = [abs(v) for (_s, _t, v, _pr, _cr) in rows_all]
+
+    # index outgoing links per source, incoming links per target
+    from collections import defaultdict
+
+    out_links = defaultdict(list)
+    in_links = defaultdict(list)
+    for li, (s_idx, t_idx, _v, _pr, _cr) in enumerate(rows_all):
+        out_links[s_idx].append(li)
+        in_links[t_idx].append(li)
+
+    # unscaled outgoing sum per node
+    out_abs = {
+        node: sum(base_vals[li] for li in out_links.get(node, ()))
+        for node in range(len(labels_vis))
+    }
+
+    # incoming widths after upstream scaling (initialize zeros)
+    incoming_scaled = [0.0] * len(labels_vis)
+    out_scale = [1.0] * len(labels_vis)  # default
+
+    # process nodes by column from left to right so parents go first
+    cols_sorted = sorted(nodes_by_col.keys())
+    for col in cols_sorted:
+        for node in nodes_by_col[col]:
+            out_sum = out_abs.get(node, 0.0)
+            in_sum = incoming_scaled[node]
+
+            if out_sum > 0:
+                if balance_mode == "match" and in_sum > 0:
+                    out_scale[node] = in_sum / out_sum
+                elif balance_mode == "cap" and in_sum > 0:
+                    out_scale[node] = min(1.0, in_sum / out_sum)
+                else:
+                    out_scale[node] = 1.0
+            else:
+                out_scale[node] = 1.0
+
+            # propagate scaled outgoing to children
+            for li in out_links.get(node, ()):
+                s_idx, t_idx, _v, _pr, _cr = rows_all[li]
+                incoming_scaled[t_idx] += base_vals[li] * out_scale[node]
 
     # Build links for both color modes, applying the per-parent scale to outgoing widths
     def links_category(rows):
         src, tgt, val, colr, hov = [], [], [], [], []
-        for s_idx, t_idx, v_signed, prow, crow in rows:
+        for li, (s_idx, t_idx, v_signed, prow, crow) in enumerate(rows):
             ck = crow["_node_key"]
             nm = ck[0] if (isinstance(ck, tuple)) else ""
             if nm == "direct emissions":
@@ -595,8 +741,8 @@ def sankey_from_supply_df(
                 c = hex_to_rgba(color_loss, 0.55)
             else:
                 c = hex_to_rgba(color_other, 0.40)
-            v = abs(v_signed) if use_abs_for_widths else abs(v_signed)
-            v *= out_scale[s_idx]  # <-- balance here
+
+            v = base_vals[li] * out_scale[s_idx]  # <--- scaled width
             src.append(s_idx)
             tgt.append(t_idx)
             val.append(v)
@@ -606,11 +752,10 @@ def sankey_from_supply_df(
 
     def links_by_parentloc(rows):
         src, tgt, val, colr, hov = [], [], [], [], []
-        for s_idx, t_idx, v_signed, prow, crow in rows:
+        for li, (s_idx, t_idx, v_signed, prow, crow) in enumerate(rows):
             base = loc_to_color.get(prow.get(col_location, "") or "—", color_other)
             c = hex_to_rgba(base, 0.60)
-            v = abs(v_signed) if use_abs_for_widths else abs(v_signed)
-            v *= out_scale[s_idx]  # <-- balance here
+            v = base_vals[li] * out_scale[s_idx]  # <--- scaled width
             src.append(s_idx)
             tgt.append(t_idx)
             val.append(v)
@@ -620,6 +765,33 @@ def sankey_from_supply_df(
 
     links_cat = links_category(rows_all)
     links_loc = links_by_parentloc(rows_all)
+
+    # ----- Build "hide specials" variants (transparent color ONLY; keep values) -----
+    is_special_target = []
+    for _s, _t, _v, _prow, crow in rows_all:
+        ck = crow["_node_key"]
+        is_special_target.append(
+            isinstance(ck, tuple) and len(ck) == 2 and ck[1] == "__GLOBAL__"
+        )
+
+    def _hide_colors(colors, mask):
+        return [_rgba_with_alpha(c, 0.0) if m else c for c, m in zip(colors, mask)]
+
+    cat_cols_hide = _hide_colors(links_cat["color"], is_special_target)
+    loc_cols_hide = _hide_colors(links_loc["color"], is_special_target)
+
+    # (optional) also mute hover on hidden links:
+    cat_hover_hide = [
+        ("" if m else h) for h, m in zip(links_cat["customdata"], is_special_target)
+    ]
+    loc_hover_hide = [
+        ("" if m else h) for h, m in zip(links_loc["customdata"], is_special_target)
+    ]
+
+    # (optional) if you also want to fade the special nodes themselves:
+    # node_colors_hide = node_colors_base[:]
+    # for i in special_indices:
+    #     node_colors_hide[i] = _rgba_with_alpha(node_colors_hide[i], 0.0)
 
     # --- base color arrays for restyling --------------------------------------
     node_colors_base = [_rgba_with_alpha(c, 1.0) for c in colors_full]
@@ -670,11 +842,149 @@ def sankey_from_supply_df(
         ]
         return node_cols, link_cols_cat, link_cols_loc
 
+    # ---- Top/bottom domain for nodes (keep nodes away from menus) -------------
+    needs_top_bar = add_toggle or (enable_highlight and len(rows_all) > 0)
+    top_margin = 156 if needs_top_bar else (132 if add_toggle else 56)
+    bottom_margin = 8
+    top_dom, bot_dom = 0.04, 0.96  # y-domain used by the sankey traces
+    dom_span = bot_dom - top_dom
+
+    # ---- Layout numbers (top/bottom margins + domain) ----
+    needs_top_bar = add_toggle or (enable_highlight and len(rows_all) > 0)
+    top_margin = 156 if needs_top_bar else (132 if add_toggle else 56)
+    bottom_margin = 8
+    top_dom, bot_dom = 0.04, 0.96
+    dom_span = bot_dom - top_dom
+
+    # Soft height heuristic
+    n_nodes_total = sum(len(v) for v in nodes_by_col.values())
+    est_h_soft = int(
+        base_height
+        + per_level_px * (len(levels) - 1)
+        + per_node_px * math.sqrt(max(1, n_nodes_total))
+    )
+    est_h = min(height_max, max(height_min, est_h_soft))
+    pane_h = max(1.0, est_h - (top_margin + bottom_margin))
+    px_per_dom = pane_h * dom_span
+    pad_dom = node_pad / px_per_dom
+    # --- Node rectangle thickness (pixels) and its domain equivalent ---
+    th_eff = int(node_thickness)  # pixels: what Plotly will actually draw
+    th_norm = th_eff / max(
+        1e-9, px_per_dom
+    )  # domain units: min height each node occupies
+
+    # --- Use the same scaled link values Plotly will render ---
+    scaled_vals = [
+        base_vals[li] * out_scale[s_idx]
+        for li, (s_idx, t_idx, _v, _pr, _cr) in enumerate(rows_all)
+    ]
+    incoming = collections.defaultdict(float)
+    outgoing = collections.defaultdict(float)
+    for li, (s_idx, t_idx, _v, _pr, _cr) in enumerate(rows_all):
+        v = scaled_vals[li]
+        outgoing[s_idx] += v
+        incoming[t_idx] += v
+
+    # raw value-height per node (same units as link values)
+    h_raw = [0.0] * len(labels_vis)
+    for i in range(len(labels_vis)):
+        h_raw[i] = max(incoming.get(i, 0.0), outgoing.get(i, 0.0), 1e-12)
+
+    # per-column sums (raw)
+    col_sum_raw = {c: sum(h_raw[i] for i in idxs) for c, idxs in nodes_by_col.items()}
+
+    # global values→domain scale (limiting column sets the scale)
+    if nodes_by_col:
+        S_dom_candidates = []
+        for c, idxs in nodes_by_col.items():
+            total = col_sum_raw.get(c, 0.0)
+            if total > 0:
+                n = len(idxs)
+                S_dom_candidates.append((dom_span - max(0, n - 1) * pad_dom) / total)
+        S_dom = max(0.0, min(S_dom_candidates) if S_dom_candidates else 1.0)
+    else:
+        S_dom = 1.0
+
+    # node heights in domain units
+    h_dom = [h * S_dom for h in h_raw]
+    # Use at least the visual rectangle height when packing to avoid overlap
+    h_draw_dom = [max(h, th_norm) for h in h_dom]
+
+    def pack_column_tops(order, lo, hi):
+        if not order:
+            return []
+        avail = max(1e-9, hi - lo)
+        n = len(order)
+        total_h = sum(h_draw_dom[i] for i in order)
+        total_with_pad = total_h + max(0, n - 1) * pad_dom
+        pad_eff = (
+            pad_dom
+            if total_with_pad <= avail
+            else max(0.0, (avail - total_h) / max(1, n - 1))
+        )
+        slack = avail - (total_h + max(0, n - 1) * pad_eff)
+
+        # give bigger nodes a bit more breathing room
+        weights = [max(1e-12, h_dom[i]) for i in order]
+        wsum = sum(weights)
+        gaps = [slack * (w / wsum) for w in weights]
+
+        ytops, cur = [], lo
+        for k, i in enumerate(order):
+            cur += gaps[k]
+            ytops.append(cur)
+            cur += h_draw_dom[i] + pad_eff
+        # clamp
+        return [max(lo, min(hi - h_draw_dom[i], y)) for y, i in zip(ytops, order)]
+
+    def _tie_break_key(i: int) -> tuple:
+        return (-magnitude[i], labels_vis[i], i)
+
+    # build y_top using actual heights; pin specials first in last col
+    y_top = [0.5] * len(labels_vis)
+    special_order_keys = [
+        ("direct emissions", "__GLOBAL__"),
+        ("activities below cutoff", "__GLOBAL__"),
+        ("loss", "__GLOBAL__"),
+    ]
+    special_indices = [key_to_idx[k] for k in special_order_keys if k in key_to_idx]
+
+    for c, idxs in nodes_by_col.items():
+        if not idxs:
+            continue
+        lo, hi = top_dom, bot_dom
+        if c == last_col:
+            ordered_rest = sorted(
+                [i for i in idxs if i not in special_indices], key=_tie_break_key
+            )
+            ordered = special_indices + ordered_rest
+        else:
+            ordered = sorted(idxs, key=_tie_break_key)
+        y_col = pack_column_tops(ordered, lo, hi)
+        for i, y in zip(ordered, y_col):
+            y_top[i] = y
+
+    # numerical guard
+    EPS = 1e-6
+    for c, idxs in nodes_by_col.items():
+        col = sorted(idxs, key=lambda i: y_top[i])
+        for k in range(1, len(col)):
+            prev, cur = col[k - 1], col[k]
+            min_top = y_top[prev] + h_draw_dom[prev] - EPS
+            if y_top[cur] < min_top:
+                y_top[cur] = min_top
+        overflow = (y_top[col[-1]] + h_draw_dom[col[-1]] - bot_dom) if col else 0.0
+        if overflow > 0:
+            for i in col:
+                y_top[i] = max(top_dom, y_top[i] - overflow)
+
     # Traces (two sankeys)
+    th_eff = int(node_thickness)
+
     def make_trace(link_dict: Dict[str, list]) -> go.Sankey:
         node_dict = dict(
             pad=node_pad,
-            thickness=node_thickness,
+            thickness=th_eff,
             label=labels_vis,
             color=colors_full,
             customdata=node_hoverdata,
@@ -683,9 +993,12 @@ def sankey_from_supply_df(
         arrangement = "fixed" if lock_x_by_level else "snap"
         if lock_x_by_level:
             node_dict["x"] = x_full
-            node_dict["y"] = y_full
+            node_dict["y"] = y_top  # TOP coords in domain units
         return go.Sankey(
             arrangement=arrangement,
+            domain=dict(
+                x=[0, 1], y=[top_dom, bot_dom]
+            ),  # <--- keep nodes inside this band
             node=node_dict,
             link=dict(
                 source=link_dict["source"],
@@ -781,38 +1094,11 @@ def sankey_from_supply_df(
     for i, v in enumerate(vis_array("cat")):
         fig.data[i].visible = v
 
-    # Buttons — push higher; add extra air before legend
-    if add_toggle:
-        fig.update_layout(
-            updatemenus=[
-                dict(
-                    type="buttons",
-                    direction="left",
-                    x=0.5,
-                    xanchor="center",
-                    y=1.30,
-                    yanchor="top",
-                    buttons=[
-                        dict(
-                            label="Color: Category",
-                            method="update",
-                            args=[{"visible": vis_array("cat")}],
-                        ),
-                        dict(
-                            label="Color: Parent location",
-                            method="update",
-                            args=[{"visible": vis_array("loc")}],
-                        ),
-                    ],
-                )
-            ]
-        )
-
+    # ---------------- Place the top controls without overlap ----------------
+    # ---------- Build highlight dropdown buttons ----------
+    highlight_buttons = []
     if enable_highlight and len(rows_all) > 0:
-        # Build button list: "None" + one per candidate link
-        highlight_buttons = []
-
-        # "None" resets to base colors (both traces at once)
+        # Reset option
         highlight_buttons.append(
             dict(
                 label="Highlight: None",
@@ -822,14 +1108,13 @@ def sankey_from_supply_df(
                         "node.color": [node_colors_base, node_colors_base],
                         "link.color": [link_colors_cat_base, link_colors_loc_base],
                     },
-                    [0, 1],  # apply to sankey traces 0 and 1
+                    [0, 1],
                 ],
             )
         )
-
-        # One button per top link
+        # Top-K links
         for rank, li in enumerate(topK_idx, start=1):
-            s_idx, t_idx, v_signed, prow, crow = rows_all[li]
+            s_idx, t_idx, _v_signed, _prow, _crow = rows_all[li]
             parent_name = node_full_name.get(s_idx, "")
             child_name = node_full_name.get(t_idx, "")
             label_txt = f"#{rank}  {child_name} ← {parent_name}"
@@ -837,7 +1122,7 @@ def sankey_from_supply_df(
             node_cols, link_cols_cat, link_cols_loc = _make_highlight_state(li)
             highlight_buttons.append(
                 dict(
-                    label=label_txt[:80],  # keep the menu readable
+                    label=label_txt[:80],
                     method="restyle",
                     args=[
                         {
@@ -849,29 +1134,104 @@ def sankey_from_supply_df(
                 )
             )
 
-        # Place this dropdown above the plot, next to the color-mode buttons
-        fig.update_layout(
-            updatemenus=list(fig.layout.updatemenus)
-            + [
-                dict(
-                    type="dropdown",
-                    direction="down",
-                    x=1.0,
-                    xanchor="right",
-                    y=1.30,
-                    yanchor="top",
-                    showactive=True,
-                    buttons=highlight_buttons,
-                )
-            ]
+    menus = []
+
+    # Left: color-mode buttons
+    if add_toggle:
+        menus.append(
+            dict(
+                type="buttons",
+                direction="left",
+                x=0.01,
+                xanchor="left",  # left edge
+                y=1.28,
+                yanchor="top",  # above plot area
+                pad=dict(l=6, r=6, t=2, b=2),
+                buttons=[
+                    dict(
+                        label="Color: Category",
+                        method="update",
+                        args=[{"visible": vis_array("cat")}],
+                    ),
+                    dict(
+                        label="Color: Parent location",
+                        method="update",
+                        args=[{"visible": vis_array("loc")}],
+                    ),
+                ],
+            )
         )
 
-    # Width & layout
+    # Right: highlight dropdown (only if enabled and we have links)
+    if enable_highlight and len(rows_all) > 0:
+        menus.append(
+            dict(
+                type="dropdown",
+                direction="down",
+                x=0.99,
+                xanchor="right",  # right edge
+                y=1.28,
+                yanchor="top",
+                showactive=True,
+                pad=dict(l=6, r=6, t=2, b=2),
+                buttons=highlight_buttons,
+            )
+        )
+
+    # Right/center-left: flows toggle (show/hide links to special nodes)
+    menus.append(
+        dict(
+            type="buttons",
+            direction="left",
+            x=0.32,
+            xanchor="left",
+            y=1.28,
+            yanchor="top",
+            pad=dict(l=6, r=6, t=2, b=2),
+            buttons=[
+                dict(
+                    label="Flows: Show specials",
+                    method="restyle",
+                    args=[
+                        {
+                            "link.color": [links_cat["color"], links_loc["color"]],
+                            # Optional: also restore hover text
+                            "link.customdata": [
+                                links_cat["customdata"],
+                                links_loc["customdata"],
+                            ],
+                        },
+                        [0, 1],
+                    ],
+                ),
+                dict(
+                    label="Flows: Hide specials",
+                    method="restyle",
+                    args=[
+                        {
+                            "link.color": [cat_cols_hide, loc_cols_hide],
+                            # Optional: blank hover on hidden links
+                            "link.customdata": [cat_hover_hide, loc_hover_hide],
+                        },
+                        [0, 1],
+                    ],
+                ),
+            ],
+        )
+    )
+
+    fig.update_layout(updatemenus=menus)
+
+    # ---------------- Layout/margins (extra top space for the controls) -----------
+    needs_top_bar = add_toggle or (enable_highlight and len(rows_all) > 0)
+    top_margin = 156 if needs_top_bar else (132 if add_toggle else 56)
+
+    # ---------- Width & autosize ----------
     if auto_width:
         est_w, autosize_flag = None, True
     else:
         raw_w = per_level_width * len(levels) + per_node_width * math.sqrt(
-            max(1, n_nodes)
+            max(1, n_nodes_total)
         )
         if width_max is not None:
             raw_w = min(width_max, raw_w)
@@ -881,7 +1241,7 @@ def sankey_from_supply_df(
         height=est_h,
         width=est_w,
         autosize=autosize_flag,
-        margin=dict(l=8, r=8, t=132 if add_toggle else 56, b=8),  # more top margin
+        margin=dict(l=8, r=8, t=top_margin, b=8),
         paper_bgcolor="rgba(0,0,0,0)",
         plot_bgcolor="rgba(0,0,0,0)",
         xaxis=dict(visible=False),
@@ -889,12 +1249,22 @@ def sankey_from_supply_df(
         legend=dict(
             orientation="h",
             yanchor="bottom",
-            y=1.12,  # a bit farther from buttons
+            y=1.10,  # slightly lower so it won't collide with menus
             xanchor="center",
             x=0.5,
             bgcolor="rgba(0,0,0,0)",
         ),
     )
+
+    compact = (est_w is not None) and (est_w < 1100)
+    if compact and menus:
+        for m in menus:
+            m.update(x=0.5, xanchor="center")
+        y_base, y_step = 1.34, 0.08
+        for i, m in enumerate(menus):
+            m.update(y=y_base - i * y_step)
+        top_margin = max(top_margin, 200)
+        fig.update_layout(margin=dict(l=8, r=8, t=top_margin, b=8))
 
     return fig
 
@@ -988,6 +1358,69 @@ def save_sankey_html(
             config=config,
         )
     return path
+
+
+def save_html_multi_methods_for_activity(
+    activity: Activity,
+    methods: Sequence[tuple],
+    path: str,
+    *,
+    amount: float = 1.0,
+    level: int = 3,
+    cutoff: float = 0.01,
+    cutoff_basis: str = "total",
+    scenario: str | None = None,
+    scenario_idx: int | str = 0,
+    use_distributions: bool = False,
+    iterations: int = 100,
+    random_seed: int | None = None,
+    redo_flags: Optional[Dict[str, bool]] = None,
+    collapse_markets: bool = False,
+    plot_kwargs: Optional[Dict[str, Any]] = None,
+    offline: bool = False,
+    auto_open: bool = False,
+    label_fn=lambda m: " / ".join(str(x) for x in m),
+) -> str:
+    """
+    Compute one Sankey per impact method and save them into a single tabbed HTML.
+
+    Usage:
+        save_html_multi_methods_for_activity(
+            activity, methods, "outputs/multi_impact.html",
+            level=3, cutoff=0.01, collapse_markets=True,
+            plot_kwargs=dict(width_max=1800, height_max=800),
+            offline=False, auto_open=True
+        )
+    """
+    label_to_df: Dict[str, pd.DataFrame] = {}
+    for m in methods:
+        sc = SupplyChain(
+            activity=activity,
+            method=m,
+            amount=amount,
+            level=level,
+            cutoff=cutoff,
+            cutoff_basis=cutoff_basis,
+            scenario=scenario,
+            scenario_idx=scenario_idx,
+            use_distributions=use_distributions,
+            iterations=iterations,
+            random_seed=random_seed,
+            redo_flags=redo_flags,
+            collapse_markets=collapse_markets,
+        )
+        sc.bootstrap()
+        df, _, _ = sc.calculate()
+        label_to_df[label_fn(m)] = df
+
+    return save_sankey_html_multi(
+        label_to_df,
+        path,
+        plot_kwargs=plot_kwargs or {},
+        offline=offline,
+        auto_open=auto_open,
+        title="Multi-impact Sankey",
+    )
 
 
 @dataclass
@@ -1222,10 +1655,18 @@ class SupplyChain:
         # Standard pipeline on root demand
         self.elcia.lci()
         self.elcia.map_exchanges()
-        self.elcia.map_aggregate_locations()
-        self.elcia.map_dynamic_locations()
-        self.elcia.map_contained_locations()
-        self.elcia.map_remaining_locations_to_global()
+        if self._redo_flags.get("run_aggregate", True):
+            self.elcia.map_aggregate_locations()
+
+        if self._redo_flags.get("run_dynamic", True):
+            self.elcia.map_dynamic_locations()
+
+        if self._redo_flags.get("run_contained", True):
+            self.elcia.map_contained_locations()
+
+        if self._redo_flags.get("run_global", True):
+            self.elcia.map_remaining_locations_to_global()
+
         self.elcia.evaluate_cfs(scenario_idx=self.scenario_idx, scenario=self.scenario)
         self.elcia.lcia()
         self._total_score = float(self.elcia.score or 0.0)
@@ -1458,15 +1899,28 @@ class SupplyChain:
                         promoted_scores += sup_score
                         promoted_cnt += 1
                     else:
-                        # supplier exists but fails cutoff → goes to below
                         below_extra.append((sup, sup_amt, sup_score))
 
-                # Any remainder (untested tail) → treat as residual under the market node
                 residual = ch_score - promoted_scores
-                if abs(residual) > 0:
-                    # We don’t know the exact composition of the tail; attribute residual
-                    # to the market activity so the below-summary can still name something.
-                    below_extra.append((ch, float("nan"), residual))
+
+                if promoted_cnt == 0:
+                    # No supplier cleared the global cutoff → keep the market itself visible
+                    # (don’t demote the whole thing into "below cutoff")
+                    above_final.append((ch, ch_amt, ch_score))
+                else:
+                    # We promoted some suppliers. Decide what to do with the residual:
+                    # if the residual itself is big enough, keep it visible; else send to 'below'.
+                    rel_resid = (
+                        (abs(residual) / denom_for_cutoff)
+                        if denom_for_cutoff > 0
+                        else 0.0
+                    )
+                    if rel_resid >= self.cutoff:
+                        above_final.append(
+                            (ch, float("nan"), residual)
+                        )  # shows market as residual
+                    elif abs(residual) > 0:
+                        below_extra.append((ch, float("nan"), residual))
 
                 self._p(
                     f"{indent}[expand-market] promoted={promoted_cnt}/{tested_cnt}  "

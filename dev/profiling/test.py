@@ -22,8 +22,9 @@ act = [
 # activities = [a for a in bw2data.Database("h2_pem") if a["name"].startswith("hydrogen")]
 print(act["name"])
 # method = ("GeoPolRisk", "paired", "2024", "short")
-method = ("AWARE 2.0", "Country", "all", "yearly")
+# method = ("AWARE 2.0", "Country", "all", "yearly")
 # method = ("GeoPolRisk", "paired", "2024")
+method = ("RELICS", "copper", "primary")
 
 LCA = EdgeLCIA(
     {act: 1},
@@ -34,16 +35,16 @@ LCA = EdgeLCIA(
 LCA.lci()
 
 LCA.map_exchanges()
-LCA.map_aggregate_locations()
-LCA.map_dynamic_locations()
-LCA.map_contained_locations()
-LCA.map_remaining_locations_to_global()
+# LCA.map_aggregate_locations()
+# LCA.map_dynamic_locations()
+# LCA.map_contained_locations()
+# LCA.map_remaining_locations_to_global()
 
 LCA.evaluate_cfs()
 LCA.lcia()
 
-# df = LCA.generate_cf_table(include_unmatched=False)
-# df.to_excel("df_AWARE.xlsx")
+df = LCA.generate_cf_table(include_unmatched=False)
+df.to_excel("df_copper.xlsx")
 
 # Stop timer
 elapsed_time = time.time() - start_time
