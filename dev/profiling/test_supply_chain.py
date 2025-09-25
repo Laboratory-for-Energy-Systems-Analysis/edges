@@ -31,10 +31,10 @@ if not use_example_df:
         cutoff=0.01,
         cutoff_basis="total",  # "total" or "parent"
         redo_flags=dict(
-            run_aggregate=False,
-            run_dynamic=False,
-            run_contained=False,
-            run_global=False,
+            run_aggregate=True,
+            run_dynamic=True,
+            run_contained=True,
+            run_global=True,
         ),
         collapse_markets=False,
         debug=False,  # <— turn on logging

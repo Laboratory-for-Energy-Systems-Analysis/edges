@@ -30,6 +30,7 @@ requirements:
     - prettytable
     - sparse >=0.13.0
     - highspy
+    - plotly
 
 
 test:
