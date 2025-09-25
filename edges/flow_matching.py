@@ -579,17 +579,6 @@ def resolve_candidate_locations(
     exceptions: set = None,
     supplier: bool = True,
 ) -> list:
-    """
-    Resolve candidate locations from a base location using the GeoResolver.
-
-    :param geo: GeoResolver instance.
-    :param location: Base location (e.g., "GLO", "CH").
-    :param weights: Frozenset of valid (supplier_loc, consumer_loc) keys.
-    :param containing: If True, return containing regions; else contained regions.
-    :param exceptions: Optional set/list of regions to exclude.
-    :param supplier: If True, validate against supplier side of weight pairs, else consumer.
-    :return: List of valid candidate location codes.
-    """
     try:
         candidates = geo.resolve(
             location=location,
@@ -599,11 +588,23 @@ def resolve_candidate_locations(
     except KeyError:
         return []
 
-    if supplier is True:
+    if supplier:
         available_locs = [loc[0] for loc in weights]
     else:
         available_locs = [loc[1] for loc in weights]
-    return [loc for loc in candidates if loc in available_locs]
+
+    # If wildcard is allowed on this side, don't filter away real region codes
+    if "__ANY__" in available_locs:
+        pool = list(candidates)
+    else:
+        pool = [loc for loc in candidates if loc in available_locs]
+
+    # When basing on GLO, ensure "GLO" itself is a candidate (for direct GLO CFs)
+    if location == "GLO" and "GLO" not in pool:
+        pool = ["GLO"] + pool
+
+    return pool
+
 
 
 def group_edges_by_signature(

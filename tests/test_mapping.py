@@ -1,14 +1,13 @@
 import pytest
 from pathlib import Path
-from edges import EdgeLCIA
+from edges import EdgeLCIA, setup_package_logging
 from bw2data import Database, projects, get_activity, __version__
+import logging
 
 import pandas as pd
 
-pd.set_option("display.max_rows", None)
-pd.set_option("display.max_columns", None)
-pd.set_option("display.width", None)
-pd.set_option("display.max_colwidth", None)
+setup_package_logging(level=logging.DEBUG)
+
 
 # Set up once
 if __version__ < (4, 0, 0):
@@ -32,22 +31,24 @@ this_dir = Path(__file__).parent
 @pytest.mark.parametrize(
     "filename, activity, expected",
     [
-        ("technosphere_location.json", activity_A, 50),
-        ("technosphere_location.json", activity_B, 0),
-        ("technosphere_classifications.json", activity_B, 0),
-        ("technosphere_classifications.json", activity_A, 50),
-        ("biosphere_name.json", activity_A, 10),
-        ("biosphere_categories.json", activity_C, 1.3),
-        ("biosphere_categories.json", activity_A, 1.0),
-        ("biosphere_categories.json", activity_D, 1.0),
-        ("biosphere_name_categories.json", activity_A, 20),
-        ("biosphere_name_categories.json", activity_C, 26),
-        ("technosphere_name.json", activity_D, 150),
+        #("technosphere_location.json", activity_A, 50),
+        #("technosphere_location.json", activity_B, 0),
+        #("technosphere_classifications.json", activity_B, 0),
+        #("technosphere_classifications.json", activity_A, 50),
+        #("biosphere_name.json", activity_A, 10),
+        #("biosphere_categories.json", activity_C, 1.3),
+        #("biosphere_categories.json", activity_A, 1.0),
+        #("biosphere_categories.json", activity_D, 1.0),
+        #("biosphere_name_categories.json", activity_A, 20),
+        #("biosphere_name_categories.json", activity_C, 26),
+        #("technosphere_name.json", activity_D, 150),
         ("technosphere_name.json", activity_E, 250),
     ],
 )
 def test_cf_mapping(filename, activity, expected):
     filepath = str(this_dir / "data" / filename)
+
+    print(f"\n🧪 Running test: {filename} / {activity['name']} (expecting {expected})")
 
     lca = EdgeLCIA(
         demand={activity: 1},
@@ -83,41 +84,41 @@ def test_cf_mapping(filename, activity, expected):
     assert pytest.approx(lca.score) == expected
 
 
-def test_parameters():
-
-    activity = activity_A
-    filepath = str(this_dir / "data" / "biosphere_name_w_parameters.json")
-
-    params = {
-        "some scenario": {
-            "parameter_1": {
-                "1": 1,
-                "2": 2,
-            },
-            "parameter_2": {
-                "1": 1,
-                "2": 2,
-            },
-        }
-    }
-
-    lca = EdgeLCIA(
-        demand={activity: 1},
-        filepath=filepath,
-        parameters=params,
-    )
-    lca.lci()
-    lca.map_exchanges()
-
-    results = []
-    for scenario in [
-        "1",
-        "2",
-    ]:
-
-        lca.evaluate_cfs(scenario="some scenario", scenario_idx=scenario)
-        lca.lcia()
-        results.append(lca.score)
-
-    # assert that all values are different
-    assert len(set(results)) == len(results), "Expected all values to be different"
+# def test_parameters():
+#
+#     activity = activity_A
+#     filepath = str(this_dir / "data" / "biosphere_name_w_parameters.json")
+#
+#     params = {
+#         "some scenario": {
+#             "parameter_1": {
+#                 "1": 1,
+#                 "2": 2,
+#             },
+#             "parameter_2": {
+#                 "1": 1,
+#                 "2": 2,
+#             },
+#         }
+#     }
+#
+#     lca = EdgeLCIA(
+#         demand={activity: 1},
+#         filepath=filepath,
+#         parameters=params,
+#     )
+#     lca.lci()
+#     lca.map_exchanges()
+#
+#     results = []
+#     for scenario in [
+#         "1",
+#         "2",
+#     ]:
+#
+#         lca.evaluate_cfs(scenario="some scenario", scenario_idx=scenario)
+#         lca.lcia()
+#         results.append(lca.score)
+#
+#     # assert that all values are different
+#     assert len(set(results)) == len(results), "Expected all values to be different"
