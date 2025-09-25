@@ -913,7 +913,9 @@ class EdgeLCIA:
             info = dict(act) if act else {}
             # keep hot caches coherent
             if "classifications" in info:
-                self.supplier_cls_tech[supplier_idx] = _norm_cls(info["classifications"])
+                self.supplier_cls_tech[supplier_idx] = _norm_cls(
+                    info["classifications"]
+                )
             if "location" in info:
                 self.supplier_loc_tech[supplier_idx] = info["location"]
 
@@ -1199,22 +1201,28 @@ class EdgeLCIA:
             # If supplier criteria are empty (ignoring 'matrix'), treat as wildcard:
             _supplier_keys_wo_matrix = [k for k in s_nonclass.keys() if k != "matrix"]
             if not _supplier_keys_wo_matrix and all(
-                    k in {"matrix", "classifications"} for k in s_crit.keys()
+                k in {"matrix", "classifications"} for k in s_crit.keys()
             ):
                 # use ALL suppliers present in this direction (restricted by adjacency)
-                s_cands = set(ebs.keys())  # all supplier positions that have outgoing edges
+                s_cands = set(
+                    ebs.keys()
+                )  # all supplier positions that have outgoing edges
                 s_loc_only = set()
                 s_loc_required = False
             else:
                 # current behavior
-                s_out = cached_match_with_index(make_hashable(s_nonclass), req_sup_nc, s_ctx_id)
+                s_out = cached_match_with_index(
+                    make_hashable(s_nonclass), req_sup_nc, s_ctx_id
+                )
                 s_cands = set(s_out.matches)
                 if s_class_hits is not None:
                     s_cands &= s_class_hits
                 s_loc_only = set(s_out.location_only_rejects)
                 if s_class_hits is not None:
                     s_loc_only &= s_class_hits
-                s_loc_required = ("location" in s_crit) and (s_crit.get("location") is not None)
+                s_loc_required = ("location" in s_crit) and (
+                    s_crit.get("location") is not None
+                )
 
             # ---------- CONSUMER side ----------
             norm_c = cf.get("_norm_consumer_cls")
@@ -1666,12 +1674,19 @@ class EdgeLCIA:
 
                     consumer_info = self._get_consumer_info(consumer_idx)
 
-                    include_cls_in_sig = any("classifications" in cf.get("supplier", {}) for cf in self.raw_cfs_data)
+                    include_cls_in_sig = any(
+                        "classifications" in cf.get("supplier", {})
+                        for cf in self.raw_cfs_data
+                    )
                     sig_fields = set(self.required_supplier_fields)
                     if include_cls_in_sig:
                         sig_fields.add("classifications")
 
-                    _proj = {k: supplier_info.get(k) for k in sig_fields if supplier_info.get(k) is not None}
+                    _proj = {
+                        k: supplier_info.get(k)
+                        for k in sig_fields
+                        if supplier_info.get(k) is not None
+                    }
                     sig = _equality_supplier_signature_cached(make_hashable(_proj))
 
                     if sig in self._cached_supplier_keys:
@@ -1961,12 +1976,19 @@ class EdgeLCIA:
                         candidate_consumers_locs = [consumer_loc]
 
                 # project supplier info to the required fields (+classifications) before hashing
-                include_cls_in_sig = any("classifications" in cf.get("supplier", {}) for cf in self.raw_cfs_data)
+                include_cls_in_sig = any(
+                    "classifications" in cf.get("supplier", {})
+                    for cf in self.raw_cfs_data
+                )
                 sig_fields = set(self.required_supplier_fields)
                 if include_cls_in_sig:
                     sig_fields.add("classifications")
 
-                _proj = {k: supplier_info.get(k) for k in sig_fields if supplier_info.get(k) is not None}
+                _proj = {
+                    k: supplier_info.get(k)
+                    for k in sig_fields
+                    if supplier_info.get(k) is not None
+                }
                 sig = _equality_supplier_signature_cached(make_hashable(_proj))
 
                 if sig in self._cached_supplier_keys:
@@ -2238,12 +2260,19 @@ class EdgeLCIA:
                         continue
                     consumer_info = self._get_consumer_info(consumer_idx)
 
-                    include_cls_in_sig = any("classifications" in cf.get("supplier", {}) for cf in self.raw_cfs_data)
+                    include_cls_in_sig = any(
+                        "classifications" in cf.get("supplier", {})
+                        for cf in self.raw_cfs_data
+                    )
                     sig_fields = set(self.required_supplier_fields)
                     if include_cls_in_sig:
                         sig_fields.add("classifications")
 
-                    _proj = {k: supplier_info.get(k) for k in sig_fields if supplier_info.get(k) is not None}
+                    _proj = {
+                        k: supplier_info.get(k)
+                        for k in sig_fields
+                        if supplier_info.get(k) is not None
+                    }
                     sig = _equality_supplier_signature_cached(make_hashable(_proj))
 
                     if sig in self._cached_supplier_keys:
@@ -2529,12 +2558,19 @@ class EdgeLCIA:
                         continue
                     consumer_info = self._get_consumer_info(consumer_idx)
 
-                    include_cls_in_sig = any("classifications" in cf.get("supplier", {}) for cf in self.raw_cfs_data)
+                    include_cls_in_sig = any(
+                        "classifications" in cf.get("supplier", {})
+                        for cf in self.raw_cfs_data
+                    )
                     sig_fields = set(self.required_supplier_fields)
                     if include_cls_in_sig:
                         sig_fields.add("classifications")
 
-                    _proj = {k: supplier_info.get(k) for k in sig_fields if supplier_info.get(k) is not None}
+                    _proj = {
+                        k: supplier_info.get(k)
+                        for k in sig_fields
+                        if supplier_info.get(k) is not None
+                    }
                     sig = _equality_supplier_signature_cached(make_hashable(_proj))
 
                     if sig in self._cached_supplier_keys:
@@ -2560,13 +2596,17 @@ class EdgeLCIA:
                             )
                         )
 
-
-                print(f"len prefiltered groups: {len(prefiltered_groups)}, len remaining edges: {len(remaining_edges)}")
-                print(f"unprocessed edges: {len(unprocessed_edges)}, processed edges: {len(processed_flows)}")
+                print(
+                    f"len prefiltered groups: {len(prefiltered_groups)}, len remaining edges: {len(remaining_edges)}"
+                )
+                print(
+                    f"unprocessed edges: {len(unprocessed_edges)}, processed edges: {len(processed_flows)}"
+                )
                 # ---- Pass 1 (prefiltered_groups) ----
                 if len(prefiltered_groups) > 0:
                     for sig, group_edges in tqdm(
-                            prefiltered_groups.items(), desc="Processing global groups (pass 1)"
+                        prefiltered_groups.items(),
+                        desc="Processing global groups (pass 1)",
                     ):
                         supplier_info = group_edges[0][2]
                         consumer_info = group_edges[0][3]
@@ -2574,7 +2614,9 @@ class EdgeLCIA:
                         # 1) Try DIRECT GLO on the CONSUMER side
                         #    Supplier candidates: keep as-is if present, else "__ANY__"
                         sup_loc = supplier_info.get("location")
-                        direct_sup_candidates = [sup_loc] if sup_loc is not None else ["__ANY__"]
+                        direct_sup_candidates = (
+                            [sup_loc] if sup_loc is not None else ["__ANY__"]
+                        )
                         direct_con_candidates = [GLO]
 
                         # compute_average_cf already ignores fields not present in CFs,
@@ -2590,7 +2632,7 @@ class EdgeLCIA:
                         )
 
                         if glo_cf != 0:
-                            for (supplier_idx, consumer_idx, _, _, _, _) in group_edges:
+                            for supplier_idx, consumer_idx, _, _, _, _ in group_edges:
                                 add_cf_entry(
                                     cfs_mapping=self.cfs_mapping,
                                     supplier_info=supplier_info,
@@ -2598,8 +2640,15 @@ class EdgeLCIA:
                                     direction=direction,
                                     indices=[(supplier_idx, consumer_idx)],
                                     value=glo_cf,
-                                    uncertainty=glo_unc if glo_unc is not None
-                                    else (matched_cf_obj.get("uncertainty") if matched_cf_obj else None),
+                                    uncertainty=(
+                                        glo_unc
+                                        if glo_unc is not None
+                                        else (
+                                            matched_cf_obj.get("uncertainty")
+                                            if matched_cf_obj
+                                            else None
+                                        )
+                                    ),
                                 )
                             continue  # done with this group
 
@@ -2615,7 +2664,7 @@ class EdgeLCIA:
                         )
 
                         if avg_cf != 0:
-                            for (supplier_idx, consumer_idx, _, _, _, _) in group_edges:
+                            for supplier_idx, consumer_idx, _, _, _, _ in group_edges:
                                 add_cf_entry(
                                     cfs_mapping=self.cfs_mapping,
                                     supplier_info=supplier_info,
@@ -2647,15 +2696,17 @@ class EdgeLCIA:
 
                 if len(grouped_edges) > 0:
                     for (
-                            s_key,
-                            c_key,
-                            (candidate_suppliers, candidate_consumers),
+                        s_key,
+                        c_key,
+                        (candidate_suppliers, candidate_consumers),
                     ), edge_group in tqdm(
                         grouped_edges.items(), desc="Processing global groups (pass 2)"
                     ):
                         # 1) Try DIRECT GLO (consumer)
                         sup_loc = s_key.get("location")
-                        direct_sup_candidates = [sup_loc] if sup_loc is not None else ["__ANY__"]
+                        direct_sup_candidates = (
+                            [sup_loc] if sup_loc is not None else ["__ANY__"]
+                        )
                         direct_con_candidates = [GLO]
 
                         glo_cf, matched_cf_obj, glo_unc = compute_cf_memoized(
@@ -2671,8 +2722,15 @@ class EdgeLCIA:
                                     direction=direction,
                                     indices=[(supplier_idx, consumer_idx)],
                                     value=glo_cf,
-                                    uncertainty=glo_unc if glo_unc is not None
-                                    else (matched_cf_obj.get("uncertainty") if matched_cf_obj else None),
+                                    uncertainty=(
+                                        glo_unc
+                                        if glo_unc is not None
+                                        else (
+                                            matched_cf_obj.get("uncertainty")
+                                            if matched_cf_obj
+                                            else None
+                                        )
+                                    ),
                                 )
                             continue
 
@@ -2690,9 +2748,15 @@ class EdgeLCIA:
                                     direction=direction,
                                     indices=[(supplier_idx, consumer_idx)],
                                     value=avg_cf,
-                                    uncertainty=agg_uncertainty
-                                    if agg_uncertainty is not None
-                                    else (matched_cf_obj.get("uncertainty") if matched_cf_obj else None),
+                                    uncertainty=(
+                                        agg_uncertainty
+                                        if agg_uncertainty is not None
+                                        else (
+                                            matched_cf_obj.get("uncertainty")
+                                            if matched_cf_obj
+                                            else None
+                                        )
+                                    ),
                                 )
                         else:
                             self.logger.warning(

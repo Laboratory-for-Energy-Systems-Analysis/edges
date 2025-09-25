@@ -606,7 +606,6 @@ def resolve_candidate_locations(
     return pool
 
 
-
 def group_edges_by_signature(
     edge_list, required_supplier_fields, required_consumer_fields
 ):
