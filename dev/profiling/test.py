@@ -1,8 +1,9 @@
-from numpy.f2py.cfuncs import includes
-
-from edges import EdgeLCIA, get_available_methods
+from edges import EdgeLCIA, get_available_methods, setup_package_logging
 import bw2data, bw2io
 import time
+import logging
+
+setup_package_logging(level=logging.DEBUG)
 
 # Start timer
 start_time = time.time()
@@ -21,7 +22,12 @@ act = [
 method = ("AWARE 2.0", "Country", "all", "yearly")
 # method = ("GeoPolRisk", "paired", "2024")
 
-LCA = EdgeLCIA({act: 1}, method, use_distributions=True, iterations=10000)
+LCA = EdgeLCIA(
+    {act: 1},
+    method,
+    # use_distributions=True,
+    # iterations=10000
+)
 LCA.lci()
 
 LCA.map_exchanges()

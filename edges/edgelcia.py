@@ -2018,19 +2018,21 @@ class EdgeLCIA:
                 dynamic_supplier = supplier_loc in ["RoW", "RoE"]
                 dynamic_consumer = consumer_loc in ["RoW", "RoE"]
 
-                self.logger.debug(
-                    "dynamic: %s→%s | dyn_sup=%s dyn_con=%s | excl_sup=%s | excl_con=%s",
-                    self._dbg_edge_label(supplier_idx), self._dbg_edge_label(consumer_idx),
-                    dynamic_supplier, dynamic_consumer,
-                    list(suppliers_excluded_subregions)[:10],
-                    list(consumers_excluded_subregions)[:10],
-                )
+
 
                 suppliers_excluded_subregions = self._extract_excluded_subregions(
                     supplier_idx, decomposed_exclusions
                 )
                 consumers_excluded_subregions = self._extract_excluded_subregions(
                     consumer_idx, decomposed_exclusions
+                )
+
+                self.logger.debug(
+                    "dynamic: %s→%s | dyn_sup=%s dyn_con=%s | excl_sup=%s | excl_con=%s",
+                    self._dbg_edge_label(supplier_idx), self._dbg_edge_label(consumer_idx),
+                    dynamic_supplier, dynamic_consumer,
+                    list(suppliers_excluded_subregions)[:10],
+                    list(consumers_excluded_subregions)[:10],
                 )
 
                 # Resolve fallback candidate locations
@@ -2638,8 +2640,6 @@ class EdgeLCIA:
             if "__ANY__" in sup_keys:
                 global_supplier_locs = ["__ANY__"]
 
-        print("global_supplier_locs:", global_supplier_locs)
-        print("global_consumer_locs:", global_consumer_locs)
         supplier_wildcard = any(k[0] == "__ANY__" for k in self.weights.keys())
 
         for direction in ["biosphere-technosphere", "technosphere-technosphere"]:
@@ -2671,8 +2671,6 @@ class EdgeLCIA:
                 else self.eligible_edges_for_next_tech
             )
 
-            print("allowed:", allowed)
-
             if allowed:
                 unprocessed_edges = [e for e in unprocessed_edges if e in allowed]
 
@@ -2681,7 +2679,6 @@ class EdgeLCIA:
                     continue
 
                 consumer_loc = self.consumer_loc.get(consumer_idx)
-                print("consumer loc:", consumer_loc)
 
                 if not consumer_loc:
                     raise ValueError(
@@ -2760,8 +2757,6 @@ class EdgeLCIA:
                         )
 
 
-                print(f"len prefiltered groups: {len(prefiltered_groups)}, len remaining edges: {len(remaining_edges)}")
-                print(f"unprocessed edges: {len(unprocessed_edges)}, processed edges: {len(processed_flows)}")
                 # ---- Pass 1 (prefiltered_groups) ----
                 if len(prefiltered_groups) > 0:
                     for sig, group_edges in tqdm(
