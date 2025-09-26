@@ -5,7 +5,7 @@ from copy import deepcopy
 import json, time
 from typing import NamedTuple, List, Optional
 
-from .utils import make_hashable, _short_cf, _head
+from edges.utils import make_hashable, _short_cf, _head
 
 
 import logging

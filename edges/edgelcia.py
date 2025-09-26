@@ -494,6 +494,10 @@ class EdgeLCIA:
 
             self.weights[(supplier_location, consumer_location)] = float(weight)
 
+        # Convenience: available locations on each side in the method
+        self.method_supplier_locs = {s for (s, _) in self.weights.keys()}
+        self.method_consumer_locs = {c for (_, c) in self.weights.keys()}
+
         if hasattr(self, "_geo") and self._geo is not None:
             self._geo._cached_lookup.cache_clear()
 
@@ -788,6 +792,19 @@ class EdgeLCIA:
         )
         self.reversed_consumer_lookup = _materialize_reversed(self.consumer_lookup)
 
+        self.logger.debug(
+            "lookups: sup_tech=%d sup_bio=%d con=%d",
+            len(self.reversed_supplier_lookup_tech),
+            len(self.reversed_supplier_lookup_bio),
+            len(self.reversed_consumer_lookup),
+        )
+        # show a couple of concrete rows if any
+        for i, (pos, info) in enumerate(list(self.reversed_consumer_lookup.items())[:5]):
+            self.logger.debug("consumer[%d] -> %s", pos, info)
+        for i, (pos, info) in enumerate(list(self.reversed_supplier_lookup_tech.items())[:5]):
+            self.logger.debug("supplier_tech[%d] -> %s", pos, info)
+
+
         # ---- Enrich consumer reversed lookup with activity metadata (classifications) ----
         # Bring 'classifications' from the activity map if missing (used by class filters)
         if self.position_to_technosphere_flows_lookup:
@@ -800,12 +817,12 @@ class EdgeLCIA:
 
             for idx, info in self.reversed_supplier_lookup_tech.items():
                 extra = self.position_to_technosphere_flows_lookup.get(idx, {})
+
                 if "location" in extra and "location" not in info:
                     info["location"] = extra["location"]
-                    self.supplier_loc_tech[idx] = extra["location"]
+
                 if "classifications" in extra and "classifications" not in info:
                     info["classifications"] = extra["classifications"]
-                    self.supplier_cls_tech[idx] = _norm_cls(extra["classifications"])
 
         # ---- Back-compat: merged supplier_lookup view if needed -------------------
         if self.supplier_lookup_bio and not self.supplier_lookup_tech:
@@ -829,10 +846,26 @@ class EdgeLCIA:
         self.supplier_loc_tech = {
             i: d.get("location") for i, d in self.reversed_supplier_lookup_tech.items()
         }
-        print("reversed_consumer_lookup:", self.reversed_consumer_lookup)
         self.consumer_loc = {
             i: d.get("location") for i, d in self.reversed_consumer_lookup.items()
         }
+
+        self.logger.debug(
+            "hot-caches: supplier_loc_tech=%s | consumer_loc=%s",
+            {k: self.supplier_loc_tech[k] for k in list(self.supplier_loc_tech)[:5]},
+            {k: self.consumer_loc[k] for k in list(self.consumer_loc)[:5]},
+        )
+
+        # Only log method keys if weights exist (they are set by _initialize_weights later)
+        if self.weights:
+            sup_locs = sorted({s for (s, _) in self.weights})
+            con_locs = sorted({c for (_, c) in self.weights})
+        else:
+            sup_locs = con_locs = []
+        self.logger.debug(
+            "method keys: supplier_locs=%s | consumer_locs=%s",
+            sup_locs, con_locs
+        )
 
         self.supplier_cls_bio = {
             i: _norm_cls(d.get("classifications"))
@@ -964,6 +997,39 @@ class EdgeLCIA:
             excluded_subregions.extend(decomposed_exclusions.get(loc, [loc]))
 
         return frozenset(excluded_subregions)
+
+    def _dbg_edge_label(self, idx: int) -> str:
+        """Human-friendly label for a technosphere position."""
+        a = self.position_to_technosphere_flows_lookup.get(idx, {})
+        return f"{a.get('name', '?')}[{a.get('reference product')}]@{a.get('location')}#{idx}"
+
+    def _dbg_geo_dump(self, where: str, loc: str | None):
+        """Log what GeoResolver knows about a location."""
+        if not loc:
+            self.logger.debug("geo[%s]: loc=None", where)
+            return
+        try:
+            kids = self.geo.batch(locations=[loc], containing=True) or {}
+            pars = self.geo.batch(locations=[loc], containing=False) or {}
+            self.logger.debug(
+                "geo[%s]: %s | parents=%s | children=%s",
+                where, loc, pars.get(loc, []), kids.get(loc, [])
+            )
+        except Exception as e:
+            self.logger.debug("geo[%s]: %s | ERROR: %s", where, loc, e)
+
+    def _dbg_cf_call(self, tag: str, s_info: dict, c_info: dict,
+                     cand_sup: list[str], cand_con: list[str]):
+        """Uniform pre/post log around CF computations."""
+        self.logger.debug(
+            "CF-CALL[%s]: s=%s c=%s | cand_sup=%s | cand_con=%s | req_sup=%s | req_con=%s",
+            tag,
+            {k: s_info.get(k) for k in sorted(self.required_supplier_fields)},
+            {k: c_info.get(k) for k in sorted(self.required_consumer_fields)},
+            cand_sup, cand_con,
+            sorted(self.required_supplier_fields),
+            sorted(self.required_consumer_fields),
+        )
 
     def lci(self) -> None:
         """
@@ -1453,6 +1519,19 @@ class EdgeLCIA:
                             added,
                         )
 
+                        for s in list(s_loc_only or []):
+                            pass  # (no-op, just anchor for breakpoint)
+                        sampled = list(bucket)[:5]
+                        self.logger.debug(
+                            "allowlist[%s]: added=%d examples=%s",
+                            dir_name,
+                            added,
+                            [f"{self._dbg_edge_label(s)} → {self._dbg_edge_label(c)}" if False else (s, c)
+                             for (s, c) in sampled]  # keep indices to avoid any side effect
+                        )
+
+
+
             if s_loc_required and c_loc_required and s_loc_only and c_loc_only:
                 cset = set(c_loc_only)
                 bucket = allow_bio if dir_name == DIR_BIO else allow_tec
@@ -1597,6 +1676,12 @@ class EdgeLCIA:
                         "Ensure all consumer flows have a valid location."
                     )
 
+                # Get supplier info first (tech/bio aware) before reading its location
+                supplier_info = self._get_supplier_info(supplier_idx, direction)
+
+                if not supplier_info:
+                    # nothing usable for this supplier; skip defensively
+                    continue
                 supplier_loc = supplier_info.get("location")
 
                 edges_index[(consumer_loc, supplier_loc)].append(
@@ -1621,7 +1706,7 @@ class EdgeLCIA:
                     candidate_suppliers_locations = resolve_candidate_locations(
                         geo=self.geo,
                         location=supplier_location,
-                        weights=frozenset(k for k, v in self.weights.items()),
+                        weights=frozenset(self.method_supplier_locs),
                         containing=True,
                         supplier=True,
                     )
@@ -1639,7 +1724,7 @@ class EdgeLCIA:
                     candidate_consumer_locations = resolve_candidate_locations(
                         geo=self.geo,
                         location=consumer_location,
-                        weights=frozenset(k for k, v in self.weights.items()),
+                        weights=frozenset(self.method_consumer_locs),
                         containing=True,
                         supplier=False,
                     )
@@ -1655,6 +1740,15 @@ class EdgeLCIA:
                 ):
                     # neither the supplier or consumer locations are composite locations
                     continue
+
+                self.logger.debug(
+                    "aggregate: (con=%s, sup=%s) → cand_sup=%s | cand_con=%s | edges=%d",
+                    consumer_location, supplier_location,
+                    candidate_suppliers_locations, candidate_consumer_locations, len(edges)
+                )
+                self._dbg_geo_dump("aggregate/consumer", consumer_location)
+                self._dbg_geo_dump("aggregate/supplier", supplier_location)
+
 
                 for supplier_idx, consumer_idx in edges:
 
@@ -1706,6 +1800,9 @@ class EdgeLCIA:
                     consumer_info = group_edges[0][3]
                     candidate_supplier_locations = group_edges[0][-2]
                     candidate_consumer_locations = group_edges[0][-1]
+
+                    self._dbg_cf_call("AGG-PASS1", supplier_info, consumer_info,
+                                      candidate_supplier_locations, candidate_consumer_locations)
 
                     new_cf, matched_cf_obj, agg_uncertainty = compute_average_cf(
                         candidate_suppliers=candidate_supplier_locations,
@@ -1763,6 +1860,10 @@ class EdgeLCIA:
                 ), edge_group in tqdm(
                     grouped_edges.items(), desc="Processing static groups (pass 2)"
                 ):
+
+                    self._dbg_cf_call("AGG-PASS2", supplier_info, consumer_info,
+                                      candidate_supplier_locations, candidate_consumer_locations)
+
                     new_cf, matched_cf_obj, agg_uncertainty = compute_cf_memoized(
                         s_key, c_key, candidate_suppliers, candidate_consumers
                     )
@@ -1917,6 +2018,14 @@ class EdgeLCIA:
                 dynamic_supplier = supplier_loc in ["RoW", "RoE"]
                 dynamic_consumer = consumer_loc in ["RoW", "RoE"]
 
+                self.logger.debug(
+                    "dynamic: %s→%s | dyn_sup=%s dyn_con=%s | excl_sup=%s | excl_con=%s",
+                    self._dbg_edge_label(supplier_idx), self._dbg_edge_label(consumer_idx),
+                    dynamic_supplier, dynamic_consumer,
+                    list(suppliers_excluded_subregions)[:10],
+                    list(consumers_excluded_subregions)[:10],
+                )
+
                 suppliers_excluded_subregions = self._extract_excluded_subregions(
                     supplier_idx, decomposed_exclusions
                 )
@@ -1929,7 +2038,7 @@ class EdgeLCIA:
                     candidate_suppliers_locs = resolve_candidate_locations(
                         geo=self.geo,
                         location="GLO",
-                        weights=frozenset(k for k, v in self.weights.items()),
+                        weights=frozenset(self.method_supplier_locs),
                         containing=True,
                         exceptions=suppliers_excluded_subregions,
                         supplier=True,
@@ -1946,7 +2055,7 @@ class EdgeLCIA:
                     candidate_consumers_locs = resolve_candidate_locations(
                         geo=self.geo,
                         location="GLO",
-                        weights=frozenset(k for k, v in self.weights.items()),
+                        weights=frozenset(self.method_consumer_locs),
                         containing=True,
                         exceptions=consumers_excluded_subregions,
                         supplier=False,
@@ -2002,6 +2111,9 @@ class EdgeLCIA:
                     rep_consumer = group_edges[0][3]
                     candidate_supplier_locations = group_edges[0][-2]
                     candidate_consumer_locations = group_edges[0][-1]
+
+                    self._dbg_cf_call("AGG-PASS1", supplier_info, consumer_info,
+                                      candidate_supplier_locations, candidate_consumer_locations)
 
                     new_cf, matched_cf_obj, agg_uncertainty = compute_average_cf(
                         candidate_suppliers=candidate_supplier_locations,
@@ -2059,6 +2171,9 @@ class EdgeLCIA:
                 ), edge_group in tqdm(
                     grouped_edges.items(), desc="Processing dynamic groups (pass 2)"
                 ):
+                    self._dbg_cf_call("AGG-PASS2", supplier_info, consumer_info,
+                                      candidate_supplier_locations, candidate_consumer_locations)
+
                     new_cf, matched_cf_obj, agg_uncertainty = compute_cf_memoized(
                         s_key,
                         c_key,
@@ -2133,6 +2248,51 @@ class EdgeLCIA:
         self._initialize_weights()
         logger.info("Handling contained locations…")
 
+        def _geo_contains(container: str, member: str) -> bool:
+            """Return True if `container` geographically contains `member`, robust to API flag semantics and case."""
+            if not container or not member:
+                return False
+
+            C_raw = str(container).strip()
+            M_raw = str(member).strip()
+
+            def N(x):  # normalize for comparisons
+                return str(x).strip().upper()
+
+            def q(loc: str, containing: bool) -> list[str]:
+                try:
+                    mp = self.geo.batch(locations=[loc], containing=containing) or {}
+                    return mp.get(loc, []) or []
+                except Exception as e:
+                    self.logger.debug("geo-contains: batch error loc=%s containing=%s err=%s", loc, containing, e)
+                    return []
+
+            # Collect both interpretations, then normalize once
+            containers_of_member = set(map(N, q(M_raw, True))) | set(map(N, q(M_raw, False)))
+            children_of_container = set(map(N, q(C_raw, False))) | set(map(N, q(C_raw, True)))
+
+            C = N(C_raw)
+            M = N(M_raw)
+
+            res = (C in containers_of_member) or (M in children_of_container)
+            self.logger.debug(
+                "geo-contains: %s ⊇ %s ? containers_of_member=%s | children_of_container=%s -> %s",
+                C_raw, M_raw,
+                sorted(containers_of_member),
+                sorted(children_of_container),
+                res,
+            )
+            return res
+
+        # Respect wildcard suppliers in method keys (e.g., ('__ANY__','RER'))
+        supplier_wildcard = any(k[0] == "__ANY__" for k in self.weights.keys())
+        available_consumer_locs = sorted({loc for _, loc in self.weights.keys()})
+
+        self.logger.debug(
+            "contained: available consumer method locs=%s",
+            sorted(available_consumer_locs)
+        )
+
         cf_operators = {
             cf["supplier"].get("operator", "equals") for cf in self.raw_cfs_data
         }
@@ -2181,6 +2341,11 @@ class EdgeLCIA:
                         "Ensure all consumer flows have a valid location."
                     )
 
+                # Get supplier info first (tech/bio aware) before reading its location
+                supplier_info = self._get_supplier_info(supplier_idx, direction)
+
+                if not supplier_info:
+                    continue
                 supplier_loc = supplier_info.get("location")
 
                 edges_index[(consumer_loc, supplier_loc)].append(
@@ -2196,38 +2361,65 @@ class EdgeLCIA:
                 ):
                     continue
 
-                # 🔁 Use the shared utility function to get subregions
-                if supplier_location is None:
-                    candidate_suppliers_locations = [
-                        "__ANY__",
-                    ]
-                else:
-                    candidate_suppliers_locations = resolve_candidate_locations(
-                        geo=self.geo,
-                        location=supplier_location,
-                        weights=frozenset(k for k, v in self.weights.items()),
-                        containing=False,
-                        supplier=True,
-                    )
+                # Supplier: if CFs use wildcard on supplier side, stick to '__ANY__'.
+                # Otherwise, keep the supplier's own location (no up/down traversal here).
 
+                if supplier_wildcard:
+                    candidate_suppliers_locations = ["__ANY__"]
+                elif supplier_location is None:
+                    candidate_suppliers_locations = ["__ANY__"]
+                else:
+                    candidate_suppliers_locations = [supplier_location]
+
+                # Consumer: climb to the nearest containing region (e.g., IT → RER),
+                # limited to locations actually present on the consumer side of method keys.
+
+                # Consumer: climb to the nearest containing region present in the method (prefer non-GLO)
                 if consumer_location is None:
-                    candidate_consumer_locations = [
-                        "__ANY__",
-                    ]
+                    candidate_consumer_locations = ["__ANY__"]
                 else:
-                    candidate_consumer_locations = resolve_candidate_locations(
-                        geo=self.geo,
-                        location=consumer_location,
-                        weights=frozenset(k for k, v in self.weights.items()),
-                        containing=False,
-                        supplier=False,
+                    # Consider only method regions on the consumer side (exclude __ANY__/GLO at first)
+                    available_non_global = [
+                        loc for loc in available_consumer_locs
+                        if loc not in {"__ANY__", "GLO"}
+                    ]
+
+                    # Try to find the nearest method region that contains the inventory region
+                    # Prioritize a stable order that tends to pick the smallest sensible container;
+                    # if you want to strongly prefer RER when present, keep it first.
+                    ordered = sorted(available_non_global, key=lambda x: (x != "RER", x))
+
+                    self._dbg_geo_dump("contained/consumer", consumer_location)
+                    # Probe each candidate method region (non-GLO) once so we see what children they claim
+                    for _cand in [loc for loc in available_consumer_locs if loc not in {"__ANY__", "GLO"}][:10]:
+                        self._dbg_geo_dump(f"contained/method-cand[{_cand}]", _cand)
+
+                    nearest = None
+                    for cand in ordered:
+                        ok = _geo_contains(cand, consumer_location)
+                        self.logger.debug("contained: probe %s ⊇ %s -> %s", cand, consumer_location, ok)
+                        if ok:
+                            nearest = cand
+                            break
+
+                    nearest = next((cand for cand in ordered if _geo_contains(cand, consumer_location)), None)
+
+                    self.logger.debug(
+                        "contained: consumer %s -> nearest method container %s (ordered candidates=%s)",
+                        consumer_location, nearest, ordered
                     )
 
-                if (
-                    len(candidate_suppliers_locations) == 0
-                    and len(candidate_consumer_locations) == 0
-                ):
-                    # neither the supplier or consumer locations are composite locations
+
+                    if nearest is not None:
+                        candidate_consumer_locations = [nearest]
+                    else:
+                        # Nothing but GLO contains this region (or geo data is missing). Leave empty here
+                        # so this pass skips; the global pass will handle it.
+                        candidate_consumer_locations = []
+
+                # If we couldn't find any suitable consumer region to climb to, skip.
+
+                if not candidate_consumer_locations:
                     continue
 
                 for supplier_idx, consumer_idx in edges:
@@ -2279,6 +2471,9 @@ class EdgeLCIA:
                     consumer_info = group_edges[0][3]
                     candidate_supplier_locations = group_edges[0][-2]
                     candidate_consumer_locations = group_edges[0][-1]
+
+                    self._dbg_cf_call("CONT-PASS1", supplier_info, consumer_info,
+                                      candidate_supplier_locations, candidate_consumer_locations)
 
                     new_cf, matched_cf_obj, agg_uncertainty = compute_average_cf(
                         candidate_suppliers=candidate_supplier_locations,
@@ -2336,6 +2531,10 @@ class EdgeLCIA:
                 ), edge_group in tqdm(
                     grouped_edges.items(), desc="Processing contained groups (pass 2)"
                 ):
+
+                    self._dbg_cf_call("CONT-PASS2", supplier_info, consumer_info,
+                                      candidate_suppliers, candidate_consumers)
+
                     new_cf, matched_cf_obj, agg_uncertainty = compute_cf_memoized(
                         supplier_info,
                         consumer_info,
@@ -2417,14 +2616,14 @@ class EdgeLCIA:
         global_supplier_locs = resolve_candidate_locations(
             geo=self.geo,
             location="GLO",
-            weights=frozenset(self.weights.keys()),
+            weights=frozenset(self.method_supplier_locs),
             containing=False,
             supplier=True,
         )
         global_consumer_locs = resolve_candidate_locations(
             geo=self.geo,
             location="GLO",
-            weights=frozenset(self.weights.keys()),
+            weights=frozenset(self.method_consumer_locs),
             containing=False,
             supplier=False,
         )
@@ -2441,6 +2640,7 @@ class EdgeLCIA:
 
         print("global_supplier_locs:", global_supplier_locs)
         print("global_consumer_locs:", global_consumer_locs)
+        supplier_wildcard = any(k[0] == "__ANY__" for k in self.weights.keys())
 
         for direction in ["biosphere-technosphere", "technosphere-technosphere"]:
 
@@ -2489,27 +2689,26 @@ class EdgeLCIA:
                         "Ensure all consumer flows have a valid location."
                     )
 
+                # Get supplier info first (tech/bio aware) before reading its location
+                supplier_info = self._get_supplier_info(supplier_idx, direction)
+
+                if not supplier_info:
+                    continue
                 supplier_loc = supplier_info.get("location")
-
-                print("supplier_loc_tech:", self.supplier_loc_tech)
-
-                print("supplier loc:", supplier_loc)
 
                 edges_index[(consumer_loc, supplier_loc)].append(
                     (supplier_idx, consumer_idx)
                 )
-
-                print("edges index:", edges_index)
 
             prefiltered_groups = defaultdict(list)
             remaining_edges = []
 
             for (consumer_location, supplier_location), edges in edges_index.items():
 
-                if supplier_location is None:
-                    candidate_suppliers_locations = [
-                        "__ANY__",
-                    ]
+                if supplier_wildcard:
+                    candidate_suppliers_locations = ["__ANY__"]
+                elif supplier_location is None:
+                    candidate_suppliers_locations = ["__ANY__"]
                 else:
                     candidate_suppliers_locations = global_supplier_locs
 
@@ -2573,9 +2772,15 @@ class EdgeLCIA:
 
                         # 1) Try DIRECT GLO on the CONSUMER side
                         #    Supplier candidates: keep as-is if present, else "__ANY__"
-                        sup_loc = supplier_info.get("location")
-                        direct_sup_candidates = [sup_loc] if sup_loc is not None else ["__ANY__"]
-                        direct_con_candidates = [GLO]
+                        if supplier_wildcard:
+                            direct_sup_candidates = ["__ANY__"]
+                        else:
+                            sup_loc = supplier_info.get("location")
+                            direct_sup_candidates = [sup_loc] if sup_loc is not None else []
+                        direct_con_candidates = ["GLO"]
+
+                        self._dbg_cf_call("GLO-PASS1", supplier_info, consumer_info,
+                                          direct_sup_candidates, direct_con_candidates)
 
                         # compute_average_cf already ignores fields not present in CFs,
                         # so if supplier 'location' isn't in CF schema, it won't block matches.
@@ -2604,9 +2809,13 @@ class EdgeLCIA:
                             continue  # done with this group
 
                         # 2) Fallback: weighted average over GLOBAL LOCATIONS
+                        self._dbg_cf_call("GLO-AVG", supplier_info, consumer_info,
+                                          (['__ANY__'] if supplier_wildcard else global_supplier_locs),
+                                          global_consumer_locs)
                         avg_cf, matched_cf_obj, agg_uncertainty = compute_average_cf(
-                            candidate_suppliers=global_locations,  # harmless if supplier loc not in CF schema
-                            candidate_consumers=global_locations,  # synthesize GLO by averaging
+                            candidate_suppliers = (
+                                ["__ANY__"] if supplier_wildcard else global_supplier_locs),
+                            candidate_consumers = global_consumer_locs,
                             supplier_info=supplier_info,
                             consumer_info=consumer_info,
                             required_supplier_fields=self.required_supplier_fields,
@@ -2628,7 +2837,7 @@ class EdgeLCIA:
                         else:
                             self.logger.warning(
                                 f"Fallback CF could not be computed for supplier={supplier_info}, consumer={consumer_info} "
-                                f"with candidate suppliers={global_locations} and consumers={global_locations}"
+                                f"with candidate suppliers={ (['__ANY__'] if supplier_wildcard else global_supplier_locs) } and consumers={global_consumer_locs}"
                             )
 
                 # ---- Pass 2 (grouped_edges) ----
@@ -2654,9 +2863,14 @@ class EdgeLCIA:
                         grouped_edges.items(), desc="Processing global groups (pass 2)"
                     ):
                         # 1) Try DIRECT GLO (consumer)
-                        sup_loc = s_key.get("location")
-                        direct_sup_candidates = [sup_loc] if sup_loc is not None else ["__ANY__"]
-                        direct_con_candidates = [GLO]
+                        if supplier_wildcard:
+                            direct_sup_candidates = ["__ANY__"]
+                        else:
+                            sup_loc = s_key.get("location")
+                            direct_sup_candidates = [sup_loc] if sup_loc is not None else []
+                        direct_con_candidates = ["GLO"]
+
+
 
                         glo_cf, matched_cf_obj, glo_unc = compute_cf_memoized(
                             s_key, c_key, direct_sup_candidates, direct_con_candidates
@@ -2678,7 +2892,9 @@ class EdgeLCIA:
 
                         # 2) Fallback to weighted average across global locations
                         avg_cf, matched_cf_obj, agg_uncertainty = compute_cf_memoized(
-                            s_key, c_key, global_locations, global_locations
+                            s_key, c_key,
+                            (["__ANY__"] if supplier_wildcard else global_supplier_locs),
+                            global_consumer_locs
                         )
 
                         if avg_cf != 0:
@@ -2697,7 +2913,7 @@ class EdgeLCIA:
                         else:
                             self.logger.warning(
                                 f"Fallback CF could not be computed for supplier={s_key}, consumer={c_key} "
-                                f"with candidate suppliers={global_locations} and consumers={global_locations}"
+                                f"with candidate suppliers={ (['__ANY__'] if supplier_wildcard else global_supplier_locs) } and consumers={global_consumer_locs}"
                             )
 
         self._update_unprocessed_edges()
