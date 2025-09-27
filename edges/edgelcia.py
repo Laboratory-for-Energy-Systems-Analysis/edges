@@ -31,7 +31,6 @@ from .utils import (
 from .matrix_builders import initialize_lcia_matrix, build_technosphere_edges_matrix
 from .flow_matching import (
     preprocess_cfs,
-    matches_classifications,
     normalize_classification_entries,
     build_cf_index,
     cached_match_with_index,
@@ -185,47 +184,6 @@ def _build_prefix_index_restricted(
     return out
 
 
-def _cls_candidates_from_cf(
-    cf_classifications,
-    prefix_index_by_scheme: dict[str, dict[str, set[int]]],
-    adjacency_keys: set[int] | None = None,
-) -> set[int]:
-    """
-    Extract classification candidates from a CF entry.
-
-    :param cf: Characterization factor entry.
-    :return: Dict of classification scheme -> list of codes.
-    """
-    if not cf_classifications:
-        return set()
-
-    # if already normalized ((scheme, (codes...)), ...), skip work
-    if (
-        isinstance(cf_classifications, tuple)
-        and cf_classifications
-        and isinstance(cf_classifications[0], tuple)
-    ):
-        norm = cf_classifications
-    else:
-        norm = _norm_cls(cf_classifications)
-
-    out = set()
-    for scheme, codes in norm:
-        sch = str(scheme).lower().strip()
-        bucket = prefix_index_by_scheme.get(sch)
-        if not bucket:
-            continue
-        for code in codes:
-            pref = str(code).split(":", 1)[0].strip()
-            hits = bucket.get(pref)
-            if hits:
-                out |= hits
-
-    if adjacency_keys is not None:
-        out &= adjacency_keys
-    return out
-
-
 def _norm_cls(x):
     def _san(c):
         # strip trailing ":..." and whitespace once
@@ -336,8 +294,6 @@ class EdgeLCIA:
         self.technosphere_flows = None
         self.biosphere_flows = None
         self.characterized_inventory = None
-        self.biosphere_characterization_matrix = None
-        self.ignored_flows = set()
         self.ignored_locations = set()
         self.ignored_method_exchanges = list()
         self.weight_scheme: str = weight
@@ -498,8 +454,10 @@ class EdgeLCIA:
         self.method_supplier_locs = {s for (s, _) in self.weights.keys()}
         self.method_consumer_locs = {c for (_, c) in self.weights.keys()}
 
-        if hasattr(self, "_geo") and self._geo is not None:
-            self._geo._cached_lookup.cache_clear()
+        if hasattr(self, "geo") and getattr(self, "geo", None) is not None:
+            getattr(
+                self.geo, "_cached_lookup", lambda: None
+            ) and self.geo._cached_lookup.cache_clear()
 
     def _ensure_filtered_lookups_for_current_edges(self) -> None:
         """Make sure filtered lookups + reversed maps exist for the current edge sets."""
@@ -1060,7 +1018,7 @@ class EdgeLCIA:
         exclusions = self.technosphere_flows_lookup.get((name, reference_product), [])
 
         self.logger.debug(
-            "exclusions[%d]: loc=%s | refprod=%s | raw=%s | decomposed=%s",
+            "exclusions[%d]: name=%s | refprod=%s | raw=%s | decomposed=%s",
             idx,
             name,
             reference_product,
@@ -1303,8 +1261,6 @@ class EdgeLCIA:
             )
 
         matched_positions_total = 0
-        allow_bio_added = 0
-        allow_tec_added = 0
 
         # Iterate CFs
         for i, cf in enumerate(tqdm(self.raw_cfs_data, desc="Mapping exchanges")):
@@ -1573,10 +1529,6 @@ class EdgeLCIA:
                             bucket.add((s, c))
                             added += 1
                 if added:
-                    if dir_name == DIR_BIO:
-                        allow_bio_added += added
-                    else:
-                        allow_tec_added += added
                     if debug:
                         log.debug(
                             "CF[%d] dir=%s allowlist add (supplier loc-only) | added=%d",
@@ -1601,10 +1553,6 @@ class EdgeLCIA:
                             bucket.add((s, c))
                             added += 1
                 if added:
-                    if dir_name == DIR_BIO:
-                        allow_bio_added += added
-                    else:
-                        allow_tec_added += added
                     if debug:
                         log.debug(
                             "CF[%d] dir=%s allowlist add (consumer loc-only) | added=%d",
@@ -1646,10 +1594,6 @@ class EdgeLCIA:
                             bucket.add((s, c))
                             added += 1
                 if added:
-                    if dir_name == DIR_BIO:
-                        allow_bio_added += added
-                    else:
-                        allow_tec_added += added
                     if debug:
                         log.debug(
                             "CF[%d] dir=%s allowlist add (both loc-only) | added=%d",
@@ -1726,18 +1670,7 @@ class EdgeLCIA:
         self._initialize_weights()
         logger.info("Handling static regions…")
 
-        cf_operators = {
-            cf["supplier"].get("operator", "equals") for cf in self.raw_cfs_data
-        }
-
         for direction in ["biosphere-technosphere", "technosphere-technosphere"]:
-
-            # Pick the correct reversed supplier dict for this direction
-            rev_sup = (
-                self.reversed_supplier_lookup_bio
-                if direction == "biosphere-technosphere"
-                else self.reversed_supplier_lookup_tech
-            )
 
             unprocessed_edges = (
                 self.unprocessed_biosphere_edges
@@ -2056,10 +1989,6 @@ class EdgeLCIA:
         self._initialize_weights()
         logger.info("Handling dynamic regions…")
 
-        cf_operators = {
-            cf["supplier"].get("operator", "equals") for cf in self.raw_cfs_data
-        }
-
         for flow in self.technosphere_flows:
             key = (flow["name"], flow.get("reference product"))
             self.technosphere_flows_lookup[key].append(flow["location"])
@@ -2078,13 +2007,6 @@ class EdgeLCIA:
         )
 
         for direction in ["biosphere-technosphere", "technosphere-technosphere"]:
-
-            # Pick the correct reversed supplier dict for this direction
-            rev_sup = (
-                self.reversed_supplier_lookup_bio
-                if direction == "biosphere-technosphere"
-                else self.reversed_supplier_lookup_tech
-            )
 
             unprocessed_edges = (
                 self.unprocessed_biosphere_edges
@@ -2125,14 +2047,11 @@ class EdgeLCIA:
                 consumer_loc = self.consumer_loc.get(consumer_idx)
 
                 # Skip if neither side is dynamic
-                if supplier_loc not in ["RoW", "RoE"] and consumer_loc not in [
-                    "RoW",
-                    "RoE",
-                ]:
-                    continue
-
                 # Identify dynamic role
                 _is_dyn = lambda x: isinstance(x, str) and x.upper() in {"ROW", "ROE"}
+                if not (_is_dyn(supplier_loc) or _is_dyn(consumer_loc)):
+                    continue
+
                 dynamic_supplier = _is_dyn(supplier_loc)
                 dynamic_consumer = _is_dyn(consumer_loc)
 
@@ -2175,18 +2094,17 @@ class EdgeLCIA:
                         candidate_suppliers_locs = [supplier_loc]
 
                 if dynamic_consumer:
-                    if dynamic_consumer:
-                        candidate_consumers_locs = resolve_candidate_locations(
-                            geo=self.geo,
-                            location="GLO",
-                            weights=frozenset(k for k, v in self.weights.items()),
-                            containing=True,
-                            exceptions=consumers_excluded_subregions,
-                            supplier=False,
-                        )
-                        candidate_consumers_locs = [
-                            loc for loc in candidate_consumers_locs if loc != "GLO"
-                        ]
+                    candidate_consumers_locs = resolve_candidate_locations(
+                        geo=self.geo,
+                        location="GLO",
+                        weights=frozenset(k for k, v in self.weights.items()),
+                        containing=True,
+                        exceptions=consumers_excluded_subregions,
+                        supplier=False,
+                    )
+                    candidate_consumers_locs = [
+                        loc for loc in candidate_consumers_locs if loc != "GLO"
+                    ]
 
                     self.logger.debug(
                         "dynamic-cands: consumer=RoW | candidates=%d (e.g. %s...) | excluded=%d | method_locs=%s",
@@ -2473,18 +2391,7 @@ class EdgeLCIA:
             sorted(available_consumer_locs),
         )
 
-        cf_operators = {
-            cf["supplier"].get("operator", "equals") for cf in self.raw_cfs_data
-        }
-
         for direction in ["biosphere-technosphere", "technosphere-technosphere"]:
-
-            # Pick the correct reversed supplier dict for this direction
-            rev_sup = (
-                self.reversed_supplier_lookup_bio
-                if direction == "biosphere-technosphere"
-                else self.reversed_supplier_lookup_tech
-            )
 
             unprocessed_edges = (
                 self.unprocessed_biosphere_edges
@@ -2580,19 +2487,6 @@ class EdgeLCIA:
                         if loc not in {"__ANY__", "GLO"}
                     ][:10]:
                         self._dbg_geo_dump(f"contained/method-cand[{_cand}]", _cand)
-
-                    nearest = None
-                    for cand in ordered:
-                        ok = _geo_contains(cand, consumer_location)
-                        self.logger.debug(
-                            "contained: probe %s ⊇ %s -> %s",
-                            cand,
-                            consumer_location,
-                            ok,
-                        )
-                        if ok:
-                            nearest = cand
-                            break
 
                     nearest = next(
                         (
@@ -2824,10 +2718,6 @@ class EdgeLCIA:
         self._initialize_weights()
         logger.info("Handling remaining exchanges…")
 
-        cf_operators = {
-            cf["supplier"].get("operator", "equals") for cf in self.raw_cfs_data
-        }
-
         # Resolve candidate locations for GLO once using utility
         # NOTE: containing=False → return contained regions of GLO (i.e., the world)
         global_supplier_locs = resolve_candidate_locations(
@@ -2858,13 +2748,6 @@ class EdgeLCIA:
         supplier_wildcard = any(k[0] == "__ANY__" for k in self.weights.keys())
 
         for direction in ["biosphere-technosphere", "technosphere-technosphere"]:
-
-            # Pick the correct reversed supplier dict for this direction
-            rev_sup = (
-                self.reversed_supplier_lookup_bio
-                if direction == "biosphere-technosphere"
-                else self.reversed_supplier_lookup_tech
-            )
 
             unprocessed_edges = (
                 self.unprocessed_biosphere_edges
