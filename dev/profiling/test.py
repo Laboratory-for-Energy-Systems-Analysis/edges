@@ -7,9 +7,9 @@ setup_package_logging(level=logging.DEBUG)
 
 # Start timer
 start_time = time.time()
-bw2data.projects.set_current("bw25_ei310")
+# bw2data.projects.set_current("bw25_ei310")
 # bw2data.projects.set_current("ecoinvent-3.10.1-cutoff")
-# bw2data.projects.set_current("ecoinvent-3.10-cutoff")
+bw2data.projects.set_current("ecoinvent-3.10-cutoff")
 
 act = [
     a

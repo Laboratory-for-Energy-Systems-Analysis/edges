@@ -914,18 +914,31 @@ class EdgeLCIA:
             if info is not None:
                 return info
 
-            # Fallback for biosphere: minimal metadata (categories via bw2data)
-            # (Biosphere supplier 'location' is typically not used.)
+            # Fallback for biosphere suppliers: project the dataset to the
+            # *method-required* supplier fields (method-agnostic).
             try:
                 ds = bw2data.get_activity(self.reversed_biosphere[supplier_idx])
-                info = {
-                    # keep only fields that can participate in signatures/matching
-                    "classifications": ds.get("categories"),
-                }
             except Exception:
-                info = {}
+                ds = {}
 
-            # No hot-cache needed for biosphere direction
+            info = self._project_dataset_to_required_fields(
+                ds=ds,
+                required_fields=self.required_supplier_fields,
+            )
+
+            # Optional: lightweight debug if the projection missed any required keys
+            missing = [
+                k
+                for k in self.required_supplier_fields
+                if k not in info
+                and k not in {"matrix", "operator", "weight", "position", "excludes"}
+            ]
+            if missing:
+                self.logger.debug(
+                    "biosphere-fallback: missing required supplier keys %s for idx=%s",
+                    missing,
+                    supplier_idx,
+                )
             return info
 
         # --- technosphere-technosphere
@@ -955,6 +968,58 @@ class EdgeLCIA:
                 self.supplier_loc_tech[supplier_idx] = info["location"]
 
         return info
+
+    def _project_dataset_to_required_fields(
+        self, ds: dict, required_fields: set[str]
+    ) -> dict:
+        """
+        Method-agnostic projection: given a BW2 dataset and the method’s
+        required supplier fields, pull values from reasonable source keys.
+        - Does not assume a particular LCIA method.
+        - Normalizes simple container types where sensible.
+        """
+        out: dict = {}
+
+        # Where to pull each logical field from (in order of preference).
+        # Safe, generic mappings that work across many methods.
+        FIELD_SOURCES: dict[str, tuple[str, ...]] = {
+            "name": ("name",),
+            "reference product": ("reference product", "reference_product"),
+            "unit": ("unit",),
+            "location": ("location",),
+            "categories": ("categories",),  # EcoSpold-style list/tuple
+            "classifications": (
+                "classifications",
+                "categories",
+            ),  # Some methods key on either
+            # For any other field, we'll try the same key name directly.
+        }
+
+        for f in required_fields or ():
+            if f in {"matrix", "operator", "weight", "position", "excludes"}:
+                continue
+            candidates = FIELD_SOURCES.get(f, (f,))
+            val = None
+            for src in candidates:
+                if isinstance(ds, dict) and src in ds:
+                    val = ds.get(src)
+                    break
+            if val is None:
+                continue
+
+            # Light normalization
+            if f == "categories" and isinstance(val, (list, tuple)):
+                out[f] = tuple(val)
+            else:
+                out[f] = val
+
+        # If the method didn’t explicitly require classifications but they are present,
+        # keep them as a free bonus (helps other methods without hurting matching).
+        if "classifications" not in out:
+            cls = ds.get("classifications")
+            if cls is not None:
+                out["classifications"] = cls
+        return out
 
     def _get_consumer_info(self, consumer_idx):
         """
@@ -993,6 +1058,15 @@ class EdgeLCIA:
         name = act.get("name")
         reference_product = act.get("reference product")
         exclusions = self.technosphere_flows_lookup.get((name, reference_product), [])
+
+        self.logger.debug(
+            "exclusions[%d]: loc=%s | refprod=%s | raw=%s | decomposed=%s",
+            idx,
+            name,
+            reference_product,
+            exclusions,
+            decomposed_exclusions,
+        )
 
         excluded_subregions = []
         for loc in exclusions:
@@ -1730,7 +1804,7 @@ class EdgeLCIA:
                     candidate_suppliers_locations = resolve_candidate_locations(
                         geo=self.geo,
                         location=supplier_location,
-                        weights=frozenset(self.method_supplier_locs),
+                        weights=frozenset(k for k, v in self.weights.items()),
                         containing=True,
                         supplier=True,
                     )
@@ -1748,7 +1822,7 @@ class EdgeLCIA:
                     candidate_consumer_locations = resolve_candidate_locations(
                         geo=self.geo,
                         location=consumer_location,
-                        weights=frozenset(self.method_consumer_locs),
+                        weights=frozenset(k for k, v in self.weights.items()),
                         containing=True,
                         supplier=False,
                     )
@@ -1901,10 +1975,10 @@ class EdgeLCIA:
 
                     self._dbg_cf_call(
                         "AGG-PASS2",
-                        supplier_info,
-                        consumer_info,
-                        candidate_supplier_locations,
-                        candidate_consumer_locations,
+                        dict(s_key),
+                        dict(c_key),
+                        candidate_suppliers,
+                        candidate_consumers,
                     )
 
                     new_cf, matched_cf_obj, agg_uncertainty = compute_cf_memoized(
@@ -1994,7 +2068,7 @@ class EdgeLCIA:
             loc
             for locs in self.technosphere_flows_lookup.values()
             for loc in locs
-            if loc not in ["RoW", "RoE"]
+            if str(loc).upper() not in {"ROW", "ROE"}
         }
         decomposed_exclusions = self.geo.batch(
             locations=list(raw_exclusion_locs), containing=True
@@ -2058,8 +2132,9 @@ class EdgeLCIA:
                     continue
 
                 # Identify dynamic role
-                dynamic_supplier = supplier_loc in ["RoW", "RoE"]
-                dynamic_consumer = consumer_loc in ["RoW", "RoE"]
+                _is_dyn = lambda x: isinstance(x, str) and x.upper() in {"ROW", "ROE"}
+                dynamic_supplier = _is_dyn(supplier_loc)
+                dynamic_consumer = _is_dyn(consumer_loc)
 
                 suppliers_excluded_subregions = self._extract_excluded_subregions(
                     supplier_idx, decomposed_exclusions
@@ -2083,11 +2158,14 @@ class EdgeLCIA:
                     candidate_suppliers_locs = resolve_candidate_locations(
                         geo=self.geo,
                         location="GLO",
-                        weights=frozenset(self.method_supplier_locs),
+                        weights=frozenset(k for k, v in self.weights.items()),
                         containing=True,
                         exceptions=suppliers_excluded_subregions,
                         supplier=True,
                     )
+                    candidate_suppliers_locs = [
+                        loc for loc in candidate_suppliers_locs if loc != "GLO"
+                    ]
                 else:
                     if supplier_loc is None:
                         candidate_suppliers_locs = [
@@ -2097,13 +2175,25 @@ class EdgeLCIA:
                         candidate_suppliers_locs = [supplier_loc]
 
                 if dynamic_consumer:
-                    candidate_consumers_locs = resolve_candidate_locations(
-                        geo=self.geo,
-                        location="GLO",
-                        weights=frozenset(self.method_consumer_locs),
-                        containing=True,
-                        exceptions=consumers_excluded_subregions,
-                        supplier=False,
+                    if dynamic_consumer:
+                        candidate_consumers_locs = resolve_candidate_locations(
+                            geo=self.geo,
+                            location="GLO",
+                            weights=frozenset(k for k, v in self.weights.items()),
+                            containing=True,
+                            exceptions=consumers_excluded_subregions,
+                            supplier=False,
+                        )
+                        candidate_consumers_locs = [
+                            loc for loc in candidate_consumers_locs if loc != "GLO"
+                        ]
+
+                    self.logger.debug(
+                        "dynamic-cands: consumer=RoW | candidates=%d (e.g. %s...) | excluded=%d | method_locs=%s",
+                        len(candidate_consumers_locs),
+                        candidate_consumers_locs[:10],
+                        len(consumers_excluded_subregions),
+                        sorted(self.method_consumer_locs),
                     )
 
                 else:
@@ -2113,6 +2203,24 @@ class EdgeLCIA:
                         ]
                     else:
                         candidate_consumers_locs = [consumer_loc]
+
+                self.logger.debug(
+                    "dynamic-check: req_sup=%s | s_has=%s | cand_sup=%d | cand_con=%d",
+                    sorted(self.required_supplier_fields),
+                    sorted(
+                        k
+                        for k in supplier_info.keys()
+                        if k in self.required_supplier_fields
+                    ),
+                    len(candidate_suppliers_locs or []),
+                    len(candidate_consumers_locs or []),
+                )
+
+                if dynamic_consumer and not candidate_consumers_locs:
+                    self.logger.debug(
+                        "dynamic: RoW consumer collapsed to empty set after exclusions; deferring to global pass"
+                    )
+                    continue
 
                 # project supplier info to the required fields (+classifications) before hashing
                 include_cls_in_sig = any(
@@ -2165,9 +2273,9 @@ class EdgeLCIA:
                     candidate_consumer_locations = group_edges[0][-1]
 
                     self._dbg_cf_call(
-                        "AGG-PASS1",
-                        supplier_info,
-                        consumer_info,
+                        "DYN-PASS1",
+                        rep_supplier,
+                        rep_consumer,
                         candidate_supplier_locations,
                         candidate_consumer_locations,
                     )
@@ -2229,9 +2337,9 @@ class EdgeLCIA:
                     grouped_edges.items(), desc="Processing dynamic groups (pass 2)"
                 ):
                     self._dbg_cf_call(
-                        "AGG-PASS2",
-                        supplier_info,
-                        consumer_info,
+                        "DYN-PASS2",
+                        dict(s_key),
+                        dict(c_key),
                         candidate_supplier_locations,
                         candidate_consumer_locations,
                     )
@@ -2725,14 +2833,14 @@ class EdgeLCIA:
         global_supplier_locs = resolve_candidate_locations(
             geo=self.geo,
             location="GLO",
-            weights=frozenset(self.method_supplier_locs),
+            weights=frozenset(k for k, v in self.weights.items()),
             containing=False,
             supplier=True,
         )
         global_consumer_locs = resolve_candidate_locations(
             geo=self.geo,
             location="GLO",
-            weights=frozenset(self.method_consumer_locs),
+            weights=frozenset(k for k, v in self.weights.items()),
             containing=False,
             supplier=False,
         )
