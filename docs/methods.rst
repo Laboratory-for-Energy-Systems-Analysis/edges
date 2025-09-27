@@ -44,11 +44,15 @@ These four methods present different scopes:
     )
 
     lcia.lci()
-    lcia.map_exchanges() # finds direct matches
-    lcia.map_aggregate_locations() # finds matches for aggregate regions ("RER", "US" etc.)
-    lcia.map_dynamic_locations() # finds matches for dynamic regions ("RoW", "RoW", etc.)
-    lcia.map_contained_locations() # finds matches for contained regions ("CA" for "CA-QC" if factor of "CA-QC" is not available)
-    lcia.map_remaining_locations_to_global() # applies global factors to remaining locations
+
+    # you can use .apply_strategies() since the strategies are listed in the LCIA JSON
+    lcia.apply_strategies()
+    # if not, use the following mapping methods:
+    #lcia.map_exchanges() # finds direct matches
+    #lcia.map_aggregate_locations() # finds matches for aggregate regions ("RER", "US" etc.)
+    #lcia.map_dynamic_locations() # finds matches for dynamic regions ("RoW", "RoW", etc.)
+    #lcia.map_contained_locations() # finds matches for contained regions ("CA" for "CA-QC" if factor of "CA-QC" is not available)
+    #lcia.map_remaining_locations_to_global() # applies global factors to remaining locations
     lcia.evaluate_cfs()
     lcia.lcia()
 
@@ -118,10 +122,13 @@ GeoPolRisk 1.0
     )
 
     lcia.lci()
-    lcia.map_exchanges()
-    lcia.map_aggregate_locations()
-    lcia.map_contained_locations()
-    lcia.map_remaining_locations_to_global()
+    # you can use .apply_strategies(), since the strategies are listed in the LCIA JSON
+    lcia.apply_strategies()
+    # if not, use the following mapping methods:
+    #lcia.map_exchanges()
+    #lcia.map_aggregate_locations()
+    #lcia.map_contained_locations()
+    #lcia.map_remaining_locations_to_global()
     lcia.evaluate_cfs()
     lcia.lcia()
 
@@ -222,11 +229,14 @@ ImpactWorld+ 2.1
     )
 
     lcia.lci()
-    lcia.map_exchanges()
-    lcia.map_aggregate_locations()
-    lcia.map_dynamic_locations()
-    lcia.map_contained_locations()
-    lcia.map_remaining_locations_to_global()
+    # you can use .apply_strategies() since the strategies are listed in the LCIA JSON
+    lcia.apply_strategies()
+    # if not, use the following mapping methods:
+    #lcia.map_exchanges()
+    #lcia.map_aggregate_locations()
+    #lcia.map_dynamic_locations()
+    #lcia.map_contained_locations()
+    #lcia.map_remaining_locations_to_global()
     lcia.evaluate_cfs()
     lcia.lcia()
 

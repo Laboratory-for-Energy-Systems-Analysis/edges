@@ -28,13 +28,14 @@ LCA = EdgeLCIA(
     # use_distributions=True,
     # iterations=10000
 )
-LCA.lci()
+# LCA.lci()
 
-LCA.map_exchanges()
-LCA.map_aggregate_locations()
-LCA.map_dynamic_locations()
-LCA.map_contained_locations()
-LCA.map_remaining_locations_to_global()
+LCA.apply_strategies()
+# LCA.map_exchanges()
+# LCA.map_aggregate_locations()
+# LCA.map_dynamic_locations()
+# LCA.map_contained_locations()
+# LCA.map_remaining_locations_to_global()
 
 LCA.evaluate_cfs()
 LCA.lcia()

@@ -1,7 +1,10 @@
 {
-  "name": "RELICS - Copper, primary",
+  "name": "ecoinvent 3.10/3.11 - RELICS - Copper, primary",
   "unit": "kg",
   "version": "1.0",
+  "strategies": [
+       "map_exchanges"
+   ],
   "exchanges": [
     {
       "supplier": {

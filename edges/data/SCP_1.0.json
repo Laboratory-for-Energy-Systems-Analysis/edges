@@ -1,10 +1,13 @@
 {
   "name": [
-    "Surplus cost of fossil fuels extraction"
+    "ecoinvent 3.10/3.11 - Surplus cost of fossil fuels extraction"
   ],
   "unit": "USD",
   "description": "Surplus cost of fossil fuels extraction (MCI pre-calculated)",
   "version": "1.2",
+  "strategies": [
+       "map_exchanges"
+   ],
   "exchanges": [
     {
       "supplier": {

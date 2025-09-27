@@ -5,6 +5,7 @@ LCIA class.
 """
 
 import math
+import time
 from collections import defaultdict
 import json
 from typing import Optional
@@ -3060,6 +3061,74 @@ class EdgeLCIA:
                             )
 
         self._update_unprocessed_edges()
+
+    def apply_strategies(self, strategies: list[str] | None = None) -> None:
+        """
+        Execute mapping strategies (strings only) in order.
+
+        If `strategies` is None, read from:
+          self.method_metadata["strategies"] (must be a list of strings).
+
+        Valid names:
+          - "map_exchanges"
+          - "map_aggregate_locations"
+          - "map_dynamic_locations"
+          - "map_contained_locations"
+          - "map_remaining_locations_to_global"
+
+        :params strategies: list of strategy names to apply in order, or None to read from metadata.
+        :return: None
+
+        """
+
+        # ---- discover strategies from metadata if not provided
+        if strategies is None:
+            md = getattr(self, "method_metadata", None) or {}
+            strategies = md.get("strategies")
+
+        if strategies is None:
+            self.logger.info("No 'strategies' found; nothing to apply.")
+            return self
+
+        if not isinstance(strategies, (list, tuple)) or not all(
+            isinstance(s, str) for s in strategies
+        ):
+            raise TypeError("'strategies' must be a list/tuple of strings")
+
+        # ---- dispatch table
+        dispatch = {
+            "map_exchanges": getattr(self, "map_exchanges", None),
+            "map_aggregate_locations": getattr(self, "map_aggregate_locations", None),
+            "map_dynamic_locations": getattr(self, "map_dynamic_locations", None),
+            "map_contained_locations": getattr(self, "map_contained_locations", None),
+            "map_remaining_locations_to_global": getattr(
+                self, "map_remaining_locations_to_global", None
+            ),
+        }
+
+        # ---- validate names
+        for name in strategies:
+            if name not in dispatch or not callable(dispatch[name]):
+                raise AttributeError(f"Unknown or unavailable strategy '{name}'.")
+
+        # ---- ensure inventory is ready
+        edges_ready = not (
+            (self.biosphere_edges is None and self.technosphere_edges is None)
+            or (not self.biosphere_edges and not self.technosphere_edges)
+        )
+        if not edges_ready:
+            self.lci()
+
+        # ---- execute
+
+        self.logger.info("Applying strategies: %s", strategies)
+
+        for name in strategies:
+            fn = dispatch[name]
+            t0 = time.perf_counter()
+            self.logger.info("Running %s()", name)
+            fn()
+            self.logger.info("Finished %s in %.3fs", name, time.perf_counter() - t0)
 
     def evaluate_cfs(self, scenario_idx: str | int = 0, scenario=None):
         """
