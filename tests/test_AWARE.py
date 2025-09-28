@@ -17,7 +17,7 @@ ei_user = os.environ["EI_USERNAME"]
 ei_pass = os.environ["EI_PASSWORD"]
 
 ei_version = "3.11"
-system_model = "cut-off"
+system_model = "cutoff"
 
 bw2data.projects.set_current(f"ecoinvent-{ei_version}-{system_model}")
 
