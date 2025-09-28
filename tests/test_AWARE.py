@@ -30,6 +30,8 @@ def test_brightway():
         username=ei_user,
         password=ei_pass,
     )
+    print(f"Current project: {bw2data.projects.current}")
+    print(f"Databases: {bw2data.databases}")
 
     if f"ecoinvent-{ei_version}-biosphere" not in bw2data.databases:
         biosphere_name = "biosphere3"
