@@ -78,6 +78,9 @@ jobs:
       - name: Run tests
         run: |
           pytest
+        env:
+          EI_USERNAME: ${{ secrets.EI_USERNAME }}
+          EI_PASSWORD: ${{ secrets.EI_PASSWORD }}
 
   Pypi:
     runs-on: ubuntu-latest
