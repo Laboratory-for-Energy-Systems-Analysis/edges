@@ -71,6 +71,13 @@ jobs:
           pip install pytest-instafail
           pip install -e . --verbose
 
+      - name: Run AWARE tests
+        run: |
+          python tests/test_AWARE.py
+        env:
+          EI_USERNAME: ${{ secrets.EI_USERNAME }}
+          EI_PASSWORD: ${{ secrets.EI_PASSWORD }}
+
       - name: Set up test database
         run: |
           python tests/setup_testdb.py
