@@ -6,8 +6,11 @@ import bw2io
 import pytest
 from dotenv import load_dotenv
 from edges import EdgeLCIA
+from pathlib import Path
 
 load_dotenv()
+
+this_dir = Path(__file__).parent
 
 
 ei_user = os.environ["EI_USERNAME"]
@@ -35,7 +38,9 @@ def test_brightway():
         biosphere_name = f"ecoinvent-{ei_version}-biosphere"
 
     if "h2_pem" not in bw2data.databases:
-        lci = bw2io.ExcelImporter("data/lci-hydrogen-electrolysis-ei310.xlsx")
+        lci = bw2io.ExcelImporter(
+            this_dir / "data" / "lci-hydrogen-electrolysis-ei310.xlsx"
+        )
         lci.apply_strategies()
         lci.match_database(fields=["name", "reference product", "location"])
         lci.match_database(
