@@ -23,4 +23,10 @@ def test_brightway():
     LCA.evaluate_cfs()
     LCA.lcia()
 
+    print(f"Sum of inventoriy matrix: {LCA.lca.inventory.sum()}")
+    print(
+        f"Sum of characterized inventoriy matrix: {LCA.lca.characterized_inventory.sum()}"
+    )
+    print(f"Score: {LCA.score}")
+
     assert np.isclose(LCA.score, 0.648, rtol=1e-3)
