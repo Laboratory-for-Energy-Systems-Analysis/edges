@@ -3,14 +3,19 @@ import bw2data, bw2io
 import time
 import logging
 
-setup_package_logging(level=logging.INFO)
+import country_converter as coco
+
+print(coco.__version__)
+
+setup_package_logging(level=logging.DEBUG)
 
 # Start timer
 start_time = time.time()
 # bw2data.projects.set_current("bw25_ei310")
 # bw2data.projects.set_current("ecoinvent-3.10.1-cutoff")
 # bw2data.projects.set_current("ecoinvent-3.10-cutoff")
-bw2data.projects.set_current("ecoinvent-3.11-cutoff")
+# bw2data.projects.set_current("ecoinvent-3.11-cutoff")
+bw2data.projects.set_current("ecoinvent-3.11-cutoff-bw25")
 
 if "h2_pem" not in bw2data.databases:
     lci = bw2io.ExcelImporter("lci-hydrogen-electrolysis-ei310.xlsx")
@@ -19,7 +24,7 @@ if "h2_pem" not in bw2data.databases:
     lci.match_database(
         "ecoinvent-3.11-cutoff", fields=["name", "reference product", "location"]
     )
-    lci.match_database("biosphere3", fields=["name", "categories"])
+    lci.match_database("ecoinvent-3.11-biosphere", fields=["name", "categories"])
     lci.statistics()
     lci.drop_unlinked(i_am_reckless=True)
     if len(list(lci.unlinked)) == 0:

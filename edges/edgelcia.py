@@ -1103,20 +1103,23 @@ class EdgeLCIA:
         reference_product = act.get("reference product")
         exclusions = self.technosphere_flows_lookup.get((name, reference_product), [])
 
-        self.logger.debug(
-            "exclusions[%d]: name=%s | refprod=%s | raw=%s | decomposed=%s",
-            idx,
-            name,
-            reference_product,
-            exclusions,
-            decomposed_exclusions,
-        )
-
         excluded_subregions = []
         for loc in exclusions:
             if loc in ["RoW", "RoE"]:
                 continue
-            excluded_subregions.extend(decomposed_exclusions.get(loc, [loc]))
+            if decomposed_exclusions.get(loc):
+                excluded_subregions.extend(decomposed_exclusions[loc])
+            else:
+                excluded_subregions.append(loc)
+
+        self.logger.debug(
+            "exclusions[%d]: name=%s | refprod=%s | raw=%s | excluded=%s",
+            idx,
+            name,
+            reference_product,
+            sorted(exclusions),
+            sorted(excluded_subregions),
+        )
 
         return frozenset(excluded_subregions)
 
@@ -2141,25 +2144,11 @@ class EdgeLCIA:
                 dynamic_supplier = _is_dyn(supplier_loc)
                 dynamic_consumer = _is_dyn(consumer_loc)
 
-                suppliers_excluded_subregions = self._extract_excluded_subregions(
-                    supplier_idx, decomposed_exclusions
-                )
-                consumers_excluded_subregions = self._extract_excluded_subregions(
-                    consumer_idx, decomposed_exclusions
-                )
-
-                self.logger.debug(
-                    "dynamic: %s→%s | dyn_sup=%s dyn_con=%s | excl_sup=%s | excl_con=%s",
-                    self._dbg_edge_label(supplier_idx),
-                    self._dbg_edge_label(consumer_idx),
-                    dynamic_supplier,
-                    dynamic_consumer,
-                    list(suppliers_excluded_subregions)[:10],
-                    list(consumers_excluded_subregions)[:10],
-                )
-
                 # Resolve fallback candidate locations
                 if dynamic_supplier:
+                    suppliers_excluded_subregions = self._extract_excluded_subregions(
+                        supplier_idx, decomposed_exclusions
+                    )
                     candidate_suppliers_locs = resolve_candidate_locations(
                         geo=self.geo,
                         location="GLO",
@@ -2171,6 +2160,7 @@ class EdgeLCIA:
                     candidate_suppliers_locs = [
                         loc for loc in candidate_suppliers_locs if loc != "GLO"
                     ]
+                    candidate_suppliers_locs = sorted(set(candidate_suppliers_locs))
                 else:
                     if supplier_loc is None:
                         candidate_suppliers_locs = [
@@ -2180,6 +2170,9 @@ class EdgeLCIA:
                         candidate_suppliers_locs = [supplier_loc]
 
                 if dynamic_consumer:
+                    consumers_excluded_subregions = self._extract_excluded_subregions(
+                        consumer_idx, decomposed_exclusions
+                    )
                     candidate_consumers_locs = resolve_candidate_locations(
                         geo=self.geo,
                         location="GLO",
@@ -2191,13 +2184,13 @@ class EdgeLCIA:
                     candidate_consumers_locs = [
                         loc for loc in candidate_consumers_locs if loc != "GLO"
                     ]
+                    candidate_consumers_locs = sorted(set(candidate_consumers_locs))
 
                     self.logger.debug(
-                        "dynamic-cands: consumer=RoW | candidates=%d (e.g. %s...) | excluded=%d | method_locs=%s",
+                        "dynamic-cands: consumer=RoW | candidates=%d (e.g. %s...) | excluded=%d",
                         len(candidate_consumers_locs),
-                        candidate_consumers_locs[:10],
+                        candidate_consumers_locs[:20],
                         len(consumers_excluded_subregions),
-                        sorted(self.method_consumer_locs),
                     )
 
                 else:
@@ -2207,18 +2200,6 @@ class EdgeLCIA:
                         ]
                     else:
                         candidate_consumers_locs = [consumer_loc]
-
-                self.logger.debug(
-                    "dynamic-check: req_sup=%s | s_has=%s | cand_sup=%d | cand_con=%d",
-                    sorted(self.required_supplier_fields),
-                    sorted(
-                        k
-                        for k in supplier_info.keys()
-                        if k in self.required_supplier_fields
-                    ),
-                    len(candidate_suppliers_locs or []),
-                    len(candidate_consumers_locs or []),
-                )
 
                 if dynamic_consumer and not candidate_consumers_locs:
                     self.logger.debug(
@@ -2265,44 +2246,72 @@ class EdgeLCIA:
                         )
                     )
 
-            # Pass 1
+            # Pass 1 (corrected): compute per unique (cand_sup, cand_con, consumer_sig)
             if len(prefiltered_groups) > 0:
                 for sig, group_edges in tqdm(
                     prefiltered_groups.items(),
                     desc="Processing dynamic groups (pass 1)",
                 ):
-                    rep_supplier = group_edges[0][2]
-                    rep_consumer = group_edges[0][3]
-                    candidate_supplier_locations = group_edges[0][-2]
-                    candidate_consumer_locations = group_edges[0][-1]
+                    # Build a small memo to avoid recomputing identical combos in this group
+                    memo = {}
 
-                    self._dbg_cf_call(
-                        "DYN-PASS1",
-                        rep_supplier,
-                        rep_consumer,
-                        candidate_supplier_locations,
-                        candidate_consumer_locations,
-                    )
+                    def _consumer_sig(consumer_info: dict) -> tuple:
+                        """Hashable, filtered consumer signature (only required fields + classifications if used)."""
+                        fields = set(self.required_consumer_fields)
+                        if any(
+                            "classifications" in cf.get("consumer", {})
+                            for cf in self.raw_cfs_data
+                        ):
+                            fields.add("classifications")
+                        proj = {
+                            k: consumer_info.get(k)
+                            for k in fields
+                            if consumer_info.get(k) is not None
+                        }
+                        return make_hashable(proj)
 
-                    new_cf, matched_cf_obj, agg_uncertainty = compute_average_cf(
-                        candidate_suppliers=candidate_supplier_locations,
-                        candidate_consumers=candidate_consumer_locations,
-                        supplier_info=rep_supplier,
-                        consumer_info=rep_consumer,
-                        required_supplier_fields=self.required_supplier_fields,
-                        required_consumer_fields=self.required_consumer_fields,
-                        cf_index=self.cf_index,
-                    )
+                    for (
+                        supplier_idx,
+                        consumer_idx,
+                        supplier_info,
+                        consumer_info,
+                        cand_sup,
+                        cand_con,
+                    ) in group_edges:
 
-                    if new_cf:
-                        for (
-                            supplier_idx,
-                            consumer_idx,
-                            supplier_info,
-                            consumer_info,
-                            _,
-                            _,
-                        ) in group_edges:
+                        # Deterministic candidate lists (avoid order-dependent averaging)
+                        cand_sup_s = tuple(sorted(set(cand_sup)))
+                        cand_con_s = tuple(sorted(set(cand_con)))
+
+                        c_sig = _consumer_sig(consumer_info)
+                        memo_key = (cand_sup_s, cand_con_s, c_sig)
+
+                        if memo_key not in memo:
+                            # Optional debug hook
+                            self._dbg_cf_call(
+                                "DYN-PASS1",
+                                supplier_info,
+                                consumer_info,
+                                list(cand_sup_s),
+                                list(cand_con_s),
+                            )
+
+                            new_cf, matched_cf_obj, agg_uncertainty = (
+                                compute_average_cf(
+                                    candidate_suppliers=list(cand_sup_s),
+                                    candidate_consumers=list(cand_con_s),
+                                    supplier_info=supplier_info,
+                                    consumer_info=consumer_info,
+                                    required_supplier_fields=self.required_supplier_fields,
+                                    required_consumer_fields=self.required_consumer_fields,
+                                    cf_index=self.cf_index,
+                                )
+                            )
+                            memo[memo_key] = (new_cf, matched_cf_obj, agg_uncertainty)
+
+                        new_cf, matched_cf_obj, agg_uncertainty = memo[memo_key]
+
+                        if new_cf:
                             add_cf_entry(
                                 cfs_mapping=self.cfs_mapping,
                                 supplier_info=supplier_info,
@@ -2312,11 +2321,25 @@ class EdgeLCIA:
                                 value=new_cf,
                                 uncertainty=agg_uncertainty,
                             )
-                    else:
-                        self.logger.warning(
-                            f"Fallback CF could not be computed for supplier={rep_supplier}, consumer={rep_consumer} "
-                            f"with candidate suppliers={candidate_supplier_locations} and consumers={candidate_consumer_locations}"
-                        )
+                            self.logger.debug(
+                                "dynamic-check: supplier name=%s | supplier refprod=%s | cons name=%s | cons refprod=%s | new_cf=%s | supplier_cands=%s | consumer_cands=%s",
+                                supplier_info.get("name"),
+                                supplier_info.get("reference product"),
+                                consumer_info.get("name"),
+                                consumer_info.get("reference product"),
+                                new_cf,
+                                list(cand_sup_s)[:10],
+                                list(cand_con_s)[:10],
+                            )
+                        else:
+                            self.logger.warning(
+                                "Fallback CF could not be computed for supplier=%s, consumer=%s "
+                                "with candidate suppliers=%s and consumers=%s",
+                                supplier_info.get("location"),
+                                consumer_info.get("location"),
+                                list(cand_sup_s),
+                                list(cand_con_s),
+                            )
 
             # Pass 2
             compute_cf_memoized = compute_cf_memoized_factory(
