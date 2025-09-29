@@ -45,4 +45,9 @@ df.to_excel("df_AWARE.xlsx")
 
 # Stop timer
 elapsed_time = time.time() - start_time
+
+print(f"Sum of inventoriy matrix: {LCA.lca.inventory.sum()}")
+print(f"Sum of characterized inventoriy matrix: {LCA.characterized_inventory.sum()}")
+print(f"Score: {LCA.score}")
+
 print(f"Score: {LCA.score}. Time elapsed: {elapsed_time} seconds.")
