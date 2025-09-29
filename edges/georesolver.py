@@ -25,7 +25,6 @@ class GeoResolver:
         :return: None
         """
         self.weights = {get_str(k): v for k, v in weights.items()}
-        self._weights_keys_sorted = tuple(sorted(self.weights.keys()))
         self.weights_key = ",".join(sorted(self.weights.keys()))
         self.logger = logging.getLogger(f"{__name__}.{self.__class__.__name__}")
 
@@ -51,23 +50,18 @@ class GeoResolver:
         """
         results = []
 
-        available_set = set(weights_available)  # NEW: O(1) membership, stable
         if exceptions:
             exceptions = tuple(get_str(e) for e in exceptions)
-        exc_set = set(exceptions or ())
 
         if location in self.missing_geographies:
             for e in self.missing_geographies[location]:
                 e_str = get_str(e)
-                if (
-                    e_str in available_set
-                    and e_str != location
-                    and e_str not in exc_set
-                ):
-                    results.append(e_str)
+                if e_str in weights_available and e_str != location:
+                    if not exceptions or e_str not in exceptions:
+                        results.append(e_str)
         else:
             method = "contained" if containing else "within"
-            raw = []
+            raw_candidates = []
             try:
                 for e in getattr(self.geo, method)(
                     location,
@@ -76,39 +70,19 @@ class GeoResolver:
                     include_self=False,
                 ):
                     e_str = get_str(e)
-                    raw.append(e_str)
+                    raw_candidates.append(e_str)
+                    if (
+                        e_str in weights_available
+                        and e_str != location
+                        and (not exceptions or e_str not in exceptions)
+                    ):
+                        results.append(e_str)
+                        if not containing:
+                            break
             except KeyError:
                 self.logger.info("Region %s: no geometry found.", location)
 
-            if containing:
-                # We want *contained* regions (per your interpretation). Keep all that pass filters.
-                for e_str in raw:
-                    if (
-                        e_str in available_set
-                        and e_str != location
-                        and e_str not in exc_set
-                    ):
-                        results.append(e_str)
-            else:
-                # We want the *containers* (regions that contain `location`).
-                # Collect all valid containers, then choose the single most specific deterministically.
-                containers = [
-                    e_str
-                    for e_str in raw
-                    if (
-                        e_str in available_set
-                        and e_str != location
-                        and e_str not in exc_set
-                    )
-                ]
-                if containers:
-                    # Choose container with the fewest leaves; tie-break by code.
-                    best = min(containers, key=lambda r: (self._leaf_count(r), r))
-                    results = [best]
-                else:
-                    results = []
-
-        # Deduplicate and enforce deterministic ordering (harmless for 0/1 element)
+        # Deduplicate and enforce deterministic ordering
         return sorted(set(results))
 
     @lru_cache(maxsize=2048)
@@ -125,18 +99,10 @@ class GeoResolver:
         """
         return self.find_locations(
             location=location,
-            weights_available=self._weights_keys_sorted,
+            weights_available=tuple(self.weights.keys()),
             containing=containing,
             exceptions=exceptions,
         )
-
-    @lru_cache(maxsize=8192)
-    def _leaf_count(self, region: str) -> int:
-        """Number of leaf countries contained in `region` (large for unknown regions)."""
-        try:
-            return len(self.geo.contained(region, include_self=False, leaves=True))
-        except KeyError:
-            return 10**9  # unknown = worst (least specific)
 
     def resolve(
         self, location: str, containing=True, exceptions: list[str] | None = None
