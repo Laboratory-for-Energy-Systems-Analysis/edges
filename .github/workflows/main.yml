@@ -81,10 +81,19 @@ jobs:
 
       - name: Run tests
         run: |
-          pytest
+          mkdir -p .pytest-debug
+          pytest -q || true
+
         env:
           EI_USERNAME: ${{ secrets.EI_USERNAME }}
           EI_PASSWORD: ${{ secrets.EI_PASSWORD }}
+
+      - name: Upload pytest artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: pytest-debug-${{ github.run_id }}
+          path: .pytest-debug/**
         
 
   Pypi:

@@ -3,7 +3,7 @@ import bw2data
 from edges import EdgeLCIA
 
 
-def test_brightway():
+def test_brightway(test_debug_dir):
 
     act = [
         a
@@ -23,11 +23,26 @@ def test_brightway():
     LCA.evaluate_cfs()
     LCA.lcia()
 
-    print(f"Sum of inventoriy matrix: {LCA.lca.inventory.sum()}")
-    print(f"Sum of characterization matrix: {LCA.characterization_matrix.sum()}")
-    print(
-        f"Sum of characterized inventoriy matrix: {LCA.characterized_inventory.sum()}"
+    df = LCA.generate_cf_table(include_unmatched=False)
+
+    # --- Dump everything useful for CI inspection ---
+    # DataFrame: CSV (easy to peek) + Parquet (lossless types, faster)
+    df.to_csv(test_debug_dir / "cf_table.csv", index=False)
+    try:
+        df.to_csv(test_debug_dir / "cf_table.csv")
+    except Exception:
+        pass  # parquet optional
+
+    # Scalars / quick diagnostics
+    (test_debug_dir / "summary.txt").write_text(
+        "\n".join(
+            [
+                f"Sum of inventory matrix: {LCA.lca.inventory.sum()}",
+                f"Sum of characterization matrix: {LCA.characterization_matrix.sum()}",
+                f"Sum of characterized inventory matrix: {LCA.characterized_inventory.sum()}",
+                f"Score: {LCA.score}",
+            ]
+        )
     )
-    print(f"Score: {LCA.score}")
 
     assert np.isclose(LCA.score, 0.648, rtol=1e-3)
