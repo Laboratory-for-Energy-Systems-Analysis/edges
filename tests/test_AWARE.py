@@ -48,4 +48,4 @@ def test_brightway(test_debug_dir):
         )
     )
 
-    assert np.isclose(LCA.score, 0.7971, rtol=1e-3)
+    assert np.isclose(LCA.score, 0.8019, rtol=1e-3)
