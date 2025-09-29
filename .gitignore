@@ -12,6 +12,9 @@ data/logs/
 */data/export/*
 */data/cache/*
 
+# environment files #
+.env
+
 # ignore .env file in tests
 tests/*.env
 

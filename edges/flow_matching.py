@@ -110,7 +110,6 @@ def process_cf_list(
                 break
 
     if best_cf:
-        logger.debug("Best matching CF selected with score %d: %s", best_score, best_cf)
         results.append(best_cf)
     else:
         logger.debug(
@@ -697,13 +696,6 @@ def compute_average_cf(
                 some_keys,
             )
         return 0, None, None
-    else:
-        if logger.isEnabledFor(logging.DEBUG):
-            logger.debug(
-                "CF-AVG: %d valid (s,c) keys found (showing up to 10): %s",
-                len(valid_location_pairs),
-                _head(valid_location_pairs, 10),
-            )
 
     # ---- Build field-filtered views (exclude location; added per-loop) ----
     required_supplier_fields = required_supplier_fields or set()

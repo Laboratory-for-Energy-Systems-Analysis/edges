@@ -2481,24 +2481,12 @@ class EdgeLCIA:
             M = N(M_raw)
 
             res = (C in containers_of_member) or (M in children_of_container)
-            self.logger.debug(
-                "geo-contains: %s ⊇ %s ? containers_of_member=%s | children_of_container=%s -> %s",
-                C_raw,
-                M_raw,
-                sorted(containers_of_member),
-                sorted(children_of_container),
-                res,
-            )
+
             return res
 
         # Respect wildcard suppliers in method keys (e.g., ('__ANY__','RER'))
         supplier_wildcard = any(k[0] == "__ANY__" for k in self.weights.keys())
         available_consumer_locs = sorted({loc for _, loc in self.weights.keys()})
-
-        self.logger.debug(
-            "contained: available consumer method locs=%s",
-            sorted(available_consumer_locs),
-        )
 
         for direction in ["biosphere-technosphere", "technosphere-technosphere"]:
 
