@@ -55,6 +55,47 @@ import logging
 
 logger = logging.getLogger(__name__)
 
+import logging
+
+
+def route_country_converter_logs_to_edges(
+    parent_logger_name: str = "edges", level=logging.WARNING, prefix="[coco] "
+):
+    """Route country_converter logs into our 'edges' logger, not the root console."""
+    parent = logging.getLogger(parent_logger_name)
+    if not parent.handlers:
+        # Make sure parent is configured first (add your own FileHandler/StreamHandler)
+        h = logging.StreamHandler()
+        h.setFormatter(logging.Formatter("%(levelname)s %(name)s: %(message)s"))
+        parent.addHandler(h)
+        parent.setLevel(level)
+
+    class _PrefixFilter(logging.Filter):
+        def filter(self, record):
+            if record.name.startswith("country_converter"):
+                record.msg = f"{prefix}{record.msg}"
+            return True
+
+    parent.addFilter(_PrefixFilter())
+
+    # country_converter uses module loggers like:
+    #   "country_converter" and "country_converter.country_converter"
+    for name in ("country_converter", "country_converter.country_converter"):
+        src = logging.getLogger(name)
+        src.setLevel(level)
+        # STOP sending to root:
+        src.propagate = False
+        # Remove any existing handlers that might print to console:
+        for h in list(src.handlers):
+            src.removeHandler(h)
+        # Attach our parent handlers so messages land in the same place as EdgeLCIA logs
+        for h in parent.handlers:
+            src.addHandler(h)
+
+
+# Call once after you set up your 'edges' logger:
+route_country_converter_logs_to_edges("edges", level=logging.WARNING)
+
 
 def add_cf_entry(
     cfs_mapping, supplier_info, consumer_info, direction, indices, value, uncertainty

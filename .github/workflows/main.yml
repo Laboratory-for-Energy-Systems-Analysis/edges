@@ -79,12 +79,13 @@ jobs:
 
       - name: List debug dir (diagnostics)
         if: always()
-        run: |
-          python -c "import pathlib; \
-          paths=['pytest-debug','bw-work','edges.log']; \
-          [print(('✅ ' if pathlib.Path(p).exists() else '❌ ')+p) or \
-           (print('  -',f) for f in pathlib.Path(p).rglob('*') if pathlib.Path(p).is_dir()) \
-           for p in paths]"
+        run: >
+          python -c "import pathlib,sys;
+          paths=['pytest-debug','bw-work','edges.log'];
+          for p in paths:
+              d=pathlib.Path(p);
+              print(('[OK] ' if d.exists() else '[MISS] ')+p);
+              [print('  -',f) for f in d.rglob('*') if d.is_dir() and f.is_file()]"
 
       - name: Upload pytest artifacts
         if: always()
