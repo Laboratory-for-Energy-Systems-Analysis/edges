@@ -1,6 +1,9 @@
 import numpy as np
+import logging
 import bw2data
-from edges import EdgeLCIA
+from edges import EdgeLCIA, setup_package_logging
+
+setup_package_logging(level=logging.DEBUG)
 
 
 def test_brightway(test_debug_dir):
