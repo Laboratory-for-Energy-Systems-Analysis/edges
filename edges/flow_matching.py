@@ -660,18 +660,14 @@ def compute_average_cf(
 ) -> tuple[str | float, Optional[dict], Optional[dict]]:
     """
     Compute a weighted CF expression and aggregated uncertainty for composite regions.
-
-    :param candidate_suppliers: Candidate supplier locations.
-    :param candidate_consumers: Candidate consumer locations.
-    :param supplier_info: Supplier-side criteria (fields used for matching).
-    :param consumer_info: Consumer-side criteria (fields used for matching).
-    :param cf_index: CF index keyed by (supplier_loc, consumer_loc).
-    :param required_supplier_fields: Required supplier fields (exclude location here).
-    :param required_consumer_fields: Required consumer fields (exclude location here).
-    :return: Tuple (expr_or_value, matched_cf_obj_or_None, aggregated_uncertainty_or_None).
+    Deterministic across platforms by enforcing stable ordering at every step.
     """
-    # Optional timing (only if DEBUG)
     _t0 = time.perf_counter() if logger.isEnabledFor(logging.DEBUG) else None
+
+    # ---- Normalize/Sort candidate pools (deterministic) ----
+    # Keep potential duplicates out; sort lexicographically (GLO first if you want it prioritized)
+    candidate_suppliers = sorted(set(candidate_suppliers))
+    candidate_consumers = sorted(set(candidate_consumers))
 
     if not candidate_suppliers and not candidate_consumers:
         logger.warning(
@@ -681,17 +677,17 @@ def compute_average_cf(
         )
         return 0, None, None
 
-    # -------- Gate 1: location-key presence in cf_index --------
+    # ---- Gate 1: location-key presence in cf_index (deterministic pairs) ----
     valid_location_pairs = [
         (s, c)
         for s in candidate_suppliers
         for c in candidate_consumers
         if cf_index.get((s, c))
     ]
+    valid_location_pairs.sort()  # (s,c) lexicographic order
 
     if not valid_location_pairs:
         if logger.isEnabledFor(logging.DEBUG):
-            # show small sample of what keys do exist for quick diagnosis
             some_keys = _head(cf_index.keys(), 10)
             logger.debug(
                 "CF-AVG: no (supplier,consumer) keys in cf_index for candidates "
@@ -709,30 +705,34 @@ def compute_average_cf(
                 _head(valid_location_pairs, 10),
             )
 
-    # Build field-filtered views (exclude location; added per-loop)
-    filtered_supplier = {
+    # ---- Build field-filtered views (exclude location; added per-loop) ----
+    required_supplier_fields = required_supplier_fields or set()
+    required_consumer_fields = required_consumer_fields or set()
+
+    base_supplier = {
         k: supplier_info[k]
-        for k in (required_supplier_fields or ())
+        for k in required_supplier_fields
         if k in supplier_info and k != "location"
     }
-    filtered_consumer = {
+    base_consumer = {
         k: consumer_info[k]
-        for k in (required_consumer_fields or ())
+        for k in required_consumer_fields
         if k in consumer_info and k != "location"
     }
 
-    # -------- Gate 2: field/operator/classification match --------
-    matched = []
+    # ---- Gate 2: field/operator/classification match (deterministic) ----
+    # Collect as tuples to preserve (s_loc, c_loc) provenance for ordering.
+    matched: list[tuple[str, str, dict]] = []
     total_candidates_seen = 0
 
     for s_loc, c_loc in valid_location_pairs:
         cands = cf_index.get((s_loc, c_loc)) or []
         total_candidates_seen += len(cands)
 
-        filtered_supplier["location"] = s_loc
-        filtered_consumer["location"] = c_loc
+        fs = {**base_supplier, "location": s_loc}
+        fc = {**base_consumer, "location": c_loc}
 
-        got = process_cf_list(cands, filtered_supplier, filtered_consumer)
+        got = process_cf_list(cands, fs, fc)
         if logger.isEnabledFor(logging.DEBUG) and got:
             logger.debug(
                 "CF-AVG: matched %d/%d CFs @ (%s,%s); example=%s",
@@ -742,7 +742,8 @@ def compute_average_cf(
                 c_loc,
                 _short_cf(got[0]),
             )
-        matched.extend(got)
+        for cf in got:
+            matched.append((s_loc, c_loc, cf))
 
     if not matched:
         if logger.isEnabledFor(logging.DEBUG):
@@ -756,37 +757,71 @@ def compute_average_cf(
             )
         return 0, None, None
 
-    # Weights
-    total_w = sum(cf.get("weight", 0.0) for cf in matched)
-    if total_w == 0:
-        logger.warning(
-            "CF-AVG: weights all zero/missing → using equal shares | matched=%d | example=%s",
-            len(matched),
-            _short_cf(matched[0]) if matched else None,
-        )
-        matched_cfs = [(cf, 1.0 / len(matched)) for cf in matched]
-    else:
-        matched_cfs = [(cf, cf.get("weight", 0.0) / total_w) for cf in matched]
+    # ---- Deterministic ordering of matched CFs ----
+    # Primary key: (s_loc, c_loc), Secondary: JSON of CF (stable representation)
+    def _cf_order_key(tup):
+        s_loc, c_loc, cf = tup
+        try:
+            cf_key = json.dumps(cf, sort_keys=True, ensure_ascii=True)
+        except Exception:
+            cf_key = repr(sorted(cf.items())) if isinstance(cf, dict) else repr(cf)
+        return (s_loc, c_loc, cf_key)
 
-    # Safety check on weights; log before assert explodes
-    share_sum = sum(s for _, s in matched_cfs)
+    matched.sort(key=_cf_order_key)
+
+    # ---- Build weights robustly (float64, cleaned, normalized) ----
+    weights = []
+    for _s, _c, cf in matched:
+        w = cf.get("weight", 0.0)
+        try:
+            w = float(w)
+        except Exception:
+            w = 0.0
+        if not np.isfinite(w) or w < 0.0:
+            w = 0.0
+        weights.append(w)
+
+    w_arr = np.asarray(weights, dtype=np.float64)
+    w_sum = float(w_arr.sum(dtype=np.float64))
+
+    if w_sum <= 0.0:
+        # Equal shares fallback, deterministic given matched ordering
+        n = len(matched)
+        shares = np.full(n, 1.0 / n, dtype=np.float64)
+        if logger.isEnabledFor(logging.DEBUG):
+            logger.debug(
+                "CF-AVG: weights all zero/missing → using equal shares | matched=%d | example=%s",
+                n,
+                _short_cf(matched[0][2]) if matched else None,
+            )
+    else:
+        shares = w_arr / w_sum
+        # Re-normalize defensively to ensure exact sum(1.0) in float64
+        shares = shares / shares.sum(dtype=np.float64)
+
+    share_sum = float(shares.sum(dtype=np.float64))
     if logger.isEnabledFor(logging.DEBUG):
         logger.debug(
-            "CF-AVG: matched=%d | sum_shares=%.6f | example=%s",
-            len(matched_cfs),
+            "CF-AVG: matched=%d | sum_shares=%.17f | example=%s",
+            len(matched),
             share_sum,
-            _short_cf(matched_cfs[0][0]) if matched_cfs else None,
+            _short_cf(matched[0][2]) if matched else None,
         )
+    # Permit tiny FP noise, then renormalize once more if necessary
+    if not np.isclose(share_sum, 1.0, rtol=1e-13, atol=1e-15):
+        shares = shares / shares.sum(dtype=np.float64)
 
-    assert np.isclose(share_sum, 1.0), f"Total shares must equal 1. Got: {share_sum}"
-
-    # Build deterministic expression (string)
-    expressions = [f"({share:.3f} * ({cf['value']}))" for cf, share in matched_cfs]
+    # ---- Build deterministic expression (string) ----
+    # Use the same matched order used for shares
+    expressions = []
+    for (s_loc, c_loc, cf), sh in zip(matched, shares):
+        # keep cf['value'] as-is (string or number)
+        expressions.append(f"({sh:.6f} * ({cf['value']}))")
     expr = " + ".join(expressions)
 
-    # Single CF shortcut (pass-through uncertainty)
-    if len(matched_cfs) == 1:
-        single_cf = matched_cfs[0][0]
+    # ---- Single CF shortcut (pass-through uncertainty) ----
+    if len(matched) == 1:
+        single_cf = matched[0][2]
         agg_uncertainty = single_cf.get("uncertainty")
         if logger.isEnabledFor(logging.DEBUG):
             dt = (time.perf_counter() - _t0) if _t0 else None
@@ -798,7 +833,7 @@ def compute_average_cf(
             )
         return (expr, single_cf, agg_uncertainty)
 
-    # Multi-CF aggregated uncertainty
+    # ---- Multi-CF aggregated uncertainty (deterministic) ----
     def _cf_sign(cf_obj) -> int | None:
         neg = (cf_obj.get("uncertainty") or {}).get("negative", None)
         if neg in (0, 1):
@@ -808,17 +843,19 @@ def compute_average_cf(
             return -1 if v < 0 else (+1 if v > 0 else None)
         return None
 
-    cf_signs = [s for (cf, _sh) in matched_cfs if (s := _cf_sign(cf)) is not None]
+    cf_signs = [_cf_sign(cf) for (_s, _c, cf) in matched]
+    cf_signs = [s for s in cf_signs if s is not None]
     agg_sign = (
         cf_signs[0] if (cf_signs and all(s == cf_signs[0] for s in cf_signs)) else None
     )
 
     child_values, child_weights = [], []
-    for cf, share in matched_cfs:
-        if share <= 0:
+    for (s_loc, c_loc, cf), sh in zip(matched, shares):
+        if sh <= 0.0:
             continue
         if cf.get("uncertainty") is not None:
             u = deepcopy(cf["uncertainty"])
+            # Mixed-sign handling is via agg_sign; store non-negative child values
             u["negative"] = 0
             child_unc = u
         else:
@@ -826,10 +863,11 @@ def compute_average_cf(
             if isinstance(v, (int, float)):
                 child_unc = {
                     "distribution": "discrete_empirical",
-                    "parameters": {"values": [abs(v)], "weights": [1.0]},
+                    "parameters": {"values": [abs(float(v))], "weights": [1.0]},
                     "negative": 0,
                 }
             else:
+                # Symbolic without uncertainty → cannot aggregate deterministically
                 if logger.isEnabledFor(logging.DEBUG):
                     logger.debug(
                         "CF-AVG: skip agg-unc (symbolic child without unc) | child=%s",
@@ -837,25 +875,42 @@ def compute_average_cf(
                     )
                 return (expr, None, None)
         child_values.append(child_unc)
-        child_weights.append(float(share))
+        child_weights.append(float(sh))
 
-    wsum = sum(child_weights) or 1.0
-    child_weights = [w / wsum for w in child_weights]
+    # Normalize and sort children deterministically by their JSON form
+    if child_values:
+        w = np.asarray(child_weights, dtype=np.float64)
+        w = np.clip(w, 0.0, None)
+        wsum = float(w.sum(dtype=np.float64))
+        w = (
+            (w / wsum)
+            if wsum > 0.0
+            else np.full_like(w, 1.0 / len(w), dtype=np.float64)
+        )
 
-    ordering = sorted(
-        range(len(child_values)),
-        key=lambda i: json.dumps(child_values[i], sort_keys=True),
-    )
-    child_values = [child_values[i] for i in ordering]
-    child_weights = [child_weights[i] for i in ordering]
+        order = sorted(
+            range(len(child_values)),
+            key=lambda i: json.dumps(
+                child_values[i], sort_keys=True, ensure_ascii=True
+            ),
+        )
+        child_values = [child_values[i] for i in order]
+        child_weights = [float(w[i]) for i in order]
 
-    filtered = [
-        (v, w) for v, w in zip(child_values, child_weights) if w > 0 and v is not None
-    ]
+        # Final cleanup (drop zeros)
+        filtered = [
+            (v, wt)
+            for v, wt in zip(child_values, child_weights)
+            if wt > 0.0 and v is not None
+        ]
+    else:
+        filtered = []
+
     if not filtered:
         if logger.isEnabledFor(logging.DEBUG):
             logger.debug("CF-AVG: filtered children empty after cleanup.")
         return 0, None, None
+
     child_values, child_weights = zip(*filtered)
 
     agg_uncertainty = {
