@@ -24,7 +24,6 @@ import bw2data
 from tqdm import tqdm
 from textwrap import fill
 from functools import lru_cache
-from numpy.__config__ import get_info
 
 
 from .utils import (
@@ -128,7 +127,7 @@ def _collect_cf_prefixes_used_by_method(raw_cfs_data):
     """
     Collect all classification prefixes that appear in a CF method.
 
-    :param data: Raw LCIA method data.
+    :param raw_cfs_data: Iterable of CF entries.
     :return: A set of prefixes found in CF entries.
     """
     needed = {}
@@ -162,7 +161,7 @@ def _build_prefix_index_restricted(
     """
     Build an index mapping classification prefixes to activities.
 
-    :param activities: Iterable of activity datasets.
+    :param idx_to_norm_classes: Mapping of activity index -> normalized classifications.
     :param required_prefixes: Prefixes to include in the index.
     :return: Dict mapping prefix -> set of activity keys.
     """
@@ -219,17 +218,58 @@ def _norm_cls(x):
     return tuple((scheme, tuple(sorted(bag[scheme]))) for scheme in sorted(bag))
 
 
-def make_coo_deterministic(coo: sparse.COO) -> sparse.COO:
-    # coalesce duplicates (ensures deterministic sums)
-    coo = coo.sum()
-    order = (
-        np.lexsort((coo.coords[2], coo.coords[1], coo.coords[0]))
-        if coo.ndim == 3
-        else np.lexsort((coo.coords[1], coo.coords[0]))
+def make_coo_deterministic(coo: "sparse.COO"):
+    """Return a COO with deterministically ordered coords and no duplicates.
+
+    - Works for 2D and 3D COO.
+    - No use of .sum() (avoids accidental scalar reduction).
+    - If `coo` is not a pydata.sparse COO, just return it unchanged.
+    """
+    import numpy as _np
+    import sparse as _sp
+
+    # Pass through non-COO objects unchanged (e.g., scalar, ndarray)
+    if not isinstance(coo, _sp.COO):
+        return coo
+
+    # Fast path: empty matrix
+    if coo.nnz == 0:
+        # Ensure the metadata flags are consistent
+        return _sp.COO(
+            coords=coo.coords,
+            data=coo.data,
+            shape=coo.shape,
+            has_duplicates=False,
+            sorted=True,
+        )
+
+    # 1) Compute a flattened linear index for each coordinate column
+    #    This is stable across platforms and makes duplicate detection easy.
+    lin = _np.ravel_multi_index(coo.coords, coo.shape)
+
+    # 2) Sort by linear index (deterministic total ordering)
+    order = _np.argsort(lin, kind="mergesort")  # stable sort
+    lin_sorted = lin[order]
+    coords_sorted = coo.coords[:, order]
+    data_sorted = coo.data[order]
+
+    # 3) Coalesce duplicates: sum data for identical linear indices
+    uniq_lin, first_idx, counts = _np.unique(
+        lin_sorted, return_index=True, return_counts=True
     )
-    return sparse.COO(
-        coords=coo.coords[:, order],
-        data=coo.data[order],
+    if _np.any(counts > 1):
+        # Sum consecutive runs for duplicates
+        summed_data = _np.add.reduceat(data_sorted, first_idx)
+        uniq_coords = coords_sorted[:, first_idx]
+    else:
+        # No duplicates; keep sorted arrays
+        summed_data = data_sorted
+        uniq_coords = coords_sorted
+
+    # 4) Rebuild a canonical COO (flags set so downstream ops know it's sorted)
+    return _sp.COO(
+        coords=uniq_coords,
+        data=summed_data,
         shape=coo.shape,
         has_duplicates=False,
         sorted=True,
@@ -386,11 +426,6 @@ class EdgeLCIA:
         )
 
         self.logger.info(
-            "BLAS: %s",
-            get_info("blas_opt_info"),
-        )
-
-        self.logger.info(
             "THREADS: %s",
             {
                 k: os.environ.get(k)
@@ -407,7 +442,6 @@ class EdgeLCIA:
         """
         Load and validate raw LCIA data for a given method.
 
-        :param method: Method identifier.
         :return: Parsed LCIA data structure.
         """
         if self.filepath is None:
@@ -550,7 +584,6 @@ class EdgeLCIA:
         """
         Get possible supplier activity keys matching a CF entry.
 
-        :param cf: Characterization factor entry.
         :return: List of supplier activity keys.
         """
 
@@ -588,7 +621,6 @@ class EdgeLCIA:
         """
         Detect the grouping mode of a CF entry (e.g. technosphere vs biosphere).
 
-        :param cf: Characterization factor entry.
         :return: Grouping mode string.
         """
 
@@ -655,7 +687,6 @@ class EdgeLCIA:
         """
         Add new edges to the list of unprocessed edges.
 
-        :param new_edges: Iterable of edges.
         :return: None
         """
 
@@ -723,10 +754,7 @@ class EdgeLCIA:
 
         # ---- Figure out required CONSUMER fields once (ignore control/meta fields)
         IGNORED_FIELDS = {"matrix", "operator", "weight", "classifications", "position"}
-        if (
-            not hasattr(self, "required_consumer_fields")
-            or self.required_consumer_fields is None
-        ):
+        if not hasattr(self, "required_consumer_fields"):
             self.required_consumer_fields = {
                 k
                 for cf in self.raw_cfs_data
@@ -899,7 +927,7 @@ class EdgeLCIA:
         }
 
         # ---- CF-needed classification prefixes (compute once per method) ----------
-        if not hasattr(self, "_cf_needed_prefixes") or self._cf_needed_prefixes is None:
+        if not hasattr(self, "_cf_needed_prefixes"):
             self._cf_needed_prefixes = _collect_cf_prefixes_used_by_method(
                 self.raw_cfs_data
             )
@@ -1041,7 +1069,7 @@ class EdgeLCIA:
         """
         Extract consumer information from an exchange.
 
-        :param exc: Exchange dataset.
+        :param consumer_idx: Index of the consumer flow.
         :return: Dict with consumer attributes.
         """
 
