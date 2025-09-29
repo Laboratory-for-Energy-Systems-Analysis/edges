@@ -210,6 +210,7 @@ if f"ecoinvent-{ei_version}-{system_model}" not in bw2data.databases:
         system_model=system_model,
         username=ei_user,
         password=ei_pass,
+        use_mp=False,
     )
 
 if f"ecoinvent-{ei_version}-biosphere" not in bw2data.databases:
