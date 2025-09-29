@@ -31,7 +31,7 @@ def test_brightway(test_debug_dir):
     try:
         df.to_csv(test_debug_dir / "cf_table.csv")
     except Exception:
-        pass  # parquet optional
+        pass
 
     # Scalars / quick diagnostics
     (test_debug_dir / "summary.txt").write_text(

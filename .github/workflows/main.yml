@@ -94,6 +94,7 @@ jobs:
         with:
           name: pytest-debug-${{ github.run_id }}
           path: .pytest-debug/**
+          include-hidden-files: true
         
 
   Pypi:

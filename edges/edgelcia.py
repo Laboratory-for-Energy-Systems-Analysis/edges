@@ -5,6 +5,11 @@ LCIA class.
 """
 
 import math
+import os
+import sys
+import platform
+import scipy
+import sparse as sp
 import time
 from collections import defaultdict
 import json
@@ -211,6 +216,54 @@ def _norm_cls(x):
     else:
         return ()
     return tuple((scheme, tuple(sorted(bag[scheme]))) for scheme in sorted(bag))
+
+
+def make_coo_deterministic(coo: sparse.COO) -> sparse.COO:
+    # coalesce duplicates (ensures deterministic sums)
+    coo = coo.sum()
+    order = (
+        np.lexsort((coo.coords[2], coo.coords[1], coo.coords[0]))
+        if coo.ndim == 3
+        else np.lexsort((coo.coords[1], coo.coords[0]))
+    )
+    return sparse.COO(
+        coords=coo.coords[:, order],
+        data=coo.data[order],
+        shape=coo.shape,
+        has_duplicates=False,
+        sorted=True,
+    )
+
+
+def log_platform():
+    from numpy.__config__ import get_info
+
+    print(
+        "VERSIONS:",
+        "python",
+        sys.version,
+        "numpy",
+        np.__version__,
+        "scipy",
+        scipy.__version__,
+        "sparse",
+        sp.__version__,
+        "platform",
+        platform.platform(),
+    )
+    print("BLAS:", get_info("blas_opt_info"))
+    print(
+        "THREADS:",
+        {
+            k: os.environ.get(k)
+            for k in [
+                "OPENBLAS_NUM_THREADS",
+                "MKL_NUM_THREADS",
+                "OMP_NUM_THREADS",
+                "NUMEXPR_NUM_THREADS",
+            ]
+        },
+    )
 
 
 class EdgeLCIA:
@@ -3244,6 +3297,9 @@ class EdgeLCIA:
                 data=data,
                 shape=(n_rows, n_cols, self.iterations),
             )
+            self.characterization_matrix = make_coo_deterministic(
+                self.characterization_matrix
+            )
 
             self.scenario_cfs = [{"positions": [], "value": 0}]  # dummy
 
@@ -3374,6 +3430,7 @@ class EdgeLCIA:
             )
 
             inventory_coo = sparse.COO.from_scipy_sparse(inventory)
+            inventory_coo = make_coo_deterministic(inventory_coo)
             inv_expanded = inventory_coo[:, :, None]
 
             # Element-wise multiply
@@ -3512,25 +3569,6 @@ class EdgeLCIA:
         only_tech = all(
             cf["supplier"].get("matrix") == "technosphere" for cf in self.raw_cfs_data
         )
-
-        # 1) Capture PREVIOUS inventory edges, preferring the last *non-empty* snapshot
-        if only_tech:
-            prev_edges = (
-                set(self._last_edges_snapshot_tech)
-                if self._last_edges_snapshot_tech
-                else set(self._last_nonempty_edges_snapshot_tech)
-            )
-            # If we still don't have a snapshot (first run), fall back to matrix in memory
-            if not prev_edges and self.technosphere_flow_matrix is not None:
-                prev_edges = set(zip(*self.technosphere_flow_matrix.nonzero()))
-        else:
-            prev_edges = (
-                set(self._last_edges_snapshot_bio)
-                if self._last_edges_snapshot_bio
-                else set(self._last_nonempty_edges_snapshot_bio)
-            )
-            if not prev_edges and getattr(self.lca, "inventory", None) is not None:
-                prev_edges = set(zip(*self.lca.inventory.nonzero()))
 
         # 2) Recompute inventory & edges for the *new* demand
         self.lca.redo_lci(demand=demand)  # updates matrices
