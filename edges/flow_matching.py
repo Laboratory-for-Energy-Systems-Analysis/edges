@@ -915,11 +915,12 @@ def compute_average_cf(
     if logger.isEnabledFor(logging.DEBUG):
         dt = (time.perf_counter() - _t0) if _t0 else None
         logger.debug(
-            "CF-AVG: success | children=%d | expr_len=%d | agg_sign=%s | dt=%.3f ms",
+            "CF-AVG: success | children=%d | expr_len=%d | agg_sign=%s | dt=%.3f ms | expr=%s",
             len(child_values),
             len(expr),
             agg_sign,
             (dt * 1000.0) if dt else -1.0,
+            expr,
         )
 
     return (expr, None, agg_uncertainty)

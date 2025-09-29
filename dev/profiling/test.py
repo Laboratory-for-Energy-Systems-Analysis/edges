@@ -3,10 +3,6 @@ import bw2data, bw2io
 import time
 import logging
 
-import country_converter as coco
-
-print(coco.__version__)
-
 setup_package_logging(level=logging.DEBUG)
 
 # Start timer
