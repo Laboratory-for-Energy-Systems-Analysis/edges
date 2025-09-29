@@ -66,13 +66,7 @@ jobs:
 
       # Create debug dir in a cross-platform way
       - name: Create debug directory
-        run: >
-          python - <<'PY'
-          import os, pathlib
-          p = pathlib.Path("pytest-debug")
-          p.mkdir(parents=True, exist_ok=True)
-          print("Created", p.resolve())
-          PY
+        run: python -c "import pathlib; p=pathlib.Path('pytest-debug'); p.mkdir(parents=True, exist_ok=True); print('Created', p.resolve())"
 
       - name: Run tests
         env:

@@ -198,7 +198,6 @@ load_dotenv()
 
 this_dir = Path(__file__).parent
 
-
 ei_user = os.environ["EI_USERNAME"]
 ei_pass = os.environ["EI_PASSWORD"]
 
