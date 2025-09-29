@@ -3,7 +3,7 @@ import bw2data, bw2io
 import time
 import logging
 
-setup_package_logging(level=logging.DEBUG)
+setup_package_logging(level=logging.INFO)
 
 # Start timer
 start_time = time.time()
@@ -109,5 +109,8 @@ print(f"Sum of inventory matrix: {LCA.lca.inventory.sum()}")
 print(f"Sum of characterization matrix: {LCA.characterization_matrix.sum()}")
 print(f"Sum of characterized inventory matrix: {LCA.characterized_inventory.sum()}")
 print(f"Score: {LCA.score}")
+
+df = LCA.generate_cf_table(include_unmatched=False)
+df.to_csv("cf_table (local).csv", index=False)
 
 print(f"Score: {LCA.score}. Time elapsed: {elapsed_time} seconds.")

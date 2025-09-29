@@ -24,6 +24,7 @@ import bw2data
 from tqdm import tqdm
 from textwrap import fill
 from functools import lru_cache
+from numpy.__config__ import get_info
 
 
 from .utils import (
@@ -235,37 +236,6 @@ def make_coo_deterministic(coo: sparse.COO) -> sparse.COO:
     )
 
 
-def log_platform():
-    from numpy.__config__ import get_info
-
-    print(
-        "VERSIONS:",
-        "python",
-        sys.version,
-        "numpy",
-        np.__version__,
-        "scipy",
-        scipy.__version__,
-        "sparse",
-        sp.__version__,
-        "platform",
-        platform.platform(),
-    )
-    print("BLAS:", get_info("blas_opt_info"))
-    print(
-        "THREADS:",
-        {
-            k: os.environ.get(k)
-            for k in [
-                "OPENBLAS_NUM_THREADS",
-                "MKL_NUM_THREADS",
-                "OMP_NUM_THREADS",
-                "NUMEXPR_NUM_THREADS",
-            ]
-        },
-    )
-
-
 class EdgeLCIA:
     """
     Class that implements the calculation of the regionalized life cycle impact assessment (LCIA) results.
@@ -366,6 +336,8 @@ class EdgeLCIA:
 
         self.lca = bw2calc.LCA(demand=self.demand)
         self._load_raw_lcia_data()
+        self.log_platform()
+
         self.cfs_mapping = []
 
         self.SAFE_GLOBALS = {
@@ -398,6 +370,38 @@ class EdgeLCIA:
         self._ever_seen_edges_tech: set[tuple[int, int]] = set()
         self._flows_version = None
         self._cls_hits_cache = {}
+
+    def log_platform(self):
+        """
+        Log versions of key dependencies and environment variables for debugging.
+        """
+
+        self.logger.info(
+            "VERSIONS: python %s, numpy %s, scipy %s, sparse %s, platform %s",
+            sys.version,
+            np.__version__,
+            scipy.__version__,
+            sp.__version__,
+            platform.platform(),
+        )
+
+        self.logger.info(
+            "BLAS: %s",
+            get_info("blas_opt_info"),
+        )
+
+        self.logger.info(
+            "THREADS: %s",
+            {
+                k: os.environ.get(k)
+                for k in [
+                    "OPENBLAS_NUM_THREADS",
+                    "MKL_NUM_THREADS",
+                    "OMP_NUM_THREADS",
+                    "NUMEXPR_NUM_THREADS",
+                ]
+            },
+        )
 
     def _load_raw_lcia_data(self):
         """

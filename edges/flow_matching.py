@@ -432,7 +432,7 @@ def match_with_index(
         if not keys:
             return []
         out = []
-        for key in keys:
+        for key in sorted(keys):
             for pos in lookup_mapping.get(key, []):
                 raw = reversed_lookup[pos]
                 flow = dict(raw) if isinstance(raw, tuple) else raw
@@ -603,6 +603,9 @@ def resolve_candidate_locations(
     if location == "GLO" and "GLO" not in pool:
         pool = ["GLO"] + pool
 
+    # Deterministic ordering across platforms (keep "GLO" first if present)
+    pool = sorted(set(pool), key=lambda x: (x != "GLO", x))
+
     return pool
 
 
@@ -639,6 +642,9 @@ def group_edges_by_signature(
         )
 
         grouped[(s_key, c_key, loc_key)].append((supplier_idx, consumer_idx))
+
+        for _k in grouped:
+            grouped[_k].sort()
 
     return grouped
 

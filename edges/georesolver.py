@@ -82,7 +82,8 @@ class GeoResolver:
             except KeyError:
                 self.logger.info("Region %s: no geometry found.", location)
 
-        return results
+        # Deduplicate and enforce deterministic ordering
+        return sorted(set(results))
 
     @lru_cache(maxsize=2048)
     def _cached_lookup(
