@@ -808,7 +808,7 @@ def compute_average_cf(
     expressions = []
     for (s_loc, c_loc, cf), sh in zip(matched, shares):
         # keep cf['value'] as-is (string or number)
-        expressions.append(f"({sh:.6f} * ({cf['value']}))")
+        expressions.append(f"({sh:.3f} * ({cf['value']}))")
     expr = " + ".join(expressions)
 
     # ---- Single CF shortcut (pass-through uncertainty) ----
