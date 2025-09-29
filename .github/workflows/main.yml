@@ -75,7 +75,7 @@ jobs:
           PYTEST_DEBUG_DIR: pytest-debug   # your fixture will use this
         run: |
           python -c "import platform; print('Platform:', platform.platform())"
-          pytest -q || true
+          pytest
 
       - name: List debug dir (diagnostics)
         if: always()
