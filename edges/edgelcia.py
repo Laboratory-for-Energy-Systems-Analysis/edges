@@ -3346,7 +3346,7 @@ class EdgeLCIA:
                     {
                         "supplier": cf["supplier"],
                         "consumer": cf["consumer"],
-                        "positions": cf["positions"],
+                        "positions": sorted(cf["positions"]),
                         "value": value,
                     }
                 )
@@ -3438,7 +3438,7 @@ class EdgeLCIA:
 
             # Sum across dimensions i and j to get 1 value per iteration
             self.characterized_inventory = characterized
-            self.score = characterized.sum(axis=(0, 1))
+            self.score = characterized.sum(axis=(0, 1), dtype=np.float64)
 
         else:
             # --- Deterministic path with a small guard against rare NotImplemented
@@ -3448,7 +3448,7 @@ class EdgeLCIA:
             if prod is NotImplemented:  # very rare, but just in case
                 prod = inv.multiply(cm)
             self.characterized_inventory = prod
-            self.score = prod.sum()
+            self.score = prod.sum(dtype=np.float64)
 
     # --- Add these helpers inside EdgeLCIA -----------------------------------
     def _covered_positions_from_characterization(self) -> set[tuple[int, int]]:
@@ -3747,6 +3747,9 @@ class EdgeLCIA:
                 self.characterization_matrix = sparse.COO(
                     coords=merged_coords, data=merged_data, shape=cm.shape
                 )
+                self.characterization_matrix = make_coo_deterministic(
+                    self.characterization_matrix
+                )
 
         else:
             # Deterministic mode: set values directly in the existing 2D matrix
@@ -3795,7 +3798,7 @@ class EdgeLCIA:
                     {
                         "supplier": cf["supplier"],
                         "consumer": cf["consumer"],
-                        "positions": cf["positions"],
+                        "positions": sorted(cf["positions"]),
                         "value": val,
                     }
                 )
