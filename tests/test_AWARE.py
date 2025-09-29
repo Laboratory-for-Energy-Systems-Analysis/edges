@@ -24,8 +24,9 @@ def test_brightway():
     LCA.lcia()
 
     print(f"Sum of inventoriy matrix: {LCA.lca.inventory.sum()}")
+    print(f"Sum of characterization matrix: {LCA.characterization_matrix.sum()}")
     print(
-        f"Sum of characterized inventoriy matrix: {LCA.lca.characterized_inventory.sum()}"
+        f"Sum of characterized inventoriy matrix: {LCA.characterized_inventory.sum()}"
     )
     print(f"Score: {LCA.score}")
 
