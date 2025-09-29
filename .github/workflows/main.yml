@@ -77,15 +77,39 @@ jobs:
           python -c "import platform; print('Platform:', platform.platform())"
           pytest
 
-      - name: List debug dir (diagnostics)
-        if: always()
-        run: >
-          python -c "import pathlib,sys;
-          paths=['pytest-debug','bw-work','edges.log'];
-          for p in paths:
-              d=pathlib.Path(p);
-              print(('[OK] ' if d.exists() else '[MISS] ')+p);
-              [print('  -',f) for f in d.rglob('*') if d.is_dir() and f.is_file()]"
+      # Linux + macOS
+      - name: List debug dir (diagnostics) — *nix
+        if: always() && runner.os != 'Windows'
+        shell: bash
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          for p in ["pytest-debug", "bw-work", "edges.log"]:
+              d = Path(p)
+              print(("[OK] " if d.exists() else "[MISS] ") + p)
+              if d.is_dir():
+                  for f in d.rglob("*"):
+                      if f.is_file():
+                          print("  -", f)
+          PY
+
+      # Windows
+      - name: List debug dir (diagnostics) — Windows
+        if: always() && runner.os == 'Windows'
+        shell: pwsh
+        run: |
+          $code = @"
+          from pathlib import Path
+          for p in ["pytest-debug", "bw-work", "edges.log"]:
+            d = Path(p)
+            print(("[OK] " if d.exists() else "[MISS] ") + p)
+            if d.is_dir():
+              for f in d.rglob("*"):
+                if f.is_file():
+                  print("  -", f)
+          "@
+          Set-Content -Path diag.py -Value $code -Encoding UTF8
+          python diag.py
 
       - name: Upload pytest artifacts
         if: always()
