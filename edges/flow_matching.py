@@ -789,7 +789,7 @@ def compute_average_cf(
     else:
         shares = w_arr / w_sum
         # remove share values below a tiny threshold
-        shares = np.where(shares < 1e-3, 0.0, shares)
+        # shares = np.where(shares < 1e-3, 0.0, shares)
         # Re-normalize defensively to ensure exact sum(1.0) in float64
         shares = shares / shares.sum(dtype=np.float64)
 

@@ -2066,53 +2066,76 @@ class EdgeLCIA:
                             )
                         )
 
-            # Pass 1
+            # Pass 1 (corrected): compute per unique (cand_sup, cand_con, consumer_sig) within each supplier group
             if len(prefiltered_groups) > 0:
                 for sig, group_edges in tqdm(
                     prefiltered_groups.items(), desc="Processing static groups (pass 1)"
                 ):
-                    supplier_info = group_edges[0][2]
-                    consumer_info = group_edges[0][3]
-                    candidate_supplier_locations = group_edges[0][-2]
-                    candidate_consumer_locations = group_edges[0][-1]
+                    memo = {}
 
-                    self._dbg_cf_call(
-                        "AGG-PASS1",
+                    def _consumer_sig(consumer_info: dict) -> tuple:
+                        fields = set(self.required_consumer_fields)
+                        if any(
+                            "classifications" in cf.get("consumer", {})
+                            for cf in self.raw_cfs_data
+                        ):
+                            fields.add("classifications")
+                        proj = {
+                            k: consumer_info.get(k)
+                            for k in fields
+                            if consumer_info.get(k) is not None
+                        }
+                        return make_hashable(proj)
+
+                    for (
+                        supplier_idx,
+                        consumer_idx,
                         supplier_info,
                         consumer_info,
-                        candidate_supplier_locations,
-                        candidate_consumer_locations,
-                    )
+                        cand_sup,
+                        cand_con,
+                    ) in group_edges:
+                        # canonicalize + determinize candidate pools
+                        cand_sup_s = tuple(sorted({str(x).strip() for x in cand_sup}))
+                        cand_con_s = tuple(sorted({str(x).strip() for x in cand_con}))
+                        c_sig = _consumer_sig(consumer_info)
+                        mkey = (cand_sup_s, cand_con_s, c_sig)
 
-                    new_cf, matched_cf_obj, agg_uncertainty = compute_average_cf(
-                        candidate_suppliers=candidate_supplier_locations,
-                        candidate_consumers=candidate_consumer_locations,
-                        supplier_info=supplier_info,
-                        consumer_info=consumer_info,
-                        required_supplier_fields=self.required_supplier_fields,
-                        required_consumer_fields=self.required_consumer_fields,
-                        cf_index=self.cf_index,
-                    )
-
-                    if new_cf != 0:
-                        for (
-                            supplier_idx,
-                            consumer_idx,
-                            supplier_info,
-                            consumer_info,
-                            _,
-                            _,
-                        ) in group_edges:
-                            _edge_fate(
-                                "PASS1",
-                                direction,
-                                supplier_idx,
-                                consumer_idx,
-                                supplier_loc=supplier_info.get("location"),
-                                consumer_loc=consumer_info.get("location"),
-                                reason="PASS1_APPLIED",
-                                extra={"new_cf": str(new_cf)},
+                        if mkey not in memo:
+                            self._dbg_cf_call(
+                                "AGG-PASS1",
+                                supplier_info,
+                                consumer_info,
+                                list(cand_sup_s),
+                                list(cand_con_s),
                             )
+
+                            new_cf, matched_cf_obj, agg_uncertainty = (
+                                compute_average_cf(
+                                    candidate_suppliers=list(cand_sup_s),
+                                    candidate_consumers=list(cand_con_s),
+                                    supplier_info=supplier_info,
+                                    consumer_info=consumer_info,
+                                    required_supplier_fields=self.required_supplier_fields,
+                                    required_consumer_fields=self.required_consumer_fields,
+                                    cf_index=self.cf_index,
+                                )
+                            )
+                            memo[mkey] = (new_cf, matched_cf_obj, agg_uncertainty)
+
+                            # helpful DEBUG to catch “global-ish” candidates sneaking in
+                            self.logger.debug(
+                                "AGG [RER] mkey summary | con=%s | sup=%s | cand_sup=%d | cand_con=%d | example=%s",
+                                consumer_info.get("location"),
+                                supplier_info.get("location"),
+                                len(cand_sup_s),
+                                len(cand_con_s),
+                                list(cand_con_s)[:10],
+                            )
+
+                        new_cf, matched_cf_obj, agg_uncertainty = memo[mkey]
+
+                        if new_cf != 0:
                             add_cf_entry(
                                 cfs_mapping=self.cfs_mapping,
                                 supplier_info=supplier_info,
@@ -2122,28 +2145,31 @@ class EdgeLCIA:
                                 value=new_cf,
                                 uncertainty=agg_uncertainty,
                             )
-                    else:
-                        for (
-                            supplier_idx,
-                            consumer_idx,
-                            supplier_info,
-                            consumer_info,
-                            _,
-                            _,
-                        ) in group_edges:
+                            # per-edge fate log (keeps your earlier diagnostics)
                             _edge_fate(
-                                "PASS1",
-                                direction,
-                                supplier_idx,
-                                consumer_idx,
+                                phase="PASS1",
+                                direction=direction,
+                                supplier_idx=supplier_idx,
+                                consumer_idx=consumer_idx,
+                                supplier_loc=supplier_info.get("location"),
+                                consumer_loc=consumer_info.get("location"),
+                                reason="PASS1_APPLIED",
+                                extra={"new_cf": str(new_cf)},
+                            )
+                        else:
+                            _edge_fate(
+                                phase="PASS1",
+                                direction=direction,
+                                supplier_idx=supplier_idx,
+                                consumer_idx=consumer_idx,
                                 supplier_loc=supplier_info.get("location"),
                                 consumer_loc=consumer_info.get("location"),
                                 reason="PASS1_FAIL",
+                                extra={
+                                    "cand_sup": list(cand_sup_s)[:10],
+                                    "cand_con": list(cand_con_s)[:10],
+                                },
                             )
-                        self.logger.warning(
-                            f"Fallback CF could not be computed for supplier={supplier_info}, consumer={consumer_info} "
-                            f"with candidate suppliers={candidate_supplier_locations} and consumers={candidate_consumer_locations}"
-                        )
 
             # Pass 2
             compute_cf_memoized = compute_cf_memoized_factory(
