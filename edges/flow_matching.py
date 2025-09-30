@@ -598,10 +598,6 @@ def resolve_candidate_locations(
     else:
         pool = [loc for loc in candidates if loc in available_locs]
 
-    # When basing on GLO, ensure "GLO" itself is a candidate (for direct GLO CFs)
-    if location == "GLO" and "GLO" not in pool:
-        pool = ["GLO"] + pool
-
     # Deterministic ordering across platforms (keep "GLO" first if present)
     pool = sorted(set(pool), key=lambda x: (x != "GLO", x))
 

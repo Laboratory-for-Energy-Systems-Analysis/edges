@@ -4,7 +4,8 @@ import time
 import pandas as pd
 
 # bw2data.projects.set_current("ecoinvent-3.10-cutoff")
-bw2data.projects.set_current("bw25_ei310")
+# bw2data.projects.set_current("bw25_ei310")
+bw2data.projects.set_current("ecoinvent-3.11-cutoff-bw25")
 
 use_example_df = False
 start_time = time.time()

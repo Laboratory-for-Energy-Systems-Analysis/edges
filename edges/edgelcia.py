@@ -1146,26 +1146,6 @@ class EdgeLCIA:
         except Exception as e:
             self.logger.debug("geo[%s]: %s | ERROR: %s", where, loc, e)
 
-    def _dbg_cf_call(
-        self,
-        tag: str,
-        s_info: dict,
-        c_info: dict,
-        cand_sup: list[str],
-        cand_con: list[str],
-    ):
-        """Uniform pre/post log around CF computations."""
-        self.logger.debug(
-            "CF-CALL[%s]: s=%s c=%s | cand_sup=%s | cand_con=%s | req_sup=%s | req_con=%s",
-            tag,
-            {k: s_info.get(k) for k in sorted(self.required_supplier_fields)},
-            {k: c_info.get(k) for k in sorted(self.required_consumer_fields)},
-            cand_sup,
-            cand_con,
-            sorted(self.required_supplier_fields),
-            sorted(self.required_consumer_fields),
-        )
-
     def lci(self) -> None:
         """
         Perform the life cycle inventory (LCI) calculation and extract relevant exchanges.
@@ -2102,13 +2082,6 @@ class EdgeLCIA:
                         mkey = (cand_sup_s, cand_con_s, c_sig)
 
                         if mkey not in memo:
-                            self._dbg_cf_call(
-                                "AGG-PASS1",
-                                supplier_info,
-                                consumer_info,
-                                list(cand_sup_s),
-                                list(cand_con_s),
-                            )
 
                             new_cf, matched_cf_obj, agg_uncertainty = (
                                 compute_average_cf(
@@ -2193,14 +2166,6 @@ class EdgeLCIA:
                 ), edge_group in tqdm(
                     grouped_edges.items(), desc="Processing static groups (pass 2)"
                 ):
-
-                    self._dbg_cf_call(
-                        "AGG-PASS2",
-                        dict(s_key),
-                        dict(c_key),
-                        candidate_suppliers,
-                        candidate_consumers,
-                    )
 
                     new_cf, matched_cf_obj, agg_uncertainty = compute_cf_memoized(
                         s_key, c_key, candidate_suppliers, candidate_consumers
@@ -2506,14 +2471,6 @@ class EdgeLCIA:
                         memo_key = (cand_sup_s, cand_con_s, c_sig)
 
                         if memo_key not in memo:
-                            # Optional debug hook
-                            self._dbg_cf_call(
-                                "DYN-PASS1",
-                                supplier_info,
-                                consumer_info,
-                                list(cand_sup_s),
-                                list(cand_con_s),
-                            )
 
                             new_cf, matched_cf_obj, agg_uncertainty = (
                                 compute_average_cf(
@@ -2582,13 +2539,6 @@ class EdgeLCIA:
                 ), edge_group in tqdm(
                     grouped_edges.items(), desc="Processing dynamic groups (pass 2)"
                 ):
-                    self._dbg_cf_call(
-                        "DYN-PASS2",
-                        dict(s_key),
-                        dict(c_key),
-                        candidate_supplier_locations,
-                        candidate_consumer_locations,
-                    )
 
                     new_cf, matched_cf_obj, agg_uncertainty = compute_cf_memoized(
                         s_key,
@@ -2889,14 +2839,6 @@ class EdgeLCIA:
                     candidate_supplier_locations = group_edges[0][-2]
                     candidate_consumer_locations = group_edges[0][-1]
 
-                    self._dbg_cf_call(
-                        "CONT-PASS1",
-                        supplier_info,
-                        consumer_info,
-                        candidate_supplier_locations,
-                        candidate_consumer_locations,
-                    )
-
                     new_cf, matched_cf_obj, agg_uncertainty = compute_average_cf(
                         candidate_suppliers=candidate_supplier_locations,
                         candidate_consumers=candidate_consumer_locations,
@@ -2953,14 +2895,6 @@ class EdgeLCIA:
                 ), edge_group in tqdm(
                     grouped_edges.items(), desc="Processing contained groups (pass 2)"
                 ):
-
-                    self._dbg_cf_call(
-                        "CONT-PASS2",
-                        supplier_info,
-                        consumer_info,
-                        candidate_suppliers,
-                        candidate_consumers,
-                    )
 
                     new_cf, matched_cf_obj, agg_uncertainty = compute_cf_memoized(
                         supplier_info,
@@ -3040,20 +2974,16 @@ class EdgeLCIA:
             geo=self.geo,
             location="GLO",
             weights=frozenset(k for k, v in self.weights.items()),
-            containing=False,
+            containing=True,
             supplier=True,
         )
         global_consumer_locs = resolve_candidate_locations(
             geo=self.geo,
             location="GLO",
             weights=frozenset(k for k, v in self.weights.items()),
-            containing=False,
+            containing=True,
             supplier=False,
         )
-
-        # If the consumer side is allowed to use a CF at GLO directly, make sure "GLO" is included
-        if "GLO" not in global_consumer_locs:
-            global_consumer_locs = ["GLO"] + list(global_consumer_locs)
 
         # If supplier side is wildcard-only, keep that wildcard as the candidate
         if not global_supplier_locs:
@@ -3135,7 +3065,6 @@ class EdgeLCIA:
                     supplier_info = self._get_supplier_info(supplier_idx, direction)
                     if not supplier_info:
                         # Nothing useful we can use: skip this edge defensively
-                        # (or log at DEBUG)
                         continue
                     consumer_info = self._get_consumer_info(consumer_idx)
 
@@ -3197,14 +3126,6 @@ class EdgeLCIA:
                             )
                         direct_con_candidates = ["GLO"]
 
-                        self._dbg_cf_call(
-                            "GLO-PASS1",
-                            supplier_info,
-                            consumer_info,
-                            direct_sup_candidates,
-                            direct_con_candidates,
-                        )
-
                         # compute_average_cf already ignores fields not present in CFs,
                         # so if supplier 'location' isn't in CF schema, it won't block matches.
                         glo_cf, matched_cf_obj, glo_unc = compute_average_cf(
@@ -3238,49 +3159,6 @@ class EdgeLCIA:
                                 )
                             continue  # done with this group
 
-                        # 2) Fallback: weighted average over GLOBAL LOCATIONS
-                        self._dbg_cf_call(
-                            "GLO-AVG",
-                            supplier_info,
-                            consumer_info,
-                            (
-                                ["__ANY__"]
-                                if supplier_wildcard
-                                else global_supplier_locs
-                            ),
-                            global_consumer_locs,
-                        )
-                        avg_cf, matched_cf_obj, agg_uncertainty = compute_average_cf(
-                            candidate_suppliers=(
-                                ["__ANY__"]
-                                if supplier_wildcard
-                                else global_supplier_locs
-                            ),
-                            candidate_consumers=global_consumer_locs,
-                            supplier_info=supplier_info,
-                            consumer_info=consumer_info,
-                            required_supplier_fields=self.required_supplier_fields,
-                            required_consumer_fields=self.required_consumer_fields,
-                            cf_index=self.cf_index,
-                        )
-
-                        if avg_cf != 0:
-                            for supplier_idx, consumer_idx, _, _, _, _ in group_edges:
-                                add_cf_entry(
-                                    cfs_mapping=self.cfs_mapping,
-                                    supplier_info=supplier_info,
-                                    consumer_info=consumer_info,
-                                    direction=direction,
-                                    indices=[(supplier_idx, consumer_idx)],
-                                    value=avg_cf,
-                                    uncertainty=agg_uncertainty,
-                                )
-                        else:
-                            self.logger.warning(
-                                f"Fallback CF could not be computed for supplier={supplier_info}, consumer={consumer_info} "
-                                f"with candidate suppliers={ (['__ANY__'] if supplier_wildcard else global_supplier_locs) } and consumers={global_consumer_locs}"
-                            )
-
                 # ---- Pass 2 (grouped_edges) ----
                 compute_cf_memoized = compute_cf_memoized_factory(
                     cf_index=self.cf_index,
@@ -3303,18 +3181,9 @@ class EdgeLCIA:
                     ), edge_group in tqdm(
                         grouped_edges.items(), desc="Processing global groups (pass 2)"
                     ):
-                        # 1) Try DIRECT GLO (consumer)
-                        if supplier_wildcard:
-                            direct_sup_candidates = ["__ANY__"]
-                        else:
-                            sup_loc = s_key.get("location")
-                            direct_sup_candidates = (
-                                [sup_loc] if sup_loc is not None else []
-                            )
-                        direct_con_candidates = ["GLO"]
 
                         glo_cf, matched_cf_obj, glo_unc = compute_cf_memoized(
-                            s_key, c_key, direct_sup_candidates, direct_con_candidates
+                            s_key, c_key, candidate_suppliers, candidate_consumers
                         )
 
                         if glo_cf != 0:
@@ -3337,43 +3206,6 @@ class EdgeLCIA:
                                     ),
                                 )
                             continue
-
-                        # 2) Fallback to weighted average across global locations
-                        avg_cf, matched_cf_obj, agg_uncertainty = compute_cf_memoized(
-                            s_key,
-                            c_key,
-                            (
-                                ["__ANY__"]
-                                if supplier_wildcard
-                                else global_supplier_locs
-                            ),
-                            global_consumer_locs,
-                        )
-
-                        if avg_cf != 0:
-                            for supplier_idx, consumer_idx in edge_group:
-                                add_cf_entry(
-                                    cfs_mapping=self.cfs_mapping,
-                                    supplier_info=dict(s_key),
-                                    consumer_info=dict(c_key),
-                                    direction=direction,
-                                    indices=[(supplier_idx, consumer_idx)],
-                                    value=avg_cf,
-                                    uncertainty=(
-                                        agg_uncertainty
-                                        if agg_uncertainty is not None
-                                        else (
-                                            matched_cf_obj.get("uncertainty")
-                                            if matched_cf_obj
-                                            else None
-                                        )
-                                    ),
-                                )
-                        else:
-                            self.logger.warning(
-                                f"Fallback CF could not be computed for supplier={s_key}, consumer={c_key} "
-                                f"with candidate suppliers={ (['__ANY__'] if supplier_wildcard else global_supplier_locs) } and consumers={global_consumer_locs}"
-                            )
 
         self._update_unprocessed_edges()
 
