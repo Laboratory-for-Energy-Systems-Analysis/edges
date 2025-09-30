@@ -1741,6 +1741,63 @@ class EdgeLCIA:
         :return: None
         """
 
+        import json, itertools
+
+        _edge_seq = itertools.count(1)
+
+        def _edge_fate(
+            phase: str,
+            direction: str,
+            supplier_idx: int,
+            consumer_idx: int,
+            supplier_loc,
+            consumer_loc,
+            reason: str,
+            extra: dict | None = None,
+        ):
+            """Log a structured, single-line fate for this edge."""
+            payload = {
+                "seq": next(_edge_seq),
+                "phase": phase,  # INDEX, GROUP, PASS1, PASS2, END
+                "dir": direction,  # biosphere-technosphere / technosphere-technosphere
+                "supplier_idx": supplier_idx,
+                "consumer_idx": consumer_idx,
+                "supplier_loc": supplier_loc,
+                "consumer_loc": consumer_loc,
+                "reason": reason,
+            }
+            if extra:
+                payload.update(extra)
+
+            # JSON helper: make numpy/pandas/sets serializable
+            def _json_default(o):
+                import numpy as _np
+                import pandas as _pd
+                from pathlib import Path as _Path
+
+                if isinstance(o, _np.generic):  # np.int32, np.float64, etc.
+                    return o.item()
+                if isinstance(o, _np.ndarray):
+                    return o.tolist()
+                if isinstance(o, (_pd.Timestamp,)):
+                    return o.isoformat()
+                if isinstance(o, (set, frozenset)):
+                    # sort for determinism
+                    return sorted(list(o))
+                if isinstance(o, _Path):
+                    return str(o)
+                # last resort: string form
+                return str(o)
+
+            tag = " [RER]" if str(consumer_loc).upper() == "RER" else ""
+            self.logger.debug(
+                "AGG%s %s",
+                tag,
+                json.dumps(
+                    payload, sort_keys=True, ensure_ascii=False, default=_json_default
+                ),
+            )
+
         self._ensure_filtered_lookups_for_current_edges()
 
         # IMPORTANT: rebuild filtered lookups to cover the (current) unprocessed edges
@@ -1786,11 +1843,29 @@ class EdgeLCIA:
 
             for supplier_idx, consumer_idx in unprocessed_edges:
                 if (supplier_idx, consumer_idx) in processed_flows:
+                    _edge_fate(
+                        "INDEX",
+                        direction,
+                        supplier_idx,
+                        consumer_idx,
+                        supplier_loc=None,
+                        consumer_loc=None,
+                        reason="ALREADY_PROCESSED",
+                    )
                     continue
 
                 consumer_loc = self.consumer_loc.get(consumer_idx)
 
                 if not consumer_loc:
+                    _edge_fate(
+                        "INDEX",
+                        direction,
+                        supplier_idx,
+                        consumer_idx,
+                        supplier_loc=None,
+                        consumer_loc=consumer_loc,
+                        reason="NO_CONSUMER_LOCATION",
+                    )
                     raise ValueError(
                         f"Consumer flow {consumer_idx} has no 'location' field. "
                         "Ensure all consumer flows have a valid location."
@@ -1801,11 +1876,30 @@ class EdgeLCIA:
 
                 if not supplier_info:
                     # nothing usable for this supplier; skip defensively
+                    _edge_fate(
+                        "INDEX",
+                        direction,
+                        supplier_idx,
+                        consumer_idx,
+                        supplier_loc=None,
+                        consumer_loc=consumer_loc,
+                        reason="NO_SUPPLIER_INFO",
+                    )
+
                     continue
                 supplier_loc = supplier_info.get("location")
 
                 edges_index[(consumer_loc, supplier_loc)].append(
                     (supplier_idx, consumer_idx)
+                )
+                _edge_fate(
+                    "INDEX",
+                    direction,
+                    supplier_idx,
+                    consumer_idx,
+                    supplier_loc=supplier_loc,
+                    consumer_loc=consumer_loc,
+                    reason="QUEUED",
                 )
 
             prefiltered_groups = defaultdict(list)
@@ -1815,6 +1909,16 @@ class EdgeLCIA:
                 if any(
                     x in ("RoW", "RoE") for x in (consumer_location, supplier_location)
                 ):
+                    for si, ci in edges:
+                        _edge_fate(
+                            phase="GROUP",
+                            direction=direction,
+                            supplier_idx=si,
+                            consumer_idx=ci,
+                            supplier_loc=supplier_location,
+                            consumer_loc=consumer_location,
+                            reason="SKIP_ROW_ROE",
+                        )
                     continue
 
                 if supplier_location is None:
@@ -1859,6 +1963,20 @@ class EdgeLCIA:
                     and len(candidate_consumer_locations) == 1
                 ):
                     # neither the supplier or consumer locations are composite locations
+                    for si, ci in edges:
+                        _edge_fate(
+                            "GROUP",
+                            direction,
+                            si,
+                            ci,
+                            supplier_loc=supplier_location,
+                            consumer_loc=consumer_location,
+                            reason="SINGLETON_CANDIDATES",
+                            extra={
+                                "cand_sup": candidate_suppliers_locations,
+                                "cand_con": candidate_consumer_locations,
+                            },
+                        )
                     continue
 
                 self.logger.debug(
@@ -1898,6 +2016,20 @@ class EdgeLCIA:
                     sig = _equality_supplier_signature_cached(make_hashable(_proj))
 
                     if sig in self._cached_supplier_keys:
+                        _edge_fate(
+                            "GROUP",
+                            direction,
+                            supplier_idx,
+                            consumer_idx,
+                            supplier_loc=supplier_location,
+                            consumer_loc=consumer_location,
+                            reason="PREFILTERED",
+                            extra={
+                                "sig_fields": sorted(sig_fields),
+                                "cand_sup": candidate_suppliers_locations[:10],
+                                "cand_con": candidate_consumer_locations[:10],
+                            },
+                        )
                         prefiltered_groups[sig].append(
                             (
                                 supplier_idx,
@@ -1909,6 +2041,20 @@ class EdgeLCIA:
                             )
                         )
                     else:
+                        _edge_fate(
+                            "GROUP",
+                            direction,
+                            supplier_idx,
+                            consumer_idx,
+                            supplier_loc=supplier_location,
+                            consumer_loc=consumer_location,
+                            reason="REMAINING",
+                            extra={
+                                "sig_fields": sorted(sig_fields),
+                                "cand_sup": candidate_suppliers_locations[:10],
+                                "cand_con": candidate_consumer_locations[:10],
+                            },
+                        )
                         remaining_edges.append(
                             (
                                 supplier_idx,
@@ -1957,6 +2103,16 @@ class EdgeLCIA:
                             _,
                             _,
                         ) in group_edges:
+                            _edge_fate(
+                                "PASS1",
+                                direction,
+                                supplier_idx,
+                                consumer_idx,
+                                supplier_loc=supplier_info.get("location"),
+                                consumer_loc=consumer_info.get("location"),
+                                reason="PASS1_APPLIED",
+                                extra={"new_cf": str(new_cf)},
+                            )
                             add_cf_entry(
                                 cfs_mapping=self.cfs_mapping,
                                 supplier_info=supplier_info,
@@ -1967,6 +2123,23 @@ class EdgeLCIA:
                                 uncertainty=agg_uncertainty,
                             )
                     else:
+                        for (
+                            supplier_idx,
+                            consumer_idx,
+                            supplier_info,
+                            consumer_info,
+                            _,
+                            _,
+                        ) in group_edges:
+                            _edge_fate(
+                                "PASS1",
+                                direction,
+                                supplier_idx,
+                                consumer_idx,
+                                supplier_loc=supplier_info.get("location"),
+                                consumer_loc=consumer_info.get("location"),
+                                reason="PASS1_FAIL",
+                            )
                         self.logger.warning(
                             f"Fallback CF could not be computed for supplier={supplier_info}, consumer={consumer_info} "
                             f"with candidate suppliers={candidate_supplier_locations} and consumers={candidate_consumer_locations}"
@@ -2018,7 +2191,27 @@ class EdgeLCIA:
                                 value=new_cf,
                                 uncertainty=agg_uncertainty,
                             )
+                            _edge_fate(
+                                "PASS2",
+                                direction,
+                                supplier_idx,
+                                consumer_idx,
+                                supplier_loc=dict(s_key).get("location"),
+                                consumer_loc=dict(c_key).get("location"),
+                                reason="PASS2_APPLIED",
+                                extra={"new_cf": str(new_cf)},
+                            )
                     else:
+                        for supplier_idx, consumer_idx in edge_group:
+                            _edge_fate(
+                                "PASS2",
+                                direction,
+                                supplier_idx,
+                                consumer_idx,
+                                supplier_loc=dict(s_key).get("location"),
+                                consumer_loc=dict(c_key).get("location"),
+                                reason="PASS2_FAIL",
+                            )
                         self.logger.warning(
                             f"Fallback CF could not be computed for supplier={s_key}, consumer={c_key} "
                             f"with candidate suppliers={candidate_suppliers} and consumers={candidate_consumers}"

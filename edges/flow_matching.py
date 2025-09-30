@@ -788,6 +788,8 @@ def compute_average_cf(
             )
     else:
         shares = w_arr / w_sum
+        # remove share values below a tiny threshold
+        shares = np.where(shares < 1e-3, 0.0, shares)
         # Re-normalize defensively to ensure exact sum(1.0) in float64
         shares = shares / shares.sum(dtype=np.float64)
 
@@ -808,7 +810,8 @@ def compute_average_cf(
     expressions = []
     for (s_loc, c_loc, cf), sh in zip(matched, shares):
         # keep cf['value'] as-is (string or number)
-        expressions.append(f"({sh:.3f} * ({cf['value']}))")
+        if sh > 0.0:
+            expressions.append(f"({sh:.3f} * ({cf['value']}))")
     expr = " + ".join(expressions)
 
     # ---- Single CF shortcut (pass-through uncertainty) ----
