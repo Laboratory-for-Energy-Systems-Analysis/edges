@@ -4,6 +4,8 @@ impact assessments, and the AWARE class, which is a subclass of the
 LCIA class.
 """
 
+from __future__ import annotations
+
 import math
 import os
 import sys
@@ -50,6 +52,16 @@ from .flow_matching import (
 from .georesolver import GeoResolver
 from .uncertainty import sample_cf_distribution, make_distribution_key, get_rng_for_key
 from .filesystem_constants import DATA_DIR
+
+from bw2calc import __version__ as bw2calc_version
+
+if isinstance(bw2calc_version, str):
+    bw2calc_version = tuple(map(int, bw2calc_version.split(".")))
+
+if bw2calc_version >= (2, 0, 0):
+    bw2 = False
+else:
+    bw2 = True
 
 import logging
 
@@ -225,17 +237,15 @@ def make_coo_deterministic(coo: "sparse.COO"):
     - No use of .sum() (avoids accidental scalar reduction).
     - If `coo` is not a pydata.sparse COO, just return it unchanged.
     """
-    import numpy as _np
-    import sparse as _sp
 
     # Pass through non-COO objects unchanged (e.g., scalar, ndarray)
-    if not isinstance(coo, _sp.COO):
+    if not isinstance(coo, sp.COO):
         return coo
 
     # Fast path: empty matrix
     if coo.nnz == 0:
         # Ensure the metadata flags are consistent
-        return _sp.COO(
+        return sp.COO(
             coords=coo.coords,
             data=coo.data,
             shape=coo.shape,
@@ -244,30 +254,30 @@ def make_coo_deterministic(coo: "sparse.COO"):
         )
 
     # 1) Compute a flattened linear index for each coordinate column
-    #    This is stable across platforms and makes duplicate detection easy.
-    lin = _np.ravel_multi_index(coo.coords, coo.shape)
+    lin = np.ravel_multi_index(coo.coords, coo.shape)
 
     # 2) Sort by linear index (deterministic total ordering)
-    order = _np.argsort(lin, kind="mergesort")  # stable sort
+    order = np.argsort(lin, kind="mergesort")  # stable sort
     lin_sorted = lin[order]
     coords_sorted = coo.coords[:, order]
     data_sorted = coo.data[order]
 
     # 3) Coalesce duplicates: sum data for identical linear indices
-    uniq_lin, first_idx, counts = _np.unique(
+    uniq_lin, first_idx, counts = np.unique(
         lin_sorted, return_index=True, return_counts=True
     )
-    if _np.any(counts > 1):
+    if np.any(counts > 1):
         # Sum consecutive runs for duplicates
-        summed_data = _np.add.reduceat(data_sorted, first_idx)
+        summed_data = np.add.reduceat(data_sorted, first_idx)
         uniq_coords = coords_sorted[:, first_idx]
     else:
         # No duplicates; keep sorted arrays
         summed_data = data_sorted
         uniq_coords = coords_sorted
 
-    # 4) Rebuild a canonical COO (flags set so downstream ops know it's sorted)
-    return _sp.COO(
+    # 4) Rebuild a canonical COO
+    # (flags set so downstream ops know it's sorted)
+    return sp.COO(
         coords=uniq_coords,
         data=summed_data,
         shape=coo.shape,
@@ -410,6 +420,7 @@ class EdgeLCIA:
         self._ever_seen_edges_tech: set[tuple[int, int]] = set()
         self._flows_version = None
         self._cls_hits_cache = {}
+        self.applied_strategies = []
 
     def log_platform(self):
         """
@@ -560,12 +571,6 @@ class EdgeLCIA:
         )
         if have:
             return
-
-        # If needed, make sure inventory/edges exist
-        if (self.biosphere_edges is None and self.technosphere_edges is None) or (
-            not self.biosphere_edges and not self.technosphere_edges
-        ):
-            self.lci()
 
         restrict_sup_bio = {s for s, _ in (self.biosphere_edges or [])} or None
         restrict_sup_tec = {s for s, _ in (self.technosphere_edges or [])} or None
@@ -842,15 +847,6 @@ class EdgeLCIA:
             len(self.reversed_supplier_lookup_bio),
             len(self.reversed_consumer_lookup),
         )
-        # show a couple of concrete rows if any
-        for i, (pos, info) in enumerate(
-            list(self.reversed_consumer_lookup.items())[:5]
-        ):
-            self.logger.debug("consumer[%d] -> %s", pos, info)
-        for i, (pos, info) in enumerate(
-            list(self.reversed_supplier_lookup_tech.items())[:5]
-        ):
-            self.logger.debug("supplier_tech[%d] -> %s", pos, info)
 
         # ---- Enrich consumer reversed lookup with activity metadata (classifications) ----
         # Bring 'classifications' from the activity map if missing (used by class filters)
@@ -896,22 +892,6 @@ class EdgeLCIA:
         self.consumer_loc = {
             i: d.get("location") for i, d in self.reversed_consumer_lookup.items()
         }
-
-        self.logger.debug(
-            "hot-caches: supplier_loc_tech=%s | consumer_loc=%s",
-            {k: self.supplier_loc_tech[k] for k in list(self.supplier_loc_tech)[:5]},
-            {k: self.consumer_loc[k] for k in list(self.consumer_loc)[:5]},
-        )
-
-        # Only log method keys if weights exist (they are set by _initialize_weights later)
-        if self.weights:
-            sup_locs = sorted({s for (s, _) in self.weights})
-            con_locs = sorted({c for (_, c) in self.weights})
-        else:
-            sup_locs = con_locs = []
-        self.logger.debug(
-            "method keys: supplier_locs=%s | consumer_locs=%s", sup_locs, con_locs
-        )
 
         self.supplier_cls_bio = {
             i: _norm_cls(d.get("classifications"))
@@ -1031,12 +1011,11 @@ class EdgeLCIA:
             "reference product": ("reference product", "reference_product"),
             "unit": ("unit",),
             "location": ("location",),
-            "categories": ("categories",),  # EcoSpold-style list/tuple
+            "categories": ("categories",),
             "classifications": (
                 "classifications",
                 "categories",
-            ),  # Some methods key on either
-            # For any other field, we'll try the same key name directly.
+            ),
         }
 
         for f in required_fields or ():
@@ -1128,24 +1107,6 @@ class EdgeLCIA:
         a = self.position_to_technosphere_flows_lookup.get(idx, {})
         return f"{a.get('name', '?')}[{a.get('reference product')}]@{a.get('location')}#{idx}"
 
-    def _dbg_geo_dump(self, where: str, loc: str | None):
-        """Log what GeoResolver knows about a location."""
-        if not loc:
-            self.logger.debug("geo[%s]: loc=None", where)
-            return
-        try:
-            kids = self.geo.batch(locations=[loc], containing=True) or {}
-            pars = self.geo.batch(locations=[loc], containing=False) or {}
-            self.logger.debug(
-                "geo[%s]: %s | parents=%s | children=%s",
-                where,
-                loc,
-                pars.get(loc, []),
-                kids.get(loc, []),
-            )
-        except Exception as e:
-            self.logger.debug("geo[%s]: %s | ERROR: %s", where, loc, e)
-
     def lci(self) -> None:
         """
         Perform the life cycle inventory (LCI) calculation and extract relevant exchanges.
@@ -1177,20 +1138,20 @@ class EdgeLCIA:
 
         unique_biosphere_flows = set(x[0] for x in self.biosphere_edges)
 
+        biosphere_dict = self.lca.biosphere_dict if bw2 else self.lca.dicts.biosphere
+        activity_dict = self.lca.activity_dict if bw2 else self.lca.dicts.activity
+
         if len(unique_biosphere_flows) > 0:
             self.biosphere_flows = get_flow_matrix_positions(
-                {
-                    k: v
-                    for k, v in self.lca.biosphere_dict.items()
-                    if v in unique_biosphere_flows
-                }
+                {k: v for k, v in biosphere_dict.items() if v in unique_biosphere_flows}
             )
 
         self.technosphere_flows = get_flow_matrix_positions(
-            {k: v for k, v in self.lca.activity_dict.items()}
+            {k: v for k, v in activity_dict.items()}
         )
 
-        self.reversed_activity, _, self.reversed_biosphere = self.lca.reverse_dict()
+        self.reversed_activity = {v: k for k, v in activity_dict.items()}
+        self.reversed_biosphere = {v: k for k, v in biosphere_dict.items()}
 
         # Build technosphere flow lookups as in the original implementation.
         self.position_to_technosphere_flows_lookup = {
@@ -1313,22 +1274,6 @@ class EdgeLCIA:
         req_sup_nc = self._req_sup_nc
         req_con_nc = self._req_con_nc
 
-        if debug:
-            log.debug(
-                "START map_exchanges | bio_edges=%d | tech_edges=%d | CFs=%d | req_supplier=%s | req_consumer=%s",
-                len(self.biosphere_edges),
-                len(self.technosphere_edges),
-                len(self.raw_cfs_data),
-                sorted(self.required_supplier_fields),
-                sorted(self.required_consumer_fields),
-            )
-            log.debug(
-                "Lookups | supplier_bio=%d keys | supplier_tech=%d keys | consumer=%d keys",
-                len(self.supplier_lookup_bio),
-                len(self.supplier_lookup_tech),
-                len(self.consumer_lookup),
-            )
-
         matched_positions_total = 0
 
         # Iterate CFs
@@ -1345,8 +1290,6 @@ class EdgeLCIA:
                 s_crit.get("matrix", "biosphere")
             )
             if not rem:
-                if debug:
-                    log.debug("CF[%d] dir=%s skipped: no remaining edges.", i, dir_name)
                 continue
 
             # ---------- SUPPLIER side ----------
@@ -1388,9 +1331,7 @@ class EdgeLCIA:
                 s_loc_required = False
             else:
                 # current behavior
-                s_out = cached_match_with_index(
-                    make_hashable(s_nonclass), req_sup_nc, s_ctx_id
-                )
+                s_out = cached_match_with_index(make_hashable(s_nonclass), req_sup_nc)
                 s_cands = set(s_out.matches)
                 if s_class_hits is not None:
                     s_cands &= s_class_hits
@@ -1421,9 +1362,7 @@ class EdgeLCIA:
             )
 
             c_nonclass = {k: v for k, v in c_crit.items() if k != "classifications"}
-            c_out = cached_match_with_index(
-                make_hashable(c_nonclass), req_con_nc, c_ctx_id
-            )
+            c_out = cached_match_with_index(make_hashable(c_nonclass), req_con_nc)
             c_cands = set(c_out.matches)
             if c_class_hits is not None:
                 c_cands &= c_class_hits
@@ -1434,51 +1373,6 @@ class EdgeLCIA:
             c_loc_required = ("location" in c_crit) and (
                 c_crit.get("location") is not None
             )
-
-            # ---- DEBUG diagnostics (only if needed) ----------------------------------
-            if debug and not s_cands:
-                s_matches_raw = list(s_out.matches)
-                reason = []
-                if not s_matches_raw:
-                    reason.append("no-index-match")
-                else:
-                    reason.append(f"raw-matches={len(s_matches_raw)}")
-                    if s_class_hits is not None and not (
-                        set(s_matches_raw) & s_class_hits
-                    ):
-                        reason.append("class-filtered-out")
-                    if s_class_hits is None:
-                        reason.append("no-class-filter")
-                log.debug(
-                    "CF[%d] dir=%s supplier candidates empty | reasons=%s | s_crit=%s | raw=%d",
-                    i,
-                    dir_name,
-                    ",".join(reason),
-                    s_crit,
-                    len(s_matches_raw),
-                )
-
-            if debug and not c_cands:
-                c_matches_raw = list(c_out.matches)
-                reason = []
-                if not c_matches_raw:
-                    reason.append("no-index-match")
-                else:
-                    reason.append(f"raw-matches={len(c_matches_raw)}")
-                    if c_class_hits is not None and not (
-                        set(c_matches_raw) & c_class_hits
-                    ):
-                        reason.append("class-filtered-out")
-                    if c_class_hits is None:
-                        reason.append("no-class-filter")
-                log.debug(
-                    "CF[%d] dir=%s consumer candidates empty | reasons=%s | c_crit=%s | raw=%d",
-                    i,
-                    dir_name,
-                    ",".join(reason),
-                    c_crit,
-                    len(c_matches_raw),
-                )
 
             # ---------- Combine full matches using set intersections ----------
             positions = []
@@ -1531,7 +1425,6 @@ class EdgeLCIA:
                             continue
 
                         positions.extend((s, c) for s in hit)
-
                         rem.difference_update((s, c) for s in hit)
 
                         # consumer in-neigh
@@ -1558,28 +1451,6 @@ class EdgeLCIA:
                     uncertainty=cf.get("uncertainty"),
                 )
                 matched_positions_total += len(positions)
-                if debug:
-                    log.debug(
-                        "CF[%d] dir=%s MATCH | positions=%d | s_cands=%d c_cands=%d | s_loc_only=%d c_loc_only=%d",
-                        i,
-                        dir_name,
-                        len(positions),
-                        len(s_cands),
-                        len(c_cands),
-                        len(s_loc_only),
-                        len(c_loc_only),
-                    )
-            elif debug:
-                log.debug(
-                    "CF[%d] dir=%s NO-MATCH | s_cands=%d c_cands=%d | s_loc_only=%d c_loc_only=%d | rem=%d",
-                    i,
-                    dir_name,
-                    len(s_cands),
-                    len(c_cands),
-                    len(s_loc_only),
-                    len(c_loc_only),
-                    len(rem),
-                )
 
             # ---------- Near-miss allowlists (location-only) --------------------------
             if s_loc_required and s_loc_only and c_cands:
@@ -1597,14 +1468,6 @@ class EdgeLCIA:
                         if (s, c) in rem:
                             bucket.add((s, c))
                             added += 1
-                if added:
-                    if debug:
-                        log.debug(
-                            "CF[%d] dir=%s allowlist add (supplier loc-only) | added=%d",
-                            i,
-                            dir_name,
-                            added,
-                        )
 
             if c_loc_required and c_loc_only and s_cands:
                 sset = s_cands
@@ -1621,31 +1484,6 @@ class EdgeLCIA:
                         if (s, c) in rem:
                             bucket.add((s, c))
                             added += 1
-                if added:
-                    if debug:
-                        log.debug(
-                            "CF[%d] dir=%s allowlist add (consumer loc-only) | added=%d",
-                            i,
-                            dir_name,
-                            added,
-                        )
-
-                        for s in list(s_loc_only or []):
-                            pass  # (no-op, just anchor for breakpoint)
-                        sampled = list(bucket)[:5]
-                        self.logger.debug(
-                            "allowlist[%s]: added=%d examples=%s",
-                            dir_name,
-                            added,
-                            [
-                                (
-                                    f"{self._dbg_edge_label(s)} → {self._dbg_edge_label(c)}"
-                                    if False
-                                    else (s, c)
-                                )
-                                for (s, c) in sampled
-                            ],  # keep indices to avoid any side effect
-                        )
 
             if s_loc_required and c_loc_required and s_loc_only and c_loc_only:
                 cset = set(c_loc_only)
@@ -1662,14 +1500,6 @@ class EdgeLCIA:
                         if (s, c) in rem:
                             bucket.add((s, c))
                             added += 1
-                if added:
-                    if debug:
-                        log.debug(
-                            "CF[%d] dir=%s allowlist add (both loc-only) | added=%d",
-                            i,
-                            dir_name,
-                            added,
-                        )
 
         self._update_unprocessed_edges()
 
@@ -1677,17 +1507,7 @@ class EdgeLCIA:
         self.eligible_edges_for_next_bio = allow_bio
         self.eligible_edges_for_next_tech = allow_tec
 
-        if debug:
-            log.debug(
-                "END map_exchanges | matched_positions=%d | allow_bio=%d | allow_tec=%d | processed_bio=%d | processed_tech=%d | unprocessed_bio=%d | unprocessed_tech=%d",
-                matched_positions_total,
-                len(allow_bio),
-                len(allow_tec),
-                len(self.processed_biosphere_edges),
-                len(self.processed_technosphere_edges),
-                len(self.unprocessed_biosphere_edges),
-                len(self.unprocessed_technosphere_edges),
-            )
+        self.applied_strategies.append("map_exchanges")
 
     def map_aggregate_locations(self) -> None:
         """
@@ -1720,63 +1540,6 @@ class EdgeLCIA:
 
         :return: None
         """
-
-        import json, itertools
-
-        _edge_seq = itertools.count(1)
-
-        def _edge_fate(
-            phase: str,
-            direction: str,
-            supplier_idx: int,
-            consumer_idx: int,
-            supplier_loc,
-            consumer_loc,
-            reason: str,
-            extra: dict | None = None,
-        ):
-            """Log a structured, single-line fate for this edge."""
-            payload = {
-                "seq": next(_edge_seq),
-                "phase": phase,  # INDEX, GROUP, PASS1, PASS2, END
-                "dir": direction,  # biosphere-technosphere / technosphere-technosphere
-                "supplier_idx": supplier_idx,
-                "consumer_idx": consumer_idx,
-                "supplier_loc": supplier_loc,
-                "consumer_loc": consumer_loc,
-                "reason": reason,
-            }
-            if extra:
-                payload.update(extra)
-
-            # JSON helper: make numpy/pandas/sets serializable
-            def _json_default(o):
-                import numpy as _np
-                import pandas as _pd
-                from pathlib import Path as _Path
-
-                if isinstance(o, _np.generic):  # np.int32, np.float64, etc.
-                    return o.item()
-                if isinstance(o, _np.ndarray):
-                    return o.tolist()
-                if isinstance(o, (_pd.Timestamp,)):
-                    return o.isoformat()
-                if isinstance(o, (set, frozenset)):
-                    # sort for determinism
-                    return sorted(list(o))
-                if isinstance(o, _Path):
-                    return str(o)
-                # last resort: string form
-                return str(o)
-
-            tag = " [RER]" if str(consumer_loc).upper() == "RER" else ""
-            self.logger.debug(
-                "AGG%s %s",
-                tag,
-                json.dumps(
-                    payload, sort_keys=True, ensure_ascii=False, default=_json_default
-                ),
-            )
 
         self._ensure_filtered_lookups_for_current_edges()
 
@@ -1823,29 +1586,11 @@ class EdgeLCIA:
 
             for supplier_idx, consumer_idx in unprocessed_edges:
                 if (supplier_idx, consumer_idx) in processed_flows:
-                    _edge_fate(
-                        "INDEX",
-                        direction,
-                        supplier_idx,
-                        consumer_idx,
-                        supplier_loc=None,
-                        consumer_loc=None,
-                        reason="ALREADY_PROCESSED",
-                    )
                     continue
 
                 consumer_loc = self.consumer_loc.get(consumer_idx)
 
                 if not consumer_loc:
-                    _edge_fate(
-                        "INDEX",
-                        direction,
-                        supplier_idx,
-                        consumer_idx,
-                        supplier_loc=None,
-                        consumer_loc=consumer_loc,
-                        reason="NO_CONSUMER_LOCATION",
-                    )
                     raise ValueError(
                         f"Consumer flow {consumer_idx} has no 'location' field. "
                         "Ensure all consumer flows have a valid location."
@@ -1856,30 +1601,11 @@ class EdgeLCIA:
 
                 if not supplier_info:
                     # nothing usable for this supplier; skip defensively
-                    _edge_fate(
-                        "INDEX",
-                        direction,
-                        supplier_idx,
-                        consumer_idx,
-                        supplier_loc=None,
-                        consumer_loc=consumer_loc,
-                        reason="NO_SUPPLIER_INFO",
-                    )
-
                     continue
                 supplier_loc = supplier_info.get("location")
 
                 edges_index[(consumer_loc, supplier_loc)].append(
                     (supplier_idx, consumer_idx)
-                )
-                _edge_fate(
-                    "INDEX",
-                    direction,
-                    supplier_idx,
-                    consumer_idx,
-                    supplier_loc=supplier_loc,
-                    consumer_loc=consumer_loc,
-                    reason="QUEUED",
                 )
 
             prefiltered_groups = defaultdict(list)
@@ -1889,16 +1615,6 @@ class EdgeLCIA:
                 if any(
                     x in ("RoW", "RoE") for x in (consumer_location, supplier_location)
                 ):
-                    for si, ci in edges:
-                        _edge_fate(
-                            phase="GROUP",
-                            direction=direction,
-                            supplier_idx=si,
-                            consumer_idx=ci,
-                            supplier_loc=supplier_location,
-                            consumer_loc=consumer_location,
-                            reason="SKIP_ROW_ROE",
-                        )
                     continue
 
                 if supplier_location is None:
@@ -1906,7 +1622,6 @@ class EdgeLCIA:
                         "__ANY__",
                     ]
                 else:
-                    # 🔁 Use the shared utility function to get subregions
                     candidate_suppliers_locations = resolve_candidate_locations(
                         geo=self.geo,
                         location=supplier_location,
@@ -1942,21 +1657,6 @@ class EdgeLCIA:
                     len(candidate_suppliers_locations) == 1
                     and len(candidate_consumer_locations) == 1
                 ):
-                    # neither the supplier or consumer locations are composite locations
-                    for si, ci in edges:
-                        _edge_fate(
-                            "GROUP",
-                            direction,
-                            si,
-                            ci,
-                            supplier_loc=supplier_location,
-                            consumer_loc=consumer_location,
-                            reason="SINGLETON_CANDIDATES",
-                            extra={
-                                "cand_sup": candidate_suppliers_locations,
-                                "cand_con": candidate_consumer_locations,
-                            },
-                        )
                     continue
 
                 self.logger.debug(
@@ -1967,15 +1667,12 @@ class EdgeLCIA:
                     candidate_consumer_locations,
                     len(edges),
                 )
-                self._dbg_geo_dump("aggregate/consumer", consumer_location)
-                self._dbg_geo_dump("aggregate/supplier", supplier_location)
 
                 for supplier_idx, consumer_idx in edges:
 
                     supplier_info = self._get_supplier_info(supplier_idx, direction)
                     if not supplier_info:
                         # Nothing useful we can use: skip this edge defensively
-                        # (or log at DEBUG)
                         continue
 
                     consumer_info = self._get_consumer_info(consumer_idx)
@@ -1996,20 +1693,7 @@ class EdgeLCIA:
                     sig = _equality_supplier_signature_cached(make_hashable(_proj))
 
                     if sig in self._cached_supplier_keys:
-                        _edge_fate(
-                            "GROUP",
-                            direction,
-                            supplier_idx,
-                            consumer_idx,
-                            supplier_loc=supplier_location,
-                            consumer_loc=consumer_location,
-                            reason="PREFILTERED",
-                            extra={
-                                "sig_fields": sorted(sig_fields),
-                                "cand_sup": candidate_suppliers_locations[:10],
-                                "cand_con": candidate_consumer_locations[:10],
-                            },
-                        )
+
                         prefiltered_groups[sig].append(
                             (
                                 supplier_idx,
@@ -2021,20 +1705,7 @@ class EdgeLCIA:
                             )
                         )
                     else:
-                        _edge_fate(
-                            "GROUP",
-                            direction,
-                            supplier_idx,
-                            consumer_idx,
-                            supplier_loc=supplier_location,
-                            consumer_loc=consumer_location,
-                            reason="REMAINING",
-                            extra={
-                                "sig_fields": sorted(sig_fields),
-                                "cand_sup": candidate_suppliers_locations[:10],
-                                "cand_con": candidate_consumer_locations[:10],
-                            },
-                        )
+
                         remaining_edges.append(
                             (
                                 supplier_idx,
@@ -2096,16 +1767,6 @@ class EdgeLCIA:
                             )
                             memo[mkey] = (new_cf, matched_cf_obj, agg_uncertainty)
 
-                            # helpful DEBUG to catch “global-ish” candidates sneaking in
-                            self.logger.debug(
-                                "AGG [RER] mkey summary | con=%s | sup=%s | cand_sup=%d | cand_con=%d | example=%s",
-                                consumer_info.get("location"),
-                                supplier_info.get("location"),
-                                len(cand_sup_s),
-                                len(cand_con_s),
-                                list(cand_con_s)[:10],
-                            )
-
                         new_cf, matched_cf_obj, agg_uncertainty = memo[mkey]
 
                         if new_cf != 0:
@@ -2118,38 +1779,12 @@ class EdgeLCIA:
                                 value=new_cf,
                                 uncertainty=agg_uncertainty,
                             )
-                            # per-edge fate log (keeps your earlier diagnostics)
-                            _edge_fate(
-                                phase="PASS1",
-                                direction=direction,
-                                supplier_idx=supplier_idx,
-                                consumer_idx=consumer_idx,
-                                supplier_loc=supplier_info.get("location"),
-                                consumer_loc=consumer_info.get("location"),
-                                reason="PASS1_APPLIED",
-                                extra={"new_cf": str(new_cf)},
-                            )
-                        else:
-                            _edge_fate(
-                                phase="PASS1",
-                                direction=direction,
-                                supplier_idx=supplier_idx,
-                                consumer_idx=consumer_idx,
-                                supplier_loc=supplier_info.get("location"),
-                                consumer_loc=consumer_info.get("location"),
-                                reason="PASS1_FAIL",
-                                extra={
-                                    "cand_sup": list(cand_sup_s)[:10],
-                                    "cand_con": list(cand_con_s)[:10],
-                                },
-                            )
 
             # Pass 2
             compute_cf_memoized = compute_cf_memoized_factory(
                 cf_index=self.cf_index,
                 required_supplier_fields=self.required_supplier_fields,
                 required_consumer_fields=self.required_consumer_fields,
-                weights=self.weights,
             )
 
             grouped_edges = group_edges_by_signature(
@@ -2182,33 +1817,15 @@ class EdgeLCIA:
                                 value=new_cf,
                                 uncertainty=agg_uncertainty,
                             )
-                            _edge_fate(
-                                "PASS2",
-                                direction,
-                                supplier_idx,
-                                consumer_idx,
-                                supplier_loc=dict(s_key).get("location"),
-                                consumer_loc=dict(c_key).get("location"),
-                                reason="PASS2_APPLIED",
-                                extra={"new_cf": str(new_cf)},
-                            )
                     else:
-                        for supplier_idx, consumer_idx in edge_group:
-                            _edge_fate(
-                                "PASS2",
-                                direction,
-                                supplier_idx,
-                                consumer_idx,
-                                supplier_loc=dict(s_key).get("location"),
-                                consumer_loc=dict(c_key).get("location"),
-                                reason="PASS2_FAIL",
-                            )
+
                         self.logger.warning(
                             f"Fallback CF could not be computed for supplier={s_key}, consumer={c_key} "
                             f"with candidate suppliers={candidate_suppliers} and consumers={candidate_consumers}"
                         )
 
         self._update_unprocessed_edges()
+        self.applied_strategies.append("map_aggregate_locations")
 
     def map_dynamic_locations(self) -> None:
         """
@@ -2497,16 +2114,7 @@ class EdgeLCIA:
                                 value=new_cf,
                                 uncertainty=agg_uncertainty,
                             )
-                            self.logger.debug(
-                                "dynamic-check: supplier name=%s | supplier refprod=%s | cons name=%s | cons refprod=%s | new_cf=%s | supplier_cands=%s | consumer_cands=%s",
-                                supplier_info.get("name"),
-                                supplier_info.get("reference product"),
-                                consumer_info.get("name"),
-                                consumer_info.get("reference product"),
-                                new_cf,
-                                list(cand_sup_s)[:10],
-                                list(cand_con_s)[:10],
-                            )
+
                         else:
                             self.logger.warning(
                                 "Fallback CF could not be computed for supplier=%s, consumer=%s "
@@ -2522,7 +2130,6 @@ class EdgeLCIA:
                 cf_index=self.cf_index,
                 required_supplier_fields=self.required_supplier_fields,
                 required_consumer_fields=self.required_consumer_fields,
-                weights=self.weights,
             )
 
             grouped_edges = group_edges_by_signature(
@@ -2565,6 +2172,7 @@ class EdgeLCIA:
                         )
 
         self._update_unprocessed_edges()
+        self.applied_strategies.append("map_dynamic_locations")
 
     def map_contained_locations(self) -> None:
         """
@@ -2741,19 +2349,9 @@ class EdgeLCIA:
                     # Try to find the nearest method region that contains the inventory region
                     # Prioritize a stable order that tends to pick the smallest sensible container;
                     # if you want to strongly prefer RER when present, keep it first.
-                    ordered = sorted(
-                        available_non_global, key=lambda x: (x != "RER", x)
-                    )
+                    ordered = sorted(available_non_global)
 
-                    self._dbg_geo_dump("contained/consumer", consumer_location)
                     # Probe each candidate method region (non-GLO) once so we see what children they claim
-                    for _cand in [
-                        loc
-                        for loc in available_consumer_locs
-                        if loc not in {"__ANY__", "GLO"}
-                    ][:10]:
-                        self._dbg_geo_dump(f"contained/method-cand[{_cand}]", _cand)
-
                     nearest = next(
                         (
                             cand
@@ -2878,7 +2476,6 @@ class EdgeLCIA:
                 cf_index=self.cf_index,
                 required_supplier_fields=self.required_supplier_fields,
                 required_consumer_fields=self.required_consumer_fields,
-                weights=self.weights,
             )
 
             grouped_edges = group_edges_by_signature(
@@ -2920,6 +2517,7 @@ class EdgeLCIA:
                         )
 
         self._update_unprocessed_edges()
+        self.applied_strategies.append("map_contained_locations")
 
     def map_remaining_locations_to_global(self) -> None:
         """
@@ -3164,7 +2762,6 @@ class EdgeLCIA:
                     cf_index=self.cf_index,
                     required_supplier_fields=self.required_supplier_fields,
                     required_consumer_fields=self.required_consumer_fields,
-                    weights=self.weights,
                 )
 
                 grouped_edges = group_edges_by_signature(
@@ -3208,6 +2805,7 @@ class EdgeLCIA:
                             continue
 
         self._update_unprocessed_edges()
+        self.applied_strategies.append("map_remaining_locations_to_global")
 
     def apply_strategies(self, strategies: list[str] | None = None) -> None:
         """
@@ -3599,10 +3197,6 @@ class EdgeLCIA:
         *,
         scenario_idx: int | str | None = None,
         scenario: str | None = None,
-        run_aggregate: bool = True,
-        run_dynamic: bool = True,
-        run_contained: bool = True,
-        run_global: bool = True,
         recompute_score: bool = True,
     ) -> None:
         """
@@ -3621,8 +3215,6 @@ class EdgeLCIA:
         scenario : str, optional
             Scenario name to use for evaluating symbolic CFs (deterministic mode).
             Defaults to the last-used one or the class default.
-        run_aggregate, run_dynamic, run_contained, run_global : bool
-            Which fallback mapping passes to run for the *new* edges.
         recompute_score : bool
             If True, recompute the LCIA score using the updated inventory.
 
@@ -3757,14 +3349,7 @@ class EdgeLCIA:
 
         # Optional fallback passes (these operate only on unprocessed edges, which we’ve
         # already restricted to the new edges in step 2)
-        if run_aggregate:
-            self.map_aggregate_locations()
-        if run_dynamic:
-            self.map_dynamic_locations()
-        if run_contained:
-            self.map_contained_locations()
-        if run_global:
-            self.map_remaining_locations_to_global()
+        self.apply_strategies()
 
         # Identify the CF entries created in this redo
         new_cf_entries = self.cfs_mapping[baseline_len:]

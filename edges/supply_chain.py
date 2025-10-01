@@ -207,7 +207,6 @@ def sankey_from_supply_df(
     col_amount: str = "amount",
     wrap_chars: int = 18,
     max_label_lines: int = 2,
-    use_abs_for_widths: bool = True,
     add_toggle: bool = True,
     base_height: int = 380,
     per_level_px: int = 110,
@@ -245,7 +244,6 @@ def sankey_from_supply_df(
     highlight_top_k: int = 25,
     highlight_alpha_on: float = 0.9,
     highlight_alpha_off: float = 0.08,
-    y_spacing: str = "linear",  # "equal" | "sqrt" | "linear" | "by_score"
     node_instance_mode: str = "merge",  # "merge" | "by_parent" | "by_child_level"
 ) -> go.Figure:
     """Sankey with last-level specials, untruncated hover labels, per-parent outgoing balancing, and tidy UI."""
@@ -426,11 +424,11 @@ def sankey_from_supply_df(
 
         elif mode == "by_parent":
             # one instance per (activity, parent)
-            return ("by_parent", base, r.get(col_parent))
+            return "by_parent", base, r.get(col_parent)
 
         elif mode == "by_child_level":
             # one instance per (activity, child level) – useful if the same activity appears at multiple levels
-            return ("by_level", base, int(r[col_level]))
+            return "by_level", base, int(r[col_level])
 
         else:
             # fallback to old behavior if an unknown value is passed
@@ -596,7 +594,7 @@ def sankey_from_supply_df(
             _instance_info[idx] = (pos, len(idxs))
 
     def _descendants(root: int) -> set[int]:
-        out, q = set([root]), deque([root])
+        out, q = {root}, deque([root])
         while q:
             u = q.popleft()
             for v in children.get(u, ()):
@@ -606,7 +604,7 @@ def sankey_from_supply_df(
         return out
 
     def _ancestors(root: int) -> set[int]:
-        out, q = set([root]), deque([root])
+        out, q = {root}, deque([root])
         while q:
             v = q.popleft()
             for u in parents.get(v, ()):
@@ -830,7 +828,7 @@ def sankey_from_supply_df(
             else:
                 c = hex_to_rgba(color_other, 0.40)
 
-            v = base_vals[li] * out_scale[s_idx]  # <--- scaled width
+            v = base_vals[li] * out_scale[s_idx]
             src.append(s_idx)
             tgt.append(t_idx)
             val.append(v)
@@ -875,11 +873,6 @@ def sankey_from_supply_df(
     loc_hover_hide = [
         ("" if m else h) for h, m in zip(links_loc["customdata"], is_special_target)
     ]
-
-    # (optional) if you also want to fade the special nodes themselves:
-    # node_colors_hide = node_colors_base[:]
-    # for i in special_indices:
-    #     node_colors_hide[i] = _rgba_with_alpha(node_colors_hide[i], 0.0)
 
     # --- base color arrays for restyling --------------------------------------
     node_colors_base = [_rgba_with_alpha(c, 1.0) for c in colors_full]
@@ -1432,7 +1425,6 @@ def save_sankey_html(
             include_plotlyjs=include,
             full_html=True,
             auto_open=auto_open,
-            title=title,  # available in Plotly >=5.0
             config=config,
         )
     except TypeError:
@@ -1462,7 +1454,6 @@ def save_html_multi_methods_for_activity(
     use_distributions: bool = False,
     iterations: int = 100,
     random_seed: int | None = None,
-    redo_flags: Optional[Dict[str, bool]] = None,
     collapse_markets: bool = False,
     plot_kwargs: Optional[Dict[str, Any]] = None,
     offline: bool = False,
@@ -1494,7 +1485,6 @@ def save_html_multi_methods_for_activity(
             use_distributions=use_distributions,
             iterations=iterations,
             random_seed=random_seed,
-            redo_flags=redo_flags,
             collapse_markets=collapse_markets,
         )
         sc.bootstrap()
@@ -1543,7 +1533,6 @@ class SupplyChain:
         use_distributions: bool = False,
         iterations: int = 100,
         random_seed: int | None = None,
-        redo_flags: Optional[Dict[str, bool]] = None,
         collapse_markets: bool = False,
         debug: bool = False,
         dbg_max_prints: int = 2000,
@@ -1576,22 +1565,9 @@ class SupplyChain:
             scenario=scenario,
         )
 
-        # Control which fallback mapping passes are allowed during recursion
-        self._redo_flags = dict(
-            run_aggregate=True, run_dynamic=True, run_contained=True, run_global=True
-        )
-        if redo_flags:
-            self._redo_flags.update(redo_flags)
-
         self._total_score: Optional[float] = None
         self._unit_score_cache: Dict[Any, float] = {}
         self._market_flat_cache: Dict[Any, List[Tuple[Activity, float]]] = {}
-
-        # --- Debugging ---
-        self.debug = bool(debug)
-        self._dbg_prints = 0
-        self._dbg_max_prints = int(dbg_max_prints)
-        self._dbg_muted = False
 
         self.market_top_k = int(market_top_k)
 
@@ -1601,20 +1577,6 @@ class SupplyChain:
         rid = self._row_counter
         self._row_counter += 1
         return rid
-
-    # ---------- Public API ---------------------------------------------------
-
-    # ---------- Debug helpers ----------
-    def _p(self, msg: str):
-        """Rate-limited debug print."""
-        if not self.debug:
-            return
-        if self._dbg_prints < self._dbg_max_prints:
-            print(msg)
-            self._dbg_prints += 1
-        elif not self._dbg_muted:
-            print("[debug muted after limit]")
-            self._dbg_muted = True
 
     @staticmethod
     def _short_act(act: Activity) -> str:
@@ -1644,9 +1606,6 @@ class SupplyChain:
         mk = self._act_cache_key(market_act)
         hit = self._market_flat_cache.get(mk)
         if hit is not None:
-            self._p(
-                f"[flatten] cache HIT for market: {self._short_act(market_act)} → {len(hit)} suppliers"
-            )
             return hit
 
         t0 = time.perf_counter()
@@ -1659,9 +1618,6 @@ class SupplyChain:
             nodes_visited += 1
             ak = self._act_cache_key(act)
             if ak in path:
-                self._p(
-                    f"[flatten] cycle @ {self._short_act(act)} (coef {coef:.4g}) → treat as terminal"
-                )
                 out_pairs.append((act, coef))
                 return
             if not _is_market_name(act.get("name")):
@@ -1679,9 +1635,6 @@ class SupplyChain:
                 _dfs(sup, coef * amt, path)
             path.remove(ak)
 
-        self._p(
-            f"[flatten] MISS for market: {self._short_act(market_act)} — expanding…"
-        )
         _dfs(market_act, 1.0, set())
 
         # aggregate duplicates
@@ -1696,16 +1649,7 @@ class SupplyChain:
 
         flat = [(key2act[k], agg[k]) for k in agg]
         self._market_flat_cache[mk] = flat
-        dt = time.perf_counter() - t0
-        self._p(
-            f"[flatten] built {len(flat)} suppliers (visited nodes={nodes_visited}, edges={edges_traversed}) "
-            f"in {dt:.3f}s for market {self._short_act(market_act)}"
-        )
-        # If this is insanely large, say so:
-        if len(flat) > 2000:
-            self._p(
-                f"[flatten][WARN] very large supplier set: {len(flat)} for {self._short_act(market_act)}"
-            )
+
         return flat
 
     def _score_per_unit(self, act: Activity) -> float:
@@ -1721,16 +1665,11 @@ class SupplyChain:
             scenario_idx=self.scenario_idx,
             scenario=self.scenario,
             recompute_score=True,
-            **self._redo_flags,
         )
         s = float(self.elcia.score or 0.0)
         dt = time.perf_counter() - t0
         self._unit_score_cache[k] = s
-        self._p(
-            f"[unit-score] MISS {self._short_act(act)} → {s:.5g} in {dt:.3f}s (cache size={len(self._unit_score_cache)})"
-        )
-        if dt > 0.5:
-            self._p(f"[unit-score][SLOW] {self._short_act(act)} took {dt:.3f}s")
+
         return s
 
     @staticmethod
@@ -1752,18 +1691,7 @@ class SupplyChain:
         """
         # Standard pipeline on root demand
         self.elcia.lci()
-        self.elcia.map_exchanges()
-        if self._redo_flags.get("run_aggregate", True):
-            self.elcia.map_aggregate_locations()
-
-        if self._redo_flags.get("run_dynamic", True):
-            self.elcia.map_dynamic_locations()
-
-        if self._redo_flags.get("run_contained", True):
-            self.elcia.map_contained_locations()
-
-        if self._redo_flags.get("run_global", True):
-            self.elcia.map_remaining_locations_to_global()
+        self.elcia.apply_strategies()
 
         self.elcia.evaluate_cfs(scenario_idx=self.scenario_idx, scenario=self.scenario)
         self.elcia.lcia()
@@ -1804,15 +1732,12 @@ class SupplyChain:
     ):
         """Traverse one node with lazy market expansion (expand only above-cutoff, top-K)."""
         indent = "  " * level
-        self._p(
-            f"{indent}→ ENTER level {level}: {self._short_act(act)}  amount={amount:.5g}"
-        )
 
         # --- Node score ---
         t0 = time.perf_counter()
         if level == 0:
             node_score = float(self._total_score or 0.0)
-            self._p(f"{indent}[score] root uses precomputed total={node_score:.5g}")
+
         else:
             if _precomputed_score is None:
                 self.elcia.redo_lcia(
@@ -1820,16 +1745,12 @@ class SupplyChain:
                     scenario_idx=self.scenario_idx,
                     scenario=self.scenario,
                     recompute_score=True,
-                    **self._redo_flags,
                 )
                 node_score = float(self.elcia.score or 0.0)
                 dt = time.perf_counter() - t0
-                self._p(
-                    f"{indent}[score] redo_lcia {self._short_act(act)} → {node_score:.5g} in {dt:.3f}s"
-                )
+
             else:
                 node_score = float(_precomputed_score)
-                self._p(f"{indent}[score] reused child precomputed={node_score:.5g}")
 
         total = float(self._total_score or 0.0)
         share = (node_score / total) if total != 0 else 0.0
@@ -1837,7 +1758,6 @@ class SupplyChain:
 
         # Cycle guard
         if parent is not None and cur_key == parent:
-            self._p(f"{indent}[cycle] parent == current; emitting LOSS and returning")
             return [
                 SupplyChainRow(
                     level=level,
@@ -1871,9 +1791,6 @@ class SupplyChain:
 
         # Depth limit
         if level >= self.level:
-            self._p(
-                f"{indent}[stop] reached level limit ({self.level}); returning node only"
-            )
             return rows
 
         # Treat unknown-amount nodes as terminals
@@ -1923,9 +1840,6 @@ class SupplyChain:
             unit = self._score_per_unit(a)
             children.append((a, amt, unit * amt))
         dt_score = time.perf_counter() - t_score0
-        self._p(
-            f"{indent}[collect+score] unique_children={len(children)} in {dt_score:.3f}s (unit-cache={len(self._unit_score_cache)})"
-        )
 
         if not children:
             # Leaf → all is direct emissions
@@ -1945,7 +1859,6 @@ class SupplyChain:
                         parent_row_id=rid,
                     )
                 )
-            self._p(f"{indent}[leaf] no children; returning")
             return rows
 
         # --- Cutoff split (track BOTH above and below) -----------------------
@@ -1955,10 +1868,6 @@ class SupplyChain:
             denom_parent
             if (self.cutoff_basis == "parent" and denom_parent > 0)
             else denom_total
-        )
-        self._p(
-            f"{indent}[cutoff] basis={'parent' if denom_for_cutoff==denom_parent else 'total'} "
-            f"cutoff={self.cutoff:.4g} denom={denom_for_cutoff:.5g}"
         )
 
         # Keep explicit lists; we’ll need `below` later to summarize ref products
@@ -1971,8 +1880,6 @@ class SupplyChain:
                 above.append((ch, ch_amt, ch_score))
             else:
                 below.append((ch, ch_amt, ch_score))
-
-        self._p(f"{indent}[cutoff] pre-expand above={len(above)}  below={len(below)}")
 
         # --- Lazy market expansion (only for above-cutoff markets) ----------
         if self.collapse_markets and above:
@@ -1990,10 +1897,6 @@ class SupplyChain:
                 t_flat = time.perf_counter()
                 flat = self._flatten_market_suppliers(ch)  # [(sup_act, coef_per_unit)]
                 dt_flat = time.perf_counter() - t_flat
-                self._p(
-                    f"{indent}[expand-market] {self._short_act(ch)} suppliers={len(flat)} "
-                    f"in {dt_flat:.3f}s, top_k={K}, ch_score={ch_score:.5g}"
-                )
 
                 # Rank candidates; compute scores only for top-K
                 flat_sorted = sorted(flat, key=lambda t: abs(t[1]), reverse=True)
@@ -2041,11 +1944,6 @@ class SupplyChain:
                             (ch, 0.0, residual)
                         )  # harmless either way (we don't recurse into "below")
 
-                self._p(
-                    f"{indent}[expand-market] promoted={promoted_cnt}/{tested_cnt}  "
-                    f"promoted_score={promoted_scores:.5g}  residual→below={residual:.5g}"
-                )
-
             # Replace above with expanded set; extend below with what fell short
             above = above_final
             below.extend(below_extra)
@@ -2054,11 +1952,6 @@ class SupplyChain:
         sum_above = sum(cs for _, _, cs in above)
         sum_below = sum(cs for _, _, cs in below)
         direct = node_score - (sum_above + sum_below)
-
-        self._p(
-            f"{indent}[balance] node={node_score:.5g} sum_above={sum_above:.5g} "
-            f"sum_below={sum_below:.5g} direct={direct:.5g}"
-        )
 
         if abs(direct) > 0.0:
             rows.append(
@@ -2120,15 +2013,6 @@ class SupplyChain:
         # --- Recurse into the final above-cutoff set ------------------------
         max_list = 6
         for idx, (ch, ch_amt, ch_score) in enumerate(above):
-            if idx < max_list:
-                self._p(
-                    f"{indent}[recurse] → child {idx+1}/{len(above)} {self._short_act(ch)} "
-                    f"amt={ch_amt:.5g} score={ch_score:.5g}"
-                )
-            elif idx == max_list:
-                self._p(
-                    f"{indent}[recurse] … {len(above)-max_list} more children (muted)"
-                )
             rows.extend(
                 self._walk(
                     ch,
@@ -2140,9 +2024,6 @@ class SupplyChain:
                 )
             )
 
-        self._p(
-            f"{indent}← EXIT level {level}: {self._short_act(act)}  produced_rows={len(rows)}"
-        )
         return rows
 
     # ---------- Small helpers ------------------------------------------------
@@ -2156,7 +2037,7 @@ class SupplyChain:
 
     @staticmethod
     def _key(a: Activity) -> Tuple[str, str, str]:
-        return (a["name"], a.get("reference product"), a.get("location"))
+        return a["name"], a.get("reference product"), a.get("location")
 
     def plot_sankey(self, df: pd.DataFrame, **kwargs):
         """Convenience method: EdgeSupplyChainScorer.plot_sankey(df, ...)."""

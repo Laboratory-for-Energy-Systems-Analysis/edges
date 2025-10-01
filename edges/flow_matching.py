@@ -77,7 +77,7 @@ def process_cf_list(
             criteria=supplier_cf,
         )
 
-        if supplier_match is False:
+        if not supplier_match:
             continue
 
         consumer_match = match_flow(
@@ -85,7 +85,7 @@ def process_cf_list(
             criteria=consumer_cf,
         )
 
-        if consumer_match is False:
+        if not consumer_match:
             continue
 
         match_score = 0
@@ -289,7 +289,7 @@ def build_cf_index(raw_cfs: list[dict]) -> dict:
 
 
 @lru_cache(maxsize=None)
-def cached_match_with_index(flow_to_match_hashable, required_fields_tuple, ctx_id):
+def cached_match_with_index(flow_to_match_hashable, required_fields_tuple):
     flow_to_match = dict(flow_to_match_hashable)
     required_fields = set(required_fields_tuple)
     # the contexts live on the function as attributes
@@ -499,7 +499,7 @@ def match_with_index(
 
 
 def compute_cf_memoized_factory(
-    cf_index, required_supplier_fields, required_consumer_fields, weights
+    cf_index, required_supplier_fields, required_consumer_fields
 ):
     """
     Factory for a memoized compute_average_cf over signature/location candidates.
@@ -507,7 +507,6 @@ def compute_cf_memoized_factory(
     :param cf_index: CF index keyed by (supplier_loc, consumer_loc).
     :param required_supplier_fields: Required fields for supplier signature.
     :param required_consumer_fields: Required fields for consumer signature.
-    :param weights: Weight pairs used for region availability checks.
     :return: Cached function(s_key, c_key, supplier_candidates, consumer_candidates) -> tuple.
     """
 
@@ -864,7 +863,7 @@ def compute_average_cf(
                         "CF-AVG: skip agg-unc (symbolic child without unc) | child=%s",
                         _short_cf(cf),
                     )
-                return (expr, None, None)
+                return expr, None, None
         child_values.append(child_unc)
         child_weights.append(float(sh))
 
@@ -922,4 +921,4 @@ def compute_average_cf(
             expr,
         )
 
-    return (expr, None, agg_uncertainty)
+    return expr, None, agg_uncertainty

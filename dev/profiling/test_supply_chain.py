@@ -1,7 +1,10 @@
-from edges import SupplyChain
+from edges import SupplyChain, setup_package_logging
+import logging
 import bw2data
 import time
 import pandas as pd
+
+setup_package_logging(level=logging.DEBUG)
 
 # bw2data.projects.set_current("ecoinvent-3.10-cutoff")
 # bw2data.projects.set_current("bw25_ei310")
@@ -20,24 +23,18 @@ if not use_example_df:
     ][0]
 
     # method = ("AWARE 2.0", "Country", "all", "yearly")
-    method = ("GeoPolRisk", "paired", "2024")
-    # method = ("ImpactWorld+ 2.1", "Particulate matter formation", "midpoint")
+    # method = ("GeoPolRisk", "paired", "2024")
+    method = ("ImpactWorld+ 2.1", "Particulate matter formation", "midpoint")
     # method = ("RELICS", "copper", "primary")
 
     sc = SupplyChain(
         activity=act,
         method=method,
         amount=1,
-        level=8,
+        level=6,
         cutoff=0.01,
         cutoff_basis="total",  # "total" or "parent"
-        redo_flags=dict(
-            run_aggregate=True,
-            run_dynamic=True,
-            run_contained=True,
-            run_global=True,
-        ),
-        collapse_markets=False,
+        collapse_markets=True,
         debug=False,  # <— turn on logging
         dbg_max_prints=5000,
         market_top_k=100,
@@ -70,12 +67,6 @@ else:
         amount=1,
         level=5,
         cutoff=0.01,
-        redo_flags=dict(
-            run_aggregate=True,
-            run_dynamic=True,
-            run_contained=True,
-            run_global=True,
-        ),
         collapse_markets=False,
     )
     df = pd.read_csv("example_df.csv")
@@ -84,7 +75,6 @@ else:
 sc.save_html(
     df,
     path="example_sankey.html",
-    y_spacing="linear",
     height_max=1000,
     width_max=1800,
     node_instance_mode="by_parent",  # or "by_child_level" / "by_level"
