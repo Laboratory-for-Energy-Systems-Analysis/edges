@@ -1657,17 +1657,14 @@ class EdgeLCIA:
                     consumer_info = self._get_consumer_info(consumer_idx)
 
                     include_cls_in_sig = any(
-                        "classifications" in cf.get("supplier", {})
-                        for cf in self.raw_cfs_data
+                        "classifications" in cf["supplier"] for cf in self.raw_cfs_data
                     )
                     sig_fields = set(self.required_supplier_fields)
                     if include_cls_in_sig:
                         sig_fields.add("classifications")
 
                     _proj = {
-                        k: supplier_info.get(k)
-                        for k in sig_fields
-                        if supplier_info.get(k) is not None
+                        k: supplier_info[k] for k in sig_fields if k in supplier_info
                     }
                     sig = _equality_supplier_signature_cached(make_hashable(_proj))
 
@@ -1706,14 +1703,12 @@ class EdgeLCIA:
                     def _consumer_sig(consumer_info: dict) -> tuple:
                         fields = set(self.required_consumer_fields)
                         if any(
-                            "classifications" in cf.get("consumer", {})
+                            "classifications" in cf["consumer"]
                             for cf in self.raw_cfs_data
                         ):
                             fields.add("classifications")
                         proj = {
-                            k: consumer_info.get(k)
-                            for k in fields
-                            if consumer_info.get(k) is not None
+                            k: consumer_info[k] for k in fields if k in consumer_info
                         }
                         return make_hashable(proj)
 
@@ -1859,7 +1854,7 @@ class EdgeLCIA:
         logger.info("Handling dynamic regions…")
 
         for flow in self.technosphere_flows:
-            key = (flow["name"], flow.get("reference product"))
+            key = (flow["name"], flow["reference product"])
             self.technosphere_flows_lookup[key].append(flow["location"])
 
         raw_exclusion_locs = {
@@ -1989,18 +1984,13 @@ class EdgeLCIA:
 
                 # project supplier info to the required fields (+classifications) before hashing
                 include_cls_in_sig = any(
-                    "classifications" in cf.get("supplier", {})
-                    for cf in self.raw_cfs_data
+                    "classifications" in cf["supplier"] for cf in self.raw_cfs_data
                 )
                 sig_fields = set(self.required_supplier_fields)
                 if include_cls_in_sig:
                     sig_fields.add("classifications")
 
-                _proj = {
-                    k: supplier_info.get(k)
-                    for k in sig_fields
-                    if supplier_info.get(k) is not None
-                }
+                _proj = {k: supplier_info[k] for k in sig_fields if k in supplier_info}
                 sig = _equality_supplier_signature_cached(make_hashable(_proj))
 
                 if sig in self._cached_supplier_keys:
@@ -2039,14 +2029,12 @@ class EdgeLCIA:
                         """Hashable, filtered consumer signature (only required fields + classifications if used)."""
                         fields = set(self.required_consumer_fields)
                         if any(
-                            "classifications" in cf.get("consumer", {})
+                            "classifications" in cf["consumer"]
                             for cf in self.raw_cfs_data
                         ):
                             fields.add("classifications")
                         proj = {
-                            k: consumer_info.get(k)
-                            for k in fields
-                            if consumer_info.get(k) is not None
+                            k: consumer_info[k] for k in fields if k in consumer_info
                         }
                         return make_hashable(proj)
 
@@ -2368,17 +2356,14 @@ class EdgeLCIA:
                     consumer_info = self._get_consumer_info(consumer_idx)
 
                     include_cls_in_sig = any(
-                        "classifications" in cf.get("supplier", {})
-                        for cf in self.raw_cfs_data
+                        "classifications" in cf["supplier"] for cf in self.raw_cfs_data
                     )
                     sig_fields = set(self.required_supplier_fields)
                     if include_cls_in_sig:
                         sig_fields.add("classifications")
 
                     _proj = {
-                        k: supplier_info.get(k)
-                        for k in sig_fields
-                        if supplier_info.get(k) is not None
+                        k: supplier_info[k] for k in sig_fields if k in supplier_info
                     }
                     sig = _equality_supplier_signature_cached(make_hashable(_proj))
 
@@ -2646,17 +2631,14 @@ class EdgeLCIA:
                     consumer_info = self._get_consumer_info(consumer_idx)
 
                     include_cls_in_sig = any(
-                        "classifications" in cf.get("supplier", {})
-                        for cf in self.raw_cfs_data
+                        "classifications" in cf["supplier"] for cf in self.raw_cfs_data
                     )
                     sig_fields = set(self.required_supplier_fields)
                     if include_cls_in_sig:
                         sig_fields.add("classifications")
 
                     _proj = {
-                        k: supplier_info.get(k)
-                        for k in sig_fields
-                        if supplier_info.get(k) is not None
+                        k: supplier_info[k] for k in sig_fields if k in supplier_info
                     }
                     sig = _equality_supplier_signature_cached(make_hashable(_proj))
 
@@ -3081,7 +3063,7 @@ class EdgeLCIA:
 
         # Decide matrix type from the method (stable across runs), not from transient edge sets
         only_tech = all(
-            cf["supplier"].get("matrix") == "technosphere" for cf in self.raw_cfs_data
+            cf["supplier"]["matrix"] == "technosphere" for cf in self.raw_cfs_data
         )
         is_biosphere = not only_tech
 
@@ -3232,14 +3214,14 @@ class EdgeLCIA:
 
         # Decide direction (tech-only vs bio) from CFs (doesn't require lci)
         only_tech = all(
-            cf["supplier"].get("matrix") == "technosphere" for cf in self.raw_cfs_data
+            cf["supplier"]["matrix"] == "technosphere" for cf in self.raw_cfs_data
         )
 
         # 2) Recompute inventory & edges for the *new* demand
         self.lca.redo_lci(demand=demand)  # updates matrices
 
         only_tech = all(
-            cf["supplier"].get("matrix") == "technosphere" for cf in self.raw_cfs_data
+            cf["supplier"]["matrix"] == "technosphere" for cf in self.raw_cfs_data
         )
 
         # Recompute CURRENT edges from fresh matrices
