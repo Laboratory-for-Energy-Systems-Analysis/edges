@@ -54,7 +54,7 @@ jobs:
         run: |
           python -m pip install -U pip
           pip install -r requirements.txt
-          pip install pytest pytest-instafail
+          pip install pytest pytest-forked
           pip install -e . --verbose
 
       - name: Set up test database
@@ -68,14 +68,27 @@ jobs:
       - name: Create debug directory
         run: python -c "import pathlib; p=pathlib.Path('pytest-debug'); p.mkdir(parents=True, exist_ok=True); print('Created', p.resolve())"
 
-      - name: Run tests
+      # POSIX: run everything with subprocess isolation
+      - name: Run tests (*nix, forked)
+        if: runner.os != 'Windows'
         env:
           EI_USERNAME: ${{ secrets.EI_USERNAME }}
           EI_PASSWORD: ${{ secrets.EI_PASSWORD }}
-          PYTEST_DEBUG_DIR: pytest-debug   # your fixture will use this
+          PYTEST_DEBUG_DIR: pytest-debug
         run: |
           python -c "import platform; print('Platform:', platform.platform())"
-          pytest
+          pytest --forked -q
+
+      # Windows: run without forking (either skip forked-marked tests or run all if safe)
+      - name: Run tests (Windows, no fork)
+        if: runner.os == 'Windows'
+        env:
+          EI_USERNAME: ${{ secrets.EI_USERNAME }}
+          EI_PASSWORD: ${{ secrets.EI_PASSWORD }}
+          PYTEST_DEBUG_DIR: pytest-debug
+        run: |
+          python -c "import platform; print('Platform:', platform.platform())"
+          pytest -q -m "not forked"
 
       # Linux + macOS
       - name: List debug dir (diagnostics) — *nix

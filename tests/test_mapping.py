@@ -4,8 +4,6 @@ from edges import EdgeLCIA, setup_package_logging
 from bw2data import Database, projects, get_activity, __version__
 import logging
 
-import pandas as pd
-
 setup_package_logging(level=logging.DEBUG)
 
 
@@ -28,6 +26,7 @@ activity_E = get_activity(("lcia-test-db", "E"))
 this_dir = Path(__file__).parent
 
 
+@pytest.mark.forked
 @pytest.mark.parametrize(
     "filename, activity, expected",
     [
@@ -82,6 +81,8 @@ def test_cf_mapping(filename, activity, expected):
             )
 
     assert pytest.approx(lca.score) == expected
+
+    lca = None
 
 
 def test_parameters():

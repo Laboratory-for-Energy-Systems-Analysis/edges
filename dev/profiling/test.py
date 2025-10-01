@@ -79,8 +79,8 @@ act = [
 ][0]
 
 # method = ("GeoPolRisk", "paired", "2024", "short")
-# method = ("AWARE 2.0", "Country", "all", "yearly")
-method = ("GeoPolRisk", "paired", "2024")
+method = ("AWARE 2.0", "Country", "all", "yearly")
+# method = ("GeoPolRisk", "paired", "2024")
 
 LCA = EdgeLCIA(
     {act: 1},
@@ -100,8 +100,8 @@ LCA.apply_strategies()
 LCA.evaluate_cfs()
 LCA.lcia()
 
-df = LCA.generate_cf_table(include_unmatched=True)
-df.to_excel("df_GeoPolRisk.xlsx")
+# df = LCA.generate_cf_table(include_unmatched=True)
+# df.to_excel("df_GeoPolRisk.xlsx")
 
 # Stop timer
 elapsed_time = time.time() - start_time
@@ -111,7 +111,7 @@ print(f"Sum of characterization matrix: {LCA.characterization_matrix.sum()}")
 print(f"Sum of characterized inventory matrix: {LCA.characterized_inventory.sum()}")
 print(f"Score: {LCA.score}")
 
-df = LCA.generate_cf_table(include_unmatched=False)
-df.to_csv("cf_table (local).csv", index=False)
+# df = LCA.generate_cf_table(include_unmatched=False)
+# df.to_csv("cf_table (local).csv", index=False)
 
 print(f"Score: {LCA.score}. Time elapsed: {elapsed_time} seconds.")

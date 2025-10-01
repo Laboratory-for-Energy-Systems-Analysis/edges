@@ -69,8 +69,14 @@ logger = logging.getLogger(__name__)
 
 
 def add_cf_entry(
-    cfs_mapping, supplier_info, consumer_info, direction, indices, value, uncertainty
-):
+    cfs_mapping: list,
+    supplier_info: dict,
+    consumer_info: dict,
+    direction: str,
+    indices: tuple,
+    value: float,
+    uncertainty: dict,
+) -> None:
     """
     Append a characterized-exchange entry to the in-memory CF mapping.
 
@@ -135,7 +141,9 @@ def _equality_supplier_signature_cached(hashable_supplier_info: tuple) -> tuple:
     return make_hashable(info)
 
 
-def _collect_cf_prefixes_used_by_method(raw_cfs_data):
+def _collect_cf_prefixes_used_by_method(
+    raw_cfs_data: list,
+) -> dict[str, frozenset[str]]:
     """
     Collect all classification prefixes that appear in a CF method.
 
@@ -169,7 +177,7 @@ def _collect_cf_prefixes_used_by_method(raw_cfs_data):
 
 def _build_prefix_index_restricted(
     idx_to_norm_classes: dict[int, tuple], required_prefixes: dict[str, frozenset[str]]
-):
+) -> dict[str, dict[str, set[int]]]:
     """
     Build an index mapping classification prefixes to activities.
 
@@ -202,7 +210,13 @@ def _build_prefix_index_restricted(
     return out
 
 
-def _norm_cls(x):
+def _norm_cls(x: dict | list | tuple | None) -> tuple[tuple[str, tuple[str, ...]], ...]:
+    """
+    Normalize classification entries into a tuple of (scheme, (codes,...)).
+
+    :param x: Raw classification data (dict, list of pairs, or None).
+    """
+
     def _san(c):
         # strip trailing ":..." and whitespace once
         return str(c).split(":", 1)[0].strip()
@@ -230,12 +244,15 @@ def _norm_cls(x):
     return tuple((scheme, tuple(sorted(bag[scheme]))) for scheme in sorted(bag))
 
 
-def make_coo_deterministic(coo: "sparse.COO"):
+def make_coo_deterministic(coo: sp.COO) -> sp.COO:
     """Return a COO with deterministically ordered coords and no duplicates.
 
     - Works for 2D and 3D COO.
     - No use of .sum() (avoids accidental scalar reduction).
     - If `coo` is not a pydata.sparse COO, just return it unchanged.
+
+    :param coo: A sparse.COO matrix.
+    :return: A sparse.COO with sorted coords and no duplicates.
     """
 
     # Pass through non-COO objects unchanged (e.g., scalar, ndarray)
@@ -308,28 +325,10 @@ class EdgeLCIA:
         """
         Initialize an EdgeLCIA object for exchange-level life cycle impact assessment.
 
-        Parameters
-        ----------
-        demand : dict
-            A Brightway-style demand dictionary defining the functional unit.
-        method : tuple, optional
-            Method name as a tuple (e.g., ("AWARE", "2.0")), used to locate the CF JSON file.
-        weight : str, optional
-            Weighting variable used for region aggregation/disaggregation (e.g., "population", "gdp").
-        parameters : dict, optional
-            Dictionary of parameter values or scenarios for symbolic CF evaluation.
-        scenario : str, optional
-            Name of the default scenario (must match a key in `parameters`).
-        filepath : str, optional
-            Explicit path to the JSON method file; overrides `method` if provided.
-        allowed_functions : dict, optional
-            Additional safe functions available to CF evaluation expressions.
-        use_distributions : bool, optional
-            Whether to interpret CF uncertainty fields and perform Monte Carlo sampling.
-        random_seed : int, optional
-            Seed for reproducible uncertainty sampling.
-        iterations : int, optional
-            Number of Monte Carlo samples to draw if uncertainty is enabled.
+        :param demand: Dictionary of {activity: amount} for the functional unit.
+        :param method: Tuple specifying the LCIA method (e.g., ("AWARE 2.0", "Country", "all", "yearly")).
+        :param weight: Weighting scheme for location mapping (default: "population").
+        :
 
         Notes
         -----
@@ -1102,11 +1101,6 @@ class EdgeLCIA:
 
         return frozenset(excluded_subregions)
 
-    def _dbg_edge_label(self, idx: int) -> str:
-        """Human-friendly label for a technosphere position."""
-        a = self.position_to_technosphere_flows_lookup.get(idx, {})
-        return f"{a.get('name', '?')}[{a.get('reference product')}]@{a.get('location')}#{idx}"
-
     def lci(self) -> None:
         """
         Perform the life cycle inventory (LCI) calculation and extract relevant exchanges.
@@ -1178,8 +1172,6 @@ class EdgeLCIA:
 
         self._ensure_filtered_lookups_for_current_edges()
 
-        log = self.logger.getChild("map")
-        debug = log.isEnabledFor(logging.DEBUG)
         self._initialize_weights()
 
         DIR_BIO = "biosphere-technosphere"
@@ -1274,8 +1266,6 @@ class EdgeLCIA:
         req_sup_nc = self._req_sup_nc
         req_con_nc = self._req_con_nc
 
-        matched_positions_total = 0
-
         # Iterate CFs
         for i, cf in enumerate(tqdm(self.raw_cfs_data, desc="Mapping exchanges")):
             # Early exit if everything got characterized in both directions
@@ -1312,7 +1302,6 @@ class EdgeLCIA:
             cached_match_with_index.index = s_index
             cached_match_with_index.lookup_mapping = s_lookup
             cached_match_with_index.reversed_lookup = s_reversed
-            s_ctx_id = (id(s_index), id(s_lookup), id(s_reversed))
 
             # Hashable flow minus classifications (precompute this if you want to squeeze more)
             # --- before cached_match_with_index(...) for supplier ---
@@ -1355,11 +1344,6 @@ class EdgeLCIA:
             cached_match_with_index.index = consumer_index
             cached_match_with_index.lookup_mapping = consumer_lookup
             cached_match_with_index.reversed_lookup = reversed_consumer_lookup
-            c_ctx_id = (
-                id(consumer_index),
-                id(consumer_lookup),
-                id(reversed_consumer_lookup),
-            )
 
             c_nonclass = {k: v for k, v in c_crit.items() if k != "classifications"}
             c_out = cached_match_with_index(make_hashable(c_nonclass), req_con_nc)
@@ -1450,13 +1434,11 @@ class EdgeLCIA:
                     value=cf["value"],
                     uncertainty=cf.get("uncertainty"),
                 )
-                matched_positions_total += len(positions)
 
             # ---------- Near-miss allowlists (location-only) --------------------------
             if s_loc_required and s_loc_only and c_cands:
                 cset = c_cands
                 bucket = allow_bio if dir_name == DIR_BIO else allow_tec
-                added = 0
                 for s in list(s_loc_only):
                     cs = ebs.get(s)
                     if not cs:
@@ -1467,12 +1449,11 @@ class EdgeLCIA:
                     for c in hit:
                         if (s, c) in rem:
                             bucket.add((s, c))
-                            added += 1
 
             if c_loc_required and c_loc_only and s_cands:
                 sset = s_cands
                 bucket = allow_bio if dir_name == DIR_BIO else allow_tec
-                added = 0
+
                 for c in list(c_loc_only):
                     ss = ebc.get(c)
                     if not ss:
@@ -1483,12 +1464,11 @@ class EdgeLCIA:
                     for s in hit:
                         if (s, c) in rem:
                             bucket.add((s, c))
-                            added += 1
 
             if s_loc_required and c_loc_required and s_loc_only and c_loc_only:
                 cset = set(c_loc_only)
                 bucket = allow_bio if dir_name == DIR_BIO else allow_tec
-                added = 0
+
                 for s in list(s_loc_only):
                     cs = ebs.get(s)
                     if not cs:
@@ -1499,7 +1479,6 @@ class EdgeLCIA:
                     for c in hit:
                         if (s, c) in rem:
                             bucket.add((s, c))
-                            added += 1
 
         self._update_unprocessed_edges()
 

@@ -784,18 +784,12 @@ def compute_average_cf(
     else:
         shares = w_arr / w_sum
         # remove share values below a tiny threshold
-        # shares = np.where(shares < 1e-3, 0.0, shares)
+        shares = np.where(shares < 1e-4, 0.0, shares)
         # Re-normalize defensively to ensure exact sum(1.0) in float64
         shares = shares / shares.sum(dtype=np.float64)
 
     share_sum = float(shares.sum(dtype=np.float64))
-    if logger.isEnabledFor(logging.DEBUG):
-        logger.debug(
-            "CF-AVG: matched=%d | sum_shares=%.17f | example=%s",
-            len(matched),
-            share_sum,
-            _short_cf(matched[0][2]) if matched else None,
-        )
+
     # Permit tiny FP noise, then renormalize once more if necessary
     if not np.isclose(share_sum, 1.0, rtol=1e-13, atol=1e-15):
         shares = shares / shares.sum(dtype=np.float64)
@@ -806,7 +800,7 @@ def compute_average_cf(
     for (s_loc, c_loc, cf), sh in zip(matched, shares):
         # keep cf['value'] as-is (string or number)
         if sh > 0.0:
-            expressions.append(f"({sh:.3f} * ({cf['value']}))")
+            expressions.append(f"({sh:.4f} * ({cf['value']}))")
     expr = " + ".join(expressions)
 
     # ---- Single CF shortcut (pass-through uncertainty) ----
