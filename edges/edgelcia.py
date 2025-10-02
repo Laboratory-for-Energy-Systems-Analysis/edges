@@ -45,6 +45,7 @@ from .flow_matching import (
     preprocess_flows,
     build_index,
     compute_cf_memoized_factory,
+    resolve_candidate_locations,
     group_edges_by_signature,
     compute_average_cf,
 )
@@ -107,36 +108,6 @@ def add_cf_entry(
     if uncertainty is not None:
         entry["uncertainty"] = uncertainty
     cfs_mapping.append(entry)
-
-
-@lru_cache(maxsize=200_000)
-def _resolve_locs_cached(
-    geo, location, containing, supplier, exceptions_tuple, weight_keys_tuple
-):
-    exceptions = set(exceptions_tuple) if exceptions_tuple else None
-    weights = set(weight_keys_tuple) if weight_keys_tuple else None
-
-    candidates = geo.resolve(
-        location=location,
-        containing=containing,
-        exceptions=exceptions,
-    )
-
-    if supplier:
-        available_locs = [loc[0] for loc in weights]
-    else:
-        available_locs = [loc[1] for loc in weights]
-
-    # If wildcard is allowed on this side, don't filter away real region codes
-    if "__ANY__" in available_locs:
-        pool = list(candidates)
-    else:
-        pool = [loc for loc in candidates if loc in available_locs]
-
-    # Deterministic ordering across platforms (keep "GLO" first if present)
-    pool = sorted(set(pool), key=lambda x: (x != "GLO", x))
-
-    return pool
 
 
 @lru_cache(maxsize=None)
@@ -1565,7 +1536,6 @@ class EdgeLCIA:
         )
 
         self._initialize_weights()
-        weight_keys = tuple(self.weights.keys())
         logger.info("Handling static regions…")
 
         for direction in ["biosphere-technosphere", "technosphere-technosphere"]:
@@ -1620,42 +1590,6 @@ class EdgeLCIA:
             prefiltered_groups = defaultdict(list)
             remaining_edges = []
 
-            # ---------------------------------------------------------------
-            # BATCH GEO: Build the unique set of resolver questions up front
-            # ---------------------------------------------------------------
-            # We only need 'containing=True' for aggregate matching and we do not
-            # use per-edge exclusions in this method, so exceptions=None is fine.
-            questions = set()
-            for (consumer_location, supplier_location), edges in edges_index.items():
-                # Skip RoW/RoE pairs entirely (same rule as per-edge loop below)
-                if any(
-                    x in ("RoW", "RoE") for x in (consumer_location, supplier_location)
-                ):
-                    continue
-                if supplier_location is not None:
-                    # ("sup", loc) → supplier=True
-                    questions.add(("sup", supplier_location))
-                if consumer_location is not None:
-                    # ("con", loc) → supplier=False
-                    questions.add(("con", consumer_location))
-
-                # Answer each unique question once using the cached resolver
-                # Key: (kind, loc) where kind ∈ {"sup","con"}
-                answers = {}
-                for kind, loc in questions:
-                    answers[(kind, loc)] = _resolve_locs_cached(
-                        geo=self.geo,
-                        location=loc,
-                        containing=True,
-                        supplier=(kind == "sup"),
-                        exceptions_tuple=None,
-                        weight_keys_tuple=weight_keys,
-                    )
-
-            # ---------------------------------------------------------------
-            # Use the precomputed answers in the main loop
-            # ---------------------------------------------------------------
-
             for (consumer_location, supplier_location), edges in edges_index.items():
                 if any(
                     x in ("RoW", "RoE") for x in (consumer_location, supplier_location)
@@ -1667,18 +1601,13 @@ class EdgeLCIA:
                         "__ANY__",
                     ]
                 else:
-                    # batched answer
-                    candidate_suppliers_locations = answers.get(
-                        ("sup", supplier_location), ()
+                    candidate_suppliers_locations = resolve_candidate_locations(
+                        geo=self.geo,
+                        location=supplier_location,
+                        weights=frozenset(k for k, v in self.weights.items()),
+                        containing=True,
+                        supplier=True,
                     )
-
-                    # candidate_suppliers_locations = resolve_candidate_locations(
-                    #    geo=self.geo,
-                    #    location=supplier_location,
-                    #    weights=frozenset(k for k, v in self.weights.items()),
-                    #    containing=True,
-                    #    supplier=True,
-                    # )
 
                 if len(candidate_suppliers_locations) == 0:
                     candidate_suppliers_locations = [
@@ -1690,17 +1619,13 @@ class EdgeLCIA:
                         "__ANY__",
                     ]
                 else:
-                    # batched answer
-                    candidate_consumer_locations = answers.get(
-                        ("con", consumer_location), ()
+                    candidate_consumer_locations = resolve_candidate_locations(
+                        geo=self.geo,
+                        location=consumer_location,
+                        weights=frozenset(k for k, v in self.weights.items()),
+                        containing=True,
+                        supplier=False,
                     )
-                    # candidate_consumer_locations = resolve_candidate_locations(
-                    #    geo=self.geo,
-                    #    location=consumer_location,
-                    #    weights=frozenset(k for k, v in self.weights.items()),
-                    #    containing=True,
-                    #    supplier=False,
-                    # )
 
                 if len(candidate_consumer_locations) == 0:
                     candidate_consumer_locations = [
@@ -1909,8 +1834,6 @@ class EdgeLCIA:
 
         :return: None
         """
-        from collections import defaultdict
-        import logging
 
         self._ensure_filtered_lookups_for_current_edges()
 
@@ -1929,9 +1852,7 @@ class EdgeLCIA:
 
         self._initialize_weights()
         logger.info("Handling dynamic regions…")
-        weight_keys = tuple(self.weights.keys())
 
-        # Build a lookup of where tech flows exist to know which subregions to exclude from RoW/RoE
         for flow in self.technosphere_flows:
             key = (flow["name"], flow["reference product"])
             self.technosphere_flows_lookup[key].append(flow["location"])
@@ -1942,18 +1863,12 @@ class EdgeLCIA:
             for loc in locs
             if str(loc).upper() not in {"ROW", "ROE"}
         }
-        # Decompose exclusions to contained subregions once
         decomposed_exclusions = self.geo.batch(
             locations=list(raw_exclusion_locs), containing=True
         )
         decomposed_exclusions = frozenset(
             (k, tuple(v)) for k, v in decomposed_exclusions.items()
         )
-
-        _is_dyn = lambda x: isinstance(x, str) and x.upper() in {
-            "ROW",
-            "ROE",
-        }  # noqa: E731
 
         for direction in ["biosphere-technosphere", "technosphere-technosphere"]:
 
@@ -1972,7 +1887,7 @@ class EdgeLCIA:
             prefiltered_groups = defaultdict(list)
             remaining_edges = []
 
-            # Filter for the subset of edges that are even allowed in this pass
+            # let's remove edges that have no chance of qualifying
             allowed = (
                 self.eligible_edges_for_next_bio
                 if direction == "biosphere-technosphere"
@@ -1980,16 +1895,6 @@ class EdgeLCIA:
             )
             if allowed:
                 unprocessed_edges = [e for e in unprocessed_edges if e in allowed]
-
-            # ------------------------------------------------------------------
-            # BATCH GEO: pre-scan dynamic edges, compute per-edge exclusions once,
-            # and resolve unique ("GLO", containing=True, supplier/consumer, exclusions) queries once
-            # ------------------------------------------------------------------
-            dyn_edge_info = (
-                []
-            )  # (s_idx, c_idx, s_info, c_info, s_loc, c_loc, dyn_sup, dyn_con, sup_exc, con_exc)
-            sup_exc_keys = set()  # set of tuples (or None) to dedupe supplier queries
-            con_exc_keys = set()  # set of tuples (or None) to dedupe consumer queries
 
             for supplier_idx, consumer_idx in unprocessed_edges:
                 if (supplier_idx, consumer_idx) in processed_flows:
@@ -1999,115 +1904,83 @@ class EdgeLCIA:
                 supplier_info = self._get_supplier_info(supplier_idx, direction)
                 if not supplier_info:
                     # Nothing useful we can use: skip this edge defensively
+                    # (or log at DEBUG)
                     continue
 
                 supplier_loc = supplier_info.get("location")
                 consumer_loc = self.consumer_loc.get(consumer_idx)
 
-                dyn_sup = _is_dyn(supplier_loc)
-                dyn_con = _is_dyn(consumer_loc)
-                if not (dyn_sup or dyn_con):
+                # Skip if neither side is dynamic
+                # Identify dynamic role
+                _is_dyn = lambda x: isinstance(x, str) and x.upper() in {"ROW", "ROE"}
+                if not (_is_dyn(supplier_loc) or _is_dyn(consumer_loc)):
                     continue
 
-                sup_exc = None
-                con_exc = None
-                if dyn_sup:
-                    sup_exc = self._extract_excluded_subregions(
+                dynamic_supplier = _is_dyn(supplier_loc)
+                dynamic_consumer = _is_dyn(consumer_loc)
+
+                # Resolve fallback candidate locations
+                if dynamic_supplier:
+                    suppliers_excluded_subregions = self._extract_excluded_subregions(
                         supplier_idx, decomposed_exclusions
                     )
-                    sup_exc = tuple(sup_exc) if sup_exc else None
-                    sup_exc_keys.add(sup_exc)
-                if dyn_con:
-                    con_exc = self._extract_excluded_subregions(
+                    candidate_suppliers_locs = resolve_candidate_locations(
+                        geo=self.geo,
+                        location="GLO",
+                        weights=frozenset(k for k, v in self.weights.items()),
+                        containing=True,
+                        exceptions=suppliers_excluded_subregions,
+                        supplier=True,
+                    )
+                    candidate_suppliers_locs = [
+                        loc for loc in candidate_suppliers_locs if loc != "GLO"
+                    ]
+                    candidate_suppliers_locs = sorted(set(candidate_suppliers_locs))
+                else:
+                    if supplier_loc is None:
+                        candidate_suppliers_locs = [
+                            "__ANY__",
+                        ]
+                    else:
+                        candidate_suppliers_locs = [supplier_loc]
+
+                if dynamic_consumer:
+                    consumers_excluded_subregions = self._extract_excluded_subregions(
                         consumer_idx, decomposed_exclusions
                     )
-                    con_exc = tuple(con_exc) if con_exc else None
-                    con_exc_keys.add(con_exc)
-
-                dyn_edge_info.append(
-                    (
-                        supplier_idx,
-                        consumer_idx,
-                        supplier_info,
-                        consumer_info,
-                        supplier_loc,
-                        consumer_loc,
-                        dyn_sup,
-                        dyn_con,
-                        sup_exc,
-                        con_exc,
+                    candidate_consumers_locs = resolve_candidate_locations(
+                        geo=self.geo,
+                        location="GLO",
+                        weights=frozenset(k for k, v in self.weights.items()),
+                        containing=True,
+                        exceptions=consumers_excluded_subregions,
+                        supplier=False,
                     )
-                )
+                    candidate_consumers_locs = [
+                        loc for loc in candidate_consumers_locs if loc != "GLO"
+                    ]
+                    candidate_consumers_locs = sorted(set(candidate_consumers_locs))
 
-            # Resolve unique supplier/consumer questions once via cached resolver
-            sup_answers = {}
-            for exc in sup_exc_keys:
-                ans = _resolve_locs_cached(
-                    geo=self.geo,
-                    location="GLO",
-                    containing=True,
-                    supplier=True,
-                    exceptions_tuple=exc,
-                    weight_keys_tuple=weight_keys,
-                )
-                # Drop 'GLO' itself and canonicalize for determinism
-                sup_answers[exc] = tuple(sorted({loc for loc in ans if loc != "GLO"}))
+                    self.logger.debug(
+                        "dynamic-cands: consumer=RoW | candidates=%d (e.g. %s...) | excluded=%d",
+                        len(candidate_consumers_locs),
+                        candidate_consumers_locs[:20],
+                        len(consumers_excluded_subregions),
+                    )
 
-            con_answers = {}
-            for exc in con_exc_keys:
-                ans = _resolve_locs_cached(
-                    geo=self.geo,
-                    location="GLO",
-                    containing=True,
-                    supplier=False,
-                    exceptions_tuple=exc,
-                    weight_keys_tuple=weight_keys,
-                )
-                con_answers[exc] = tuple(sorted({loc for loc in ans if loc != "GLO"}))
-
-            # ------------------------------------------------------------------
-            # Main per-edge loop (reuses batched answers; no per-edge resolver calls)
-            # ------------------------------------------------------------------
-            for (
-                supplier_idx,
-                consumer_idx,
-                supplier_info,
-                consumer_info,
-                supplier_loc,
-                consumer_loc,
-                dynamic_supplier,
-                dynamic_consumer,
-                suppliers_excluded_subregions,
-                consumers_excluded_subregions,
-            ) in dyn_edge_info:
-
-                # Suppliers
-                if dynamic_supplier:
-                    cand_sup = sup_answers.get(suppliers_excluded_subregions, ())
-                    if not cand_sup:
-                        cand_sup = (supplier_loc,) if supplier_loc else ("__ANY__",)
                 else:
-                    cand_sup = (supplier_loc,) if supplier_loc else ("__ANY__",)
+                    if consumer_loc is None:
+                        candidate_consumers_locs = [
+                            "__ANY__",
+                        ]
+                    else:
+                        candidate_consumers_locs = [consumer_loc]
 
-                # Consumers
-                if dynamic_consumer:
-                    cand_con = con_answers.get(consumers_excluded_subregions, ())
-                    if self.logger.isEnabledFor(logging.DEBUG):
-                        self.logger.isEnabledFor(logging.DEBUG) and self.logger.debug(
-                            "dynamic-cands: consumer=RoW | candidates=%d (e.g. %s...) | excluded=%d",
-                            len(cand_con),
-                            cand_con[:20],
-                            (
-                                0
-                                if consumers_excluded_subregions is None
-                                else len(consumers_excluded_subregions)
-                            ),
-                        )
-                    if not cand_con:
-                        # Nothing left after exclusions; defer to global pass
-                        continue
-                else:
-                    cand_con = (consumer_loc,) if consumer_loc else ("__ANY__",)
+                if dynamic_consumer and not candidate_consumers_locs:
+                    self.logger.debug(
+                        "dynamic: RoW consumer collapsed to empty set after exclusions; deferring to global pass"
+                    )
+                    continue
 
                 # project supplier info to the required fields (+classifications) before hashing
                 include_cls_in_sig = any(
@@ -2120,10 +1993,6 @@ class EdgeLCIA:
                 _proj = {k: supplier_info[k] for k in sig_fields if k in supplier_info}
                 sig = _equality_supplier_signature_cached(make_hashable(_proj))
 
-                # Deterministic candidate lists (avoid order-dependent averaging)
-                cand_sup = tuple(sorted(set(cand_sup)))
-                cand_con = tuple(sorted(set(cand_con)))
-
                 if sig in self._cached_supplier_keys:
                     prefiltered_groups[sig].append(
                         (
@@ -2131,8 +2000,8 @@ class EdgeLCIA:
                             consumer_idx,
                             supplier_info,
                             consumer_info,
-                            cand_sup,
-                            cand_con,
+                            candidate_suppliers_locs,
+                            candidate_consumers_locs,
                         )
                     )
                 else:
@@ -2142,22 +2011,22 @@ class EdgeLCIA:
                             consumer_idx,
                             supplier_info,
                             consumer_info,
-                            cand_sup,
-                            cand_con,
+                            candidate_suppliers_locs,
+                            candidate_consumers_locs,
                         )
                     )
 
-            # ---------------------
-            # Pass 1: grouped memo
-            # ---------------------
+            # Pass 1 (corrected): compute per unique (cand_sup, cand_con, consumer_sig)
             if len(prefiltered_groups) > 0:
                 for sig, group_edges in tqdm(
                     prefiltered_groups.items(),
                     desc="Processing dynamic groups (pass 1)",
                 ):
+                    # Build a small memo to avoid recomputing identical combos in this group
                     memo = {}
 
                     def _consumer_sig(consumer_info: dict) -> tuple:
+                        """Hashable, filtered consumer signature (only required fields + classifications if used)."""
                         fields = set(self.required_consumer_fields)
                         if any(
                             "classifications" in cf["consumer"]
@@ -2178,14 +2047,19 @@ class EdgeLCIA:
                         cand_con,
                     ) in group_edges:
 
+                        # Deterministic candidate lists (avoid order-dependent averaging)
+                        cand_sup_s = tuple(sorted(set(cand_sup)))
+                        cand_con_s = tuple(sorted(set(cand_con)))
+
                         c_sig = _consumer_sig(consumer_info)
-                        memo_key = (cand_sup, cand_con, c_sig)
+                        memo_key = (cand_sup_s, cand_con_s, c_sig)
 
                         if memo_key not in memo:
+
                             new_cf, matched_cf_obj, agg_uncertainty = (
                                 compute_average_cf(
-                                    candidate_suppliers=list(cand_sup),
-                                    candidate_consumers=list(cand_con),
+                                    candidate_suppliers=list(cand_sup_s),
+                                    candidate_consumers=list(cand_con_s),
                                     supplier_info=supplier_info,
                                     consumer_info=consumer_info,
                                     required_supplier_fields=self.required_supplier_fields,
@@ -2207,19 +2081,18 @@ class EdgeLCIA:
                                 value=new_cf,
                                 uncertainty=agg_uncertainty,
                             )
+
                         else:
                             self.logger.warning(
                                 "Fallback CF could not be computed for supplier=%s, consumer=%s "
                                 "with candidate suppliers=%s and consumers=%s",
                                 supplier_info.get("location"),
                                 consumer_info.get("location"),
-                                list(cand_sup),
-                                list(cand_con),
+                                list(cand_sup_s),
+                                list(cand_con_s),
                             )
 
-            # ---------------------
-            # Pass 2: generic grouping
-            # ---------------------
+            # Pass 2
             compute_cf_memoized = compute_cf_memoized_factory(
                 cf_index=self.cf_index,
                 required_supplier_fields=self.required_supplier_fields,
@@ -2297,8 +2170,6 @@ class EdgeLCIA:
 
         :return: None
         """
-        from collections import defaultdict
-        import logging
 
         self._ensure_filtered_lookups_for_current_edges()
 
@@ -2318,22 +2189,48 @@ class EdgeLCIA:
         self._initialize_weights()
         logger.info("Handling contained locations…")
 
-        # Whether supplier wildcard ('__ANY__') exists on the method side
+        def _geo_contains(container: str, member: str) -> bool:
+            """Return True if `container` geographically contains `member`, robust to API flag semantics and case."""
+            if not container or not member:
+                return False
+
+            C_raw = str(container).strip()
+            M_raw = str(member).strip()
+
+            def N(x):  # normalize for comparisons
+                return str(x).strip().upper()
+
+            def q(loc: str, containing: bool) -> list[str]:
+                try:
+                    mp = self.geo.batch(locations=[loc], containing=containing) or {}
+                    return mp.get(loc, []) or []
+                except Exception as e:
+                    self.logger.debug(
+                        "geo-contains: batch error loc=%s containing=%s err=%s",
+                        loc,
+                        containing,
+                        e,
+                    )
+                    return []
+
+            # Collect both interpretations, then normalize once
+            containers_of_member = set(map(N, q(M_raw, True))) | set(
+                map(N, q(M_raw, False))
+            )
+            children_of_container = set(map(N, q(C_raw, False))) | set(
+                map(N, q(C_raw, True))
+            )
+
+            C = N(C_raw)
+            M = N(M_raw)
+
+            res = (C in containers_of_member) or (M in children_of_container)
+
+            return res
+
+        # Respect wildcard suppliers in method keys (e.g., ('__ANY__','RER'))
         supplier_wildcard = any(k[0] == "__ANY__" for k in self.weights.keys())
-
-        # Method consumer locations (what containers are even valid on the method side)
         available_consumer_locs = sorted({loc for _, loc in self.weights.keys()})
-        available_non_global = [
-            loc for loc in available_consumer_locs if loc not in {"__ANY__", "GLO"}
-        ]
-        available_non_global_set = set(available_non_global)
-
-        # Utility: prefer 'RER' when present, else shortest string (as a proxy of granularity), then lexicographic
-        def _prefer_order(codes: list[str]) -> list[str]:
-            if "RER" in codes:
-                return ["RER"] + [c for c in codes if c != "RER"]
-            # shortest code first; then lexical
-            return sorted(codes, key=lambda x: (len(x), x))
 
         for direction in ["biosphere-technosphere", "technosphere-technosphere"]:
 
@@ -2360,90 +2257,101 @@ class EdgeLCIA:
             if allowed:
                 unprocessed_edges = [e for e in unprocessed_edges if e in allowed]
 
-            # Group edges and collect unique consumer locations we will need containers for
-            unique_consumers = set()
             for supplier_idx, consumer_idx in unprocessed_edges:
                 if (supplier_idx, consumer_idx) in processed_flows:
                     continue
 
                 consumer_loc = self.consumer_loc.get(consumer_idx)
+
                 if not consumer_loc:
                     raise ValueError(
                         f"Consumer flow {consumer_idx} has no 'location' field. "
                         "Ensure all consumer flows have a valid location."
                     )
 
+                # Get supplier info first (tech/bio aware) before reading its location
                 supplier_info = self._get_supplier_info(supplier_idx, direction)
+
                 if not supplier_info:
-                    # nothing usable for this supplier; skip defensively
                     continue
                 supplier_loc = supplier_info.get("location")
-
-                # Skip dynamic placeholders here; they belong in map_dynamic_locations
-                if any(x in ("RoW", "RoE") for x in (consumer_loc, supplier_loc)):
-                    continue
 
                 edges_index[(consumer_loc, supplier_loc)].append(
                     (supplier_idx, consumer_idx)
                 )
-                unique_consumers.add(consumer_loc)
-
-            # -----------------------------
-            # BATCH GEO: containers per consumer
-            # -----------------------------
-            # One call to get, for each consumer location, its containers
-            # (Note: GeoResolver.batch(containing=True) returns containers of the given location)
-            containers_map = (
-                self.geo.batch(locations=list(unique_consumers), containing=True) or {}
-            )
 
             prefiltered_groups = defaultdict(list)
             remaining_edges = []
 
-            # Main loop using precomputed containers_map (no per-edge resolver calls)
             for (consumer_location, supplier_location), edges in edges_index.items():
-
-                # Supplier candidates
-                if supplier_wildcard or supplier_location is None:
-                    candidate_suppliers_locations = ("__ANY__",)
-                else:
-                    candidate_suppliers_locations = (supplier_location,)
-
-                # Consumer: pick nearest method container among the consumer's containers
-                if consumer_location is None:
-                    candidate_consumer_locations = ("__ANY__",)
-                else:
-                    conts = containers_map.get(consumer_location, []) or []
-                    # Intersection with method-available consumer regions, prefer RER, then shortest code
-                    hits = [c for c in conts if c in available_non_global_set]
-                    ordered_hits = _prefer_order(hits)
-                    nearest = ordered_hits[0] if ordered_hits else None
-
-                    if self.logger.isEnabledFor(logging.DEBUG):
-                        self.logger.isEnabledFor(logging.DEBUG) and self.logger.debug(
-                            "contained: consumer=%s → nearest=%s (candidates=%s)",
-                            consumer_location,
-                            nearest,
-                            ordered_hits[:20],
-                        )
-
-                    if nearest is not None:
-                        candidate_consumer_locations = (nearest,)
-                    else:
-                        # If nothing but GLO (or nothing at all), skip here; the global pass handles it.
-                        candidate_consumer_locations = tuple()
-
-                # If we couldn't find any suitable consumer region to climb to, skip.
-                if not candidate_consumer_locations:
+                if any(
+                    x in ("RoW", "RoE") for x in (consumer_location, supplier_location)
+                ):
                     continue
 
-                # Deterministic tuples for memoization stability
-                cand_sup = tuple(sorted(set(candidate_suppliers_locations)))
-                cand_con = tuple(sorted(set(candidate_consumer_locations)))
+                # Supplier: if CFs use wildcard on supplier side, stick to '__ANY__'.
+                # Otherwise, keep the supplier's own location (no up/down traversal here).
+
+                if supplier_wildcard:
+                    candidate_suppliers_locations = ["__ANY__"]
+                elif supplier_location is None:
+                    candidate_suppliers_locations = ["__ANY__"]
+                else:
+                    candidate_suppliers_locations = [supplier_location]
+
+                # Consumer: climb to the nearest containing region (e.g., IT → RER),
+                # limited to locations actually present on the consumer side of method keys.
+
+                # Consumer: climb to the nearest containing region present in the method (prefer non-GLO)
+                if consumer_location is None:
+                    candidate_consumer_locations = ["__ANY__"]
+                else:
+                    # Consider only method regions on the consumer side (exclude __ANY__/GLO at first)
+                    available_non_global = [
+                        loc
+                        for loc in available_consumer_locs
+                        if loc not in {"__ANY__", "GLO"}
+                    ]
+
+                    # Try to find the nearest method region that contains the inventory region
+                    # Prioritize a stable order that tends to pick the smallest sensible container;
+                    # if you want to strongly prefer RER when present, keep it first.
+                    ordered = sorted(available_non_global)
+
+                    # Probe each candidate method region (non-GLO) once so we see what children they claim
+                    nearest = next(
+                        (
+                            cand
+                            for cand in ordered
+                            if _geo_contains(cand, consumer_location)
+                        ),
+                        None,
+                    )
+
+                    self.logger.debug(
+                        "contained: consumer %s -> nearest method container %s (ordered candidates=%s)",
+                        consumer_location,
+                        nearest,
+                        ordered,
+                    )
+
+                    if nearest is not None:
+                        candidate_consumer_locations = [nearest]
+                    else:
+                        # Nothing but GLO contains this region (or geo data is missing). Leave empty here
+                        # so this pass skips; the global pass will handle it.
+                        candidate_consumer_locations = []
+
+                # If we couldn't find any suitable consumer region to climb to, skip.
+
+                if not candidate_consumer_locations:
+                    continue
 
                 for supplier_idx, consumer_idx in edges:
                     supplier_info = self._get_supplier_info(supplier_idx, direction)
                     if not supplier_info:
+                        # Nothing useful we can use: skip this edge defensively
+                        # (or log at DEBUG)
                         continue
                     consumer_info = self._get_consumer_info(consumer_idx)
 
@@ -2466,8 +2374,8 @@ class EdgeLCIA:
                                 consumer_idx,
                                 supplier_info,
                                 consumer_info,
-                                cand_sup,
-                                cand_con,
+                                candidate_suppliers_locations,
+                                candidate_consumer_locations,
                             )
                         )
                     else:
@@ -2477,60 +2385,41 @@ class EdgeLCIA:
                                 consumer_idx,
                                 supplier_info,
                                 consumer_info,
-                                cand_sup,
-                                cand_con,
+                                candidate_suppliers_locations,
+                                candidate_consumer_locations,
                             )
                         )
 
-            # ---------------------
-            # Pass 1: grouped compute with memo
-            # ---------------------
+            # Pass 1
             if len(prefiltered_groups) > 0:
                 for sig, group_edges in tqdm(
                     prefiltered_groups.items(),
                     desc="Processing contained groups (pass 1)",
                 ):
-                    memo = {}
+                    supplier_info = group_edges[0][2]
+                    consumer_info = group_edges[0][3]
+                    candidate_supplier_locations = group_edges[0][-2]
+                    candidate_consumer_locations = group_edges[0][-1]
 
-                    # Helper to hash consumer side minimally for the memo
-                    def _consumer_sig(consumer_info: dict) -> tuple:
-                        fields = set(self.required_consumer_fields)
-                        if any(
-                            "classifications" in cf["consumer"]
-                            for cf in self.raw_cfs_data
-                        ):
-                            fields.add("classifications")
-                        proj = {
-                            k: consumer_info[k] for k in fields if k in consumer_info
-                        }
-                        return make_hashable(proj)
+                    new_cf, matched_cf_obj, agg_uncertainty = compute_average_cf(
+                        candidate_suppliers=candidate_supplier_locations,
+                        candidate_consumers=candidate_consumer_locations,
+                        supplier_info=supplier_info,
+                        consumer_info=consumer_info,
+                        required_supplier_fields=self.required_supplier_fields,
+                        required_consumer_fields=self.required_consumer_fields,
+                        cf_index=self.cf_index,
+                    )
 
-                    for (
-                        supplier_idx,
-                        consumer_idx,
-                        supplier_info,
-                        consumer_info,
-                        cand_sup,
-                        cand_con,
-                    ) in group_edges:
-                        c_sig = _consumer_sig(consumer_info)
-                        memo_key = (cand_sup, cand_con, c_sig)
-                        if memo_key not in memo:
-                            new_cf, matched_cf_obj, agg_uncertainty = (
-                                compute_average_cf(
-                                    candidate_suppliers=list(cand_sup),
-                                    candidate_consumers=list(cand_con),
-                                    supplier_info=supplier_info,
-                                    consumer_info=consumer_info,
-                                    required_supplier_fields=self.required_supplier_fields,
-                                    required_consumer_fields=self.required_consumer_fields,
-                                    cf_index=self.cf_index,
-                                )
-                            )
-                            memo[memo_key] = (new_cf, matched_cf_obj, agg_uncertainty)
-
-                        new_cf, matched_cf_obj, agg_uncertainty = memo[memo_key]
-                        if new_cf:
+                    if new_cf:
+                        for (
+                            supplier_idx,
+                            consumer_idx,
+                            supplier_info,
+                            consumer_info,
+                            _,
+                            _,
+                        ) in group_edges:
                             add_cf_entry(
                                 cfs_mapping=self.cfs_mapping,
                                 supplier_info=supplier_info,
@@ -2540,19 +2429,13 @@ class EdgeLCIA:
                                 value=new_cf,
                                 uncertainty=agg_uncertainty,
                             )
-                        else:
-                            self.logger.warning(
-                                "Fallback CF could not be computed for supplier=%s, consumer=%s "
-                                "with candidate suppliers=%s and consumers=%s",
-                                supplier_info.get("location"),
-                                consumer_info.get("location"),
-                                list(cand_sup),
-                                list(cand_con),
-                            )
+                    else:
+                        self.logger.warning(
+                            f"Fallback CF could not be computed for supplier={supplier_info}, consumer={consumer_info} "
+                            f"with candidate suppliers={candidate_supplier_locations} and consumers={candidate_consumer_locations}"
+                        )
 
-            # ---------------------
-            # Pass 2: generic grouping
-            # ---------------------
+            # Pass 2
             compute_cf_memoized = compute_cf_memoized_factory(
                 cf_index=self.cf_index,
                 required_supplier_fields=self.required_supplier_fields,
@@ -2567,22 +2450,25 @@ class EdgeLCIA:
 
             if len(grouped_edges) > 0:
                 for (
-                    s_key,
-                    c_key,
+                    supplier_info,
+                    consumer_info,
                     (candidate_suppliers, candidate_consumers),
                 ), edge_group in tqdm(
                     grouped_edges.items(), desc="Processing contained groups (pass 2)"
                 ):
 
                     new_cf, matched_cf_obj, agg_uncertainty = compute_cf_memoized(
-                        s_key, c_key, candidate_suppliers, candidate_consumers
+                        supplier_info,
+                        consumer_info,
+                        candidate_suppliers,
+                        candidate_consumers,
                     )
                     if new_cf:
                         for supplier_idx, consumer_idx in edge_group:
                             add_cf_entry(
                                 cfs_mapping=self.cfs_mapping,
-                                supplier_info=dict(s_key),
-                                consumer_info=dict(c_key),
+                                supplier_info=dict(supplier_info),
+                                consumer_info=dict(consumer_info),
                                 direction=direction,
                                 indices=[(supplier_idx, consumer_idx)],
                                 value=new_cf,
@@ -2590,7 +2476,7 @@ class EdgeLCIA:
                             )
                     else:
                         self.logger.warning(
-                            f"Fallback CF could not be computed for supplier={s_key}, consumer={c_key} "
+                            f"Fallback CF could not be computed for supplier={supplier_info}, consumer={consumer_info} "
                             f"with candidate suppliers={candidate_suppliers} and consumers={candidate_consumers}"
                         )
 
@@ -2604,9 +2490,27 @@ class EdgeLCIA:
         This method ensures that all eligible exchanges are characterized by assigning a CF
         from the global region ("GLO") when no direct, aggregate, dynamic, or containing region match
         has been found.
+
+        It is the last step in the regional mapping cascade.
+
+        Notes
+        -----
+        - Uses a weighted global average if multiple CFs exist for the same exchange type.
+        - If no global CF exists for a given exchange, it remains uncharacterized.
+        - This step guarantees that the system-wide score is computable unless coverage is zero.
+
+        Preconditions
+        -------------
+        - `lci()` and `map_exchanges()` must be called
+        - Should follow other mapping steps: `map_aggregate_locations()`, `map_dynamic_locations()`, etc.
+
+        Updates
+        -------
+        - Adds fallback CFs to `cfs_mapping`
+        - Marks remaining exchanges as processed
+
+        :return: None
         """
-        from collections import defaultdict
-        import logging
 
         self._ensure_filtered_lookups_for_current_edges()
 
@@ -2626,40 +2530,30 @@ class EdgeLCIA:
         self._initialize_weights()
         logger.info("Handling remaining exchanges…")
 
-        # Resolve GLO candidates once (batched/cached), reuse everywhere
-        weight_keys = tuple(self.weights.keys())
-
-        global_supplier_locs = _resolve_locs_cached(
+        # Resolve candidate locations for GLO once using utility
+        # NOTE: containing=False → return contained regions of GLO (i.e., the world)
+        global_supplier_locs = resolve_candidate_locations(
             geo=self.geo,
             location="GLO",
-            containing=True,  # return contained regions of GLO (the world)
+            weights=frozenset(k for k, v in self.weights.items()),
+            containing=True,
             supplier=True,
-            exceptions_tuple=None,
-            weight_keys_tuple=weight_keys,
         )
-        global_consumer_locs = _resolve_locs_cached(
+        global_consumer_locs = resolve_candidate_locations(
             geo=self.geo,
             location="GLO",
+            weights=frozenset(k for k, v in self.weights.items()),
             containing=True,
             supplier=False,
-            exceptions_tuple=None,
-            weight_keys_tuple=weight_keys,
-        )
-
-        # Deterministic, de-duplicated tuples (stable for memo/cache keys)
-        global_supplier_locs = (
-            tuple(sorted({loc for loc in global_supplier_locs if loc != "GLO"}))
-            or tuple()
-        )
-        global_consumer_locs = (
-            tuple(sorted({loc for loc in global_consumer_locs if loc != "GLO"}))
-            or tuple()
         )
 
         # If supplier side is wildcard-only, keep that wildcard as the candidate
+        if not global_supplier_locs:
+            sup_keys = {k[0] for k in self.weights.keys()}
+            if "__ANY__" in sup_keys:
+                global_supplier_locs = ["__ANY__"]
+
         supplier_wildcard = any(k[0] == "__ANY__" for k in self.weights.keys())
-        if not global_supplier_locs and supplier_wildcard:
-            global_supplier_locs = ("__ANY__",)
 
         for direction in ["biosphere-technosphere", "technosphere-technosphere"]:
 
@@ -2674,34 +2568,34 @@ class EdgeLCIA:
                 else self.processed_technosphere_edges
             )
             processed_flows = set(processed_flows)
+            edges_index = defaultdict(list)
 
-            # Optional allow-list pruning for this pass
+            # let's remove edges that have no chance of qualifying
             allowed = (
                 self.eligible_edges_for_next_bio
                 if direction == "biosphere-technosphere"
                 else self.eligible_edges_for_next_tech
             )
+
             if allowed:
                 unprocessed_edges = [e for e in unprocessed_edges if e in allowed]
 
-            # ----------------------------------------------------
-            # Group edges by (consumer_loc, supplier_loc) to reuse
-            # ----------------------------------------------------
-            edges_index = defaultdict(list)
             for supplier_idx, consumer_idx in unprocessed_edges:
                 if (supplier_idx, consumer_idx) in processed_flows:
                     continue
 
                 consumer_loc = self.consumer_loc.get(consumer_idx)
+
                 if not consumer_loc:
                     raise ValueError(
                         f"Consumer flow {consumer_idx} has no 'location' field. "
                         "Ensure all consumer flows have a valid location."
                     )
 
+                # Get supplier info first (tech/bio aware) before reading its location
                 supplier_info = self._get_supplier_info(supplier_idx, direction)
+
                 if not supplier_info:
-                    # no usable supplier info; skip defensively
                     continue
                 supplier_loc = supplier_info.get("location")
 
@@ -2712,45 +2606,27 @@ class EdgeLCIA:
             prefiltered_groups = defaultdict(list)
             remaining_edges = []
 
-            # ------------------------------------
-            # Build candidates (using precomputed)
-            # ------------------------------------
             for (consumer_location, supplier_location), edges in edges_index.items():
 
-                # Supplier candidates
-                if supplier_wildcard or supplier_location is None:
-                    candidate_suppliers = ("__ANY__",)
+                if supplier_wildcard:
+                    candidate_suppliers_locations = ["__ANY__"]
+                elif supplier_location is None:
+                    candidate_suppliers_locations = ["__ANY__"]
                 else:
-                    # For global fallback, allow using the precomputed global supplier pool
-                    # (keeps behavior consistent with global averaging logic)
-                    candidate_suppliers = global_supplier_locs or (supplier_location,)
+                    candidate_suppliers_locations = global_supplier_locs
 
-                # Consumer candidates
                 if consumer_location is None:
-                    candidate_consumers = ("__ANY__",)
+                    candidate_consumers_locations = [
+                        "__ANY__",
+                    ]
                 else:
-                    candidate_consumers = global_consumer_locs or ("GLO",)
+                    candidate_consumers_locations = global_consumer_locs
 
-                # Deterministic tuples (stable for memo keys)
-                candidate_suppliers = tuple(sorted(set(candidate_suppliers)))
-                candidate_consumers = tuple(sorted(set(candidate_consumers)))
-
-                # Debug (guarded)
-                if self.logger.isEnabledFor(logging.DEBUG):
-                    self.logger.isEnabledFor(logging.DEBUG) and self.logger.debug(
-                        "global-fallback: con=%s, sup=%s → cand_sup=%s | cand_con=%s | edges=%d",
-                        consumer_location,
-                        supplier_location,
-                        candidate_suppliers[:10],
-                        candidate_consumers[:10],
-                        len(edges),
-                    )
-
-                # Partition edges by supplier signature cache
                 for supplier_idx, consumer_idx in edges:
 
                     supplier_info = self._get_supplier_info(supplier_idx, direction)
                     if not supplier_info:
+                        # Nothing useful we can use: skip this edge defensively
                         continue
                     consumer_info = self._get_consumer_info(consumer_idx)
 
@@ -2773,8 +2649,8 @@ class EdgeLCIA:
                                 consumer_idx,
                                 supplier_info,
                                 consumer_info,
-                                candidate_suppliers,
-                                candidate_consumers,
+                                candidate_suppliers_locations,
+                                candidate_consumers_locations,
                             )
                         )
                     else:
@@ -2784,132 +2660,110 @@ class EdgeLCIA:
                                 consumer_idx,
                                 supplier_info,
                                 consumer_info,
-                                candidate_suppliers,
-                                candidate_consumers,
+                                candidate_suppliers_locations,
+                                candidate_consumers_locations,
                             )
                         )
 
-            # ---------------------
-            # Pass 1: grouped compute with memo
-            # ---------------------
-            if len(prefiltered_groups) > 0:
-                for sig, group_edges in tqdm(
-                    prefiltered_groups.items(), desc="Processing global groups (pass 1)"
-                ):
-                    memo = {}
+                # ---- Pass 1 (prefiltered_groups) ----
+                if len(prefiltered_groups) > 0:
+                    for sig, group_edges in tqdm(
+                        prefiltered_groups.items(),
+                        desc="Processing global groups (pass 1)",
+                    ):
+                        supplier_info = group_edges[0][2]
+                        consumer_info = group_edges[0][3]
 
-                    def _consumer_sig(consumer_info: dict) -> tuple:
-                        fields = set(self.required_consumer_fields)
-                        if any(
-                            "classifications" in cf["consumer"]
-                            for cf in self.raw_cfs_data
-                        ):
-                            fields.add("classifications")
-                        proj = {
-                            k: consumer_info[k] for k in fields if k in consumer_info
-                        }
-                        return make_hashable(proj)
-
-                    for (
-                        supplier_idx,
-                        consumer_idx,
-                        supplier_info,
-                        consumer_info,
-                        cand_sup,
-                        cand_con,
-                    ) in group_edges:
-                        c_sig = _consumer_sig(consumer_info)
-                        memo_key = (cand_sup, cand_con, c_sig)
-
-                        if memo_key not in memo:
-                            # Try global-average across the provided pools
-                            glo_cf, matched_cf_obj, glo_unc = compute_average_cf(
-                                candidate_suppliers=list(cand_sup),
-                                candidate_consumers=list(cand_con),
-                                supplier_info=supplier_info,
-                                consumer_info=consumer_info,
-                                required_supplier_fields=self.required_supplier_fields,
-                                required_consumer_fields=self.required_consumer_fields,
-                                cf_index=self.cf_index,
-                            )
-                            memo[memo_key] = (glo_cf, matched_cf_obj, glo_unc)
-
-                        glo_cf, matched_cf_obj, glo_unc = memo[memo_key]
-                        if glo_cf:
-                            add_cf_entry(
-                                cfs_mapping=self.cfs_mapping,
-                                supplier_info=supplier_info,
-                                consumer_info=consumer_info,
-                                direction=direction,
-                                indices=[(supplier_idx, consumer_idx)],
-                                value=glo_cf,
-                                uncertainty=(
-                                    glo_unc
-                                    if glo_unc is not None
-                                    else (
-                                        matched_cf_obj.get("uncertainty")
-                                        if matched_cf_obj
-                                        else None
-                                    )
-                                ),
-                            )
+                        # 1) Try DIRECT GLO on the CONSUMER side
+                        #    Supplier candidates: keep as-is if present, else "__ANY__"
+                        if supplier_wildcard:
+                            direct_sup_candidates = ["__ANY__"]
                         else:
-                            self.logger.warning(
-                                "Global fallback could not be computed for supplier=%s, consumer=%s "
-                                "with candidate suppliers=%s and consumers=%s",
-                                supplier_info.get("location"),
-                                consumer_info.get("location"),
-                                list(cand_sup),
-                                list(cand_con),
+                            sup_loc = supplier_info.get("location")
+                            direct_sup_candidates = (
+                                [sup_loc] if sup_loc is not None else []
                             )
+                        direct_con_candidates = ["GLO"]
 
-            # ---------------------
-            # Pass 2: generic grouping over the remaining edges
-            # ---------------------
-            compute_cf_memoized = compute_cf_memoized_factory(
-                cf_index=self.cf_index,
-                required_supplier_fields=self.required_supplier_fields,
-                required_consumer_fields=self.required_consumer_fields,
-            )
+                        # compute_average_cf already ignores fields not present in CFs,
+                        # so if supplier 'location' isn't in CF schema, it won't block matches.
+                        glo_cf, matched_cf_obj, glo_unc = compute_average_cf(
+                            candidate_suppliers=direct_sup_candidates,
+                            candidate_consumers=direct_con_candidates,
+                            supplier_info=supplier_info,
+                            consumer_info=consumer_info,
+                            required_supplier_fields=self.required_supplier_fields,
+                            required_consumer_fields=self.required_consumer_fields,
+                            cf_index=self.cf_index,
+                        )
 
-            grouped_edges = group_edges_by_signature(
-                edge_list=remaining_edges,
-                required_supplier_fields=self.required_supplier_fields,
-                required_consumer_fields=self.required_consumer_fields,
-            )
+                        if glo_cf != 0:
+                            for supplier_idx, consumer_idx, _, _, _, _ in group_edges:
+                                add_cf_entry(
+                                    cfs_mapping=self.cfs_mapping,
+                                    supplier_info=supplier_info,
+                                    consumer_info=consumer_info,
+                                    direction=direction,
+                                    indices=[(supplier_idx, consumer_idx)],
+                                    value=glo_cf,
+                                    uncertainty=(
+                                        glo_unc
+                                        if glo_unc is not None
+                                        else (
+                                            matched_cf_obj.get("uncertainty")
+                                            if matched_cf_obj
+                                            else None
+                                        )
+                                    ),
+                                )
+                            continue  # done with this group
 
-            if len(grouped_edges) > 0:
-                for (
-                    s_key,
-                    c_key,
-                    (candidate_suppliers, candidate_consumers),
-                ), edge_group in tqdm(
-                    grouped_edges.items(), desc="Processing global groups (pass 2)"
-                ):
+                # ---- Pass 2 (grouped_edges) ----
+                compute_cf_memoized = compute_cf_memoized_factory(
+                    cf_index=self.cf_index,
+                    required_supplier_fields=self.required_supplier_fields,
+                    required_consumer_fields=self.required_consumer_fields,
+                )
 
-                    glo_cf, matched_cf_obj, glo_unc = compute_cf_memoized(
-                        s_key, c_key, candidate_suppliers, candidate_consumers
-                    )
+                grouped_edges = group_edges_by_signature(
+                    edge_list=remaining_edges,
+                    required_supplier_fields=self.required_supplier_fields,
+                    required_consumer_fields=self.required_consumer_fields,
+                )
 
-                    if glo_cf:
-                        for supplier_idx, consumer_idx in edge_group:
-                            add_cf_entry(
-                                cfs_mapping=self.cfs_mapping,
-                                supplier_info=dict(s_key),
-                                consumer_info=dict(c_key),
-                                direction=direction,
-                                indices=[(supplier_idx, consumer_idx)],
-                                value=glo_cf,
-                                uncertainty=(
-                                    glo_unc
-                                    if glo_unc is not None
-                                    else (
-                                        matched_cf_obj.get("uncertainty")
-                                        if matched_cf_obj
-                                        else None
-                                    )
-                                ),
-                            )
+                if len(grouped_edges) > 0:
+                    for (
+                        s_key,
+                        c_key,
+                        (candidate_suppliers, candidate_consumers),
+                    ), edge_group in tqdm(
+                        grouped_edges.items(), desc="Processing global groups (pass 2)"
+                    ):
+
+                        glo_cf, matched_cf_obj, glo_unc = compute_cf_memoized(
+                            s_key, c_key, candidate_suppliers, candidate_consumers
+                        )
+
+                        if glo_cf != 0:
+                            for supplier_idx, consumer_idx in edge_group:
+                                add_cf_entry(
+                                    cfs_mapping=self.cfs_mapping,
+                                    supplier_info=dict(s_key),
+                                    consumer_info=dict(c_key),
+                                    direction=direction,
+                                    indices=[(supplier_idx, consumer_idx)],
+                                    value=glo_cf,
+                                    uncertainty=(
+                                        glo_unc
+                                        if glo_unc is not None
+                                        else (
+                                            matched_cf_obj.get("uncertainty")
+                                            if matched_cf_obj
+                                            else None
+                                        )
+                                    ),
+                                )
+                            continue
 
         self._update_unprocessed_edges()
         self.applied_strategies.append("map_remaining_locations_to_global")
