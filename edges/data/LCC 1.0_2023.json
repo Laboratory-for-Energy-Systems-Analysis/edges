@@ -1,7 +1,14 @@
 {
-  "name":"LCC method",
+  "name":"ecoinvent 3.10/3.11 - LCC method",
   "unit":"USD",
   "version":"1.0",
+  "strategies": [
+       "map_exchanges",
+       "map_aggregate_locations",
+       "map_dynamic_locations",
+       "map_contained_locations",
+       "map_remaining_locations_to_global"
+   ],
   "exchanges":[
     {
       "supplier":{

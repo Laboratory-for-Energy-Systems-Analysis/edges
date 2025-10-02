@@ -1,14 +1,11 @@
 import pytest
 from pathlib import Path
-from edges import EdgeLCIA
+from edges import EdgeLCIA, setup_package_logging
 from bw2data import Database, projects, get_activity, __version__
+import logging
 
-import pandas as pd
+setup_package_logging(level=logging.DEBUG)
 
-pd.set_option("display.max_rows", None)
-pd.set_option("display.max_columns", None)
-pd.set_option("display.width", None)
-pd.set_option("display.max_colwidth", None)
 
 # Set up once
 if __version__ < (4, 0, 0):
@@ -29,6 +26,7 @@ activity_E = get_activity(("lcia-test-db", "E"))
 this_dir = Path(__file__).parent
 
 
+@pytest.mark.forked
 @pytest.mark.parametrize(
     "filename, activity, expected",
     [
@@ -48,6 +46,8 @@ this_dir = Path(__file__).parent
 )
 def test_cf_mapping(filename, activity, expected):
     filepath = str(this_dir / "data" / filename)
+
+    print(f"\n🧪 Running test: {filename} / {activity['name']} (expecting {expected})")
 
     lca = EdgeLCIA(
         demand={activity: 1},
@@ -84,7 +84,6 @@ def test_cf_mapping(filename, activity, expected):
 
 
 def test_parameters():
-
     activity = activity_A
     filepath = str(this_dir / "data" / "biosphere_name_w_parameters.json")
 
@@ -100,7 +99,6 @@ def test_parameters():
             },
         }
     }
-
     lca = EdgeLCIA(
         demand={activity: 1},
         filepath=filepath,

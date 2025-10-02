@@ -4,7 +4,6 @@ on: [push, pull_request]
 jobs:
   clean:
     runs-on: ubuntu-latest
-
     steps:
       - uses: actions/checkout@v4
 
@@ -13,10 +12,14 @@ jobs:
         with:
           args: "./"
 
-
       - name: Check for modified files
         id: git-check
-        run: echo ::set-output name=modified::$(if git diff-index --quiet HEAD --; then echo "false"; else echo "true"; fi)
+        run: |
+          if git diff-index --quiet HEAD --; then
+            echo "modified=false" >> $GITHUB_OUTPUT
+          else
+            echo "modified=true" >> $GITHUB_OUTPUT
+          fi
 
       - name: Push changes
         if: steps.git-check.outputs.modified == 'true'
@@ -28,81 +31,124 @@ jobs:
           git commit -am "Black reformating"
           git push
 
+  # === CROSS-PLATFORM PYTEST ===
   build:
-    runs-on: ${{matrix.os}}
-    strategy:
-      matrix:
-        os: [ubuntu-latest]
-
+    name: tests (${{ matrix.os }}, py${{ matrix.python-version }})
     needs: clean
-
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+        python-version: ["3.11"]   # add more versions if you like
     steps:
       - uses: actions/checkout@v4
 
-      - name: Install system dependencies for pyenv
-        run: |
-          sudo apt-get update
-          sudo apt-get install build-essential zlib1g-dev libffi-dev libssl-dev \
-                               libbz2-dev libreadline-dev libsqlite3-dev liblzma-dev \
-                               libncurses-dev tk-dev
-
-      - name: Install python version
-        uses: gabrielfalcao/pyenv-action@v18
+      - name: Set up Python
+        uses: actions/setup-python@v5
         with:
-          default: 3.11
-          command: pip install -U pip  # upgrade pip after installing python
-
-
-      - name: create environment
-        run: |
-          pyenv install 3.11 && python -mvenv .venv390
-          
-
-      - name: Activate pyenv Python
-        run: |
-          pyenv install -s 3.11
-          pyenv global 3.11
-          python --version
+          python-version: ${{ matrix.python-version }}
+          cache: "pip"
 
       - name: Install dependencies
         run: |
-          pip install -r requirements.txt --upgrade pip
-          pip install pytest
-          pip install pytest-instafail
+          python -m pip install -U pip
+          pip install -r requirements.txt
+          pip install pytest pytest-forked
           pip install -e . --verbose
 
       - name: Set up test database
+        env:
+          EI_USERNAME: ${{ secrets.EI_USERNAME }}
+          EI_PASSWORD: ${{ secrets.EI_PASSWORD }}
         run: |
           python tests/setup_testdb.py
 
-      - name: Run tests
-        run: |
-          pytest
+      # Create debug dir in a cross-platform way
+      - name: Create debug directory
+        run: python -c "import pathlib; p=pathlib.Path('pytest-debug'); p.mkdir(parents=True, exist_ok=True); print('Created', p.resolve())"
 
+      # POSIX: run everything with subprocess isolation
+      - name: Run tests (*nix, forked)
+        if: runner.os != 'Windows'
+        env:
+          EI_USERNAME: ${{ secrets.EI_USERNAME }}
+          EI_PASSWORD: ${{ secrets.EI_PASSWORD }}
+          PYTEST_DEBUG_DIR: pytest-debug
+        run: |
+          python -c "import platform; print('Platform:', platform.platform())"
+          pytest --forked -q
+
+      # Windows: run without forking (either skip forked-marked tests or run all if safe)
+      - name: Run tests (Windows, no fork)
+        if: runner.os == 'Windows'
+        env:
+          EI_USERNAME: ${{ secrets.EI_USERNAME }}
+          EI_PASSWORD: ${{ secrets.EI_PASSWORD }}
+          PYTEST_DEBUG_DIR: pytest-debug
+        run: |
+          python -c "import platform; print('Platform:', platform.platform())"
+          pytest -q -m "not forked"
+
+      # Linux + macOS
+      - name: List debug dir (diagnostics) — *nix
+        if: always() && runner.os != 'Windows'
+        shell: bash
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          for p in ["pytest-debug", "bw-work", "edges.log"]:
+              d = Path(p)
+              print(("[OK] " if d.exists() else "[MISS] ") + p)
+              if d.is_dir():
+                  for f in d.rglob("*"):
+                      if f.is_file():
+                          print("  -", f)
+          PY
+
+      # Windows
+      - name: List debug dir (diagnostics) — Windows
+        if: always() && runner.os == 'Windows'
+        shell: pwsh
+        run: |
+          $code = @"
+          from pathlib import Path
+          for p in ["pytest-debug", "bw-work", "edges.log"]:
+            d = Path(p)
+            print(("[OK] " if d.exists() else "[MISS] ") + p)
+            if d.is_dir():
+              for f in d.rglob("*"):
+                if f.is_file():
+                  print("  -", f)
+          "@
+          Set-Content -Path diag.py -Value $code -Encoding UTF8
+          python diag.py
+
+      - name: Upload pytest artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: pytest-debug-${{ github.run_id }}-${{ matrix.os }}
+          path: |
+            pytest-debug/**
+            edges.log
+          include-hidden-files: true
+
+  # == Keep your packaging jobs as-is, depending on build ==
   Pypi:
     runs-on: ubuntu-latest
     needs: build
-
     strategy:
       fail-fast: false
       matrix:
         os: [ "ubuntu-latest" ]
         python-version: [ "3.11" ]
-
     steps:
       - uses: actions/checkout@v4
-
       - name: Install pypa/build
-        run: >-
-          python -m
-          pip install
-          build
-
+        run: python -m pip install build
       - name: Build a binary wheel and a source tarball
-        run: >-
-          python -m
-          build
-
+        run: python -m build
       - name: Publish distribution 📦 to PyPI if Release
         if: startsWith(github.ref, 'refs/tags')
         uses: pypa/gh-action-pypi-publish@release/v1
@@ -110,7 +156,6 @@ jobs:
           password: ${{ secrets.PYPI_API_TOKEN }}
           skip-existing: true
           verbose: true
-
       - name: Publish distribution 📦 to Test PyPI if Push
         uses: pypa/gh-action-pypi-publish@release/v1
         with:
@@ -120,10 +165,9 @@ jobs:
           verbose: true
 
   conda:
-    name: (${{ matrix.python-version }}, ubuntu-latest)
+    name: (conda build)
     runs-on: ubuntu-latest
     needs: build
-
     strategy:
       fail-fast: false
       matrix:
@@ -139,15 +183,12 @@ jobs:
           channel-priority: strict
           auto-update-conda: true
           activate-environment: test
-
       - name: Conda info
         shell: bash -l {0}
         run: conda info
-
       - name: Publish all variants 📦 to Anaconda if Push and if main branch
         if: startsWith(github.ref, 'refs/heads/main')
         shell: bash -l {0}
-
         run: |
           PKG_NAME=edges
           USER=romainsacchi
@@ -157,34 +198,24 @@ jobs:
           conda config --set anaconda_upload no
           export CONDA_BLD_PATH=~/conda-bld
           export VERSION=`date +%Y.%m.%d`
-
-          # Build the package with all variants
           conda build conda/ --old-build-string
-
-          # List built .tar.bz2 and .conda packages
           BUILT_PACKAGES=$(find $CONDA_BLD_PATH -type f \( -name "*.tar.bz2" -o -name "*.conda" \))
-
           echo "Built packages:"
           echo $BUILT_PACKAGES
-
-          # Upload each valid package
           for PACKAGE in $BUILT_PACKAGES; do
             echo "Uploading $PACKAGE"
             anaconda -t ${{ secrets.ANACONDA_CLOUD }} upload -u $USER $PACKAGE --force
           done
-  
-  
 
   testconda:
-    name: (${{ matrix.python-version }}, ${{ matrix.os }})
+    name: (conda test ${{ matrix.python-version }}, ${{ matrix.os }})
     runs-on: ${{ matrix.os }}
     needs: conda
-
     strategy:
       fail-fast: false
       matrix:
         os: ["ubuntu-latest"]
-        python-version: ["3.11",]
+        python-version: ["3.11"]
         solver: ["classic"]
     steps:
       - uses: actions/checkout@v4
@@ -196,9 +227,7 @@ jobs:
           auto-update-conda: true
           activate-environment: test
           conda-solver: ${{ matrix.solver }}
-
       - name: Pull distribution 📦 from Anaconda and test it if master branch
-
         run: |
           conda install romainsacchi::edges
           conda update edges

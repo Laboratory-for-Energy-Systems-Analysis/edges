@@ -1,4 +1,5 @@
 # edges/georesolver.py
+from __future__ import annotations
 
 from functools import lru_cache
 import logging
@@ -7,6 +8,20 @@ from .utils import load_missing_geographies, get_str
 
 logger = logging.getLogger(__name__)
 logger.addHandler(logging.NullHandler())
+
+
+for name in ("country_converter", "country_converter.country_converter"):
+    l = logging.getLogger(name)
+    # remove existing handlers
+    while l.handlers:
+        h = l.handlers.pop()
+        try:
+            h.close()
+        except:
+            pass
+    l.propagate = False  # don’t bubble to root
+    l.setLevel(logging.ERROR)  # drop WARNINGs
+logging.lastResort = None
 
 
 class GeoResolver:
@@ -82,7 +97,8 @@ class GeoResolver:
             except KeyError:
                 self.logger.info("Region %s: no geometry found.", location)
 
-        return results
+        # Deduplicate and enforce deterministic ordering
+        return sorted(set(results))
 
     @lru_cache(maxsize=2048)
     def _cached_lookup(

@@ -26,10 +26,12 @@ requirements:
     - bw2data
     - bw2io
     - bw2analyzer
-    - constructive_geometries
+    - country_converter>=1.3.1
+    - constructive_geometries>=1.0.0
     - prettytable
     - sparse >=0.13.0
     - highspy
+    - plotly
 
 
 test:

@@ -22,7 +22,6 @@ def lcia():
     act = db.random()
 
     lcia = EdgeLCIA(demand={act: 1}, method=("AWARE 2.0", "Country", "all", "yearly"))
-    lcia.logger = type("Logger", (), {"info": lambda *a, **kw: None})()
     return lcia
 
 

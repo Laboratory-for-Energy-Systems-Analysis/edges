@@ -1,7 +1,14 @@
 {
-  "name": "ImpactWorld+ 2.1 - Freshwater ecotoxicity, short term_damage",
+  "name": "ecoinvent 3.10/3.11 - ImpactWorld+ 2.1 - Freshwater ecotoxicity, short term_damage",
   "unit": "PDF.m2.yr",
   "version": "2.1",
+  "strategies": [
+       "map_exchanges",
+       "map_aggregate_locations",
+       "map_dynamic_locations",
+       "map_contained_locations",
+       "map_remaining_locations_to_global"
+   ],
   "exchanges": [
     {
       "supplier": {

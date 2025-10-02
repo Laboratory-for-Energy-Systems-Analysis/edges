@@ -1,7 +1,14 @@
 {
-   "name": "Country_unspecified_yearly",
+   "name": "ecoinvent 3.10/3.11 - Country_unspecified_yearly",
    "unit": "m3 deprived water-eq.",
    "version": "2.0",
+   "strategies": [
+       "map_exchanges",
+       "map_aggregate_locations",
+       "map_dynamic_locations",
+       "map_contained_locations",
+       "map_remaining_locations_to_global"
+   ],
    "exchanges": [
       {
          "supplier": {

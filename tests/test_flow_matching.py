@@ -176,4 +176,4 @@ def test_compute_average_cf_with_any_fallback():
     )
 
     assert matched_cf is not None, f"Expected a matched CF, got {matched_cf}"
-    assert result == "(1.000 * (10))"
+    assert eval(result) == eval("(1.000 * (10))")

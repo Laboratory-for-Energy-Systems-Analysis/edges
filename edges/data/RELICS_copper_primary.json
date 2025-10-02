@@ -1,0 +1,44 @@
+{
+  "name": "ecoinvent 3.10/3.11 - RELICS - Copper, primary",
+  "unit": "kg",
+  "version": "1.0",
+  "strategies": [
+       "map_exchanges"
+   ],
+  "exchanges": [
+    {
+      "supplier": {
+        "name": " ",
+        "reference product": "copper, cathode",
+        "operator": "contains",
+        "matrix": "technosphere",
+        "excludes": [
+          "market",
+          "treatment"
+        ]
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1.0
+    },
+    {
+        "supplier": {
+          "name": " ",
+          "reference product": "copper, anode",
+          "operator": "contains",
+          "matrix": "technosphere",
+          "excludes": [
+            "market",
+            "treatment",
+            "slime"
+          ]
+        },
+        "consumer": {
+          "matrix": "technosphere"
+        },
+        "value": 1.0
+      }
+
+  ]
+}
