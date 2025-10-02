@@ -3,7 +3,7 @@ import bw2data, bw2io
 import time
 import logging
 
-setup_package_logging(level=logging.DEBUG)
+# setup_package_logging(level=logging.DEBUG)
 
 # Start timer
 start_time = time.time()

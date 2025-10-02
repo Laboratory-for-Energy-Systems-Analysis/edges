@@ -82,8 +82,6 @@ def test_cf_mapping(filename, activity, expected):
 
     assert pytest.approx(lca.score) == expected
 
-    lca = None
-
 
 def test_parameters():
     activity = activity_A
