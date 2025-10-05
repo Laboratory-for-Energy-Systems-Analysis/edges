@@ -6,6 +6,7 @@ LCIA class.
 
 from __future__ import annotations
 
+from typing import Union, Mapping, Sequence, Any, Optional
 import math
 import os
 import sys
@@ -13,6 +14,7 @@ import platform
 import scipy
 import sparse as sp
 import time
+import copy
 from collections import defaultdict
 import json
 from typing import Optional
@@ -67,6 +69,44 @@ else:
 import logging
 
 logger = logging.getLogger(__name__)
+
+
+def _is_cf_exchange(obj: Any) -> bool:
+    """Minimal check for a CF 'exchange' entry."""
+    return (
+        isinstance(obj, dict)
+        and isinstance(obj.get("supplier"), dict)
+        and isinstance(obj.get("consumer"), dict)
+        and ("value" in obj)
+    )
+
+
+def _coerce_method_exchanges(method_obj: Mapping[str, Any]) -> list[dict]:
+    """
+    Accept a dict like:
+    {
+      "name": "...",
+      "version": "...",
+      "description": "...",
+      "unit": "...",
+      "exchanges": [ { supplier: {...}, consumer: {...}, value: ... }, ... ]
+    }
+    Return a deep-copied list of exchange dicts; raise if invalid.
+    """
+    if not isinstance(method_obj, Mapping):
+        raise TypeError("Method must be a mapping (dict-like) when provided inline.")
+
+    exchanges = method_obj.get("exchanges")
+    if not isinstance(exchanges, Sequence) or not exchanges:
+        raise ValueError("Inline method must contain a non-empty 'exchanges' list.")
+
+    if not all(_is_cf_exchange(x) for x in exchanges):
+        raise ValueError(
+            "Each item in 'exchanges' must have 'supplier' (dict), 'consumer' (dict), and 'value'."
+        )
+
+    # Deep copy to avoid mutating caller's object
+    return copy.deepcopy(list(exchanges))
 
 
 def add_cf_entry(
@@ -313,7 +353,7 @@ class EdgeLCIA:
     def __init__(
         self,
         demand: dict,
-        method: Optional[tuple] = None,
+        method: Union[str, os.PathLike, Mapping[str, Any], tuple, None] = None,
         weight: Optional[str] = "population",
         parameters: Optional[dict] = None,
         scenario: Optional[str] = None,
@@ -341,6 +381,18 @@ class EdgeLCIA:
         5. `lcia()`
         6. Optionally: `statistics()`, `generate_df_table()`
         """
+
+        try:
+            _equality_supplier_signature_cached.cache_clear()
+            # cached_match_with_index.cache_clear()
+        except Exception:
+            pass
+        try:
+            # _equality_supplier_signature_cached.cache_clear()
+            cached_match_with_index.cache_clear()
+        except Exception:
+            pass
+
         self.cf_index = None
         self.scenario_cfs = None
         self.method_metadata = None
@@ -359,7 +411,7 @@ class EdgeLCIA:
         self.reversed_biosphere = None
         self.reversed_activity = None
         self.characterization_matrix = None
-        self.method = method  # Store the method argument in the instance
+        self.method = method
         self.position_to_technosphere_flows_lookup = None
         self.technosphere_flows_lookup = defaultdict(list)
         self.technosphere_flow_matrix = None
@@ -457,26 +509,157 @@ class EdgeLCIA:
             },
         )
 
+    def _resolve_method(
+        self,
+        method: Union[str, os.PathLike, Mapping[str, Any]],
+    ) -> tuple[list[dict], dict]:
+        """
+        Resolve 'method' into (exchanges_list, meta_dict).
+
+        Supports:
+          - dict with 'exchanges' (inline method)
+          - JSON file path
+          - registered/known method name (existing behavior via your loader)
+
+        meta_dict carries name/version/description/unit if present (for reporting).
+        """
+        meta: dict = {}
+        # 1) Inline dict
+        if isinstance(method, Mapping):
+            exchanges = _coerce_method_exchanges(method)
+            # capture metadata (optional keys)
+            for k in ("name", "version", "description", "unit"):
+                if k in method:
+                    meta[k] = method[k]
+            return exchanges, meta
+
+        # 2) String/Path: try JSON file first
+        if isinstance(method, (str, os.PathLike)):
+            path = os.fspath(method)
+            if os.path.exists(path) and os.path.isfile(path):
+                with open(path, "r", encoding="utf-8") as f:
+                    payload = json.load(f)
+                if isinstance(payload, Mapping):
+                    exchanges = _coerce_method_exchanges(payload)
+                    for k in ("name", "version", "description", "unit"):
+                        if k in payload:
+                            meta[k] = payload[k]
+                    return exchanges, meta
+                raise ValueError(
+                    f"JSON at '{path}' must be an object with an 'exchanges' list."
+                )
+
+            # 3) Registered/known name → defer to your existing loader
+            if hasattr(self, "_load_registered_method"):
+                cf_list = self._load_registered_method(path)
+            else:
+                # If you had a previous loader, call it here instead
+                raise FileNotFoundError(
+                    f"'{path}' is neither a JSON file nor a registered method name (no loader found)."
+                )
+
+            if not isinstance(cf_list, list) or (
+                cf_list and not _is_cf_exchange(cf_list[0])
+            ):
+                raise ValueError(
+                    f"Registered method '{path}' did not yield a valid exchanges list."
+                )
+            return cf_list, meta
+
+        raise TypeError(
+            "method must be a method name (str), JSON filepath (str/Path), "
+            "or an inline dict with an 'exchanges' list."
+        )
+
+    def _normalize_exchanges(self, exchanges: list[dict]) -> list[dict]:
+        """
+        - Set default operator='equals' if missing
+        - Ensure 'matrix' defaults ('biosphere' for supplier if unset, pass-through otherwise)
+        - Preserve any classifications; pre-normalize if your pipeline expects it
+        - Do not mutate input in place (work on copies)
+        """
+        out: list[dict] = []
+        for cf in exchanges:
+            # shallow copies
+            cf = dict(cf)
+            s = dict(cf.get("supplier", {}))
+            c = dict(cf.get("consumer", {}))
+
+            # defaults that downstream fast paths expect
+            s.setdefault("operator", "equals")
+            c.setdefault("operator", "equals")
+            s.setdefault("matrix", s.get("matrix", "biosphere"))
+
+            # (optional) your code likely uses normalized classifications:
+            if "classifications" in s:
+                cf["_norm_supplier_cls"] = self._normalize_classifications(
+                    s["classifications"]
+                )
+            if "classifications" in c:
+                cf["_norm_consumer_cls"] = self._normalize_classifications(
+                    c["classifications"]
+                )
+
+            cf["supplier"] = s
+            cf["consumer"] = c
+            out.append(cf)
+        return out
+
     def _load_raw_lcia_data(self):
         """
         Load and validate raw LCIA data for a given method.
 
-        :return: Parsed LCIA data structure.
+        Supports:
+          - inline dict with 'exchanges' (and optional metadata),
+          - JSON filepath (str/Path),
+          - legacy tuple method name resolved under DATA_DIR (current behavior).
         """
-        if self.filepath is None:
-            self.filepath = DATA_DIR / f"{'_'.join(self.method)}.json"
-        if not self.filepath.is_file():
-            raise FileNotFoundError(f"Data file not found: {self.filepath}")
+        # ----- 1) Decide the payload source -----------------------------------------
+        raw = None  # the object we'll pass to format_data(...)
 
-        with open(self.filepath, "r", encoding="utf-8") as f:
-            raw = json.load(f)
+        # A) Inline dict (your new use case)
+        if isinstance(self.method, Mapping):
+            raw = self.method
+            # create a Path object for consistency
+            self.filepath = Path()
 
-        # Store full method metadata except exchanges and parameters
+        # B) Explicit filepath (string/Path) -> read JSON file
+        elif isinstance(self.method, (str, os.PathLike)):
+            meth_path = os.fspath(self.method)
+            if os.path.exists(meth_path) and os.path.isfile(meth_path):
+                with open(meth_path, "r", encoding="utf-8") as f:
+                    raw = json.load(f)
+                self.filepath = Path(meth_path)
+
+        # C) Legacy tuple method name -> resolve under DATA_DIR
+        if raw is None:
+            if self.filepath is None:
+                # self.method can be a tuple (legacy) or anything else; if not tuple, will error out below
+                if isinstance(self.method, tuple):
+                    self.filepath = DATA_DIR / f"{'_'.join(self.method)}.json"
+                else:
+                    raise TypeError(
+                        "Unsupported 'method' type. Provide a dict with 'exchanges', a JSON filepath, "
+                        "or a legacy tuple method name."
+                    )
+
+            if not self.filepath.is_file():
+                raise FileNotFoundError(f"Data file not found: {self.filepath}")
+
+            with open(self.filepath, "r", encoding="utf-8") as f:
+                raw = json.load(f)
+
+        # ----- 2) Run your existing formatting + normalization -----------------------
+        # Store full method metadata and exchanges the same way you already do
         self.raw_cfs_data, self.method_metadata = format_data(raw, self.weight_scheme)
+
         # check for NaNs in the raw CF data
         assert_no_nans_in_cf_list(self.raw_cfs_data, file_source=self.filepath)
+
+        # Normalize classification entries (your current helper)
         self.raw_cfs_data = normalize_classification_entries(self.raw_cfs_data)
 
+        # Precompute normalized classification tuples for fast matching (unchanged)
         for cf in self.raw_cfs_data:
             cf["_norm_supplier_cls"] = _norm_cls(
                 cf.get("supplier", {}).get("classifications")
@@ -487,23 +670,27 @@ class EdgeLCIA:
 
         self.cfs_number = len(self.raw_cfs_data)
 
-        # Extract parameters or scenarios from method file if not already provided
+        # ----- 3) Parameters / scenarios (unchanged) ---------------------------------
         if not self.parameters:
             self.parameters = raw.get("scenarios", raw.get("parameters", {}))
         if not self.parameters:
             self.logger.warning(
-                f"No parameters or scenarios found in method file: {self.filepath}"
+                f"No parameters or scenarios found in method source: {self.filepath or '<inline method>'}"
             )
 
-        # Fallback to default scenario
-        if self.scenario and self.scenario not in self.parameters:
+        if (
+            self.scenario
+            and isinstance(self.parameters, dict)
+            and self.scenario not in self.parameters
+        ):
             self.logger.error(
-                f"Scenario '{self.scenario}' not found in method file. Available scenarios: {list(self.parameters)}"
+                f"Scenario '{self.scenario}' not found. Available: {list(self.parameters)}"
             )
             raise ValueError(
                 f"Scenario '{self.scenario}' not found in available parameters: {list(self.parameters)}"
             )
 
+        # ----- 4) Required fields and index (unchanged) ------------------------------
         self.required_supplier_fields = {
             k
             for cf in self.raw_cfs_data
@@ -1211,6 +1398,11 @@ class EdgeLCIA:
             hit = _match_memo.get(key)
             if hit is not None:
                 return hit
+
+            try:
+                cached_match_with_index.cache_clear()
+            except Exception:
+                pass
 
             # Configure matcher context only here
             cached_match_with_index.index = index
@@ -2858,6 +3050,7 @@ class EdgeLCIA:
 
         if strategies is None:
             self.logger.info("No 'strategies' found; nothing to apply.")
+            print("No 'strategies' found; nothing to apply.")
             return self
 
         if not isinstance(strategies, (list, tuple)) or not all(
@@ -3593,7 +3786,12 @@ class EdgeLCIA:
                     ),
                 ]
             )
-        rows.append(["Method name", fill(str(self.method), width=45)])
+        if isinstance(self.method, tuple):
+            method_name = str(self.method)
+        else:
+            method_name = self.method["name"]
+
+        rows.append(["Method name", fill(method_name, width=45)])
         if "unit" in self.method_metadata:
             rows.append(["Unit", fill(self.method_metadata["unit"], width=45)])
         rows.append(["Data file", fill(self.filepath.stem, width=45)])
