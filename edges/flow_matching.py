@@ -380,13 +380,6 @@ def match_with_index(
 ) -> MatchResult:
     """
     Match a flow to positions using a per-field inverted index and full criteria.
-
-    :param flow_to_match: Flow fields to match (may include operator/excludes).
-    :param index: Per-field index (from build_index).
-    :param lookup_mapping: Original lookup map: key -> list of positions.
-    :param required_fields: Required fields to consider (including 'location' optionally).
-    :param reversed_lookup: Map of position -> raw flow dict for final validation.
-    :return: MatchResult with full matches and location-only rejects.
     """
     SPECIAL = {"excludes", "operator", "matrix"}
     nonloc_fields = [f for f in required_fields if f not in SPECIAL and f != "location"]
@@ -431,13 +424,45 @@ def match_with_index(
         if not keys:
             return []
         out = []
-        for key in sorted(keys):
-            for pos in lookup_mapping.get(key, []):
+        # Fast path: no excludes -> everything in these keys already matches
+        excludes = ft_for_matchflow.get("excludes")
+        if not excludes:
+            for key in keys:
+                # lookup_mapping[key] is the list of positions for this composite key
+                bucket = lookup_mapping.get(key)
+                if bucket:
+                    out.extend(bucket)
+            return out
+
+        # Slow path: excludes present -> filter per-record once
+        # Normalize excludes for faster checks
+        ex = tuple(e.lower() for e in (excludes or ()))
+        for key in keys:
+            bucket = lookup_mapping.get(key)
+            if not bucket:
+                continue
+            for pos in bucket:
                 raw = reversed_lookup[pos]
                 flow = dict(raw) if isinstance(raw, tuple) else raw
-                if flow and match_flow(flow, ft_for_matchflow):
-                    out.append(pos)
+                # Only scan string fields; short-circuit early
+                if any(
+                    isinstance(v, str) and any(e in v.lower() for e in ex)
+                    for v in flow.values()
+                ):
+                    continue
+                out.append(pos)
         return out
+
+    def intersect_smallest_first(sets_iterable):
+        sets_list = [s for s in sets_iterable if s is not None]
+        if not sets_list:
+            return set()
+        acc = min(sets_list, key=len).copy()
+        for s in sorted((x for x in sets_list if x is not acc), key=len):
+            acc &= s
+            if not acc:
+                break
+        return acc
 
     # --- SPECIAL CASE: only 'location' is required ---
     if not nonloc_fields and has_location_constraint:
@@ -462,22 +487,28 @@ def match_with_index(
 
     # --- NORMAL PATH: there are non-location required fields ---
     if nonloc_fields:
-        pre_location_keys = None
+        # Build candidate key sets per non-location field
+        per_field_sets = []
         for field in nonloc_fields:
             cand = field_candidates(field, flow_to_match.get(field), op)
-            pre_location_keys = (
-                cand if pre_location_keys is None else (pre_location_keys & cand)
-            )
-            if not pre_location_keys:
+            if not cand:
+                # Any empty set means no matches possible
                 return MatchResult(matches=[], location_only_rejects={})
+            per_field_sets.append(cand)
+
+        # Intersect smallest-first for speed
+        pre_location_keys = intersect_smallest_first(per_field_sets)
+        if not pre_location_keys:
+            return MatchResult(matches=[], location_only_rejects={})
     else:
-        # no required fields at all
+        # no required fields at all → start from all keys
         pre_location_keys = set(lookup_mapping.keys())
 
-    # apply location last
+    # Apply location as an extra filter (kept separate to preserve location-only diagnostics)
     candidate_keys = pre_location_keys
     if has_location_constraint:
         loc_cand = field_candidates("location", flow_to_match.get("location"), op)
+        # Intersect with location last (fast set op on already reduced key-space)
         candidate_keys = pre_location_keys & loc_cand
 
     # noloc matches (for diagnosing location-only)
@@ -489,7 +520,7 @@ def match_with_index(
     full_matches = gather_positions(candidate_keys, flow_to_match)
 
     loc_only = (
-        set(noloc_matches) - set(full_matches) if has_location_constraint else set()
+        (set(noloc_matches) - set(full_matches)) if has_location_constraint else set()
     )
 
     return MatchResult(
@@ -567,40 +598,63 @@ def normalize_signature_data(info_dict, required_fields):
     return filtered
 
 
-@lru_cache(maxsize=None)
+@lru_cache(maxsize=4096)
+def _available_locs_from_weights(weights_key_tuple: tuple, supplier: bool) -> tuple:
+    """
+    Project available locations from a stable weights key.
+    weights_key_tuple is a tuple of (supplier_loc, consumer_loc) pairs.
+    Returns a sorted, de-duplicated tuple of allowed codes for the given side.
+    """
+    if supplier:
+        vals = {w[0] for w in weights_key_tuple}
+    else:
+        vals = {w[1] for w in weights_key_tuple}
+    # Keep deterministic order; don't special-case __ANY__ here
+    return tuple(sorted(vals))
+
+
+@lru_cache(maxsize=200_000)
 def resolve_candidate_locations(
     *,
     geo,
     location: str,
-    weights: frozenset,
+    weights: tuple,
     containing: bool = False,
-    exceptions: set = None,
+    exceptions: tuple | None = None,  # <— changed: tuple for caching
     supplier: bool = True,
-) -> list:
+) -> tuple:
+    """
+    Cached candidate resolver:
+    - derives available locations once per weights_key_tuple + side
+    - filters inside (including dropping 'GLO' when expanding GLO) to avoid extra list comps in hot loops
+    - returns a tuple (hashable, deterministic)
+    """
     try:
+        exceptions = list(exceptions) if exceptions else []
         candidates = geo.resolve(
-            location=location,
-            containing=containing,
-            exceptions=exceptions or [],
+            location=location, containing=containing, exceptions=exceptions
         )
     except KeyError:
-        return []
+        return tuple()
 
-    if supplier:
-        available_locs = [loc[0] for loc in weights]
+    # When expanding GLO to its contained regions, drop 'GLO' itself here
+    if containing and isinstance(location, str) and location == "GLO":
+        candidates = [c for c in candidates if c != "GLO"]
+
+    avail = _available_locs_from_weights(weights, supplier=supplier)
+
+    # If wildcard is allowed on this side, we don't filter candidates by availability
+    if "__ANY__" in avail:
+        pool = candidates
     else:
-        available_locs = [loc[1] for loc in weights]
+        # avail is small; convert to set once for O(1) membership
+        a = set(avail)
+        pool = [loc for loc in candidates if loc in a]
 
-    # If wildcard is allowed on this side, don't filter away real region codes
-    if "__ANY__" in available_locs:
-        pool = list(candidates)
-    else:
-        pool = [loc for loc in candidates if loc in available_locs]
-
-    # Deterministic ordering across platforms (keep "GLO" first if present)
-    pool = sorted(set(pool), key=lambda x: (x != "GLO", x))
-
-    return pool
+    # Deterministic ordering across platforms
+    # If you still want 'GLO' first (we dropped it above for GLO-expansion),
+    # keep the same policy for non-GLO locations
+    return tuple(sorted(set(pool)))
 
 
 def group_edges_by_signature(
@@ -644,8 +698,8 @@ def group_edges_by_signature(
 
 
 def compute_average_cf(
-    candidate_suppliers: list,
-    candidate_consumers: list,
+    candidate_suppliers: list | tuple,
+    candidate_consumers: list | tuple,
     supplier_info: dict,
     consumer_info: dict,
     cf_index: dict,
@@ -654,14 +708,60 @@ def compute_average_cf(
 ) -> tuple[str | float, Optional[dict], Optional[dict]]:
     """
     Compute a weighted CF expression and aggregated uncertainty for composite regions.
-    Deterministic across platforms by enforcing stable ordering at every step.
+    Deterministic across platforms without deep freezing: we sort by (s_loc, c_loc, cf_signature),
+    where cf_signature is a compact, shallow tuple of stable fields.
     """
     _t0 = time.perf_counter() if logger.isEnabledFor(logging.DEBUG) else None
 
-    # ---- Normalize/Sort candidate pools (deterministic) ----
-    # Keep potential duplicates out; sort lexicographically (GLO first if you want it prioritized)
-    candidate_suppliers = sorted(set(candidate_suppliers))
-    candidate_consumers = sorted(set(candidate_consumers))
+    # ---- compact, shallow signatures (no deep recursion) ----
+    # Keep only a few stable fields that define semantics; fall back to repr for odd types.
+    def _cf_signature(cf: dict) -> tuple:
+        # Pull once to locals (avoid many dict.get calls)
+        # Choose a small set of fields that make equal CFs sort adjacent/stably
+        v = cf.get("value")
+        w = cf.get("weight")
+        u = cf.get("unit")
+        sym = cf.get("symbolic")  # expression or None
+        # If there is an explicit identifier, prefer it for stability
+        cfid = cf.get("id") or cf.get("code") or None
+        # Normalize numerics; avoid touching nested dicts/lists
+        try:
+            v_norm = float(v) if isinstance(v, (int, float)) else repr(v)
+        except Exception:
+            v_norm = repr(v)
+        try:
+            w_norm = (
+                float(w)
+                if isinstance(w, (int, float))
+                else (0.0 if w in (None, "", False) else 0.0)
+            )
+        except Exception:
+            w_norm = 0.0
+        return (cfid, v_norm, u or "", bool(sym))
+
+    def _unc_signature(unc: dict | None) -> tuple:
+        if not unc:
+            return ("",)
+        dist = unc.get("distribution", "")
+        neg = unc.get("negative", None)
+        # Shallow, order-stable snapshot of top-level parameters only
+        params = unc.get("parameters")
+        if isinstance(params, dict):
+            # Only sort top-level keys; values kept as-is (repr) to avoid deep cost
+            par_sig = tuple(sorted((k, repr(params[k])) for k in params.keys()))
+        else:
+            par_sig = repr(params)
+        return (
+            dist,
+            1 if neg in (1, True) else 0 if neg in (0, False) else -1,
+            par_sig,
+        )
+
+    # ---------- 1) Canonicalize candidate pools (once) ----------
+    if not isinstance(candidate_suppliers, tuple):
+        candidate_suppliers = tuple(set(candidate_suppliers))
+    if not isinstance(candidate_consumers, tuple):
+        candidate_consumers = tuple(set(candidate_consumers))
 
     if not candidate_suppliers and not candidate_consumers:
         logger.warning(
@@ -671,28 +771,33 @@ def compute_average_cf(
         )
         return 0, None, None
 
-    # ---- Gate 1: location-key presence in cf_index (deterministic pairs) ----
-    valid_location_pairs = [
-        (s, c)
-        for s in candidate_suppliers
-        for c in candidate_consumers
-        if cf_index.get((s, c))
-    ]
-    valid_location_pairs.sort()  # (s,c) lexicographic order
+    S = candidate_suppliers
+    C = candidate_consumers
+    setS, setC = set(S), set(C)
+
+    # ---------- 2) Efficient valid (s,c) pair discovery ----------
+    idx_keys = cf_index.keys()
+    prod_size = len(S) * len(C)
+    if prod_size and prod_size <= len(idx_keys):
+        valid_location_pairs = [(s, c) for s in S for c in C if (s, c) in cf_index]
+        # S and C are already sorted; this is lexicographically ordered
+    else:
+        valid_location_pairs = [k for k in idx_keys if k[0] in setS and k[1] in setC]
+        valid_location_pairs.sort()
 
     if not valid_location_pairs:
         if logger.isEnabledFor(logging.DEBUG):
-            some_keys = _head(cf_index.keys(), 10)
+            some_keys = _head(idx_keys, 10)
             logger.debug(
                 "CF-AVG: no (supplier,consumer) keys in cf_index for candidates "
                 "| suppliers=%s | consumers=%s | sample_index_keys=%s",
-                _head(candidate_suppliers),
-                _head(candidate_consumers),
+                _head(S),
+                _head(C),
                 some_keys,
             )
         return 0, None, None
 
-    # ---- Build field-filtered views (exclude location; added per-loop) ----
+    # ---------- 3) Base, field-filtered views (exclude 'location' here) ----------
     required_supplier_fields = required_supplier_fields or set()
     required_consumer_fields = required_consumer_fields or set()
 
@@ -707,8 +812,7 @@ def compute_average_cf(
         if k in consumer_info and k != "location"
     }
 
-    # ---- Gate 2: field/operator/classification match (deterministic) ----
-    # Collect as tuples to preserve (s_loc, c_loc) provenance for ordering.
+    # ---------- 4) Field/operator/classification match ----------
     matched: list[tuple[str, str, dict]] = []
     total_candidates_seen = 0
 
@@ -720,7 +824,7 @@ def compute_average_cf(
         fc = {**base_consumer, "location": c_loc}
 
         got = process_cf_list(cands, fs, fc)
-        if logger.isEnabledFor(logging.DEBUG) and got:
+        if got and logger.isEnabledFor(logging.DEBUG):
             logger.debug(
                 "CF-AVG: matched %d/%d CFs @ (%s,%s); example=%s",
                 len(got),
@@ -744,19 +848,11 @@ def compute_average_cf(
             )
         return 0, None, None
 
-    # ---- Deterministic ordering of matched CFs ----
-    # Primary key: (s_loc, c_loc), Secondary: JSON of CF (stable representation)
-    def _cf_order_key(tup):
-        s_loc, c_loc, cf = tup
-        try:
-            cf_key = json.dumps(cf, sort_keys=True, ensure_ascii=True)
-        except Exception:
-            cf_key = repr(sorted(cf.items())) if isinstance(cf, dict) else repr(cf)
-        return (s_loc, c_loc, cf_key)
+    # ---------- 5) Deterministic ordering without deep freezing ----------
+    matched.sort(key=lambda t: (t[0], t[1], _cf_signature(t[2])))
 
-    matched.sort(key=_cf_order_key)
-
-    # ---- Build weights robustly (float64, cleaned, normalized) ----
+    # ---------- 6) Build and normalize weights ----------
+    # Pull weights once; avoid repeated cf.get in loops
     weights = []
     for _s, _c, cf in matched:
         w = cf.get("weight", 0.0)
@@ -770,40 +866,34 @@ def compute_average_cf(
 
     w_arr = np.asarray(weights, dtype=np.float64)
     w_sum = float(w_arr.sum(dtype=np.float64))
+    n_m = len(matched)
 
     if w_sum <= 0.0:
-        # Equal shares fallback, deterministic given matched ordering
-        n = len(matched)
-        shares = np.full(n, 1.0 / n, dtype=np.float64)
+        shares = np.full(n_m, 1.0 / n_m, dtype=np.float64)
         if logger.isEnabledFor(logging.DEBUG):
             logger.debug(
                 "CF-AVG: weights all zero/missing → using equal shares | matched=%d | example=%s",
-                n,
+                n_m,
                 _short_cf(matched[0][2]) if matched else None,
             )
     else:
         shares = w_arr / w_sum
-        # remove share values below a tiny threshold
+        # prune tiny contributions to stabilize representation
         shares = np.where(shares < 1e-4, 0.0, shares)
-        # Re-normalize defensively to ensure exact sum(1.0) in float64
-        shares = shares / shares.sum(dtype=np.float64)
+        ssum = float(shares.sum(dtype=np.float64))
+        shares = (
+            (shares / ssum) if ssum > 0.0 else np.full(n_m, 1.0 / n_m, dtype=np.float64)
+        )
 
-    share_sum = float(shares.sum(dtype=np.float64))
-
-    # Permit tiny FP noise, then renormalize once more if necessary
-    if not np.isclose(share_sum, 1.0, rtol=1e-13, atol=1e-15):
-        shares = shares / shares.sum(dtype=np.float64)
-
-    # ---- Build deterministic expression (string) ----
-    # Use the same matched order used for shares
+    # ---------- 7) Expression assembly (uses matched order) ----------
+    # Use shallow value access (no deep repr/formatting)
     expressions = []
-    for (s_loc, c_loc, cf), sh in zip(matched, shares):
-        # keep cf['value'] as-is (string or number)
+    for (_s, _c, cf), sh in zip(matched, shares):
         if sh > 0.0:
-            expressions.append(f"({sh:.4f} * ({cf['value']}))")
+            expressions.append(f"({sh:.4f} * ({cf.get('value')}))")
     expr = " + ".join(expressions)
 
-    # ---- Single CF shortcut (pass-through uncertainty) ----
+    # ---------- 8) Single CF shortcut ----------
     if len(matched) == 1:
         single_cf = matched[0][2]
         agg_uncertainty = single_cf.get("uncertainty")
@@ -817,9 +907,10 @@ def compute_average_cf(
             )
         return (expr, single_cf, agg_uncertainty)
 
-    # ---- Multi-CF aggregated uncertainty (deterministic) ----
+    # ---------- 9) Aggregate uncertainty (deterministic, shallow) ----------
     def _cf_sign(cf_obj) -> int | None:
-        neg = (cf_obj.get("uncertainty") or {}).get("negative", None)
+        unc = cf_obj.get("uncertainty")
+        neg = None if unc is None else unc.get("negative", None)
         if neg in (0, 1):
             return -1 if neg == 1 else +1
         v = cf_obj.get("value")
@@ -834,14 +925,16 @@ def compute_average_cf(
     )
 
     child_values, child_weights = [], []
-    for (s_loc, c_loc, cf), sh in zip(matched, shares):
+    for (_s, _c, cf), sh in zip(matched, shares):
         if sh <= 0.0:
             continue
-        if cf.get("uncertainty") is not None:
-            u = deepcopy(cf["uncertainty"])
-            # Mixed-sign handling is via agg_sign; store non-negative child values
-            u["negative"] = 0
-            child_unc = u
+        unc = cf.get("uncertainty")
+        if unc is not None:
+            # Shallow copy of top-level only (keeps nested as-is)
+            child_unc = {
+                k: (dict(v) if isinstance(v, dict) else v) for k, v in unc.items()
+            }
+            child_unc["negative"] = 0
         else:
             v = cf.get("value")
             if isinstance(v, (int, float)):
@@ -851,7 +944,7 @@ def compute_average_cf(
                     "negative": 0,
                 }
             else:
-                # Symbolic without uncertainty → cannot aggregate deterministically
+                # symbolic without uncertainty: cannot aggregate deterministically
                 if logger.isEnabledFor(logging.DEBUG):
                     logger.debug(
                         "CF-AVG: skip agg-unc (symbolic child without unc) | child=%s",
@@ -861,38 +954,32 @@ def compute_average_cf(
         child_values.append(child_unc)
         child_weights.append(float(sh))
 
-    # Normalize and sort children deterministically by their JSON form
-    if child_values:
-        w = np.asarray(child_weights, dtype=np.float64)
-        w = np.clip(w, 0.0, None)
-        wsum = float(w.sum(dtype=np.float64))
-        w = (
-            (w / wsum)
-            if wsum > 0.0
-            else np.full_like(w, 1.0 / len(w), dtype=np.float64)
-        )
-
-        order = sorted(
-            range(len(child_values)),
-            key=lambda i: json.dumps(
-                child_values[i], sort_keys=True, ensure_ascii=True
-            ),
-        )
-        child_values = [child_values[i] for i in order]
-        child_weights = [float(w[i]) for i in order]
-
-        # Final cleanup (drop zeros)
-        filtered = [
-            (v, wt)
-            for v, wt in zip(child_values, child_weights)
-            if wt > 0.0 and v is not None
-        ]
-    else:
-        filtered = []
-
-    if not filtered:
+    if not child_values:
         if logger.isEnabledFor(logging.DEBUG):
             logger.debug("CF-AVG: filtered children empty after cleanup.")
+        return 0, None, None
+
+    w = np.asarray(child_weights, dtype=np.float64)
+    w = np.clip(w, 0.0, None)
+    wsum = float(w.sum(dtype=np.float64))
+    w = (w / wsum) if wsum > 0.0 else np.full_like(w, 1.0 / len(w), dtype=np.float64)
+
+    # Deterministic order of child uncertainties via shallow signature only
+    order = sorted(
+        range(len(child_values)), key=lambda i: _unc_signature(child_values[i])
+    )
+    child_values = [child_values[i] for i in order]
+    child_weights = [float(w[i]) for i in order]
+
+    # Final cleanup
+    filtered = [
+        (v, wt)
+        for v, wt in zip(child_values, child_weights)
+        if wt > 0.0 and v is not None
+    ]
+    if not filtered:
+        if logger.isEnabledFor(logging.DEBUG):
+            logger.debug("CF-AVG: filtered children empty after cleanup (post-sort).")
         return 0, None, None
 
     child_values, child_weights = zip(*filtered)

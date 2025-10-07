@@ -78,9 +78,9 @@ act = [
     == "hydrogen production, gaseous, 30 bar, from PEM electrolysis, from offshore wind electricity"
 ][0]
 
-# method = ("GeoPolRisk", "paired", "2024", "short")
-method = ("AWARE 2.0", "Country", "all", "yearly")
-# method = ("GeoPolRisk", "paired", "2024")
+# method = ("AWARE 2.0", "Country", "all", "yearly")
+method = ("GeoPolRisk", "paired", "2024")
+method = ("RELICS", "copper", "secondary")
 
 LCA = EdgeLCIA(
     {act: 1},
@@ -100,8 +100,8 @@ LCA.apply_strategies()
 LCA.evaluate_cfs()
 LCA.lcia()
 
-# df = LCA.generate_cf_table(include_unmatched=True)
-# df.to_excel("df_GeoPolRisk.xlsx")
+df = LCA.generate_cf_table(include_unmatched=True)
+df.to_excel("df_GeoPolRisk.xlsx")
 
 # Stop timer
 elapsed_time = time.time() - start_time

@@ -6,6 +6,7 @@ LCIA class.
 
 from __future__ import annotations
 
+from typing import Union, Mapping, Sequence, Any, Optional
 import math
 import os
 import sys
@@ -13,6 +14,7 @@ import platform
 import scipy
 import sparse as sp
 import time
+import copy
 from collections import defaultdict
 import json
 from typing import Optional
@@ -48,6 +50,7 @@ from .flow_matching import (
     resolve_candidate_locations,
     group_edges_by_signature,
     compute_average_cf,
+    MatchResult,
 )
 from .georesolver import GeoResolver
 from .uncertainty import sample_cf_distribution, make_distribution_key, get_rng_for_key
@@ -66,6 +69,44 @@ else:
 import logging
 
 logger = logging.getLogger(__name__)
+
+
+def _is_cf_exchange(obj: Any) -> bool:
+    """Minimal check for a CF 'exchange' entry."""
+    return (
+        isinstance(obj, dict)
+        and isinstance(obj.get("supplier"), dict)
+        and isinstance(obj.get("consumer"), dict)
+        and ("value" in obj)
+    )
+
+
+def _coerce_method_exchanges(method_obj: Mapping[str, Any]) -> list[dict]:
+    """
+    Accept a dict like:
+    {
+      "name": "...",
+      "version": "...",
+      "description": "...",
+      "unit": "...",
+      "exchanges": [ { supplier: {...}, consumer: {...}, value: ... }, ... ]
+    }
+    Return a deep-copied list of exchange dicts; raise if invalid.
+    """
+    if not isinstance(method_obj, Mapping):
+        raise TypeError("Method must be a mapping (dict-like) when provided inline.")
+
+    exchanges = method_obj.get("exchanges")
+    if not isinstance(exchanges, Sequence) or not exchanges:
+        raise ValueError("Inline method must contain a non-empty 'exchanges' list.")
+
+    if not all(_is_cf_exchange(x) for x in exchanges):
+        raise ValueError(
+            "Each item in 'exchanges' must have 'supplier' (dict), 'consumer' (dict), and 'value'."
+        )
+
+    # Deep copy to avoid mutating caller's object
+    return copy.deepcopy(list(exchanges))
 
 
 def add_cf_entry(
@@ -312,7 +353,7 @@ class EdgeLCIA:
     def __init__(
         self,
         demand: dict,
-        method: Optional[tuple] = None,
+        method: Union[str, os.PathLike, Mapping[str, Any], tuple, None] = None,
         weight: Optional[str] = "population",
         parameters: Optional[dict] = None,
         scenario: Optional[str] = None,
@@ -340,6 +381,18 @@ class EdgeLCIA:
         5. `lcia()`
         6. Optionally: `statistics()`, `generate_df_table()`
         """
+
+        try:
+            _equality_supplier_signature_cached.cache_clear()
+            # cached_match_with_index.cache_clear()
+        except Exception:
+            pass
+        try:
+            # _equality_supplier_signature_cached.cache_clear()
+            cached_match_with_index.cache_clear()
+        except Exception:
+            pass
+
         self.cf_index = None
         self.scenario_cfs = None
         self.method_metadata = None
@@ -358,7 +411,7 @@ class EdgeLCIA:
         self.reversed_biosphere = None
         self.reversed_activity = None
         self.characterization_matrix = None
-        self.method = method  # Store the method argument in the instance
+        self.method = method
         self.position_to_technosphere_flows_lookup = None
         self.technosphere_flows_lookup = defaultdict(list)
         self.technosphere_flow_matrix = None
@@ -421,6 +474,14 @@ class EdgeLCIA:
         self._cls_hits_cache = {}
         self.applied_strategies = []
 
+        # One-time flags for this run:
+        self._include_cls_in_supplier_sig = any(
+            "classifications" in (cf.get("supplier") or {}) for cf in self.raw_cfs_data
+        )
+        self._include_cls_in_consumer_sig = any(
+            "classifications" in (cf.get("consumer") or {}) for cf in self.raw_cfs_data
+        )
+
     def log_platform(self):
         """
         Log versions of key dependencies and environment variables for debugging.
@@ -448,26 +509,157 @@ class EdgeLCIA:
             },
         )
 
+    def _resolve_method(
+        self,
+        method: Union[str, os.PathLike, Mapping[str, Any]],
+    ) -> tuple[list[dict], dict]:
+        """
+        Resolve 'method' into (exchanges_list, meta_dict).
+
+        Supports:
+          - dict with 'exchanges' (inline method)
+          - JSON file path
+          - registered/known method name (existing behavior via your loader)
+
+        meta_dict carries name/version/description/unit if present (for reporting).
+        """
+        meta: dict = {}
+        # 1) Inline dict
+        if isinstance(method, Mapping):
+            exchanges = _coerce_method_exchanges(method)
+            # capture metadata (optional keys)
+            for k in ("name", "version", "description", "unit"):
+                if k in method:
+                    meta[k] = method[k]
+            return exchanges, meta
+
+        # 2) String/Path: try JSON file first
+        if isinstance(method, (str, os.PathLike)):
+            path = os.fspath(method)
+            if os.path.exists(path) and os.path.isfile(path):
+                with open(path, "r", encoding="utf-8") as f:
+                    payload = json.load(f)
+                if isinstance(payload, Mapping):
+                    exchanges = _coerce_method_exchanges(payload)
+                    for k in ("name", "version", "description", "unit"):
+                        if k in payload:
+                            meta[k] = payload[k]
+                    return exchanges, meta
+                raise ValueError(
+                    f"JSON at '{path}' must be an object with an 'exchanges' list."
+                )
+
+            # 3) Registered/known name → defer to your existing loader
+            if hasattr(self, "_load_registered_method"):
+                cf_list = self._load_registered_method(path)
+            else:
+                # If you had a previous loader, call it here instead
+                raise FileNotFoundError(
+                    f"'{path}' is neither a JSON file nor a registered method name (no loader found)."
+                )
+
+            if not isinstance(cf_list, list) or (
+                cf_list and not _is_cf_exchange(cf_list[0])
+            ):
+                raise ValueError(
+                    f"Registered method '{path}' did not yield a valid exchanges list."
+                )
+            return cf_list, meta
+
+        raise TypeError(
+            "method must be a method name (str), JSON filepath (str/Path), "
+            "or an inline dict with an 'exchanges' list."
+        )
+
+    def _normalize_exchanges(self, exchanges: list[dict]) -> list[dict]:
+        """
+        - Set default operator='equals' if missing
+        - Ensure 'matrix' defaults ('biosphere' for supplier if unset, pass-through otherwise)
+        - Preserve any classifications; pre-normalize if your pipeline expects it
+        - Do not mutate input in place (work on copies)
+        """
+        out: list[dict] = []
+        for cf in exchanges:
+            # shallow copies
+            cf = dict(cf)
+            s = dict(cf.get("supplier", {}))
+            c = dict(cf.get("consumer", {}))
+
+            # defaults that downstream fast paths expect
+            s.setdefault("operator", "equals")
+            c.setdefault("operator", "equals")
+            s.setdefault("matrix", s.get("matrix", "biosphere"))
+
+            # (optional) your code likely uses normalized classifications:
+            if "classifications" in s:
+                cf["_norm_supplier_cls"] = self._normalize_classifications(
+                    s["classifications"]
+                )
+            if "classifications" in c:
+                cf["_norm_consumer_cls"] = self._normalize_classifications(
+                    c["classifications"]
+                )
+
+            cf["supplier"] = s
+            cf["consumer"] = c
+            out.append(cf)
+        return out
+
     def _load_raw_lcia_data(self):
         """
         Load and validate raw LCIA data for a given method.
 
-        :return: Parsed LCIA data structure.
+        Supports:
+          - inline dict with 'exchanges' (and optional metadata),
+          - JSON filepath (str/Path),
+          - legacy tuple method name resolved under DATA_DIR (current behavior).
         """
-        if self.filepath is None:
-            self.filepath = DATA_DIR / f"{'_'.join(self.method)}.json"
-        if not self.filepath.is_file():
-            raise FileNotFoundError(f"Data file not found: {self.filepath}")
+        # ----- 1) Decide the payload source -----------------------------------------
+        raw = None  # the object we'll pass to format_data(...)
 
-        with open(self.filepath, "r", encoding="utf-8") as f:
-            raw = json.load(f)
+        # A) Inline dict (your new use case)
+        if isinstance(self.method, Mapping):
+            raw = self.method
+            # create a Path object for consistency
+            self.filepath = Path()
 
-        # Store full method metadata except exchanges and parameters
+        # B) Explicit filepath (string/Path) -> read JSON file
+        elif isinstance(self.method, (str, os.PathLike)):
+            meth_path = os.fspath(self.method)
+            if os.path.exists(meth_path) and os.path.isfile(meth_path):
+                with open(meth_path, "r", encoding="utf-8") as f:
+                    raw = json.load(f)
+                self.filepath = Path(meth_path)
+
+        # C) Legacy tuple method name -> resolve under DATA_DIR
+        if raw is None:
+            if self.filepath is None:
+                # self.method can be a tuple (legacy) or anything else; if not tuple, will error out below
+                if isinstance(self.method, tuple):
+                    self.filepath = DATA_DIR / f"{'_'.join(self.method)}.json"
+                else:
+                    raise TypeError(
+                        "Unsupported 'method' type. Provide a dict with 'exchanges', a JSON filepath, "
+                        "or a legacy tuple method name."
+                    )
+
+            if not self.filepath.is_file():
+                raise FileNotFoundError(f"Data file not found: {self.filepath}")
+
+            with open(self.filepath, "r", encoding="utf-8") as f:
+                raw = json.load(f)
+
+        # ----- 2) Run your existing formatting + normalization -----------------------
+        # Store full method metadata and exchanges the same way you already do
         self.raw_cfs_data, self.method_metadata = format_data(raw, self.weight_scheme)
+
         # check for NaNs in the raw CF data
         assert_no_nans_in_cf_list(self.raw_cfs_data, file_source=self.filepath)
+
+        # Normalize classification entries (your current helper)
         self.raw_cfs_data = normalize_classification_entries(self.raw_cfs_data)
 
+        # Precompute normalized classification tuples for fast matching (unchanged)
         for cf in self.raw_cfs_data:
             cf["_norm_supplier_cls"] = _norm_cls(
                 cf.get("supplier", {}).get("classifications")
@@ -478,23 +670,27 @@ class EdgeLCIA:
 
         self.cfs_number = len(self.raw_cfs_data)
 
-        # Extract parameters or scenarios from method file if not already provided
+        # ----- 3) Parameters / scenarios (unchanged) ---------------------------------
         if not self.parameters:
             self.parameters = raw.get("scenarios", raw.get("parameters", {}))
         if not self.parameters:
             self.logger.warning(
-                f"No parameters or scenarios found in method file: {self.filepath}"
+                f"No parameters or scenarios found in method source: {self.filepath or '<inline method>'}"
             )
 
-        # Fallback to default scenario
-        if self.scenario and self.scenario not in self.parameters:
+        if (
+            self.scenario
+            and isinstance(self.parameters, dict)
+            and self.scenario not in self.parameters
+        ):
             self.logger.error(
-                f"Scenario '{self.scenario}' not found in method file. Available scenarios: {list(self.parameters)}"
+                f"Scenario '{self.scenario}' not found. Available: {list(self.parameters)}"
             )
             raise ValueError(
                 f"Scenario '{self.scenario}' not found in available parameters: {list(self.parameters)}"
             )
 
+        # ----- 4) Required fields and index (unchanged) ------------------------------
         self.required_supplier_fields = {
             k
             for cf in self.raw_cfs_data
@@ -1171,8 +1367,51 @@ class EdgeLCIA:
         """
 
         self._ensure_filtered_lookups_for_current_edges()
-
         self._initialize_weights()
+
+        # Cache per unique supplier+consumer signature
+        _match_memo: dict[tuple, MatchResult] = {}
+
+        def _sig_tuple(supplier_info: dict, consumer_info: dict) -> tuple:
+            # only fields the matcher needs; keep deterministic ordering
+            s_fields = tuple(
+                sorted((k, supplier_info.get(k)) for k in self.required_supplier_fields)
+            )
+            c_fields = tuple(
+                sorted((k, consumer_info.get(k)) for k in self.required_consumer_fields)
+            )
+            # include operator/excludes if they influence matching
+            op = supplier_info.get("operator", "equals")
+            exc = tuple(sorted(supplier_info.get("excludes") or ()))
+            return (s_fields, c_fields, op, exc)
+
+        # ---- Memoized wrapper around cached_match_with_index ------------------------
+        def _match_with_memo(flow_key, req_fields, index, lookup, reversed_lookup):
+            key = (
+                "mi",
+                id(index),
+                id(lookup),
+                id(reversed_lookup),
+                tuple(req_fields),  # req_fields is already a tuple in your code
+                flow_key,
+            )
+            hit = _match_memo.get(key)
+            if hit is not None:
+                return hit
+
+            try:
+                cached_match_with_index.cache_clear()
+            except Exception:
+                pass
+
+            # Configure matcher context only here
+            cached_match_with_index.index = index
+            cached_match_with_index.lookup_mapping = lookup
+            cached_match_with_index.reversed_lookup = reversed_lookup
+
+            res = cached_match_with_index(flow_key, req_fields)
+            _match_memo[key] = res
+            return res
 
         DIR_BIO = "biosphere-technosphere"
         DIR_TECH = "technosphere-technosphere"
@@ -1247,7 +1486,7 @@ class EdgeLCIA:
                     self.reversed_supplier_lookup_tech,
                 )
 
-        # Hot locals
+        # Hot locals (read once)
         consumer_lookup = self.consumer_lookup
         reversed_consumer_lookup = self.reversed_consumer_lookup
 
@@ -1272,15 +1511,23 @@ class EdgeLCIA:
             if not rem_bio and not rem_tec:
                 break
 
+            # PERF: hoist hot dict.get to locals
             s_crit = cf["supplier"]
             c_crit = cf["consumer"]
+            s_matrix = s_crit.get("matrix", "biosphere")
+            s_loc = s_crit.get("location")
+            c_loc = c_crit.get("location")
 
             # Direction bundle
             dir_name, rem, ebs, ebc, s_index, s_lookup, s_reversed = get_dir_bundle(
-                s_crit.get("matrix", "biosphere")
+                s_matrix
             )
             if not rem:
                 continue
+
+            # Pre-bind map .get once per CF branch (used a lot below)
+            ebs_get = ebs.get
+            ebc_get = ebc.get
 
             # ---------- SUPPLIER side ----------
             norm_s = cf.get("_norm_supplier_cls")  # pre-normalized & sanitized once
@@ -1298,38 +1545,31 @@ class EdgeLCIA:
                 else None
             )
 
-            # Prepare indexed match (cache key includes index context)
-            cached_match_with_index.index = s_index
-            cached_match_with_index.lookup_mapping = s_lookup
-            cached_match_with_index.reversed_lookup = s_reversed
-
-            # Hashable flow minus classifications (precompute this if you want to squeeze more)
-            # --- before cached_match_with_index(...) for supplier ---
+            # Hashable flow minus classifications (location stays inside match logic)
             s_nonclass = {k: v for k, v in s_crit.items() if k != "classifications"}
 
             # If supplier criteria are empty (ignoring 'matrix'), treat as wildcard:
-            _supplier_keys_wo_matrix = [k for k in s_nonclass.keys() if k != "matrix"]
-            if not _supplier_keys_wo_matrix and all(
-                k in {"matrix", "classifications"} for k in s_crit.keys()
-            ):
-                # use ALL suppliers present in this direction (restricted by adjacency)
-                s_cands = set(
-                    ebs.keys()
-                )  # all supplier positions that have outgoing edges
+            if not any(k for k in s_nonclass.keys() if k != "matrix"):
+                # all supplier positions that have outgoing edges (restricted by adjacency)
+                s_cands = set(ebs.keys())
                 s_loc_only = set()
                 s_loc_required = False
             else:
-                # current behavior
-                s_out = cached_match_with_index(make_hashable(s_nonclass), req_sup_nc)
+                s_key = make_hashable(s_nonclass)
+                s_out = _match_with_memo(
+                    flow_key=s_key,
+                    req_fields=req_sup_nc,
+                    index=s_index,
+                    lookup=s_lookup,
+                    reversed_lookup=s_reversed,
+                )
                 s_cands = set(s_out.matches)
                 if s_class_hits is not None:
                     s_cands &= s_class_hits
                 s_loc_only = set(s_out.location_only_rejects)
                 if s_class_hits is not None:
                     s_loc_only &= s_class_hits
-                s_loc_required = ("location" in s_crit) and (
-                    s_crit.get("location") is not None
-                )
+                s_loc_required = ("location" in s_crit) and (s_loc is not None)
 
             # ---------- CONSUMER side ----------
             norm_c = cf.get("_norm_consumer_cls")
@@ -1341,12 +1581,15 @@ class EdgeLCIA:
                 else None
             )
 
-            cached_match_with_index.index = consumer_index
-            cached_match_with_index.lookup_mapping = consumer_lookup
-            cached_match_with_index.reversed_lookup = reversed_consumer_lookup
-
             c_nonclass = {k: v for k, v in c_crit.items() if k != "classifications"}
-            c_out = cached_match_with_index(make_hashable(c_nonclass), req_con_nc)
+            c_key = make_hashable(c_nonclass)
+            c_out = _match_with_memo(
+                flow_key=c_key,
+                req_fields=req_con_nc,
+                index=consumer_index,
+                lookup=consumer_lookup,
+                reversed_lookup=reversed_consumer_lookup,
+            )
             c_cands = set(c_out.matches)
             if c_class_hits is not None:
                 c_cands &= c_class_hits
@@ -1354,44 +1597,39 @@ class EdgeLCIA:
             c_loc_only = set(c_out.location_only_rejects)
             if c_class_hits is not None:
                 c_loc_only &= c_class_hits
-            c_loc_required = ("location" in c_crit) and (
-                c_crit.get("location") is not None
-            )
+            c_loc_required = ("location" in c_crit) and (c_loc is not None)
 
             # ---------- Combine full matches using set intersections ----------
             positions = []
             if s_cands and c_cands:
-                sset = s_cands
-                cset = c_cands
-                ebs_get = ebs.get
-                ebc_get = ebc.get
-
                 # Pick the cheaper side to iterate
-                iterate_suppliers = len(sset) <= len(cset)
+                iterate_suppliers = len(s_cands) <= len(c_cands)
 
                 if iterate_suppliers:
                     # suppliers → consumers
-                    for s in list(sset):
+                    for s in list(s_cands):
                         cs = ebs_get(s)
                         if not cs:
                             continue
-                        hit = cs & cset
+                        hit = cs & c_cands
                         if not hit:
                             continue
 
+                        # list literal is faster than generator to extend
                         positions.extend((s, c) for c in hit)
 
                         # prune rem, ebs, ebc with minimal lookups
-                        rem.difference_update((s, c) for c in hit)
+                        if hit:
+                            # build once, reuse
+                            pairs = [(s, c) for c in hit]
+                            positions.extend(pairs)
+                            rem.difference_update(pairs)
 
-                        # supplier out-neigh
                         cs.difference_update(hit)
                         if not cs:
-                            # keep empty buckets to avoid costly deletes if you prefer;
-                            # but if you want to delete, do it once:
+                            # optional: keep empty to avoid dict churn; if you delete, do it once
                             del ebs[s]
 
-                        # consumer in-neigh
                         for c in hit:
                             bucket = ebc_get(c)
                             if bucket:
@@ -1400,23 +1638,22 @@ class EdgeLCIA:
                                     del ebc[c]
                 else:
                     # consumers → suppliers
-                    for c in list(cset):
+                    for c in list(c_cands):
                         ss = ebc_get(c)
                         if not ss:
                             continue
-                        hit = ss & sset
+                        hit = ss & s_cands
                         if not hit:
                             continue
 
-                        positions.extend((s, c) for s in hit)
-                        rem.difference_update((s, c) for s in hit)
+                        pairs = [(s, c) for s in hit]
+                        positions.extend(pairs)
+                        rem.difference_update(pairs)
 
-                        # consumer in-neigh
                         ss.difference_update(hit)
                         if not ss:
                             del ebc[c]
 
-                        # supplier out-neigh
                         for s in hit:
                             nb = ebs_get(s)
                             if nb:
@@ -1440,7 +1677,7 @@ class EdgeLCIA:
                 cset = c_cands
                 bucket = allow_bio if dir_name == DIR_BIO else allow_tec
                 for s in list(s_loc_only):
-                    cs = ebs.get(s)
+                    cs = ebs_get(s)
                     if not cs:
                         continue
                     hit = cs & cset
@@ -1453,9 +1690,8 @@ class EdgeLCIA:
             if c_loc_required and c_loc_only and s_cands:
                 sset = s_cands
                 bucket = allow_bio if dir_name == DIR_BIO else allow_tec
-
                 for c in list(c_loc_only):
-                    ss = ebc.get(c)
+                    ss = ebc_get(c)
                     if not ss:
                         continue
                     hit = ss & sset
@@ -1466,11 +1702,10 @@ class EdgeLCIA:
                             bucket.add((s, c))
 
             if s_loc_required and c_loc_required and s_loc_only and c_loc_only:
-                cset = set(c_loc_only)
+                cset = set(c_loc_only)  # local once
                 bucket = allow_bio if dir_name == DIR_BIO else allow_tec
-
                 for s in list(s_loc_only):
-                    cs = ebs.get(s)
+                    cs = ebs_get(s)
                     if not cs:
                         continue
                     hit = cs & cset
@@ -1536,6 +1771,8 @@ class EdgeLCIA:
         )
 
         self._initialize_weights()
+        weight_keys = frozenset(k for k, v in self.weights.items())
+
         logger.info("Handling static regions…")
 
         for direction in ["biosphere-technosphere", "technosphere-technosphere"]:
@@ -1604,7 +1841,7 @@ class EdgeLCIA:
                     candidate_suppliers_locations = resolve_candidate_locations(
                         geo=self.geo,
                         location=supplier_location,
-                        weights=frozenset(k for k, v in self.weights.items()),
+                        weights=weight_keys,
                         containing=True,
                         supplier=True,
                     )
@@ -1622,7 +1859,7 @@ class EdgeLCIA:
                     candidate_consumer_locations = resolve_candidate_locations(
                         geo=self.geo,
                         location=consumer_location,
-                        weights=frozenset(k for k, v in self.weights.items()),
+                        weights=weight_keys,
                         containing=True,
                         supplier=False,
                     )
@@ -1656,11 +1893,8 @@ class EdgeLCIA:
 
                     consumer_info = self._get_consumer_info(consumer_idx)
 
-                    include_cls_in_sig = any(
-                        "classifications" in cf["supplier"] for cf in self.raw_cfs_data
-                    )
                     sig_fields = set(self.required_supplier_fields)
-                    if include_cls_in_sig:
+                    if self._include_cls_in_supplier_sig:
                         sig_fields.add("classifications")
 
                     _proj = {
@@ -1727,7 +1961,6 @@ class EdgeLCIA:
                         mkey = (cand_sup_s, cand_con_s, c_sig)
 
                         if mkey not in memo:
-
                             new_cf, matched_cf_obj, agg_uncertainty = (
                                 compute_average_cf(
                                     candidate_suppliers=list(cand_sup_s),
@@ -1851,6 +2084,8 @@ class EdgeLCIA:
         )
 
         self._initialize_weights()
+        weight_keys = frozenset(k for k, v in self.weights.items())
+
         logger.info("Handling dynamic regions…")
 
         for flow in self.technosphere_flows:
@@ -1869,6 +2104,54 @@ class EdgeLCIA:
         decomposed_exclusions = frozenset(
             (k, tuple(v)) for k, v in decomposed_exclusions.items()
         )
+
+        # ------------------------------------------------------------
+        # NEW: canonicalize exclusions and cache post-resolve candidates
+        # ------------------------------------------------------------
+        _dyn_cand_cache: dict[tuple, tuple[str, ...]] = {}
+
+        def _canon_exclusions(exclusions) -> frozenset:
+            """Turn list/set/dict-of-weights into a stable frozenset of region codes."""
+            if exclusions is None:
+                return frozenset()
+            if isinstance(exclusions, dict):
+                return frozenset(exclusions.keys())
+            try:
+                return frozenset(exclusions)
+            except TypeError:
+                # If a single code sneaks in
+                return frozenset([exclusions])
+
+        def _dynamic_candidates(
+            *, role_is_supplier: bool, exclusions
+        ) -> tuple[str, ...]:
+            """
+            Wrap resolve_candidate_locations with:
+              - canonicalized exclusions (better cache hit rate upstream),
+              - local memo for the post-processing (sorted unique tuple),
+              - stable cache key (role, exclusions, weights).
+            """
+            ex_sig = _canon_exclusions(exclusions)
+            key = (role_is_supplier, ex_sig, weight_keys)
+            cached = _dyn_cand_cache.get(key)
+            if cached is not None:
+                return cached
+
+            # Call the underlying (already-cached) resolver with canonical args
+            raw = resolve_candidate_locations(
+                geo=self.geo,
+                location="GLO",
+                weights=weight_keys,
+                containing=True,
+                exceptions=ex_sig,
+                supplier=role_is_supplier,
+            )
+            # Canonical deterministic result (sorted unique tuple)
+            result = tuple(sorted(set(raw)))
+            _dyn_cand_cache[key] = result
+            return result
+
+        # ------------------------------------------------------------
 
         for direction in ["biosphere-technosphere", "technosphere-technosphere"]:
 
@@ -1919,75 +2202,52 @@ class EdgeLCIA:
                 dynamic_supplier = _is_dyn(supplier_loc)
                 dynamic_consumer = _is_dyn(consumer_loc)
 
-                # Resolve fallback candidate locations
+                # Resolve fallback candidate locations (via cached wrapper)
                 if dynamic_supplier:
                     suppliers_excluded_subregions = self._extract_excluded_subregions(
                         supplier_idx, decomposed_exclusions
                     )
-                    candidate_suppliers_locs = resolve_candidate_locations(
-                        geo=self.geo,
-                        location="GLO",
-                        weights=frozenset(k for k, v in self.weights.items()),
-                        containing=True,
-                        exceptions=suppliers_excluded_subregions,
-                        supplier=True,
+                    candidate_suppliers_locs = _dynamic_candidates(
+                        role_is_supplier=True,
+                        exclusions=suppliers_excluded_subregions,
                     )
-                    candidate_suppliers_locs = [
-                        loc for loc in candidate_suppliers_locs if loc != "GLO"
-                    ]
-                    candidate_suppliers_locs = sorted(set(candidate_suppliers_locs))
                 else:
                     if supplier_loc is None:
-                        candidate_suppliers_locs = [
-                            "__ANY__",
-                        ]
+                        candidate_suppliers_locs = ("__ANY__",)
                     else:
-                        candidate_suppliers_locs = [supplier_loc]
+                        candidate_suppliers_locs = (supplier_loc,)
 
                 if dynamic_consumer:
                     consumers_excluded_subregions = self._extract_excluded_subregions(
                         consumer_idx, decomposed_exclusions
                     )
-                    candidate_consumers_locs = resolve_candidate_locations(
-                        geo=self.geo,
-                        location="GLO",
-                        weights=frozenset(k for k, v in self.weights.items()),
-                        containing=True,
-                        exceptions=consumers_excluded_subregions,
-                        supplier=False,
+                    candidate_consumers_locs = _dynamic_candidates(
+                        role_is_supplier=False,
+                        exclusions=consumers_excluded_subregions,
                     )
-                    candidate_consumers_locs = [
-                        loc for loc in candidate_consumers_locs if loc != "GLO"
-                    ]
-                    candidate_consumers_locs = sorted(set(candidate_consumers_locs))
 
-                    self.logger.debug(
+                    self.logger.isEnabledFor(logging.DEBUG) and self.logger.debug(
                         "dynamic-cands: consumer=RoW | candidates=%d (e.g. %s...) | excluded=%d",
                         len(candidate_consumers_locs),
-                        candidate_consumers_locs[:20],
-                        len(consumers_excluded_subregions),
+                        list(candidate_consumers_locs)[:20],
+                        len(_canon_exclusions(consumers_excluded_subregions)),
                     )
 
                 else:
                     if consumer_loc is None:
-                        candidate_consumers_locs = [
-                            "__ANY__",
-                        ]
+                        candidate_consumers_locs = ("__ANY__",)
                     else:
-                        candidate_consumers_locs = [consumer_loc]
+                        candidate_consumers_locs = (consumer_loc,)
 
                 if dynamic_consumer and not candidate_consumers_locs:
-                    self.logger.debug(
+                    self.logger.isEnabledFor(logging.DEBUG) and self.logger.debug(
                         "dynamic: RoW consumer collapsed to empty set after exclusions; deferring to global pass"
                     )
                     continue
 
                 # project supplier info to the required fields (+classifications) before hashing
-                include_cls_in_sig = any(
-                    "classifications" in cf["supplier"] for cf in self.raw_cfs_data
-                )
                 sig_fields = set(self.required_supplier_fields)
-                if include_cls_in_sig:
+                if self._include_cls_in_supplier_sig:
                     sig_fields.add("classifications")
 
                 _proj = {k: supplier_info[k] for k in sig_fields if k in supplier_info}
@@ -2081,7 +2341,6 @@ class EdgeLCIA:
                                 value=new_cf,
                                 uncertainty=agg_uncertainty,
                             )
-
                         else:
                             self.logger.warning(
                                 "Fallback CF could not be computed for supplier=%s, consumer=%s "
@@ -2187,6 +2446,7 @@ class EdgeLCIA:
         )
 
         self._initialize_weights()
+
         logger.info("Handling contained locations…")
 
         def _geo_contains(container: str, member: str) -> bool:
@@ -2205,7 +2465,7 @@ class EdgeLCIA:
                     mp = self.geo.batch(locations=[loc], containing=containing) or {}
                     return mp.get(loc, []) or []
                 except Exception as e:
-                    self.logger.debug(
+                    self.logger.isEnabledFor(logging.DEBUG) and self.logger.debug(
                         "geo-contains: batch error loc=%s containing=%s err=%s",
                         loc,
                         containing,
@@ -2328,7 +2588,7 @@ class EdgeLCIA:
                         None,
                     )
 
-                    self.logger.debug(
+                    self.logger.isEnabledFor(logging.DEBUG) and self.logger.debug(
                         "contained: consumer %s -> nearest method container %s (ordered candidates=%s)",
                         consumer_location,
                         nearest,
@@ -2355,11 +2615,8 @@ class EdgeLCIA:
                         continue
                     consumer_info = self._get_consumer_info(consumer_idx)
 
-                    include_cls_in_sig = any(
-                        "classifications" in cf["supplier"] for cf in self.raw_cfs_data
-                    )
                     sig_fields = set(self.required_supplier_fields)
-                    if include_cls_in_sig:
+                    if self._include_cls_in_supplier_sig:
                         sig_fields.add("classifications")
 
                     _proj = {
@@ -2528,6 +2785,8 @@ class EdgeLCIA:
         )
 
         self._initialize_weights()
+        weight_keys = frozenset(k for k, v in self.weights.items())
+
         logger.info("Handling remaining exchanges…")
 
         # Resolve candidate locations for GLO once using utility
@@ -2535,14 +2794,14 @@ class EdgeLCIA:
         global_supplier_locs = resolve_candidate_locations(
             geo=self.geo,
             location="GLO",
-            weights=frozenset(k for k, v in self.weights.items()),
+            weights=weight_keys,
             containing=True,
             supplier=True,
         )
         global_consumer_locs = resolve_candidate_locations(
             geo=self.geo,
             location="GLO",
-            weights=frozenset(k for k, v in self.weights.items()),
+            weights=weight_keys,
             containing=True,
             supplier=False,
         )
@@ -2630,11 +2889,8 @@ class EdgeLCIA:
                         continue
                     consumer_info = self._get_consumer_info(consumer_idx)
 
-                    include_cls_in_sig = any(
-                        "classifications" in cf["supplier"] for cf in self.raw_cfs_data
-                    )
                     sig_fields = set(self.required_supplier_fields)
-                    if include_cls_in_sig:
+                    if self._include_cls_in_supplier_sig:
                         sig_fields.add("classifications")
 
                     _proj = {
@@ -2794,6 +3050,7 @@ class EdgeLCIA:
 
         if strategies is None:
             self.logger.info("No 'strategies' found; nothing to apply.")
+            print("No 'strategies' found; nothing to apply.")
             return self
 
         if not isinstance(strategies, (list, tuple)) or not all(
@@ -3529,7 +3786,12 @@ class EdgeLCIA:
                     ),
                 ]
             )
-        rows.append(["Method name", fill(str(self.method), width=45)])
+        if isinstance(self.method, tuple):
+            method_name = str(self.method)
+        else:
+            method_name = self.method["name"]
+
+        rows.append(["Method name", fill(method_name, width=45)])
         if "unit" in self.method_metadata:
             rows.append(["Unit", fill(self.method_metadata["unit"], width=45)])
         rows.append(["Data file", fill(self.filepath.stem, width=45)])
