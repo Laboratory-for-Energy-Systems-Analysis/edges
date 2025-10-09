@@ -7,11 +7,11 @@ import logging
 
 # Start timer
 start_time = time.time()
-# bw2data.projects.set_current("bw25_ei310")
+bw2data.projects.set_current("bw25_ei310")
 # bw2data.projects.set_current("ecoinvent-3.10.1-cutoff")
 # bw2data.projects.set_current("ecoinvent-3.10-cutoff")
 # bw2data.projects.set_current("ecoinvent-3.11-cutoff")
-bw2data.projects.set_current("ecoinvent-3.11-cutoff-bw25")
+# bw2data.projects.set_current("ecoinvent-3.11-cutoff-bw25")
 
 if "h2_pem" not in bw2data.databases:
     lci = bw2io.ExcelImporter("lci-hydrogen-electrolysis-ei310.xlsx")
@@ -79,8 +79,8 @@ act = [
 ][0]
 
 # method = ("AWARE 2.0", "Country", "all", "yearly")
-method = ("GeoPolRisk", "paired", "2024")
-method = ("RELICS", "copper", "secondary")
+method = ('biodiversity', 'scherer', 'occupation', 'average', 'amphibians')
+# method = ("RELICS", "copper", "secondary")
 
 LCA = EdgeLCIA(
     {act: 1},
@@ -100,8 +100,8 @@ LCA.apply_strategies()
 LCA.evaluate_cfs()
 LCA.lcia()
 
-df = LCA.generate_cf_table(include_unmatched=True)
-df.to_excel("df_GeoPolRisk.xlsx")
+#df = LCA.generate_cf_table(include_unmatched=True)
+#df.to_excel("df_GeoPolRisk.xlsx")
 
 # Stop timer
 elapsed_time = time.time() - start_time
