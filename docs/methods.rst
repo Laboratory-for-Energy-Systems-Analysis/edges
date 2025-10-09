@@ -436,7 +436,7 @@ These methods present different scopes:
 * CFs are provided as average, at country level, with ecoregion-specific CFs for sensitivity purpose, across five biome types.
 * The CFs integrate land fragmentation (via the Equivalent Connected Area, ECA) and land use intensity—both drivers of biodiversity loss not jointly included in earlier models.
 * CFs cannot be used to assess changes in fragmentation degree, as fragmentation is internally parameterized.
-
+* The Eukaryota CFs represent an aggregated proxy combining plants and vertebrates (amphibians, birds, mammals, reptiles), each weighted equally. They thus serve as a generic biodiversity indicator for overall potential species loss across taxa.
 
 **Description**:
 
