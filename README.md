@@ -50,6 +50,7 @@ Currently, the library provides regionalized CFs for:
 * AWARE 2.0 (water scarcity impacts)
 * ImpactWorld+ 2.1
 * GeoPolRisk 1.0
+* GLAM3 Land use impacts on biodiversity
 
 ## Installation
 
@@ -95,16 +96,19 @@ method = ('AWARE 1.2c', 'Country', 'unspecified', 'yearly')
 LCA = EdgeLCIA({act: 1}, method)
 LCA.lci()
 
-# Map CFs to exchanges
-LCA.map_exchanges()
+# Map CFs to exchanges: apply suggested strategies
+LCA.apply_strategies()
+
+# or apply these strategies manually
+#LCA.map_exchanges()
 
 # If needed, extend the mapping to aggregated and `dynamic` regions (e.g., RoW)
-LCA.map_aggregate_locations()
-LCA.map_dynamic_locations()
-LCA.map_contained_locations()
+#LCA.map_aggregate_locations()
+#LCA.map_dynamic_locations()
+#LCA.map_contained_locations()
 
 # add global CFs to exchanges missing a CF
-LCA.map_remaining_locations_to_global()
+#LCA.map_remaining_locations_to_global()
 
 # Evaluate CFs
 LCA.evaluate_cfs()
@@ -237,7 +241,7 @@ See [Methods](https://edges.readthedocs.io/en/latest/methods.html) from [Documen
 
 ## Methodology
 
-See [Therory](https://edges.readthedocs.io/en/latest/theory.html) from [Documentation](https://edges.readthedocs.io/en/latest/index.html).
+See [Theory](https://edges.readthedocs.io/en/latest/theory.html) from [Documentation](https://edges.readthedocs.io/en/latest/index.html).
 
 ## Contributing
 Contributions are welcome! Please follow these steps to contribute:

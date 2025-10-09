@@ -268,7 +268,7 @@ https://doi.org/10.1007/s11367-019-01583-0
 ---
 
 SCP 1.0 (Surplus Cost Potential)
--------------------------------
+--------------------------------
 
 **Name**: `SCP_1.0.json`
 
@@ -405,3 +405,150 @@ See also:
 **Reference**:
 IPCC AR6, 2021.
 https://www.ipcc.ch/assessment-report/ar6/
+
+
+---
+
+GLAM3 - Land use impacts on biodiversity
+----------------------------------------
+
+**Name**: `Land use impacts on biodiversity`
+
+**Impact Category**:
+
+- ``("GLAM3", "biodiversity", "occupation", "average", "amphibians")``
+- ``("GLAM3", "biodiversity", "occupation", "average", "birds")``
+- ``("GLAM3", "biodiversity", "occupation", "average", "eukaryota")``
+- ``("GLAM3", "biodiversity", "occupation", "average", "mammals")``
+- ``("GLAM3", "biodiversity", "occupation", "average", "plants")``
+- ``("GLAM3", "biodiversity", "occupation", "average", "reptiles")``
+- ``("GLAM3", "biodiversity", "transformation", "average", "amphibians")``
+- ``("GLAM3", "biodiversity", "transformation", "average", "birds")``
+- ``("GLAM3", "biodiversity", "transformation", "average", "eukaryota")``
+- ``("GLAM3", "biodiversity", "transformation", "average", "mammals")``
+- ``("GLAM3", "biodiversity", "transformation", "average", "plants")``
+- ``("GLAM3", "biodiversity", "transformation", "average", "reptiles")``
+
+These methods present different scopes:
+
+* Occupation CFs (in PDF·m²⁻¹) quantify impacts per unit area and time of land occupation.
+* Transformation CFs (in PDF·yr·m²⁻¹) quantify impacts per unit area transformed, accounting for regeneration time.
+* CFs are provided as average, at country level, with ecoregion-specific CFs for sensitivity purpose, across five biome types.
+* The CFs integrate land fragmentation (via the Equivalent Connected Area, ECA) and land use intensity—both drivers of biodiversity loss not jointly included in earlier models.
+* CFs cannot be used to assess changes in fragmentation degree, as fragmentation is internally parameterized.
+
+
+**Description**:
+
+This method, developed within the UNEP Life Cycle Initiative’s GLAM3 framework,
+quantifies biodiversity impacts of land use and land-use change on species
+richness using updated global data. It combines two major advancements:
+
+1. inclusion of land use intensity and
+2. explicit consideration of habitat fragmentation.
+
+Characterization factors (CFs) were derived using a countryside species–area
+relationship adjusted for fragmentation, with relative species loss calculated
+separately for five species groups — plants, amphibians, birds, mammals, and reptiles.
+Regional CFs were scaled to global species loss using extinction probabilities.
+
+The resulting CFs represent potential, long-term losses in species richness
+(accounting for extinction debt), expressed in potentially disappeared
+fraction of species (PDF). They are available for both land occupation and land
+transformation, enabling integration into LCA at multiple spatial scales.
+
+**Usage Example**:
+
+.. code-block:: python
+
+    import bw2data
+    from edges import EdgeLCIA
+
+    bw2data.project.set_current("some project")
+    act = bw2data.Database("some db").random()
+
+    lcia = EdgeLCIA(
+        demand={act: 1},
+        method=("GLAM3", "biodiversity", "occupation", "average", "amphibians")
+    )
+
+    lcia.lci()
+
+    # you can use .apply_strategies() since the strategies are listed in the LCIA JSON
+    lcia.apply_strategies()
+    # if not, use the following mapping methods:
+    #lcia.map_exchanges() # finds direct matches
+    #lcia.map_aggregate_locations() # finds matches for aggregate regions ("RER", "US" etc.)
+    #lcia.map_dynamic_locations() # finds matches for dynamic regions ("RoW", "RoW", etc.)
+    #lcia.map_contained_locations() # finds matches for contained regions ("CA" for "CA-QC" if factor of "CA-QC" is not available)
+    #lcia.map_remaining_locations_to_global() # applies global factors to remaining locations
+    lcia.evaluate_cfs()
+    lcia.lcia()
+
+**Sample CF JSON**:
+
+.. code-block:: json
+
+    {
+      "supplier": {
+        "name": "Occupation, annual crop, greenhouse",
+        "categories": [
+          "natural resource",
+          "land"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "location": "AF",
+        "matrix": "technosphere"
+      },
+      "value": 2.99558005008489e-12,
+      "weight": 643830.7383041249,
+      "uncertainty": {
+        "distribution": "discrete_empirical",
+        "parameters": {
+          "values": [
+            7.79534374146956e-12,
+            1.50524230465717e-11,
+            3.80734278838771e-12,
+            9.985618271115879e-12,
+            9.985618271115879e-12,
+            9.985618271115879e-12,
+            9.985618271115879e-12,
+            9.985618271115879e-12,
+            9.985618271115879e-12,
+            1.0017404981279698e-11,
+            4.595297532330699e-12,
+            1.6189133164701399e-12,
+            3.52822420899683e-12,
+            7.80635977979514e-13,
+            1.0017404981279698e-11,
+            1.60177437279945e-12
+          ],
+          "weights": [
+            0.0002681212386553088,
+            0.01986688334294251,
+            0.005598136518128794,
+            0.10351496842799959,
+            0.04397028921970691,
+            0.006936061677420315,
+            0.0019971425916960298,
+            0.007822246506266655,
+            0.006322221724374011,
+            0.021299462915867963,
+            0.08460533036349488,
+            0.05054301639029757,
+            0.21687159321700622,
+            0.0364686471004479,
+            0.14403400105010292,
+            0.24874318136298704
+          ]
+        }
+      }
+    }
+
+**Reference**:
+Scherer L, Rosa F, Sun Z, et al (2023)
+Biodiversity Impact Assessment Considering Land Use Intensities and Fragmentation.
+Environ Sci Technol https://doi.org/10.1021/acs.est.3c04191
+
