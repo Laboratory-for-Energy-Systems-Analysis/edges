@@ -80,7 +80,7 @@ class GeoResolver:
             try:
                 for e in getattr(self.geo, method)(
                     location,
-                    biggest_first=True,
+                    biggest_first=False,
                     exclusive=containing,
                     include_self=False,
                 ):
