@@ -111,6 +111,7 @@ def _coerce_method_exchanges(method_obj: Mapping[str, Any]) -> list[dict]:
 
 import logging
 
+
 def add_cf_entry(
     cfs_mapping: list,
     supplier_info: dict,
@@ -131,14 +132,14 @@ def add_cf_entry(
     seen = set()
     for e in cfs_mapping:
         ed = e.get("direction", direction)
-        for (ii, jj) in e.get("positions", ()):
+        for ii, jj in e.get("positions", ()):
             seen.add((ed, int(ii), int(jj)))
 
     # De-dup incoming indices (also handles duplicates within `indices`)
     unique_positions = []
     skipped = 0
     local_seen = set()  # avoid duplicates within this call
-    for (i, j) in indices:
+    for i, j in indices:
         key = (direction, int(i), int(j))
         if key in seen or key in local_seen:
             skipped += 1
@@ -151,7 +152,8 @@ def add_cf_entry(
         if logging.getLogger(__name__).isEnabledFor(logging.DEBUG):
             logging.getLogger(__name__).debug(
                 "add_cf_entry: skipped %d duplicate positions for direction=%s",
-                skipped, direction
+                skipped,
+                direction,
             )
         return
 
@@ -174,7 +176,6 @@ def add_cf_entry(
         entry["uncertainty"] = uncertainty
 
     cfs_mapping.append(entry)
-
 
 
 @lru_cache(maxsize=None)
