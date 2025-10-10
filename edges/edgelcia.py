@@ -109,6 +109,9 @@ def _coerce_method_exchanges(method_obj: Mapping[str, Any]) -> list[dict]:
     return copy.deepcopy(list(exchanges))
 
 
+import logging
+
+
 def add_cf_entry(
     cfs_mapping: list,
     supplier_info: dict,
@@ -119,17 +122,40 @@ def add_cf_entry(
     uncertainty: dict,
 ) -> None:
     """
-    Append a characterized-exchange entry to the in-memory CF mapping.
-
-    :param cfs_mapping: Target list that collects CF entries.
-    :param supplier_info: Supplier-side metadata for this CF (matrix, location, classifications, etc.).
-    :param consumer_info: Consumer-side metadata for this CF (location, classifications, etc.).
-    :param direction: Exchange direction the CF applies to.
-    :param indices: Pairs of (supplier_idx, consumer_idx) covered by this CF.
-    :param value: CF value or symbolic expression.
-    :param uncertainty: Optional uncertainty specification for this CF.
-    :return: None
+    Append a characterized-exchange entry to the in-memory CF mapping,
+    skipping positions that were already added for the same direction.
+    This prevents duplicate (i, j, k) summation in stochastic mode.
     """
+
+    # Build a set of already-used (direction, i, j) for this mapping so far.
+    # O(N) over current cfs_mapping, but keeps this function self-contained.
+    seen = set()
+    for e in cfs_mapping:
+        ed = e.get("direction", direction)
+        for ii, jj in e.get("positions", ()):
+            seen.add((ed, int(ii), int(jj)))
+
+    # De-dup incoming indices (also handles duplicates within `indices`)
+    unique_positions = []
+    skipped = 0
+    local_seen = set()  # avoid duplicates within this call
+    for i, j in indices:
+        key = (direction, int(i), int(j))
+        if key in seen or key in local_seen:
+            skipped += 1
+            continue
+        local_seen.add(key)
+        unique_positions.append((int(i), int(j)))
+
+    if not unique_positions:
+        # Nothing new to add; silently return (or log at debug level)
+        if logging.getLogger(__name__).isEnabledFor(logging.DEBUG):
+            logging.getLogger(__name__).debug(
+                "add_cf_entry: skipped %d duplicate positions for direction=%s",
+                skipped,
+                direction,
+            )
+        return
 
     supplier_entry = dict(supplier_info)
     consumer_entry = dict(consumer_info)
@@ -142,12 +168,13 @@ def add_cf_entry(
     entry = {
         "supplier": supplier_entry,
         "consumer": consumer_entry,
-        "positions": indices,
+        "positions": tuple(unique_positions),
         "direction": direction,
         "value": value,
     }
     if uncertainty is not None:
         entry["uncertainty"] = uncertainty
+
     cfs_mapping.append(entry)
 
 
@@ -3149,6 +3176,15 @@ class EdgeLCIA:
             coords_i, coords_j, coords_k = [], [], []
             data = []
             sample_cache = {}
+
+            unique = {}
+            for cf in self.cfs_mapping:
+                # positions is a list of (i, j); in practice size 1; make it a sorted tuple
+                pos_key = tuple(sorted(cf["positions"]))
+                # If you prefer "last write wins", overwrite on key collision
+                unique[pos_key] = cf
+
+            self.cfs_mapping = list(unique.values())
 
             for cf in self.cfs_mapping:
 
