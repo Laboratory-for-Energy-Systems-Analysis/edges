@@ -904,6 +904,12 @@ class EdgeLCIA:
             for pos in cf["positions"]
         }
 
+        if (
+            len(self.processed_biosphere_edges) + len(self.processed_technosphere_edges)
+            == 0
+        ):
+            print("WARNING: No eligible edges found. Check the method file!")
+
         logger.info(
             "Processed edges: %d",
             len(self.processed_biosphere_edges)
