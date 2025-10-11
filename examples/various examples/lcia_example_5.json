@@ -1,0 +1,43 @@
+{
+    "name": "Some GWP with uncertainty",
+    "unit": "kg CO2-eq.",
+    "version": "1.0",
+    "exchanges": [
+      {
+          "supplier": {
+              "name": "Carbon dioxide, fossil",
+              "matrix": "biosphere"
+          },
+          "consumer": {"matrix": "technosphere"},
+          "value": 1.0,
+          "uncertainty": {
+              "distribution": "triang",
+              "parameters": {"minimum": 0.8, "maximum": 1.2, "loc": 1.0}
+          }
+      },
+      {
+          "supplier": {
+            "name": "Methane, fossil",
+            "matrix": "biosphere"
+          },
+          "consumer": {"matrix": "technosphere"},
+          "value": 25.0,
+          "uncertainty": {
+              "distribution": "triang",
+              "parameters": {"minimum": 23.0, "loc": 25.0, "maximum": 28.0}
+          }
+      },
+      {
+          "supplier": {
+              "name": "Nitrogen monoxide",
+              "matrix": "biosphere"
+          },
+          "consumer": {"matrix": "technosphere"},
+          "value": 298.0,
+          "uncertainty": {
+              "distribution": "normal",
+              "parameters": {"loc": 298.0, "scale": 10.0, "minimum": 270, "maximum": 320}
+          }
+      }
+  ]
+}

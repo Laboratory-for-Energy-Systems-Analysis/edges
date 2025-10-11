@@ -109,6 +109,9 @@ def _coerce_method_exchanges(method_obj: Mapping[str, Any]) -> list[dict]:
     return copy.deepcopy(list(exchanges))
 
 
+import logging
+
+
 def add_cf_entry(
     cfs_mapping: list,
     supplier_info: dict,
@@ -119,17 +122,40 @@ def add_cf_entry(
     uncertainty: dict,
 ) -> None:
     """
-    Append a characterized-exchange entry to the in-memory CF mapping.
-
-    :param cfs_mapping: Target list that collects CF entries.
-    :param supplier_info: Supplier-side metadata for this CF (matrix, location, classifications, etc.).
-    :param consumer_info: Consumer-side metadata for this CF (location, classifications, etc.).
-    :param direction: Exchange direction the CF applies to.
-    :param indices: Pairs of (supplier_idx, consumer_idx) covered by this CF.
-    :param value: CF value or symbolic expression.
-    :param uncertainty: Optional uncertainty specification for this CF.
-    :return: None
+    Append a characterized-exchange entry to the in-memory CF mapping,
+    skipping positions that were already added for the same direction.
+    This prevents duplicate (i, j, k) summation in stochastic mode.
     """
+
+    # Build a set of already-used (direction, i, j) for this mapping so far.
+    # O(N) over current cfs_mapping, but keeps this function self-contained.
+    seen = set()
+    for e in cfs_mapping:
+        ed = e.get("direction", direction)
+        for ii, jj in e.get("positions", ()):
+            seen.add((ed, int(ii), int(jj)))
+
+    # De-dup incoming indices (also handles duplicates within `indices`)
+    unique_positions = []
+    skipped = 0
+    local_seen = set()  # avoid duplicates within this call
+    for i, j in indices:
+        key = (direction, int(i), int(j))
+        if key in seen or key in local_seen:
+            skipped += 1
+            continue
+        local_seen.add(key)
+        unique_positions.append((int(i), int(j)))
+
+    if not unique_positions:
+        # Nothing new to add; silently return (or log at debug level)
+        if logging.getLogger(__name__).isEnabledFor(logging.DEBUG):
+            logging.getLogger(__name__).debug(
+                "add_cf_entry: skipped %d duplicate positions for direction=%s",
+                skipped,
+                direction,
+            )
+        return
 
     supplier_entry = dict(supplier_info)
     consumer_entry = dict(consumer_info)
@@ -142,12 +168,13 @@ def add_cf_entry(
     entry = {
         "supplier": supplier_entry,
         "consumer": consumer_entry,
-        "positions": indices,
+        "positions": tuple(unique_positions),
         "direction": direction,
         "value": value,
     }
     if uncertainty is not None:
         entry["uncertainty"] = uncertainty
+
     cfs_mapping.append(entry)
 
 
@@ -2456,43 +2483,23 @@ class EdgeLCIA:
         logger.info("Handling contained locations…")
 
         def _geo_contains(container: str, member: str) -> bool:
-            """Return True if `container` geographically contains `member`, robust to API flag semantics and case."""
+            """Return True if `container` geographically contains `member`."""
             if not container or not member:
                 return False
 
-            C_raw = str(container).strip()
-            M_raw = str(member).strip()
-
-            def N(x):  # normalize for comparisons
-                return str(x).strip().upper()
-
-            def q(loc: str, containing: bool) -> list[str]:
-                try:
-                    mp = self.geo.batch(locations=[loc], containing=containing) or {}
-                    return mp.get(loc, []) or []
-                except Exception as e:
-                    self.logger.isEnabledFor(logging.DEBUG) and self.logger.debug(
-                        "geo-contains: batch error loc=%s containing=%s err=%s",
-                        loc,
-                        containing,
-                        e,
+            try:
+                result = self.geo.batch(locations=[member], containing=False) or {}
+                containers = result.get(member, [])
+            except Exception as e:
+                if self.logger.isEnabledFor(logging.DEBUG):
+                    self.logger.debug(
+                        "geo-contains: batch error member=%s err=%s", member, e
                     )
-                    return []
+                return False
 
-            # Collect both interpretations, then normalize once
-            containers_of_member = set(map(N, q(M_raw, True))) | set(
-                map(N, q(M_raw, False))
-            )
-            children_of_container = set(map(N, q(C_raw, False))) | set(
-                map(N, q(C_raw, True))
-            )
-
-            C = N(C_raw)
-            M = N(M_raw)
-
-            res = (C in containers_of_member) or (M in children_of_container)
-
-            return res
+            return str(container).strip().upper() in {
+                str(c).strip().upper() for c in containers
+            }
 
         # Respect wildcard suppliers in method keys (e.g., ('__ANY__','RER'))
         supplier_wildcard = any(k[0] == "__ANY__" for k in self.weights.keys())
@@ -3149,6 +3156,15 @@ class EdgeLCIA:
             coords_i, coords_j, coords_k = [], [], []
             data = []
             sample_cache = {}
+
+            unique = {}
+            for cf in self.cfs_mapping:
+                # positions is a list of (i, j); in practice size 1; make it a sorted tuple
+                pos_key = tuple(sorted(cf["positions"]))
+                # If you prefer "last write wins", overwrite on key collision
+                unique[pos_key] = cf
+
+            self.cfs_mapping = list(unique.values())
 
             for cf in self.cfs_mapping:
 
