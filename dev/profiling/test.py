@@ -79,7 +79,7 @@ act = [
 ][0]
 
 # method = ("AWARE 2.0", "Country", "all", "yearly")
-method = ("biodiversity", "scherer", "occupation", "average", "amphibians")
+method = ("GLAM3", "biodiversity", "occupation", "average", "amphibians")
 # method = ("RELICS", "copper", "secondary")
 
 LCA = EdgeLCIA(
