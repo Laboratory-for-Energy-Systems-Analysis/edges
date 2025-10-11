@@ -271,4 +271,5 @@ Energy [ADEME](https://www.ademe.fr/), via the financing of the [HySPI](https://
 The HySPI project aims to provide a methodological framework to analyze and 
 quantify, in a systemic and prospective manner, the environmental impacts of the 
 decarbonization strategy of hydrogen production used by the industry in France.
-We also acknowledge financial support from the Europe Horizon project [RAWCLIC](https://ec.europa.eu/info/funding-tenders/opportunities/portal/screen/opportunities/projects-details/43108390/101183654/HORIZON?keywords=RAWCLIC&isExactMatch=true&order=DESC&pageNumber=NaN&sortBy=title).
+We also acknowledge financial support from the Europe Horizon project [RAWCLIC](https://ec.europa.eu/info/funding-tenders/opportunities/portal/screen/opportunities/projects-details/43108390/101183654/HORIZON?keywords=RAWCLIC&isExactMatch=true&order=DESC&pageNumber=NaN&sortBy=title)
+as well as the Europe Horizon project [PRISMA](https://www.net0prisma.eu/).
