@@ -57,8 +57,16 @@ Currently, the library provides regionalized CFs for:
 You can install the library using pip:
 
 ```bash
-pip install git+https://github.com/Laboratory-for-Energy-Systems-Analysis/edges.git
+pip install edges
 ```
+
+---
+**NOTE**
+
+The library is compatible with both `brightway2` and `brightway25`.
+Please ensure you have one of these frameworks installed in your Python environment.
+
+---
 
 ## Documentation
 
