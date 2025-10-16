@@ -27,6 +27,7 @@ requirements:
     - prettytable
     - sparse >=0.13.0
     - plotly
+    - highspy
 
 
 test:

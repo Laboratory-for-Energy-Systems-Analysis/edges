@@ -8,3 +8,4 @@ prettytable
 sparse >=0.13.0
 plotly
 ecoinvent_interface
+highspy
