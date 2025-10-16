@@ -60,13 +60,10 @@ You can install the library using pip:
 pip install edges
 ```
 
----
-**NOTE**
+> [!NOTE]
+> The library is compatible with both `brightway2` and `brightway25`.
+> Please ensure you have one of these frameworks installed in your Python environment.
 
-The library is compatible with both `brightway2` and `brightway25`.
-Please ensure you have one of these frameworks installed in your Python environment.
-
----
 
 ## Documentation
 
