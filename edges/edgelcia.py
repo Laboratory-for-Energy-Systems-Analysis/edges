@@ -2483,43 +2483,23 @@ class EdgeLCIA:
         logger.info("Handling contained locations…")
 
         def _geo_contains(container: str, member: str) -> bool:
-            """Return True if `container` geographically contains `member`, robust to API flag semantics and case."""
+            """Return True if `container` geographically contains `member`."""
             if not container or not member:
                 return False
 
-            C_raw = str(container).strip()
-            M_raw = str(member).strip()
-
-            def N(x):  # normalize for comparisons
-                return str(x).strip().upper()
-
-            def q(loc: str, containing: bool) -> list[str]:
-                try:
-                    mp = self.geo.batch(locations=[loc], containing=containing) or {}
-                    return mp.get(loc, []) or []
-                except Exception as e:
-                    self.logger.isEnabledFor(logging.DEBUG) and self.logger.debug(
-                        "geo-contains: batch error loc=%s containing=%s err=%s",
-                        loc,
-                        containing,
-                        e,
+            try:
+                result = self.geo.batch(locations=[member], containing=False) or {}
+                containers = result.get(member, [])
+            except Exception as e:
+                if self.logger.isEnabledFor(logging.DEBUG):
+                    self.logger.debug(
+                        "geo-contains: batch error member=%s err=%s", member, e
                     )
-                    return []
+                return False
 
-            # Collect both interpretations, then normalize once
-            containers_of_member = set(map(N, q(M_raw, True))) | set(
-                map(N, q(M_raw, False))
-            )
-            children_of_container = set(map(N, q(C_raw, False))) | set(
-                map(N, q(C_raw, True))
-            )
-
-            C = N(C_raw)
-            M = N(M_raw)
-
-            res = (C in containers_of_member) or (M in children_of_container)
-
-            return res
+            return str(container).strip().upper() in {
+                str(c).strip().upper() for c in containers
+            }
 
         # Respect wildcard suppliers in method keys (e.g., ('__ANY__','RER'))
         supplier_wildcard = any(k[0] == "__ANY__" for k in self.weights.keys())

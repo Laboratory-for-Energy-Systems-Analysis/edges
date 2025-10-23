@@ -57,8 +57,13 @@ Currently, the library provides regionalized CFs for:
 You can install the library using pip:
 
 ```bash
-pip install git+https://github.com/Laboratory-for-Energy-Systems-Analysis/edges.git
+pip install edges
 ```
+
+> [!NOTE]
+> The library is compatible with both `brightway2` and `brightway25`.
+> Please ensure you have one of these frameworks installed in your Python environment.
+
 
 ## Documentation
 
@@ -271,4 +276,5 @@ Energy [ADEME](https://www.ademe.fr/), via the financing of the [HySPI](https://
 The HySPI project aims to provide a methodological framework to analyze and 
 quantify, in a systemic and prospective manner, the environmental impacts of the 
 decarbonization strategy of hydrogen production used by the industry in France.
-We also acknowledge financial support from the Europe Horizon project [RAWCLIC](https://ec.europa.eu/info/funding-tenders/opportunities/portal/screen/opportunities/projects-details/43108390/101183654/HORIZON?keywords=RAWCLIC&isExactMatch=true&order=DESC&pageNumber=NaN&sortBy=title).
+We also acknowledge financial support from the Europe Horizon project [RAWCLIC](https://ec.europa.eu/info/funding-tenders/opportunities/portal/screen/opportunities/projects-details/43108390/101183654/HORIZON?keywords=RAWCLIC&isExactMatch=true&order=DESC&pageNumber=NaN&sortBy=title)
+as well as the Europe Horizon project [PRISMA](https://www.net0prisma.eu/).
