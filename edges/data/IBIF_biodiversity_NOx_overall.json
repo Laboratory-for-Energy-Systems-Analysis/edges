@@ -2,7 +2,7 @@
   "name": "IBIF v2 - NOx emissions - biodiversity intactness - overall",
   "unit": "MSA-loss.km2.yr",
   "version": "2.0",
-  "description": "Intactness-based Biodiversity Impact Factors (IBIF) for NOx emissions on terrestrial biodiversity intactness, (overall). Based on GLOBIO 4 model and Mean Species Abundance (MSA) metric. From Schipper et al. 2025: https://doi.org/10.1038/s41597-025-05946-1",
+  "description": "Intactness-based Biodiversity Impact Factors (IBIF) for NOx emissions on terrestrial biodiversity intactness, (overall). Based on GLOBIO 4 model and Mean Species Abundance (MSA) metric. From Schipper et al. 2025: https://doi.org/10.1038/s41597-025-05946-1. Country-level entries include a GDP-based weight used to compute weighted averages when aggregating to composite or unspecified regions.",
   "species_group": "overall",
   "pressure_type": "NOx",
   "strategies": [
@@ -16,5450 +16,5474 @@
     {
       "supplier": {
         "name": "Nitrogen oxides",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "AF",
         "matrix": "technosphere"
       },
-      "value": 6.42e-06
+      "value": 6.42e-06,
+      "weight": 17152234636.8715
     },
     {
       "supplier": {
         "name": "Nitrogen oxides",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "AL",
         "matrix": "technosphere"
       },
-      "value": 1.24e-05
+      "value": 1.24e-05,
+      "weight": 23547180412.3404
     },
     {
       "supplier": {
         "name": "Nitrogen oxides",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "DZ",
         "matrix": "technosphere"
       },
-      "value": 2.1e-05
+      "value": 2.1e-05,
+      "weight": 247626161016.414
     },
     {
       "supplier": {
         "name": "Nitrogen oxides",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "AS",
         "matrix": "technosphere"
       },
-      "value": 6.86e-06
+      "value": 6.86e-06,
+      "weight": 871000000.0
     },
     {
       "supplier": {
         "name": "Nitrogen oxides",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "AD",
         "matrix": "technosphere"
       },
-      "value": 9.2e-06
+      "value": 9.2e-06,
+      "weight": 3785067331.7625
     },
     {
       "supplier": {
         "name": "Nitrogen oxides",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "AO",
         "matrix": "technosphere"
       },
-      "value": 8.58e-06
+      "value": 8.58e-06,
+      "weight": 84875162197.0107
     },
     {
       "supplier": {
         "name": "Nitrogen oxides",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "AG",
         "matrix": "technosphere"
       },
-      "value": 4.48e-06
+      "value": 4.48e-06,
+      "weight": 2005785185.18518
     },
     {
       "supplier": {
         "name": "Nitrogen oxides",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "AZ",
         "matrix": "technosphere"
       },
-      "value": 3.44e-05
+      "value": 3.44e-05,
+      "weight": 72428470588.2353
     },
     {
       "supplier": {
         "name": "Nitrogen oxides",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "AR",
         "matrix": "technosphere"
       },
-      "value": 9.31e-06
+      "value": 9.31e-06,
+      "weight": 646075277525.125
     },
     {
       "supplier": {
         "name": "Nitrogen oxides",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "AU",
         "matrix": "technosphere"
       },
-      "value": 8.12e-06
+      "value": 8.12e-06,
+      "weight": 1728057316695.61
     },
     {
       "supplier": {
         "name": "Nitrogen oxides",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "AT",
         "matrix": "technosphere"
       },
-      "value": 1.27e-05
+      "value": 1.27e-05,
+      "weight": 511685203845.001
     },
     {
       "supplier": {
         "name": "Nitrogen oxides",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "BS",
         "matrix": "technosphere"
       },
-      "value": 4.48e-06
+      "value": 4.48e-06,
+      "weight": 15271300000.0
     },
     {
       "supplier": {
         "name": "Nitrogen oxides",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "BH",
         "matrix": "technosphere"
       },
-      "value": 1.23e-05
+      "value": 1.23e-05,
+      "weight": 46192260638.2979
     },
     {
       "supplier": {
         "name": "Nitrogen oxides",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "BD",
         "matrix": "technosphere"
       },
-      "value": 6.42e-06
+      "value": 6.42e-06,
+      "weight": 437415333018.291
     },
     {
       "supplier": {
         "name": "Nitrogen oxides",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "AM",
         "matrix": "technosphere"
       },
-      "value": 3.44e-05
+      "value": 3.44e-05,
+      "weight": 24085749592.3359
     },
     {
       "supplier": {
         "name": "Nitrogen oxides",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "BB",
         "matrix": "technosphere"
       },
-      "value": 4.48e-06
+      "value": 4.48e-06,
+      "weight": 6720733200.0
     },
     {
       "supplier": {
         "name": "Nitrogen oxides",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "BE",
         "matrix": "technosphere"
       },
-      "value": 9.85e-06
+      "value": 9.85e-06,
+      "weight": 644655275111.58
     },
     {
       "supplier": {
         "name": "Nitrogen oxides",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "BM",
         "matrix": "technosphere"
       },
-      "value": 1.52e-05
+      "value": 1.52e-05,
+      "weight": 8579242000.0
     },
     {
       "supplier": {
         "name": "Nitrogen oxides",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "BT",
         "matrix": "technosphere"
       },
-      "value": 6.42e-06
+      "value": 6.42e-06,
+      "weight": 3019253885.46989
     },
     {
       "supplier": {
         "name": "Nitrogen oxides",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "BO",
         "matrix": "technosphere"
       },
-      "value": 1.01e-05
+      "value": 1.01e-05,
+      "weight": 45135398002.8944
     },
     {
       "supplier": {
         "name": "Nitrogen oxides",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "BA",
         "matrix": "technosphere"
       },
-      "value": 1.24e-05
+      "value": 1.24e-05,
+      "weight": 27592361387.8597
     },
     {
       "supplier": {
         "name": "Nitrogen oxides",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "BW",
         "matrix": "technosphere"
       },
-      "value": 8.58e-06
+      "value": 8.58e-06,
+      "weight": 19411266967.1044
     },
     {
       "supplier": {
         "name": "Nitrogen oxides",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "BR",
         "matrix": "technosphere"
       },
-      "value": 1.11e-05
+      "value": 1.11e-05,
+      "weight": 2191131765684.63
     },
     {
       "supplier": {
         "name": "Nitrogen oxides",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "BZ",
         "matrix": "technosphere"
       },
-      "value": 4.48e-06
+      "value": 4.48e-06,
+      "weight": 3066850000.0
     },
     {
       "supplier": {
         "name": "Nitrogen oxides",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "SB",
         "matrix": "technosphere"
       },
-      "value": 6.86e-06
+      "value": 6.86e-06,
+      "weight": 1660896530.71894
     },
     {
       "supplier": {
         "name": "Nitrogen oxides",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "VG",
         "matrix": "technosphere"
       },
-      "value": 4.48e-06
+      "value": 4.48e-06,
+      "weight": 0.0
     },
     {
       "supplier": {
         "name": "Nitrogen oxides",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "BN",
         "matrix": "technosphere"
       },
-      "value": 5.85e-06
+      "value": 5.85e-06,
+      "weight": 15095084686.1651
     },
     {
       "supplier": {
         "name": "Nitrogen oxides",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "BG",
         "matrix": "technosphere"
       },
-      "value": 1.15e-05
+      "value": 1.15e-05,
+      "weight": 102396840296.147
     },
     {
       "supplier": {
         "name": "Nitrogen oxides",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "MM",
         "matrix": "technosphere"
       },
-      "value": 6.57e-06
+      "value": 6.57e-06,
+      "weight": 66757619000.0
     },
     {
       "supplier": {
         "name": "Nitrogen oxides",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "BI",
         "matrix": "technosphere"
       },
-      "value": 1.06e-05
+      "value": 1.06e-05,
+      "weight": 2629391599.50157
     },
     {
       "supplier": {
         "name": "Nitrogen oxides",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "BY",
         "matrix": "technosphere"
       },
-      "value": 2.05e-05
+      "value": 2.05e-05,
+      "weight": 72478760370.4258
     },
     {
       "supplier": {
         "name": "Nitrogen oxides",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "KH",
         "matrix": "technosphere"
       },
-      "value": 6.57e-06
+      "value": 6.57e-06,
+      "weight": 42335646895.7984
     },
     {
       "supplier": {
         "name": "Nitrogen oxides",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "CM",
         "matrix": "technosphere"
       },
-      "value": 6.96e-06
+      "value": 6.96e-06,
+      "weight": 49279410982.826
     },
     {
       "supplier": {
         "name": "Nitrogen oxides",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "CA",
         "matrix": "technosphere"
       },
-      "value": 3.25e-05
+      "value": 3.25e-05,
+      "weight": 2173339670064.33
     },
     {
       "supplier": {
         "name": "Nitrogen oxides",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "CV",
         "matrix": "technosphere"
       },
-      "value": 6.96e-06
+      "value": 6.96e-06,
+      "weight": 2539203428.73837
     },
     {
       "supplier": {
         "name": "Nitrogen oxides",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "KY",
         "matrix": "technosphere"
       },
-      "value": 4.48e-06
+      "value": 4.48e-06,
+      "weight": 7139428557.71423
     },
     {
       "supplier": {
         "name": "Nitrogen oxides",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "CF",
         "matrix": "technosphere"
       },
-      "value": 1.06e-05
+      "value": 1.06e-05,
+      "weight": 2555492085.94725
     },
     {
       "supplier": {
         "name": "Nitrogen oxides",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "LK",
         "matrix": "technosphere"
       },
-      "value": 3.44e-06
+      "value": 3.44e-06,
+      "weight": 83716142582.1945
     },
     {
       "supplier": {
         "name": "Nitrogen oxides",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "TD",
         "matrix": "technosphere"
       },
-      "value": 1.06e-05
+      "value": 1.06e-05,
+      "weight": 19107685020.89
     },
     {
       "supplier": {
         "name": "Nitrogen oxides",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "CL",
         "matrix": "technosphere"
       },
-      "value": 1.11e-05
+      "value": 1.11e-05,
+      "weight": 335518054097.637
     },
     {
       "supplier": {
         "name": "Nitrogen oxides",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "CN",
         "matrix": "technosphere"
       },
-      "value": 5.44e-06
+      "value": 5.44e-06,
+      "weight": 18270356654533.2
     },
     {
       "supplier": {
         "name": "Nitrogen oxides",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "TW",
         "matrix": "technosphere"
       },
-      "value": 1.82e-06
+      "value": 1.82e-06,
+      "weight": 751000000000.0
     },
     {
       "supplier": {
         "name": "Nitrogen oxides",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "CO",
         "matrix": "technosphere"
       },
-      "value": 1.01e-05
+      "value": 1.01e-05,
+      "weight": 366291836137.916
     },
     {
       "supplier": {
         "name": "Nitrogen oxides",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "KM",
         "matrix": "technosphere"
       },
-      "value": 1.06e-05
+      "value": 1.06e-05,
+      "weight": 1430523435.81695
     },
     {
       "supplier": {
         "name": "Nitrogen oxides",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "YT",
         "matrix": "technosphere"
       },
-      "value": 8.58e-06
+      "value": 8.58e-06,
+      "weight": 0.0
     },
     {
       "supplier": {
         "name": "Nitrogen oxides",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "CG",
         "matrix": "technosphere"
       },
-      "value": 6.96e-06
+      "value": 6.96e-06,
+      "weight": 15321055818.3263
     },
     {
       "supplier": {
         "name": "Nitrogen oxides",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "CD",
         "matrix": "technosphere"
       },
-      "value": 1.06e-05
+      "value": 1.06e-05,
+      "weight": 67006756666.3604
     },
     {
       "supplier": {
         "name": "Nitrogen oxides",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "CK",
         "matrix": "technosphere"
       },
-      "value": 6.86e-06
+      "value": 6.86e-06,
+      "weight": 0.0
     },
     {
       "supplier": {
         "name": "Nitrogen oxides",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "CR",
         "matrix": "technosphere"
       },
-      "value": 4.48e-06
+      "value": 4.48e-06,
+      "weight": 86497941438.9809
     },
     {
       "supplier": {
         "name": "Nitrogen oxides",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "HR",
         "matrix": "technosphere"
       },
-      "value": 1.24e-05
+      "value": 1.24e-05,
+      "weight": 84393795502.4421
     },
     {
       "supplier": {
         "name": "Nitrogen oxides",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "CU",
         "matrix": "technosphere"
       },
-      "value": 4.48e-06
+      "value": 4.48e-06,
+      "weight": 107351800000.0
     },
     {
       "supplier": {
         "name": "Nitrogen oxides",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "CY",
         "matrix": "technosphere"
       },
-      "value": 1.08e-05
+      "value": 1.08e-05,
+      "weight": 33886930712.3394
     },
     {
       "supplier": {
         "name": "Nitrogen oxides",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "CZ",
         "matrix": "technosphere"
       },
-      "value": 1.37e-05
+      "value": 1.37e-05,
+      "weight": 343206568134.637
     },
     {
       "supplier": {
         "name": "Nitrogen oxides",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "BJ",
         "matrix": "technosphere"
       },
-      "value": 6.96e-06
+      "value": 6.96e-06,
+      "weight": 19673290995.8491
     },
     {
       "supplier": {
         "name": "Nitrogen oxides",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "DK",
         "matrix": "technosphere"
       },
-      "value": 1.98e-05
+      "value": 1.98e-05,
+      "weight": 407091920305.404
     },
     {
       "supplier": {
         "name": "Nitrogen oxides",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "DM",
         "matrix": "technosphere"
       },
-      "value": 4.48e-06
+      "value": 4.48e-06,
+      "weight": 659311111.111111
     },
     {
       "supplier": {
         "name": "Nitrogen oxides",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "DO",
         "matrix": "technosphere"
       },
-      "value": 4.48e-06
+      "value": 4.48e-06,
+      "weight": 120456239153.739
     },
     {
       "supplier": {
         "name": "Nitrogen oxides",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "EC",
         "matrix": "technosphere"
       },
-      "value": 1.01e-05
+      "value": 1.01e-05,
+      "weight": 121147057000.0
     },
     {
       "supplier": {
         "name": "Nitrogen oxides",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "SV",
         "matrix": "technosphere"
       },
-      "value": 4.48e-06
+      "value": 4.48e-06,
+      "weight": 33853940000.0
     },
     {
       "supplier": {
         "name": "Nitrogen oxides",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "GQ",
         "matrix": "technosphere"
       },
-      "value": 6.96e-06
+      "value": 6.96e-06,
+      "weight": 12337550583.754
     },
     {
       "supplier": {
         "name": "Nitrogen oxides",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "ET",
         "matrix": "technosphere"
       },
-      "value": 1.06e-05
+      "value": 1.06e-05,
+      "weight": 126772707851.339
     },
     {
       "supplier": {
         "name": "Nitrogen oxides",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "ER",
         "matrix": "technosphere"
       },
-      "value": 1.06e-05
+      "value": 1.06e-05,
+      "weight": 2000000000.0
     },
     {
       "supplier": {
         "name": "Nitrogen oxides",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "EE",
         "matrix": "technosphere"
       },
-      "value": 1.64e-05
+      "value": 1.64e-05,
+      "weight": 41291245222.1948
     },
     {
       "supplier": {
         "name": "Nitrogen oxides",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "FO",
         "matrix": "technosphere"
       },
-      "value": 1.98e-05
+      "value": 1.98e-05,
+      "weight": 3907323961.33964
     },
     {
       "supplier": {
         "name": "Nitrogen oxides",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "FK",
         "matrix": "technosphere"
       },
-      "value": 9.31e-06
+      "value": 9.31e-06,
+      "weight": 0.0
     },
     {
       "supplier": {
         "name": "Nitrogen oxides",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "FJ",
         "matrix": "technosphere"
       },
-      "value": 6.86e-06
+      "value": 6.86e-06,
+      "weight": 5442046552.96928
     },
     {
       "supplier": {
         "name": "Nitrogen oxides",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "FI",
         "matrix": "technosphere"
       },
-      "value": 2.96e-05
+      "value": 2.96e-05,
+      "weight": 294950618733.339
     },
     {
       "supplier": {
         "name": "Nitrogen oxides",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "FR",
         "matrix": "technosphere"
       },
-      "value": 9.2e-06
+      "value": 9.2e-06,
+      "weight": 3051831611384.76
     },
     {
       "supplier": {
         "name": "Nitrogen oxides",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "GF",
         "matrix": "technosphere"
       },
-      "value": 1.01e-05
+      "value": 1.01e-05,
+      "weight": 0.0
     },
     {
       "supplier": {
         "name": "Nitrogen oxides",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "DJ",
         "matrix": "technosphere"
       },
-      "value": 1.06e-05
+      "value": 1.06e-05,
+      "weight": 3917150480.80981
     },
     {
       "supplier": {
         "name": "Nitrogen oxides",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "GA",
         "matrix": "technosphere"
       },
-      "value": 6.96e-06
+      "value": 6.96e-06,
+      "weight": 20055720403.471
     },
     {
       "supplier": {
         "name": "Nitrogen oxides",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "GE",
         "matrix": "technosphere"
       },
-      "value": 3.44e-05
+      "value": 3.44e-05,
+      "weight": 30777833600.6515
     },
     {
       "supplier": {
         "name": "Nitrogen oxides",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "GM",
         "matrix": "technosphere"
       },
-      "value": 6.96e-06
+      "value": 6.96e-06,
+      "weight": 2396111020.8801
     },
     {
       "supplier": {
         "name": "Nitrogen oxides",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "PS",
         "matrix": "technosphere"
       },
-      "value": 1.46e-05
+      "value": 1.46e-05,
+      "weight": 17847900000.0
     },
     {
       "supplier": {
         "name": "Nitrogen oxides",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "DE",
         "matrix": "technosphere"
       },
-      "value": 1.19e-05
+      "value": 1.19e-05,
+      "weight": 4525703903627.53
     },
     {
       "supplier": {
         "name": "Nitrogen oxides",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "GH",
         "matrix": "technosphere"
       },
-      "value": 6.96e-06
+      "value": 6.96e-06,
+      "weight": 80547146878.3843
     },
     {
       "supplier": {
         "name": "Nitrogen oxides",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "GI",
         "matrix": "technosphere"
       },
-      "value": 9.32e-06
+      "value": 9.32e-06,
+      "weight": 0.0
     },
     {
       "supplier": {
         "name": "Nitrogen oxides",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "KI",
         "matrix": "technosphere"
       },
-      "value": 6.86e-06
+      "value": 6.86e-06,
+      "weight": 288610732.190775
     },
     {
       "supplier": {
         "name": "Nitrogen oxides",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "GR",
         "matrix": "technosphere"
       },
-      "value": 1.08e-05
+      "value": 1.08e-05,
+      "weight": 243498333237.802
     },
     {
       "supplier": {
         "name": "Nitrogen oxides",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "GD",
         "matrix": "technosphere"
       },
-      "value": 4.48e-06
+      "value": 4.48e-06,
+      "weight": 1323985600.0
     },
     {
       "supplier": {
         "name": "Nitrogen oxides",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "GP",
         "matrix": "technosphere"
       },
-      "value": 4.48e-06
+      "value": 4.48e-06,
+      "weight": 0.0
     },
     {
       "supplier": {
         "name": "Nitrogen oxides",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "GU",
         "matrix": "technosphere"
       },
-      "value": 6.86e-06
+      "value": 6.86e-06,
+      "weight": 6910000000.0
     },
     {
       "supplier": {
         "name": "Nitrogen oxides",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "GT",
         "matrix": "technosphere"
       },
-      "value": 4.48e-06
+      "value": 4.48e-06,
+      "weight": 104368413483.146
     },
     {
       "supplier": {
         "name": "Nitrogen oxides",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "GN",
         "matrix": "technosphere"
       },
-      "value": 6.96e-06
+      "value": 6.96e-06,
+      "weight": 22407615556.0571
     },
     {
       "supplier": {
         "name": "Nitrogen oxides",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "GY",
         "matrix": "technosphere"
       },
-      "value": 1.01e-05
+      "value": 1.01e-05,
+      "weight": 16918503597.1223
     },
     {
       "supplier": {
         "name": "Nitrogen oxides",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "HT",
         "matrix": "technosphere"
       },
-      "value": 4.48e-06
+      "value": 4.48e-06,
+      "weight": 19850585722.3241
     },
     {
       "supplier": {
         "name": "Nitrogen oxides",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "HN",
         "matrix": "technosphere"
       },
-      "value": 4.48e-06
+      "value": 4.48e-06,
+      "weight": 34355805527.9795
     },
     {
       "supplier": {
         "name": "Nitrogen oxides",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "HU",
         "matrix": "technosphere"
       },
-      "value": 1.34e-05
+      "value": 1.34e-05,
+      "weight": 214022571311.24
     },
     {
       "supplier": {
         "name": "Nitrogen oxides",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "IS",
         "matrix": "technosphere"
       },
-      "value": 2.08e-05
+      "value": 2.08e-05,
+      "weight": 31452223861.9091
     },
     {
       "supplier": {
         "name": "Nitrogen oxides",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "IN",
         "matrix": "technosphere"
       },
-      "value": 3.44e-06
+      "value": 3.44e-06,
+      "weight": 3638489096033.86
     },
     {
       "supplier": {
         "name": "Nitrogen oxides",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "ID",
         "matrix": "technosphere"
       },
-      "value": 5.33e-06
+      "value": 5.33e-06,
+      "weight": 1371169301563.62
     },
     {
       "supplier": {
         "name": "Nitrogen oxides",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "IR",
         "matrix": "technosphere"
       },
-      "value": 1.23e-05
+      "value": 1.23e-05,
+      "weight": 404625655076.275
     },
     {
       "supplier": {
         "name": "Nitrogen oxides",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "IQ",
         "matrix": "technosphere"
       },
-      "value": 1.23e-05
+      "value": 1.23e-05,
+      "weight": 268881051643.549
     },
     {
       "supplier": {
         "name": "Nitrogen oxides",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "IE",
         "matrix": "technosphere"
       },
-      "value": 7.26e-06
+      "value": 7.26e-06,
+      "weight": 551394889339.778
     },
     {
       "supplier": {
         "name": "Nitrogen oxides",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "IL",
         "matrix": "technosphere"
       },
-      "value": 1.46e-05
+      "value": 1.46e-05,
+      "weight": 512184638998.974
     },
     {
       "supplier": {
         "name": "Nitrogen oxides",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "IT",
         "matrix": "technosphere"
       },
-      "value": 9.42e-06
+      "value": 9.42e-06,
+      "weight": 2304605139862.79
     },
     {
       "supplier": {
         "name": "Nitrogen oxides",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "CI",
         "matrix": "technosphere"
       },
-      "value": 6.96e-06
+      "value": 6.96e-06,
+      "weight": 79618056323.7639
     },
     {
       "supplier": {
         "name": "Nitrogen oxides",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "JM",
         "matrix": "technosphere"
       },
-      "value": 4.48e-06
+      "value": 4.48e-06,
+      "weight": 19423355367.2372
     },
     {
       "supplier": {
         "name": "Nitrogen oxides",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "JP",
         "matrix": "technosphere"
       },
-      "value": 4.7e-06
+      "value": 4.7e-06,
+      "weight": 4213167237905.83
     },
     {
       "supplier": {
         "name": "Nitrogen oxides",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "KZ",
         "matrix": "technosphere"
       },
-      "value": 2.51e-05
+      "value": 2.51e-05,
+      "weight": 261840101059.923
     },
     {
       "supplier": {
         "name": "Nitrogen oxides",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "JO",
         "matrix": "technosphere"
       },
-      "value": 1.46e-05
+      "value": 1.46e-05,
+      "weight": 51088476338.0282
     },
     {
       "supplier": {
         "name": "Nitrogen oxides",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "KE",
         "matrix": "technosphere"
       },
-      "value": 1.06e-05
+      "value": 1.06e-05,
+      "weight": 108038588970.595
     },
     {
       "supplier": {
         "name": "Nitrogen oxides",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "KP",
         "matrix": "technosphere"
       },
-      "value": 6.23e-06
+      "value": 6.23e-06,
+      "weight": 28000000000.0
     },
     {
       "supplier": {
         "name": "Nitrogen oxides",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "KR",
         "matrix": "technosphere"
       },
-      "value": 3.83e-06
+      "value": 3.83e-06,
+      "weight": 1712792854202.37
     },
     {
       "supplier": {
         "name": "Nitrogen oxides",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "KW",
         "matrix": "technosphere"
       },
-      "value": 1.23e-05
+      "value": 1.23e-05,
+      "weight": 165384407267.056
     },
     {
       "supplier": {
         "name": "Nitrogen oxides",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "KG",
         "matrix": "technosphere"
       },
-      "value": 1.09e-05
+      "value": 1.09e-05,
+      "weight": 15180842369.4894
     },
     {
       "supplier": {
         "name": "Nitrogen oxides",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "LA",
         "matrix": "technosphere"
       },
-      "value": 6.57e-06
+      "value": 6.57e-06,
+      "weight": 15843155731.2552
     },
     {
       "supplier": {
         "name": "Nitrogen oxides",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "LB",
         "matrix": "technosphere"
       },
-      "value": 1.46e-05
+      "value": 1.46e-05,
+      "weight": 20078620356.9931
     },
     {
       "supplier": {
         "name": "Nitrogen oxides",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "LS",
         "matrix": "technosphere"
       },
-      "value": 4.61e-06
+      "value": 4.61e-06,
+      "weight": 2117962430.3041
     },
     {
       "supplier": {
         "name": "Nitrogen oxides",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "LV",
         "matrix": "technosphere"
       },
-      "value": 1.64e-05
+      "value": 1.64e-05,
+      "weight": 42572151720.138
     },
     {
       "supplier": {
         "name": "Nitrogen oxides",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "LR",
         "matrix": "technosphere"
       },
-      "value": 6.96e-06
+      "value": 6.96e-06,
+      "weight": 4390000000.0
     },
     {
       "supplier": {
         "name": "Nitrogen oxides",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "LY",
         "matrix": "technosphere"
       },
-      "value": 2.1e-05
+      "value": 2.1e-05,
+      "weight": 45096462972.4014
     },
     {
       "supplier": {
         "name": "Nitrogen oxides",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "LI",
         "matrix": "technosphere"
       },
-      "value": 1.27e-05
+      "value": 1.27e-05,
+      "weight": 8287748667.20832
     },
     {
       "supplier": {
         "name": "Nitrogen oxides",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "LT",
         "matrix": "technosphere"
       },
-      "value": 1.64e-05
+      "value": 1.64e-05,
+      "weight": 79789877416.1681
     },
     {
       "supplier": {
         "name": "Nitrogen oxides",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "LU",
         "matrix": "technosphere"
       },
-      "value": 9.85e-06
+      "value": 9.85e-06,
+      "weight": 87574021091.7525
     },
     {
       "supplier": {
         "name": "Nitrogen oxides",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "MG",
         "matrix": "technosphere"
       },
-      "value": 1.06e-05
+      "value": 1.06e-05,
+      "weight": 15869945477.855
     },
     {
       "supplier": {
         "name": "Nitrogen oxides",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "MW",
         "matrix": "technosphere"
       },
-      "value": 8.58e-06
+      "value": 8.58e-06,
+      "weight": 12712150082.0792
     },
     {
       "supplier": {
         "name": "Nitrogen oxides",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "MY",
         "matrix": "technosphere"
       },
-      "value": 5.85e-06
+      "value": 5.85e-06,
+      "weight": 399705137434.074
     },
     {
       "supplier": {
         "name": "Nitrogen oxides",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "MV",
         "matrix": "technosphere"
       },
-      "value": 3.44e-06
+      "value": 3.44e-06,
+      "weight": 6590894301.9579
     },
     {
       "supplier": {
         "name": "Nitrogen oxides",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "ML",
         "matrix": "technosphere"
       },
-      "value": 6.96e-06
+      "value": 6.96e-06,
+      "weight": 24621545564.8753
     },
     {
       "supplier": {
         "name": "Nitrogen oxides",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "MT",
         "matrix": "technosphere"
       },
-      "value": 9.42e-06
+      "value": 9.42e-06,
+      "weight": 22210718401.0207
     },
     {
       "supplier": {
         "name": "Nitrogen oxides",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "MQ",
         "matrix": "technosphere"
       },
-      "value": 4.48e-06
+      "value": 4.48e-06,
+      "weight": 0.0
     },
     {
       "supplier": {
         "name": "Nitrogen oxides",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "MR",
         "matrix": "technosphere"
       },
-      "value": 6.96e-06
+      "value": 6.96e-06,
+      "weight": 10651709314.1644
     },
     {
       "supplier": {
         "name": "Nitrogen oxides",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "MU",
         "matrix": "technosphere"
       },
-      "value": 1.06e-05
+      "value": 1.06e-05,
+      "weight": 14101195732.6741
     },
     {
       "supplier": {
         "name": "Nitrogen oxides",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "MX",
         "matrix": "technosphere"
       },
-      "value": 8.78e-06
+      "value": 8.78e-06,
+      "weight": 1793798859343.27
     },
     {
       "supplier": {
         "name": "Nitrogen oxides",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "MN",
         "matrix": "technosphere"
       },
-      "value": 6.23e-06
+      "value": 6.23e-06,
+      "weight": 20325121393.9074
     },
     {
       "supplier": {
         "name": "Nitrogen oxides",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "MD",
         "matrix": "technosphere"
       },
-      "value": 2.05e-05
+      "value": 2.05e-05,
+      "weight": 16711906746.2133
     },
     {
       "supplier": {
         "name": "Nitrogen oxides",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "ME",
         "matrix": "technosphere"
       },
-      "value": 1.24e-05
+      "value": 1.24e-05,
+      "weight": 7530593375.22034
     },
     {
       "supplier": {
         "name": "Nitrogen oxides",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "MS",
         "matrix": "technosphere"
       },
-      "value": 4.48e-06
+      "value": 4.48e-06,
+      "weight": 0.0
     },
     {
       "supplier": {
         "name": "Nitrogen oxides",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "MA",
         "matrix": "technosphere"
       },
-      "value": 2.1e-05
+      "value": 2.1e-05,
+      "weight": 144417103249.646
     },
     {
       "supplier": {
         "name": "Nitrogen oxides",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "MZ",
         "matrix": "technosphere"
       },
-      "value": 8.58e-06
+      "value": 8.58e-06,
+      "weight": 20954220983.5473
     },
     {
       "supplier": {
         "name": "Nitrogen oxides",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "OM",
         "matrix": "technosphere"
       },
-      "value": 1.23e-05
+      "value": 1.23e-05,
+      "weight": 105895708712.614
     },
     {
       "supplier": {
         "name": "Nitrogen oxides",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "NA",
         "matrix": "technosphere"
       },
-      "value": 8.58e-06
+      "value": 8.58e-06,
+      "weight": 12408271447.8691
     },
     {
       "supplier": {
         "name": "Nitrogen oxides",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "NR",
         "matrix": "technosphere"
       },
-      "value": 6.86e-06
+      "value": 6.86e-06,
+      "weight": 151455967.735319
     },
     {
       "supplier": {
         "name": "Nitrogen oxides",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "NP",
         "matrix": "technosphere"
       },
-      "value": 6.42e-06
+      "value": 6.42e-06,
+      "weight": 41047772331.0994
     },
     {
       "supplier": {
         "name": "Nitrogen oxides",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "NL",
         "matrix": "technosphere"
       },
-      "value": 9.85e-06
+      "value": 9.85e-06,
+      "weight": 1154361305398.06
     },
     {
       "supplier": {
         "name": "Nitrogen oxides",
-        "type": "emission",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "location": "BQ",
+        "matrix": "technosphere"
+      },
+      "value": 4.48e-06,
+      "weight": 0.0
+    },
+    {
+      "supplier": {
+        "name": "Nitrogen oxides",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "AW",
         "matrix": "technosphere"
       },
-      "value": 4.48e-06
+      "value": 4.48e-06,
+      "weight": 3648573136.15155
     },
     {
       "supplier": {
         "name": "Nitrogen oxides",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "NC",
         "matrix": "technosphere"
       },
-      "value": 6.86e-06
+      "value": 6.86e-06,
+      "weight": 9623318718.31459
     },
     {
       "supplier": {
         "name": "Nitrogen oxides",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "VU",
         "matrix": "technosphere"
       },
-      "value": 6.86e-06
+      "value": 6.86e-06,
+      "weight": 1126313359.21923
     },
     {
       "supplier": {
         "name": "Nitrogen oxides",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "NZ",
         "matrix": "technosphere"
       },
-      "value": 1.89e-06
+      "value": 1.89e-06,
+      "weight": 255194972673.122
     },
     {
       "supplier": {
         "name": "Nitrogen oxides",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "NI",
         "matrix": "technosphere"
       },
-      "value": 4.48e-06
+      "value": 4.48e-06,
+      "weight": 17805842283.8725
     },
     {
       "supplier": {
         "name": "Nitrogen oxides",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "NE",
         "matrix": "technosphere"
       },
-      "value": 6.96e-06
+      "value": 6.96e-06,
+      "weight": 16698786973.0228
     },
     {
       "supplier": {
         "name": "Nitrogen oxides",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "NG",
         "matrix": "technosphere"
       },
-      "value": 6.96e-06
+      "value": 6.96e-06,
+      "weight": 363846332834.618
     },
     {
       "supplier": {
         "name": "Nitrogen oxides",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "NU",
         "matrix": "technosphere"
       },
-      "value": 6.86e-06
+      "value": 6.86e-06,
+      "weight": 0.0
     },
     {
       "supplier": {
         "name": "Nitrogen oxides",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "NF",
         "matrix": "technosphere"
       },
-      "value": 6.86e-06
+      "value": 6.86e-06,
+      "weight": 0.0
     },
     {
       "supplier": {
         "name": "Nitrogen oxides",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "NO",
         "matrix": "technosphere"
       },
-      "value": 2.08e-05
+      "value": 2.08e-05,
+      "weight": 482949731776.587
     },
     {
       "supplier": {
         "name": "Nitrogen oxides",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "MP",
         "matrix": "technosphere"
       },
-      "value": 6.86e-06
+      "value": 6.86e-06,
+      "weight": 1096000000.0
     },
     {
       "supplier": {
         "name": "Nitrogen oxides",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "FM",
         "matrix": "technosphere"
       },
-      "value": 6.86e-06
+      "value": 6.86e-06,
+      "weight": 443916782.295594
     },
     {
       "supplier": {
         "name": "Nitrogen oxides",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "MH",
         "matrix": "technosphere"
       },
-      "value": 6.86e-06
+      "value": 6.86e-06,
+      "weight": 259300000.0
     },
     {
       "supplier": {
         "name": "Nitrogen oxides",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "PW",
         "matrix": "technosphere"
       },
-      "value": 6.86e-06
+      "value": 6.86e-06,
+      "weight": 281849100.0
     },
     {
       "supplier": {
         "name": "Nitrogen oxides",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "PK",
         "matrix": "technosphere"
       },
-      "value": 6.42e-06
+      "value": 6.42e-06,
+      "weight": 337885531778.052
     },
     {
       "supplier": {
         "name": "Nitrogen oxides",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "PA",
         "matrix": "technosphere"
       },
-      "value": 4.48e-06
+      "value": 4.48e-06,
+      "weight": 83318176900.0
     },
     {
       "supplier": {
         "name": "Nitrogen oxides",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "PG",
         "matrix": "technosphere"
       },
-      "value": 6.86e-06
+      "value": 6.86e-06,
+      "weight": 30816367066.9594
     },
     {
       "supplier": {
         "name": "Nitrogen oxides",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "PY",
         "matrix": "technosphere"
       },
-      "value": 1.01e-05
+      "value": 1.01e-05,
+      "weight": 43118053174.5413
     },
     {
       "supplier": {
         "name": "Nitrogen oxides",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "PE",
         "matrix": "technosphere"
       },
-      "value": 1.01e-05
+      "value": 1.01e-05,
+      "weight": 266958720837.988
     },
     {
       "supplier": {
         "name": "Nitrogen oxides",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "PH",
         "matrix": "technosphere"
       },
-      "value": 2.42e-06
+      "value": 2.42e-06,
+      "weight": 437055627244.424
     },
     {
       "supplier": {
         "name": "Nitrogen oxides",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "PN",
         "matrix": "technosphere"
       },
-      "value": 6.86e-06
+      "value": 6.86e-06,
+      "weight": 0.0
     },
     {
       "supplier": {
         "name": "Nitrogen oxides",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "PL",
         "matrix": "technosphere"
       },
-      "value": 1.64e-05
+      "value": 1.64e-05,
+      "weight": 812451128978.58
     },
     {
       "supplier": {
         "name": "Nitrogen oxides",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "PT",
         "matrix": "technosphere"
       },
-      "value": 9.32e-06
+      "value": 9.32e-06,
+      "weight": 289696962620.235
     },
     {
       "supplier": {
         "name": "Nitrogen oxides",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "GW",
         "matrix": "technosphere"
       },
-      "value": 6.96e-06
+      "value": 6.96e-06,
+      "weight": 2077816134.67419
     },
     {
       "supplier": {
         "name": "Nitrogen oxides",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "TL",
         "matrix": "technosphere"
       },
-      "value": 5.33e-06
+      "value": 5.33e-06,
+      "weight": 2079916909.49485
     },
     {
       "supplier": {
         "name": "Nitrogen oxides",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "PR",
         "matrix": "technosphere"
       },
-      "value": 4.48e-06
+      "value": 4.48e-06,
+      "weight": 118375000000.0
     },
     {
       "supplier": {
         "name": "Nitrogen oxides",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "QA",
         "matrix": "technosphere"
       },
-      "value": 1.23e-05
+      "value": 1.23e-05,
+      "weight": 213002809340.659
     },
     {
       "supplier": {
         "name": "Nitrogen oxides",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "RE",
         "matrix": "technosphere"
       },
-      "value": 1.06e-05
+      "value": 1.06e-05,
+      "weight": 0.0
     },
     {
       "supplier": {
         "name": "Nitrogen oxides",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "RO",
         "matrix": "technosphere"
       },
-      "value": 1.24e-05
+      "value": 1.24e-05,
+      "weight": 350775856415.189
     },
     {
       "supplier": {
         "name": "Nitrogen oxides",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "RU",
         "matrix": "technosphere"
       },
-      "value": 3.44e-05
+      "value": 3.44e-05,
+      "weight": 2071505725030.58
     },
     {
       "supplier": {
         "name": "Nitrogen oxides",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "RW",
         "matrix": "technosphere"
       },
-      "value": 1.06e-05
+      "value": 1.06e-05,
+      "weight": 14331722700.3249
     },
     {
       "supplier": {
         "name": "Nitrogen oxides",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "SH",
         "matrix": "technosphere"
       },
-      "value": 6.96e-06
+      "value": 6.96e-06,
+      "weight": 0.0
     },
     {
       "supplier": {
         "name": "Nitrogen oxides",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "KN",
         "matrix": "technosphere"
       },
-      "value": 4.48e-06
+      "value": 4.48e-06,
+      "weight": 1056751851.85185
     },
     {
       "supplier": {
         "name": "Nitrogen oxides",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "AI",
         "matrix": "technosphere"
       },
-      "value": 4.48e-06
+      "value": 4.48e-06,
+      "weight": 0.0
     },
     {
       "supplier": {
         "name": "Nitrogen oxides",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "LC",
         "matrix": "technosphere"
       },
-      "value": 4.48e-06
+      "value": 4.48e-06,
+      "weight": 2430166666.66667
     },
     {
       "supplier": {
         "name": "Nitrogen oxides",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "MF",
         "matrix": "technosphere"
       },
-      "value": 4.48e-06
+      "value": 4.48e-06,
+      "weight": 649206156.194207
     },
     {
       "supplier": {
         "name": "Nitrogen oxides",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "PM",
         "matrix": "technosphere"
       },
-      "value": 1.52e-05
+      "value": 1.52e-05,
+      "weight": 0.0
     },
     {
       "supplier": {
         "name": "Nitrogen oxides",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "VC",
         "matrix": "technosphere"
       },
-      "value": 4.48e-06
+      "value": 4.48e-06,
+      "weight": 1072237037.03704
     },
     {
       "supplier": {
         "name": "Nitrogen oxides",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "SM",
         "matrix": "technosphere"
       },
-      "value": 9.42e-06
+      "value": 9.42e-06,
+      "weight": 1831700577.08904
     },
     {
       "supplier": {
         "name": "Nitrogen oxides",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "ST",
         "matrix": "technosphere"
       },
-      "value": 6.96e-06
+      "value": 6.96e-06,
+      "weight": 678976264.835436
     },
     {
       "supplier": {
         "name": "Nitrogen oxides",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "SA",
         "matrix": "technosphere"
       },
-      "value": 1.23e-05
+      "value": 1.23e-05,
+      "weight": 1218584533333.33
     },
     {
       "supplier": {
         "name": "Nitrogen oxides",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "SN",
         "matrix": "technosphere"
       },
-      "value": 6.96e-06
+      "value": 6.96e-06,
+      "weight": 30696331295.7826
     },
     {
       "supplier": {
         "name": "Nitrogen oxides",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "RS",
         "matrix": "technosphere"
       },
-      "value": 1.24e-05
+      "value": 1.24e-05,
+      "weight": 81342660752.3732
     },
     {
       "supplier": {
         "name": "Nitrogen oxides",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "SC",
         "matrix": "technosphere"
       },
-      "value": 1.06e-05
+      "value": 1.06e-05,
+      "weight": 2187379754.66167
     },
     {
       "supplier": {
         "name": "Nitrogen oxides",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "SL",
         "matrix": "technosphere"
       },
-      "value": 6.96e-06
+      "value": 6.96e-06,
+      "weight": 6411787856.06581
     },
     {
       "supplier": {
         "name": "Nitrogen oxides",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "SG",
         "matrix": "technosphere"
       },
-      "value": 5.85e-06
+      "value": 5.85e-06,
+      "weight": 505439514078.019
     },
     {
       "supplier": {
         "name": "Nitrogen oxides",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "SK",
         "matrix": "technosphere"
       },
-      "value": 1.24e-05
+      "value": 1.24e-05,
+      "weight": 133896931490.224
     },
     {
       "supplier": {
         "name": "Nitrogen oxides",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "VN",
         "matrix": "technosphere"
       },
-      "value": 5.59e-06
+      "value": 5.59e-06,
+      "weight": 433857681378.291
     },
     {
       "supplier": {
         "name": "Nitrogen oxides",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "SI",
         "matrix": "technosphere"
       },
-      "value": 1.27e-05
+      "value": 1.27e-05,
+      "weight": 69148468417.3208
     },
     {
       "supplier": {
         "name": "Nitrogen oxides",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "SO",
         "matrix": "technosphere"
       },
-      "value": 1.06e-05
+      "value": 1.06e-05,
+      "weight": 10968517089.9982
     },
     {
       "supplier": {
         "name": "Nitrogen oxides",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "ZA",
         "matrix": "technosphere"
       },
-      "value": 4.61e-06
+      "value": 4.61e-06,
+      "weight": 380699271816.395
     },
     {
       "supplier": {
         "name": "Nitrogen oxides",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "ZW",
         "matrix": "technosphere"
       },
-      "value": 8.58e-06
+      "value": 8.58e-06,
+      "weight": 35231369343.4002
     },
     {
       "supplier": {
         "name": "Nitrogen oxides",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "ES",
         "matrix": "technosphere"
       },
-      "value": 9.32e-06
+      "value": 9.32e-06,
+      "weight": 1620090734956.89
     },
     {
       "supplier": {
         "name": "Nitrogen oxides",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "SS",
         "matrix": "technosphere"
       },
-      "value": 1.06e-05
+      "value": 1.06e-05,
+      "weight": 11000000000.0
     },
     {
       "supplier": {
         "name": "Nitrogen oxides",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "SD",
         "matrix": "technosphere"
       },
-      "value": 1.06e-05
+      "value": 1.06e-05,
+      "weight": 39898289820.7951
     },
     {
       "supplier": {
         "name": "Nitrogen oxides",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "EH",
         "matrix": "technosphere"
       },
-      "value": 2.1e-05
+      "value": 2.1e-05,
+      "weight": 0.0
     },
     {
       "supplier": {
         "name": "Nitrogen oxides",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "SR",
         "matrix": "technosphere"
       },
-      "value": 1.01e-05
+      "value": 1.01e-05,
+      "weight": 3455146280.83975
     },
     {
       "supplier": {
         "name": "Nitrogen oxides",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "SJ",
         "matrix": "technosphere"
       },
-      "value": 2.08e-05
+      "value": 2.08e-05,
+      "weight": 0.0
     },
     {
       "supplier": {
         "name": "Nitrogen oxides",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "SZ",
         "matrix": "technosphere"
       },
-      "value": 4.61e-06
+      "value": 4.61e-06,
+      "weight": 4604172127.36299
     },
     {
       "supplier": {
         "name": "Nitrogen oxides",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "SE",
         "matrix": "technosphere"
       },
-      "value": 1.98e-05
+      "value": 1.98e-05,
+      "weight": 585489968189.064
     },
     {
       "supplier": {
         "name": "Nitrogen oxides",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "CH",
         "matrix": "technosphere"
       },
-      "value": 1.2e-05
+      "value": 1.2e-05,
+      "weight": 894424821645.205
     },
     {
       "supplier": {
         "name": "Nitrogen oxides",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "SY",
         "matrix": "technosphere"
       },
-      "value": 1.46e-05
+      "value": 1.46e-05,
+      "weight": 19993439949.5435
     },
     {
       "supplier": {
         "name": "Nitrogen oxides",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "TJ",
         "matrix": "technosphere"
       },
-      "value": 1.09e-05
+      "value": 1.09e-05,
+      "weight": 12244169292.7998
     },
     {
       "supplier": {
         "name": "Nitrogen oxides",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "TH",
         "matrix": "technosphere"
       },
-      "value": 5.46e-06
+      "value": 5.46e-06,
+      "weight": 515906283940.933
     },
     {
       "supplier": {
         "name": "Nitrogen oxides",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "TG",
         "matrix": "technosphere"
       },
-      "value": 6.96e-06
+      "value": 6.96e-06,
+      "weight": 9171261837.57103
     },
     {
       "supplier": {
         "name": "Nitrogen oxides",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "TO",
         "matrix": "technosphere"
       },
-      "value": 6.86e-06
+      "value": 6.86e-06,
+      "weight": 508735107.033734
     },
     {
       "supplier": {
         "name": "Nitrogen oxides",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "TT",
         "matrix": "technosphere"
       },
-      "value": 4.48e-06
+      "value": 4.48e-06,
+      "weight": 25489373405.0619
     },
     {
       "supplier": {
         "name": "Nitrogen oxides",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "AE",
         "matrix": "technosphere"
       },
-      "value": 1.23e-05
+      "value": 1.23e-05,
+      "weight": 514130432648.06
     },
     {
       "supplier": {
         "name": "Nitrogen oxides",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "TN",
         "matrix": "technosphere"
       },
-      "value": 2.1e-05
+      "value": 2.1e-05,
+      "weight": 48196281783.9479
     },
     {
       "supplier": {
         "name": "Nitrogen oxides",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "TR",
         "matrix": "technosphere"
       },
-      "value": 1.29e-05
+      "value": 1.29e-05,
+      "weight": 1118252958513.72
     },
     {
       "supplier": {
         "name": "Nitrogen oxides",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "TM",
         "matrix": "technosphere"
       },
-      "value": 1.09e-05
+      "value": 1.09e-05,
+      "weight": 60628857142.8571
     },
     {
       "supplier": {
         "name": "Nitrogen oxides",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "TC",
         "matrix": "technosphere"
       },
-      "value": 4.48e-06
+      "value": 4.48e-06,
+      "weight": 1638653000.0
     },
     {
       "supplier": {
         "name": "Nitrogen oxides",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "TV",
         "matrix": "technosphere"
       },
-      "value": 6.86e-06
+      "value": 6.86e-06,
+      "weight": 62280311.5852172
     },
     {
       "supplier": {
         "name": "Nitrogen oxides",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "UG",
         "matrix": "technosphere"
       },
-      "value": 1.06e-05
+      "value": 1.06e-05,
+      "weight": 48768955859.2834
     },
     {
       "supplier": {
         "name": "Nitrogen oxides",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "UA",
         "matrix": "technosphere"
       },
-      "value": 2.05e-05
+      "value": 2.05e-05,
+      "weight": 181221517868.744
     },
     {
       "supplier": {
         "name": "Nitrogen oxides",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "MK",
         "matrix": "technosphere"
       },
-      "value": 1.24e-05
+      "value": 1.24e-05,
+      "weight": 15763604287.9867
     },
     {
       "supplier": {
         "name": "Nitrogen oxides",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "EG",
         "matrix": "technosphere"
       },
-      "value": 2e-05
+      "value": 2e-05,
+      "weight": 395926075163.006
     },
     {
       "supplier": {
         "name": "Nitrogen oxides",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "GB",
         "matrix": "technosphere"
       },
-      "value": 7.26e-06
+      "value": 7.26e-06,
+      "weight": 3369861888972.88
     },
     {
       "supplier": {
         "name": "Nitrogen oxides",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "GG",
         "matrix": "technosphere"
       },
-      "value": 7.26e-06
+      "value": 7.26e-06,
+      "weight": 0.0
     },
     {
       "supplier": {
         "name": "Nitrogen oxides",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "IM",
         "matrix": "technosphere"
       },
-      "value": 7.26e-06
+      "value": 7.26e-06,
+      "weight": 7431257410.92713
     },
     {
       "supplier": {
         "name": "Nitrogen oxides",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "TZ",
         "matrix": "technosphere"
       },
-      "value": 1.06e-05
+      "value": 1.06e-05,
+      "weight": 79062403836.8432
     },
     {
       "supplier": {
         "name": "Nitrogen oxides",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "US",
         "matrix": "technosphere"
       },
-      "value": 1.52e-05
+      "value": 1.52e-05,
+      "weight": 27720709000000.0
     },
     {
       "supplier": {
         "name": "Nitrogen oxides",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "VI",
         "matrix": "technosphere"
       },
-      "value": 4.48e-06
+      "value": 4.48e-06,
+      "weight": 4672000000.0
     },
     {
       "supplier": {
         "name": "Nitrogen oxides",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "BF",
         "matrix": "technosphere"
       },
-      "value": 6.96e-06
+      "value": 6.96e-06,
+      "weight": 20324617844.5265
     },
     {
       "supplier": {
         "name": "Nitrogen oxides",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "UY",
         "matrix": "technosphere"
       },
-      "value": 9.31e-06
+      "value": 9.31e-06,
+      "weight": 77991666837.7382
     },
     {
       "supplier": {
         "name": "Nitrogen oxides",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "UZ",
         "matrix": "technosphere"
       },
-      "value": 1.09e-05
+      "value": 1.09e-05,
+      "weight": 102641879248.764
     },
     {
       "supplier": {
         "name": "Nitrogen oxides",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "VE",
         "matrix": "technosphere"
       },
-      "value": 1.01e-05
+      "value": 1.01e-05,
+      "weight": 269000000000.0
     },
     {
       "supplier": {
         "name": "Nitrogen oxides",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "WF",
         "matrix": "technosphere"
       },
-      "value": 6.86e-06
+      "value": 6.86e-06,
+      "weight": 0.0
     },
     {
       "supplier": {
         "name": "Nitrogen oxides",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "WS",
         "matrix": "technosphere"
       },
-      "value": 6.86e-06
+      "value": 6.86e-06,
+      "weight": 938189443.830393
     },
     {
       "supplier": {
         "name": "Nitrogen oxides",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "YE",
         "matrix": "technosphere"
       },
-      "value": 1.23e-05
+      "value": 1.23e-05,
+      "weight": 21000000000.0
     },
     {
       "supplier": {
         "name": "Nitrogen oxides",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "ZM",
         "matrix": "technosphere"
       },
-      "value": 8.58e-06
+      "value": 8.58e-06,
+      "weight": 27577956471.244
     },
     {
       "supplier": {
         "name": "Nitrogen dioxide",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "AF",
         "matrix": "technosphere"
       },
-      "value": 6.42e-06
+      "value": 6.42e-06,
+      "weight": 17152234636.8715
     },
     {
       "supplier": {
         "name": "Nitrogen dioxide",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "AL",
         "matrix": "technosphere"
       },
-      "value": 1.24e-05
+      "value": 1.24e-05,
+      "weight": 23547180412.3404
     },
     {
       "supplier": {
         "name": "Nitrogen dioxide",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "DZ",
         "matrix": "technosphere"
       },
-      "value": 2.1e-05
+      "value": 2.1e-05,
+      "weight": 247626161016.414
     },
     {
       "supplier": {
         "name": "Nitrogen dioxide",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "AS",
         "matrix": "technosphere"
       },
-      "value": 6.86e-06
+      "value": 6.86e-06,
+      "weight": 871000000.0
     },
     {
       "supplier": {
         "name": "Nitrogen dioxide",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "AD",
         "matrix": "technosphere"
       },
-      "value": 9.2e-06
+      "value": 9.2e-06,
+      "weight": 3785067331.7625
     },
     {
       "supplier": {
         "name": "Nitrogen dioxide",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "AO",
         "matrix": "technosphere"
       },
-      "value": 8.58e-06
+      "value": 8.58e-06,
+      "weight": 84875162197.0107
     },
     {
       "supplier": {
         "name": "Nitrogen dioxide",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "AG",
         "matrix": "technosphere"
       },
-      "value": 4.48e-06
+      "value": 4.48e-06,
+      "weight": 2005785185.18518
     },
     {
       "supplier": {
         "name": "Nitrogen dioxide",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "AZ",
         "matrix": "technosphere"
       },
-      "value": 3.44e-05
+      "value": 3.44e-05,
+      "weight": 72428470588.2353
     },
     {
       "supplier": {
         "name": "Nitrogen dioxide",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "AR",
         "matrix": "technosphere"
       },
-      "value": 9.31e-06
+      "value": 9.31e-06,
+      "weight": 646075277525.125
     },
     {
       "supplier": {
         "name": "Nitrogen dioxide",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "AU",
         "matrix": "technosphere"
       },
-      "value": 8.12e-06
+      "value": 8.12e-06,
+      "weight": 1728057316695.61
     },
     {
       "supplier": {
         "name": "Nitrogen dioxide",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "AT",
         "matrix": "technosphere"
       },
-      "value": 1.27e-05
+      "value": 1.27e-05,
+      "weight": 511685203845.001
     },
     {
       "supplier": {
         "name": "Nitrogen dioxide",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "BS",
         "matrix": "technosphere"
       },
-      "value": 4.48e-06
+      "value": 4.48e-06,
+      "weight": 15271300000.0
     },
     {
       "supplier": {
         "name": "Nitrogen dioxide",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "BH",
         "matrix": "technosphere"
       },
-      "value": 1.23e-05
+      "value": 1.23e-05,
+      "weight": 46192260638.2979
     },
     {
       "supplier": {
         "name": "Nitrogen dioxide",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "BD",
         "matrix": "technosphere"
       },
-      "value": 6.42e-06
+      "value": 6.42e-06,
+      "weight": 437415333018.291
     },
     {
       "supplier": {
         "name": "Nitrogen dioxide",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "AM",
         "matrix": "technosphere"
       },
-      "value": 3.44e-05
+      "value": 3.44e-05,
+      "weight": 24085749592.3359
     },
     {
       "supplier": {
         "name": "Nitrogen dioxide",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "BB",
         "matrix": "technosphere"
       },
-      "value": 4.48e-06
+      "value": 4.48e-06,
+      "weight": 6720733200.0
     },
     {
       "supplier": {
         "name": "Nitrogen dioxide",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "BE",
         "matrix": "technosphere"
       },
-      "value": 9.85e-06
+      "value": 9.85e-06,
+      "weight": 644655275111.58
     },
     {
       "supplier": {
         "name": "Nitrogen dioxide",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "BM",
         "matrix": "technosphere"
       },
-      "value": 1.52e-05
+      "value": 1.52e-05,
+      "weight": 8579242000.0
     },
     {
       "supplier": {
         "name": "Nitrogen dioxide",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "BT",
         "matrix": "technosphere"
       },
-      "value": 6.42e-06
+      "value": 6.42e-06,
+      "weight": 3019253885.46989
     },
     {
       "supplier": {
         "name": "Nitrogen dioxide",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "BO",
         "matrix": "technosphere"
       },
-      "value": 1.01e-05
+      "value": 1.01e-05,
+      "weight": 45135398002.8944
     },
     {
       "supplier": {
         "name": "Nitrogen dioxide",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "BA",
         "matrix": "technosphere"
       },
-      "value": 1.24e-05
+      "value": 1.24e-05,
+      "weight": 27592361387.8597
     },
     {
       "supplier": {
         "name": "Nitrogen dioxide",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "BW",
         "matrix": "technosphere"
       },
-      "value": 8.58e-06
+      "value": 8.58e-06,
+      "weight": 19411266967.1044
     },
     {
       "supplier": {
         "name": "Nitrogen dioxide",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "BR",
         "matrix": "technosphere"
       },
-      "value": 1.11e-05
+      "value": 1.11e-05,
+      "weight": 2191131765684.63
     },
     {
       "supplier": {
         "name": "Nitrogen dioxide",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "BZ",
         "matrix": "technosphere"
       },
-      "value": 4.48e-06
+      "value": 4.48e-06,
+      "weight": 3066850000.0
     },
     {
       "supplier": {
         "name": "Nitrogen dioxide",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "SB",
         "matrix": "technosphere"
       },
-      "value": 6.86e-06
+      "value": 6.86e-06,
+      "weight": 1660896530.71894
     },
     {
       "supplier": {
         "name": "Nitrogen dioxide",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "VG",
         "matrix": "technosphere"
       },
-      "value": 4.48e-06
+      "value": 4.48e-06,
+      "weight": 0.0
     },
     {
       "supplier": {
         "name": "Nitrogen dioxide",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "BN",
         "matrix": "technosphere"
       },
-      "value": 5.85e-06
+      "value": 5.85e-06,
+      "weight": 15095084686.1651
     },
     {
       "supplier": {
         "name": "Nitrogen dioxide",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "BG",
         "matrix": "technosphere"
       },
-      "value": 1.15e-05
+      "value": 1.15e-05,
+      "weight": 102396840296.147
     },
     {
       "supplier": {
         "name": "Nitrogen dioxide",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "MM",
         "matrix": "technosphere"
       },
-      "value": 6.57e-06
+      "value": 6.57e-06,
+      "weight": 66757619000.0
     },
     {
       "supplier": {
         "name": "Nitrogen dioxide",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "BI",
         "matrix": "technosphere"
       },
-      "value": 1.06e-05
+      "value": 1.06e-05,
+      "weight": 2629391599.50157
     },
     {
       "supplier": {
         "name": "Nitrogen dioxide",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "BY",
         "matrix": "technosphere"
       },
-      "value": 2.05e-05
+      "value": 2.05e-05,
+      "weight": 72478760370.4258
     },
     {
       "supplier": {
         "name": "Nitrogen dioxide",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "KH",
         "matrix": "technosphere"
       },
-      "value": 6.57e-06
+      "value": 6.57e-06,
+      "weight": 42335646895.7984
     },
     {
       "supplier": {
         "name": "Nitrogen dioxide",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "CM",
         "matrix": "technosphere"
       },
-      "value": 6.96e-06
+      "value": 6.96e-06,
+      "weight": 49279410982.826
     },
     {
       "supplier": {
         "name": "Nitrogen dioxide",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "CA",
         "matrix": "technosphere"
       },
-      "value": 3.25e-05
+      "value": 3.25e-05,
+      "weight": 2173339670064.33
     },
     {
       "supplier": {
         "name": "Nitrogen dioxide",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "CV",
         "matrix": "technosphere"
       },
-      "value": 6.96e-06
+      "value": 6.96e-06,
+      "weight": 2539203428.73837
     },
     {
       "supplier": {
         "name": "Nitrogen dioxide",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "KY",
         "matrix": "technosphere"
       },
-      "value": 4.48e-06
+      "value": 4.48e-06,
+      "weight": 7139428557.71423
     },
     {
       "supplier": {
         "name": "Nitrogen dioxide",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "CF",
         "matrix": "technosphere"
       },
-      "value": 1.06e-05
+      "value": 1.06e-05,
+      "weight": 2555492085.94725
     },
     {
       "supplier": {
         "name": "Nitrogen dioxide",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "LK",
         "matrix": "technosphere"
       },
-      "value": 3.44e-06
+      "value": 3.44e-06,
+      "weight": 83716142582.1945
     },
     {
       "supplier": {
         "name": "Nitrogen dioxide",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "TD",
         "matrix": "technosphere"
       },
-      "value": 1.06e-05
+      "value": 1.06e-05,
+      "weight": 19107685020.89
     },
     {
       "supplier": {
         "name": "Nitrogen dioxide",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "CL",
         "matrix": "technosphere"
       },
-      "value": 1.11e-05
+      "value": 1.11e-05,
+      "weight": 335518054097.637
     },
     {
       "supplier": {
         "name": "Nitrogen dioxide",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "CN",
         "matrix": "technosphere"
       },
-      "value": 5.44e-06
+      "value": 5.44e-06,
+      "weight": 18270356654533.2
     },
     {
       "supplier": {
         "name": "Nitrogen dioxide",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "TW",
         "matrix": "technosphere"
       },
-      "value": 1.82e-06
+      "value": 1.82e-06,
+      "weight": 751000000000.0
     },
     {
       "supplier": {
         "name": "Nitrogen dioxide",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "CO",
         "matrix": "technosphere"
       },
-      "value": 1.01e-05
+      "value": 1.01e-05,
+      "weight": 366291836137.916
     },
     {
       "supplier": {
         "name": "Nitrogen dioxide",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "KM",
         "matrix": "technosphere"
       },
-      "value": 1.06e-05
+      "value": 1.06e-05,
+      "weight": 1430523435.81695
     },
     {
       "supplier": {
         "name": "Nitrogen dioxide",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "YT",
         "matrix": "technosphere"
       },
-      "value": 8.58e-06
+      "value": 8.58e-06,
+      "weight": 0.0
     },
     {
       "supplier": {
         "name": "Nitrogen dioxide",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "CG",
         "matrix": "technosphere"
       },
-      "value": 6.96e-06
+      "value": 6.96e-06,
+      "weight": 15321055818.3263
     },
     {
       "supplier": {
         "name": "Nitrogen dioxide",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "CD",
         "matrix": "technosphere"
       },
-      "value": 1.06e-05
+      "value": 1.06e-05,
+      "weight": 67006756666.3604
     },
     {
       "supplier": {
         "name": "Nitrogen dioxide",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "CK",
         "matrix": "technosphere"
       },
-      "value": 6.86e-06
+      "value": 6.86e-06,
+      "weight": 0.0
     },
     {
       "supplier": {
         "name": "Nitrogen dioxide",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "CR",
         "matrix": "technosphere"
       },
-      "value": 4.48e-06
+      "value": 4.48e-06,
+      "weight": 86497941438.9809
     },
     {
       "supplier": {
         "name": "Nitrogen dioxide",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "HR",
         "matrix": "technosphere"
       },
-      "value": 1.24e-05
+      "value": 1.24e-05,
+      "weight": 84393795502.4421
     },
     {
       "supplier": {
         "name": "Nitrogen dioxide",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "CU",
         "matrix": "technosphere"
       },
-      "value": 4.48e-06
+      "value": 4.48e-06,
+      "weight": 107351800000.0
     },
     {
       "supplier": {
         "name": "Nitrogen dioxide",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "CY",
         "matrix": "technosphere"
       },
-      "value": 1.08e-05
+      "value": 1.08e-05,
+      "weight": 33886930712.3394
     },
     {
       "supplier": {
         "name": "Nitrogen dioxide",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "CZ",
         "matrix": "technosphere"
       },
-      "value": 1.37e-05
+      "value": 1.37e-05,
+      "weight": 343206568134.637
     },
     {
       "supplier": {
         "name": "Nitrogen dioxide",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "BJ",
         "matrix": "technosphere"
       },
-      "value": 6.96e-06
+      "value": 6.96e-06,
+      "weight": 19673290995.8491
     },
     {
       "supplier": {
         "name": "Nitrogen dioxide",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "DK",
         "matrix": "technosphere"
       },
-      "value": 1.98e-05
+      "value": 1.98e-05,
+      "weight": 407091920305.404
     },
     {
       "supplier": {
         "name": "Nitrogen dioxide",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "DM",
         "matrix": "technosphere"
       },
-      "value": 4.48e-06
+      "value": 4.48e-06,
+      "weight": 659311111.111111
     },
     {
       "supplier": {
         "name": "Nitrogen dioxide",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "DO",
         "matrix": "technosphere"
       },
-      "value": 4.48e-06
+      "value": 4.48e-06,
+      "weight": 120456239153.739
     },
     {
       "supplier": {
         "name": "Nitrogen dioxide",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "EC",
         "matrix": "technosphere"
       },
-      "value": 1.01e-05
+      "value": 1.01e-05,
+      "weight": 121147057000.0
     },
     {
       "supplier": {
         "name": "Nitrogen dioxide",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "SV",
         "matrix": "technosphere"
       },
-      "value": 4.48e-06
+      "value": 4.48e-06,
+      "weight": 33853940000.0
     },
     {
       "supplier": {
         "name": "Nitrogen dioxide",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "GQ",
         "matrix": "technosphere"
       },
-      "value": 6.96e-06
+      "value": 6.96e-06,
+      "weight": 12337550583.754
     },
     {
       "supplier": {
         "name": "Nitrogen dioxide",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "ET",
         "matrix": "technosphere"
       },
-      "value": 1.06e-05
+      "value": 1.06e-05,
+      "weight": 126772707851.339
     },
     {
       "supplier": {
         "name": "Nitrogen dioxide",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "ER",
         "matrix": "technosphere"
       },
-      "value": 1.06e-05
+      "value": 1.06e-05,
+      "weight": 2000000000.0
     },
     {
       "supplier": {
         "name": "Nitrogen dioxide",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "EE",
         "matrix": "technosphere"
       },
-      "value": 1.64e-05
+      "value": 1.64e-05,
+      "weight": 41291245222.1948
     },
     {
       "supplier": {
         "name": "Nitrogen dioxide",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "FO",
         "matrix": "technosphere"
       },
-      "value": 1.98e-05
+      "value": 1.98e-05,
+      "weight": 3907323961.33964
     },
     {
       "supplier": {
         "name": "Nitrogen dioxide",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "FK",
         "matrix": "technosphere"
       },
-      "value": 9.31e-06
+      "value": 9.31e-06,
+      "weight": 0.0
     },
     {
       "supplier": {
         "name": "Nitrogen dioxide",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "FJ",
         "matrix": "technosphere"
       },
-      "value": 6.86e-06
+      "value": 6.86e-06,
+      "weight": 5442046552.96928
     },
     {
       "supplier": {
         "name": "Nitrogen dioxide",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "FI",
         "matrix": "technosphere"
       },
-      "value": 2.96e-05
+      "value": 2.96e-05,
+      "weight": 294950618733.339
     },
     {
       "supplier": {
         "name": "Nitrogen dioxide",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "FR",
         "matrix": "technosphere"
       },
-      "value": 9.2e-06
+      "value": 9.2e-06,
+      "weight": 3051831611384.76
     },
     {
       "supplier": {
         "name": "Nitrogen dioxide",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "GF",
         "matrix": "technosphere"
       },
-      "value": 1.01e-05
+      "value": 1.01e-05,
+      "weight": 0.0
     },
     {
       "supplier": {
         "name": "Nitrogen dioxide",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "DJ",
         "matrix": "technosphere"
       },
-      "value": 1.06e-05
+      "value": 1.06e-05,
+      "weight": 3917150480.80981
     },
     {
       "supplier": {
         "name": "Nitrogen dioxide",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "GA",
         "matrix": "technosphere"
       },
-      "value": 6.96e-06
+      "value": 6.96e-06,
+      "weight": 20055720403.471
     },
     {
       "supplier": {
         "name": "Nitrogen dioxide",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "GE",
         "matrix": "technosphere"
       },
-      "value": 3.44e-05
+      "value": 3.44e-05,
+      "weight": 30777833600.6515
     },
     {
       "supplier": {
         "name": "Nitrogen dioxide",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "GM",
         "matrix": "technosphere"
       },
-      "value": 6.96e-06
+      "value": 6.96e-06,
+      "weight": 2396111020.8801
     },
     {
       "supplier": {
         "name": "Nitrogen dioxide",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "PS",
         "matrix": "technosphere"
       },
-      "value": 1.46e-05
+      "value": 1.46e-05,
+      "weight": 17847900000.0
     },
     {
       "supplier": {
         "name": "Nitrogen dioxide",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "DE",
         "matrix": "technosphere"
       },
-      "value": 1.19e-05
+      "value": 1.19e-05,
+      "weight": 4525703903627.53
     },
     {
       "supplier": {
         "name": "Nitrogen dioxide",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "GH",
         "matrix": "technosphere"
       },
-      "value": 6.96e-06
+      "value": 6.96e-06,
+      "weight": 80547146878.3843
     },
     {
       "supplier": {
         "name": "Nitrogen dioxide",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "GI",
         "matrix": "technosphere"
       },
-      "value": 9.32e-06
+      "value": 9.32e-06,
+      "weight": 0.0
     },
     {
       "supplier": {
         "name": "Nitrogen dioxide",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "KI",
         "matrix": "technosphere"
       },
-      "value": 6.86e-06
+      "value": 6.86e-06,
+      "weight": 288610732.190775
     },
     {
       "supplier": {
         "name": "Nitrogen dioxide",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "GR",
         "matrix": "technosphere"
       },
-      "value": 1.08e-05
+      "value": 1.08e-05,
+      "weight": 243498333237.802
     },
     {
       "supplier": {
         "name": "Nitrogen dioxide",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "GD",
         "matrix": "technosphere"
       },
-      "value": 4.48e-06
+      "value": 4.48e-06,
+      "weight": 1323985600.0
     },
     {
       "supplier": {
         "name": "Nitrogen dioxide",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "GP",
         "matrix": "technosphere"
       },
-      "value": 4.48e-06
+      "value": 4.48e-06,
+      "weight": 0.0
     },
     {
       "supplier": {
         "name": "Nitrogen dioxide",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "GU",
         "matrix": "technosphere"
       },
-      "value": 6.86e-06
+      "value": 6.86e-06,
+      "weight": 6910000000.0
     },
     {
       "supplier": {
         "name": "Nitrogen dioxide",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "GT",
         "matrix": "technosphere"
       },
-      "value": 4.48e-06
+      "value": 4.48e-06,
+      "weight": 104368413483.146
     },
     {
       "supplier": {
         "name": "Nitrogen dioxide",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "GN",
         "matrix": "technosphere"
       },
-      "value": 6.96e-06
+      "value": 6.96e-06,
+      "weight": 22407615556.0571
     },
     {
       "supplier": {
         "name": "Nitrogen dioxide",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "GY",
         "matrix": "technosphere"
       },
-      "value": 1.01e-05
+      "value": 1.01e-05,
+      "weight": 16918503597.1223
     },
     {
       "supplier": {
         "name": "Nitrogen dioxide",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "HT",
         "matrix": "technosphere"
       },
-      "value": 4.48e-06
+      "value": 4.48e-06,
+      "weight": 19850585722.3241
     },
     {
       "supplier": {
         "name": "Nitrogen dioxide",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "HN",
         "matrix": "technosphere"
       },
-      "value": 4.48e-06
+      "value": 4.48e-06,
+      "weight": 34355805527.9795
     },
     {
       "supplier": {
         "name": "Nitrogen dioxide",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "HU",
         "matrix": "technosphere"
       },
-      "value": 1.34e-05
+      "value": 1.34e-05,
+      "weight": 214022571311.24
     },
     {
       "supplier": {
         "name": "Nitrogen dioxide",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "IS",
         "matrix": "technosphere"
       },
-      "value": 2.08e-05
+      "value": 2.08e-05,
+      "weight": 31452223861.9091
     },
     {
       "supplier": {
         "name": "Nitrogen dioxide",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "IN",
         "matrix": "technosphere"
       },
-      "value": 3.44e-06
+      "value": 3.44e-06,
+      "weight": 3638489096033.86
     },
     {
       "supplier": {
         "name": "Nitrogen dioxide",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "ID",
         "matrix": "technosphere"
       },
-      "value": 5.33e-06
+      "value": 5.33e-06,
+      "weight": 1371169301563.62
     },
     {
       "supplier": {
         "name": "Nitrogen dioxide",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "IR",
         "matrix": "technosphere"
       },
-      "value": 1.23e-05
+      "value": 1.23e-05,
+      "weight": 404625655076.275
     },
     {
       "supplier": {
         "name": "Nitrogen dioxide",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "IQ",
         "matrix": "technosphere"
       },
-      "value": 1.23e-05
+      "value": 1.23e-05,
+      "weight": 268881051643.549
     },
     {
       "supplier": {
         "name": "Nitrogen dioxide",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "IE",
         "matrix": "technosphere"
       },
-      "value": 7.26e-06
+      "value": 7.26e-06,
+      "weight": 551394889339.778
     },
     {
       "supplier": {
         "name": "Nitrogen dioxide",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "IL",
         "matrix": "technosphere"
       },
-      "value": 1.46e-05
+      "value": 1.46e-05,
+      "weight": 512184638998.974
     },
     {
       "supplier": {
         "name": "Nitrogen dioxide",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "IT",
         "matrix": "technosphere"
       },
-      "value": 9.42e-06
+      "value": 9.42e-06,
+      "weight": 2304605139862.79
     },
     {
       "supplier": {
         "name": "Nitrogen dioxide",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "CI",
         "matrix": "technosphere"
       },
-      "value": 6.96e-06
+      "value": 6.96e-06,
+      "weight": 79618056323.7639
     },
     {
       "supplier": {
         "name": "Nitrogen dioxide",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "JM",
         "matrix": "technosphere"
       },
-      "value": 4.48e-06
+      "value": 4.48e-06,
+      "weight": 19423355367.2372
     },
     {
       "supplier": {
         "name": "Nitrogen dioxide",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "JP",
         "matrix": "technosphere"
       },
-      "value": 4.7e-06
+      "value": 4.7e-06,
+      "weight": 4213167237905.83
     },
     {
       "supplier": {
         "name": "Nitrogen dioxide",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "KZ",
         "matrix": "technosphere"
       },
-      "value": 2.51e-05
+      "value": 2.51e-05,
+      "weight": 261840101059.923
     },
     {
       "supplier": {
         "name": "Nitrogen dioxide",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "JO",
         "matrix": "technosphere"
       },
-      "value": 1.46e-05
+      "value": 1.46e-05,
+      "weight": 51088476338.0282
     },
     {
       "supplier": {
         "name": "Nitrogen dioxide",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "KE",
         "matrix": "technosphere"
       },
-      "value": 1.06e-05
+      "value": 1.06e-05,
+      "weight": 108038588970.595
     },
     {
       "supplier": {
         "name": "Nitrogen dioxide",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "KP",
         "matrix": "technosphere"
       },
-      "value": 6.23e-06
+      "value": 6.23e-06,
+      "weight": 28000000000.0
     },
     {
       "supplier": {
         "name": "Nitrogen dioxide",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "KR",
         "matrix": "technosphere"
       },
-      "value": 3.83e-06
+      "value": 3.83e-06,
+      "weight": 1712792854202.37
     },
     {
       "supplier": {
         "name": "Nitrogen dioxide",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "KW",
         "matrix": "technosphere"
       },
-      "value": 1.23e-05
+      "value": 1.23e-05,
+      "weight": 165384407267.056
     },
     {
       "supplier": {
         "name": "Nitrogen dioxide",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "KG",
         "matrix": "technosphere"
       },
-      "value": 1.09e-05
+      "value": 1.09e-05,
+      "weight": 15180842369.4894
     },
     {
       "supplier": {
         "name": "Nitrogen dioxide",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "LA",
         "matrix": "technosphere"
       },
-      "value": 6.57e-06
+      "value": 6.57e-06,
+      "weight": 15843155731.2552
     },
     {
       "supplier": {
         "name": "Nitrogen dioxide",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "LB",
         "matrix": "technosphere"
       },
-      "value": 1.46e-05
+      "value": 1.46e-05,
+      "weight": 20078620356.9931
     },
     {
       "supplier": {
         "name": "Nitrogen dioxide",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "LS",
         "matrix": "technosphere"
       },
-      "value": 4.61e-06
+      "value": 4.61e-06,
+      "weight": 2117962430.3041
     },
     {
       "supplier": {
         "name": "Nitrogen dioxide",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "LV",
         "matrix": "technosphere"
       },
-      "value": 1.64e-05
+      "value": 1.64e-05,
+      "weight": 42572151720.138
     },
     {
       "supplier": {
         "name": "Nitrogen dioxide",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "LR",
         "matrix": "technosphere"
       },
-      "value": 6.96e-06
+      "value": 6.96e-06,
+      "weight": 4390000000.0
     },
     {
       "supplier": {
         "name": "Nitrogen dioxide",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "LY",
         "matrix": "technosphere"
       },
-      "value": 2.1e-05
+      "value": 2.1e-05,
+      "weight": 45096462972.4014
     },
     {
       "supplier": {
         "name": "Nitrogen dioxide",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "LI",
         "matrix": "technosphere"
       },
-      "value": 1.27e-05
+      "value": 1.27e-05,
+      "weight": 8287748667.20832
     },
     {
       "supplier": {
         "name": "Nitrogen dioxide",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "LT",
         "matrix": "technosphere"
       },
-      "value": 1.64e-05
+      "value": 1.64e-05,
+      "weight": 79789877416.1681
     },
     {
       "supplier": {
         "name": "Nitrogen dioxide",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "LU",
         "matrix": "technosphere"
       },
-      "value": 9.85e-06
+      "value": 9.85e-06,
+      "weight": 87574021091.7525
     },
     {
       "supplier": {
         "name": "Nitrogen dioxide",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "MG",
         "matrix": "technosphere"
       },
-      "value": 1.06e-05
+      "value": 1.06e-05,
+      "weight": 15869945477.855
     },
     {
       "supplier": {
         "name": "Nitrogen dioxide",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "MW",
         "matrix": "technosphere"
       },
-      "value": 8.58e-06
+      "value": 8.58e-06,
+      "weight": 12712150082.0792
     },
     {
       "supplier": {
         "name": "Nitrogen dioxide",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "MY",
         "matrix": "technosphere"
       },
-      "value": 5.85e-06
+      "value": 5.85e-06,
+      "weight": 399705137434.074
     },
     {
       "supplier": {
         "name": "Nitrogen dioxide",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "MV",
         "matrix": "technosphere"
       },
-      "value": 3.44e-06
+      "value": 3.44e-06,
+      "weight": 6590894301.9579
     },
     {
       "supplier": {
         "name": "Nitrogen dioxide",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "ML",
         "matrix": "technosphere"
       },
-      "value": 6.96e-06
+      "value": 6.96e-06,
+      "weight": 24621545564.8753
     },
     {
       "supplier": {
         "name": "Nitrogen dioxide",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "MT",
         "matrix": "technosphere"
       },
-      "value": 9.42e-06
+      "value": 9.42e-06,
+      "weight": 22210718401.0207
     },
     {
       "supplier": {
         "name": "Nitrogen dioxide",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "MQ",
         "matrix": "technosphere"
       },
-      "value": 4.48e-06
+      "value": 4.48e-06,
+      "weight": 0.0
     },
     {
       "supplier": {
         "name": "Nitrogen dioxide",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "MR",
         "matrix": "technosphere"
       },
-      "value": 6.96e-06
+      "value": 6.96e-06,
+      "weight": 10651709314.1644
     },
     {
       "supplier": {
         "name": "Nitrogen dioxide",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "MU",
         "matrix": "technosphere"
       },
-      "value": 1.06e-05
+      "value": 1.06e-05,
+      "weight": 14101195732.6741
     },
     {
       "supplier": {
         "name": "Nitrogen dioxide",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "MX",
         "matrix": "technosphere"
       },
-      "value": 8.78e-06
+      "value": 8.78e-06,
+      "weight": 1793798859343.27
     },
     {
       "supplier": {
         "name": "Nitrogen dioxide",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "MN",
         "matrix": "technosphere"
       },
-      "value": 6.23e-06
+      "value": 6.23e-06,
+      "weight": 20325121393.9074
     },
     {
       "supplier": {
         "name": "Nitrogen dioxide",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "MD",
         "matrix": "technosphere"
       },
-      "value": 2.05e-05
+      "value": 2.05e-05,
+      "weight": 16711906746.2133
     },
     {
       "supplier": {
         "name": "Nitrogen dioxide",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "ME",
         "matrix": "technosphere"
       },
-      "value": 1.24e-05
+      "value": 1.24e-05,
+      "weight": 7530593375.22034
     },
     {
       "supplier": {
         "name": "Nitrogen dioxide",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "MS",
         "matrix": "technosphere"
       },
-      "value": 4.48e-06
+      "value": 4.48e-06,
+      "weight": 0.0
     },
     {
       "supplier": {
         "name": "Nitrogen dioxide",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "MA",
         "matrix": "technosphere"
       },
-      "value": 2.1e-05
+      "value": 2.1e-05,
+      "weight": 144417103249.646
     },
     {
       "supplier": {
         "name": "Nitrogen dioxide",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "MZ",
         "matrix": "technosphere"
       },
-      "value": 8.58e-06
+      "value": 8.58e-06,
+      "weight": 20954220983.5473
     },
     {
       "supplier": {
         "name": "Nitrogen dioxide",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "OM",
         "matrix": "technosphere"
       },
-      "value": 1.23e-05
+      "value": 1.23e-05,
+      "weight": 105895708712.614
     },
     {
       "supplier": {
         "name": "Nitrogen dioxide",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "NA",
         "matrix": "technosphere"
       },
-      "value": 8.58e-06
+      "value": 8.58e-06,
+      "weight": 12408271447.8691
     },
     {
       "supplier": {
         "name": "Nitrogen dioxide",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "NR",
         "matrix": "technosphere"
       },
-      "value": 6.86e-06
+      "value": 6.86e-06,
+      "weight": 151455967.735319
     },
     {
       "supplier": {
         "name": "Nitrogen dioxide",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "NP",
         "matrix": "technosphere"
       },
-      "value": 6.42e-06
+      "value": 6.42e-06,
+      "weight": 41047772331.0994
     },
     {
       "supplier": {
         "name": "Nitrogen dioxide",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "NL",
         "matrix": "technosphere"
       },
-      "value": 9.85e-06
+      "value": 9.85e-06,
+      "weight": 1154361305398.06
     },
     {
       "supplier": {
         "name": "Nitrogen dioxide",
-        "type": "emission",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "location": "BQ",
+        "matrix": "technosphere"
+      },
+      "value": 4.48e-06,
+      "weight": 0.0
+    },
+    {
+      "supplier": {
+        "name": "Nitrogen dioxide",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "AW",
         "matrix": "technosphere"
       },
-      "value": 4.48e-06
+      "value": 4.48e-06,
+      "weight": 3648573136.15155
     },
     {
       "supplier": {
         "name": "Nitrogen dioxide",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "NC",
         "matrix": "technosphere"
       },
-      "value": 6.86e-06
+      "value": 6.86e-06,
+      "weight": 9623318718.31459
     },
     {
       "supplier": {
         "name": "Nitrogen dioxide",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "VU",
         "matrix": "technosphere"
       },
-      "value": 6.86e-06
+      "value": 6.86e-06,
+      "weight": 1126313359.21923
     },
     {
       "supplier": {
         "name": "Nitrogen dioxide",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "NZ",
         "matrix": "technosphere"
       },
-      "value": 1.89e-06
+      "value": 1.89e-06,
+      "weight": 255194972673.122
     },
     {
       "supplier": {
         "name": "Nitrogen dioxide",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "NI",
         "matrix": "technosphere"
       },
-      "value": 4.48e-06
+      "value": 4.48e-06,
+      "weight": 17805842283.8725
     },
     {
       "supplier": {
         "name": "Nitrogen dioxide",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "NE",
         "matrix": "technosphere"
       },
-      "value": 6.96e-06
+      "value": 6.96e-06,
+      "weight": 16698786973.0228
     },
     {
       "supplier": {
         "name": "Nitrogen dioxide",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "NG",
         "matrix": "technosphere"
       },
-      "value": 6.96e-06
+      "value": 6.96e-06,
+      "weight": 363846332834.618
     },
     {
       "supplier": {
         "name": "Nitrogen dioxide",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "NU",
         "matrix": "technosphere"
       },
-      "value": 6.86e-06
+      "value": 6.86e-06,
+      "weight": 0.0
     },
     {
       "supplier": {
         "name": "Nitrogen dioxide",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "NF",
         "matrix": "technosphere"
       },
-      "value": 6.86e-06
+      "value": 6.86e-06,
+      "weight": 0.0
     },
     {
       "supplier": {
         "name": "Nitrogen dioxide",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "NO",
         "matrix": "technosphere"
       },
-      "value": 2.08e-05
+      "value": 2.08e-05,
+      "weight": 482949731776.587
     },
     {
       "supplier": {
         "name": "Nitrogen dioxide",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "MP",
         "matrix": "technosphere"
       },
-      "value": 6.86e-06
+      "value": 6.86e-06,
+      "weight": 1096000000.0
     },
     {
       "supplier": {
         "name": "Nitrogen dioxide",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "FM",
         "matrix": "technosphere"
       },
-      "value": 6.86e-06
+      "value": 6.86e-06,
+      "weight": 443916782.295594
     },
     {
       "supplier": {
         "name": "Nitrogen dioxide",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "MH",
         "matrix": "technosphere"
       },
-      "value": 6.86e-06
+      "value": 6.86e-06,
+      "weight": 259300000.0
     },
     {
       "supplier": {
         "name": "Nitrogen dioxide",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "PW",
         "matrix": "technosphere"
       },
-      "value": 6.86e-06
+      "value": 6.86e-06,
+      "weight": 281849100.0
     },
     {
       "supplier": {
         "name": "Nitrogen dioxide",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "PK",
         "matrix": "technosphere"
       },
-      "value": 6.42e-06
+      "value": 6.42e-06,
+      "weight": 337885531778.052
     },
     {
       "supplier": {
         "name": "Nitrogen dioxide",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "PA",
         "matrix": "technosphere"
       },
-      "value": 4.48e-06
+      "value": 4.48e-06,
+      "weight": 83318176900.0
     },
     {
       "supplier": {
         "name": "Nitrogen dioxide",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "PG",
         "matrix": "technosphere"
       },
-      "value": 6.86e-06
+      "value": 6.86e-06,
+      "weight": 30816367066.9594
     },
     {
       "supplier": {
         "name": "Nitrogen dioxide",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "PY",
         "matrix": "technosphere"
       },
-      "value": 1.01e-05
+      "value": 1.01e-05,
+      "weight": 43118053174.5413
     },
     {
       "supplier": {
         "name": "Nitrogen dioxide",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "PE",
         "matrix": "technosphere"
       },
-      "value": 1.01e-05
+      "value": 1.01e-05,
+      "weight": 266958720837.988
     },
     {
       "supplier": {
         "name": "Nitrogen dioxide",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "PH",
         "matrix": "technosphere"
       },
-      "value": 2.42e-06
+      "value": 2.42e-06,
+      "weight": 437055627244.424
     },
     {
       "supplier": {
         "name": "Nitrogen dioxide",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "PN",
         "matrix": "technosphere"
       },
-      "value": 6.86e-06
+      "value": 6.86e-06,
+      "weight": 0.0
     },
     {
       "supplier": {
         "name": "Nitrogen dioxide",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "PL",
         "matrix": "technosphere"
       },
-      "value": 1.64e-05
+      "value": 1.64e-05,
+      "weight": 812451128978.58
     },
     {
       "supplier": {
         "name": "Nitrogen dioxide",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "PT",
         "matrix": "technosphere"
       },
-      "value": 9.32e-06
+      "value": 9.32e-06,
+      "weight": 289696962620.235
     },
     {
       "supplier": {
         "name": "Nitrogen dioxide",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "GW",
         "matrix": "technosphere"
       },
-      "value": 6.96e-06
+      "value": 6.96e-06,
+      "weight": 2077816134.67419
     },
     {
       "supplier": {
         "name": "Nitrogen dioxide",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "TL",
         "matrix": "technosphere"
       },
-      "value": 5.33e-06
+      "value": 5.33e-06,
+      "weight": 2079916909.49485
     },
     {
       "supplier": {
         "name": "Nitrogen dioxide",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "PR",
         "matrix": "technosphere"
       },
-      "value": 4.48e-06
+      "value": 4.48e-06,
+      "weight": 118375000000.0
     },
     {
       "supplier": {
         "name": "Nitrogen dioxide",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "QA",
         "matrix": "technosphere"
       },
-      "value": 1.23e-05
+      "value": 1.23e-05,
+      "weight": 213002809340.659
     },
     {
       "supplier": {
         "name": "Nitrogen dioxide",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "RE",
         "matrix": "technosphere"
       },
-      "value": 1.06e-05
+      "value": 1.06e-05,
+      "weight": 0.0
     },
     {
       "supplier": {
         "name": "Nitrogen dioxide",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "RO",
         "matrix": "technosphere"
       },
-      "value": 1.24e-05
+      "value": 1.24e-05,
+      "weight": 350775856415.189
     },
     {
       "supplier": {
         "name": "Nitrogen dioxide",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "RU",
         "matrix": "technosphere"
       },
-      "value": 3.44e-05
+      "value": 3.44e-05,
+      "weight": 2071505725030.58
     },
     {
       "supplier": {
         "name": "Nitrogen dioxide",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "RW",
         "matrix": "technosphere"
       },
-      "value": 1.06e-05
+      "value": 1.06e-05,
+      "weight": 14331722700.3249
     },
     {
       "supplier": {
         "name": "Nitrogen dioxide",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "SH",
         "matrix": "technosphere"
       },
-      "value": 6.96e-06
+      "value": 6.96e-06,
+      "weight": 0.0
     },
     {
       "supplier": {
         "name": "Nitrogen dioxide",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "KN",
         "matrix": "technosphere"
       },
-      "value": 4.48e-06
+      "value": 4.48e-06,
+      "weight": 1056751851.85185
     },
     {
       "supplier": {
         "name": "Nitrogen dioxide",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "AI",
         "matrix": "technosphere"
       },
-      "value": 4.48e-06
+      "value": 4.48e-06,
+      "weight": 0.0
     },
     {
       "supplier": {
         "name": "Nitrogen dioxide",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "LC",
         "matrix": "technosphere"
       },
-      "value": 4.48e-06
+      "value": 4.48e-06,
+      "weight": 2430166666.66667
     },
     {
       "supplier": {
         "name": "Nitrogen dioxide",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "MF",
         "matrix": "technosphere"
       },
-      "value": 4.48e-06
+      "value": 4.48e-06,
+      "weight": 649206156.194207
     },
     {
       "supplier": {
         "name": "Nitrogen dioxide",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "PM",
         "matrix": "technosphere"
       },
-      "value": 1.52e-05
+      "value": 1.52e-05,
+      "weight": 0.0
     },
     {
       "supplier": {
         "name": "Nitrogen dioxide",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "VC",
         "matrix": "technosphere"
       },
-      "value": 4.48e-06
+      "value": 4.48e-06,
+      "weight": 1072237037.03704
     },
     {
       "supplier": {
         "name": "Nitrogen dioxide",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "SM",
         "matrix": "technosphere"
       },
-      "value": 9.42e-06
+      "value": 9.42e-06,
+      "weight": 1831700577.08904
     },
     {
       "supplier": {
         "name": "Nitrogen dioxide",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "ST",
         "matrix": "technosphere"
       },
-      "value": 6.96e-06
+      "value": 6.96e-06,
+      "weight": 678976264.835436
     },
     {
       "supplier": {
         "name": "Nitrogen dioxide",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "SA",
         "matrix": "technosphere"
       },
-      "value": 1.23e-05
+      "value": 1.23e-05,
+      "weight": 1218584533333.33
     },
     {
       "supplier": {
         "name": "Nitrogen dioxide",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "SN",
         "matrix": "technosphere"
       },
-      "value": 6.96e-06
+      "value": 6.96e-06,
+      "weight": 30696331295.7826
     },
     {
       "supplier": {
         "name": "Nitrogen dioxide",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "RS",
         "matrix": "technosphere"
       },
-      "value": 1.24e-05
+      "value": 1.24e-05,
+      "weight": 81342660752.3732
     },
     {
       "supplier": {
         "name": "Nitrogen dioxide",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "SC",
         "matrix": "technosphere"
       },
-      "value": 1.06e-05
+      "value": 1.06e-05,
+      "weight": 2187379754.66167
     },
     {
       "supplier": {
         "name": "Nitrogen dioxide",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "SL",
         "matrix": "technosphere"
       },
-      "value": 6.96e-06
+      "value": 6.96e-06,
+      "weight": 6411787856.06581
     },
     {
       "supplier": {
         "name": "Nitrogen dioxide",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "SG",
         "matrix": "technosphere"
       },
-      "value": 5.85e-06
+      "value": 5.85e-06,
+      "weight": 505439514078.019
     },
     {
       "supplier": {
         "name": "Nitrogen dioxide",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "SK",
         "matrix": "technosphere"
       },
-      "value": 1.24e-05
+      "value": 1.24e-05,
+      "weight": 133896931490.224
     },
     {
       "supplier": {
         "name": "Nitrogen dioxide",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "VN",
         "matrix": "technosphere"
       },
-      "value": 5.59e-06
+      "value": 5.59e-06,
+      "weight": 433857681378.291
     },
     {
       "supplier": {
         "name": "Nitrogen dioxide",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "SI",
         "matrix": "technosphere"
       },
-      "value": 1.27e-05
+      "value": 1.27e-05,
+      "weight": 69148468417.3208
     },
     {
       "supplier": {
         "name": "Nitrogen dioxide",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "SO",
         "matrix": "technosphere"
       },
-      "value": 1.06e-05
+      "value": 1.06e-05,
+      "weight": 10968517089.9982
     },
     {
       "supplier": {
         "name": "Nitrogen dioxide",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "ZA",
         "matrix": "technosphere"
       },
-      "value": 4.61e-06
+      "value": 4.61e-06,
+      "weight": 380699271816.395
     },
     {
       "supplier": {
         "name": "Nitrogen dioxide",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "ZW",
         "matrix": "technosphere"
       },
-      "value": 8.58e-06
+      "value": 8.58e-06,
+      "weight": 35231369343.4002
     },
     {
       "supplier": {
         "name": "Nitrogen dioxide",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "ES",
         "matrix": "technosphere"
       },
-      "value": 9.32e-06
+      "value": 9.32e-06,
+      "weight": 1620090734956.89
     },
     {
       "supplier": {
         "name": "Nitrogen dioxide",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "SS",
         "matrix": "technosphere"
       },
-      "value": 1.06e-05
+      "value": 1.06e-05,
+      "weight": 11000000000.0
     },
     {
       "supplier": {
         "name": "Nitrogen dioxide",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "SD",
         "matrix": "technosphere"
       },
-      "value": 1.06e-05
+      "value": 1.06e-05,
+      "weight": 39898289820.7951
     },
     {
       "supplier": {
         "name": "Nitrogen dioxide",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "EH",
         "matrix": "technosphere"
       },
-      "value": 2.1e-05
+      "value": 2.1e-05,
+      "weight": 0.0
     },
     {
       "supplier": {
         "name": "Nitrogen dioxide",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "SR",
         "matrix": "technosphere"
       },
-      "value": 1.01e-05
+      "value": 1.01e-05,
+      "weight": 3455146280.83975
     },
     {
       "supplier": {
         "name": "Nitrogen dioxide",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "SJ",
         "matrix": "technosphere"
       },
-      "value": 2.08e-05
+      "value": 2.08e-05,
+      "weight": 0.0
     },
     {
       "supplier": {
         "name": "Nitrogen dioxide",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "SZ",
         "matrix": "technosphere"
       },
-      "value": 4.61e-06
+      "value": 4.61e-06,
+      "weight": 4604172127.36299
     },
     {
       "supplier": {
         "name": "Nitrogen dioxide",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "SE",
         "matrix": "technosphere"
       },
-      "value": 1.98e-05
+      "value": 1.98e-05,
+      "weight": 585489968189.064
     },
     {
       "supplier": {
         "name": "Nitrogen dioxide",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "CH",
         "matrix": "technosphere"
       },
-      "value": 1.2e-05
+      "value": 1.2e-05,
+      "weight": 894424821645.205
     },
     {
       "supplier": {
         "name": "Nitrogen dioxide",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "SY",
         "matrix": "technosphere"
       },
-      "value": 1.46e-05
+      "value": 1.46e-05,
+      "weight": 19993439949.5435
     },
     {
       "supplier": {
         "name": "Nitrogen dioxide",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "TJ",
         "matrix": "technosphere"
       },
-      "value": 1.09e-05
+      "value": 1.09e-05,
+      "weight": 12244169292.7998
     },
     {
       "supplier": {
         "name": "Nitrogen dioxide",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "TH",
         "matrix": "technosphere"
       },
-      "value": 5.46e-06
+      "value": 5.46e-06,
+      "weight": 515906283940.933
     },
     {
       "supplier": {
         "name": "Nitrogen dioxide",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "TG",
         "matrix": "technosphere"
       },
-      "value": 6.96e-06
+      "value": 6.96e-06,
+      "weight": 9171261837.57103
     },
     {
       "supplier": {
         "name": "Nitrogen dioxide",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "TO",
         "matrix": "technosphere"
       },
-      "value": 6.86e-06
+      "value": 6.86e-06,
+      "weight": 508735107.033734
     },
     {
       "supplier": {
         "name": "Nitrogen dioxide",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "TT",
         "matrix": "technosphere"
       },
-      "value": 4.48e-06
+      "value": 4.48e-06,
+      "weight": 25489373405.0619
     },
     {
       "supplier": {
         "name": "Nitrogen dioxide",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "AE",
         "matrix": "technosphere"
       },
-      "value": 1.23e-05
+      "value": 1.23e-05,
+      "weight": 514130432648.06
     },
     {
       "supplier": {
         "name": "Nitrogen dioxide",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "TN",
         "matrix": "technosphere"
       },
-      "value": 2.1e-05
+      "value": 2.1e-05,
+      "weight": 48196281783.9479
     },
     {
       "supplier": {
         "name": "Nitrogen dioxide",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "TR",
         "matrix": "technosphere"
       },
-      "value": 1.29e-05
+      "value": 1.29e-05,
+      "weight": 1118252958513.72
     },
     {
       "supplier": {
         "name": "Nitrogen dioxide",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "TM",
         "matrix": "technosphere"
       },
-      "value": 1.09e-05
+      "value": 1.09e-05,
+      "weight": 60628857142.8571
     },
     {
       "supplier": {
         "name": "Nitrogen dioxide",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "TC",
         "matrix": "technosphere"
       },
-      "value": 4.48e-06
+      "value": 4.48e-06,
+      "weight": 1638653000.0
     },
     {
       "supplier": {
         "name": "Nitrogen dioxide",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "TV",
         "matrix": "technosphere"
       },
-      "value": 6.86e-06
+      "value": 6.86e-06,
+      "weight": 62280311.5852172
     },
     {
       "supplier": {
         "name": "Nitrogen dioxide",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "UG",
         "matrix": "technosphere"
       },
-      "value": 1.06e-05
+      "value": 1.06e-05,
+      "weight": 48768955859.2834
     },
     {
       "supplier": {
         "name": "Nitrogen dioxide",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "UA",
         "matrix": "technosphere"
       },
-      "value": 2.05e-05
+      "value": 2.05e-05,
+      "weight": 181221517868.744
     },
     {
       "supplier": {
         "name": "Nitrogen dioxide",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "MK",
         "matrix": "technosphere"
       },
-      "value": 1.24e-05
+      "value": 1.24e-05,
+      "weight": 15763604287.9867
     },
     {
       "supplier": {
         "name": "Nitrogen dioxide",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "EG",
         "matrix": "technosphere"
       },
-      "value": 2e-05
+      "value": 2e-05,
+      "weight": 395926075163.006
     },
     {
       "supplier": {
         "name": "Nitrogen dioxide",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "GB",
         "matrix": "technosphere"
       },
-      "value": 7.26e-06
+      "value": 7.26e-06,
+      "weight": 3369861888972.88
     },
     {
       "supplier": {
         "name": "Nitrogen dioxide",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "GG",
         "matrix": "technosphere"
       },
-      "value": 7.26e-06
+      "value": 7.26e-06,
+      "weight": 0.0
     },
     {
       "supplier": {
         "name": "Nitrogen dioxide",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "IM",
         "matrix": "technosphere"
       },
-      "value": 7.26e-06
+      "value": 7.26e-06,
+      "weight": 7431257410.92713
     },
     {
       "supplier": {
         "name": "Nitrogen dioxide",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "TZ",
         "matrix": "technosphere"
       },
-      "value": 1.06e-05
+      "value": 1.06e-05,
+      "weight": 79062403836.8432
     },
     {
       "supplier": {
         "name": "Nitrogen dioxide",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "US",
         "matrix": "technosphere"
       },
-      "value": 1.52e-05
+      "value": 1.52e-05,
+      "weight": 27720709000000.0
     },
     {
       "supplier": {
         "name": "Nitrogen dioxide",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "VI",
         "matrix": "technosphere"
       },
-      "value": 4.48e-06
+      "value": 4.48e-06,
+      "weight": 4672000000.0
     },
     {
       "supplier": {
         "name": "Nitrogen dioxide",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "BF",
         "matrix": "technosphere"
       },
-      "value": 6.96e-06
+      "value": 6.96e-06,
+      "weight": 20324617844.5265
     },
     {
       "supplier": {
         "name": "Nitrogen dioxide",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "UY",
         "matrix": "technosphere"
       },
-      "value": 9.31e-06
+      "value": 9.31e-06,
+      "weight": 77991666837.7382
     },
     {
       "supplier": {
         "name": "Nitrogen dioxide",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "UZ",
         "matrix": "technosphere"
       },
-      "value": 1.09e-05
+      "value": 1.09e-05,
+      "weight": 102641879248.764
     },
     {
       "supplier": {
         "name": "Nitrogen dioxide",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "VE",
         "matrix": "technosphere"
       },
-      "value": 1.01e-05
+      "value": 1.01e-05,
+      "weight": 269000000000.0
     },
     {
       "supplier": {
         "name": "Nitrogen dioxide",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "WF",
         "matrix": "technosphere"
       },
-      "value": 6.86e-06
+      "value": 6.86e-06,
+      "weight": 0.0
     },
     {
       "supplier": {
         "name": "Nitrogen dioxide",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "WS",
         "matrix": "technosphere"
       },
-      "value": 6.86e-06
+      "value": 6.86e-06,
+      "weight": 938189443.830393
     },
     {
       "supplier": {
         "name": "Nitrogen dioxide",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "YE",
         "matrix": "technosphere"
       },
-      "value": 1.23e-05
+      "value": 1.23e-05,
+      "weight": 21000000000.0
     },
     {
       "supplier": {
         "name": "Nitrogen dioxide",
-        "type": "emission",
         "matrix": "biosphere"
       },
       "consumer": {
         "location": "ZM",
         "matrix": "technosphere"
       },
-      "value": 8.58e-06
+      "value": 8.58e-06,
+      "weight": 27577956471.244
     }
   ]
 }
