@@ -32,7 +32,7 @@ class GeoResolver:
     :return: GeoResolver instance.
     """
 
-    def __init__(self, weights: dict):
+    def __init__(self, weights: dict, additional_topologies: dict):
         """
         Initialize the resolver and normalize internal weight keys.
 
@@ -46,6 +46,12 @@ class GeoResolver:
         # Dependencies from constructive_geometries and your utils
         self.geo = Geomatcher()
         self.missing_geographies = load_missing_geographies()
+
+        if additional_topologies:
+            self.geo.add_definitions(additional_topologies, "ecoinvent", relative=True)
+            self.geo.add_definitions(
+                {"World": ["GLO", "RoW"]}, "ecoinvent", relative=True
+            )
 
     def find_locations(
         self,
