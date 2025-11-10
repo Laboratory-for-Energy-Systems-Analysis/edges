@@ -3881,32 +3881,83 @@ class EdgeLCIA:
 
     def generate_cf_table(self, include_unmatched=False) -> pd.DataFrame:
         """
-        Generate a detailed results table of characterized exchanges.
+        Generate a detailed results table of characterized exchanges, plus
+        per-scheme classification columns for suppliers and consumers.
 
-        Returns a pandas DataFrame with one row per characterized exchange,
-        including the following fields:
+        After populating rows, this function scans all rows to find the set of
+        classification schemes present in supplier and consumer activities and
+        then adds one column per scheme:
+          - supplier {scheme}
+          - consumer {scheme}
 
-        - Supplier and consumer activity name, reference product, and location
-        - Flow amount
-        - Characterization factor(s)
-        - Characterized impact (CF × amount)
-
-        Behavior
-        --------
-        - If uncertainty is enabled (`use_distributions=True`), the DataFrame contains:
-          - Mean, std, percentiles, min/max for CFs and impact values
-        - If deterministic: contains only point values for CF and impact
-
-        Returns
-        -------
-        pd.DataFrame
-            A table of all characterized exchanges with metadata and scores.
-
-        Notes
-        -----
-        - Must be called after `evaluate_cfs()` and `lcia()`
-        - Useful for debugging, reporting, or plotting contributions
+        Each cell contains a '; '-joined, de-duplicated, sorted list of codes for that scheme.
         """
+
+        def _norm_classifications(cls):
+            """
+            Normalize various 'classifications' payloads into:
+              dict[str, set[str]]  => {scheme: {code1, code2, ...}}
+
+            Supported inputs:
+              - dict[str, list[str] | str]
+              - list[tuple[str, str]] (first two entries used as (scheme, code))
+              - list[str] where items look like 'scheme:code' (parsed)
+            Bare strings without 'scheme:code' are ignored to avoid spurious columns.
+            """
+            result = {}
+            if not cls:
+                return result
+
+            # dict case
+            if isinstance(cls, dict):
+                for scheme, codes in cls.items():
+                    if codes is None:
+                        continue
+                    if isinstance(codes, (list, tuple, set)):
+                        for code in codes:
+                            if code is None:
+                                continue
+                            result.setdefault(str(scheme).lower(), set()).add(str(code))
+                    else:
+                        result.setdefault(str(scheme).lower(), set()).add(str(codes))
+                return result
+
+            # iterable case (list/tuple/set)
+            if isinstance(cls, (list, tuple, set)):
+                for item in cls:
+                    if item is None:
+                        continue
+                    # tuple-like ('cpc', '1234', ...)
+                    if isinstance(item, (list, tuple)) and len(item) >= 2:
+                        scheme, code = item[0], item[1]
+                        if scheme is None or code is None:
+                            continue
+                        result.setdefault(str(scheme).lower(), set()).add(str(code))
+                    # string 'scheme:code'
+                    elif isinstance(item, str) and ":" in item:
+                        scheme, code = item.split(":", 1)
+                        result.setdefault(scheme.strip().lower(), set()).add(
+                            code.strip()
+                        )
+                    # ignore other bare strings to avoid creating noisy columns
+                return result
+
+            # string 'scheme:code'
+            if isinstance(cls, str) and ":" in cls:
+                scheme, code = cls.split(":", 1)
+                result.setdefault(scheme.strip().lower(), set()).add(code.strip())
+                return result
+
+            return result
+
+        def _codes_to_cell(d, scheme):
+            """Turn a dict[str, set[str]] into a '; '-joined string for a scheme."""
+            if not isinstance(d, dict):
+                return None
+            codes = d.get(scheme, None)
+            if not codes:
+                return None
+            return "; ".join(sorted({str(c) for c in codes if c is not None}))
 
         if not self.scenario_cfs:
             self.logger.warning(
@@ -3915,11 +3966,13 @@ class EdgeLCIA:
             return pd.DataFrame()
 
         is_biosphere = True if self.technosphere_flow_matrix is None else False
-
         inventory = (
             self.lca.inventory if is_biosphere else self.technosphere_flow_matrix
         )
+
         data = []
+        supplier_schemes_seen = set()
+        consumer_schemes_seen = set()
 
         if (
             self.use_distributions
@@ -3927,10 +3980,7 @@ class EdgeLCIA:
             and hasattr(self, "iterations")
         ):
             cm = self.characterization_matrix
-
-            for i, j in zip(
-                *cm.sum(axis=2).nonzero()
-            ):  # Only loop over nonzero entries
+            for i, j in zip(*cm.sum(axis=2).nonzero()):
                 consumer = bw2data.get_activity(self.reversed_activity[j])
                 supplier = (
                     bw2data.get_activity(self.reversed_biosphere[i])
@@ -3942,9 +3992,13 @@ class EdgeLCIA:
                 amount = inventory[i, j]
                 impact_samples = amount * samples
 
-                # Percentiles
                 cf_p = np.percentile(samples, [5, 25, 50, 75, 95])
                 impact_p = np.percentile(impact_samples, [5, 25, 50, 75, 95])
+
+                s_cls = _norm_classifications(supplier.get("classifications"))
+                c_cls = _norm_classifications(consumer.get("classifications"))
+                supplier_schemes_seen.update(s_cls.keys())
+                consumer_schemes_seen.update(c_cls.keys())
 
                 entry = {
                     "supplier name": supplier["name"],
@@ -3970,6 +4024,9 @@ class EdgeLCIA:
                     "impact (75th)": impact_p[3],
                     "impact (95th)": impact_p[4],
                     "impact (max)": impact_samples.max(),
+                    # hold normalized dicts temporarily
+                    "_supplier_cls": s_cls,
+                    "_consumer_cls": c_cls,
                 }
 
                 if is_biosphere:
@@ -3997,6 +4054,11 @@ class EdgeLCIA:
                     cf_value = cf["value"]
                     impact = amount * cf_value
 
+                    s_cls = _norm_classifications(supplier.get("classifications"))
+                    c_cls = _norm_classifications(consumer.get("classifications"))
+                    supplier_schemes_seen.update(s_cls.keys())
+                    consumer_schemes_seen.update(c_cls.keys())
+
                     entry = {
                         "supplier name": supplier["name"],
                         "consumer name": consumer["name"],
@@ -4005,6 +4067,8 @@ class EdgeLCIA:
                         "amount": amount,
                         "CF": cf_value,
                         "impact": impact,
+                        "_supplier_cls": s_cls,
+                        "_consumer_cls": c_cls,
                     }
 
                     if is_biosphere:
@@ -4020,20 +4084,23 @@ class EdgeLCIA:
         if include_unmatched is True:
             unprocess_exchanges = (
                 self.unprocessed_biosphere_edges
-                if is_biosphere is True
+                if is_biosphere
                 else self.unprocessed_technosphere_edges
             )
-            # Add unprocessed exchanges
             for i, j in unprocess_exchanges:
-                if is_biosphere is True:
-                    supplier = bw2data.get_activity(self.reversed_biosphere[i])
-                else:
-                    supplier = bw2data.get_activity(self.reversed_activity[i])
+                supplier = (
+                    bw2data.get_activity(self.reversed_biosphere[i])
+                    if is_biosphere
+                    else bw2data.get_activity(self.reversed_activity[i])
+                )
                 consumer = bw2data.get_activity(self.reversed_activity[j])
 
                 amount = inventory[i, j]
-                cf_value = None
-                impact = None
+
+                s_cls = _norm_classifications(supplier.get("classifications"))
+                c_cls = _norm_classifications(consumer.get("classifications"))
+                supplier_schemes_seen.update(s_cls.keys())
+                consumer_schemes_seen.update(c_cls.keys())
 
                 entry = {
                     "supplier name": supplier["name"],
@@ -4041,8 +4108,10 @@ class EdgeLCIA:
                     "consumer reference product": consumer.get("reference product"),
                     "consumer location": consumer.get("location"),
                     "amount": amount,
-                    "CF": cf_value,
-                    "impact": impact,
+                    "CF": None,
+                    "impact": None,
+                    "_supplier_cls": s_cls,
+                    "_consumer_cls": c_cls,
                 }
 
                 if is_biosphere:
@@ -4055,24 +4124,46 @@ class EdgeLCIA:
 
                 data.append(entry)
 
-        # Convert to DataFrame
+        # Build DataFrame
         df = pd.DataFrame(data)
 
+        # Add per-scheme columns (sorted for determinism)
+        supplier_scheme_cols = []
+        consumer_scheme_cols = []
+
+        for scheme in sorted(supplier_schemes_seen):
+            col = f"supplier {scheme}"
+            df[col] = df["_supplier_cls"].apply(lambda d: _codes_to_cell(d, scheme))
+            supplier_scheme_cols.append(col)
+
+        for scheme in sorted(consumer_schemes_seen):
+            col = f"consumer {scheme}"
+            df[col] = df["_consumer_cls"].apply(lambda d: _codes_to_cell(d, scheme))
+            consumer_scheme_cols.append(col)
+
+        # Drop temp dict columns
+        if "_supplier_cls" in df.columns:
+            df = df.drop(columns=["_supplier_cls"])
+        if "_consumer_cls" in df.columns:
+            df = df.drop(columns=["_consumer_cls"])
+
         # Order columns
-        preferred_columns = [
+        base_cols = [
             "supplier name",
             "supplier categories",
             "supplier reference product",
             "supplier location",
+            # supplier scheme columns inserted here
             "consumer name",
             "consumer reference product",
             "consumer location",
+            # consumer scheme columns inserted here
             "amount",
         ]
 
-        # Add CF or CF summary columns
+        # CF/impact columns
         if self.use_distributions:
-            preferred_columns += [
+            metric_cols = [
                 "CF (mean)",
                 "CF (std)",
                 "CF (min)",
@@ -4093,9 +4184,29 @@ class EdgeLCIA:
                 "impact (max)",
             ]
         else:
-            preferred_columns += ["CF", "impact"]
+            metric_cols = ["CF", "impact"]
 
-        df = df[[col for col in preferred_columns if col in df.columns]]
+        # stitch together while skipping absent columns
+        ordered = []
+        for col in base_cols:
+            if col == "supplier location":
+                # insert supplier scheme cols right after supplier location
+                if col in df.columns:
+                    ordered.append(col)
+                ordered.extend([c for c in supplier_scheme_cols if c in df.columns])
+                continue
+            if col == "consumer location":
+                if col in df.columns:
+                    ordered.append(col)
+                ordered.extend([c for c in consumer_scheme_cols if c in df.columns])
+                continue
+            if col in df.columns:
+                ordered.append(col)
+
+        ordered += [c for c in metric_cols if c in df.columns]
+
+        # Final selection (keep only existing)
+        df = df[[c for c in ordered if c in df.columns]]
 
         return df
 
