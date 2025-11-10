@@ -32,7 +32,7 @@ class GeoResolver:
     :return: GeoResolver instance.
     """
 
-    def __init__(self, weights: dict, additional_topologies: dict):
+    def __init__(self, weights: dict, additional_topologies: dict = None):
         """
         Initialize the resolver and normalize internal weight keys.
 
