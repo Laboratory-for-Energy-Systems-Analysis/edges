@@ -389,6 +389,8 @@ class EdgeLCIA:
         use_distributions: Optional[bool] = False,
         random_seed: Optional[int] = None,
         iterations: Optional[int] = 100,
+        lca: Optional[bw2calc.LCA] = None,
+        additional_topologies: Optional[dict] = None,
     ):
         """
         Initialize an EdgeLCIA object for exchange-level life cycle impact assessment.
@@ -463,7 +465,7 @@ class EdgeLCIA:
         self.random_seed = random_seed if random_seed is not None else 42
         self.random_state = np.random.default_rng(self.random_seed)
 
-        self.lca = bw2calc.LCA(demand=self.demand)
+        self.lca = lca or bw2calc.LCA(demand=self.demand)
         self._load_raw_lcia_data()
         self.log_platform()
 
@@ -508,6 +510,8 @@ class EdgeLCIA:
         self._include_cls_in_consumer_sig = any(
             "classifications" in (cf.get("consumer") or {}) for cf in self.raw_cfs_data
         )
+
+        self.additional_topologies = additional_topologies
 
     def log_platform(self):
         """
@@ -985,7 +989,7 @@ class EdgeLCIA:
               self.cls_prefidx_consumer
         """
 
-        # ---- Figure out required CONSUMER fields once (ignore control/meta fields)
+        # ---- Figure out required CONSUMER fields once (ignore control/metafields)
         IGNORED_FIELDS = {"matrix", "operator", "weight", "classifications", "position"}
         if not hasattr(self, "required_consumer_fields"):
             self.required_consumer_fields = {
@@ -1404,19 +1408,6 @@ class EdgeLCIA:
 
         # Cache per unique supplier+consumer signature
         _match_memo: dict[tuple, MatchResult] = {}
-
-        def _sig_tuple(supplier_info: dict, consumer_info: dict) -> tuple:
-            # only fields the matcher needs; keep deterministic ordering
-            s_fields = tuple(
-                sorted((k, supplier_info.get(k)) for k in self.required_supplier_fields)
-            )
-            c_fields = tuple(
-                sorted((k, consumer_info.get(k)) for k in self.required_consumer_fields)
-            )
-            # include operator/excludes if they influence matching
-            op = supplier_info.get("operator", "equals")
-            exc = tuple(sorted(supplier_info.get("excludes") or ()))
-            return (s_fields, c_fields, op, exc)
 
         # ---- Memoized wrapper around cached_match_with_index ------------------------
         def _match_with_memo(flow_key, req_fields, index, lookup, reversed_lookup):
@@ -3092,11 +3083,11 @@ class EdgeLCIA:
             (self.biosphere_edges is None and self.technosphere_edges is None)
             or (not self.biosphere_edges and not self.technosphere_edges)
         )
+
         if not edges_ready:
             self.lci()
 
         # ---- execute
-
         self.logger.info("Applying strategies: %s", strategies)
 
         for name in strategies:
@@ -4218,5 +4209,5 @@ class EdgeLCIA:
         :return: GeoResolver object.
         """
         if getattr(self, "_geo", None) is None:
-            self._geo = GeoResolver(self.weights)
+            self._geo = GeoResolver(self.weights, self.additional_topologies)
         return self._geo
