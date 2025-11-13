@@ -20,7 +20,7 @@ from packaging.version import Version
 
 bw2data_version = Version(bw2data_version)
 
-if bw2data_version >= Version("4, 0, 0"):
+if bw2data_version >= Version("4.0.0"):
     from bw2data.backends import ActivityDataset as AD
     from bw2data.subclass_mapping import NODE_PROCESS_CLASS_MAPPING
 else:

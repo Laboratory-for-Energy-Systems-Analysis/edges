@@ -9,7 +9,7 @@ from packaging.version import Version
 __version__ = Version(__version__)
 
 
-if __version__ < Version("4, 0, 0"):
+if __version__ < Version("4.0.0"):
     is_bw2 = True
 else:
     is_bw2 = False
