@@ -17,6 +17,8 @@ requirements:
   build:
     - python
     - setuptools
+    - bw2data
+    - bw2calc
   run:
     - numpy
     - pandas
