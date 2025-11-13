@@ -14,11 +14,13 @@ build:
     - CONDA_BLD_PATH
 
 requirements:
-  build:
-    - python
+  host:
+    - python >=3.10
+    - pip
     - setuptools
-    - bw2data
     - bw2calc
+    - bw2data
+
   run:
     - numpy
     - pandas
@@ -31,6 +33,8 @@ requirements:
     - plotly
     - highspy
     - packaging
+    - bw2calc
+    - bw2data
 
 
 test:
