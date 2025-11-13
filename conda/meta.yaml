@@ -28,6 +28,7 @@ requirements:
     - sparse >=0.13.0
     - plotly
     - highspy
+    - packaging
 
 
 test:
