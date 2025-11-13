@@ -28,11 +28,12 @@ except ImportError:  # bw2data >= 4.0
 from .edgelcia import EdgeLCIA
 
 from bw2data import __version__ as bw2data_version
+from packaging.version import Version
 
-if isinstance(bw2data_version, str):
-    bw2data_version = tuple(map(int, bw2data_version.split(".")))
+bw2data_version = Version(bw2data_version)
 
-if bw2data_version >= (4, 0, 0):
+
+if bw2data_version >= Version("4.0.0"):
     is_bw25 = True
 else:
     is_bw25 = False
