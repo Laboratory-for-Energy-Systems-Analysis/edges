@@ -40,7 +40,7 @@ jobs:
       fail-fast: false
       matrix:
         os: [ubuntu-latest, windows-latest, macos-latest]
-        python-version: ["3.11"]   # add more versions if you like
+        python-version: ["3.11", "3.12", "3.13"]
     steps:
       - uses: actions/checkout@v4
 
@@ -129,7 +129,7 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: pytest-debug-${{ github.run_id }}-${{ matrix.os }}
+          name: pytest-debug-${{ github.run_id }}-${{ matrix.os }}-py${{ matrix.python-version }}
           path: |
             pytest-debug/**
             edges.log
@@ -216,7 +216,7 @@ jobs:
       fail-fast: false
       matrix:
         os: ["ubuntu-latest"]
-        python-version: ["3.11"]
+        python-version: ["3.11", "3.12", "3.13"]
         solver: ["classic"]
     steps:
       - uses: actions/checkout@v4
