@@ -230,5 +230,5 @@ jobs:
           conda-solver: ${{ matrix.solver }}
       - name: Pull distribution 📦 from Anaconda and test it if master branch
         run: |
-          conda install romainsacchi::edges
+          conda install -y "python==${{ matrix.python-version }}.*"
           conda update edges
