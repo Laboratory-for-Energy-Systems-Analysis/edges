@@ -22,7 +22,7 @@ classifiers = [
     "Operating System :: OS Independent",
     "Topic :: Scientific/Engineering",
 ]
-requires-python = ">=3.10,<3.12"
+requires-python = ">=3.10,<3.13"
 
 [project.urls]
 source = "https://github.com/Laboratory-for-Energy-Systems-Analysis/clear-scope"
