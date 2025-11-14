@@ -5,6 +5,9 @@ from bw2data import Database, projects, get_activity, __version__
 import logging
 from packaging.version import Version
 
+if isinstance(__version__, tuple):
+    __version__ = ".".join(map(str, __version__))
+
 __version__ = Version(__version__)
 
 setup_package_logging(level=logging.DEBUG)

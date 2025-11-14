@@ -6,6 +6,9 @@ from dotenv import load_dotenv
 from pathlib import Path
 from packaging.version import Version
 
+if isinstance(__version__, tuple):
+    __version__ = ".".join(map(str, __version__))
+
 __version__ = Version(__version__)
 
 

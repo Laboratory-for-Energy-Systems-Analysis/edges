@@ -6,6 +6,9 @@ import bw2data
 from bw2data import __version__
 from packaging.version import Version
 
+if isinstance(__version__, tuple):
+    __version__ = ".".join(map(str, __version__))
+
 __version__ = Version(__version__)
 
 

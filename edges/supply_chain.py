@@ -28,6 +28,10 @@ except ImportError:  # bw2data >= 4.0
 from .edgelcia import EdgeLCIA
 
 from bw2data import __version__ as bw2data_version
+
+if isinstance(bw2data_version, tuple):
+    bw2data_version = ".".join(map(str, bw2data_version))
+
 from packaging.version import Version
 
 bw2data_version = Version(bw2data_version)

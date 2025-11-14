@@ -18,6 +18,9 @@ import math
 from bw2data import __version__ as bw2data_version
 from packaging.version import Version
 
+if isinstance(bw2data_version, tuple):
+    bw2data_version = ".".join(map(str, bw2data_version))
+
 bw2data_version = Version(bw2data_version)
 
 if bw2data_version >= Version("4.0.0"):
