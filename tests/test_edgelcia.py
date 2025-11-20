@@ -3,13 +3,20 @@ import pytest
 import pytest
 from edges.edgelcia import EdgeLCIA
 import bw2data
+from bw2data import __version__
+from packaging.version import Version
+
+if isinstance(__version__, tuple):
+    __version__ = ".".join(map(str, __version__))
+
+__version__ = Version(__version__)
 
 
 @pytest.fixture
 def lcia():
     """Fixture to create an EdgeLCIA instance for testing."""
     # Set up once
-    if bw2data.__version__ < (4, 0, 0):
+    if __version__ < Version("4.0.0"):
         print("Using Brightway2.")
         bw2data.projects.set_current("EdgeLCIA-Test")
     else:

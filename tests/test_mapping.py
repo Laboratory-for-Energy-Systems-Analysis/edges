@@ -3,12 +3,18 @@ from pathlib import Path
 from edges import EdgeLCIA, setup_package_logging
 from bw2data import Database, projects, get_activity, __version__
 import logging
+from packaging.version import Version
+
+if isinstance(__version__, tuple):
+    __version__ = ".".join(map(str, __version__))
+
+__version__ = Version(__version__)
 
 setup_package_logging(level=logging.DEBUG)
 
 
 # Set up once
-if __version__ < (4, 0, 0):
+if __version__ < Version("4.0.0"):
     print("Using Brightway2.")
     projects.set_current("EdgeLCIA-Test")
 else:
