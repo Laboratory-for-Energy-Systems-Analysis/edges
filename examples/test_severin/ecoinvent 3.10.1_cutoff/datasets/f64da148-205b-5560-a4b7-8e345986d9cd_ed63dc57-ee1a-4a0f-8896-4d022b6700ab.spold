@@ -1,0 +1,126 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<ecoSpold xmlns="http://www.EcoInvent.org/EcoSpold02" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.EcoInvent.org/EcoSpold02 ../../schemas/datasets/EcoSpold02.xsd http://www.EcoInvent.org/UsedUserMasterData ../../schemas/datasets/EcoSpold02UserMasterData.xsd">
+  <childActivityDataset>
+    <activityDescription>
+      <activity specialActivityType="0" id="f64da148-205b-5560-a4b7-8e345986d9cd" activityNameId="817e65af-dee4-46df-8306-58778eca4947" parentActivityId="282da43f-f421-4c07-9328-da22323478c2" inheritanceDepth="0" type="2">
+        <activityName xml:lang="en">purge gas, rich in sodium nitrate to market for sodium nitrate, unrefined</activityName>
+        <includedActivitiesStart xml:lang="en">The activity starts with the input of purge gas, rich in nitrate. From cradle, i.e. including all upstream activities.</includedActivitiesStart>
+        <includedActivitiesEnd xml:lang="en">The activity ends with the provision of sodium nitrate, unrefined.</includedActivitiesEnd>
+        <generalComment>
+          <text xml:lang="en" index="0">This activity represents a renaming activity. The activity links purge gas, rich in sodium nitrate to sodium nitrate, unrefined. This activity allows to model the reuse of purge gas in the production of potassium nitrate, industrial grade.  </text>
+        </generalComment>
+      </activity>
+      <classification classificationId="04d83550-7c85-44f3-916b-424730a81963">
+        <classificationSystem xml:lang="en">ISIC rev.4 ecoinvent</classificationSystem>
+        <classificationValue xml:lang="en">2012:Manufacture of fertilizers and nitrogen compounds</classificationValue>
+      </classification>
+      <geography geographyId="0c852cde-7d7e-11de-9ae2-0019e336be3a">
+        <shortname xml:lang="en">CL</shortname>
+      </geography>
+      <technology technologyLevel="3"/>
+      <timePeriod startDate="2019-01-01" endDate="2023-12-31" isDataValidForEntirePeriod="true"/>
+      <macroEconomicScenario macroEconomicScenarioId="d9f57f0a-a01f-42eb-a57b-8f18d6635801">
+        <name xml:lang="en">Business-as-Usual</name>
+      </macroEconomicScenario>
+    </activityDescription>
+    <flowData>
+      <intermediateExchange id="2c1ff492-d342-59d0-aaf1-94c7f36773fe" unitId="487df68b-4994-4027-8fdc-a4dc298257b7" casNumber="7631-99-4" amount="1.0" intermediateExchangeId="ed63dc57-ee1a-4a0f-8896-4d022b6700ab" productionVolumeAmount="12201000.0" productionVolumeMathematicalRelation="2.4402E+08*0.05">
+        <name xml:lang="en">sodium nitrate, unrefined</name>
+        <unitName xml:lang="en">kg</unitName>
+        <comment xml:lang="en">Sodium nitrate reaching a purity of about 50%. This sodium nitrate is used in the production of potassium nitrate or will be further procecced to higher purities. So, this product is not sold on the market. </comment>
+        <property propertyId="f2283db2-62e4-467f-b9ac-c4f45be563b4" amount="0.0" isDefiningValue="false" isCalculatedAmount="false" unitId="487df68b-4994-4027-8fdc-a4dc298257b7">
+          <name xml:lang="en">carbon allocation</name>
+          <unitName xml:lang="en">kg</unitName>
+        </property>
+        <property propertyId="a301a838-7975-4d89-9e74-8eb77ad03cd1" amount="0.0" isDefiningValue="false" isCalculatedAmount="false" unitId="577e242a-461f-44a7-922c-d8e1c3d2bf45">
+          <name xml:lang="en">carbon content</name>
+          <unitName xml:lang="en">dimensionless</unitName>
+        </property>
+        <property propertyId="c74c3729-e577-4081-b572-a283d2561a75" amount="0.0" isDefiningValue="false" unitId="577e242a-461f-44a7-922c-d8e1c3d2bf45">
+          <name xml:lang="en">carbon content, fossil</name>
+          <unitName xml:lang="en">dimensionless</unitName>
+        </property>
+        <property propertyId="6393c14b-db78-445d-a47b-c0cb866a1b25" amount="0.0" isDefiningValue="false" unitId="577e242a-461f-44a7-922c-d8e1c3d2bf45">
+          <name xml:lang="en">carbon content, non-fossil</name>
+          <unitName xml:lang="en">dimensionless</unitName>
+        </property>
+        <property propertyId="3a0af1d6-04c3-41c6-a3da-92c4f61e0eaa" amount="1.0" isDefiningValue="false" unitId="487df68b-4994-4027-8fdc-a4dc298257b7">
+          <name xml:lang="en">dry mass</name>
+          <unitName xml:lang="en">kg</unitName>
+        </property>
+        <property propertyId="38f94dd1-d5aa-41b8-b182-c0c42985d9dc" amount="0.23" unitId="7b75baf0-cbee-45e6-bf66-af119da06553">
+          <name xml:lang="en">price</name>
+          <unitName xml:lang="en">EUR2005</unitName>
+          <comment xml:lang="en">Calculated value based on data from United Nations Commodity Trade Statistics Database (comtrade.un.org). UN comtrade category: 310250 Sodium nitrate, in packs &gt; 10 kg. Year 2005. Using exchange rate of 1EURO = 1.209 USD. Average of price of import into 5 main markets (EU, US, JP, IN and CN).</comment>
+        </property>
+        <property propertyId="a9358458-9724-4f03-b622-106eda248916" amount="0.0" isDefiningValue="false" unitId="577e242a-461f-44a7-922c-d8e1c3d2bf45">
+          <name xml:lang="en">water content</name>
+          <unitName xml:lang="en">dimensionless</unitName>
+        </property>
+        <property propertyId="6d9e1462-80e3-4f10-b3f4-71febd6f1168" amount="0.0" isDefiningValue="false" unitId="487df68b-4994-4027-8fdc-a4dc298257b7">
+          <name xml:lang="en">water in wet mass</name>
+          <unitName xml:lang="en">kg</unitName>
+        </property>
+        <property propertyId="67f102e2-9cb6-4d20-aa16-bf74d8a03326" amount="1.0" isDefiningValue="false" unitId="487df68b-4994-4027-8fdc-a4dc298257b7">
+          <name xml:lang="en">wet mass</name>
+          <unitName xml:lang="en">kg</unitName>
+        </property>
+        <productionVolumeComment xml:lang="en">Purge gas is produced as a by-product of the production of sodium nitrate, agricultural grade. The total production volume is taken from the producing activity, 5% of the total is assumed to go to sodium nitrate, unrefined.</productionVolumeComment>
+        <classification classificationId="39b0f0ab-1a2f-401b-9f4d-6e39400760a4">
+          <classificationSystem xml:lang="en">By-product classification</classificationSystem>
+          <classificationValue xml:lang="en">allocatable product</classificationValue>
+        </classification>
+        <classification classificationId="bffa066c-7ba8-4a4e-82ec-e27a75dc8717">
+          <classificationSystem xml:lang="en">CPC</classificationSystem>
+          <classificationValue xml:lang="en">16390: Other minerals n.e.c.</classificationValue>
+        </classification>
+        <classification classificationId="e0875607-9d1b-5b79-9af0-445d6174ab8f">
+          <classificationSystem xml:lang="en">HS2017</classificationSystem>
+          <classificationValue xml:lang="en">310250: Fertilizers, mineral or chemical; nitrogenous, sodium nitrate</classificationValue>
+        </classification>
+        <outputGroup>0</outputGroup>
+      </intermediateExchange>
+    </flowData>
+    <modellingAndValidation>
+      <representativeness systemModelId="290c1f85-4cc4-4fa1-b0c8-2cb7f4276dce">
+        <systemModelName xml:lang="en">Allocation, cut-off by classification</systemModelName>
+      </representativeness>
+      <review reviewedMajorRelease="3" reviewedMinorRelease="0" reviewedMajorRevision="0" reviewedMinorRevision="6" reviewerId="35d091e9-38c2-4037-9efe-a73673c57123" reviewerName="Emilia Moreno Ruiz" reviewerEmail="moreno@ecoinvent.org" reviewDate="2019-06-26">
+        <otherDetails xml:lang="en"/>
+      </review>
+      <review reviewedMajorRelease="3" reviewedMinorRelease="0" reviewedMajorRevision="0" reviewedMinorRevision="6" reviewerId="c4597934-ecac-422c-b431-382e85fdcb83" reviewerName="[System]" reviewerEmail="support@ecoinvent.org" reviewDate="2019-06-26">
+        <otherDetails xml:lang="en">Validation warnings:
+
+- Mass and/or economic deficit in activity dataset exceeds either 0.1% of input or output sum:
+
+Property 'dry mass':
+ - Input='0', Output='1'
+ - Input &lt; output by 1 kg (100% of output)
+
+Property 'wet mass':
+ - Input='0', Output='1'
+ - Input &lt; output by 1 kg (100% of output)
+
+
+- Uncertainty shall always be provided for all primary data inputs (exchange amounts, properties and parameters), except for the amount and properties of reference products.
+ -- Exchange(s): purge gas, rich in sodium nitrate
+
+- Pedigree information shall always be provided for all uncertainties of primary data inputs (exchange amounts, properties and parameters), except for the amount and properties of reference products.
+ -- Exchange(s): purge gas, rich in sodium nitrate
+
+- Production volume of local datasets for a specific activity, time period, and macro-economic scenario must not exceed 99,5% of the production volume of the corresponding global.
+
+ Warning: -  Exchange 'sodium nitrate, unrefined', global (2019-2019) production volume 12201000, sum of all non-global production volumes 12201000. Local datasets used in calculation: CL (2019-2019) PV: 12201000
+
+</otherDetails>
+      </review>
+    </modellingAndValidation>
+    <administrativeInformation>
+      <dataEntryBy personId="ebf45305-b87c-4d3d-b74f-fbc6677bca1b" isActiveAuthor="false" personName="Lucia Valsasina" personEmail="valsasina@ecoinvent.org"/>
+      <dataGeneratorAndPublication personId="ebf45305-b87c-4d3d-b74f-fbc6677bca1b" personName="Lucia Valsasina" personEmail="valsasina@ecoinvent.org" isCopyrightProtected="true" accessRestrictedTo="1"/>
+      <fileAttributes majorRelease="3" minorRelease="0" majorRevision="1" minorRevision="0" internalSchemaVersion="2.0.12" defaultLanguage="en" creationTimestamp="2019-06-26T11:20:27" lastEditTimestamp="2019-06-26T13:42:45" fileGenerator="EcoEditor 3.11.1000.19016" fileTimestamp="2019-06-26T13:42:45" contextId="de659012-50c4-4e96-b54a-fc781bf987ab">
+        <contextName xml:lang="en">ecoinvent</contextName>
+      </fileAttributes>
+    </administrativeInformation>
+  </childActivityDataset>
+</ecoSpold>

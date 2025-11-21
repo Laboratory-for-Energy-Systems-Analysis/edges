@@ -1,0 +1,452 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<ecoSpold xmlns="http://www.EcoInvent.org/EcoSpold02" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.EcoInvent.org/EcoSpold02 ../../schemas/datasets/EcoSpold02.xsd http://www.EcoInvent.org/UsedUserMasterData ../../schemas/datasets/EcoSpold02UserMasterData.xsd">
+  <childActivityDataset>
+    <activityDescription>
+      <activity specialActivityType="0" id="fe42d2b5-0ff2-54a2-a593-b9b00b095ff2" activityNameId="d60803be-97cc-439b-9641-8ee907531f29" parentActivityId="dba5afe2-9e70-44e9-976d-fa7fc49447e8" inheritanceDepth="0" type="2">
+        <activityName xml:lang="en">treatment of brake wear emissions, lorry</activityName>
+        <includedActivitiesStart xml:lang="en">The activity starts with the friction of lorry brakes  From cradle, i.e. including all upstream activities.</includedActivitiesStart>
+        <includedActivitiesEnd xml:lang="en">The activity ends with emissions of lorry brake wear </includedActivitiesEnd>
+        <generalComment>
+          <text xml:lang="en" index="0">This dataset represents the treatment of non-exhaust emissions produced by brake abrasion from road freight transport. The datasets are treatments because they represent a removal of substances from the technosphere (removal of tyre material).</text>
+          <text xml:lang="en" index="1"></text>
+          <text xml:lang="en" index="2">This dataset and the emission factors within it relate to 1kg brake wear. It is valid for Europe and represents the average data for road freight transport. </text>
+          <text xml:lang="en" index="3"></text>
+          <text xml:lang="en" index="4">Calculation of non-exhaust emissions (tyre, brake and road wear emissions) are based on EMEP/EEA (2013) and values for net vehicle weights and average load factors. Net vehicle weights are taken from the EcoTransIT (2011) report whilst the average load factors are taken from the Tremove model v2.7b (2009) and EcoTransIT (2011) report. </text>
+          <text xml:lang="en" index="5"></text>
+          <text xml:lang="en" index="6">The brake wear emissions are to air only. All particulates are accounted for as emissions to air and have particle sizes below 100um. Anything above this does not remain airborne over longer periods. </text>
+          <text xml:lang="en" index="7"></text>
+          <text xml:lang="en" index="8">It must be noted that elementary and organic carbon, substances very dominant in the emissions profile from brake wear are currently not available in the ecoinvent database and are therfore not accounted for in this datase other than their representation as unspecified particulate emissions. This means that although the datasets represent 1kg of brake wear the emissions do not sum up to 1kg. </text>
+          <text xml:lang="en" index="9"></text>
+          <text xml:lang="en" index="10">In order to use the treatment of non-exhaust emissions in a transport dataset the quantity of emissions per tkm must be calculated. This must then be devided by the specific load factor of the transport in question.Non-exhaust emissions are considered to be linearly scalable to gross vehicle weight (GVW). For brake wear emissions from lorries the specific quantity is 8.13E-9 kg/kg GVW*km.</text>
+          <text xml:lang="en" index="11"></text>
+          <text xml:lang="en" index="12">Main data sources:</text>
+          <text xml:lang="en" index="13"></text>
+          <text xml:lang="en" index="14">De Ceuster, G., et al. (2009) TREMOVE: Final Report. Model code v2.7b, 2009. European Commission, Brussels, BE.</text>
+          <text xml:lang="en" index="15"></text>
+          <text xml:lang="en" index="16">Knörr, W. et al. (2011) Ecological Transport Information Tool for Worldwide Transports (EcoTransIT): Methodology and data update. Berlin, Hannover, Heidelberg, DE.</text>
+          <text xml:lang="en" index="17"></text>
+          <text xml:lang="en" index="18">Ntziachristos, L., Boulter, P. (2013) EMEP/EEA air pollutant emissions inventory guidebook 2009: Road vehicle tyre and brake wear; Road surface wear. European Environment Agency, Copenhagen, DK.</text>
+        </generalComment>
+      </activity>
+      <classification classificationId="9a63625a-358b-4c1d-bf95-50ba038a759b">
+        <classificationSystem xml:lang="en">ISIC rev.4 ecoinvent</classificationSystem>
+        <classificationValue xml:lang="en">3821:Treatment and disposal of non-hazardous waste</classificationValue>
+      </classification>
+      <geography geographyId="0723d252-7e2a-11de-9820-0019e336be3a">
+        <shortname xml:lang="en">RER</shortname>
+      </geography>
+      <technology technologyLevel="3"/>
+      <timePeriod startDate="2009-01-01" endDate="2023-12-31" isDataValidForEntirePeriod="true"/>
+      <macroEconomicScenario macroEconomicScenarioId="d9f57f0a-a01f-42eb-a57b-8f18d6635801">
+        <name xml:lang="en">Business-as-Usual</name>
+      </macroEconomicScenario>
+    </activityDescription>
+    <flowData>
+      <intermediateExchange id="50930469-36bf-5997-985d-712549016f35" unitId="487df68b-4994-4027-8fdc-a4dc298257b7" amount="-1.0" sourceId="c5e98626-ddde-4f78-90ec-4ab5e3022aff" sourceYear="2013" sourceFirstAuthor="Ntziachristos, L." intermediateExchangeId="3ef818f1-4d91-43b8-9027-924492a0fb50" productionVolumeAmount="48292200.0" productionVolumeMathematicalRelation="5.94E+12*8.13E-09*1000" productionVolumeSourceId="8b8afdf4-1947-4dc3-be9d-e4a923b43935">
+        <name xml:lang="en">brake wear emissions, lorry</name>
+        <unitName xml:lang="en">kg</unitName>
+        <comment xml:lang="en">Road freight specific non-exhaust emissions.
+
+This dataset and the emission factors within it relate to 1kg of brake wear. In order to use the treatment of non-exhaust emissions in a transport dataset the quantity of emissions per km must be calculated. This must then be devided by the specific load factor of the transport in question. Non-exhaust emissions are considered to be linearly scalable to gross vehicle weight (GVW). For brake wear emissions from lorries the specific quantity is 8.13E-9 kg/kg GVW*km.</comment>
+        <property propertyId="f2283db2-62e4-467f-b9ac-c4f45be563b4" amount="0.149" isDefiningValue="false" isCalculatedAmount="false" unitId="487df68b-4994-4027-8fdc-a4dc298257b7">
+          <name xml:lang="en">carbon allocation</name>
+          <unitName xml:lang="en">kg</unitName>
+        </property>
+        <property propertyId="a301a838-7975-4d89-9e74-8eb77ad03cd1" amount="0.149" isDefiningValue="false" isCalculatedAmount="false" unitId="577e242a-461f-44a7-922c-d8e1c3d2bf45">
+          <name xml:lang="en">carbon content</name>
+          <unitName xml:lang="en">dimensionless</unitName>
+        </property>
+        <property propertyId="c74c3729-e577-4081-b572-a283d2561a75" amount="0.149" isDefiningValue="false" unitId="577e242a-461f-44a7-922c-d8e1c3d2bf45">
+          <name xml:lang="en">carbon content, fossil</name>
+          <unitName xml:lang="en">dimensionless</unitName>
+          <comment xml:lang="en">fossil carbon content on a dry matter basis. Represents the total organic carbon emissions to air, water and soil.</comment>
+        </property>
+        <property propertyId="6393c14b-db78-445d-a47b-c0cb866a1b25" amount="0.0" isDefiningValue="false" unitId="577e242a-461f-44a7-922c-d8e1c3d2bf45">
+          <name xml:lang="en">carbon content, non-fossil</name>
+          <unitName xml:lang="en">dimensionless</unitName>
+          <comment xml:lang="en">biogene carbon content on a dry matter basis</comment>
+        </property>
+        <property propertyId="3a0af1d6-04c3-41c6-a3da-92c4f61e0eaa" amount="1.0" isDefiningValue="false" unitId="487df68b-4994-4027-8fdc-a4dc298257b7">
+          <name xml:lang="en">dry mass</name>
+          <unitName xml:lang="en">kg</unitName>
+        </property>
+        <property propertyId="38f94dd1-d5aa-41b8-b182-c0c42985d9dc" amount="0.0" unitId="7b75baf0-cbee-45e6-bf66-af119da06553">
+          <name xml:lang="en">price</name>
+          <unitName xml:lang="en">EUR2005</unitName>
+          <comment xml:lang="en">Waste products are assigned a price of zero as they are assumed to require further treatment.</comment>
+        </property>
+        <property propertyId="67f102e2-9cb6-4d20-aa16-bf74d8a03326" amount="1.0" isDefiningValue="false" unitId="487df68b-4994-4027-8fdc-a4dc298257b7">
+          <name xml:lang="en">wet mass</name>
+          <unitName xml:lang="en">kg</unitName>
+        </property>
+        <productionVolumeComment xml:lang="en">Estimation. Calculated from production volume of reference product using the relative outputs.
+
+Annual production volume of non-exhaust brake wear emissions = total Gtkm/yr * t emission/t gross vehicle weight and km = 5.94E+12 Gtkm/yr * 8.13E-09 t/Gtkm * 1000
+
+Gtkm expresses the transport of freight and vehicle over one kilometer. Source for total tkm/yr in Europe (EU 19 + CH &amp; NO): TREMOVE (2009) v2.7b. Amount of emissions per tkm taken from Ntziachristos, L., Boulter, P. (2009b). EMEP/EEA air pollutant emissions inventory guidebook 2009: Road vehicle tyre and brake wear; Road surface wear. Copenhagen, European Environment Agency.
+Net vehicle weights taken from ecoinvent v2 with minor alteration.</productionVolumeComment>
+        <productionVolumeUncertainty>
+          <lognormal meanValue="1.0" mu="17.692780614898545" variance="0.0006" varianceWithPedigreeUncertainty="0.0015"/>
+          <pedigreeMatrix reliability="2" completeness="2" temporalCorrelation="2" geographicalCorrelation="1" furtherTechnologyCorrelation="1"/>
+        </productionVolumeUncertainty>
+        <classification classificationId="ee3238ec-ca7a-4ddc-af1b-e7c35957b9b6">
+          <classificationSystem xml:lang="en">By-product classification</classificationSystem>
+          <classificationValue xml:lang="en">Waste</classificationValue>
+        </classification>
+        <classification classificationId="95d675ce-bf35-41a9-808b-3f8a231cc74d">
+          <classificationSystem xml:lang="en">CPC</classificationSystem>
+          <classificationValue xml:lang="en">49129: Other parts and accessories n.e.c. of motor vehicles (including brakes, gear boxes, axles, road wheels, suspen[…]</classificationValue>
+        </classification>
+        <classification classificationId="ae913ae9-3396-52e8-a1b8-1a01360b6e0f">
+          <classificationSystem xml:lang="en">HS2017</classificationSystem>
+          <classificationValue xml:lang="en">8708: Motor vehicles; parts and accessories, of heading no. 8701 to 8705</classificationValue>
+        </classification>
+        <outputGroup>0</outputGroup>
+      </intermediateExchange>
+      <elementaryExchange id="3b0e128f-0ed4-4552-aa04-29829bd50001" unitId="487df68b-4994-4027-8fdc-a4dc298257b7" amount="0.00285" elementaryExchangeId="ff65658c-2d39-44a2-b23e-7ec3c644f064">
+        <name xml:lang="en">Aluminium III</name>
+        <unitName xml:lang="en">kg</unitName>
+        <compartment subcompartmentId="7011f0aa-f5f9-4901-8c10-884ad8296812">
+          <compartment xml:lang="en">air</compartment>
+          <subcompartment xml:lang="en">unspecified</subcompartment>
+        </compartment>
+        <outputGroup>4</outputGroup>
+      </elementaryExchange>
+      <elementaryExchange id="43b45655-8cbf-4b5f-af0c-b4820f3b8f4b" unitId="487df68b-4994-4027-8fdc-a4dc298257b7" amount="0.139" elementaryExchangeId="77927dac-dea3-429d-a434-d5a71d92c4f7">
+        <name xml:lang="en">Antimony ion</name>
+        <unitName xml:lang="en">kg</unitName>
+        <compartment subcompartmentId="7011f0aa-f5f9-4901-8c10-884ad8296812">
+          <compartment xml:lang="en">air</compartment>
+          <subcompartment xml:lang="en">unspecified</subcompartment>
+        </compartment>
+        <outputGroup>4</outputGroup>
+      </elementaryExchange>
+      <elementaryExchange id="9bf5335e-8189-436a-92b0-e99301d3eff2" unitId="487df68b-4994-4027-8fdc-a4dc298257b7" amount="9.38E-05" elementaryExchangeId="dc6dbdaa-9f13-43a8-8af5-6603688c6ad0">
+        <name xml:lang="en">Arsenic ion</name>
+        <unitName xml:lang="en">kg</unitName>
+        <compartment subcompartmentId="7011f0aa-f5f9-4901-8c10-884ad8296812">
+          <compartment xml:lang="en">air</compartment>
+          <subcompartment xml:lang="en">unspecified</subcompartment>
+        </compartment>
+        <outputGroup>4</outputGroup>
+      </elementaryExchange>
+      <elementaryExchange id="b5ba6324-8073-4d7c-ab98-95a3fed4e5d8" unitId="487df68b-4994-4027-8fdc-a4dc298257b7" amount="0.0535" elementaryExchangeId="7e246e3a-5cff-43fc-a8e6-02d191424559">
+        <name xml:lang="en">Barium II</name>
+        <unitName xml:lang="en">kg</unitName>
+        <compartment subcompartmentId="7011f0aa-f5f9-4901-8c10-884ad8296812">
+          <compartment xml:lang="en">air</compartment>
+          <subcompartment xml:lang="en">unspecified</subcompartment>
+        </compartment>
+        <outputGroup>4</outputGroup>
+      </elementaryExchange>
+      <elementaryExchange id="5bdc0b32-861d-4870-92d8-301a8c28d30e" unitId="487df68b-4994-4027-8fdc-a4dc298257b7" amount="5.56E-05" elementaryExchangeId="c24f5894-f95e-4661-ba76-130397348894">
+        <name xml:lang="en">Bromine</name>
+        <unitName xml:lang="en">kg</unitName>
+        <compartment subcompartmentId="7011f0aa-f5f9-4901-8c10-884ad8296812">
+          <compartment xml:lang="en">air</compartment>
+          <subcompartment xml:lang="en">unspecified</subcompartment>
+        </compartment>
+        <outputGroup>4</outputGroup>
+      </elementaryExchange>
+      <elementaryExchange id="79a5cb92-e14f-4083-b36a-3ed6e10c2886" unitId="487df68b-4994-4027-8fdc-a4dc298257b7" amount="3.11E-05" elementaryExchangeId="1c5a7322-9261-4d59-a692-adde6c12de92">
+        <name xml:lang="en">Cadmium II</name>
+        <unitName xml:lang="en">kg</unitName>
+        <compartment subcompartmentId="7011f0aa-f5f9-4901-8c10-884ad8296812">
+          <compartment xml:lang="en">air</compartment>
+          <subcompartment xml:lang="en">unspecified</subcompartment>
+        </compartment>
+        <outputGroup>4</outputGroup>
+      </elementaryExchange>
+      <elementaryExchange id="87fda392-9ad9-484a-a728-f67333a2d695" unitId="487df68b-4994-4027-8fdc-a4dc298257b7" amount="0.0107" elementaryExchangeId="b87016c6-ac91-4414-98ce-fb665e0a6d2e">
+        <name xml:lang="en">Calcium II</name>
+        <unitName xml:lang="en">kg</unitName>
+        <compartment subcompartmentId="7011f0aa-f5f9-4901-8c10-884ad8296812">
+          <compartment xml:lang="en">air</compartment>
+          <subcompartment xml:lang="en">unspecified</subcompartment>
+        </compartment>
+        <outputGroup>4</outputGroup>
+      </elementaryExchange>
+      <elementaryExchange id="22a52e39-e934-4d60-8092-287bc4c3b23f" unitId="487df68b-4994-4027-8fdc-a4dc298257b7" amount="0.00208" elementaryExchangeId="39d1390a-ded6-41cb-a536-d47510bf2fbc">
+        <name xml:lang="en">Chlorine</name>
+        <unitName xml:lang="en">kg</unitName>
+        <compartment subcompartmentId="7011f0aa-f5f9-4901-8c10-884ad8296812">
+          <compartment xml:lang="en">air</compartment>
+          <subcompartment xml:lang="en">unspecified</subcompartment>
+        </compartment>
+        <outputGroup>4</outputGroup>
+      </elementaryExchange>
+      <elementaryExchange id="670bba74-9b04-4ce9-b1fc-b5f8cb02a5a1" unitId="487df68b-4994-4027-8fdc-a4dc298257b7" amount="8.89E-06" elementaryExchangeId="e142b577-e934-4085-9a07-3983d4d92afb">
+        <name xml:lang="en">Chromium III</name>
+        <unitName xml:lang="en">kg</unitName>
+        <compartment subcompartmentId="7011f0aa-f5f9-4901-8c10-884ad8296812">
+          <compartment xml:lang="en">air</compartment>
+          <subcompartment xml:lang="en">unspecified</subcompartment>
+        </compartment>
+        <outputGroup>4</outputGroup>
+      </elementaryExchange>
+      <elementaryExchange id="fcb0463b-e54c-4dc8-99f2-3b641be1fd5b" unitId="487df68b-4994-4027-8fdc-a4dc298257b7" amount="8.89E-06" elementaryExchangeId="f0e28a62-ddf9-4c93-af81-676a58c3f2d4">
+        <name xml:lang="en">Cobalt II</name>
+        <unitName xml:lang="en">kg</unitName>
+        <compartment subcompartmentId="7011f0aa-f5f9-4901-8c10-884ad8296812">
+          <compartment xml:lang="en">air</compartment>
+          <subcompartment xml:lang="en">unspecified</subcompartment>
+        </compartment>
+        <outputGroup>4</outputGroup>
+      </elementaryExchange>
+      <elementaryExchange id="982bf58c-a612-45df-afd6-6ed14ed04d67" unitId="487df68b-4994-4027-8fdc-a4dc298257b7" amount="0.071" elementaryExchangeId="ec8144d6-d123-43b1-9c17-a295422a0498">
+        <name xml:lang="en">Copper ion</name>
+        <unitName xml:lang="en">kg</unitName>
+        <compartment subcompartmentId="7011f0aa-f5f9-4901-8c10-884ad8296812">
+          <compartment xml:lang="en">air</compartment>
+          <subcompartment xml:lang="en">unspecified</subcompartment>
+        </compartment>
+        <outputGroup>4</outputGroup>
+      </elementaryExchange>
+      <elementaryExchange id="910ffafa-2001-4901-8bfb-7c3a59b36a70" unitId="487df68b-4994-4027-8fdc-a4dc298257b7" amount="0.291" elementaryExchangeId="8dba66e2-0f2e-4038-84ef-1e40b4f573a6">
+        <name xml:lang="en">Iron ion</name>
+        <unitName xml:lang="en">kg</unitName>
+        <compartment subcompartmentId="7011f0aa-f5f9-4901-8c10-884ad8296812">
+          <compartment xml:lang="en">air</compartment>
+          <subcompartment xml:lang="en">unspecified</subcompartment>
+        </compartment>
+        <outputGroup>4</outputGroup>
+      </elementaryExchange>
+      <elementaryExchange id="cd5ed82f-10df-44b9-9118-ce7148431c91" unitId="487df68b-4994-4027-8fdc-a4dc298257b7" amount="0.00843" elementaryExchangeId="8e123669-94d3-41d8-9480-a79211fe7c43">
+        <name xml:lang="en">Lead II</name>
+        <unitName xml:lang="en">kg</unitName>
+        <compartment subcompartmentId="7011f0aa-f5f9-4901-8c10-884ad8296812">
+          <compartment xml:lang="en">air</compartment>
+          <subcompartment xml:lang="en">unspecified</subcompartment>
+        </compartment>
+        <outputGroup>4</outputGroup>
+      </elementaryExchange>
+      <elementaryExchange id="cf8ab229-603e-4607-a3cd-6153f1304242" unitId="487df68b-4994-4027-8fdc-a4dc298257b7" amount="0.00342" elementaryExchangeId="295060ba-3c3d-45e4-99ca-e17b1204b553">
+        <name xml:lang="en">Manganese II</name>
+        <unitName xml:lang="en">kg</unitName>
+        <compartment subcompartmentId="7011f0aa-f5f9-4901-8c10-884ad8296812">
+          <compartment xml:lang="en">air</compartment>
+          <subcompartment xml:lang="en">unspecified</subcompartment>
+        </compartment>
+        <outputGroup>4</outputGroup>
+      </elementaryExchange>
+      <elementaryExchange id="fbee6a56-43a2-46e0-a4d9-a3bdd8f7517c" unitId="487df68b-4994-4027-8fdc-a4dc298257b7" amount="0.0139" elementaryExchangeId="640e30d2-3158-4a1a-82ef-fd0c72922c9a">
+        <name xml:lang="en">Molybdenum VI</name>
+        <unitName xml:lang="en">kg</unitName>
+        <compartment subcompartmentId="7011f0aa-f5f9-4901-8c10-884ad8296812">
+          <compartment xml:lang="en">air</compartment>
+          <subcompartment xml:lang="en">unspecified</subcompartment>
+        </compartment>
+        <outputGroup>4</outputGroup>
+      </elementaryExchange>
+      <elementaryExchange id="1a91e738-6708-4762-ba62-2dedf8fb01f4" unitId="487df68b-4994-4027-8fdc-a4dc298257b7" amount="0.000454" elementaryExchangeId="a5506f4b-113f-4713-95c3-c819dde6e48b">
+        <name xml:lang="en">Nickel II</name>
+        <unitName xml:lang="en">kg</unitName>
+        <compartment subcompartmentId="7011f0aa-f5f9-4901-8c10-884ad8296812">
+          <compartment xml:lang="en">air</compartment>
+          <subcompartment xml:lang="en">unspecified</subcompartment>
+        </compartment>
+        <outputGroup>4</outputGroup>
+      </elementaryExchange>
+      <elementaryExchange id="fd6630e2-d1db-4483-872d-e47e0e03faff" unitId="487df68b-4994-4027-8fdc-a4dc298257b7" amount="0.00222" elementaryExchangeId="5e7cf95c-9cc3-4479-89af-55377b3db99c">
+        <name xml:lang="en">Nitrate</name>
+        <unitName xml:lang="en">kg</unitName>
+        <compartment subcompartmentId="7011f0aa-f5f9-4901-8c10-884ad8296812">
+          <compartment xml:lang="en">air</compartment>
+          <subcompartment xml:lang="en">unspecified</subcompartment>
+        </compartment>
+        <outputGroup>4</outputGroup>
+      </elementaryExchange>
+      <elementaryExchange id="535a2793-113a-477a-a133-ee5789cdb6b8" unitId="487df68b-4994-4027-8fdc-a4dc298257b7" amount="2.47E-06" elementaryExchangeId="3e5d7d91-67d7-4afb-91dd-36fab58e4685">
+        <name xml:lang="en">PAH, polycyclic aromatic hydrocarbons</name>
+        <unitName xml:lang="en">kg</unitName>
+        <compartment subcompartmentId="7011f0aa-f5f9-4901-8c10-884ad8296812">
+          <compartment xml:lang="en">air</compartment>
+          <subcompartment xml:lang="en">unspecified</subcompartment>
+        </compartment>
+        <outputGroup>4</outputGroup>
+      </elementaryExchange>
+      <elementaryExchange id="219460bc-3de9-439a-90fa-06e7f6955c78" unitId="487df68b-4994-4027-8fdc-a4dc298257b7" amount="0.39" elementaryExchangeId="21e46cb8-6233-4c99-bac3-c41d2ab99498">
+        <name xml:lang="en">Particulate Matter, &lt; 2.5 um</name>
+        <unitName xml:lang="en">kg</unitName>
+        <compartment subcompartmentId="7011f0aa-f5f9-4901-8c10-884ad8296812">
+          <compartment xml:lang="en">air</compartment>
+          <subcompartment xml:lang="en">unspecified</subcompartment>
+        </compartment>
+        <outputGroup>4</outputGroup>
+      </elementaryExchange>
+      <elementaryExchange id="1d873b3d-5129-46b3-9eb1-7630f2d829a5" unitId="487df68b-4994-4027-8fdc-a4dc298257b7" amount="0.02" elementaryExchangeId="66020d27-7ae4-4e59-83a3-89214b72c40a">
+        <name xml:lang="en">Particulate Matter, &gt; 10 um</name>
+        <unitName xml:lang="en">kg</unitName>
+        <compartment subcompartmentId="7011f0aa-f5f9-4901-8c10-884ad8296812">
+          <compartment xml:lang="en">air</compartment>
+          <subcompartment xml:lang="en">unspecified</subcompartment>
+        </compartment>
+        <outputGroup>4</outputGroup>
+      </elementaryExchange>
+      <elementaryExchange id="011da9d6-a1f6-47ac-aeec-a4b0ab35b5a8" unitId="487df68b-4994-4027-8fdc-a4dc298257b7" amount="0.59" elementaryExchangeId="b967e1bf-f09b-4c89-8740-ace21db47bba">
+        <name xml:lang="en">Particulate Matter, &gt; 2.5 um and &lt; 10um</name>
+        <unitName xml:lang="en">kg</unitName>
+        <compartment subcompartmentId="7011f0aa-f5f9-4901-8c10-884ad8296812">
+          <compartment xml:lang="en">air</compartment>
+          <subcompartment xml:lang="en">unspecified</subcompartment>
+        </compartment>
+        <outputGroup>4</outputGroup>
+      </elementaryExchange>
+      <elementaryExchange id="a4a9011c-7203-4763-9882-b165757eb63e" unitId="487df68b-4994-4027-8fdc-a4dc298257b7" amount="0.000727" elementaryExchangeId="756b1234-887b-406e-88ed-b50ba4694f09">
+        <name xml:lang="en">Potassium I</name>
+        <unitName xml:lang="en">kg</unitName>
+        <compartment subcompartmentId="7011f0aa-f5f9-4901-8c10-884ad8296812">
+          <compartment xml:lang="en">air</compartment>
+          <subcompartment xml:lang="en">unspecified</subcompartment>
+        </compartment>
+        <outputGroup>4</outputGroup>
+      </elementaryExchange>
+      <elementaryExchange id="41743193-0dea-4e7e-b43c-7e5dd1a8ae30" unitId="487df68b-4994-4027-8fdc-a4dc298257b7" amount="2.78E-05" elementaryExchangeId="454c61fd-c52b-4a04-9731-f141bb7b5264">
+        <name xml:lang="en">Selenium IV</name>
+        <unitName xml:lang="en">kg</unitName>
+        <compartment subcompartmentId="7011f0aa-f5f9-4901-8c10-884ad8296812">
+          <compartment xml:lang="en">air</compartment>
+          <subcompartment xml:lang="en">unspecified</subcompartment>
+        </compartment>
+        <outputGroup>4</outputGroup>
+      </elementaryExchange>
+      <elementaryExchange id="14028fc9-ef1e-4102-8180-9330826bddfc" unitId="487df68b-4994-4027-8fdc-a4dc298257b7" amount="0.0943" elementaryExchangeId="e98b9661-2844-49dc-9ae4-855b9912c700">
+        <name xml:lang="en">Silicon</name>
+        <unitName xml:lang="en">kg</unitName>
+        <compartment subcompartmentId="7011f0aa-f5f9-4901-8c10-884ad8296812">
+          <compartment xml:lang="en">air</compartment>
+          <subcompartment xml:lang="en">unspecified</subcompartment>
+        </compartment>
+        <outputGroup>4</outputGroup>
+      </elementaryExchange>
+      <elementaryExchange id="8c107960-f40c-4677-9716-3c2f6aa192c3" unitId="487df68b-4994-4027-8fdc-a4dc298257b7" amount="0.0108" elementaryExchangeId="235b2f02-ff98-4da9-82e2-e4246c7b7990">
+        <name xml:lang="en">Sodium I</name>
+        <unitName xml:lang="en">kg</unitName>
+        <compartment subcompartmentId="7011f0aa-f5f9-4901-8c10-884ad8296812">
+          <compartment xml:lang="en">air</compartment>
+          <subcompartment xml:lang="en">unspecified</subcompartment>
+        </compartment>
+        <outputGroup>4</outputGroup>
+      </elementaryExchange>
+      <elementaryExchange id="4ac0f24f-3f52-40b1-9caa-5afdb6393567" unitId="487df68b-4994-4027-8fdc-a4dc298257b7" amount="0.000722" elementaryExchangeId="0d9f52b2-f2d5-46a3-90a3-e22ef252cc37">
+        <name xml:lang="en">Strontium II</name>
+        <unitName xml:lang="en">kg</unitName>
+        <compartment subcompartmentId="7011f0aa-f5f9-4901-8c10-884ad8296812">
+          <compartment xml:lang="en">air</compartment>
+          <subcompartment xml:lang="en">unspecified</subcompartment>
+        </compartment>
+        <outputGroup>4</outputGroup>
+      </elementaryExchange>
+      <elementaryExchange id="7845888c-319c-43aa-b904-19031531ee0a" unitId="487df68b-4994-4027-8fdc-a4dc298257b7" amount="0.0464" elementaryExchangeId="9b00c244-fcce-4d38-922b-601a81f2ba34">
+        <name xml:lang="en">Sulfate</name>
+        <unitName xml:lang="en">kg</unitName>
+        <compartment subcompartmentId="7011f0aa-f5f9-4901-8c10-884ad8296812">
+          <compartment xml:lang="en">air</compartment>
+          <subcompartment xml:lang="en">unspecified</subcompartment>
+        </compartment>
+        <outputGroup>4</outputGroup>
+      </elementaryExchange>
+      <elementaryExchange id="9f00edca-ed30-4a52-9a27-d11e54561251" unitId="487df68b-4994-4027-8fdc-a4dc298257b7" amount="0.0356" elementaryExchangeId="fd7aa71c-508c-480d-81a6-8052aad92646">
+        <name xml:lang="en">Sulfur dioxide</name>
+        <unitName xml:lang="en">kg</unitName>
+        <compartment subcompartmentId="7011f0aa-f5f9-4901-8c10-884ad8296812">
+          <compartment xml:lang="en">air</compartment>
+          <subcompartment xml:lang="en">unspecified</subcompartment>
+        </compartment>
+        <outputGroup>4</outputGroup>
+      </elementaryExchange>
+      <elementaryExchange id="8906665f-3ea7-4f8d-b451-b437e32fc107" unitId="487df68b-4994-4027-8fdc-a4dc298257b7" amount="0.00972" elementaryExchangeId="2a7b68ff-f12a-44c6-8b31-71ec91d29889">
+        <name xml:lang="en">Tin ion</name>
+        <unitName xml:lang="en">kg</unitName>
+        <compartment subcompartmentId="7011f0aa-f5f9-4901-8c10-884ad8296812">
+          <compartment xml:lang="en">air</compartment>
+          <subcompartment xml:lang="en">unspecified</subcompartment>
+        </compartment>
+        <outputGroup>4</outputGroup>
+      </elementaryExchange>
+      <elementaryExchange id="b78ce661-339f-4116-b24b-4241af900ce0" unitId="487df68b-4994-4027-8fdc-a4dc298257b7" amount="0.005" elementaryExchangeId="b15d845f-810e-4614-8633-af8bab2014ee">
+        <name xml:lang="en">Titanium ion</name>
+        <unitName xml:lang="en">kg</unitName>
+        <compartment subcompartmentId="7011f0aa-f5f9-4901-8c10-884ad8296812">
+          <compartment xml:lang="en">air</compartment>
+          <subcompartment xml:lang="en">unspecified</subcompartment>
+        </compartment>
+        <outputGroup>4</outputGroup>
+      </elementaryExchange>
+      <elementaryExchange id="23f3bda8-8187-4c39-858c-e8847d5b3306" unitId="487df68b-4994-4027-8fdc-a4dc298257b7" amount="0.000917" elementaryExchangeId="591b0a62-8064-4697-86ed-47bfa1f8b5e6">
+        <name xml:lang="en">Vanadium V</name>
+        <unitName xml:lang="en">kg</unitName>
+        <compartment subcompartmentId="7011f0aa-f5f9-4901-8c10-884ad8296812">
+          <compartment xml:lang="en">air</compartment>
+          <subcompartment xml:lang="en">unspecified</subcompartment>
+        </compartment>
+        <outputGroup>4</outputGroup>
+      </elementaryExchange>
+      <elementaryExchange id="c21c6aec-ef89-43a9-b162-a978852fd7a9" unitId="487df68b-4994-4027-8fdc-a4dc298257b7" amount="0.0121" elementaryExchangeId="5ce378a0-b48d-471c-977d-79681521efde">
+        <name xml:lang="en">Zinc II</name>
+        <unitName xml:lang="en">kg</unitName>
+        <compartment subcompartmentId="7011f0aa-f5f9-4901-8c10-884ad8296812">
+          <compartment xml:lang="en">air</compartment>
+          <subcompartment xml:lang="en">unspecified</subcompartment>
+        </compartment>
+        <outputGroup>4</outputGroup>
+      </elementaryExchange>
+    </flowData>
+    <modellingAndValidation>
+      <representativeness systemModelId="290c1f85-4cc4-4fa1-b0c8-2cb7f4276dce">
+        <systemModelName xml:lang="en">Allocation, cut-off by classification</systemModelName>
+        <samplingProcedure xml:lang="en">Literature</samplingProcedure>
+      </representativeness>
+      <review reviewedMajorRelease="3" reviewedMinorRelease="0" reviewedMajorRevision="0" reviewedMinorRevision="10" reviewerId="35d091e9-38c2-4037-9efe-a73673c57123" reviewerName="Emilia Moreno Ruiz" reviewerEmail="moreno@ecoinvent.org" reviewDate="2014-04-04">
+        <otherDetails xml:lang="en"/>
+      </review>
+      <review reviewedMajorRelease="3" reviewedMinorRelease="0" reviewedMajorRevision="0" reviewedMinorRevision="10" reviewerId="87296ea5-2149-44c3-8e36-b1256c92666a" reviewerName="Gregor Wernet" reviewerEmail="wernet@ecoinvent.org" reviewDate="2014-04-04">
+        <otherDetails xml:lang="en"/>
+      </review>
+      <review reviewedMajorRelease="3" reviewedMinorRelease="0" reviewedMajorRevision="0" reviewedMinorRevision="10" reviewerId="f86c02d3-2c12-4c25-ad03-33af05bcfe63" reviewerName="Tereza Levova" reviewerEmail="levova@ecoinvent.org" reviewDate="2014-04-04">
+        <otherDetails xml:lang="en"/>
+      </review>
+      <review reviewedMajorRelease="3" reviewedMinorRelease="0" reviewedMajorRevision="0" reviewedMinorRevision="10" reviewerId="c4597934-ecac-422c-b431-382e85fdcb83" reviewerName="[System]" reviewerEmail="support@ecoinvent.org" reviewDate="2014-04-10">
+        <otherDetails xml:lang="en">Validation warnings:
+
+- Consider if it would be better to create this dataset as a child dataset relative to a parent dataset. See the ecoinvent Data Quality Guideline Chapter 4.2 for further advice.
+- Mass and/or economic deficit in activity dataset exceeds either 0.1% of input or output sum:
+
+Property 'carbon content, fossil':
+ - Input='0,149', Output='0,922580126157611'
+ - Input &lt; output by 0,773580126157611 kg (83,85% of output)
+
+Property 'carbon content, non-fossil':
+ - Input='0', Output='1,17579759735518E-06'
+ - Input &lt; output by 1,17579759735518E-06 kg (100% of output)
+
+Property 'dry mass':
+ - Input='1', Output='1,81506855'
+ - Input &lt; output by 0,81506855 kg (44,91% of output)
+
+Property 'wet mass':
+ - Input='1', Output='1,81506855'
+ - Input &lt; output by 0,81506855 kg (44,91% of output)
+
+
+- Uncertainty shall always be provided for all primary data inputs (exchange amounts, properties and parameters), except for the amount and properties of reference products.
+ -- Property(ies): carbon content, fossil=0, carbon content, non-fossil=0, water in wet mass=0, water content=0, dry mass=1, wet mass=1, carbon content, non-fossil=0, water in wet mass=0, water content=0, carbon content, fossil=0, wet mass=1, dry mass=1, carbon content, non-fossil=0, water in wet mass=0, water content=0, carbon content, fossil=0, wet mass=1, dry mass=1, water in wet mass=0, carbon content, fossil=0, water content=0, carbon content, non-fossil=0, wet mass=1, dry mass=1, water in wet mass=0, carbon content, non-fossil=0, water content=0, carbon content, fossil=0, dry mass=1, wet mass=1, water in wet mass=0, carbon content, non-fossil=0, carbon content, fossil=0, water content=0, wet mass=1, dry mass=1, water in wet mass=0, water content=0, carbon content, non-fossil=0, carbon content, fossil=0, wet mass=1, dry mass=1, water in wet mass=0, carbon content, fossil=0,922578950360014, carbon content, non-fossil=0, water content=0, wet mass=1, dry mass=1, carbon content, fossil=0, carbon content, non-fossil=0, water content=0, water in wet mass=0, dry mass=1, wet mass=1, carbon content, non-fossil=0, water in wet mass=0, water content=0, carbon content, fossil=0, dry mass=1, wet mass=1, carbon content, non-fossil=0, water in wet mass=0, carbon content, fossil=0, water content=0, wet mass=1, dry mass=1, carbon content, fossil=0,476031415933272, water in wet mass=0, carbon content, non-fossil=0,476031415933272, water content=0, dry mass=1, wet mass=1, carbon content, non-fossil=0, water in wet mass=0, carbon content, fossil=0, water content=0, wet mass=1, dry mass=1, water in wet mass=0, carbon content, non-fossil=0, water content=0, carbon content, fossil=0, dry mass=1, wet mass=1, carbon content, fossil=0, water in wet mass=0, carbon content, non-fossil=0, water content=0, dry mass=1, wet mass=1, water in wet mass=0, carbon content, non-fossil=0, water content=0, carbon content, fossil=0, wet mass=1, dry mass=1, carbon content, non-fossil=0, water content=0, water in wet mass=0, carbon content, fossil=0, dry mass=1, wet mass=1, carbon content, non-fossil=0, carbon content, fossil=0, water in wet mass=0, water content=0, wet mass=1, dry mass=1, water content=0, carbon content, fossil=0,922578950360014, water in wet mass=0, carbon content, non-fossil=0, wet mass=1, dry mass=1, carbon content, non-fossil=0, water in wet mass=0, carbon content, fossil=0, water content=0, wet mass=1, dry mass=1, water in wet mass=0, carbon content, non-fossil=0, water content=0, carbon content, fossil=0,922578950360014, wet mass=1, dry mass=1, water in wet mass=0, carbon content, fossil=0, water content=0, carbon content, non-fossil=0, dry mass=1, wet mass=1, water content=0, carbon content, fossil=0, carbon content, non-fossil=0, water in wet mass=0, wet mass=1, dry mass=1, carbon content, fossil=0, water in wet mass=0, water content=0, carbon content, non-fossil=0, dry mass=1, wet mass=1, water in wet mass=0, carbon content, non-fossil=0, water content=0, carbon content, fossil=0, dry mass=1, wet mass=1, water in wet mass=0, carbon content, fossil=0, carbon content, non-fossil=0, water content=0, dry mass=1, wet mass=1, carbon content, fossil=0, carbon content, non-fossil=0, water in wet mass=0, water content=0, wet mass=1, dry mass=1, carbon content, non-fossil=0, water in wet mass=0, water content=0, carbon content, fossil=0, wet mass=1, dry mass=1, water in wet mass=0, carbon content, fossil=0, carbon content, non-fossil=0, water content=0, wet mass=1, dry mass=1, water content=0, water in wet mass=0, carbon content, fossil=0, carbon content, non-fossil=0, dry mass=1, wet mass=1, water in wet mass=0, carbon content, fossil=0, carbon content, non-fossil=0, water content=0, dry mass=1, wet mass=1, carbon content, non-fossil=0, water in wet mass=0, water content=0, carbon content, fossil=0, wet mass=1, dry mass=1
+
+- Pedigree information shall always be provided for all uncertainties of primary data inputs (exchange amounts, properties and parameters), except for the amount and properties of reference products.
+ -- Property(ies): carbon content, fossil=0, carbon content, non-fossil=0, water in wet mass=0, water content=0, dry mass=1, wet mass=1, carbon content, non-fossil=0, water in wet mass=0, water content=0, carbon content, fossil=0, wet mass=1, dry mass=1, carbon content, non-fossil=0, water in wet mass=0, water content=0, carbon content, fossil=0, wet mass=1, dry mass=1, water in wet mass=0, carbon content, fossil=0, water content=0, carbon content, non-fossil=0, wet mass=1, dry mass=1, water in wet mass=0, carbon content, non-fossil=0, water content=0, carbon content, fossil=0, dry mass=1, wet mass=1, water in wet mass=0, carbon content, non-fossil=0, carbon content, fossil=0, water content=0, wet mass=1, dry mass=1, water in wet mass=0, water content=0, carbon content, non-fossil=0, carbon content, fossil=0, wet mass=1, dry mass=1, water in wet mass=0, carbon content, fossil=0,922578950360014, carbon content, non-fossil=0, water content=0, wet mass=1, dry mass=1, carbon content, fossil=0, carbon content, non-fossil=0, water content=0, water in wet mass=0, dry mass=1, wet mass=1, carbon content, non-fossil=0, water in wet mass=0, water content=0, carbon content, fossil=0, dry mass=1, wet mass=1, carbon content, non-fossil=0, water in wet mass=0, carbon content, fossil=0, water content=0, wet mass=1, dry mass=1, carbon content, fossil=0,476031415933272, water in wet mass=0, carbon content, non-fossil=0,476031415933272, water content=0, dry mass=1, wet mass=1, carbon content, non-fossil=0, water in wet mass=0, carbon content, fossil=0, water content=0, wet mass=1, dry mass=1, water in wet mass=0, carbon content, non-fossil=0, water content=0, carbon content, fossil=0, dry mass=1, wet mass=1, carbon content, fossil=0, water in wet mass=0, carbon content, non-fossil=0, water content=0, dry mass=1, wet mass=1, water in wet mass=0, carbon content, non-fossil=0, water content=0, carbon content, fossil=0, wet mass=1, dry mass=1, carbon content, non-fossil=0, water content=0, water in wet mass=0, carbon content, fossil=0, dry mass=1, wet mass=1, carbon content, non-fossil=0, carbon content, fossil=0, water in wet mass=0, water content=0, wet mass=1, dry mass=1, water content=0, carbon content, fossil=0,922578950360014, water in wet mass=0, carbon content, non-fossil=0, wet mass=1, dry mass=1, carbon content, non-fossil=0, water in wet mass=0, carbon content, fossil=0, water content=0, wet mass=1, dry mass=1, water in wet mass=0, carbon content, non-fossil=0, water content=0, carbon content, fossil=0,922578950360014, wet mass=1, dry mass=1, water in wet mass=0, carbon content, fossil=0, water content=0, carbon content, non-fossil=0, dry mass=1, wet mass=1, water content=0, carbon content, fossil=0, carbon content, non-fossil=0, water in wet mass=0, wet mass=1, dry mass=1, carbon content, fossil=0, water in wet mass=0, water content=0, carbon content, non-fossil=0, dry mass=1, wet mass=1, water in wet mass=0, carbon content, non-fossil=0, water content=0, carbon content, fossil=0, dry mass=1, wet mass=1, water in wet mass=0, carbon content, fossil=0, carbon content, non-fossil=0, water content=0, dry mass=1, wet mass=1, carbon content, fossil=0, carbon content, non-fossil=0, water in wet mass=0, water content=0, wet mass=1, dry mass=1, carbon content, non-fossil=0, water in wet mass=0, water content=0, carbon content, fossil=0, wet mass=1, dry mass=1, water in wet mass=0, carbon content, fossil=0, carbon content, non-fossil=0, water content=0, wet mass=1, dry mass=1, water content=0, water in wet mass=0, carbon content, fossil=0, carbon content, non-fossil=0, dry mass=1, wet mass=1, water in wet mass=0, carbon content, fossil=0, carbon content, non-fossil=0, water content=0, dry mass=1, wet mass=1, carbon content, non-fossil=0, water in wet mass=0, water content=0, carbon content, fossil=0, wet mass=1, dry mass=1
+
+- The following negative reference products could not be identified as materials for treatment. A market is missing for the negative reference product.
+ - brake wear emissions, lorry
+
+</otherDetails>
+      </review>
+    </modellingAndValidation>
+    <administrativeInformation>
+      <dataEntryBy personId="50d9d3b9-313f-43bb-ba08-8a498d208034" isActiveAuthor="true" personName="Andrew Simons" personEmail="andrew.simons@3sp.ch"/>
+      <dataGeneratorAndPublication personId="50d9d3b9-313f-43bb-ba08-8a498d208034" personName="Andrew Simons" personEmail="andrew.simons@3sp.ch" dataPublishedIn="1" publishedSourceId="7576770b-a1f2-4ecc-9f69-52b216badd81" publishedSourceYear="2009" publishedSourceFirstAuthor="Ntziachristos L., Paul P." isCopyrightProtected="true" accessRestrictedTo="1"/>
+      <fileAttributes majorRelease="3" minorRelease="0" majorRevision="1" minorRevision="0" internalSchemaVersion="2.0.8" defaultLanguage="en" creationTimestamp="2014-04-02T00:16:31" lastEditTimestamp="2014-04-10T22:03:34" fileGenerator="EcoEditor 3.3.65.10874" fileTimestamp="2014-04-10T22:03:34" contextId="de659012-50c4-4e96-b54a-fc781bf987ab">
+        <contextName xml:lang="en">ecoinvent</contextName>
+      </fileAttributes>
+    </administrativeInformation>
+  </childActivityDataset>
+</ecoSpold>

@@ -1,0 +1,216 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<ecoSpold xmlns="http://www.EcoInvent.org/EcoSpold02" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.EcoInvent.org/EcoSpold02 ../../schemas/datasets/EcoSpold02.xsd http://www.EcoInvent.org/UsedUserMasterData ../../schemas/datasets/EcoSpold02UserMasterData.xsd">
+  <childActivityDataset>
+    <activityDescription>
+      <activity specialActivityType="0" id="fc1bdfd3-33b9-5a3a-b6b5-a5a0feead7f0" activityNameId="13e0c586-50f0-4858-8fdf-44c924f83b6f" parentActivityId="dba8eb45-fd4b-4e31-a7c8-2b572de45eb4" inheritanceDepth="0" type="2">
+        <activityName xml:lang="en">treatment of used refrigerant R134a, reclamation</activityName>
+        <includedActivitiesStart xml:lang="en">The activity starts, when the used refrigerant is accepted for treatment. From cradle, i.e. including all upstream activities.</includedActivitiesStart>
+        <includedActivitiesEnd xml:lang="en">There are no data on the amount of energy needed during this process. </includedActivitiesEnd>
+        <generalComment>
+          <text xml:lang="en" index="0">This dataset represent treatment of used refrigerant R134a by reclamation.</text>
+          <text xml:lang="en" index="1">The refrigerant R134a is widely used refrigerant (mainly in automobile air conditioning systems and othere refrigeration and cooling technolodges). It can be treated by primary three different technologies; 1) venting, 2) reclamation and 3) final disposal. </text>
+          <text xml:lang="en" index="2">Since the R134a causes global warming venting as a way of treatment is forbidden in some countries. For example in the US (US EPA, http://www.epa.gov/ozone/title6/608/faq.html, accessed 20141105).</text>
+        </generalComment>
+      </activity>
+      <classification classificationId="5e736d13-58c6-4fbd-8157-dd6ef35c3f88">
+        <classificationSystem xml:lang="en">ISIC rev.4 ecoinvent</classificationSystem>
+        <classificationValue xml:lang="en">3822:Treatment and disposal of hazardous waste</classificationValue>
+      </classification>
+      <geography geographyId="34dbbff8-88ce-11de-ad60-0019e336be3a">
+        <shortname xml:lang="en">GLO</shortname>
+      </geography>
+      <technology technologyLevel="2">
+        <comment>
+          <text xml:lang="en" index="0">Reclamation refers to the reprocessing of used HFC-134a to new product specifications. Quality of reclaimed product is verified by chemical analysis (DuPont, HFC-134a Technical Information, http://www2.dupont.com/Refrigerants/en_US/assets/downloads/h45945_hfc134a_push.pdf, accessed 20141105).</text>
+          <text xml:lang="en" index="1">The machine for R-134a reclaim are mostly portable machineries for cars. Their functions are mainly recovery, vacuuming and charging. Recovery is the process to recover the R-134a and purifying it, the purified refrigerant is then stored in the machine. Vacuuming the car is to eliminate any residuals to prevent contamination. Charging is then insertion of the refrigerant (http://wonderfu.buy.lightneasy.org/pz66c0ed9-fully-automatic-r134a-recovery-machine-and-refrigerant-charging-machine.html, accessed 20150924).</text>
+        </comment>
+      </technology>
+      <timePeriod startDate="2010-01-01" endDate="2023-12-31" isDataValidForEntirePeriod="true"/>
+      <macroEconomicScenario macroEconomicScenarioId="d9f57f0a-a01f-42eb-a57b-8f18d6635801">
+        <name xml:lang="en">Business-as-Usual</name>
+      </macroEconomicScenario>
+    </activityDescription>
+    <flowData>
+      <intermediateExchange id="3bc94e33-2913-566f-a44d-f0344abc1e8b" unitId="487df68b-4994-4027-8fdc-a4dc298257b7" variableName="refrigerant_ByP" casNumber="000811-97-2" amount="1.0" isCalculatedAmount="true" mathematicalRelation="ABS(used_refrigerant)- refrigerant_to_air- waste_haz" intermediateExchangeId="8a309022-83ff-455f-a0bd-17edef16b064" productionVolumeAmount="64188600.0" productionVolumeMathematicalRelation=" refrigerant_ByP/ABS( used_refrigerant)* used_refrigerant_PV">
+        <name xml:lang="en">refrigerant R134a</name>
+        <unitName xml:lang="en">kg</unitName>
+        <comment xml:lang="en">Calculated value.</comment>
+        <property propertyId="f2283db2-62e4-467f-b9ac-c4f45be563b4" amount="0.235294117647059" isDefiningValue="false" isCalculatedAmount="false" unitId="487df68b-4994-4027-8fdc-a4dc298257b7">
+          <name xml:lang="en">carbon allocation</name>
+          <unitName xml:lang="en">kg</unitName>
+        </property>
+        <property propertyId="a301a838-7975-4d89-9e74-8eb77ad03cd1" amount="0.235294117647059" isDefiningValue="false" isCalculatedAmount="false" unitId="577e242a-461f-44a7-922c-d8e1c3d2bf45">
+          <name xml:lang="en">carbon content</name>
+          <unitName xml:lang="en">dimensionless</unitName>
+        </property>
+        <property propertyId="c74c3729-e577-4081-b572-a283d2561a75" amount="0.235294117647059" unitId="577e242a-461f-44a7-922c-d8e1c3d2bf45">
+          <name xml:lang="en">carbon content, fossil</name>
+          <unitName xml:lang="en">dimensionless</unitName>
+        </property>
+        <property propertyId="6393c14b-db78-445d-a47b-c0cb866a1b25" amount="0.0" unitId="577e242a-461f-44a7-922c-d8e1c3d2bf45">
+          <name xml:lang="en">carbon content, non-fossil</name>
+          <unitName xml:lang="en">dimensionless</unitName>
+        </property>
+        <property propertyId="3a0af1d6-04c3-41c6-a3da-92c4f61e0eaa" amount="1.0" unitId="487df68b-4994-4027-8fdc-a4dc298257b7">
+          <name xml:lang="en">dry mass</name>
+          <unitName xml:lang="en">kg</unitName>
+        </property>
+        <property propertyId="48c987bb-3144-4872-b5c7-b1389c40be25" amount="9.51" mathematicalRelation="" unitId="980b811e-3905-4797-82a5-173f5568bc7e">
+          <name xml:lang="en">heating value, net</name>
+          <unitName xml:lang="en">MJ</unitName>
+          <comment xml:lang="en">LHV is calculated based on the elemental composition of the substance. Based on the CAS number of the substance (000811-97-2), which is found manually, the chemical formula of the substance is found to be: C2H2F4, (PubChem 2020).
+Reference: Kim, S., Chen, J., Cheng, T., Gindulyte, A., He, J., He, S., Li, Q., Shoemaker, B. A., Thiessen, P. A., Yu, B., Zaslavsky, L., Zhang, J., &amp; Bolton, E. E. (2019). PubChem 2019 update: improved access to chemical data. Nucleic acids research, 47(D1), D1102–D1109. https://doi.org/10.1093/nar/gky1033</comment>
+        </property>
+        <property propertyId="38f94dd1-d5aa-41b8-b182-c0c42985d9dc" amount="5.0" unitId="7b75baf0-cbee-45e6-bf66-af119da06553">
+          <name xml:lang="en">price</name>
+          <unitName xml:lang="en">EUR2005</unitName>
+          <comment xml:lang="en">Estimated based on purchasing price.</comment>
+        </property>
+        <property propertyId="a9358458-9724-4f03-b622-106eda248916" amount="0.0" unitId="577e242a-461f-44a7-922c-d8e1c3d2bf45">
+          <name xml:lang="en">water content</name>
+          <unitName xml:lang="en">dimensionless</unitName>
+        </property>
+        <property propertyId="6d9e1462-80e3-4f10-b3f4-71febd6f1168" amount="0.0" unitId="487df68b-4994-4027-8fdc-a4dc298257b7">
+          <name xml:lang="en">water in wet mass</name>
+          <unitName xml:lang="en">kg</unitName>
+        </property>
+        <property propertyId="67f102e2-9cb6-4d20-aa16-bf74d8a03326" amount="1.0" unitId="487df68b-4994-4027-8fdc-a4dc298257b7">
+          <name xml:lang="en">wet mass</name>
+          <unitName xml:lang="en">kg</unitName>
+        </property>
+        <productionVolumeComment xml:lang="en">Calculated from production volume of reference product using the relative outputs.</productionVolumeComment>
+        <classification classificationId="39b0f0ab-1a2f-401b-9f4d-6e39400760a4">
+          <classificationSystem xml:lang="en">By-product classification</classificationSystem>
+          <classificationValue xml:lang="en">allocatable product</classificationValue>
+        </classification>
+        <classification classificationId="f9c4918d-e5bd-4d4d-96d0-76cf1fc4d53c">
+          <classificationSystem xml:lang="en">CPC</classificationSystem>
+          <classificationValue xml:lang="en">34110: Hydrocarbons and their halogenated, sulphonated, nitrated or nitrosated derivatives</classificationValue>
+        </classification>
+        <classification classificationId="6d63c7a7-fdff-5280-b6d7-7efd3399479c">
+          <classificationSystem xml:lang="en">HS2017</classificationSystem>
+          <classificationValue xml:lang="en">290339: Fluorinated, brominated or iodinated derivatives of acyclic hydrocarbons; other than ethylene dibromide (IS[...]</classificationValue>
+        </classification>
+        <outputGroup>0</outputGroup>
+      </intermediateExchange>
+      <parameter parameterId="b57acb1b-97d9-426d-bf3c-1448fb0e477a" amount="0.7" variableName="motor_power" isCalculatedAmount="false" unitId="7de7e78f-ccf0-46b4-a549-20b04f4b1421">
+        <name xml:lang="en">motor power</name>
+        <unitName xml:lang="en">kW</unitName>
+        <comment xml:lang="en">Literature data. 
+
+The power used by the reclamation machine as reported by the producer. 
+
+0.7 kW reported by producer - Dayang (http://dyautoequip.en.alibaba.com/product/1639275705-219888480/r134a_refrigerant_recharging_equipment.html&gt;, accessed 20150924 ).
+
+Cross reference:
+
+0.75 kW reported by another producer - Wonderfu (&lt;http://www.wonderfu.com/sale-4009681-auto-r134a-recovery-machine-for-garage-refrigerant-reclaiming-equipment.html&gt;, accessed 20150924).</comment>
+      </parameter>
+      <parameter parameterId="7ed40d4c-f898-4716-bb0b-e123c388d9bd" amount="15.0" variableName="recovery_speed" mathematicalRelation="250/1000*60" isCalculatedAmount="true" unitId="a309a95f-0ed9-4672-8749-2dc7a190c82c">
+        <name xml:lang="en">recovery speed</name>
+        <unitName xml:lang="en">kg/hour</unitName>
+        <comment xml:lang="en">Literature data. 
+
+The recovery speed during the reclamation as reported by the producer. 
+
+250 g/min. reported by producer - Dayang (http://dyautoequip.en.alibaba.com/product/1639275705-219888480/r134a_refrigerant_recharging_equipment.html&gt;, accessed 20150924 ).
+
+Cross reference:
+
+300 g/min. reported by another producer - Wonderfu (&lt;http://www.wonderfu.com/sale-4009681-auto-r134a-recovery-machine-for-garage-refrigerant-reclaiming-equipment.html&gt;, accessed 20150924).</comment>
+      </parameter>
+    </flowData>
+    <modellingAndValidation>
+      <representativeness systemModelId="290c1f85-4cc4-4fa1-b0c8-2cb7f4276dce">
+        <systemModelName xml:lang="en">Allocation, cut-off by classification</systemModelName>
+      </representativeness>
+      <review reviewedMajorRelease="3" reviewedMinorRelease="0" reviewedMajorRevision="0" reviewedMinorRevision="40" reviewerId="35d091e9-38c2-4037-9efe-a73673c57123" reviewerName="Emilia Moreno Ruiz" reviewerEmail="moreno@ecoinvent.org" reviewDate="2014-12-19">
+        <otherDetails xml:lang="en"/>
+      </review>
+      <review reviewedMajorRelease="3" reviewedMinorRelease="0" reviewedMajorRevision="0" reviewedMinorRevision="40" reviewerId="e8d6ebac-c6d1-4f98-b4db-6613e1520289" reviewerName="Gabor Doka" reviewerEmail="gabor@doka.ch" reviewDate="2014-12-19">
+        <details>
+          <text xml:lang="en" index="0">passed</text>
+        </details>
+        <otherDetails xml:lang="en"/>
+      </review>
+      <review reviewedMajorRelease="3" reviewedMinorRelease="0" reviewedMajorRevision="0" reviewedMinorRevision="40" reviewerId="c4597934-ecac-422c-b431-382e85fdcb83" reviewerName="[System]" reviewerEmail="support@ecoinvent.org" reviewDate="2015-07-23">
+        <otherDetails xml:lang="en">Validation warnings:
+
+- Mass and/or economic deficit in activity dataset exceeds either 0.1% of input or output sum:
+
+Property 'carbon content, fossil':
+ - Input='0,23529', Output='0,253364848876727'
+ - Input &lt; output by 0,0180748488767268 kg (7,13% of output)
+
+Property 'water in wet mass':
+ - Input='0', Output='0,025'
+ - Input &lt; output by 0,025 kg (100% of output)
+
+Property 'dry mass':
+ - Input='1', Output='0,975'
+ - Input &gt; output by 0,0249999999999999 kg (2,56% of output)
+
+
+- Specified amount (0,1) did not match amount calculated by uncertainty (0,97) at exchange 'hazardous waste, for incineration'
+- The total water in wet mass of all input exchanges (0) and output exchanges (0,025) is unbalanced.
+- Uncertainty shall always be provided for all primary data inputs (exchange amounts, properties and parameters), except for the amount and properties of reference products.
+ -- Property(ies): water content=0, carbon content, fossil=0,235294117647059, carbon content, non-fossil=0, water in wet mass=0, dry mass=1, wet mass=1, carbon content, non-fossil=0, wet mass=1, water in wet mass=0,25, water content=0,333333333333333, carbon content, fossil=0,554666666666667, dry mass=0,75, carbon content, non-fossil=0, carbon content, fossil=0,23543711202077, water in wet mass=0, water content=0, wet mass=1, dry mass=1
+
+- Pedigree information shall always be provided for all uncertainties of primary data inputs (exchange amounts, properties and parameters), except for the amount and properties of reference products.
+ -- Property(ies): water content=0, carbon content, fossil=0,235294117647059, carbon content, non-fossil=0, water in wet mass=0, dry mass=1, wet mass=1, carbon content, non-fossil=0, wet mass=1, water in wet mass=0,25, water content=0,333333333333333, carbon content, fossil=0,554666666666667, dry mass=0,75, carbon content, non-fossil=0, carbon content, fossil=0,23543711202077, water in wet mass=0, water content=0, wet mass=1, dry mass=1
+
+- The following negative reference products could not be identified as materials for treatment. A market is missing for the negative reference product.
+ - used refrigerant R134a
+
+</otherDetails>
+      </review>
+      <review reviewedMajorRelease="3" reviewedMinorRelease="0" reviewedMajorRevision="1" reviewedMinorRevision="6" reviewerId="35d091e9-38c2-4037-9efe-a73673c57123" reviewerName="Emilia Moreno Ruiz" reviewerEmail="moreno@ecoinvent.org" reviewDate="2015-09-24">
+        <otherDetails xml:lang="en"/>
+      </review>
+      <review reviewedMajorRelease="3" reviewedMinorRelease="0" reviewedMajorRevision="1" reviewedMinorRevision="6" reviewerId="c4597934-ecac-422c-b431-382e85fdcb83" reviewerName="[System]" reviewerEmail="support@ecoinvent.org" reviewDate="2015-09-24">
+        <otherDetails xml:lang="en">Validation warnings:
+
+- Mass and/or economic deficit in activity dataset exceeds either 0.1% of input or output sum:
+
+Property 'dry mass':
+ - Input='1', Output='0,975'
+ - Input &gt; output by 0,0249999999999999 kg (2,56% of output)
+
+Property 'water in wet mass':
+ - Input='0', Output='0,025'
+ - Input &lt; output by 0,025 kg (100% of output)
+
+Property 'carbon content, fossil':
+ - Input='0,23529', Output='0,253364848876727'
+ - Input &lt; output by 0,0180748488767268 kg (7,13% of output)
+
+Property 'price':
+ - Input='0', Output='4,495'
+ - Input &lt; output by 4,495 EUR2005 (100% of output)
+
+
+- Specified amount (0,1) did not match amount calculated by uncertainty (0,97) at exchange 'hazardous waste, for incineration'
+- The total water in wet mass of all input exchanges (0) and output exchanges (0,025) is unbalanced.
+- Uncertainty shall always be provided for all primary data inputs (exchange amounts, properties and parameters), except for the amount and properties of reference products.
+ -- Property(ies): carbon content, fossil=0,554666666666667, water content=0,333333333333333, carbon content, non-fossil=0, water in wet mass=0,25, wet mass=1, dry mass=0,75, price=5, carbon content, fossil=0,235294117647059, water content=0, water in wet mass=0, carbon content, non-fossil=0, wet mass=1, dry mass=1, dry mass=1, water in wet mass=0, carbon content, fossil=0,23543711202077, carbon content, non-fossil=0, wet mass=1, water content=0
+ -- Parameter(s): motor power, recovery speed
+
+- Pedigree information shall always be provided for all uncertainties of primary data inputs (exchange amounts, properties and parameters), except for the amount and properties of reference products.
+ -- Property(ies): carbon content, fossil=0,554666666666667, water content=0,333333333333333, carbon content, non-fossil=0, water in wet mass=0,25, wet mass=1, dry mass=0,75, price=5, carbon content, fossil=0,235294117647059, water content=0, water in wet mass=0, carbon content, non-fossil=0, wet mass=1, dry mass=1, dry mass=1, water in wet mass=0, carbon content, fossil=0,23543711202077, carbon content, non-fossil=0, wet mass=1, water content=0
+ -- Parameter(s): motor power, recovery speed
+
+- The following negative reference products could not be identified as materials for treatment. No activities exist that produce these materials for treatment.
+ - used refrigerant R134a
+
+</otherDetails>
+      </review>
+    </modellingAndValidation>
+    <administrativeInformation>
+      <dataEntryBy personId="f86c02d3-2c12-4c25-ad03-33af05bcfe63" isActiveAuthor="true" personName="Tereza Levova" personEmail="levova@ecoinvent.org"/>
+      <dataGeneratorAndPublication personId="f86c02d3-2c12-4c25-ad03-33af05bcfe63" personName="Tereza Levova" personEmail="levova@ecoinvent.org" isCopyrightProtected="true" accessRestrictedTo="1"/>
+      <fileAttributes majorRelease="3" minorRelease="0" majorRevision="5" minorRevision="0" internalSchemaVersion="2.0.8" defaultLanguage="en" creationTimestamp="2014-11-05T13:56:06" lastEditTimestamp="2015-09-24T17:34:23" fileGenerator="EcoEditor 3.6.120.14104" fileTimestamp="2015-09-24T17:34:23" contextId="de659012-50c4-4e96-b54a-fc781bf987ab">
+        <contextName xml:lang="en">ecoinvent</contextName>
+      </fileAttributes>
+    </administrativeInformation>
+  </childActivityDataset>
+</ecoSpold>

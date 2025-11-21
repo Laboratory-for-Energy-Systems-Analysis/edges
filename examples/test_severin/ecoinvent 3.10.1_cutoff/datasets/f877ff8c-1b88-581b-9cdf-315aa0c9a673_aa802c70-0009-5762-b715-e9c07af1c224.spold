@@ -1,0 +1,403 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<ecoSpold xmlns="http://www.EcoInvent.org/EcoSpold02" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.EcoInvent.org/EcoSpold02 ../../schemas/datasets/EcoSpold02.xsd http://www.EcoInvent.org/UsedUserMasterData ../../schemas/datasets/EcoSpold02UserMasterData.xsd">
+  <childActivityDataset>
+    <activityDescription>
+      <activity specialActivityType="1" id="f877ff8c-1b88-581b-9cdf-315aa0c9a673" activityNameId="ea0728dd-8c54-521f-b2ad-deceafa28333" parentActivityId="d7a51c5c-f5d9-5849-9de0-5311062dcf2e" inheritanceDepth="0" type="2">
+        <activityName xml:lang="en">market for basic oxygen furnace slag, for recovery</activityName>
+        <includedActivitiesStart xml:lang="en">The activity starts with the collection of recovered materials for internal or external use (e.g. in iron and steelmaking or cement making). From cradle, i.e. including all upstream activities.</includedActivitiesStart>
+        <includedActivitiesEnd xml:lang="en">The activity ends with the recovered materials being available for use in other activities (e.g. in iron and steelmaking or cement making).</includedActivitiesEnd>
+        <generalComment>
+          <text xml:lang="en" index="0">This is a market activity. Each market represents the consumption mix of a product in a given geography, connecting suppliers with consumers of the same product in the same geographical area. Markets group the producers and also the imports of the product (if relevant) within the same geographical area. They also account for transport to the consumer and for the losses during that process, when relevant.</text>
+          <text xml:lang="en" index="1">This is the market for 'basic oxygen furnace slag, for recovery', in the geography of Europe. This is a constrained market for consequential system model, for attributional system models, this is a regular market. In the case of consequential system model, details about the marginal consumer can be found in the comment of the conditional exchange (by-product).</text>
+          <text xml:lang="en" index="2">This is a constrained market. The justification for a market constraint is included in the comment field of the conditional exchange. 'Basic oxygen furnace slag' is a by-product of the steelmaking industry that is typically either sent for disposal in a landfill or recovered for internal or external use (e.g. in iron and steelmaking or cement making). This market represents the European supply of 'basic oxygen furnace slag, for recovery', which is the fraction of 'basic oxygen furnace slag' that is recovered for internal or external use. Transportation is not included here as it is included in the market activity 'market for basic oxygen furnace slag'.</text>
+        </generalComment>
+      </activity>
+      <classification classificationId="9a63625a-358b-4c1d-bf95-50ba038a759b">
+        <classificationSystem xml:lang="en">ISIC rev.4 ecoinvent</classificationSystem>
+        <classificationValue xml:lang="en">3821:Treatment and disposal of non-hazardous waste</classificationValue>
+      </classification>
+      <geography geographyId="0723d252-7e2a-11de-9820-0019e336be3a">
+        <shortname xml:lang="en">RER</shortname>
+      </geography>
+      <technology/>
+      <timePeriod startDate="2008-01-01" endDate="2023-12-31" isDataValidForEntirePeriod="true">
+        <comment>
+          <text xml:lang="en" index="0">Time period based on the range of years of publication from which by product fate data were taken (see worldsteel, 2010).</text>
+          <text xml:lang="en" index="1">References:</text>
+          <text xml:lang="en" index="2">Worldsteel (2010). Steel industry by-products. World Steel Association: Brussels, Belgium.</text>
+        </comment>
+      </timePeriod>
+      <macroEconomicScenario macroEconomicScenarioId="d9f57f0a-a01f-42eb-a57b-8f18d6635801">
+        <name xml:lang="en">Business-as-Usual</name>
+      </macroEconomicScenario>
+    </activityDescription>
+    <flowData>
+      <intermediateExchange id="dc0f8d58-8421-5d30-962f-1c65e744a43e" unitId="487df68b-4994-4027-8fdc-a4dc298257b7" variableName="RP" amount="1.0" intermediateExchangeId="aa802c70-0009-5762-b715-e9c07af1c224" productionVolumeAmount="1.0">
+        <name xml:lang="en">basic oxygen furnace slag, for recovery</name>
+        <unitName xml:lang="en">kg</unitName>
+        <comment xml:lang="en"/>
+        <property propertyId="e9688cbc-7400-457a-a936-5ab123ea326c" amount="0.0101033995871153" isDefiningValue="false" unitId="577e242a-461f-44a7-922c-d8e1c3d2bf45">
+          <name xml:lang="en">aluminium content</name>
+          <unitName xml:lang="en">dimensionless</unitName>
+          <comment xml:lang="en">The value of 'aluminium content' is documented in Turner &amp; Symeonidis, 2020.
+Reference: Turner David &amp; Symeonidis Avraam, 2020, Life cycle inventories of the treatment of iron and steelmaking by-products, ecoinvent association, Zürich, Switzerland</comment>
+        </property>
+        <property propertyId="4054bfa7-dfcb-452e-b1dd-810b9e981506" amount="3.3E-06" isDefiningValue="false" unitId="577e242a-461f-44a7-922c-d8e1c3d2bf45">
+          <name xml:lang="en">antimony content</name>
+          <unitName xml:lang="en">dimensionless</unitName>
+          <comment xml:lang="en">The value of 'antimony content' is documented in Turner &amp; Symeonidis, 2020.
+Reference: Turner David &amp; Symeonidis Avraam, 2020, Life cycle inventories of the treatment of iron and steelmaking by-products, ecoinvent association, Zürich, Switzerland</comment>
+        </property>
+        <property propertyId="30f0aa15-2d50-4f09-af94-683b6dd68adc" amount="1.9E-06" isDefiningValue="false" unitId="577e242a-461f-44a7-922c-d8e1c3d2bf45">
+          <name xml:lang="en">arsenic content</name>
+          <unitName xml:lang="en">dimensionless</unitName>
+          <comment xml:lang="en">The value of 'arsenic content' is documented in Turner &amp; Symeonidis, 2020.
+Reference: Turner David &amp; Symeonidis Avraam, 2020, Life cycle inventories of the treatment of iron and steelmaking by-products, ecoinvent association, Zürich, Switzerland</comment>
+        </property>
+        <property propertyId="1dcfb203-7830-40b2-878d-13fc02a74051" amount="7.5E-05" isDefiningValue="false" unitId="577e242a-461f-44a7-922c-d8e1c3d2bf45">
+          <name xml:lang="en">barium content</name>
+          <unitName xml:lang="en">dimensionless</unitName>
+          <comment xml:lang="en">The value of 'barium content' is documented in Turner &amp; Symeonidis, 2020.
+Reference: Turner David &amp; Symeonidis Avraam, 2020, Life cycle inventories of the treatment of iron and steelmaking by-products, ecoinvent association, Zürich, Switzerland</comment>
+        </property>
+        <property propertyId="bf4d71d9-4301-4939-8a9d-36d8811b7db0" amount="5E-07" isDefiningValue="false" unitId="577e242a-461f-44a7-922c-d8e1c3d2bf45">
+          <name xml:lang="en">beryllium content</name>
+          <unitName xml:lang="en">dimensionless</unitName>
+          <comment xml:lang="en">The value of 'beryllium content' is documented in Turner &amp; Symeonidis, 2020.
+Reference: Turner David &amp; Symeonidis Avraam, 2020, Life cycle inventories of the treatment of iron and steelmaking by-products, ecoinvent association, Zürich, Switzerland</comment>
+        </property>
+        <property propertyId="ad7781c7-5dc2-4421-b182-e1fd4cef7fa5" amount="2.5E-06" isDefiningValue="false" unitId="577e242a-461f-44a7-922c-d8e1c3d2bf45">
+          <name xml:lang="en">cadmium content</name>
+          <unitName xml:lang="en">dimensionless</unitName>
+          <comment xml:lang="en">The value of 'cadmium content' is documented in Turner &amp; Symeonidis, 2020.
+Reference: Turner David &amp; Symeonidis Avraam, 2020, Life cycle inventories of the treatment of iron and steelmaking by-products, ecoinvent association, Zürich, Switzerland</comment>
+        </property>
+        <property propertyId="f9da385d-5b1b-4548-826c-0bf5892a9fd9" amount="0.324525174855295" isDefiningValue="false" unitId="577e242a-461f-44a7-922c-d8e1c3d2bf45">
+          <name xml:lang="en">calcium content</name>
+          <unitName xml:lang="en">dimensionless</unitName>
+          <comment xml:lang="en">The value of 'calcium content' is documented in Turner &amp; Symeonidis, 2020.
+Reference: Turner David &amp; Symeonidis Avraam, 2020, Life cycle inventories of the treatment of iron and steelmaking by-products, ecoinvent association, Zürich, Switzerland</comment>
+        </property>
+        <property propertyId="f2283db2-62e4-467f-b9ac-c4f45be563b4" amount="0.0034205262752974143" isDefiningValue="false" isCalculatedAmount="false" unitId="487df68b-4994-4027-8fdc-a4dc298257b7">
+          <name xml:lang="en">carbon allocation</name>
+          <unitName xml:lang="en">kg</unitName>
+        </property>
+        <property propertyId="a301a838-7975-4d89-9e74-8eb77ad03cd1" amount="0.00343771484954514" isDefiningValue="false" isCalculatedAmount="false" unitId="577e242a-461f-44a7-922c-d8e1c3d2bf45">
+          <name xml:lang="en">carbon content</name>
+          <unitName xml:lang="en">dimensionless</unitName>
+        </property>
+        <property propertyId="c74c3729-e577-4081-b572-a283d2561a75" amount="0.00343771484954514" isDefiningValue="false" unitId="577e242a-461f-44a7-922c-d8e1c3d2bf45">
+          <name xml:lang="en">carbon content, fossil</name>
+          <unitName xml:lang="en">dimensionless</unitName>
+          <comment xml:lang="en">The value of 'carbon content, fossil' is documented in Turner &amp; Symeonidis, 2020.
+Reference: Turner David &amp; Symeonidis Avraam, 2020, Life cycle inventories of the treatment of iron and steelmaking by-products, ecoinvent association, Zürich, Switzerland</comment>
+        </property>
+        <property propertyId="6393c14b-db78-445d-a47b-c0cb866a1b25" amount="0.0" isDefiningValue="false" unitId="577e242a-461f-44a7-922c-d8e1c3d2bf45">
+          <name xml:lang="en">carbon content, non-fossil</name>
+          <unitName xml:lang="en">dimensionless</unitName>
+          <comment xml:lang="en">The value of 'carbon content, non-fossil' is documented in Turner &amp; Symeonidis, 2020.
+Reference: Turner David &amp; Symeonidis Avraam, 2020, Life cycle inventories of the treatment of iron and steelmaking by-products, ecoinvent association, Zürich, Switzerland</comment>
+        </property>
+        <property propertyId="66d4c921-658a-4ba0-b190-c6e09e57d74a" amount="0.0001" isDefiningValue="false" unitId="577e242a-461f-44a7-922c-d8e1c3d2bf45">
+          <name xml:lang="en">chlorine content</name>
+          <unitName xml:lang="en">dimensionless</unitName>
+          <comment xml:lang="en">The value of 'chlorine content' is documented in Turner &amp; Symeonidis, 2020.
+Reference: Turner David &amp; Symeonidis Avraam, 2020, Life cycle inventories of the treatment of iron and steelmaking by-products, ecoinvent association, Zürich, Switzerland</comment>
+        </property>
+        <property propertyId="e1d2c19b-3a97-4f52-a83f-fe88400452c2" amount="0.00235801358507406" isDefiningValue="false" unitId="577e242a-461f-44a7-922c-d8e1c3d2bf45">
+          <name xml:lang="en">chromium content</name>
+          <unitName xml:lang="en">dimensionless</unitName>
+          <comment xml:lang="en">The value of 'chromium content' is documented in Turner &amp; Symeonidis, 2020.
+Reference: Turner David &amp; Symeonidis Avraam, 2020, Life cycle inventories of the treatment of iron and steelmaking by-products, ecoinvent association, Zürich, Switzerland</comment>
+        </property>
+        <property propertyId="66e996b5-5f7b-449f-8893-0b787af21d7e" amount="3.8E-06" isDefiningValue="false" unitId="577e242a-461f-44a7-922c-d8e1c3d2bf45">
+          <name xml:lang="en">cobalt content</name>
+          <unitName xml:lang="en">dimensionless</unitName>
+          <comment xml:lang="en">The value of 'cobalt content' is documented in Turner &amp; Symeonidis, 2020.
+Reference: Turner David &amp; Symeonidis Avraam, 2020, Life cycle inventories of the treatment of iron and steelmaking by-products, ecoinvent association, Zürich, Switzerland</comment>
+        </property>
+        <property propertyId="0132d97c-5f19-4397-9197-59ab801b10cf" amount="1.54919333848297E-05" isDefiningValue="false" unitId="577e242a-461f-44a7-922c-d8e1c3d2bf45">
+          <name xml:lang="en">copper content</name>
+          <unitName xml:lang="en">dimensionless</unitName>
+          <comment xml:lang="en">The value of 'copper content' is documented in Turner &amp; Symeonidis, 2020.
+Reference: Turner David &amp; Symeonidis Avraam, 2020, Life cycle inventories of the treatment of iron and steelmaking by-products, ecoinvent association, Zürich, Switzerland</comment>
+        </property>
+        <property propertyId="3a0af1d6-04c3-41c6-a3da-92c4f61e0eaa" amount="0.995" isDefiningValue="false" unitId="487df68b-4994-4027-8fdc-a4dc298257b7">
+          <name xml:lang="en">dry mass</name>
+          <unitName xml:lang="en">kg</unitName>
+          <comment xml:lang="en">The value of 'dry mass' is documented in Turner &amp; Symeonidis, 2020.
+Reference: Turner David &amp; Symeonidis Avraam, 2020, Life cycle inventories of the treatment of iron and steelmaking by-products, ecoinvent association, Zürich, Switzerland</comment>
+        </property>
+        <property propertyId="48c987bb-3144-4872-b5c7-b1389c40be25" amount="0.0" mathematicalRelation="" unitId="980b811e-3905-4797-82a5-173f5568bc7e">
+          <name xml:lang="en">heating value, net</name>
+          <unitName xml:lang="en">MJ</unitName>
+          <comment xml:lang="en">Non combustible products are assumed to have an LHV equal to zero (0).</comment>
+        </property>
+        <property propertyId="d8364dfc-5753-4585-bf50-4d42b126f72d" amount="0.182474971318186" isDefiningValue="false" unitId="577e242a-461f-44a7-922c-d8e1c3d2bf45">
+          <name xml:lang="en">iron content</name>
+          <unitName xml:lang="en">dimensionless</unitName>
+          <comment xml:lang="en">The value of 'iron content' is documented in Turner &amp; Symeonidis, 2020.
+Reference: Turner David &amp; Symeonidis Avraam, 2020, Life cycle inventories of the treatment of iron and steelmaking by-products, ecoinvent association, Zürich, Switzerland</comment>
+        </property>
+        <property propertyId="e5507d89-78ad-4746-900c-b9afa5a62ea6" amount="5E-05" isDefiningValue="false" unitId="577e242a-461f-44a7-922c-d8e1c3d2bf45">
+          <name xml:lang="en">lead content</name>
+          <unitName xml:lang="en">dimensionless</unitName>
+          <comment xml:lang="en">The value of 'lead content' is documented in Turner &amp; Symeonidis, 2020.
+Reference: Turner David &amp; Symeonidis Avraam, 2020, Life cycle inventories of the treatment of iron and steelmaking by-products, ecoinvent association, Zürich, Switzerland</comment>
+        </property>
+        <property propertyId="8aedc313-f49b-42cd-8d54-fc877ec03017" amount="0.0350100922995011" isDefiningValue="false" unitId="577e242a-461f-44a7-922c-d8e1c3d2bf45">
+          <name xml:lang="en">magnesium content</name>
+          <unitName xml:lang="en">dimensionless</unitName>
+          <comment xml:lang="en">The value of 'magnesium content' is documented in Turner &amp; Symeonidis, 2020.
+Reference: Turner David &amp; Symeonidis Avraam, 2020, Life cycle inventories of the treatment of iron and steelmaking by-products, ecoinvent association, Zürich, Switzerland</comment>
+        </property>
+        <property propertyId="2bc683e4-3780-4f00-8c1d-fd53e05cfde7" amount="0.0250783420872308" isDefiningValue="false" unitId="577e242a-461f-44a7-922c-d8e1c3d2bf45">
+          <name xml:lang="en">manganese content</name>
+          <unitName xml:lang="en">dimensionless</unitName>
+          <comment xml:lang="en">The value of 'manganese content' is documented in Turner &amp; Symeonidis, 2020.
+Reference: Turner David &amp; Symeonidis Avraam, 2020, Life cycle inventories of the treatment of iron and steelmaking by-products, ecoinvent association, Zürich, Switzerland</comment>
+        </property>
+        <property propertyId="2a256b0b-6003-4669-a3c1-1d3eba2de45e" amount="1E-07" isDefiningValue="false" unitId="577e242a-461f-44a7-922c-d8e1c3d2bf45">
+          <name xml:lang="en">mercury content</name>
+          <unitName xml:lang="en">dimensionless</unitName>
+          <comment xml:lang="en">The value of 'mercury content' is documented in Turner &amp; Symeonidis, 2020.
+Reference: Turner David &amp; Symeonidis Avraam, 2020, Life cycle inventories of the treatment of iron and steelmaking by-products, ecoinvent association, Zürich, Switzerland</comment>
+        </property>
+        <property propertyId="83f67a9e-bf78-4e0d-b1f0-5051a1fda9fe" amount="2.0712315177208E-05" isDefiningValue="false" unitId="577e242a-461f-44a7-922c-d8e1c3d2bf45">
+          <name xml:lang="en">molybdenum content</name>
+          <unitName xml:lang="en">dimensionless</unitName>
+          <comment xml:lang="en">The value of 'molybdenum content' is documented in Turner &amp; Symeonidis, 2020.
+Reference: Turner David &amp; Symeonidis Avraam, 2020, Life cycle inventories of the treatment of iron and steelmaking by-products, ecoinvent association, Zürich, Switzerland</comment>
+        </property>
+        <property propertyId="f767b36f-62bf-4458-b694-ecbefd2ab970" amount="1.495E-05" isDefiningValue="false" unitId="577e242a-461f-44a7-922c-d8e1c3d2bf45">
+          <name xml:lang="en">nickel content</name>
+          <unitName xml:lang="en">dimensionless</unitName>
+          <comment xml:lang="en">The value of 'nickel content' is documented in Turner &amp; Symeonidis, 2020.
+Reference: Turner David &amp; Symeonidis Avraam, 2020, Life cycle inventories of the treatment of iron and steelmaking by-products, ecoinvent association, Zürich, Switzerland</comment>
+        </property>
+        <property propertyId="dbf41b1b-c7b8-4d5e-b39c-f858eb868df5" amount="0.329258688946773" isDefiningValue="false" unitId="577e242a-461f-44a7-922c-d8e1c3d2bf45">
+          <name xml:lang="en">oxygen content</name>
+          <unitName xml:lang="en">dimensionless</unitName>
+          <comment xml:lang="en">The value of 'oxygen content' is documented in Turner &amp; Symeonidis, 2020.
+Reference: Turner David &amp; Symeonidis Avraam, 2020, Life cycle inventories of the treatment of iron and steelmaking by-products, ecoinvent association, Zürich, Switzerland</comment>
+        </property>
+        <property propertyId="97f3bbfe-fa3a-4d05-9cb6-bb4b6379c5ef" amount="0.0102096249647065" isDefiningValue="false" unitId="577e242a-461f-44a7-922c-d8e1c3d2bf45">
+          <name xml:lang="en">phosphorus content</name>
+          <unitName xml:lang="en">dimensionless</unitName>
+          <comment xml:lang="en">The value of 'phosphorus content' is documented in Turner &amp; Symeonidis, 2020.
+Reference: Turner David &amp; Symeonidis Avraam, 2020, Life cycle inventories of the treatment of iron and steelmaking by-products, ecoinvent association, Zürich, Switzerland</comment>
+        </property>
+        <property propertyId="ca949a93-0642-4d1d-83bf-52faf10f2329" amount="0.000832764632059603" isDefiningValue="false" unitId="577e242a-461f-44a7-922c-d8e1c3d2bf45">
+          <name xml:lang="en">potassium content</name>
+          <unitName xml:lang="en">dimensionless</unitName>
+          <comment xml:lang="en">The value of 'potassium content' is documented in Turner &amp; Symeonidis, 2020.
+Reference: Turner David &amp; Symeonidis Avraam, 2020, Life cycle inventories of the treatment of iron and steelmaking by-products, ecoinvent association, Zürich, Switzerland</comment>
+        </property>
+        <property propertyId="38f94dd1-d5aa-41b8-b182-c0c42985d9dc" amount="0.00711" unitId="7b75baf0-cbee-45e6-bf66-af119da06553">
+          <name xml:lang="en">price</name>
+          <unitName xml:lang="en">EUR2005</unitName>
+          <comment xml:lang="en">Value is calculated based on the iron content of this material in combination with the price for iron ore concentrate on a per kg iron basis.</comment>
+        </property>
+        <property propertyId="7e83fd10-c04d-4a80-8df2-a8bbcc268c4a" amount="1.5E-05" isDefiningValue="false" unitId="577e242a-461f-44a7-922c-d8e1c3d2bf45">
+          <name xml:lang="en">selenium content</name>
+          <unitName xml:lang="en">dimensionless</unitName>
+          <comment xml:lang="en">The value of 'selenium content' is documented in Turner &amp; Symeonidis, 2020.
+Reference: Turner David &amp; Symeonidis Avraam, 2020, Life cycle inventories of the treatment of iron and steelmaking by-products, ecoinvent association, Zürich, Switzerland</comment>
+        </property>
+        <property propertyId="dd7e15dc-c438-43f7-9c0d-d0a627163cf1" amount="0.0600013832296948" isDefiningValue="false" unitId="577e242a-461f-44a7-922c-d8e1c3d2bf45">
+          <name xml:lang="en">silicon content</name>
+          <unitName xml:lang="en">dimensionless</unitName>
+          <comment xml:lang="en">The value of 'silicon content' is documented in Turner &amp; Symeonidis, 2020.
+Reference: Turner David &amp; Symeonidis Avraam, 2020, Life cycle inventories of the treatment of iron and steelmaking by-products, ecoinvent association, Zürich, Switzerland</comment>
+        </property>
+        <property propertyId="56f09738-8225-4bdc-91d2-39ee6328f0ee" amount="9.1E-06" isDefiningValue="false" unitId="577e242a-461f-44a7-922c-d8e1c3d2bf45">
+          <name xml:lang="en">silver content</name>
+          <unitName xml:lang="en">dimensionless</unitName>
+          <comment xml:lang="en">The value of 'silver content' is documented in Turner &amp; Symeonidis, 2020.
+Reference: Turner David &amp; Symeonidis Avraam, 2020, Life cycle inventories of the treatment of iron and steelmaking by-products, ecoinvent association, Zürich, Switzerland</comment>
+        </property>
+        <property propertyId="d3c0b420-1906-478c-8812-acfe6bf40c2e" amount="0.000235405344804902" isDefiningValue="false" unitId="577e242a-461f-44a7-922c-d8e1c3d2bf45">
+          <name xml:lang="en">sodium content</name>
+          <unitName xml:lang="en">dimensionless</unitName>
+          <comment xml:lang="en">The value of 'sodium content' is documented in Turner &amp; Symeonidis, 2020.
+Reference: Turner David &amp; Symeonidis Avraam, 2020, Life cycle inventories of the treatment of iron and steelmaking by-products, ecoinvent association, Zürich, Switzerland</comment>
+        </property>
+        <property propertyId="f6c7ebbb-902a-412f-a55b-0743aea00238" amount="0.00108261453148322" isDefiningValue="false" unitId="577e242a-461f-44a7-922c-d8e1c3d2bf45">
+          <name xml:lang="en">sulfur content</name>
+          <unitName xml:lang="en">dimensionless</unitName>
+          <comment xml:lang="en">The value of 'sulfur content' is documented in Turner &amp; Symeonidis, 2020.
+Reference: Turner David &amp; Symeonidis Avraam, 2020, Life cycle inventories of the treatment of iron and steelmaking by-products, ecoinvent association, Zürich, Switzerland</comment>
+        </property>
+        <property propertyId="608190bf-8f74-4f8e-8544-f25377accf4d" amount="7.2E-06" isDefiningValue="false" unitId="577e242a-461f-44a7-922c-d8e1c3d2bf45">
+          <name xml:lang="en">thallium content</name>
+          <unitName xml:lang="en">dimensionless</unitName>
+          <comment xml:lang="en">The value of 'thallium content' is documented in Turner &amp; Symeonidis, 2020.
+Reference: Turner David &amp; Symeonidis Avraam, 2020, Life cycle inventories of the treatment of iron and steelmaking by-products, ecoinvent association, Zürich, Switzerland</comment>
+        </property>
+        <property propertyId="d8551abf-da96-4429-846b-0973136b7d48" amount="6.5E-06" isDefiningValue="false" unitId="577e242a-461f-44a7-922c-d8e1c3d2bf45">
+          <name xml:lang="en">tin content</name>
+          <unitName xml:lang="en">dimensionless</unitName>
+          <comment xml:lang="en">The value of 'tin content' is documented in Turner &amp; Symeonidis, 2020.
+Reference: Turner David &amp; Symeonidis Avraam, 2020, Life cycle inventories of the treatment of iron and steelmaking by-products, ecoinvent association, Zürich, Switzerland</comment>
+        </property>
+        <property propertyId="e9fa11a1-1011-421d-aa34-0544d767a632" amount="0.00449810968843237" isDefiningValue="false" unitId="577e242a-461f-44a7-922c-d8e1c3d2bf45">
+          <name xml:lang="en">titanium content</name>
+          <unitName xml:lang="en">dimensionless</unitName>
+          <comment xml:lang="en">The value of 'titanium content' is documented in Turner &amp; Symeonidis, 2020.
+Reference: Turner David &amp; Symeonidis Avraam, 2020, Life cycle inventories of the treatment of iron and steelmaking by-products, ecoinvent association, Zürich, Switzerland</comment>
+        </property>
+        <property propertyId="dba83ee6-9127-4c81-86c9-15e29987dcdf" amount="0.00554357910309409" isDefiningValue="false" unitId="577e242a-461f-44a7-922c-d8e1c3d2bf45">
+          <name xml:lang="en">vanadium content</name>
+          <unitName xml:lang="en">dimensionless</unitName>
+          <comment xml:lang="en">The value of 'vanadium content' is documented in Turner &amp; Symeonidis, 2020.
+Reference: Turner David &amp; Symeonidis Avraam, 2020, Life cycle inventories of the treatment of iron and steelmaking by-products, ecoinvent association, Zürich, Switzerland</comment>
+        </property>
+        <property propertyId="a9358458-9724-4f03-b622-106eda248916" amount="0.00502512562814071" isDefiningValue="false" unitId="577e242a-461f-44a7-922c-d8e1c3d2bf45">
+          <name xml:lang="en">water content</name>
+          <unitName xml:lang="en">dimensionless</unitName>
+          <comment xml:lang="en">The value of 'water content' is documented in Turner &amp; Symeonidis, 2020.
+Reference: Turner David &amp; Symeonidis Avraam, 2020, Life cycle inventories of the treatment of iron and steelmaking by-products, ecoinvent association, Zürich, Switzerland</comment>
+        </property>
+        <property propertyId="6d9e1462-80e3-4f10-b3f4-71febd6f1168" amount="0.005" isDefiningValue="false" unitId="487df68b-4994-4027-8fdc-a4dc298257b7">
+          <name xml:lang="en">water in wet mass</name>
+          <unitName xml:lang="en">kg</unitName>
+          <comment xml:lang="en">The value of 'water in wet mass' is documented in Turner &amp; Symeonidis, 2020.
+Reference: Turner David &amp; Symeonidis Avraam, 2020, Life cycle inventories of the treatment of iron and steelmaking by-products, ecoinvent association, Zürich, Switzerland</comment>
+        </property>
+        <property propertyId="67f102e2-9cb6-4d20-aa16-bf74d8a03326" amount="1.0" isDefiningValue="false" unitId="487df68b-4994-4027-8fdc-a4dc298257b7">
+          <name xml:lang="en">wet mass</name>
+          <unitName xml:lang="en">kg</unitName>
+          <comment xml:lang="en">The value of 'wet mass' is documented in Turner &amp; Symeonidis, 2020.
+Reference: Turner David &amp; Symeonidis Avraam, 2020, Life cycle inventories of the treatment of iron and steelmaking by-products, ecoinvent association, Zürich, Switzerland</comment>
+        </property>
+        <property propertyId="33f96fe7-39da-47ca-837f-f2c311681d1b" amount="4.12553026894725E-05" isDefiningValue="false" unitId="577e242a-461f-44a7-922c-d8e1c3d2bf45">
+          <name xml:lang="en">zinc content</name>
+          <unitName xml:lang="en">dimensionless</unitName>
+          <comment xml:lang="en">The value of 'zinc content' is documented in Turner &amp; Symeonidis, 2020.
+Reference: Turner David &amp; Symeonidis Avraam, 2020, Life cycle inventories of the treatment of iron and steelmaking by-products, ecoinvent association, Zürich, Switzerland</comment>
+        </property>
+        <productionVolumeComment xml:lang="en"/>
+        <classification classificationId="a20a9e2f-b3f0-40fd-8358-f8adf7f419c4">
+          <classificationSystem xml:lang="en">By-product classification</classificationSystem>
+          <classificationValue xml:lang="en">Recyclable</classificationValue>
+        </classification>
+        <classification classificationId="49a5cb0e-a492-40f3-84b9-6d06674709da">
+          <classificationSystem xml:lang="en">CPC</classificationSystem>
+          <classificationValue xml:lang="en">39310: Slag, dross, scalings and other waste from the manufacture of iron or steel</classificationValue>
+        </classification>
+        <classification classificationId="22d8ac8d-7875-58b8-96cf-354dd6e084e5">
+          <classificationSystem xml:lang="en">HS2017</classificationSystem>
+          <classificationValue xml:lang="en">2618: Granulated slag (slag sand) from the manufacture of iron or steel</classificationValue>
+        </classification>
+        <outputGroup>0</outputGroup>
+      </intermediateExchange>
+    </flowData>
+    <modellingAndValidation>
+      <representativeness systemModelId="290c1f85-4cc4-4fa1-b0c8-2cb7f4276dce">
+        <systemModelName xml:lang="en">Allocation, cut-off by classification</systemModelName>
+      </representativeness>
+      <review reviewedMajorRelease="3" reviewedMinorRelease="0" reviewedMajorRevision="0" reviewedMinorRevision="6" reviewerId="35d091e9-38c2-4037-9efe-a73673c57123" reviewerName="Emilia Moreno Ruiz" reviewerEmail="moreno@ecoinvent.org" reviewDate="2020-05-27">
+        <otherDetails xml:lang="en"/>
+      </review>
+      <review reviewedMajorRelease="3" reviewedMinorRelease="0" reviewedMajorRevision="0" reviewedMinorRevision="6" reviewerId="c4597934-ecac-422c-b431-382e85fdcb83" reviewerName="[System]" reviewerEmail="support@ecoinvent.org" reviewDate="2020-05-27">
+        <otherDetails xml:lang="en">Validation warnings:
+
+- Non-global market activities should have a geography comment.
+- Uncertainty shall always be provided for all primary data inputs (exchange amounts, properties and parameters), except for the amount and properties of reference products.
+ -- Property(ies): aluminium content=0.0101033995871153, antimony content=3.3E-06, arsenic content=1.9E-06, barium content=7.5E-05, beryllium content=5E-07, cadmium content=2.5E-06, calcium content=0.324525174855295, carbon content, fossil=0.00343771484954514, carbon content, non-fossil=0, chlorine content=0.0001, chromium content=0.00235801358507406, cobalt content=3.8E-06, copper content=1.54919333848297E-05, dry mass=0.995, iron content=0.182474971318186, lead content=5E-05, magnesium content=0.0350100922995011, manganese content=0.0250783420872308, mercury content=1E-07, molybdenum content=2.0712315177208E-05, nickel content=1.495E-05, oxygen content=0.329258688946773, phosphorus content=0.0102096249647065, potassium content=0.000832764632059603, selenium content=1.5E-05, silicon content=0.0600013832296948, silver content=9.1E-06, sodium content=0.000235405344804902, sulfur content=0.00108261453148322, thallium content=7.2E-06, tin content=6.5E-06, titanium content=0.00449810968843237, vanadium content=0.00554357910309409, water content=0.00502512562814071, water in wet mass=0.005, wet mass=1, zinc content=4.12553026894725E-05, consequential=1
+
+- Pedigree information shall always be provided for all uncertainties of primary data inputs (exchange amounts, properties and parameters), except for the amount and properties of reference products.
+ -- Property(ies): aluminium content=0.0101033995871153, antimony content=3.3E-06, arsenic content=1.9E-06, barium content=7.5E-05, beryllium content=5E-07, cadmium content=2.5E-06, calcium content=0.324525174855295, carbon content, fossil=0.00343771484954514, carbon content, non-fossil=0, chlorine content=0.0001, chromium content=0.00235801358507406, cobalt content=3.8E-06, copper content=1.54919333848297E-05, dry mass=0.995, iron content=0.182474971318186, lead content=5E-05, magnesium content=0.0350100922995011, manganese content=0.0250783420872308, mercury content=1E-07, molybdenum content=2.0712315177208E-05, nickel content=1.495E-05, oxygen content=0.329258688946773, phosphorus content=0.0102096249647065, potassium content=0.000832764632059603, selenium content=1.5E-05, silicon content=0.0600013832296948, silver content=9.1E-06, sodium content=0.000235405344804902, sulfur content=0.00108261453148322, thallium content=7.2E-06, tin content=6.5E-06, titanium content=0.00449810968843237, vanadium content=0.00554357910309409, water content=0.00502512562814071, water in wet mass=0.005, wet mass=1, zinc content=4.12553026894725E-05, consequential=1
+
+</otherDetails>
+      </review>
+      <review reviewedMajorRelease="3" reviewedMinorRelease="0" reviewedMajorRevision="1" reviewedMinorRevision="5" reviewerId="35d091e9-38c2-4037-9efe-a73673c57123" reviewerName="Emilia Moreno Ruiz" reviewerEmail="moreno@ecoinvent.org" reviewDate="2020-06-30">
+        <otherDetails xml:lang="en"/>
+      </review>
+      <review reviewedMajorRelease="3" reviewedMinorRelease="0" reviewedMajorRevision="1" reviewedMinorRevision="5" reviewerId="c4597934-ecac-422c-b431-382e85fdcb83" reviewerName="[System]" reviewerEmail="support@ecoinvent.org" reviewDate="2020-06-30">
+        <otherDetails xml:lang="en">Validation warnings:
+
+- Amount of property 'titanium content=0.00449810968843237' of exchange 'basic oxygen furnace slag, for recovery' deviates from the default amount in the master file.
+Amount of property 'thallium content=7.2E-06' of exchange 'basic oxygen furnace slag, for recovery' deviates from the default amount in the master file.
+Amount of property 'potassium content=0.000832764632059603' of exchange 'basic oxygen furnace slag, for recovery' deviates from the default amount in the master file.
+Amount of property 'antimony content=3.3E-06' of exchange 'basic oxygen furnace slag, for recovery' deviates from the default amount in the master file.
+Amount of property 'zinc content=4.12553026894725E-05' of exchange 'basic oxygen furnace slag, for recovery' deviates from the default amount in the master file.
+Amount of property 'beryllium content=5E-07' of exchange 'basic oxygen furnace slag, for recovery' deviates from the default amount in the master file.
+Amount of property 'arsenic content=1.9E-06' of exchange 'basic oxygen furnace slag, for recovery' deviates from the default amount in the master file.
+Amount of property 'chromium content=0.00235801358507406' of exchange 'basic oxygen furnace slag, for recovery' deviates from the default amount in the master file.
+Amount of property 'calcium content=0.324525174855295' of exchange 'basic oxygen furnace slag, for recovery' deviates from the default amount in the master file.
+Amount of property 'molybdenum content=2.0712315177208E-05' of exchange 'basic oxygen furnace slag, for recovery' deviates from the default amount in the master file.
+Amount of property 'manganese content=0.0250783420872308' of exchange 'basic oxygen furnace slag, for recovery' deviates from the default amount in the master file.
+Amount of property 'chlorine content=0.0001' of exchange 'basic oxygen furnace slag, for recovery' deviates from the default amount in the master file.
+Amount of property 'mercury content=1E-07' of exchange 'basic oxygen furnace slag, for recovery' deviates from the default amount in the master file.
+Amount of property 'phosphorus content=0.0102096249647065' of exchange 'basic oxygen furnace slag, for recovery' deviates from the default amount in the master file.
+Amount of property 'cadmium content=2.5E-06' of exchange 'basic oxygen furnace slag, for recovery' deviates from the default amount in the master file.
+Amount of property 'sodium content=0.000235405344804902' of exchange 'basic oxygen furnace slag, for recovery' deviates from the default amount in the master file.
+Amount of property 'selenium content=1.5E-05' of exchange 'basic oxygen furnace slag, for recovery' deviates from the default amount in the master file.
+Amount of property 'copper content=1.54919333848297E-05' of exchange 'basic oxygen furnace slag, for recovery' deviates from the default amount in the master file.
+Amount of property 'magnesium content=0.0350100922995011' of exchange 'basic oxygen furnace slag, for recovery' deviates from the default amount in the master file.
+Amount of property 'aluminium content=0.0101033995871153' of exchange 'basic oxygen furnace slag, for recovery' deviates from the default amount in the master file.
+Amount of property 'silicon content=0.0600013832296948' of exchange 'basic oxygen furnace slag, for recovery' deviates from the default amount in the master file.
+Amount of property 'silver content=9.1E-06' of exchange 'basic oxygen furnace slag, for recovery' deviates from the default amount in the master file.
+Amount of property 'oxygen content=0.329258688946773' of exchange 'basic oxygen furnace slag, for recovery' deviates from the default amount in the master file.
+Amount of property 'iron content=0.182474971318186' of exchange 'basic oxygen furnace slag, for recovery' deviates from the default amount in the master file.
+Amount of property 'water content=0.00502512562814071' of exchange 'basic oxygen furnace slag, for recovery' deviates from the default amount in the master file.
+Amount of property 'cobalt content=3.8E-06' of exchange 'basic oxygen furnace slag, for recovery' deviates from the default amount in the master file.
+Amount of property 'sulfur content=0.00108261453148322' of exchange 'basic oxygen furnace slag, for recovery' deviates from the default amount in the master file.
+Amount of property 'barium content=7.5E-05' of exchange 'basic oxygen furnace slag, for recovery' deviates from the default amount in the master file.
+Amount of property 'vanadium content=0.00554357910309409' of exchange 'basic oxygen furnace slag, for recovery' deviates from the default amount in the master file.
+Amount of property 'nickel content=1.495E-05' of exchange 'basic oxygen furnace slag, for recovery' deviates from the default amount in the master file.
+Amount of property 'lead content=5E-05' of exchange 'basic oxygen furnace slag, for recovery' deviates from the default amount in the master file.
+Amount of property 'tin content=6.5E-06' of exchange 'basic oxygen furnace slag, for recovery' deviates from the default amount in the master file.
+Amount of property 'titanium content=0.00449810968843237' of exchange 'basic oxygen furnace slag, for recovery' deviates from the default amount in the master file.
+Amount of property 'thallium content=7.2E-06' of exchange 'basic oxygen furnace slag, for recovery' deviates from the default amount in the master file.
+Amount of property 'potassium content=0.000832764632059603' of exchange 'basic oxygen furnace slag, for recovery' deviates from the default amount in the master file.
+Amount of property 'antimony content=3.3E-06' of exchange 'basic oxygen furnace slag, for recovery' deviates from the default amount in the master file.
+Amount of property 'zinc content=4.12553026894725E-05' of exchange 'basic oxygen furnace slag, for recovery' deviates from the default amount in the master file.
+Amount of property 'beryllium content=5E-07' of exchange 'basic oxygen furnace slag, for recovery' deviates from the default amount in the master file.
+Amount of property 'arsenic content=1.9E-06' of exchange 'basic oxygen furnace slag, for recovery' deviates from the default amount in the master file.
+Amount of property 'chromium content=0.00235801358507406' of exchange 'basic oxygen furnace slag, for recovery' deviates from the default amount in the master file.
+Amount of property 'calcium content=0.324525174855295' of exchange 'basic oxygen furnace slag, for recovery' deviates from the default amount in the master file.
+Amount of property 'molybdenum content=2.0712315177208E-05' of exchange 'basic oxygen furnace slag, for recovery' deviates from the default amount in the master file.
+Amount of property 'manganese content=0.0250783420872308' of exchange 'basic oxygen furnace slag, for recovery' deviates from the default amount in the master file.
+Amount of property 'chlorine content=0.0001' of exchange 'basic oxygen furnace slag, for recovery' deviates from the default amount in the master file.
+Amount of property 'mercury content=1E-07' of exchange 'basic oxygen furnace slag, for recovery' deviates from the default amount in the master file.
+Amount of property 'phosphorus content=0.0102096249647065' of exchange 'basic oxygen furnace slag, for recovery' deviates from the default amount in the master file.
+Amount of property 'cadmium content=2.5E-06' of exchange 'basic oxygen furnace slag, for recovery' deviates from the default amount in the master file.
+Amount of property 'sodium content=0.000235405344804902' of exchange 'basic oxygen furnace slag, for recovery' deviates from the default amount in the master file.
+Amount of property 'selenium content=1.5E-05' of exchange 'basic oxygen furnace slag, for recovery' deviates from the default amount in the master file.
+Amount of property 'copper content=1.54919333848297E-05' of exchange 'basic oxygen furnace slag, for recovery' deviates from the default amount in the master file.
+Amount of property 'magnesium content=0.0350100922995011' of exchange 'basic oxygen furnace slag, for recovery' deviates from the default amount in the master file.
+Amount of property 'aluminium content=0.0101033995871153' of exchange 'basic oxygen furnace slag, for recovery' deviates from the default amount in the master file.
+Amount of property 'silicon content=0.0600013832296948' of exchange 'basic oxygen furnace slag, for recovery' deviates from the default amount in the master file.
+Amount of property 'silver content=9.1E-06' of exchange 'basic oxygen furnace slag, for recovery' deviates from the default amount in the master file.
+Amount of property 'oxygen content=0.329258688946773' of exchange 'basic oxygen furnace slag, for recovery' deviates from the default amount in the master file.
+Amount of property 'iron content=0.182474971318186' of exchange 'basic oxygen furnace slag, for recovery' deviates from the default amount in the master file.
+Amount of property 'water content=0.00502512562814071' of exchange 'basic oxygen furnace slag, for recovery' deviates from the default amount in the master file.
+Amount of property 'cobalt content=3.8E-06' of exchange 'basic oxygen furnace slag, for recovery' deviates from the default amount in the master file.
+Amount of property 'sulfur content=0.00108261453148322' of exchange 'basic oxygen furnace slag, for recovery' deviates from the default amount in the master file.
+Amount of property 'barium content=7.5E-05' of exchange 'basic oxygen furnace slag, for recovery' deviates from the default amount in the master file.
+Amount of property 'vanadium content=0.00554357910309409' of exchange 'basic oxygen furnace slag, for recovery' deviates from the default amount in the master file.
+Amount of property 'nickel content=1.495E-05' of exchange 'basic oxygen furnace slag, for recovery' deviates from the default amount in the master file.
+Amount of property 'lead content=5E-05' of exchange 'basic oxygen furnace slag, for recovery' deviates from the default amount in the master file.
+Amount of property 'tin content=6.5E-06' of exchange 'basic oxygen furnace slag, for recovery' deviates from the default amount in the master file.
+
+- Non-global market activities should have a geography comment.
+- Uncertainty shall always be provided for all primary data inputs (exchange amounts, properties and parameters), except for the amount and properties of reference products.
+ -- Property(ies): barium content=7.5E-05, aluminium content=0.0101033995871153, sodium content=0.000235405344804902, arsenic content=1.9E-06, water content=0.00502512562814071, oxygen content=0.329258688946773, consequential=1, copper content=1.54919333848297E-05, thallium content=7.2E-06, silver content=9.1E-06, vanadium content=0.00554357910309409, dry mass=0.995, water in wet mass=0.005, phosphorus content=0.0102096249647065, carbon content, non-fossil=0, beryllium content=5E-07, calcium content=0.324525174855295, cadmium content=2.5E-06, carbon content, fossil=0.00343771484954514, manganese content=0.0250783420872308, tin content=6.5E-06, potassium content=0.000832764632059603, iron content=0.182474971318186, wet mass=1, antimony content=3.3E-06, selenium content=1.5E-05, mercury content=1E-07, cobalt content=3.8E-06, zinc content=4.12553026894725E-05, chromium content=0.00235801358507406, magnesium content=0.0350100922995011, nickel content=1.495E-05, chlorine content=0.0001, molybdenum content=2.0712315177208E-05, lead content=5E-05, silicon content=0.0600013832296948, titanium content=0.00449810968843237, sulfur content=0.00108261453148322
+
+- Pedigree information shall always be provided for all uncertainties of primary data inputs (exchange amounts, properties and parameters), except for the amount and properties of reference products.
+ -- Property(ies): barium content=7.5E-05, aluminium content=0.0101033995871153, sodium content=0.000235405344804902, arsenic content=1.9E-06, water content=0.00502512562814071, oxygen content=0.329258688946773, consequential=1, copper content=1.54919333848297E-05, thallium content=7.2E-06, silver content=9.1E-06, vanadium content=0.00554357910309409, dry mass=0.995, water in wet mass=0.005, phosphorus content=0.0102096249647065, carbon content, non-fossil=0, beryllium content=5E-07, calcium content=0.324525174855295, cadmium content=2.5E-06, carbon content, fossil=0.00343771484954514, manganese content=0.0250783420872308, tin content=6.5E-06, potassium content=0.000832764632059603, iron content=0.182474971318186, wet mass=1, antimony content=3.3E-06, selenium content=1.5E-05, mercury content=1E-07, cobalt content=3.8E-06, zinc content=4.12553026894725E-05, chromium content=0.00235801358507406, magnesium content=0.0350100922995011, nickel content=1.495E-05, chlorine content=0.0001, molybdenum content=2.0712315177208E-05, lead content=5E-05, silicon content=0.0600013832296948, titanium content=0.00449810968843237, sulfur content=0.00108261453148322
+
+</otherDetails>
+      </review>
+    </modellingAndValidation>
+    <administrativeInformation>
+      <dataEntryBy personId="847a56f5-d9e5-4a65-ab51-b056e0039130" isActiveAuthor="false" personName="Avraam Symeonidis" personEmail="Symeonidis@ecoinvent.org"/>
+      <dataGeneratorAndPublication personId="847a56f5-d9e5-4a65-ab51-b056e0039130" personName="Avraam Symeonidis" personEmail="Symeonidis@ecoinvent.org" isCopyrightProtected="true" accessRestrictedTo="1"/>
+      <fileAttributes majorRelease="3" minorRelease="0" majorRevision="6" minorRevision="0" internalSchemaVersion="2.0.12" defaultLanguage="en" creationTimestamp="2020-05-27T16:27:18" lastEditTimestamp="2020-06-30T09:34:41" fileGenerator="EcoEditor 3.12.6000.6006" fileTimestamp="2020-06-30T09:34:41" contextId="de659012-50c4-4e96-b54a-fc781bf987ab">
+        <contextName xml:lang="en">ecoinvent</contextName>
+      </fileAttributes>
+    </administrativeInformation>
+  </childActivityDataset>
+</ecoSpold>

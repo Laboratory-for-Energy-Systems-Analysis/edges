@@ -1,0 +1,209 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<ecoSpold xmlns="http://www.EcoInvent.org/EcoSpold02" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.EcoInvent.org/EcoSpold02 ../../schemas/datasets/EcoSpold02.xsd http://www.EcoInvent.org/UsedUserMasterData ../../schemas/datasets/EcoSpold02UserMasterData.xsd">
+  <childActivityDataset>
+    <activityDescription>
+      <activity specialActivityType="0" id="ee30595f-57aa-5714-96ac-8dfd14d913c3" activityNameId="8ec0c90e-05b4-4ff1-b4e0-922019a07e8b" parentActivityId="fa32d449-660e-4802-8ee7-d6db9487891b" inheritanceDepth="0" type="2">
+        <activityName xml:lang="en">treatment of road wear emissions, passenger car</activityName>
+        <includedActivitiesStart xml:lang="en">The activity starts with the road abrasion induced by passenger car From cradle, i.e. including all upstream activities.</includedActivitiesStart>
+        <includedActivitiesEnd xml:lang="en">The activity ends with emissions of road abrasion induced by passenger car </includedActivitiesEnd>
+        <generalComment>
+          <text xml:lang="en" index="0">This dataset represents the treatment of non-exhaust emissions produced by road abrasion from an average passenger car. The datasets are treatments because they represent a removal of substances from the technosphere (removal of road material).</text>
+          <text xml:lang="en" index="1"></text>
+          <text xml:lang="en" index="2">This dataset represents the operation of an average passenger car. </text>
+          <text xml:lang="en" index="3"></text>
+          <text xml:lang="en" index="4">Calculation of non-exhaust emissions (tyre, brake and road wear emissions as well as petrol evaporation emissions) are based on: Ntziachristos, L., Boulter, P. (2009). EMEP/EEA air pollutant emissions inventory guidebook 2009: Road vehicle tyre and brake wear; Road surface wear. Copenhagen, European Environment Agency.</text>
+          <text xml:lang="en" index="5"></text>
+          <text xml:lang="en" index="6">The emission factors relate to 1kg road wear. The quantity of road wear emissions per kg vehicle and km is then defined in the transport datasets.</text>
+          <text xml:lang="en" index="7"></text>
+          <text xml:lang="en" index="8">The road wear emissions are to air, water and soil. All particulates are accounted for as emissions to air and have particle sizes below 100um. Anything above this does not remain airborne over longer periods. Total particulates equals total of all air emission substances. The fractions to water and soil are calculated by deducting the airborne emissions from the total tyre wear. This remaining amount is then simply split 50/50 between water and soil.</text>
+        </generalComment>
+      </activity>
+      <classification classificationId="9a63625a-358b-4c1d-bf95-50ba038a759b">
+        <classificationSystem xml:lang="en">ISIC rev.4 ecoinvent</classificationSystem>
+        <classificationValue xml:lang="en">3821:Treatment and disposal of non-hazardous waste</classificationValue>
+      </classification>
+      <geography geographyId="7846b897-7c04-4f9f-b607-2b83fcd9a74c">
+        <shortname xml:lang="en">RoW</shortname>
+      </geography>
+      <technology technologyLevel="3"/>
+      <timePeriod startDate="2012-01-01" endDate="2023-12-31" isDataValidForEntirePeriod="true"/>
+      <macroEconomicScenario macroEconomicScenarioId="d9f57f0a-a01f-42eb-a57b-8f18d6635801">
+        <name xml:lang="en">Business-as-Usual</name>
+      </macroEconomicScenario>
+    </activityDescription>
+    <flowData>
+      <intermediateExchange id="e8173cbb-134b-5b29-9f01-bd4a4e7e9078" unitId="487df68b-4994-4027-8fdc-a4dc298257b7" amount="-1.0" sourceId="7576770b-a1f2-4ecc-9f69-52b216badd81" sourceYear="2009" sourceFirstAuthor="Ntziachristos L., Paul P." intermediateExchangeId="016a27f2-6bba-45a7-a682-0ee4a9d5ac29" productionVolumeAmount="2672630000.0" productionVolumeMathematicalRelation="" productionVolumeSourceId="c2ea4715-4e93-466a-9ef5-fe3551881124">
+        <name xml:lang="en">road wear emissions, passenger car</name>
+        <unitName xml:lang="en">kg</unitName>
+        <comment xml:lang="en"/>
+        <property propertyId="f2283db2-62e4-467f-b9ac-c4f45be563b4" amount="0.0" isDefiningValue="false" isCalculatedAmount="false" unitId="487df68b-4994-4027-8fdc-a4dc298257b7">
+          <name xml:lang="en">carbon allocation</name>
+          <unitName xml:lang="en">kg</unitName>
+        </property>
+        <property propertyId="a301a838-7975-4d89-9e74-8eb77ad03cd1" amount="0.0" isDefiningValue="false" isCalculatedAmount="false" unitId="577e242a-461f-44a7-922c-d8e1c3d2bf45">
+          <name xml:lang="en">carbon content</name>
+          <unitName xml:lang="en">dimensionless</unitName>
+        </property>
+        <property propertyId="38f94dd1-d5aa-41b8-b182-c0c42985d9dc" amount="0.0" unitId="7b75baf0-cbee-45e6-bf66-af119da06553">
+          <name xml:lang="en">price</name>
+          <unitName xml:lang="en">EUR2005</unitName>
+          <comment xml:lang="en">Waste products are assigned a price of zero as they are assumed to require further treatment.</comment>
+        </property>
+        <productionVolumeComment xml:lang="en">Estimation. Value represents 2008 because regional annual production volume was only available for this year. Calculated from production volume of reference product using the relative outputs. Extrapolation from vkm data for Europe in 1990 and 2008, and for GLO in 1990.
+
+a) Road wear emissions RER 1990 = 7.777e+7kg
+b) Road wear emissions RER 2008 = 9.837e+7kg
+c) Road wear emissions GLO 1990 = 2.9e+8kg
+
+Road wear emissions GLO 2008 = (b/a)*c
+
+Extrapolation from vkm data for Europe and GLO using: 
+Shafer A., The global demand for motorized mobility, 1998, Elsevier
+&lt;http://www.sciencedirect.com/science/article/pii/S0965856498000044&gt;</productionVolumeComment>
+        <productionVolumeUncertainty>
+          <lognormal meanValue="1.0" mu="21.706328843272555" variance="0.0006" varianceWithPedigreeUncertainty="0.0016"/>
+          <pedigreeMatrix reliability="2" completeness="2" temporalCorrelation="2" geographicalCorrelation="3" furtherTechnologyCorrelation="1"/>
+          <comment xml:lang="en">Data extrapolated from Europe-based calculations, therefore Geographical--&gt;3</comment>
+        </productionVolumeUncertainty>
+        <classification classificationId="ee3238ec-ca7a-4ddc-af1b-e7c35957b9b6">
+          <classificationSystem xml:lang="en">By-product classification</classificationSystem>
+          <classificationValue xml:lang="en">Waste</classificationValue>
+        </classification>
+        <classification classificationId="2836a67d-b184-4323-be1b-8a93c340ca8f">
+          <classificationSystem xml:lang="en">CPC</classificationSystem>
+          <classificationValue xml:lang="en">53211: Highways (except elevated highways), streets and roads</classificationValue>
+        </classification>
+        <outputGroup>0</outputGroup>
+      </intermediateExchange>
+      <elementaryExchange id="49a22df3-2735-4024-a903-f6b08f54f419" unitId="487df68b-4994-4027-8fdc-a4dc298257b7" amount="0.27" elementaryExchangeId="230d8a0a-517c-43fe-8357-1818dd12997a">
+        <name xml:lang="en">Particulate Matter, &lt; 2.5 um</name>
+        <unitName xml:lang="en">kg</unitName>
+        <compartment subcompartmentId="e8d7772c-55ca-4dd7-b605-fee5ae764578">
+          <compartment xml:lang="en">air</compartment>
+          <subcompartment xml:lang="en">urban air close to ground</subcompartment>
+        </compartment>
+        <outputGroup>4</outputGroup>
+      </elementaryExchange>
+      <elementaryExchange id="e9f90368-00b9-4202-add6-8ba9d214e48a" unitId="487df68b-4994-4027-8fdc-a4dc298257b7" amount="0.5" elementaryExchangeId="1eb1b94c-e9d8-47ab-969b-9cca920157d8">
+        <name xml:lang="en">Particulate Matter, &gt; 10 um</name>
+        <unitName xml:lang="en">kg</unitName>
+        <compartment subcompartmentId="e8d7772c-55ca-4dd7-b605-fee5ae764578">
+          <compartment xml:lang="en">air</compartment>
+          <subcompartment xml:lang="en">urban air close to ground</subcompartment>
+        </compartment>
+        <outputGroup>4</outputGroup>
+      </elementaryExchange>
+      <elementaryExchange id="42ad6cc1-0441-4fdf-8f87-0200a4ebd712" unitId="487df68b-4994-4027-8fdc-a4dc298257b7" amount="0.23" elementaryExchangeId="ccb169c3-8aae-4727-89bb-a7dd122946f3">
+        <name xml:lang="en">Particulate Matter, &gt; 2.5 um and &lt; 10um</name>
+        <unitName xml:lang="en">kg</unitName>
+        <compartment subcompartmentId="e8d7772c-55ca-4dd7-b605-fee5ae764578">
+          <compartment xml:lang="en">air</compartment>
+          <subcompartment xml:lang="en">urban air close to ground</subcompartment>
+        </compartment>
+        <outputGroup>4</outputGroup>
+      </elementaryExchange>
+    </flowData>
+    <modellingAndValidation>
+      <representativeness systemModelId="290c1f85-4cc4-4fa1-b0c8-2cb7f4276dce">
+        <systemModelName xml:lang="en">Allocation, cut-off by classification</systemModelName>
+        <samplingProcedure xml:lang="en">Literature</samplingProcedure>
+        <extrapolations xml:lang="en">Extrapolation from dataset  for Europe using GDP per capita and p/v values.Source: 
+Shafer A., The global demand for motorized mobility, 1998, Elsevier
+&lt;http://www.sciencedirect.com/science/article/pii/S0965856498000044&gt;
+World Bank.org
+&lt;http://data.worldbank.org/indicator/NY.GDP.PCAP.CD/countries?display=default&gt;</extrapolations>
+      </representativeness>
+      <review reviewedMajorRelease="3" reviewedMinorRelease="0" reviewedMajorRevision="0" reviewedMinorRevision="15" reviewerId="000f2ba7-53bc-4ad8-aba2-d41b0adadac6" reviewerName="Dominik Saner" reviewerEmail="dominik.saner@ifu.baug.ethz.ch" reviewDate="2012-06-11">
+        <details>
+          <text xml:lang="en" index="0">The dataset was found to meet the quality guidelines for the ecoinvent database on 2012-06-18.</text>
+        </details>
+        <otherDetails xml:lang="en"/>
+      </review>
+      <review reviewedMajorRelease="3" reviewedMinorRelease="0" reviewedMajorRevision="0" reviewedMinorRevision="15" reviewerId="c4597934-ecac-422c-b431-382e85fdcb83" reviewerName="[System]" reviewerEmail="support@ecoinvent.org" reviewDate="2012-06-22">
+        <otherDetails xml:lang="en">Validation warnings:
+
+- Mass and/or economic deficit in activity dataset:
+
+Property 'dry mass':
+ - Input='0', Output='1'
+ - Input &lt; output by 1 kg (100% of output)
+
+Property 'wet mass':
+ - Input='0', Output='1'
+ - Input &lt; output by 1 kg (100% of output)
+
+Property 'carbon content, fossil':
+ - Input='0', Output='0,922578950360014'
+ - Input &lt; output by 0,922578950360014 kg (100% of output)
+
+
+- Amount of property 'carbon content, non-fossil=0' of exchange 'Particulates, &lt; 2.5 um' deviates from the default amount in the master file.
+Amount of property 'water in wet mass=0' of exchange 'Particulates, &lt; 2.5 um' deviates from the default amount in the master file.
+Amount of property 'carbon content, fossil=0,922578950360014' of exchange 'Particulates, &lt; 2.5 um' deviates from the default amount in the master file.
+Amount of property 'water content=0' of exchange 'Particulates, &lt; 2.5 um' deviates from the default amount in the master file.
+Amount of property 'dry mass=1' of exchange 'Particulates, &lt; 2.5 um' deviates from the default amount in the master file.
+Amount of property 'wet mass=1' of exchange 'Particulates, &lt; 2.5 um' deviates from the default amount in the master file.
+
+- Uncertainty shall always be provided for all primary data inputs (exchange amounts, properties and parameters), except for the amount and properties of reference products.
+ -- Property(ies): dry mass=1, carbon content, non-fossil=0, wet mass=1, carbon content, fossil=0,922578950360014, water in wet mass=0, water content=0, wet mass=1, dry mass=1, water content=0, water in wet mass=0, carbon content, non-fossil=0, carbon content, fossil=0,922578950360014, wet mass=1, carbon content, fossil=0,922578950360014, water in wet mass=0, water content=0, carbon content, non-fossil=0, dry mass=1
+
+- Pedigree information shall always be provided for all uncertainties of primary data inputs (exchange amounts, properties and parameters), except for the amount and properties of reference products.
+ -- Property(ies): dry mass=1, carbon content, non-fossil=0, wet mass=1, carbon content, fossil=0,922578950360014, water in wet mass=0, water content=0, wet mass=1, dry mass=1, water content=0, water in wet mass=0, carbon content, non-fossil=0, carbon content, fossil=0,922578950360014, wet mass=1, carbon content, fossil=0,922578950360014, water in wet mass=0, water content=0, carbon content, non-fossil=0, dry mass=1
+
+</otherDetails>
+      </review>
+      <review reviewedMajorRelease="3" reviewedMinorRelease="0" reviewedMajorRevision="1" reviewedMinorRevision="3" reviewerId="87296ea5-2149-44c3-8e36-b1256c92666a" reviewerName="Gregor Wernet" reviewerEmail="wernet@ecoinvent.org" reviewDate="2012-09-03">
+        <otherDetails xml:lang="en"/>
+      </review>
+      <review reviewedMajorRelease="3" reviewedMinorRelease="0" reviewedMajorRevision="1" reviewedMinorRevision="3" reviewerId="c4597934-ecac-422c-b431-382e85fdcb83" reviewerName="[System]" reviewerEmail="support@ecoinvent.org" reviewDate="2012-09-03">
+        <otherDetails xml:lang="en">Validation warnings:
+
+- Mass and/or economic deficit in activity dataset:
+
+Property 'wet mass':
+ - Input='0', Output='1'
+ - Input &lt; output by 1 kg (100% of output)
+
+Property 'dry mass':
+ - Input='0', Output='1'
+ - Input &lt; output by 1 kg (100% of output)
+
+Property 'carbon content, fossil':
+ - Input='0', Output='0,922578950360014'
+ - Input &lt; output by 0,922578950360014 kg (100% of output)
+
+
+- Amount of property 'water content=0' of exchange 'Particulates, &gt; 10 um' deviates from the default amount in the master file.
+Amount of property 'carbon content, fossil=0,922578950360014' of exchange 'Particulates, &gt; 10 um' deviates from the default amount in the master file.
+Amount of property 'carbon content, non-fossil=0' of exchange 'Particulates, &gt; 10 um' deviates from the default amount in the master file.
+Amount of property 'water in wet mass=0' of exchange 'Particulates, &gt; 10 um' deviates from the default amount in the master file.
+Amount of property 'water content=0' of exchange 'Particulates, &lt; 2.5 um' deviates from the default amount in the master file.
+Amount of property 'water in wet mass=0' of exchange 'Particulates, &lt; 2.5 um' deviates from the default amount in the master file.
+Amount of property 'carbon content, fossil=0,922578950360014' of exchange 'Particulates, &lt; 2.5 um' deviates from the default amount in the master file.
+Amount of property 'carbon content, non-fossil=0' of exchange 'Particulates, &lt; 2.5 um' deviates from the default amount in the master file.
+Amount of property 'carbon content, fossil=0,922578950360014' of exchange 'Particulates, &gt; 2.5 um, and &lt; 10um' deviates from the default amount in the master file.
+Amount of property 'water in wet mass=0' of exchange 'Particulates, &gt; 2.5 um, and &lt; 10um' deviates from the default amount in the master file.
+Amount of property 'water content=0' of exchange 'Particulates, &gt; 2.5 um, and &lt; 10um' deviates from the default amount in the master file.
+Amount of property 'carbon content, non-fossil=0' of exchange 'Particulates, &gt; 2.5 um, and &lt; 10um' deviates from the default amount in the master file.
+
+- Uncertainty shall always be provided for all primary data inputs (exchange amounts, properties and parameters), except for the amount and properties of reference products.
+ -- Property(ies): carbon content, non-fossil=0, wet mass=1, dry mass=1, water in wet mass=0, water content=0, carbon content, fossil=0,922578950360014, dry mass=1, carbon content, non-fossil=0, carbon content, fossil=0,922578950360014, wet mass=1, water in wet mass=0, water content=0, wet mass=1, carbon content, non-fossil=0, dry mass=1, carbon content, fossil=0,922578950360014, water in wet mass=0, water content=0
+
+- Pedigree information shall always be provided for all uncertainties of primary data inputs (exchange amounts, properties and parameters), except for the amount and properties of reference products.
+ -- Property(ies): carbon content, non-fossil=0, wet mass=1, dry mass=1, water in wet mass=0, water content=0, carbon content, fossil=0,922578950360014, dry mass=1, carbon content, non-fossil=0, carbon content, fossil=0,922578950360014, wet mass=1, water in wet mass=0, water content=0, wet mass=1, carbon content, non-fossil=0, dry mass=1, carbon content, fossil=0,922578950360014, water in wet mass=0, water content=0
+
+- The following negative reference products do not appear on the current list of materials for treatment. No activities exist that produce these materials for treatment.
+ - road wear emissions, passenger car
+
+</otherDetails>
+      </review>
+    </modellingAndValidation>
+    <administrativeInformation>
+      <dataEntryBy personId="50d9d3b9-313f-43bb-ba08-8a498d208034" isActiveAuthor="true" personName="Andrew Simons" personEmail="andrew.simons@3sp.ch"/>
+      <dataGeneratorAndPublication personId="d94fc0f8-968e-4190-9583-0f73a91b1a28" personName="Andrew Simons" personEmail="psi@ecoinvent.org" publishedSourceId="7576770b-a1f2-4ecc-9f69-52b216badd81" publishedSourceYear="2009" publishedSourceFirstAuthor="Ntziachristos L., Paul P." isCopyrightProtected="true" accessRestrictedTo="1"/>
+      <fileAttributes majorRelease="3" minorRelease="0" majorRevision="3" minorRevision="0" internalSchemaVersion="2.0.8" defaultLanguage="en" creationTimestamp="2012-05-30T13:46:10" lastEditTimestamp="2012-09-03T14:56:47" fileGenerator="EcoEditor 3.0.61.8746" fileTimestamp="2012-09-03T14:56:47" contextId="de659012-50c4-4e96-b54a-fc781bf987ab">
+        <contextName xml:lang="en">ecoinvent</contextName>
+      </fileAttributes>
+    </administrativeInformation>
+  </childActivityDataset>
+</ecoSpold>

@@ -1,0 +1,1117 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<ecoSpold xmlns="http://www.EcoInvent.org/EcoSpold02" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.EcoInvent.org/EcoSpold02 ../../schemas/datasets/EcoSpold02.xsd http://www.EcoInvent.org/UsedUserMasterData ../../schemas/datasets/EcoSpold02UserMasterData.xsd">
+  <childActivityDataset>
+    <activityDescription>
+      <activity specialActivityType="0" id="f2fc1eb1-7d3a-5b07-b6ea-4b47992917be" activityNameId="f41353bc-e0d8-472c-a0de-abfa110c6c99" parentActivityId="82a4a654-ad40-4624-a51c-abfa11cd1fd6" inheritanceDepth="0" type="2">
+        <activityName xml:lang="en">treatment of sulfidic tailings, from copper mine operation, tailings impoundment</activityName>
+        <synonym xml:lang="en">pond</synonym>
+        <synonym xml:lang="en">tailing</synonym>
+        <synonym xml:lang="en">tails</synonym>
+        <synonym xml:lang="en">sulphidic</synonym>
+        <includedActivitiesStart xml:lang="en"> The activity starts at the point of waste deposition in the impoundment. All upstream activities, including the pumping of tailings to the site, any dewatering or treatment, or other transport-related activities are excluded. From cradle, i.e. including all upstream activities.</includedActivitiesStart>
+        <includedActivitiesEnd xml:lang="en"> Waste-specific short- and long-term emissions to the environment via impoundment leachate; land transformation and occupation. Note that the structural integrity of the site is assumed to be unwavering during the entie modelled time horizon; i.e. accidental releases of leachate (due to impoundment failure) are not considered.</includedActivitiesEnd>
+        <generalComment>
+          <text xml:lang="en" index="0">This dataset represents the activity of waste disposal of sulfidic tailings, from copper mine operation in a tailings impoundment in Chile. </text>
+          <text xml:lang="en" index="1">Background: Tailings, a waste material produced during mineral concentration (beneficiation), often contain significant quantities of mobile toxic metals and are typically produced in large quantities. To manage these wastes, tailings are commonly stored behind dammed impoundments, known as tailings ponds. These ponds pose a significant long-term pollution risk as metals may leach out into the surrounding environment, potentially over very long timeframes.</text>
+          <text xml:lang="en" index="2">Modelling approach: This dataset was produced using a model developed specifically for assessing the long-term emissions of tailings disposal (see Doka, 2017). The tailings disposal model is based on the modelling framework applied in existing landfill process models used in ecoinvent and is based on a top-down approach. Literature data on measurements of deposited tailings compositions (solids) and measured current concentrations in leachate (liquid) form the basis of the model and are used to characterise pollutant mobility and calculate the currently occurring rate of emissions of the landfill. Heeding chief parameters, such as hydrology, pH development and elemental chemistry, these emissions are then projected into the future. Tailings composition is based on the typical composition of tailings at copper mine sites worldwide; i.e. composition is not region-specific. Land use was calculated following the approach described by Doka (2008). Based on an assumed generic final height of a tailings impoundment of 60 m and an assumed tailings density of 2200 kg/m3, a land area of 7.58E-06 m2 is required per kilogram of sulfidic tailings. The land is assumed to be converted from unknown origin to a disposal site. After an operational phase of 30 years, spontaneous restoration of a consolidated state is assumed to be reached after one hundred years. The total occupation time is therefore 130 years and the land occupation per kilogram tailings is 9.85E-04 m2.</text>
+          <text xml:lang="en" index="3">Waste composition (wet, in ppm): H2O 300000; O 622290; H na; C 6145; S 289.86; N 5.0454; P 212.27; B 54.583; Cl 102.61; Br 0.22894; F 772.88; I na; Ag 8.304; As 46.473; Ba 335.12; Cd 3.6523; Co 13.907; Cr 60.142; Cu 876.83; Hg 0.24258; Mn 158.19; Mo 12.151; Ni 19.339; Pb 133.55; Sb 28.698; Se 3.3486; Sn 28.153; V 136.61; Zn 182.34; Be 1.6625; Sc 13.352; Sr 90.588; Ti 229.49; Tl 8.6074; W 9.7967; Si 38694; Fe 10340; Ca 3158.3; Al 11031; K 1832.5; Mg 1606.1; Na 1060.3.   //  Share of carbon in waste that is biogenic 0%.</text>
+          <text xml:lang="en" index="4">Activity extent: The dataset includes all potential emissions to the environment and land use changes. Input exchanges of infrastructure, materials, energy, and water are not included here but are accounted for in the activity, copper mine operation.</text>
+          <text xml:lang="en" index="5">References</text>
+          <text xml:lang="en" index="6">Doka, G. (2008). Life Cycle Inventory data of mining waste: Emissions from sulfidic tailings disposal. Zürich, Switzerland: Doka Life Cycle Assessments.</text>
+          <text xml:lang="en" index="7">Doka, G. (2017). A model for waste-specific and climate-specific life cycle inventories of tailings impoundments. Zürich, Switzerland: Doka Life Cycle Assessments.</text>
+        </generalComment>
+      </activity>
+      <classification classificationId="5e736d13-58c6-4fbd-8157-dd6ef35c3f88">
+        <classificationSystem xml:lang="en">ISIC rev.4 ecoinvent</classificationSystem>
+        <classificationValue xml:lang="en">3822:Treatment and disposal of hazardous waste</classificationValue>
+      </classification>
+      <geography geographyId="0c852cde-7d7e-11de-9ae2-0019e336be3a">
+        <shortname xml:lang="en">CL</shortname>
+        <comment>
+          <text xml:lang="en" index="0">Given name of site is 'Copper deposits; Chile'. Impoundment site with mean annual temperature (MAT) of 4.79368876116271 degC, mean annual precipitation (MAP) of 159.826651966991 mm/year, mean annual actual evaporation (EAT) of 92.3517270810254 mm/year, and net infiltration of 113.650788426478 mm/year (using half of natural surface evapotranspiration). </text>
+          <text xml:lang="en" index="1">Temperature at site can result in permafrost conditions, which slows down water flow by a factor of 0.997. </text>
+        </comment>
+      </geography>
+      <technology technologyLevel="3">
+        <comment>
+          <text xml:lang="en" index="0">This is an inventory for an impoundment of copper ore beneficiation tailings waste. The following assumptions were made concerning technology: final impoundment height is 60 meters; operation phase duration is 30 years; and impoundment leachates are released into the environment untreated.</text>
+        </comment>
+      </technology>
+      <timePeriod startDate="2015-01-01" endDate="2023-12-31" isDataValidForEntirePeriod="true">
+        <comment>
+          <text xml:lang="en" index="0">'Data on average composition of tailings and tailings-derived leachates from literature sources published between 1994 and 2017 (mean publication date: 2009±6). Mean annual temperature and precipitation data for 1970-2000 (source: Fick and Hijmans, 2017); mean annual evapotranspiration for 1950-2000 (source: Fekete et al., 2002). Production volume based on world mine production data from the USGS Minerals Yearbook 2015. Transfer coefficients from prospective, tailings-specific model. </text>
+          <text xml:lang="en" index="1">References: </text>
+          <text xml:lang="en" index="2">Fekete, B. M., Vorosmarty, C. J. &amp; Grabs, W. (2002). High-resolution fields of global runoff combining observed river discharge and simulated water balances. Global Biogeochemical Cycles, 16, 15-1 - 15-10.</text>
+          <text xml:lang="en" index="3">Fick, S. E. &amp; Hijmans, R. J. (2017). Worldclim 2: New 1-km spatial resolution climate surfaces for global land areas. International Journal of Climatology, 37, 4302-4315.'</text>
+        </comment>
+      </timePeriod>
+      <macroEconomicScenario macroEconomicScenarioId="d9f57f0a-a01f-42eb-a57b-8f18d6635801">
+        <name xml:lang="en">Business-as-Usual</name>
+      </macroEconomicScenario>
+    </activityDescription>
+    <flowData>
+      <intermediateExchange id="c297e405-43ca-59ef-8c90-6b82e4e0c959" unitId="487df68b-4994-4027-8fdc-a4dc298257b7" amount="-1.0" intermediateExchangeId="7c3dbbb9-cc2d-43e8-acf9-abfa115d2ae5" productionVolumeAmount="639000000000.0">
+        <name xml:lang="en">sulfidic tailings, from copper mine operation</name>
+        <unitName xml:lang="en">kg</unitName>
+        <comment xml:lang="en">main reference product of this activity (supply of disposal service). </comment>
+        <property propertyId="e9688cbc-7400-457a-a936-5ab123ea326c" amount="0.015758" isDefiningValue="false" unitId="577e242a-461f-44a7-922c-d8e1c3d2bf45">
+          <name xml:lang="en">aluminium content</name>
+          <unitName xml:lang="en">dimensionless</unitName>
+        </property>
+        <property propertyId="4054bfa7-dfcb-452e-b1dd-810b9e981506" amount="4.0998E-05" isDefiningValue="false" unitId="577e242a-461f-44a7-922c-d8e1c3d2bf45">
+          <name xml:lang="en">antimony content</name>
+          <unitName xml:lang="en">dimensionless</unitName>
+        </property>
+        <property propertyId="30f0aa15-2d50-4f09-af94-683b6dd68adc" amount="6.639E-05" isDefiningValue="false" unitId="577e242a-461f-44a7-922c-d8e1c3d2bf45">
+          <name xml:lang="en">arsenic content</name>
+          <unitName xml:lang="en">dimensionless</unitName>
+        </property>
+        <property propertyId="1dcfb203-7830-40b2-878d-13fc02a74051" amount="0.00047874" isDefiningValue="false" unitId="577e242a-461f-44a7-922c-d8e1c3d2bf45">
+          <name xml:lang="en">barium content</name>
+          <unitName xml:lang="en">dimensionless</unitName>
+        </property>
+        <property propertyId="bf4d71d9-4301-4939-8a9d-36d8811b7db0" amount="2.375E-06" isDefiningValue="false" unitId="577e242a-461f-44a7-922c-d8e1c3d2bf45">
+          <name xml:lang="en">beryllium content</name>
+          <unitName xml:lang="en">dimensionless</unitName>
+        </property>
+        <property propertyId="b86d456d-a1dc-4468-a20e-b6a3f4701e32" amount="7.7976E-05" isDefiningValue="false" unitId="577e242a-461f-44a7-922c-d8e1c3d2bf45">
+          <name xml:lang="en">boron content</name>
+          <unitName xml:lang="en">dimensionless</unitName>
+        </property>
+        <property propertyId="6b90d16b-f20b-4b53-abc2-763f9455dc05" amount="3.2706E-07" isDefiningValue="false" unitId="577e242a-461f-44a7-922c-d8e1c3d2bf45">
+          <name xml:lang="en">bromine content</name>
+          <unitName xml:lang="en">dimensionless</unitName>
+        </property>
+        <property propertyId="ad7781c7-5dc2-4421-b182-e1fd4cef7fa5" amount="5.2176E-06" isDefiningValue="false" unitId="577e242a-461f-44a7-922c-d8e1c3d2bf45">
+          <name xml:lang="en">cadmium content</name>
+          <unitName xml:lang="en">dimensionless</unitName>
+        </property>
+        <property propertyId="f9da385d-5b1b-4548-826c-0bf5892a9fd9" amount="0.0045119" isDefiningValue="false" unitId="577e242a-461f-44a7-922c-d8e1c3d2bf45">
+          <name xml:lang="en">calcium content</name>
+          <unitName xml:lang="en">dimensionless</unitName>
+        </property>
+        <property propertyId="f2283db2-62e4-467f-b9ac-c4f45be563b4" amount="0.00614495" isDefiningValue="false" isCalculatedAmount="false" unitId="487df68b-4994-4027-8fdc-a4dc298257b7">
+          <name xml:lang="en">carbon allocation</name>
+          <unitName xml:lang="en">kg</unitName>
+        </property>
+        <property propertyId="a301a838-7975-4d89-9e74-8eb77ad03cd1" amount="0.0087785" isDefiningValue="false" isCalculatedAmount="false" unitId="577e242a-461f-44a7-922c-d8e1c3d2bf45">
+          <name xml:lang="en">carbon content</name>
+          <unitName xml:lang="en">dimensionless</unitName>
+        </property>
+        <property propertyId="c74c3729-e577-4081-b572-a283d2561a75" amount="0.0087785" isDefiningValue="false" unitId="577e242a-461f-44a7-922c-d8e1c3d2bf45">
+          <name xml:lang="en">carbon content, fossil</name>
+          <unitName xml:lang="en">dimensionless</unitName>
+        </property>
+        <property propertyId="6393c14b-db78-445d-a47b-c0cb866a1b25" amount="0.0" isDefiningValue="false" unitId="577e242a-461f-44a7-922c-d8e1c3d2bf45">
+          <name xml:lang="en">carbon content, non-fossil</name>
+          <unitName xml:lang="en">dimensionless</unitName>
+        </property>
+        <property propertyId="66d4c921-658a-4ba0-b190-c6e09e57d74a" amount="0.00014659" isDefiningValue="false" unitId="577e242a-461f-44a7-922c-d8e1c3d2bf45">
+          <name xml:lang="en">chlorine content</name>
+          <unitName xml:lang="en">dimensionless</unitName>
+        </property>
+        <property propertyId="e1d2c19b-3a97-4f52-a83f-fe88400452c2" amount="8.5917E-05" isDefiningValue="false" unitId="577e242a-461f-44a7-922c-d8e1c3d2bf45">
+          <name xml:lang="en">chromium content</name>
+          <unitName xml:lang="en">dimensionless</unitName>
+        </property>
+        <property propertyId="66e996b5-5f7b-449f-8893-0b787af21d7e" amount="1.9866E-05" isDefiningValue="false" unitId="577e242a-461f-44a7-922c-d8e1c3d2bf45">
+          <name xml:lang="en">cobalt content</name>
+          <unitName xml:lang="en">dimensionless</unitName>
+        </property>
+        <property propertyId="0132d97c-5f19-4397-9197-59ab801b10cf" amount="0.0012526" isDefiningValue="false" unitId="577e242a-461f-44a7-922c-d8e1c3d2bf45">
+          <name xml:lang="en">copper content</name>
+          <unitName xml:lang="en">dimensionless</unitName>
+        </property>
+        <property propertyId="3a0af1d6-04c3-41c6-a3da-92c4f61e0eaa" amount="0.7" isDefiningValue="false" unitId="487df68b-4994-4027-8fdc-a4dc298257b7">
+          <name xml:lang="en">dry mass</name>
+          <unitName xml:lang="en">kg</unitName>
+        </property>
+        <property propertyId="1f3c2d02-f345-4df9-ba6a-88cdeaa67923" amount="0.0011041" isDefiningValue="false" unitId="577e242a-461f-44a7-922c-d8e1c3d2bf45">
+          <name xml:lang="en">fluorine content</name>
+          <unitName xml:lang="en">dimensionless</unitName>
+        </property>
+        <property propertyId="d8364dfc-5753-4585-bf50-4d42b126f72d" amount="0.014771" isDefiningValue="false" unitId="577e242a-461f-44a7-922c-d8e1c3d2bf45">
+          <name xml:lang="en">iron content</name>
+          <unitName xml:lang="en">dimensionless</unitName>
+        </property>
+        <property propertyId="e5507d89-78ad-4746-900c-b9afa5a62ea6" amount="0.00019078" isDefiningValue="false" unitId="577e242a-461f-44a7-922c-d8e1c3d2bf45">
+          <name xml:lang="en">lead content</name>
+          <unitName xml:lang="en">dimensionless</unitName>
+        </property>
+        <property propertyId="8aedc313-f49b-42cd-8d54-fc877ec03017" amount="0.0022944" isDefiningValue="false" unitId="577e242a-461f-44a7-922c-d8e1c3d2bf45">
+          <name xml:lang="en">magnesium content</name>
+          <unitName xml:lang="en">dimensionless</unitName>
+        </property>
+        <property propertyId="2bc683e4-3780-4f00-8c1d-fd53e05cfde7" amount="0.00022598" isDefiningValue="false" unitId="577e242a-461f-44a7-922c-d8e1c3d2bf45">
+          <name xml:lang="en">manganese content</name>
+          <unitName xml:lang="en">dimensionless</unitName>
+        </property>
+        <property propertyId="2a256b0b-6003-4669-a3c1-1d3eba2de45e" amount="3.4654E-07" isDefiningValue="false" unitId="577e242a-461f-44a7-922c-d8e1c3d2bf45">
+          <name xml:lang="en">mercury content</name>
+          <unitName xml:lang="en">dimensionless</unitName>
+        </property>
+        <property propertyId="83f67a9e-bf78-4e0d-b1f0-5051a1fda9fe" amount="1.7358E-05" isDefiningValue="false" unitId="577e242a-461f-44a7-922c-d8e1c3d2bf45">
+          <name xml:lang="en">molybdenum content</name>
+          <unitName xml:lang="en">dimensionless</unitName>
+        </property>
+        <property propertyId="f767b36f-62bf-4458-b694-ecbefd2ab970" amount="2.7626E-05" isDefiningValue="false" unitId="577e242a-461f-44a7-922c-d8e1c3d2bf45">
+          <name xml:lang="en">nickel content</name>
+          <unitName xml:lang="en">dimensionless</unitName>
+        </property>
+        <property propertyId="f53a5dbc-3bd3-4570-adff-b00790ea3ffc" amount="7.2076E-06" isDefiningValue="false" unitId="577e242a-461f-44a7-922c-d8e1c3d2bf45">
+          <name xml:lang="en">nitrogen content</name>
+          <unitName xml:lang="en">dimensionless</unitName>
+        </property>
+        <property propertyId="dbf41b1b-c7b8-4d5e-b39c-f858eb868df5" amount="0.88899" isDefiningValue="false" unitId="577e242a-461f-44a7-922c-d8e1c3d2bf45">
+          <name xml:lang="en">oxygen content</name>
+          <unitName xml:lang="en">dimensionless</unitName>
+        </property>
+        <property propertyId="97f3bbfe-fa3a-4d05-9cb6-bb4b6379c5ef" amount="0.00030324" isDefiningValue="false" unitId="577e242a-461f-44a7-922c-d8e1c3d2bf45">
+          <name xml:lang="en">phosphorus content</name>
+          <unitName xml:lang="en">dimensionless</unitName>
+        </property>
+        <property propertyId="ca949a93-0642-4d1d-83bf-52faf10f2329" amount="0.0026178" isDefiningValue="false" unitId="577e242a-461f-44a7-922c-d8e1c3d2bf45">
+          <name xml:lang="en">potassium content</name>
+          <unitName xml:lang="en">dimensionless</unitName>
+        </property>
+        <property propertyId="38f94dd1-d5aa-41b8-b182-c0c42985d9dc" amount="0.0" unitId="7b75baf0-cbee-45e6-bf66-af119da06553">
+          <name xml:lang="en">price</name>
+          <unitName xml:lang="en">EUR2005</unitName>
+          <comment xml:lang="en">Waste products are assigned a price of zero as they are assumed to require further treatment.</comment>
+        </property>
+        <property propertyId="35d2e0b2-eca5-4897-a6af-b6d2e61a9079" amount="1.9074E-05" isDefiningValue="false" unitId="577e242a-461f-44a7-922c-d8e1c3d2bf45">
+          <name xml:lang="en">scandium content</name>
+          <unitName xml:lang="en">dimensionless</unitName>
+        </property>
+        <property propertyId="7e83fd10-c04d-4a80-8df2-a8bbcc268c4a" amount="4.7837E-06" isDefiningValue="false" unitId="577e242a-461f-44a7-922c-d8e1c3d2bf45">
+          <name xml:lang="en">selenium content</name>
+          <unitName xml:lang="en">dimensionless</unitName>
+        </property>
+        <property propertyId="dd7e15dc-c438-43f7-9c0d-d0a627163cf1" amount="0.055278" isDefiningValue="false" unitId="577e242a-461f-44a7-922c-d8e1c3d2bf45">
+          <name xml:lang="en">silicon content</name>
+          <unitName xml:lang="en">dimensionless</unitName>
+        </property>
+        <property propertyId="56f09738-8225-4bdc-91d2-39ee6328f0ee" amount="1.1863E-05" isDefiningValue="false" unitId="577e242a-461f-44a7-922c-d8e1c3d2bf45">
+          <name xml:lang="en">silver content</name>
+          <unitName xml:lang="en">dimensionless</unitName>
+        </property>
+        <property propertyId="d3c0b420-1906-478c-8812-acfe6bf40c2e" amount="0.0015148" isDefiningValue="false" unitId="577e242a-461f-44a7-922c-d8e1c3d2bf45">
+          <name xml:lang="en">sodium content</name>
+          <unitName xml:lang="en">dimensionless</unitName>
+        </property>
+        <property propertyId="995265a2-f2cb-4c12-a961-766eb34392b9" amount="0.00012941" isDefiningValue="false" unitId="577e242a-461f-44a7-922c-d8e1c3d2bf45">
+          <name xml:lang="en">strontium content</name>
+          <unitName xml:lang="en">dimensionless</unitName>
+        </property>
+        <property propertyId="f6c7ebbb-902a-412f-a55b-0743aea00238" amount="0.00041409" isDefiningValue="false" unitId="577e242a-461f-44a7-922c-d8e1c3d2bf45">
+          <name xml:lang="en">sulfur content</name>
+          <unitName xml:lang="en">dimensionless</unitName>
+        </property>
+        <property propertyId="608190bf-8f74-4f8e-8544-f25377accf4d" amount="1.2296E-05" isDefiningValue="false" unitId="577e242a-461f-44a7-922c-d8e1c3d2bf45">
+          <name xml:lang="en">thallium content</name>
+          <unitName xml:lang="en">dimensionless</unitName>
+        </property>
+        <property propertyId="d8551abf-da96-4429-846b-0973136b7d48" amount="4.0219E-05" isDefiningValue="false" unitId="577e242a-461f-44a7-922c-d8e1c3d2bf45">
+          <name xml:lang="en">tin content</name>
+          <unitName xml:lang="en">dimensionless</unitName>
+        </property>
+        <property propertyId="e9fa11a1-1011-421d-aa34-0544d767a632" amount="0.00032784" isDefiningValue="false" unitId="577e242a-461f-44a7-922c-d8e1c3d2bf45">
+          <name xml:lang="en">titanium content</name>
+          <unitName xml:lang="en">dimensionless</unitName>
+        </property>
+        <property propertyId="84916b80-bf93-4e20-9b7c-593aa9518d09" amount="1.3995E-05" isDefiningValue="false" unitId="577e242a-461f-44a7-922c-d8e1c3d2bf45">
+          <name xml:lang="en">tungsten content</name>
+          <unitName xml:lang="en">dimensionless</unitName>
+        </property>
+        <property propertyId="dba83ee6-9127-4c81-86c9-15e29987dcdf" amount="0.00019515" isDefiningValue="false" unitId="577e242a-461f-44a7-922c-d8e1c3d2bf45">
+          <name xml:lang="en">vanadium content</name>
+          <unitName xml:lang="en">dimensionless</unitName>
+        </property>
+        <property propertyId="a9358458-9724-4f03-b622-106eda248916" amount="0.42857" isDefiningValue="false" unitId="577e242a-461f-44a7-922c-d8e1c3d2bf45">
+          <name xml:lang="en">water content</name>
+          <unitName xml:lang="en">dimensionless</unitName>
+        </property>
+        <property propertyId="6d9e1462-80e3-4f10-b3f4-71febd6f1168" amount="0.3" isDefiningValue="false" unitId="487df68b-4994-4027-8fdc-a4dc298257b7">
+          <name xml:lang="en">water in wet mass</name>
+          <unitName xml:lang="en">kg</unitName>
+        </property>
+        <property propertyId="67f102e2-9cb6-4d20-aa16-bf74d8a03326" amount="1.0" isDefiningValue="false" unitId="487df68b-4994-4027-8fdc-a4dc298257b7">
+          <name xml:lang="en">wet mass</name>
+          <unitName xml:lang="en">kg</unitName>
+        </property>
+        <property propertyId="33f96fe7-39da-47ca-837f-f2c311681d1b" amount="0.00026049" isDefiningValue="false" unitId="577e242a-461f-44a7-922c-d8e1c3d2bf45">
+          <name xml:lang="en">zinc content</name>
+          <unitName xml:lang="en">dimensionless</unitName>
+        </property>
+        <productionVolumeComment xml:lang="en">Estimate of the national tailings production volume from the mining and concentration of sulfidic copper ores, based on national mine production of copper from sulfide mineral deposits (kg) multiplied by estimated tailings generation rate per kg copper concentrate produced (160 kg per kg copper concentrate).</productionVolumeComment>
+        <classification classificationId="ee3238ec-ca7a-4ddc-af1b-e7c35957b9b6">
+          <classificationSystem xml:lang="en">By-product classification</classificationSystem>
+          <classificationValue xml:lang="en">Waste</classificationValue>
+        </classification>
+        <classification classificationId="49a5cb0e-a492-40f3-84b9-6d06674709da">
+          <classificationSystem xml:lang="en">CPC</classificationSystem>
+          <classificationValue xml:lang="en">39310: Slag, dross, scalings and other waste from the manufacture of iron or steel</classificationValue>
+        </classification>
+        <outputGroup>0</outputGroup>
+      </intermediateExchange>
+      <elementaryExchange id="1a58ef7e-2a51-4d70-8050-0b37cc0a2477" unitId="487df68b-4994-4027-8fdc-a4dc298257b7" amount="1.8558E-06" elementaryExchangeId="2e0c9efa-d55c-49db-8be3-0376d5921ff4">
+        <name xml:lang="en">Aluminium III</name>
+        <unitName xml:lang="en">kg</unitName>
+        <compartment subcompartmentId="a119c440-7e83-4655-a874-97fe1468315a">
+          <compartment xml:lang="en">water</compartment>
+          <subcompartment xml:lang="en">ground-</subcompartment>
+        </compartment>
+        <outputGroup>4</outputGroup>
+      </elementaryExchange>
+      <elementaryExchange id="0dcc05f4-ef9f-4300-9dfb-f988acadcf64" unitId="487df68b-4994-4027-8fdc-a4dc298257b7" amount="0.011029" elementaryExchangeId="01056d4b-f9b0-4dfc-b8d9-8407c8376efb">
+        <name xml:lang="en">Aluminium III</name>
+        <unitName xml:lang="en">kg</unitName>
+        <compartment subcompartmentId="aa4362e0-b20a-448b-b2a0-261f4510deb5">
+          <compartment xml:lang="en">water</compartment>
+          <subcompartment xml:lang="en">ground-, long-term</subcompartment>
+        </compartment>
+        <outputGroup>4</outputGroup>
+      </elementaryExchange>
+      <elementaryExchange id="a66e8468-d762-4f5f-8f8a-d4d24332fe41" unitId="487df68b-4994-4027-8fdc-a4dc298257b7" amount="1.2319E-07" elementaryExchangeId="736f52e8-9703-4076-8909-7ae80a7f8005">
+        <name xml:lang="en">Ammonium</name>
+        <unitName xml:lang="en">kg</unitName>
+        <compartment subcompartmentId="a119c440-7e83-4655-a874-97fe1468315a">
+          <compartment xml:lang="en">water</compartment>
+          <subcompartment xml:lang="en">ground-</subcompartment>
+        </compartment>
+        <outputGroup>4</outputGroup>
+      </elementaryExchange>
+      <elementaryExchange id="0dcec465-eb70-4995-a56d-db38cf9d3003" unitId="487df68b-4994-4027-8fdc-a4dc298257b7" amount="1.0388E-06" elementaryExchangeId="130cedc6-f6ed-4f1b-bd1e-881177f79e74">
+        <name xml:lang="en">Ammonium</name>
+        <unitName xml:lang="en">kg</unitName>
+        <compartment subcompartmentId="aa4362e0-b20a-448b-b2a0-261f4510deb5">
+          <compartment xml:lang="en">water</compartment>
+          <subcompartment xml:lang="en">ground-, long-term</subcompartment>
+        </compartment>
+        <outputGroup>4</outputGroup>
+      </elementaryExchange>
+      <elementaryExchange id="0495d2e7-925f-454b-b082-cd6788f77928" unitId="487df68b-4994-4027-8fdc-a4dc298257b7" amount="2.9854E-09" elementaryExchangeId="5df5cb9f-812c-4ce8-ab1c-df6ab4d31900">
+        <name xml:lang="en">Antimony ion</name>
+        <unitName xml:lang="en">kg</unitName>
+        <compartment subcompartmentId="a119c440-7e83-4655-a874-97fe1468315a">
+          <compartment xml:lang="en">water</compartment>
+          <subcompartment xml:lang="en">ground-</subcompartment>
+        </compartment>
+        <outputGroup>4</outputGroup>
+      </elementaryExchange>
+      <elementaryExchange id="0a34e6ec-7c3e-4acc-80da-3d0cb327a327" unitId="487df68b-4994-4027-8fdc-a4dc298257b7" amount="6.6871E-07" elementaryExchangeId="83cf77ca-867b-4eef-b0f0-78d71b3d91d5">
+        <name xml:lang="en">Antimony ion</name>
+        <unitName xml:lang="en">kg</unitName>
+        <compartment subcompartmentId="aa4362e0-b20a-448b-b2a0-261f4510deb5">
+          <compartment xml:lang="en">water</compartment>
+          <subcompartment xml:lang="en">ground-, long-term</subcompartment>
+        </compartment>
+        <outputGroup>4</outputGroup>
+      </elementaryExchange>
+      <elementaryExchange id="fd589c1a-aaa2-4f0e-9ba5-2e76ff846c35" unitId="487df68b-4994-4027-8fdc-a4dc298257b7" amount="3.0341E-09" elementaryExchangeId="1f607ae2-b42d-4411-90b8-e9bbac66a554">
+        <name xml:lang="en">Arsenic ion</name>
+        <unitName xml:lang="en">kg</unitName>
+        <compartment subcompartmentId="a119c440-7e83-4655-a874-97fe1468315a">
+          <compartment xml:lang="en">water</compartment>
+          <subcompartment xml:lang="en">ground-</subcompartment>
+        </compartment>
+        <outputGroup>4</outputGroup>
+      </elementaryExchange>
+      <elementaryExchange id="e344b493-89d4-4265-b758-2d2ea8dd680a" unitId="487df68b-4994-4027-8fdc-a4dc298257b7" amount="6.826E-07" elementaryExchangeId="e60edb16-3c74-415b-9aff-a22a6f49fecb">
+        <name xml:lang="en">Arsenic ion</name>
+        <unitName xml:lang="en">kg</unitName>
+        <compartment subcompartmentId="aa4362e0-b20a-448b-b2a0-261f4510deb5">
+          <compartment xml:lang="en">water</compartment>
+          <subcompartment xml:lang="en">ground-, long-term</subcompartment>
+        </compartment>
+        <outputGroup>4</outputGroup>
+      </elementaryExchange>
+      <elementaryExchange id="ed12302e-0fef-4526-80a7-562b72fd75a7" unitId="487df68b-4994-4027-8fdc-a4dc298257b7" amount="4.7353E-10" elementaryExchangeId="57c27ba7-a61a-4932-8cd5-095c88ff0245">
+        <name xml:lang="en">BOD5, Biological Oxygen Demand</name>
+        <unitName xml:lang="en">kg</unitName>
+        <compartment subcompartmentId="a119c440-7e83-4655-a874-97fe1468315a">
+          <compartment xml:lang="en">water</compartment>
+          <subcompartment xml:lang="en">ground-</subcompartment>
+        </compartment>
+        <outputGroup>4</outputGroup>
+      </elementaryExchange>
+      <elementaryExchange id="7b90d897-920d-4609-a814-cde929cb8a15" unitId="487df68b-4994-4027-8fdc-a4dc298257b7" amount="2.8364E-07" elementaryExchangeId="aedea697-930a-4a0e-9e4f-b9c369aa9a33">
+        <name xml:lang="en">BOD5, Biological Oxygen Demand</name>
+        <unitName xml:lang="en">kg</unitName>
+        <compartment subcompartmentId="aa4362e0-b20a-448b-b2a0-261f4510deb5">
+          <compartment xml:lang="en">water</compartment>
+          <subcompartment xml:lang="en">ground-, long-term</subcompartment>
+        </compartment>
+        <outputGroup>4</outputGroup>
+      </elementaryExchange>
+      <elementaryExchange id="4f78a748-8277-4c1b-b13c-e2dc156b5555" unitId="487df68b-4994-4027-8fdc-a4dc298257b7" amount="5.0433E-10" elementaryExchangeId="d68f41b3-6887-49a8-8efa-96812f8ec9f6">
+        <name xml:lang="en">Barium II</name>
+        <unitName xml:lang="en">kg</unitName>
+        <compartment subcompartmentId="a119c440-7e83-4655-a874-97fe1468315a">
+          <compartment xml:lang="en">water</compartment>
+          <subcompartment xml:lang="en">ground-</subcompartment>
+        </compartment>
+        <outputGroup>4</outputGroup>
+      </elementaryExchange>
+      <elementaryExchange id="15880449-11eb-4fad-8adb-41f6d371af7e" unitId="487df68b-4994-4027-8fdc-a4dc298257b7" amount="3.1797E-05" elementaryExchangeId="3184c902-c587-4fd7-bd89-769d3cf30072">
+        <name xml:lang="en">Barium II</name>
+        <unitName xml:lang="en">kg</unitName>
+        <compartment subcompartmentId="aa4362e0-b20a-448b-b2a0-261f4510deb5">
+          <compartment xml:lang="en">water</compartment>
+          <subcompartment xml:lang="en">ground-, long-term</subcompartment>
+        </compartment>
+        <outputGroup>4</outputGroup>
+      </elementaryExchange>
+      <elementaryExchange id="427d2c84-3e1b-46bd-a601-5a0b9f5883aa" unitId="487df68b-4994-4027-8fdc-a4dc298257b7" amount="1.0935E-09" elementaryExchangeId="fa89c354-2263-4ed2-ac56-99946be5c665">
+        <name xml:lang="en">Beryllium II</name>
+        <unitName xml:lang="en">kg</unitName>
+        <compartment subcompartmentId="a119c440-7e83-4655-a874-97fe1468315a">
+          <compartment xml:lang="en">water</compartment>
+          <subcompartment xml:lang="en">ground-</subcompartment>
+        </compartment>
+        <outputGroup>4</outputGroup>
+      </elementaryExchange>
+      <elementaryExchange id="25f76d63-3815-40ea-9147-0a580f500407" unitId="487df68b-4994-4027-8fdc-a4dc298257b7" amount="1.6614E-06" elementaryExchangeId="24e0a9cb-a789-46e2-a25c-0278a90d67e5">
+        <name xml:lang="en">Beryllium II</name>
+        <unitName xml:lang="en">kg</unitName>
+        <compartment subcompartmentId="aa4362e0-b20a-448b-b2a0-261f4510deb5">
+          <compartment xml:lang="en">water</compartment>
+          <subcompartment xml:lang="en">ground-, long-term</subcompartment>
+        </compartment>
+        <outputGroup>4</outputGroup>
+      </elementaryExchange>
+      <elementaryExchange id="8c4e3d88-bced-423d-a7c2-f466c5a012ec" unitId="487df68b-4994-4027-8fdc-a4dc298257b7" amount="4.8865E-09" elementaryExchangeId="242b4a08-f6ff-496d-ae0f-bf8f8bc77692">
+        <name xml:lang="en">Boron</name>
+        <unitName xml:lang="en">kg</unitName>
+        <compartment subcompartmentId="a119c440-7e83-4655-a874-97fe1468315a">
+          <compartment xml:lang="en">water</compartment>
+          <subcompartment xml:lang="en">ground-</subcompartment>
+        </compartment>
+        <outputGroup>4</outputGroup>
+      </elementaryExchange>
+      <elementaryExchange id="06430ad2-ab75-4820-97fa-fb219233d71a" unitId="487df68b-4994-4027-8fdc-a4dc298257b7" amount="1.0963E-06" elementaryExchangeId="061d04a0-af1d-4884-bdd3-997b6cd5550f">
+        <name xml:lang="en">Boron</name>
+        <unitName xml:lang="en">kg</unitName>
+        <compartment subcompartmentId="aa4362e0-b20a-448b-b2a0-261f4510deb5">
+          <compartment xml:lang="en">water</compartment>
+          <subcompartment xml:lang="en">ground-, long-term</subcompartment>
+        </compartment>
+        <outputGroup>4</outputGroup>
+      </elementaryExchange>
+      <elementaryExchange id="a74fd867-30b2-4306-85dd-c4d6163d4500" unitId="487df68b-4994-4027-8fdc-a4dc298257b7" amount="6.3836E-11" elementaryExchangeId="b311427f-0de3-4190-84a5-05c8460c62d1">
+        <name xml:lang="en">Bromine</name>
+        <unitName xml:lang="en">kg</unitName>
+        <compartment subcompartmentId="a119c440-7e83-4655-a874-97fe1468315a">
+          <compartment xml:lang="en">water</compartment>
+          <subcompartment xml:lang="en">ground-</subcompartment>
+        </compartment>
+        <outputGroup>4</outputGroup>
+      </elementaryExchange>
+      <elementaryExchange id="f30b3cd7-b3bb-4a45-baab-fb5c28ca8ae7" unitId="487df68b-4994-4027-8fdc-a4dc298257b7" amount="3.521E-08" elementaryExchangeId="20bc9500-2e2f-4cba-9332-8ea17d362aba">
+        <name xml:lang="en">Bromine</name>
+        <unitName xml:lang="en">kg</unitName>
+        <compartment subcompartmentId="aa4362e0-b20a-448b-b2a0-261f4510deb5">
+          <compartment xml:lang="en">water</compartment>
+          <subcompartment xml:lang="en">ground-, long-term</subcompartment>
+        </compartment>
+        <outputGroup>4</outputGroup>
+      </elementaryExchange>
+      <elementaryExchange id="5274f995-6edc-48a7-b298-44360ab22d03" unitId="487df68b-4994-4027-8fdc-a4dc298257b7" amount="2.3676E-08" elementaryExchangeId="be10dd54-eb4d-48ae-9e14-7d79ce8b170d">
+        <name xml:lang="en">COD, Chemical Oxygen Demand</name>
+        <unitName xml:lang="en">kg</unitName>
+        <compartment subcompartmentId="a119c440-7e83-4655-a874-97fe1468315a">
+          <compartment xml:lang="en">water</compartment>
+          <subcompartment xml:lang="en">ground-</subcompartment>
+        </compartment>
+        <outputGroup>4</outputGroup>
+      </elementaryExchange>
+      <elementaryExchange id="27e08009-98a9-4a1c-9209-c391091bccff" unitId="487df68b-4994-4027-8fdc-a4dc298257b7" amount="1.4182E-05" elementaryExchangeId="a8fea8cf-9b09-49fc-aa58-5a732494a2a0">
+        <name xml:lang="en">COD, Chemical Oxygen Demand</name>
+        <unitName xml:lang="en">kg</unitName>
+        <compartment subcompartmentId="aa4362e0-b20a-448b-b2a0-261f4510deb5">
+          <compartment xml:lang="en">water</compartment>
+          <subcompartment xml:lang="en">ground-, long-term</subcompartment>
+        </compartment>
+        <outputGroup>4</outputGroup>
+      </elementaryExchange>
+      <elementaryExchange id="f74a5f11-1c4f-4ceb-aea0-c088be7e375f" unitId="487df68b-4994-4027-8fdc-a4dc298257b7" amount="3.2196E-09" elementaryExchangeId="3937f5a5-b4a4-434d-9fc3-1d29064fc3f8">
+        <name xml:lang="en">Cadmium II</name>
+        <unitName xml:lang="en">kg</unitName>
+        <compartment subcompartmentId="a119c440-7e83-4655-a874-97fe1468315a">
+          <compartment xml:lang="en">water</compartment>
+          <subcompartment xml:lang="en">ground-</subcompartment>
+        </compartment>
+        <outputGroup>4</outputGroup>
+      </elementaryExchange>
+      <elementaryExchange id="8542494f-6cf8-4a49-b245-5374edbe15ed" unitId="487df68b-4994-4027-8fdc-a4dc298257b7" amount="3.6491E-06" elementaryExchangeId="4ce23896-a82f-49f1-a8e3-8848734805a3">
+        <name xml:lang="en">Cadmium II</name>
+        <unitName xml:lang="en">kg</unitName>
+        <compartment subcompartmentId="aa4362e0-b20a-448b-b2a0-261f4510deb5">
+          <compartment xml:lang="en">water</compartment>
+          <subcompartment xml:lang="en">ground-, long-term</subcompartment>
+        </compartment>
+        <outputGroup>4</outputGroup>
+      </elementaryExchange>
+      <elementaryExchange id="49486288-a4ee-4d6b-838b-ed8a9d459bc4" unitId="487df68b-4994-4027-8fdc-a4dc298257b7" amount="1.3845E-05" elementaryExchangeId="1d0f4392-8c91-4d01-8a5d-f8fe1f5b05c9">
+        <name xml:lang="en">Calcium II</name>
+        <unitName xml:lang="en">kg</unitName>
+        <compartment subcompartmentId="a119c440-7e83-4655-a874-97fe1468315a">
+          <compartment xml:lang="en">water</compartment>
+          <subcompartment xml:lang="en">ground-</subcompartment>
+        </compartment>
+        <outputGroup>4</outputGroup>
+      </elementaryExchange>
+      <elementaryExchange id="33350126-e443-4870-8dbe-4458d5b5c01d" unitId="487df68b-4994-4027-8fdc-a4dc298257b7" amount="0.0031445" elementaryExchangeId="ae28c923-a4a3-4f00-b862-1ae6e748efb9">
+        <name xml:lang="en">Calcium II</name>
+        <unitName xml:lang="en">kg</unitName>
+        <compartment subcompartmentId="aa4362e0-b20a-448b-b2a0-261f4510deb5">
+          <compartment xml:lang="en">water</compartment>
+          <subcompartment xml:lang="en">ground-, long-term</subcompartment>
+        </compartment>
+        <outputGroup>4</outputGroup>
+      </elementaryExchange>
+      <elementaryExchange id="df284c19-2e24-49ec-9cc8-cfdc9ad1fde7" unitId="487df68b-4994-4027-8fdc-a4dc298257b7" amount="4.9021E-06" elementaryExchangeId="85bec19f-c785-4364-8ef6-472b8e9dd90e">
+        <name xml:lang="en">Chloride</name>
+        <unitName xml:lang="en">kg</unitName>
+        <compartment subcompartmentId="a119c440-7e83-4655-a874-97fe1468315a">
+          <compartment xml:lang="en">water</compartment>
+          <subcompartment xml:lang="en">ground-</subcompartment>
+        </compartment>
+        <outputGroup>4</outputGroup>
+      </elementaryExchange>
+      <elementaryExchange id="4ccca402-1206-4b7f-b24e-852f2d011f6b" unitId="487df68b-4994-4027-8fdc-a4dc298257b7" amount="9.7708E-05" elementaryExchangeId="ea70cc93-c68c-4228-8b8e-1b189b4c705c">
+        <name xml:lang="en">Chloride</name>
+        <unitName xml:lang="en">kg</unitName>
+        <compartment subcompartmentId="aa4362e0-b20a-448b-b2a0-261f4510deb5">
+          <compartment xml:lang="en">water</compartment>
+          <subcompartment xml:lang="en">ground-, long-term</subcompartment>
+        </compartment>
+        <outputGroup>4</outputGroup>
+      </elementaryExchange>
+      <elementaryExchange id="3007b612-a1bb-49c7-adb8-76ef6feaf6ff" unitId="487df68b-4994-4027-8fdc-a4dc298257b7" amount="2.2503E-09" elementaryExchangeId="9bbae55a-35de-4eff-a219-814a9fec5ac2">
+        <name xml:lang="en">Chromium VI</name>
+        <unitName xml:lang="en">kg</unitName>
+        <compartment subcompartmentId="a119c440-7e83-4655-a874-97fe1468315a">
+          <compartment xml:lang="en">water</compartment>
+          <subcompartment xml:lang="en">ground-</subcompartment>
+        </compartment>
+        <outputGroup>4</outputGroup>
+      </elementaryExchange>
+      <elementaryExchange id="1f95e6d6-55fd-46e4-9db2-f81b10f541e0" unitId="487df68b-4994-4027-8fdc-a4dc298257b7" amount="5.0788E-07" elementaryExchangeId="ef475b50-9cd0-4e7c-9c59-07868fe16e91">
+        <name xml:lang="en">Chromium VI</name>
+        <unitName xml:lang="en">kg</unitName>
+        <compartment subcompartmentId="aa4362e0-b20a-448b-b2a0-261f4510deb5">
+          <compartment xml:lang="en">water</compartment>
+          <subcompartment xml:lang="en">ground-, long-term</subcompartment>
+        </compartment>
+        <outputGroup>4</outputGroup>
+      </elementaryExchange>
+      <elementaryExchange id="31437751-5a98-4e11-9971-aa6d30793169" unitId="487df68b-4994-4027-8fdc-a4dc298257b7" amount="3.3079E-08" elementaryExchangeId="f0d1c319-249f-4a89-b0e7-3a5a90a54036">
+        <name xml:lang="en">Cobalt II</name>
+        <unitName xml:lang="en">kg</unitName>
+        <compartment subcompartmentId="a119c440-7e83-4655-a874-97fe1468315a">
+          <compartment xml:lang="en">water</compartment>
+          <subcompartment xml:lang="en">ground-</subcompartment>
+        </compartment>
+        <outputGroup>4</outputGroup>
+      </elementaryExchange>
+      <elementaryExchange id="c809586a-c3f2-431f-9f0f-d984e673d1ab" unitId="487df68b-4994-4027-8fdc-a4dc298257b7" amount="1.3873E-05" elementaryExchangeId="1e904267-caa3-40e6-a3a0-fc104489770b">
+        <name xml:lang="en">Cobalt II</name>
+        <unitName xml:lang="en">kg</unitName>
+        <compartment subcompartmentId="aa4362e0-b20a-448b-b2a0-261f4510deb5">
+          <compartment xml:lang="en">water</compartment>
+          <subcompartment xml:lang="en">ground-, long-term</subcompartment>
+        </compartment>
+        <outputGroup>4</outputGroup>
+      </elementaryExchange>
+      <elementaryExchange id="41bd6694-4949-46dd-9e93-6bea00778245" unitId="487df68b-4994-4027-8fdc-a4dc298257b7" amount="1.0699E-07" elementaryExchangeId="c3b659e5-35f1-408c-8cb5-b5f9b295c76e">
+        <name xml:lang="en">Copper ion</name>
+        <unitName xml:lang="en">kg</unitName>
+        <compartment subcompartmentId="a119c440-7e83-4655-a874-97fe1468315a">
+          <compartment xml:lang="en">water</compartment>
+          <subcompartment xml:lang="en">ground-</subcompartment>
+        </compartment>
+        <outputGroup>4</outputGroup>
+      </elementaryExchange>
+      <elementaryExchange id="5b2e4e7a-96b5-4c43-88a9-0e5d055cfb89" unitId="487df68b-4994-4027-8fdc-a4dc298257b7" amount="0.00087673" elementaryExchangeId="40229ebf-9346-4f20-910a-f8ea3bd88d44">
+        <name xml:lang="en">Copper ion</name>
+        <unitName xml:lang="en">kg</unitName>
+        <compartment subcompartmentId="aa4362e0-b20a-448b-b2a0-261f4510deb5">
+          <compartment xml:lang="en">water</compartment>
+          <subcompartment xml:lang="en">ground-, long-term</subcompartment>
+        </compartment>
+        <outputGroup>4</outputGroup>
+      </elementaryExchange>
+      <elementaryExchange id="407eedfe-2a85-45a8-9e89-f4fa2f639f9c" unitId="487df68b-4994-4027-8fdc-a4dc298257b7" amount="2.5993E-07" elementaryExchangeId="73eed463-4986-4d81-8bae-60dae5be49d0">
+        <name xml:lang="en">DOC, Dissolved Organic Carbon</name>
+        <unitName xml:lang="en">kg</unitName>
+        <compartment subcompartmentId="a119c440-7e83-4655-a874-97fe1468315a">
+          <compartment xml:lang="en">water</compartment>
+          <subcompartment xml:lang="en">ground-</subcompartment>
+        </compartment>
+        <outputGroup>4</outputGroup>
+      </elementaryExchange>
+      <elementaryExchange id="e0e8cbe0-8b31-4b0a-a64d-f5f5bf4a074f" unitId="487df68b-4994-4027-8fdc-a4dc298257b7" amount="0.0001557" elementaryExchangeId="725c7923-0ed8-43e5-b485-fad7e34bef08">
+        <name xml:lang="en">DOC, Dissolved Organic Carbon</name>
+        <unitName xml:lang="en">kg</unitName>
+        <compartment subcompartmentId="aa4362e0-b20a-448b-b2a0-261f4510deb5">
+          <compartment xml:lang="en">water</compartment>
+          <subcompartment xml:lang="en">ground-, long-term</subcompartment>
+        </compartment>
+        <outputGroup>4</outputGroup>
+      </elementaryExchange>
+      <elementaryExchange id="24eb9dfc-4e5f-493c-a0ec-1b0c458d391d" unitId="487df68b-4994-4027-8fdc-a4dc298257b7" amount="2.155E-07" elementaryExchangeId="b84e31d0-cf7b-4c3f-bc8a-3cc93bdb30d9">
+        <name xml:lang="en">Fluoride</name>
+        <unitName xml:lang="en">kg</unitName>
+        <compartment subcompartmentId="a119c440-7e83-4655-a874-97fe1468315a">
+          <compartment xml:lang="en">water</compartment>
+          <subcompartment xml:lang="en">ground-</subcompartment>
+        </compartment>
+        <outputGroup>4</outputGroup>
+      </elementaryExchange>
+      <elementaryExchange id="74c725ba-2e0f-4fc6-a796-f8598eb3d995" unitId="487df68b-4994-4027-8fdc-a4dc298257b7" amount="0.00011886" elementaryExchangeId="7ae3e6e8-75e6-4566-b18f-6d848086c4e5">
+        <name xml:lang="en">Fluoride</name>
+        <unitName xml:lang="en">kg</unitName>
+        <compartment subcompartmentId="aa4362e0-b20a-448b-b2a0-261f4510deb5">
+          <compartment xml:lang="en">water</compartment>
+          <subcompartment xml:lang="en">ground-, long-term</subcompartment>
+        </compartment>
+        <outputGroup>4</outputGroup>
+      </elementaryExchange>
+      <elementaryExchange id="601093e3-e816-4b85-a93d-096f9492cafb" unitId="487df68b-4994-4027-8fdc-a4dc298257b7" amount="8.0428E-06" elementaryExchangeId="db945649-d0d5-4818-ab81-dc8579469a05">
+        <name xml:lang="en">Hydrogen sulfide</name>
+        <unitName xml:lang="en">kg</unitName>
+        <compartment subcompartmentId="a119c440-7e83-4655-a874-97fe1468315a">
+          <compartment xml:lang="en">water</compartment>
+          <subcompartment xml:lang="en">ground-</subcompartment>
+        </compartment>
+        <outputGroup>4</outputGroup>
+      </elementaryExchange>
+      <elementaryExchange id="e2aae5b5-c5eb-478d-8193-82f6768b8c8b" unitId="487df68b-4994-4027-8fdc-a4dc298257b7" amount="6.3726E-05" elementaryExchangeId="554be2fb-9bb9-46c6-a4df-46df0d53cb65">
+        <name xml:lang="en">Hydrogen sulfide</name>
+        <unitName xml:lang="en">kg</unitName>
+        <compartment subcompartmentId="aa4362e0-b20a-448b-b2a0-261f4510deb5">
+          <compartment xml:lang="en">water</compartment>
+          <subcompartment xml:lang="en">ground-, long-term</subcompartment>
+        </compartment>
+        <outputGroup>4</outputGroup>
+      </elementaryExchange>
+      <elementaryExchange id="74a3ab07-2272-4a8c-bda4-113048e5f094" unitId="487df68b-4994-4027-8fdc-a4dc298257b7" amount="1.2517E-06" elementaryExchangeId="33fd8342-58e7-45c9-ad92-0951c002c403">
+        <name xml:lang="en">Iron ion</name>
+        <unitName xml:lang="en">kg</unitName>
+        <compartment subcompartmentId="a119c440-7e83-4655-a874-97fe1468315a">
+          <compartment xml:lang="en">water</compartment>
+          <subcompartment xml:lang="en">ground-</subcompartment>
+        </compartment>
+        <outputGroup>4</outputGroup>
+      </elementaryExchange>
+      <elementaryExchange id="6c47edb4-060a-41c0-a189-2c3a6a369274" unitId="487df68b-4994-4027-8fdc-a4dc298257b7" amount="0.010339" elementaryExchangeId="9b6d6f07-ebc6-447d-a3c0-f2017d77d852">
+        <name xml:lang="en">Iron ion</name>
+        <unitName xml:lang="en">kg</unitName>
+        <compartment subcompartmentId="aa4362e0-b20a-448b-b2a0-261f4510deb5">
+          <compartment xml:lang="en">water</compartment>
+          <subcompartment xml:lang="en">ground-, long-term</subcompartment>
+        </compartment>
+        <outputGroup>4</outputGroup>
+      </elementaryExchange>
+      <elementaryExchange id="260eb335-6726-46ca-9d03-1baf29dd8370" unitId="487df68b-4994-4027-8fdc-a4dc298257b7" amount="3.7381E-09" elementaryExchangeId="c864aa15-0abc-41ad-9889-348106e485d8">
+        <name xml:lang="en">Lead II</name>
+        <unitName xml:lang="en">kg</unitName>
+        <compartment subcompartmentId="a119c440-7e83-4655-a874-97fe1468315a">
+          <compartment xml:lang="en">water</compartment>
+          <subcompartment xml:lang="en">ground-</subcompartment>
+        </compartment>
+        <outputGroup>4</outputGroup>
+      </elementaryExchange>
+      <elementaryExchange id="0a9b351f-bc43-43d4-83f4-7cd82f43e4d8" unitId="487df68b-4994-4027-8fdc-a4dc298257b7" amount="0.00013354" elementaryExchangeId="0ff15165-d761-48c9-9814-2d1dcdd56857">
+        <name xml:lang="en">Lead II</name>
+        <unitName xml:lang="en">kg</unitName>
+        <compartment subcompartmentId="aa4362e0-b20a-448b-b2a0-261f4510deb5">
+          <compartment xml:lang="en">water</compartment>
+          <subcompartment xml:lang="en">ground-, long-term</subcompartment>
+        </compartment>
+        <outputGroup>4</outputGroup>
+      </elementaryExchange>
+      <elementaryExchange id="898aa82f-56cc-4984-9b46-106ee56a3d77" unitId="487df68b-4994-4027-8fdc-a4dc298257b7" amount="7.1644E-06" elementaryExchangeId="24acc516-974c-4ff3-b7e1-5950b8d37206">
+        <name xml:lang="en">Magnesium</name>
+        <unitName xml:lang="en">kg</unitName>
+        <compartment subcompartmentId="a119c440-7e83-4655-a874-97fe1468315a">
+          <compartment xml:lang="en">water</compartment>
+          <subcompartment xml:lang="en">ground-</subcompartment>
+        </compartment>
+        <outputGroup>4</outputGroup>
+      </elementaryExchange>
+      <elementaryExchange id="5b5e8d9d-619c-40dd-9374-aca405017b37" unitId="487df68b-4994-4027-8fdc-a4dc298257b7" amount="0.0015989" elementaryExchangeId="ce9fd912-233a-4807-a33e-0323b1e4a7a2">
+        <name xml:lang="en">Magnesium</name>
+        <unitName xml:lang="en">kg</unitName>
+        <compartment subcompartmentId="aa4362e0-b20a-448b-b2a0-261f4510deb5">
+          <compartment xml:lang="en">water</compartment>
+          <subcompartment xml:lang="en">ground-, long-term</subcompartment>
+        </compartment>
+        <outputGroup>4</outputGroup>
+      </elementaryExchange>
+      <elementaryExchange id="b2e61146-35d4-410f-bdcc-21ea2a29efb6" unitId="487df68b-4994-4027-8fdc-a4dc298257b7" amount="2.7409E-07" elementaryExchangeId="44f28e11-061d-44fd-8f25-dc62a9f1fa57">
+        <name xml:lang="en">Manganese II</name>
+        <unitName xml:lang="en">kg</unitName>
+        <compartment subcompartmentId="a119c440-7e83-4655-a874-97fe1468315a">
+          <compartment xml:lang="en">water</compartment>
+          <subcompartment xml:lang="en">ground-</subcompartment>
+        </compartment>
+        <outputGroup>4</outputGroup>
+      </elementaryExchange>
+      <elementaryExchange id="9a86d3bb-8d44-4002-b44d-67cc1b85718d" unitId="487df68b-4994-4027-8fdc-a4dc298257b7" amount="0.00015792" elementaryExchangeId="835d0907-a668-4d92-b6b6-7b56fa343713">
+        <name xml:lang="en">Manganese II</name>
+        <unitName xml:lang="en">kg</unitName>
+        <compartment subcompartmentId="aa4362e0-b20a-448b-b2a0-261f4510deb5">
+          <compartment xml:lang="en">water</compartment>
+          <subcompartment xml:lang="en">ground-, long-term</subcompartment>
+        </compartment>
+        <outputGroup>4</outputGroup>
+      </elementaryExchange>
+      <elementaryExchange id="43339f73-6938-4048-b42f-fc81740fd885" unitId="487df68b-4994-4027-8fdc-a4dc298257b7" amount="5.7387E-11" elementaryExchangeId="e1aa92d7-9297-452e-ade0-e5e2acc52ad7">
+        <name xml:lang="en">Mercury II</name>
+        <unitName xml:lang="en">kg</unitName>
+        <compartment subcompartmentId="a119c440-7e83-4655-a874-97fe1468315a">
+          <compartment xml:lang="en">water</compartment>
+          <subcompartment xml:lang="en">ground-</subcompartment>
+        </compartment>
+        <outputGroup>4</outputGroup>
+      </elementaryExchange>
+      <elementaryExchange id="1ed6e708-020e-42a2-9fe9-7965434352f4" unitId="487df68b-4994-4027-8fdc-a4dc298257b7" amount="2.4252E-07" elementaryExchangeId="40f89b03-64f8-466d-9480-bca47d8a435c">
+        <name xml:lang="en">Mercury II</name>
+        <unitName xml:lang="en">kg</unitName>
+        <compartment subcompartmentId="aa4362e0-b20a-448b-b2a0-261f4510deb5">
+          <compartment xml:lang="en">water</compartment>
+          <subcompartment xml:lang="en">ground-, long-term</subcompartment>
+        </compartment>
+        <outputGroup>4</outputGroup>
+      </elementaryExchange>
+      <elementaryExchange id="723acafa-09b5-4be1-8753-2577d762feca" unitId="487df68b-4994-4027-8fdc-a4dc298257b7" amount="3.3487E-08" elementaryExchangeId="3822809c-cc03-469d-ac2a-9f85842f8440">
+        <name xml:lang="en">Molybdenum VI</name>
+        <unitName xml:lang="en">kg</unitName>
+        <compartment subcompartmentId="a119c440-7e83-4655-a874-97fe1468315a">
+          <compartment xml:lang="en">water</compartment>
+          <subcompartment xml:lang="en">ground-</subcompartment>
+        </compartment>
+        <outputGroup>4</outputGroup>
+      </elementaryExchange>
+      <elementaryExchange id="a1486cbf-7479-48fd-a9c7-2c7ee9764dcf" unitId="487df68b-4994-4027-8fdc-a4dc298257b7" amount="5.6346E-06" elementaryExchangeId="7d3f7498-3596-478a-9fa1-72201ef94082">
+        <name xml:lang="en">Molybdenum VI</name>
+        <unitName xml:lang="en">kg</unitName>
+        <compartment subcompartmentId="aa4362e0-b20a-448b-b2a0-261f4510deb5">
+          <compartment xml:lang="en">water</compartment>
+          <subcompartment xml:lang="en">ground-, long-term</subcompartment>
+        </compartment>
+        <outputGroup>4</outputGroup>
+      </elementaryExchange>
+      <elementaryExchange id="0070600e-03f5-4592-8c91-69e7616f3bb3" unitId="487df68b-4994-4027-8fdc-a4dc298257b7" amount="1.5155E-08" elementaryExchangeId="56815b4f-6138-4e0b-9fac-c94fd6b102b3">
+        <name xml:lang="en">Nickel II</name>
+        <unitName xml:lang="en">kg</unitName>
+        <compartment subcompartmentId="a119c440-7e83-4655-a874-97fe1468315a">
+          <compartment xml:lang="en">water</compartment>
+          <subcompartment xml:lang="en">ground-</subcompartment>
+        </compartment>
+        <outputGroup>4</outputGroup>
+      </elementaryExchange>
+      <elementaryExchange id="9687990a-83b6-47b7-9ee0-90d6f20d31a5" unitId="487df68b-4994-4027-8fdc-a4dc298257b7" amount="1.9323E-05" elementaryExchangeId="9f69cb8e-51fe-447b-a1ac-4da74de8ebe4">
+        <name xml:lang="en">Nickel II</name>
+        <unitName xml:lang="en">kg</unitName>
+        <compartment subcompartmentId="aa4362e0-b20a-448b-b2a0-261f4510deb5">
+          <compartment xml:lang="en">water</compartment>
+          <subcompartment xml:lang="en">ground-, long-term</subcompartment>
+        </compartment>
+        <outputGroup>4</outputGroup>
+      </elementaryExchange>
+      <elementaryExchange id="a1501b8e-1a22-4eea-88e1-eb485bd37e6a" unitId="487df68b-4994-4027-8fdc-a4dc298257b7" amount="1.9444E-06" elementaryExchangeId="b9291c72-4b1d-4275-8068-4c707dc3ce33">
+        <name xml:lang="en">Nitrate</name>
+        <unitName xml:lang="en">kg</unitName>
+        <compartment subcompartmentId="a119c440-7e83-4655-a874-97fe1468315a">
+          <compartment xml:lang="en">water</compartment>
+          <subcompartment xml:lang="en">ground-</subcompartment>
+        </compartment>
+        <outputGroup>4</outputGroup>
+      </elementaryExchange>
+      <elementaryExchange id="30fab6a2-5c3b-47d9-8ed8-14f078c31266" unitId="487df68b-4994-4027-8fdc-a4dc298257b7" amount="1.6397E-05" elementaryExchangeId="b61057a3-a0bc-4158-882e-b819c4797419">
+        <name xml:lang="en">Nitrate</name>
+        <unitName xml:lang="en">kg</unitName>
+        <compartment subcompartmentId="aa4362e0-b20a-448b-b2a0-261f4510deb5">
+          <compartment xml:lang="en">water</compartment>
+          <subcompartment xml:lang="en">ground-, long-term</subcompartment>
+        </compartment>
+        <outputGroup>4</outputGroup>
+      </elementaryExchange>
+      <elementaryExchange id="10380b02-0cdd-4a24-be80-ab38b786eb82" unitId="487df68b-4994-4027-8fdc-a4dc298257b7" amount="9.3252E-06" elementaryExchangeId="329fc7d8-4011-4327-84e4-34ff76f0e42d">
+        <name xml:lang="en">Phosphate</name>
+        <unitName xml:lang="en">kg</unitName>
+        <compartment subcompartmentId="a119c440-7e83-4655-a874-97fe1468315a">
+          <compartment xml:lang="en">water</compartment>
+          <subcompartment xml:lang="en">ground-</subcompartment>
+        </compartment>
+        <outputGroup>4</outputGroup>
+      </elementaryExchange>
+      <elementaryExchange id="9bdace66-3c44-4eaa-9cef-e41a443860a6" unitId="487df68b-4994-4027-8fdc-a4dc298257b7" amount="0.00064117" elementaryExchangeId="490b267b-f429-4d9a-ac79-224e37fb4d58">
+        <name xml:lang="en">Phosphate</name>
+        <unitName xml:lang="en">kg</unitName>
+        <compartment subcompartmentId="aa4362e0-b20a-448b-b2a0-261f4510deb5">
+          <compartment xml:lang="en">water</compartment>
+          <subcompartment xml:lang="en">ground-, long-term</subcompartment>
+        </compartment>
+        <outputGroup>4</outputGroup>
+      </elementaryExchange>
+      <elementaryExchange id="67422f05-d74c-4c0e-ab16-315d74f6317c" unitId="487df68b-4994-4027-8fdc-a4dc298257b7" amount="1.5794E-07" elementaryExchangeId="c21a1397-82dc-427a-a6cb-c790ba2626f4">
+        <name xml:lang="en">Potassium I</name>
+        <unitName xml:lang="en">kg</unitName>
+        <compartment subcompartmentId="a119c440-7e83-4655-a874-97fe1468315a">
+          <compartment xml:lang="en">water</compartment>
+          <subcompartment xml:lang="en">ground-</subcompartment>
+        </compartment>
+        <outputGroup>4</outputGroup>
+      </elementaryExchange>
+      <elementaryExchange id="54a6ca45-324c-48b1-b763-0f53a699909b" unitId="487df68b-4994-4027-8fdc-a4dc298257b7" amount="9.2202E-05" elementaryExchangeId="b93fc4df-91b2-4ac4-a315-89147515ddfb">
+        <name xml:lang="en">Potassium I</name>
+        <unitName xml:lang="en">kg</unitName>
+        <compartment subcompartmentId="aa4362e0-b20a-448b-b2a0-261f4510deb5">
+          <compartment xml:lang="en">water</compartment>
+          <subcompartment xml:lang="en">ground-, long-term</subcompartment>
+        </compartment>
+        <outputGroup>4</outputGroup>
+      </elementaryExchange>
+      <elementaryExchange id="4b66ab04-dfc7-4776-a99a-29bb5d79e5b9" unitId="487df68b-4994-4027-8fdc-a4dc298257b7" amount="1.032E-08" elementaryExchangeId="0a6ae675-cdf2-475d-b4ef-486e78757d65">
+        <name xml:lang="en">Scandium</name>
+        <unitName xml:lang="en">kg</unitName>
+        <compartment subcompartmentId="a119c440-7e83-4655-a874-97fe1468315a">
+          <compartment xml:lang="en">water</compartment>
+          <subcompartment xml:lang="en">ground-</subcompartment>
+        </compartment>
+        <outputGroup>4</outputGroup>
+      </elementaryExchange>
+      <elementaryExchange id="6cc4a1f0-c052-418a-8b20-e96450294108" unitId="487df68b-4994-4027-8fdc-a4dc298257b7" amount="1.3341E-05" elementaryExchangeId="f6266ac7-9608-47f2-bc91-3857eb366446">
+        <name xml:lang="en">Scandium</name>
+        <unitName xml:lang="en">kg</unitName>
+        <compartment subcompartmentId="aa4362e0-b20a-448b-b2a0-261f4510deb5">
+          <compartment xml:lang="en">water</compartment>
+          <subcompartment xml:lang="en">ground-, long-term</subcompartment>
+        </compartment>
+        <outputGroup>4</outputGroup>
+      </elementaryExchange>
+      <elementaryExchange id="bfc9ff90-4c97-4925-8095-33c1bdf3df74" unitId="487df68b-4994-4027-8fdc-a4dc298257b7" amount="6.7598E-10" elementaryExchangeId="1be475e0-ccef-4145-98e0-0d47c570a71b">
+        <name xml:lang="en">Selenium IV</name>
+        <unitName xml:lang="en">kg</unitName>
+        <compartment subcompartmentId="a119c440-7e83-4655-a874-97fe1468315a">
+          <compartment xml:lang="en">water</compartment>
+          <subcompartment xml:lang="en">ground-</subcompartment>
+        </compartment>
+        <outputGroup>4</outputGroup>
+      </elementaryExchange>
+      <elementaryExchange id="1a7dfebb-1e4e-4dbb-ab07-570723e3c378" unitId="487df68b-4994-4027-8fdc-a4dc298257b7" amount="1.4974E-07" elementaryExchangeId="4d54a415-82d7-49ac-88e1-712bd0009363">
+        <name xml:lang="en">Selenium IV</name>
+        <unitName xml:lang="en">kg</unitName>
+        <compartment subcompartmentId="aa4362e0-b20a-448b-b2a0-261f4510deb5">
+          <compartment xml:lang="en">water</compartment>
+          <subcompartment xml:lang="en">ground-, long-term</subcompartment>
+        </compartment>
+        <outputGroup>4</outputGroup>
+      </elementaryExchange>
+      <elementaryExchange id="85b898af-ce61-47fa-8c1e-748f785b821a" unitId="487df68b-4994-4027-8fdc-a4dc298257b7" amount="9.6232E-07" elementaryExchangeId="fc91fc6f-596e-424a-9ee4-4432d718a66f">
+        <name xml:lang="en">Silicon</name>
+        <unitName xml:lang="en">kg</unitName>
+        <compartment subcompartmentId="a119c440-7e83-4655-a874-97fe1468315a">
+          <compartment xml:lang="en">water</compartment>
+          <subcompartment xml:lang="en">ground-</subcompartment>
+        </compartment>
+        <outputGroup>4</outputGroup>
+      </elementaryExchange>
+      <elementaryExchange id="f20c2983-67b5-4746-ae7c-2ae2df4352e0" unitId="487df68b-4994-4027-8fdc-a4dc298257b7" amount="0.00021811" elementaryExchangeId="ce88a9b6-0afa-4f68-9b32-8c3438bf4025">
+        <name xml:lang="en">Silicon</name>
+        <unitName xml:lang="en">kg</unitName>
+        <compartment subcompartmentId="aa4362e0-b20a-448b-b2a0-261f4510deb5">
+          <compartment xml:lang="en">water</compartment>
+          <subcompartment xml:lang="en">ground-, long-term</subcompartment>
+        </compartment>
+        <outputGroup>4</outputGroup>
+      </elementaryExchange>
+      <elementaryExchange id="16926efc-b96c-4da7-bb68-0f6b912b90dc" unitId="487df68b-4994-4027-8fdc-a4dc298257b7" amount="2.4716E-10" elementaryExchangeId="71cfe87c-ab80-421e-adba-afb7d5bd0861">
+        <name xml:lang="en">Silver I</name>
+        <unitName xml:lang="en">kg</unitName>
+        <compartment subcompartmentId="a119c440-7e83-4655-a874-97fe1468315a">
+          <compartment xml:lang="en">water</compartment>
+          <subcompartment xml:lang="en">ground-</subcompartment>
+        </compartment>
+        <outputGroup>4</outputGroup>
+      </elementaryExchange>
+      <elementaryExchange id="da698fed-7780-44bb-82b7-bc6c8304144c" unitId="487df68b-4994-4027-8fdc-a4dc298257b7" amount="8.3037E-06" elementaryExchangeId="94426df9-63b1-4dc6-ad1b-3509e22f1154">
+        <name xml:lang="en">Silver I</name>
+        <unitName xml:lang="en">kg</unitName>
+        <compartment subcompartmentId="aa4362e0-b20a-448b-b2a0-261f4510deb5">
+          <compartment xml:lang="en">water</compartment>
+          <subcompartment xml:lang="en">ground-, long-term</subcompartment>
+        </compartment>
+        <outputGroup>4</outputGroup>
+      </elementaryExchange>
+      <elementaryExchange id="b2f1b6f1-e01d-41b5-9c48-ead21d85206e" unitId="487df68b-4994-4027-8fdc-a4dc298257b7" amount="2.591E-06" elementaryExchangeId="ee9fdd7c-5e29-4bdb-852a-3258f06ec2ab">
+        <name xml:lang="en">Sodium I</name>
+        <unitName xml:lang="en">kg</unitName>
+        <compartment subcompartmentId="a119c440-7e83-4655-a874-97fe1468315a">
+          <compartment xml:lang="en">water</compartment>
+          <subcompartment xml:lang="en">ground-</subcompartment>
+        </compartment>
+        <outputGroup>4</outputGroup>
+      </elementaryExchange>
+      <elementaryExchange id="068b8fb5-027e-4a10-9273-9c131ae85e2e" unitId="487df68b-4994-4027-8fdc-a4dc298257b7" amount="0.00081345" elementaryExchangeId="fb83d61e-6fe3-4da7-8eb2-b0e2dc85a76d">
+        <name xml:lang="en">Sodium I</name>
+        <unitName xml:lang="en">kg</unitName>
+        <compartment subcompartmentId="aa4362e0-b20a-448b-b2a0-261f4510deb5">
+          <compartment xml:lang="en">water</compartment>
+          <subcompartment xml:lang="en">ground-, long-term</subcompartment>
+        </compartment>
+        <outputGroup>4</outputGroup>
+      </elementaryExchange>
+      <elementaryExchange id="500d2823-e201-44b2-89cb-c7eb3bedf5ac" unitId="487df68b-4994-4027-8fdc-a4dc298257b7" amount="3.2113E-08" elementaryExchangeId="070f9c6e-584d-40ed-8b07-6b1f7f75dd3f">
+        <name xml:lang="en">Strontium II</name>
+        <unitName xml:lang="en">kg</unitName>
+        <compartment subcompartmentId="a119c440-7e83-4655-a874-97fe1468315a">
+          <compartment xml:lang="en">water</compartment>
+          <subcompartment xml:lang="en">ground-</subcompartment>
+        </compartment>
+        <outputGroup>4</outputGroup>
+      </elementaryExchange>
+      <elementaryExchange id="00cba687-0cfe-4ef4-b18d-72536dc982c1" unitId="487df68b-4994-4027-8fdc-a4dc298257b7" amount="9.0556E-05" elementaryExchangeId="8f1b69d9-fc00-4b46-99f9-7a57fd71dad2">
+        <name xml:lang="en">Strontium II</name>
+        <unitName xml:lang="en">kg</unitName>
+        <compartment subcompartmentId="aa4362e0-b20a-448b-b2a0-261f4510deb5">
+          <compartment xml:lang="en">water</compartment>
+          <subcompartment xml:lang="en">ground-, long-term</subcompartment>
+        </compartment>
+        <outputGroup>4</outputGroup>
+      </elementaryExchange>
+      <elementaryExchange id="741f362a-a385-45d9-9603-807cc05a36ce" unitId="487df68b-4994-4027-8fdc-a4dc298257b7" amount="7.4741E-05" elementaryExchangeId="31eacbfc-683a-4d36-afc1-80dee42a3b94">
+        <name xml:lang="en">Sulfate</name>
+        <unitName xml:lang="en">kg</unitName>
+        <compartment subcompartmentId="a119c440-7e83-4655-a874-97fe1468315a">
+          <compartment xml:lang="en">water</compartment>
+          <subcompartment xml:lang="en">ground-</subcompartment>
+        </compartment>
+        <outputGroup>4</outputGroup>
+      </elementaryExchange>
+      <elementaryExchange id="c3077ba0-8d8a-44f9-961b-4f020c011683" unitId="487df68b-4994-4027-8fdc-a4dc298257b7" amount="0.0005922" elementaryExchangeId="bfc0bf1c-e5e2-4702-a502-08c892031837">
+        <name xml:lang="en">Sulfate</name>
+        <unitName xml:lang="en">kg</unitName>
+        <compartment subcompartmentId="aa4362e0-b20a-448b-b2a0-261f4510deb5">
+          <compartment xml:lang="en">water</compartment>
+          <subcompartment xml:lang="en">ground-, long-term</subcompartment>
+        </compartment>
+        <outputGroup>4</outputGroup>
+      </elementaryExchange>
+      <elementaryExchange id="410ed4a1-9053-421f-b664-f7bd4897609a" unitId="487df68b-4994-4027-8fdc-a4dc298257b7" amount="2.5993E-07" elementaryExchangeId="73b225ab-ddc4-4a38-9ed0-ceedee987424">
+        <name xml:lang="en">TOC, Total Organic Carbon</name>
+        <unitName xml:lang="en">kg</unitName>
+        <compartment subcompartmentId="a119c440-7e83-4655-a874-97fe1468315a">
+          <compartment xml:lang="en">water</compartment>
+          <subcompartment xml:lang="en">ground-</subcompartment>
+        </compartment>
+        <outputGroup>4</outputGroup>
+      </elementaryExchange>
+      <elementaryExchange id="fc6225fb-1700-4128-9da4-5335d3095b86" unitId="487df68b-4994-4027-8fdc-a4dc298257b7" amount="0.0001557" elementaryExchangeId="8734eb08-50cf-4f5a-8d1a-db76d38efe3c">
+        <name xml:lang="en">TOC, Total Organic Carbon</name>
+        <unitName xml:lang="en">kg</unitName>
+        <compartment subcompartmentId="aa4362e0-b20a-448b-b2a0-261f4510deb5">
+          <compartment xml:lang="en">water</compartment>
+          <subcompartment xml:lang="en">ground-, long-term</subcompartment>
+        </compartment>
+        <outputGroup>4</outputGroup>
+      </elementaryExchange>
+      <elementaryExchange id="0b529b0e-924e-4a75-a0f5-1f25c1c70763" unitId="487df68b-4994-4027-8fdc-a4dc298257b7" amount="4.0477E-10" elementaryExchangeId="7da26881-518f-4b1b-87bf-7d1f633a7c1a">
+        <name xml:lang="en">Thallium I</name>
+        <unitName xml:lang="en">kg</unitName>
+        <compartment subcompartmentId="a119c440-7e83-4655-a874-97fe1468315a">
+          <compartment xml:lang="en">water</compartment>
+          <subcompartment xml:lang="en">ground-</subcompartment>
+        </compartment>
+        <outputGroup>4</outputGroup>
+      </elementaryExchange>
+      <elementaryExchange id="31790fc4-8564-4112-a35c-4af7c2aa9d24" unitId="487df68b-4994-4027-8fdc-a4dc298257b7" amount="8.607E-06" elementaryExchangeId="7e9baf19-8fa4-49c6-a3c2-2e875217e60b">
+        <name xml:lang="en">Thallium I</name>
+        <unitName xml:lang="en">kg</unitName>
+        <compartment subcompartmentId="aa4362e0-b20a-448b-b2a0-261f4510deb5">
+          <compartment xml:lang="en">water</compartment>
+          <subcompartment xml:lang="en">ground-, long-term</subcompartment>
+        </compartment>
+        <outputGroup>4</outputGroup>
+      </elementaryExchange>
+      <elementaryExchange id="806481fe-3171-4d88-be38-628eba137b95" unitId="487df68b-4994-4027-8fdc-a4dc298257b7" amount="7.4149E-09" elementaryExchangeId="f73177d8-5e57-4f0d-ba34-6889cfdfed40">
+        <name xml:lang="en">Tin ion</name>
+        <unitName xml:lang="en">kg</unitName>
+        <compartment subcompartmentId="a119c440-7e83-4655-a874-97fe1468315a">
+          <compartment xml:lang="en">water</compartment>
+          <subcompartment xml:lang="en">ground-</subcompartment>
+        </compartment>
+        <outputGroup>4</outputGroup>
+      </elementaryExchange>
+      <elementaryExchange id="3875d709-e223-4fa9-816b-0d45f0fd27b5" unitId="487df68b-4994-4027-8fdc-a4dc298257b7" amount="2.8146E-05" elementaryExchangeId="60a6702f-20ad-444f-a6df-f6374f1e3183">
+        <name xml:lang="en">Tin ion</name>
+        <unitName xml:lang="en">kg</unitName>
+        <compartment subcompartmentId="aa4362e0-b20a-448b-b2a0-261f4510deb5">
+          <compartment xml:lang="en">water</compartment>
+          <subcompartment xml:lang="en">ground-, long-term</subcompartment>
+        </compartment>
+        <outputGroup>4</outputGroup>
+      </elementaryExchange>
+      <elementaryExchange id="83902c3c-3418-4750-b432-e33f672e154a" unitId="487df68b-4994-4027-8fdc-a4dc298257b7" amount="2.2001E-09" elementaryExchangeId="e2380d91-f278-41ee-9926-15272a7d1443">
+        <name xml:lang="en">Titanium ion</name>
+        <unitName xml:lang="en">kg</unitName>
+        <compartment subcompartmentId="a119c440-7e83-4655-a874-97fe1468315a">
+          <compartment xml:lang="en">water</compartment>
+          <subcompartment xml:lang="en">ground-</subcompartment>
+        </compartment>
+        <outputGroup>4</outputGroup>
+      </elementaryExchange>
+      <elementaryExchange id="c352c9c5-63fd-4b33-ab83-b49f118aa87c" unitId="487df68b-4994-4027-8fdc-a4dc298257b7" amount="0.00013871" elementaryExchangeId="2a46e7f4-c66c-43e5-8a8a-d119c4098aff">
+        <name xml:lang="en">Titanium ion</name>
+        <unitName xml:lang="en">kg</unitName>
+        <compartment subcompartmentId="aa4362e0-b20a-448b-b2a0-261f4510deb5">
+          <compartment xml:lang="en">water</compartment>
+          <subcompartment xml:lang="en">ground-, long-term</subcompartment>
+        </compartment>
+        <outputGroup>4</outputGroup>
+      </elementaryExchange>
+      <elementaryExchange id="f3d6937d-327b-4a53-94c4-19e4b68f70a1" unitId="487df68b-4994-4027-8fdc-a4dc298257b7" amount="5.1816E-09" elementaryExchangeId="3277c200-21e3-4b45-8dcc-97cdc2e4c245">
+        <name xml:lang="en">Tungsten</name>
+        <unitName xml:lang="en">kg</unitName>
+        <compartment subcompartmentId="a119c440-7e83-4655-a874-97fe1468315a">
+          <compartment xml:lang="en">water</compartment>
+          <subcompartment xml:lang="en">ground-</subcompartment>
+        </compartment>
+        <outputGroup>4</outputGroup>
+      </elementaryExchange>
+      <elementaryExchange id="f94b03b3-cc60-44b2-ae20-2a50c08d7d8b" unitId="487df68b-4994-4027-8fdc-a4dc298257b7" amount="1.1065E-06" elementaryExchangeId="10319ea8-90db-4340-be33-b7182dca01db">
+        <name xml:lang="en">Tungsten</name>
+        <unitName xml:lang="en">kg</unitName>
+        <compartment subcompartmentId="aa4362e0-b20a-448b-b2a0-261f4510deb5">
+          <compartment xml:lang="en">water</compartment>
+          <subcompartment xml:lang="en">ground-, long-term</subcompartment>
+        </compartment>
+        <outputGroup>4</outputGroup>
+      </elementaryExchange>
+      <elementaryExchange id="5c9961a2-a313-4ef3-b911-b295bb80995d" unitId="487df68b-4994-4027-8fdc-a4dc298257b7" amount="8.1725E-10" elementaryExchangeId="ed1fd27e-014a-41cf-842f-7b2022b0be79">
+        <name xml:lang="en">Vanadium V</name>
+        <unitName xml:lang="en">kg</unitName>
+        <compartment subcompartmentId="a119c440-7e83-4655-a874-97fe1468315a">
+          <compartment xml:lang="en">water</compartment>
+          <subcompartment xml:lang="en">ground-</subcompartment>
+        </compartment>
+        <outputGroup>4</outputGroup>
+      </elementaryExchange>
+      <elementaryExchange id="3a8cd8de-50d8-4fe0-b64f-8ecf3f374a08" unitId="487df68b-4994-4027-8fdc-a4dc298257b7" amount="1.851E-07" elementaryExchangeId="41dbbe1f-06e1-4a34-8497-5986be8f9e51">
+        <name xml:lang="en">Vanadium V</name>
+        <unitName xml:lang="en">kg</unitName>
+        <compartment subcompartmentId="aa4362e0-b20a-448b-b2a0-261f4510deb5">
+          <compartment xml:lang="en">water</compartment>
+          <subcompartment xml:lang="en">ground-, long-term</subcompartment>
+        </compartment>
+        <outputGroup>4</outputGroup>
+      </elementaryExchange>
+      <elementaryExchange id="71e703fe-13a4-422f-a403-752a3c7a6ce0" unitId="487df68b-4994-4027-8fdc-a4dc298257b7" amount="2.0192E-07" elementaryExchangeId="7e769b3e-03fb-4b53-be15-85a910dcfea9">
+        <name xml:lang="en">Zinc II</name>
+        <unitName xml:lang="en">kg</unitName>
+        <compartment subcompartmentId="a119c440-7e83-4655-a874-97fe1468315a">
+          <compartment xml:lang="en">water</compartment>
+          <subcompartment xml:lang="en">ground-</subcompartment>
+        </compartment>
+        <outputGroup>4</outputGroup>
+      </elementaryExchange>
+      <elementaryExchange id="075d0d75-2d5a-40fc-9655-1a3666ef5550" unitId="487df68b-4994-4027-8fdc-a4dc298257b7" amount="0.00018214" elementaryExchangeId="bdce3a7c-e008-4391-be26-285f71a02453">
+        <name xml:lang="en">Zinc II</name>
+        <unitName xml:lang="en">kg</unitName>
+        <compartment subcompartmentId="aa4362e0-b20a-448b-b2a0-261f4510deb5">
+          <compartment xml:lang="en">water</compartment>
+          <subcompartment xml:lang="en">ground-, long-term</subcompartment>
+        </compartment>
+        <outputGroup>4</outputGroup>
+      </elementaryExchange>
+      <elementaryExchange id="5736530b-adc5-42ad-9906-3e7e10f4aceb" unitId="eb955b7c-7bed-401f-9c76-5db716ca3640" amount="0.00098485" elementaryExchangeId="1eaa9ea4-40b8-414a-b198-5626400372e1">
+        <name xml:lang="en">Occupation, dump site</name>
+        <unitName xml:lang="en">m2*year</unitName>
+        <compartment subcompartmentId="7d704b6f-d455-4f41-9c28-50b4f372f315">
+          <compartment xml:lang="en">natural resource</compartment>
+          <subcompartment xml:lang="en">land</subcompartment>
+        </compartment>
+        <inputGroup>4</inputGroup>
+      </elementaryExchange>
+      <elementaryExchange id="9f4236bc-5dc9-4275-8d91-3c4e0d67688f" unitId="1017f68a-f818-4f9d-a34d-a31e7386f628" amount="7.5758E-06" elementaryExchangeId="29630a65-f38c-48a5-9744-c0121f586640">
+        <name xml:lang="en">Transformation, from unspecified</name>
+        <unitName xml:lang="en">m2</unitName>
+        <compartment subcompartmentId="7d704b6f-d455-4f41-9c28-50b4f372f315">
+          <compartment xml:lang="en">natural resource</compartment>
+          <subcompartment xml:lang="en">land</subcompartment>
+        </compartment>
+        <inputGroup>4</inputGroup>
+      </elementaryExchange>
+      <elementaryExchange id="4f256f30-bc6d-4628-bce9-aec721ab8921" unitId="1017f68a-f818-4f9d-a34d-a31e7386f628" amount="7.5758E-06" elementaryExchangeId="90a5a447-af6f-421a-8201-011f07ad1150">
+        <name xml:lang="en">Transformation, to dump site</name>
+        <unitName xml:lang="en">m2</unitName>
+        <compartment subcompartmentId="7d704b6f-d455-4f41-9c28-50b4f372f315">
+          <compartment xml:lang="en">natural resource</compartment>
+          <subcompartment xml:lang="en">land</subcompartment>
+        </compartment>
+        <inputGroup>4</inputGroup>
+      </elementaryExchange>
+    </flowData>
+    <modellingAndValidation>
+      <representativeness systemModelId="290c1f85-4cc4-4fa1-b0c8-2cb7f4276dce" percent="80.0">
+        <systemModelName xml:lang="en">Allocation, cut-off by classification</systemModelName>
+        <samplingProcedure xml:lang="en">Tailings model based on observed leachate concentrations in literature. Extrapolated to 60'000 years heeding chemical characteristics. Initial waste composition from various literature sources. Climate information for national copper deposits (identified from the USGS Major Mineral Deposits database) from literature as follows: global mean annual temperature and precipitation data from Fick and Hijmans (2017); global mean annual evapotranspiration data from Fekete et al. (2002).
+
+References: 
+Fekete, B. M., Vorosmarty, C. J. &amp; Grabs, W. (2002). High-resolution fields of global runoff combining observed river discharge and simulated water balances. Global Biogeochemical Cycles, 16, 15-1 - 15-10.
+Fick, S. E. &amp; Hijmans, R. J. (2017). Worldclim 2: New 1-km spatial resolution climate surfaces for global land areas. International Journal of Climatology, 37, 4302-4315.</samplingProcedure>
+        <extrapolations xml:lang="en">Climate data collected for copper deposits in Chile and aggregated to reflect average climatic conditions of copper deposits in the country. Initial tailings composition based on global average copper tailings composition, derived from literature data. Initial leachate concentration based on generic global average data also obtained from the literature.</extrapolations>
+      </representativeness>
+      <review reviewedMajorRelease="3" reviewedMinorRelease="0" reviewedMajorRevision="1" reviewedMinorRevision="1" reviewerId="35d091e9-38c2-4037-9efe-a73673c57123" reviewerName="Emilia Moreno Ruiz" reviewerEmail="moreno@ecoinvent.org" reviewDate="2019-03-25">
+        <otherDetails xml:lang="en"/>
+      </review>
+      <review reviewedMajorRelease="3" reviewedMinorRelease="0" reviewedMajorRevision="1" reviewedMinorRevision="1" reviewerId="c4597934-ecac-422c-b431-382e85fdcb83" reviewerName="[System]" reviewerEmail="support@ecoinvent.org" reviewDate="2019-03-25">
+        <otherDetails xml:lang="en">Validation warnings:
+
+- Mass and/or economic deficit in activity dataset exceeds either 0.1% of input or output sum:
+
+Property 'dry mass':
+ - Input='0,7', Output='0,030924656298813'
+ - Input &gt; output by 0,669075343701187 kg (2163,57% of output)
+
+Property 'carbon content, fossil':
+ - Input='0,00614495', Output='0,00031191986'
+ - Input &gt; output by 0,00583303014 kg (1870,04% of output)
+
+Property 'water in wet mass':
+ - Input='0,3', Output='0'
+ - Input &gt; output by 0,3 kg
+
+Property 'wet mass':
+ - Input='1', Output='0,030924656298813'
+ - Input &gt; output by 0,969075343701187 kg (3133,67% of output)
+
+
+- The total water in wet mass of all input exchanges (0,3) and output exchanges (0) is unbalanced.
+
+- Uncertainty shall always be provided for all primary data inputs (exchange amounts, properties and parameters), except for the amount and properties of reference products.
+ -- Property(ies): dry mass=1, carbon content, fossil=0, water content=0, carbon content, non-fossil=0, water in wet mass=0, wet mass=1, dry mass=1, carbon content, fossil=0, wet mass=1, carbon content, non-fossil=0, water content=0, water in wet mass=0, wet mass=1, water in wet mass=0, water content=0, carbon content, non-fossil=0, carbon content, fossil=0, dry mass=1, carbon content, fossil=0, water content=0, dry mass=1, wet mass=1, water in wet mass=0, carbon content, non-fossil=0, carbon content, non-fossil=0, dry mass=1, wet mass=1, water content=0, water in wet mass=0, carbon content, fossil=0, dry mass=1, carbon content, fossil=0, water content=0, carbon content, non-fossil=0, water in wet mass=0, wet mass=1, wet mass=1, dry mass=1, water content=0, carbon content, non-fossil=0, water in wet mass=0, carbon content, fossil=0, dry mass=1, carbon content, fossil=0, carbon content, non-fossil=0, water in wet mass=0, water content=0, wet mass=1, carbon content, non-fossil=0, dry mass=1, water content=0, carbon content, fossil=0, wet mass=1, water in wet mass=0, carbon content, non-fossil=0, carbon content, fossil=0, wet mass=1, water in wet mass=0, water content=0, dry mass=1, water in wet mass=0, carbon content, non-fossil=0, carbon content, fossil=0, wet mass=1, dry mass=1, water content=0, carbon content, non-fossil=0, carbon content, fossil=0, water content=0, wet mass=1, dry mass=1, water in wet mass=0, carbon content, fossil=0, carbon content, non-fossil=0, water content=0, wet mass=1, dry mass=1, water in wet mass=0, water content=0, dry mass=1, carbon content, fossil=0, carbon content, non-fossil=0, water in wet mass=0, wet mass=1, carbon content, non-fossil=0, carbon content, fossil=0, water in wet mass=0, dry mass=1, water content=0, wet mass=1, carbon content, non-fossil=0, water content=0, carbon content, fossil=0, dry mass=1, wet mass=1, water in wet mass=0, dry mass=1, water content=0, carbon content, fossil=0, water in wet mass=0, wet mass=1, carbon content, non-fossil=0, water content=0, carbon content, non-fossil=0, dry mass=1, water in wet mass=0, carbon content, fossil=0, wet mass=1, carbon content, fossil=0, water in wet mass=0, water content=0, wet mass=1, carbon content, non-fossil=0, dry mass=1, carbon content, fossil=0, wet mass=1, carbon content, non-fossil=0, water in wet mass=0, dry mass=1, water content=0, carbon content, non-fossil=0, dry mass=1, water content=0, carbon content, fossil=0, water in wet mass=0, wet mass=1, water in wet mass=0, carbon content, non-fossil=0, dry mass=1, wet mass=1, water content=0, carbon content, fossil=0, carbon content, fossil=0, water in wet mass=0, water content=0, carbon content, non-fossil=0, wet mass=1, dry mass=1, carbon content, fossil=0, dry mass=1, carbon content, non-fossil=0, water in wet mass=0, wet mass=1, water content=0, water content=0, carbon content, fossil=0, wet mass=1, water in wet mass=0, carbon content, non-fossil=0, dry mass=1, wet mass=1, carbon content, non-fossil=0, carbon content, fossil=0, dry mass=1, water content=0, water in wet mass=0, carbon content, non-fossil=0, water content=0, dry mass=1, water in wet mass=0, carbon content, fossil=0, wet mass=1, dry mass=1, carbon content, fossil=0, water in wet mass=0, wet mass=1, carbon content, non-fossil=0, water content=0, wet mass=1, carbon content, fossil=0, water in wet mass=0, water content=0, dry mass=1, carbon content, non-fossil=0, carbon content, non-fossil=0, carbon content, fossil=0, water content=0, water in wet mass=0, wet mass=1, dry mass=1, dry mass=1, wet mass=1, carbon content, non-fossil=0, water in wet mass=0, water content=0, carbon content, fossil=1, water content=0, wet mass=1, dry mass=1, carbon content, non-fossil=0, water in wet mass=0, carbon content, fossil=1, carbon content, non-fossil=0, wet mass=1, water content=0, water in wet mass=0, dry mass=1, carbon content, fossil=0, wet mass=1, dry mass=1, water in wet mass=0, carbon content, non-fossil=0, water content=0, carbon content, fossil=0, water in wet mass=0, wet mass=1, carbon content, fossil=0, carbon content, non-fossil=0, water content=0, dry mass=1, water in wet mass=0, dry mass=1, carbon content, non-fossil=0, carbon content, fossil=0, water content=0, wet mass=1, water in wet mass=0, carbon content, fossil=0, wet mass=1, water content=0, dry mass=1, carbon content, non-fossil=0, water content=0, dry mass=1, carbon content, non-fossil=0, carbon content, fossil=0, water in wet mass=0, wet mass=1, wet mass=1, carbon content, fossil=0, dry mass=1, water in wet mass=0, carbon content, non-fossil=0, water content=0, carbon content, fossil=0, water in wet mass=0, dry mass=1, carbon content, non-fossil=0, wet mass=1, water content=0, carbon content, non-fossil=0, water in wet mass=0, dry mass=1, wet mass=1, carbon content, fossil=0, water content=0, carbon content, fossil=0, water in wet mass=0, carbon content, non-fossil=0, dry mass=1, water content=0, wet mass=1, water content=0, wet mass=1, dry mass=1, carbon content, fossil=0, carbon content, non-fossil=0, water in wet mass=0, carbon content, non-fossil=0, carbon content, fossil=0, dry mass=1, water content=0, water in wet mass=0, wet mass=1, wet mass=1, water in wet mass=0, carbon content, fossil=0, dry mass=1, water content=0, carbon content, non-fossil=0, dry mass=1, water in wet mass=0, carbon content, fossil=0, wet mass=1, water content=0, carbon content, non-fossil=0, dry mass=1, carbon content, fossil=0, wet mass=1, carbon content, non-fossil=0, water content=0, water in wet mass=0, dry mass=1, water content=0, wet mass=1, carbon content, non-fossil=0, carbon content, fossil=0, water in wet mass=0, water in wet mass=0, carbon content, fossil=0, carbon content, non-fossil=0, water content=0, wet mass=1, dry mass=1, carbon content, non-fossil=0, water in wet mass=0, water content=0, wet mass=1, dry mass=1, carbon content, fossil=0, wet mass=0, dry mass=0, carbon content, fossil=0, carbon content, non-fossil=0, water in wet mass=0, water content=0, carbon content, fossil=0, carbon content, non-fossil=0, dry mass=1, wet mass=1, water in wet mass=0, dry mass=1, wet mass=1, carbon content, non-fossil=0, water in wet mass=0, carbon content, fossil=0, water content=0, wet mass=1, carbon content, fossil=0, carbon content, non-fossil=0, dry mass=1, water content=0, water in wet mass=0, carbon content, non-fossil=0, water content=0, dry mass=1, water in wet mass=0, wet mass=1, carbon content, fossil=0, water content=0, dry mass=1, carbon content, fossil=0, wet mass=1, carbon content, non-fossil=0, water in wet mass=0, carbon content, fossil=0, water in wet mass=0, wet mass=1, dry mass=1, carbon content, non-fossil=0, water content=0, dry mass=1, carbon content, fossil=0, water in wet mass=0, water content=0, wet mass=1, carbon content, non-fossil=0, dry mass=1, water in wet mass=0, wet mass=1, carbon content, fossil=0, water content=0, carbon content, non-fossil=0, wet mass=1, carbon content, non-fossil=0, water in wet mass=0, carbon content, fossil=0, water content=0, dry mass=1, water in wet mass=0, carbon content, fossil=0, water content=0, dry mass=1, wet mass=1, carbon content, non-fossil=0, carbon content, non-fossil=0, water content=0, dry mass=1, wet mass=1, water in wet mass=0, carbon content, fossil=0, dry mass=1, wet mass=1, water in wet mass=0, carbon content, non-fossil=0, water content=0, carbon content, fossil=0, water content=0, water in wet mass=0, carbon content, fossil=0, carbon content, non-fossil=0, dry mass=1, wet mass=1, dry mass=1, carbon content, fossil=0, carbon content, non-fossil=0, water in wet mass=0, water content=0, wet mass=1, carbon content, non-fossil=0, water content=0, carbon content, fossil=0, dry mass=1, wet mass=1, water in wet mass=0, carbon content, non-fossil=0, wet mass=1, dry mass=1, carbon content, fossil=0, water in wet mass=0, water content=0, water in wet mass=0, carbon content, non-fossil=0, water content=0, carbon content, fossil=0, dry mass=1, wet mass=1, carbon content, fossil=0, water in wet mass=0, wet mass=1, water content=0, dry mass=1, carbon content, non-fossil=0, wet mass=1, carbon content, fossil=0, dry mass=1, water content=0, water in wet mass=0, carbon content, non-fossil=0, water content=0, wet mass=1, dry mass=1, carbon content, non-fossil=0, carbon content, fossil=0, water in wet mass=0, wet mass=1, water in wet mass=0, carbon content, fossil=0, water content=0, dry mass=1, carbon content, non-fossil=0, water in wet mass=0, carbon content, non-fossil=0, carbon content, fossil=0, dry mass=1, wet mass=1, water content=0, dry mass=1, carbon content, non-fossil=0, water content=0, carbon content, fossil=0, water in wet mass=0, wet mass=1, dry mass=1, wet mass=1, water content=0, carbon content, non-fossil=0, carbon content, fossil=0, water in wet mass=0, carbon content, fossil=1, carbon content, non-fossil=0, water in wet mass=0, dry mass=1, water content=0, wet mass=1, wet mass=1, water content=0, carbon content, fossil=1, water in wet mass=0, dry mass=1, carbon content, non-fossil=0, wet mass=1, water in wet mass=0, carbon content, non-fossil=0, dry mass=1, carbon content, fossil=0, water content=0, water in wet mass=0, carbon content, fossil=0, water content=0, carbon content, non-fossil=0, dry mass=1, wet mass=1, carbon content, fossil=0, water in wet mass=0, water content=0, dry mass=1, carbon content, non-fossil=0, wet mass=1, carbon content, non-fossil=0, dry mass=1, water in wet mass=0, water content=0, wet mass=1, carbon content, fossil=0, carbon content, non-fossil=0, dry mass=1, water in wet mass=0, wet mass=1, carbon content, fossil=0, water content=0, carbon content, fossil=0, carbon content, non-fossil=0, water content=0, dry mass=1, wet mass=1, water in wet mass=0
+
+- Pedigree information shall always be provided for all uncertainties of primary data inputs (exchange amounts, properties and parameters), except for the amount and properties of reference products.
+ -- Property(ies): dry mass=1, carbon content, fossil=0, water content=0, carbon content, non-fossil=0, water in wet mass=0, wet mass=1, dry mass=1, carbon content, fossil=0, wet mass=1, carbon content, non-fossil=0, water content=0, water in wet mass=0, wet mass=1, water in wet mass=0, water content=0, carbon content, non-fossil=0, carbon content, fossil=0, dry mass=1, carbon content, fossil=0, water content=0, dry mass=1, wet mass=1, water in wet mass=0, carbon content, non-fossil=0, carbon content, non-fossil=0, dry mass=1, wet mass=1, water content=0, water in wet mass=0, carbon content, fossil=0, dry mass=1, carbon content, fossil=0, water content=0, carbon content, non-fossil=0, water in wet mass=0, wet mass=1, wet mass=1, dry mass=1, water content=0, carbon content, non-fossil=0, water in wet mass=0, carbon content, fossil=0, dry mass=1, carbon content, fossil=0, carbon content, non-fossil=0, water in wet mass=0, water content=0, wet mass=1, carbon content, non-fossil=0, dry mass=1, water content=0, carbon content, fossil=0, wet mass=1, water in wet mass=0, carbon content, non-fossil=0, carbon content, fossil=0, wet mass=1, water in wet mass=0, water content=0, dry mass=1, water in wet mass=0, carbon content, non-fossil=0, carbon content, fossil=0, wet mass=1, dry mass=1, water content=0, carbon content, non-fossil=0, carbon content, fossil=0, water content=0, wet mass=1, dry mass=1, water in wet mass=0, carbon content, fossil=0, carbon content, non-fossil=0, water content=0, wet mass=1, dry mass=1, water in wet mass=0, water content=0, dry mass=1, carbon content, fossil=0, carbon content, non-fossil=0, water in wet mass=0, wet mass=1, carbon content, non-fossil=0, carbon content, fossil=0, water in wet mass=0, dry mass=1, water content=0, wet mass=1, carbon content, non-fossil=0, water content=0, carbon content, fossil=0, dry mass=1, wet mass=1, water in wet mass=0, dry mass=1, water content=0, carbon content, fossil=0, water in wet mass=0, wet mass=1, carbon content, non-fossil=0, water content=0, carbon content, non-fossil=0, dry mass=1, water in wet mass=0, carbon content, fossil=0, wet mass=1, carbon content, fossil=0, water in wet mass=0, water content=0, wet mass=1, carbon content, non-fossil=0, dry mass=1, carbon content, fossil=0, wet mass=1, carbon content, non-fossil=0, water in wet mass=0, dry mass=1, water content=0, carbon content, non-fossil=0, dry mass=1, water content=0, carbon content, fossil=0, water in wet mass=0, wet mass=1, water in wet mass=0, carbon content, non-fossil=0, dry mass=1, wet mass=1, water content=0, carbon content, fossil=0, carbon content, fossil=0, water in wet mass=0, water content=0, carbon content, non-fossil=0, wet mass=1, dry mass=1, carbon content, fossil=0, dry mass=1, carbon content, non-fossil=0, water in wet mass=0, wet mass=1, water content=0, water content=0, carbon content, fossil=0, wet mass=1, water in wet mass=0, carbon content, non-fossil=0, dry mass=1, wet mass=1, carbon content, non-fossil=0, carbon content, fossil=0, dry mass=1, water content=0, water in wet mass=0, carbon content, non-fossil=0, water content=0, dry mass=1, water in wet mass=0, carbon content, fossil=0, wet mass=1, dry mass=1, carbon content, fossil=0, water in wet mass=0, wet mass=1, carbon content, non-fossil=0, water content=0, wet mass=1, carbon content, fossil=0, water in wet mass=0, water content=0, dry mass=1, carbon content, non-fossil=0, carbon content, non-fossil=0, carbon content, fossil=0, water content=0, water in wet mass=0, wet mass=1, dry mass=1, dry mass=1, wet mass=1, carbon content, non-fossil=0, water in wet mass=0, water content=0, carbon content, fossil=1, water content=0, wet mass=1, dry mass=1, carbon content, non-fossil=0, water in wet mass=0, carbon content, fossil=1, carbon content, non-fossil=0, wet mass=1, water content=0, water in wet mass=0, dry mass=1, carbon content, fossil=0, wet mass=1, dry mass=1, water in wet mass=0, carbon content, non-fossil=0, water content=0, carbon content, fossil=0, water in wet mass=0, wet mass=1, carbon content, fossil=0, carbon content, non-fossil=0, water content=0, dry mass=1, water in wet mass=0, dry mass=1, carbon content, non-fossil=0, carbon content, fossil=0, water content=0, wet mass=1, water in wet mass=0, carbon content, fossil=0, wet mass=1, water content=0, dry mass=1, carbon content, non-fossil=0, water content=0, dry mass=1, carbon content, non-fossil=0, carbon content, fossil=0, water in wet mass=0, wet mass=1, wet mass=1, carbon content, fossil=0, dry mass=1, water in wet mass=0, carbon content, non-fossil=0, water content=0, carbon content, fossil=0, water in wet mass=0, dry mass=1, carbon content, non-fossil=0, wet mass=1, water content=0, carbon content, non-fossil=0, water in wet mass=0, dry mass=1, wet mass=1, carbon content, fossil=0, water content=0, carbon content, fossil=0, water in wet mass=0, carbon content, non-fossil=0, dry mass=1, water content=0, wet mass=1, water content=0, wet mass=1, dry mass=1, carbon content, fossil=0, carbon content, non-fossil=0, water in wet mass=0, carbon content, non-fossil=0, carbon content, fossil=0, dry mass=1, water content=0, water in wet mass=0, wet mass=1, wet mass=1, water in wet mass=0, carbon content, fossil=0, dry mass=1, water content=0, carbon content, non-fossil=0, dry mass=1, water in wet mass=0, carbon content, fossil=0, wet mass=1, water content=0, carbon content, non-fossil=0, dry mass=1, carbon content, fossil=0, wet mass=1, carbon content, non-fossil=0, water content=0, water in wet mass=0, dry mass=1, water content=0, wet mass=1, carbon content, non-fossil=0, carbon content, fossil=0, water in wet mass=0, water in wet mass=0, carbon content, fossil=0, carbon content, non-fossil=0, water content=0, wet mass=1, dry mass=1, carbon content, non-fossil=0, water in wet mass=0, water content=0, wet mass=1, dry mass=1, carbon content, fossil=0, wet mass=0, dry mass=0, carbon content, fossil=0, carbon content, non-fossil=0, water in wet mass=0, water content=0, carbon content, fossil=0, carbon content, non-fossil=0, dry mass=1, wet mass=1, water in wet mass=0, dry mass=1, wet mass=1, carbon content, non-fossil=0, water in wet mass=0, carbon content, fossil=0, water content=0, wet mass=1, carbon content, fossil=0, carbon content, non-fossil=0, dry mass=1, water content=0, water in wet mass=0, carbon content, non-fossil=0, water content=0, dry mass=1, water in wet mass=0, wet mass=1, carbon content, fossil=0, water content=0, dry mass=1, carbon content, fossil=0, wet mass=1, carbon content, non-fossil=0, water in wet mass=0, carbon content, fossil=0, water in wet mass=0, wet mass=1, dry mass=1, carbon content, non-fossil=0, water content=0, dry mass=1, carbon content, fossil=0, water in wet mass=0, water content=0, wet mass=1, carbon content, non-fossil=0, dry mass=1, water in wet mass=0, wet mass=1, carbon content, fossil=0, water content=0, carbon content, non-fossil=0, wet mass=1, carbon content, non-fossil=0, water in wet mass=0, carbon content, fossil=0, water content=0, dry mass=1, water in wet mass=0, carbon content, fossil=0, water content=0, dry mass=1, wet mass=1, carbon content, non-fossil=0, carbon content, non-fossil=0, water content=0, dry mass=1, wet mass=1, water in wet mass=0, carbon content, fossil=0, dry mass=1, wet mass=1, water in wet mass=0, carbon content, non-fossil=0, water content=0, carbon content, fossil=0, water content=0, water in wet mass=0, carbon content, fossil=0, carbon content, non-fossil=0, dry mass=1, wet mass=1, dry mass=1, carbon content, fossil=0, carbon content, non-fossil=0, water in wet mass=0, water content=0, wet mass=1, carbon content, non-fossil=0, water content=0, carbon content, fossil=0, dry mass=1, wet mass=1, water in wet mass=0, carbon content, non-fossil=0, wet mass=1, dry mass=1, carbon content, fossil=0, water in wet mass=0, water content=0, water in wet mass=0, carbon content, non-fossil=0, water content=0, carbon content, fossil=0, dry mass=1, wet mass=1, carbon content, fossil=0, water in wet mass=0, wet mass=1, water content=0, dry mass=1, carbon content, non-fossil=0, wet mass=1, carbon content, fossil=0, dry mass=1, water content=0, water in wet mass=0, carbon content, non-fossil=0, water content=0, wet mass=1, dry mass=1, carbon content, non-fossil=0, carbon content, fossil=0, water in wet mass=0, wet mass=1, water in wet mass=0, carbon content, fossil=0, water content=0, dry mass=1, carbon content, non-fossil=0, water in wet mass=0, carbon content, non-fossil=0, carbon content, fossil=0, dry mass=1, wet mass=1, water content=0, dry mass=1, carbon content, non-fossil=0, water content=0, carbon content, fossil=0, water in wet mass=0, wet mass=1, dry mass=1, wet mass=1, water content=0, carbon content, non-fossil=0, carbon content, fossil=0, water in wet mass=0, carbon content, fossil=1, carbon content, non-fossil=0, water in wet mass=0, dry mass=1, water content=0, wet mass=1, wet mass=1, water content=0, carbon content, fossil=1, water in wet mass=0, dry mass=1, carbon content, non-fossil=0, wet mass=1, water in wet mass=0, carbon content, non-fossil=0, dry mass=1, carbon content, fossil=0, water content=0, water in wet mass=0, carbon content, fossil=0, water content=0, carbon content, non-fossil=0, dry mass=1, wet mass=1, carbon content, fossil=0, water in wet mass=0, water content=0, dry mass=1, carbon content, non-fossil=0, wet mass=1, carbon content, non-fossil=0, dry mass=1, water in wet mass=0, water content=0, wet mass=1, carbon content, fossil=0, carbon content, non-fossil=0, dry mass=1, water in wet mass=0, wet mass=1, carbon content, fossil=0, water content=0, carbon content, fossil=0, carbon content, non-fossil=0, water content=0, dry mass=1, wet mass=1, water in wet mass=0
+
+- A dataset with the term "operation" in its name should normally have an infrastructure input (products with a property "capacity" or "lifetime_capacity")
+- The following negative reference products could not be identified as materials for treatment. No activities exist that produce these materials for treatment.
+ - sulfidic tailings, from copper mine operation
+
+</otherDetails>
+      </review>
+    </modellingAndValidation>
+    <administrativeInformation>
+      <dataEntryBy personId="64faadb9-5be6-45f5-a9fb-54d3d39b86a3" isActiveAuthor="true" personName="David Turner" personEmail="david.turner@empa.ch"/>
+      <dataGeneratorAndPublication personId="64faadb9-5be6-45f5-a9fb-54d3d39b86a3" personName="David Turner" personEmail="david.turner@empa.ch" isCopyrightProtected="true" accessRestrictedTo="1"/>
+      <fileAttributes majorRelease="3" minorRelease="0" majorRevision="4" minorRevision="0" internalSchemaVersion="2.0.12" defaultLanguage="en" creationTimestamp="2019-03-22T18:23:17" lastEditTimestamp="2019-03-22T18:23:17" fileTimestamp="2019-03-22T18:23:17" contextId="de659012-50c4-4e96-b54a-fc781bf987ab">
+        <contextName xml:lang="en">ecoinvent</contextName>
+      </fileAttributes>
+    </administrativeInformation>
+  </childActivityDataset>
+</ecoSpold>

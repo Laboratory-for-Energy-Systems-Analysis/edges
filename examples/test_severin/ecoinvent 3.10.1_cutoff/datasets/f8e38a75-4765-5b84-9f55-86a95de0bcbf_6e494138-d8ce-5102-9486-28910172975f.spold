@@ -1,0 +1,65 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<ecoSpold xmlns="http://www.EcoInvent.org/EcoSpold02" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.EcoInvent.org/EcoSpold02 ../../schemas/datasets/EcoSpold02.xsd http://www.EcoInvent.org/UsedUserMasterData ../../schemas/datasets/EcoSpold02UserMasterData.xsd">
+  <activityDataset>
+    <activityDescription>
+      <activity specialActivityType="0" id="f8e38a75-4765-5b84-9f55-86a95de0bcbf" activityNameId="dd0f2758-2b1b-5d82-8641-19e2b4b5140b" inheritanceDepth="0" type="2">
+        <activityName xml:lang="en">ferrous metal, in mixed metal scrap, Recycled Content cut-off</activityName>
+        <includedActivitiesStart xml:lang="en">From cradle, i.e. including all upstream activities.</includedActivitiesStart>
+        <generalComment/>
+      </activity>
+      <geography geographyId="34dbbff8-88ce-11de-ad60-0019e336be3a">
+        <shortname xml:lang="en">GLO</shortname>
+      </geography>
+      <technology technologyLevel="3"/>
+      <timePeriod startDate="2023-01-01" endDate="2023-12-31" isDataValidForEntirePeriod="true"/>
+      <macroEconomicScenario macroEconomicScenarioId="d9f57f0a-a01f-42eb-a57b-8f18d6635801">
+        <name xml:lang="en">Business-as-Usual</name>
+      </macroEconomicScenario>
+    </activityDescription>
+    <flowData>
+      <intermediateExchange id="0d10de0f-a3cc-5439-822a-e21afed2216d" unitId="487df68b-4994-4027-8fdc-a4dc298257b7" amount="1.0" isCalculatedAmount="false" intermediateExchangeId="6e494138-d8ce-5102-9486-28910172975f" productionVolumeAmount="1.0">
+        <name xml:lang="en">ferrous metal, in mixed metal scrap</name>
+        <unitName xml:lang="en">kg</unitName>
+        <comment xml:lang="en"/>
+        <property propertyId="f2283db2-62e4-467f-b9ac-c4f45be563b4" amount="0.0" isDefiningValue="false" isCalculatedAmount="false" unitId="487df68b-4994-4027-8fdc-a4dc298257b7">
+          <name xml:lang="en">carbon allocation</name>
+          <unitName xml:lang="en">kg</unitName>
+        </property>
+        <property propertyId="a301a838-7975-4d89-9e74-8eb77ad03cd1" amount="0.0" isDefiningValue="false" isCalculatedAmount="false" unitId="577e242a-461f-44a7-922c-d8e1c3d2bf45">
+          <name xml:lang="en">carbon content</name>
+          <unitName xml:lang="en">dimensionless</unitName>
+        </property>
+        <property propertyId="38f94dd1-d5aa-41b8-b182-c0c42985d9dc" amount="0.0" isDefiningValue="false" isCalculatedAmount="false" unitId="7b75baf0-cbee-45e6-bf66-af119da06553">
+          <name xml:lang="en">price</name>
+          <unitName xml:lang="en">EUR2005</unitName>
+        </property>
+        <productionVolumeComment xml:lang="en"/>
+        <classification classificationId="a20a9e2f-b3f0-40fd-8358-f8adf7f419c4">
+          <classificationSystem xml:lang="en">By-product classification</classificationSystem>
+          <classificationValue xml:lang="en">Recyclable</classificationValue>
+        </classification>
+        <classification classificationId="2a77cb52-c1c9-400f-9d79-c2da8e77e3d7">
+          <classificationSystem xml:lang="en">CPC</classificationSystem>
+          <classificationValue xml:lang="en">39340: Ferrous waste and scrap</classificationValue>
+        </classification>
+        <classification classificationId="2b98eb5c-a903-57b8-a2ad-91ae39ad68f4">
+          <classificationSystem xml:lang="en">HS2017</classificationSystem>
+          <classificationValue xml:lang="en">720449: Ferrous waste and scrap; n.e.c. in heading no. 7204</classificationValue>
+        </classification>
+        <outputGroup>0</outputGroup>
+      </intermediateExchange>
+    </flowData>
+    <modellingAndValidation>
+      <representativeness systemModelId="290c1f85-4cc4-4fa1-b0c8-2cb7f4276dce">
+        <systemModelName xml:lang="en">Allocation, cut-off by classification</systemModelName>
+      </representativeness>
+    </modellingAndValidation>
+    <administrativeInformation>
+      <dataEntryBy personId="c4597934-ecac-422c-b431-382e85fdcb83" isActiveAuthor="false" personName="[System]" personEmail="support@ecoinvent.org"/>
+      <dataGeneratorAndPublication personId="c4597934-ecac-422c-b431-382e85fdcb83" personName="[System]" personEmail="support@ecoinvent.org" dataPublishedIn="0" isCopyrightProtected="true" accessRestrictedTo="1"/>
+      <fileAttributes majorRelease="1" minorRelease="1" majorRevision="1" minorRevision="1" internalSchemaVersion="2.0.12" defaultLanguage="en" fileGenerator="ecoCalc" contextId="de659012-50c4-4e96-b54a-fc781bf987ab">
+        <contextName xml:lang="en">ecoinvent</contextName>
+      </fileAttributes>
+    </administrativeInformation>
+  </activityDataset>
+</ecoSpold>

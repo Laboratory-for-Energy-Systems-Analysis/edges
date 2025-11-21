@@ -1,0 +1,167 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<ecoSpold xmlns="http://www.EcoInvent.org/EcoSpold02" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.EcoInvent.org/EcoSpold02 ../../schemas/datasets/EcoSpold02.xsd http://www.EcoInvent.org/UsedUserMasterData ../../schemas/datasets/EcoSpold02UserMasterData.xsd">
+  <childActivityDataset>
+    <activityDescription>
+      <activity specialActivityType="1" id="efbabe7b-8cba-5c47-910e-2e984df4ff1d" activityNameId="d873b9e3-5292-4f1f-a88f-0570f8260fb9" parentActivityId="50ffe04b-98ca-57af-ad8d-f8eb79bce673" inheritanceDepth="0" type="2">
+        <activityName xml:lang="en">market for land tenure, arable land, measured as carbon net primary productivity, perennial crop</activityName>
+        <includedActivitiesStart xml:lang="en">Activity starts with the delivery of land for cultivation from the different activities. From cradle, i.e. including all upstream activities.</includedActivitiesStart>
+        <includedActivitiesEnd xml:lang="en">Activity ends with the provision of arable land to activities modelling land use change.</includedActivitiesEnd>
+        <generalComment>
+          <text xml:lang="en" index="0">This is a market activity. Each market represents the consumption mix of a product in a given geography, connecting suppliers with consumers of the same product in the same geographical area. Markets group the producers and also the imports of the product (if relevant) within the same geographical area. They also account for transport to the consumer and for the losses during that process, when relevant.</text>
+          <text xml:lang="en" index="1">This market represents the mix of land tenure 'land tenure, arable land, measured as carbon net primary productivity, perennial crop', in Brazil, São Paulo. This is land that is made accessible for cultivation after deforestation, transformation from primary or secondary forest, or change from annual to perennial crops (or vice versa), and is used by activities modelling land use change only.</text>
+          <text xml:lang="en" index="2">The production volumes and market shares of land tenure and LUC have a high level of uncertainty, which can have large impacts in overall LCIA results (Novaes et al. 2017). However, the uncertainty associated with these data could not easily be reflected in the datasets. Uncertainty assessments should take this limitation into consideration.</text>
+        </generalComment>
+      </activity>
+      <classification classificationId="bbe2eb06-fac9-48bb-9610-f402b9d3f2d0">
+        <classificationSystem xml:lang="en">ISIC rev.4 ecoinvent</classificationSystem>
+        <classificationValue xml:lang="en">0161:Support activities for crop production</classificationValue>
+      </classification>
+      <geography geographyId="a7ba1868-375a-4d62-9048-bdf2136447c4">
+        <shortname xml:lang="en">BR-SP</shortname>
+      </geography>
+      <technology/>
+      <timePeriod startDate="2017-01-01" endDate="2023-12-31" isDataValidForEntirePeriod="true"/>
+      <macroEconomicScenario macroEconomicScenarioId="d9f57f0a-a01f-42eb-a57b-8f18d6635801">
+        <name xml:lang="en">Business-as-Usual</name>
+      </macroEconomicScenario>
+    </activityDescription>
+    <flowData>
+      <intermediateExchange id="2224fe78-fb7b-5cc3-87aa-dec7e067aa1d" unitId="487df68b-4994-4027-8fdc-a4dc298257b7" amount="1.0" intermediateExchangeId="9b9edcf3-0539-4642-9516-0df642a5c41a" productionVolumeAmount="161186470.359926">
+        <name xml:lang="en">land tenure, arable land, measured as carbon net primary productivity, perennial crop</name>
+        <unitName xml:lang="en">kg</unitName>
+        <comment xml:lang="en"/>
+        <property propertyId="f2283db2-62e4-467f-b9ac-c4f45be563b4" amount="0.0" isDefiningValue="false" isCalculatedAmount="false" unitId="487df68b-4994-4027-8fdc-a4dc298257b7">
+          <name xml:lang="en">carbon allocation</name>
+          <unitName xml:lang="en">kg</unitName>
+        </property>
+        <property propertyId="a301a838-7975-4d89-9e74-8eb77ad03cd1" amount="0.0" isDefiningValue="false" isCalculatedAmount="false" unitId="577e242a-461f-44a7-922c-d8e1c3d2bf45">
+          <name xml:lang="en">carbon content</name>
+          <unitName xml:lang="en">dimensionless</unitName>
+        </property>
+        <property propertyId="6393c14b-db78-445d-a47b-c0cb866a1b25" amount="0.0" isDefiningValue="false" unitId="577e242a-461f-44a7-922c-d8e1c3d2bf45">
+          <name xml:lang="en">carbon content, non-fossil</name>
+          <unitName xml:lang="en">dimensionless</unitName>
+        </property>
+        <property propertyId="3a0af1d6-04c3-41c6-a3da-92c4f61e0eaa" amount="0.0" isDefiningValue="false" unitId="487df68b-4994-4027-8fdc-a4dc298257b7">
+          <name xml:lang="en">dry mass</name>
+          <unitName xml:lang="en">kg</unitName>
+        </property>
+        <property propertyId="38f94dd1-d5aa-41b8-b182-c0c42985d9dc" amount="0.0" unitId="7b75baf0-cbee-45e6-bf66-af119da06553">
+          <name xml:lang="en">price</name>
+          <unitName xml:lang="en">EUR2005</unitName>
+          <comment xml:lang="en">No price assigned.</comment>
+        </property>
+        <property propertyId="a9358458-9724-4f03-b622-106eda248916" amount="0.0" isDefiningValue="false" unitId="577e242a-461f-44a7-922c-d8e1c3d2bf45">
+          <name xml:lang="en">water content</name>
+          <unitName xml:lang="en">dimensionless</unitName>
+        </property>
+        <property propertyId="6d9e1462-80e3-4f10-b3f4-71febd6f1168" amount="0.0" isDefiningValue="false" unitId="487df68b-4994-4027-8fdc-a4dc298257b7">
+          <name xml:lang="en">water in wet mass</name>
+          <unitName xml:lang="en">kg</unitName>
+        </property>
+        <property propertyId="67f102e2-9cb6-4d20-aa16-bf74d8a03326" amount="0.0" isDefiningValue="false" unitId="487df68b-4994-4027-8fdc-a4dc298257b7">
+          <name xml:lang="en">wet mass</name>
+          <unitName xml:lang="en">kg</unitName>
+        </property>
+        <productionVolumeComment xml:lang="en"/>
+        <classification classificationId="39b0f0ab-1a2f-401b-9f4d-6e39400760a4">
+          <classificationSystem xml:lang="en">By-product classification</classificationSystem>
+          <classificationValue xml:lang="en">allocatable product</classificationValue>
+        </classification>
+        <classification classificationId="6c6f6640-de93-4f39-ade6-13b51de75241">
+          <classificationSystem xml:lang="en">CPC</classificationSystem>
+          <classificationValue xml:lang="en">91131: Public administrative services related to agriculture, forestry, fishing and hunting</classificationValue>
+        </classification>
+        <outputGroup>0</outputGroup>
+      </intermediateExchange>
+      <elementaryExchange id="3b9c2e2a-745c-4809-be28-24a9451002a6" unitId="487df68b-4994-4027-8fdc-a4dc298257b7" amount="11.639707610010166" elementaryExchangeId="259cf8d6-6ea8-4ccf-84b7-23c930a5b2b3">
+        <name xml:lang="en">Carbon dioxide, to soil or biomass stock</name>
+        <unitName xml:lang="en">kg</unitName>
+        <compartment subcompartmentId="e1bc9a16-5b6a-494f-98ef-49f461b1a11e">
+          <compartment xml:lang="en">soil</compartment>
+          <subcompartment xml:lang="en">agricultural</subcompartment>
+        </compartment>
+        <outputGroup>4</outputGroup>
+      </elementaryExchange>
+      <elementaryExchange id="52947263-17a4-425a-a3f9-39c3799bda63" unitId="487df68b-4994-4027-8fdc-a4dc298257b7" amount="11.639707610010166" elementaryExchangeId="cc6a1abb-b123-4ca6-8f16-38209df609be">
+        <name xml:lang="en">Carbon dioxide, in air</name>
+        <unitName xml:lang="en">kg</unitName>
+        <compartment subcompartmentId="45bb416c-a63b-429f-8754-b3f76a069c43">
+          <compartment xml:lang="en">natural resource</compartment>
+          <subcompartment xml:lang="en">in air</subcompartment>
+        </compartment>
+        <inputGroup>4</inputGroup>
+      </elementaryExchange>
+      <elementaryExchange id="894c5fb1-5373-4463-8804-8ee0681cab76" unitId="1017f68a-f818-4f9d-a34d-a31e7386f628" amount="0.14078774132110733" elementaryExchangeId="4d166779-88fd-441b-9537-f3b974e3bff7">
+        <name xml:lang="en">Transformation, from arable land, unspecified use</name>
+        <unitName xml:lang="en">m2</unitName>
+        <compartment subcompartmentId="7d704b6f-d455-4f41-9c28-50b4f372f315">
+          <compartment xml:lang="en">natural resource</compartment>
+          <subcompartment xml:lang="en">land</subcompartment>
+        </compartment>
+        <inputGroup>4</inputGroup>
+      </elementaryExchange>
+      <elementaryExchange id="118ca2c8-3856-4794-95ad-ed2a42b96b36" unitId="1017f68a-f818-4f9d-a34d-a31e7386f628" amount="0.9977088885091434" elementaryExchangeId="2c126bcc-bb63-4d63-bd72-f02a1e616809">
+        <name xml:lang="en">Transformation, from pasture, man made</name>
+        <unitName xml:lang="en">m2</unitName>
+        <compartment subcompartmentId="7d704b6f-d455-4f41-9c28-50b4f372f315">
+          <compartment xml:lang="en">natural resource</compartment>
+          <subcompartment xml:lang="en">land</subcompartment>
+        </compartment>
+        <inputGroup>4</inputGroup>
+      </elementaryExchange>
+      <elementaryExchange id="91da218b-a1dc-468a-94e5-66a79af6087c" unitId="1017f68a-f818-4f9d-a34d-a31e7386f628" amount="0.09454899285778993" elementaryExchangeId="fcb77a5a-6882-4aeb-82a9-ba57688d2224">
+        <name xml:lang="en">Transformation, from permanent crop</name>
+        <unitName xml:lang="en">m2</unitName>
+        <compartment subcompartmentId="7d704b6f-d455-4f41-9c28-50b4f372f315">
+          <compartment xml:lang="en">natural resource</compartment>
+          <subcompartment xml:lang="en">land</subcompartment>
+        </compartment>
+        <inputGroup>4</inputGroup>
+      </elementaryExchange>
+      <elementaryExchange id="b9017c4b-e530-4bb8-bedb-7ca86ca3bb3e" unitId="1017f68a-f818-4f9d-a34d-a31e7386f628" amount="1.2330456226880406" elementaryExchangeId="6e02ccfc-9eb5-4a51-be9a-870c1087c833">
+        <name xml:lang="en">Transformation, to permanent crop</name>
+        <unitName xml:lang="en">m2</unitName>
+        <compartment subcompartmentId="7d704b6f-d455-4f41-9c28-50b4f372f315">
+          <compartment xml:lang="en">natural resource</compartment>
+          <subcompartment xml:lang="en">land</subcompartment>
+        </compartment>
+        <inputGroup>4</inputGroup>
+      </elementaryExchange>
+    </flowData>
+    <modellingAndValidation>
+      <representativeness systemModelId="290c1f85-4cc4-4fa1-b0c8-2cb7f4276dce">
+        <systemModelName xml:lang="en">Allocation, cut-off by classification</systemModelName>
+      </representativeness>
+      <review reviewedMajorRelease="3" reviewedMinorRelease="0" reviewedMajorRevision="0" reviewedMinorRevision="1" reviewerId="35d091e9-38c2-4037-9efe-a73673c57123" reviewerName="Emilia Moreno Ruiz" reviewerEmail="moreno@ecoinvent.org" reviewDate="2018-04-13"/>
+      <review reviewedMajorRelease="3" reviewedMinorRelease="0" reviewedMajorRevision="0" reviewedMinorRevision="1" reviewerId="c4597934-ecac-422c-b431-382e85fdcb83" reviewerName="[System]" reviewerEmail="support@ecoinvent.org" reviewDate="2018-04-13">
+        <otherDetails xml:lang="en">Validation warnings:
+
+- Non-global market activities should have a geography comment.
+</otherDetails>
+      </review>
+      <review reviewedMajorRelease="3" reviewedMinorRelease="0" reviewedMajorRevision="1" reviewedMinorRevision="0" reviewerId="c4597934-ecac-422c-b431-382e85fdcb83" reviewerName="[System]" reviewerEmail="support@ecoinvent.org" reviewDate="2018-04-13">
+        <otherDetails xml:lang="en">Validation warnings:
+
+- Non-global market activities should have a geography comment.
+</otherDetails>
+      </review>
+      <review reviewedMajorRelease="3" reviewedMinorRelease="0" reviewedMajorRevision="1" reviewedMinorRevision="1" reviewerId="35d091e9-38c2-4037-9efe-a73673c57123" reviewerName="Emilia Moreno Ruiz" reviewerEmail="moreno@ecoinvent.org" reviewDate="2018-06-08">
+        <otherDetails xml:lang="en"/>
+      </review>
+      <review reviewedMajorRelease="3" reviewedMinorRelease="0" reviewedMajorRevision="1" reviewedMinorRevision="1" reviewerId="c4597934-ecac-422c-b431-382e85fdcb83" reviewerName="[System]" reviewerEmail="support@ecoinvent.org" reviewDate="2018-06-08">
+        <otherDetails xml:lang="en">Validation warnings:
+
+- Non-global market activities should have a geography comment.
+</otherDetails>
+      </review>
+    </modellingAndValidation>
+    <administrativeInformation>
+      <dataEntryBy personId="28f608ef-9ac6-4db4-8447-a4360122dfd5" isActiveAuthor="true" personName="Renan Novaes" personEmail="renan.milagres@embrapa.br"/>
+      <dataGeneratorAndPublication personId="28f608ef-9ac6-4db4-8447-a4360122dfd5" personName="Renan Novaes" personEmail="renan.milagres@embrapa.br" isCopyrightProtected="true" accessRestrictedTo="1"/>
+      <fileAttributes majorRelease="3" minorRelease="0" majorRevision="4" minorRevision="0" internalSchemaVersion="2.0.12" defaultLanguage="en" contextId="de659012-50c4-4e96-b54a-fc781bf987ab">
+        <contextName xml:lang="en">ecoinvent</contextName>
+      </fileAttributes>
+    </administrativeInformation>
+  </childActivityDataset>
+</ecoSpold>

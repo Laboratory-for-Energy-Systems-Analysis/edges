@@ -1,0 +1,109 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<ecoSpold xmlns="http://www.EcoInvent.org/EcoSpold02" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.EcoInvent.org/EcoSpold02 ../../schemas/datasets/EcoSpold02.xsd http://www.EcoInvent.org/UsedUserMasterData ../../schemas/datasets/EcoSpold02UserMasterData.xsd">
+  <childActivityDataset>
+    <activityDescription>
+      <activity specialActivityType="0" id="f62c0d74-2267-5f09-a05f-80d5bdaa98cc" activityNameId="7c046930-820e-42ff-808e-abfa11cd9973" parentActivityId="40167b81-01a2-48ee-b0f5-c4b16bef9a9a" inheritanceDepth="0" type="2">
+        <activityName xml:lang="en">heat, from municipal waste incineration to generic market for heat district or industrial, other than natural gas</activityName>
+        <synonym xml:lang="en">WTE</synonym>
+        <synonym xml:lang="en">waste-to-energy</synonym>
+        <includedActivitiesStart xml:lang="en">From cradle, i.e. including all upstream activities.</includedActivitiesStart>
+        <generalComment>
+          <text xml:lang="en" index="0">This dataset changes the names of the (internally used) heat product of waste incineration and connects it with the external grid and the respective average energy markets (district heat grid).</text>
+        </generalComment>
+      </activity>
+      <classification classificationId="be3540ee-592f-46fd-bd68-c362a3bbccc6">
+        <classificationSystem xml:lang="en">ISIC rev.4 ecoinvent</classificationSystem>
+        <classificationValue xml:lang="en">3530:Steam and air conditioning supply</classificationValue>
+      </classification>
+      <geography geographyId="0e0e1020-7d7e-11de-9ae2-0019e336be3a">
+        <shortname xml:lang="en">DE</shortname>
+      </geography>
+      <technology technologyLevel="3"/>
+      <timePeriod startDate="2008-01-01" endDate="2023-12-31" isDataValidForEntirePeriod="true"/>
+      <macroEconomicScenario macroEconomicScenarioId="d9f57f0a-a01f-42eb-a57b-8f18d6635801">
+        <name xml:lang="en">Business-as-Usual</name>
+      </macroEconomicScenario>
+    </activityDescription>
+    <flowData>
+      <intermediateExchange id="2d7e20cb-8d76-5ed9-9e66-a47da48643a6" unitId="980b811e-3905-4797-82a5-173f5568bc7e" amount="1.0" isCalculatedAmount="true" mathematicalRelation="E_th_prod_MSWI" sourceId="8358a2ce-c42c-4b66-b7e4-abfa1111b0c1" sourceYear="2013" sourceFirstAuthor="Doka G." pageNumbers="" intermediateExchangeId="71e2f1db-a2c5-44d0-8337-dfff15be974d" productionVolumeAmount="62500000000.0" productionVolumeSourceIdOverwrittenByChild="true">
+        <name xml:lang="en">heat, district or industrial, other than natural gas</name>
+        <unitName xml:lang="en">MJ</unitName>
+        <comment xml:lang="en">Net heat from municipal waste incineration fed in to district heating grid</comment>
+        <property propertyId="f2283db2-62e4-467f-b9ac-c4f45be563b4" amount="0.0" isDefiningValue="false" isCalculatedAmount="false" unitId="487df68b-4994-4027-8fdc-a4dc298257b7">
+          <name xml:lang="en">carbon allocation</name>
+          <unitName xml:lang="en">kg</unitName>
+        </property>
+        <property propertyId="a301a838-7975-4d89-9e74-8eb77ad03cd1" amount="0.0" isDefiningValue="false" isCalculatedAmount="false" unitId="577e242a-461f-44a7-922c-d8e1c3d2bf45">
+          <name xml:lang="en">carbon content</name>
+          <unitName xml:lang="en">dimensionless</unitName>
+        </property>
+        <property propertyId="48c987bb-3144-4872-b5c7-b1389c40be25" amount="1.0" mathematicalRelation="" unitId="980b811e-3905-4797-82a5-173f5568bc7e">
+          <name xml:lang="en">heating value, net</name>
+          <unitName xml:lang="en">MJ</unitName>
+        </property>
+        <property propertyId="38f94dd1-d5aa-41b8-b182-c0c42985d9dc" amount="0.0106" unitId="7b75baf0-cbee-45e6-bf66-af119da06553">
+          <name xml:lang="en">price</name>
+          <unitName xml:lang="en">EUR2005</unitName>
+          <comment xml:lang="en">Average European district heat price from Ecoheatcool and Euroheat 2005-2006, Ecoheat Work package 1: The European heat market. Final report. 10.6 EUR/GJ i s the price of district heat. http://www.solarthermalworld.org/files/Ecoheatcool%20WP1%20Web.pdf?download</comment>
+        </property>
+        <productionVolumeComment xml:lang="en">Calculated value. Please take into account that the annual production volume of the municipal solid waste is a rough estimate only.</productionVolumeComment>
+        <classification classificationId="39b0f0ab-1a2f-401b-9f4d-6e39400760a4">
+          <classificationSystem xml:lang="en">By-product classification</classificationSystem>
+          <classificationValue xml:lang="en">allocatable product</classificationValue>
+        </classification>
+        <classification classificationId="da9e0ee4-0a34-499e-9f51-82a5235d243c">
+          <classificationSystem xml:lang="en">CPC</classificationSystem>
+          <classificationValue xml:lang="en">17300: Steam and hot water</classificationValue>
+        </classification>
+        <outputGroup>0</outputGroup>
+      </intermediateExchange>
+    </flowData>
+    <modellingAndValidation>
+      <representativeness systemModelId="290c1f85-4cc4-4fa1-b0c8-2cb7f4276dce" percent="100.0">
+        <systemModelName xml:lang="en">Allocation, cut-off by classification</systemModelName>
+      </representativeness>
+      <review reviewedMajorRelease="3" reviewedMinorRelease="0" reviewedMajorRevision="0" reviewedMinorRevision="7" reviewerId="35d091e9-38c2-4037-9efe-a73673c57123" reviewerName="Emilia Moreno Ruiz" reviewerEmail="moreno@ecoinvent.org" reviewDate="2014-06-17"/>
+      <review reviewedMajorRelease="3" reviewedMinorRelease="0" reviewedMajorRevision="0" reviewedMinorRevision="7" reviewerId="c4597934-ecac-422c-b431-382e85fdcb83" reviewerName="[System]" reviewerEmail="support@ecoinvent.org" reviewDate="2014-06-17">
+        <otherDetails xml:lang="en">Validation warnings:
+
+- Mass and/or economic deficit in activity dataset exceeds either 0.1% of input or output sum:
+
+Property "price":
+ - Input="0", Output="0,0106"
+ - Input &lt; output by 0,0106 EUR2005 (100% of output)
+
+
+- Property "corresponding fuel use, propane, furnace &gt;100kW=0" of master data exchange was removed from exchange "heat, district or industrial, other than natural gas".
+
+- Other datasets supplying the same reference product have the following properties as variable properties for this product (one or more exchanges expressed as mathematical relations involving the property of the reference product), while in the current dataset the exchanges are in a fixed relationship to the reference product:
+ - heat, district or industrial, other than natural gas: corresponding fuel use, propane, furnace &gt;100kW
+
+</otherDetails>
+      </review>
+      <review reviewedMajorRelease="3" reviewedMinorRelease="0" reviewedMajorRevision="1" reviewedMinorRevision="2" reviewerId="847a56f5-d9e5-4a65-ab51-b056e0039130" reviewerName="Avraam Symeonidis" reviewerEmail="Symeonidis@ecoinvent.org" reviewDate="2021-01-16">
+        <otherDetails xml:lang="en"/>
+      </review>
+      <review reviewedMajorRelease="3" reviewedMinorRelease="0" reviewedMajorRevision="1" reviewedMinorRevision="2" reviewerId="c4597934-ecac-422c-b431-382e85fdcb83" reviewerName="[System]" reviewerEmail="support@ecoinvent.org" reviewDate="2021-01-16">
+        <otherDetails xml:lang="en">Validation warnings:
+
+- Mass and/or economic deficit in activity dataset exceeds either 0.1% of input or output sum:
+
+Property 'price':
+ - Input='0', Output='0.0106'
+ - Input &lt; output by 0.0106 EUR2005 (100% of output)
+
+
+- Property 'corresponding fuel use, propane, furnace &gt;100kW=0' of master data exchange was removed from exchange 'heat, district or industrial, other than natural gas'.
+
+</otherDetails>
+      </review>
+    </modellingAndValidation>
+    <administrativeInformation>
+      <dataEntryBy personId="610bd1b2-fec3-4e8e-84a6-76fef8b6b7b8" isActiveAuthor="true" personName="Karin Treyer" personEmail="karin.treyer@psi.ch"/>
+      <dataGeneratorAndPublication personId="610bd1b2-fec3-4e8e-84a6-76fef8b6b7b8" personName="Karin Treyer" personEmail="karin.treyer@psi.ch" publishedSourceId="8358a2ce-c42c-4b66-b7e4-abfa1111b0c1" publishedSourceYear="2013" publishedSourceFirstAuthor="Doka G." isCopyrightProtected="true" accessRestrictedTo="1"/>
+      <fileAttributes majorRelease="3" minorRelease="0" majorRevision="4" minorRevision="0" internalSchemaVersion="2.0.10" defaultLanguage="en" creationTimestamp="2014-06-06T10:26:04" lastEditTimestamp="2014-06-17T10:11:35" fileGenerator="EcoEditor 3.3.65.10874" fileTimestamp="2014-06-17T10:11:35" contextId="de659012-50c4-4e96-b54a-fc781bf987ab">
+        <contextName xml:lang="en">ecoinvent</contextName>
+      </fileAttributes>
+    </administrativeInformation>
+  </childActivityDataset>
+</ecoSpold>

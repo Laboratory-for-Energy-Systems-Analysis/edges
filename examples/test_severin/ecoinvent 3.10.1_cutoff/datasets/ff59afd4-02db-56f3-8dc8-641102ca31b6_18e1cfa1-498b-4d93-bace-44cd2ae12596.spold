@@ -1,0 +1,379 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<ecoSpold xmlns="http://www.EcoInvent.org/EcoSpold02" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.EcoInvent.org/EcoSpold02 ../../schemas/datasets/EcoSpold02.xsd http://www.EcoInvent.org/UsedUserMasterData ../../schemas/datasets/EcoSpold02UserMasterData.xsd">
+  <childActivityDataset>
+    <activityDescription>
+      <activity specialActivityType="0" id="ff59afd4-02db-56f3-8dc8-641102ca31b6" activityNameId="b418f553-ea39-47a6-8f64-cd616f193e36" parentActivityId="6e5e7c2e-293e-4e4e-bae2-7fa41364dd06" inheritanceDepth="0" type="2">
+        <activityName xml:lang="en">treatment of biowaste by anaerobic digestion</activityName>
+        <includedActivitiesStart xml:lang="en">The process described starts at the treatment site, after delivery of the materials for treatment. From cradle, i.e. including all upstream activities.</includedActivitiesStart>
+        <includedActivitiesEnd xml:lang="en">Energy demand for operating a anaerobic treatment plant was included as well as process emissions and the needed infrastructure of the plant.</includedActivitiesEnd>
+        <generalComment>
+          <text xml:lang="en" index="0">Biowaste in the current process is defined as follows: </text>
+          <text xml:lang="en" index="1"></text>
+          <text xml:lang="en" index="2">Biodegradable garden and park waste, food and kitchen waste from households, restaurants, caterers and retail premises, comparable waste from food processing plants, it also includes forestry or agricultural residues and manure. It does not include sewage sludge, or other biodegradable waste such as natural textiles, paper or processed wood. </text>
+          <text xml:lang="en" index="3">The anaerobic digestion treatment is a collection of processes by which microorganisms break down biodegradable material in the absence of oxygen. The treatment process produces biogas (a mixture of mainly methane and carbon dioxide) and residual products called solid and liquid digestate.</text>
+          <text xml:lang="en" index="4">The relevant resulting emissions to air from the treatment process are summarised in the following table:</text>
+          <imageUrl index="5">https://db3.ecoinvent.org/images/4ea88f89-96eb-42f5-b6b5-ba579cec7792</imageUrl>
+          <text xml:lang="en" index="6">The resulting outputs biogas, "digestate, solid" and "digestate, liquid" refer to 1 kg fresh weight of biogenic waste. </text>
+          <text xml:lang="en" index="7">The contents of digestate are as follows:</text>
+          <imageUrl index="8">https://db3.ecoinvent.org/images/e43781e1-3b3d-4fc9-96ad-513c84f6dd2a</imageUrl>
+          <imageUrl index="9">https://db3.ecoinvent.org/images/8889224f-3ca5-43ee-a54a-a3d278339917</imageUrl>
+          <text xml:lang="en" index="10">The heavy metal contents of digestate are presented in the following tables:</text>
+          <imageUrl index="11">https://db3.ecoinvent.org/images/a15c27df-02c3-4c50-80a4-fd02e53f39b2</imageUrl>
+          <imageUrl index="12">https://db3.ecoinvent.org/images/f1de16df-0193-42e8-9530-c77bfe02e3cb</imageUrl>
+          <text xml:lang="en" index="13">Previous studies in the corresponding field showed that the evaluation of heavy metal emissions into soil with various single score methods such as Eco-Indicator 99 and ecological scarcity have a significant impact on the overall results. It is therefore advised to take special care when evaluating these systems, especially to avoid potential double counting.</text>
+          <text xml:lang="en" index="14">The output digestate uses a special property "humus equivalents" which depicts the amount of organic carbon, which would lead to a buildup of humus.</text>
+          <text xml:lang="en" index="15">Different substrates have different capacities of organic matter to form humus (see following figure)</text>
+          <imageUrl index="16">https://db3.ecoinvent.org/images/aa15745b-7452-4da2-a2a5-f52b85a6d3ab</imageUrl>
+          <text xml:lang="en" index="17">The proposed method to account for humus C is based on the following methodology:</text>
+          <text xml:lang="en" index="18">The organic carbon content of soil (Corg) is normally used to declare the amount of organic matter of soil. The content of humus is calculated from Corg, using the assumption that humus contains 58% carbon on average.</text>
+          <text xml:lang="en" index="19">The amount of humus is therefore calculated out of Corg as follows: </text>
+          <text xml:lang="en" index="20">humus content [%] or [mg g-1] = (Ctotal - Cinorg) / 0.58</text>
+          <text xml:lang="en" index="21">If an allocation approach with substution is applied, the corresponding amounts of substitutes are calculated based on their capacity to build up humus. The conversion is based on the humus factors, which are listed in the next table:</text>
+          <text xml:lang="en" index="22"></text>
+          <imageUrl index="23">https://db3.ecoinvent.org/images/623d4a32-52ed-4380-88a1-09ad6d64f7c9</imageUrl>
+          <text xml:lang="en" index="24">More detailed descriptions and background information can be found in the corresponding report.</text>
+        </generalComment>
+      </activity>
+      <classification classificationId="9a63625a-358b-4c1d-bf95-50ba038a759b">
+        <classificationSystem xml:lang="en">ISIC rev.4 ecoinvent</classificationSystem>
+        <classificationValue xml:lang="en">3821:Treatment and disposal of non-hazardous waste</classificationValue>
+      </classification>
+      <geography geographyId="7846b897-7c04-4f9f-b607-2b83fcd9a74c">
+        <shortname xml:lang="en">RoW</shortname>
+        <comment>
+          <text xml:lang="en" index="0">Values refer to the situation in Switzerland.</text>
+        </comment>
+      </geography>
+      <technology technologyLevel="3">
+        <comment>
+          <text xml:lang="en" index="0">Included processes: Infrastructure for the pre-treatment process, digestion of bio-waste and the succsesive treatment of the fermented material (de-watering and post composting). Remark: Infrastructure expenditures are recorded for a plant with a yearly capacity of 10"000t and a lifetime of 25 years. For stationary machines a lifetime of 10 years is assumed. As a first approximation, the machines are taken into account as cast iron.; Geography: Data represents a Swiss plant. Technology: Thermophile, single stage digestion with post composting.</text>
+          <text xml:lang="en" index="1">The process step-by-step, from shredding to products:</text>
+          <text xml:lang="en" index="2">1. Reception and weighing (+ storage of feedstock)</text>
+          <text xml:lang="en" index="3">2. Shredding (depending on structure of feedstock)</text>
+          <text xml:lang="en" index="4">3. Anaerobic digestion (AD) and solid/liquid separation</text>
+          <text xml:lang="en" index="5">4. Rotting process, turning over, aeration and watering</text>
+          <text xml:lang="en" index="6">5. Post-processing and conditioning</text>
+        </comment>
+      </technology>
+      <timePeriod startDate="2011-01-01" endDate="2023-12-31" isDataValidForEntirePeriod="true"/>
+      <macroEconomicScenario macroEconomicScenarioId="d9f57f0a-a01f-42eb-a57b-8f18d6635801">
+        <name xml:lang="en">Business-as-Usual</name>
+      </macroEconomicScenario>
+    </activityDescription>
+    <flowData>
+      <intermediateExchange id="e2034c8a-381e-5ae3-bbfb-6cc35098dbf4" unitId="de5b3c87-0e35-4fb0-9765-4f3ba34c99e5" variableName="biogas_yield" amount="1.0" isCalculatedAmount="true" mathematicalRelation="ABS( Mass_biowaste)*0.1" sourceId="a6635acc-a03f-49d4-8ab3-3ba180407f1d" sourceYear="2014" sourceFirstAuthor="Raboni, Massimo" intermediateExchangeId="18e1cfa1-498b-4d93-bace-44cd2ae12596" productionVolumeAmount="5534254237.0" productionVolumeVariableName="biogas_annual_volume" productionVolumeMathematicalRelation="5578885320">
+        <name xml:lang="en">biogas</name>
+        <unitName xml:lang="en">m3</unitName>
+        <comment xml:lang="en">An average yield of 100 litres of biogas per kg biowaste is assumed</comment>
+        <property propertyId="f2283db2-62e4-467f-b9ac-c4f45be563b4" amount="0.5174300000000004" isDefiningValue="false" isCalculatedAmount="false" unitId="487df68b-4994-4027-8fdc-a4dc298257b7">
+          <name xml:lang="en">carbon allocation</name>
+          <unitName xml:lang="en">kg</unitName>
+        </property>
+        <property propertyId="a301a838-7975-4d89-9e74-8eb77ad03cd1" amount="0.449939130434783" isDefiningValue="false" isCalculatedAmount="false" unitId="577e242a-461f-44a7-922c-d8e1c3d2bf45">
+          <name xml:lang="en">carbon content</name>
+          <unitName xml:lang="en">dimensionless</unitName>
+        </property>
+        <property propertyId="c74c3729-e577-4081-b572-a283d2561a75" amount="0.0" isDefiningValue="false" unitId="577e242a-461f-44a7-922c-d8e1c3d2bf45">
+          <name xml:lang="en">carbon content, fossil</name>
+          <unitName xml:lang="en">dimensionless</unitName>
+        </property>
+        <property propertyId="6393c14b-db78-445d-a47b-c0cb866a1b25" amount="0.449939130434783" isDefiningValue="false" unitId="577e242a-461f-44a7-922c-d8e1c3d2bf45">
+          <name xml:lang="en">carbon content, non-fossil</name>
+          <unitName xml:lang="en">dimensionless</unitName>
+          <comment xml:lang="en">Total C content in kg/Nm3 (Tab 12.8, ecoinvent v2.2 report n17), referred to 1kg DM</comment>
+        </property>
+        <property propertyId="3a0af1d6-04c3-41c6-a3da-92c4f61e0eaa" amount="1.15" isDefiningValue="false" unitId="487df68b-4994-4027-8fdc-a4dc298257b7">
+          <name xml:lang="en">dry mass</name>
+          <unitName xml:lang="en">kg</unitName>
+        </property>
+        <property propertyId="48c987bb-3144-4872-b5c7-b1389c40be25" amount="22.73" isDefiningValue="false" mathematicalRelation="" unitId="980b811e-3905-4797-82a5-173f5568bc7e">
+          <name xml:lang="en">heating value, net</name>
+          <unitName xml:lang="en">MJ</unitName>
+          <comment xml:lang="en">Value taken from the general comment of "heat and power co-generation, biogas, gas engine" dataset.</comment>
+        </property>
+        <property propertyId="38f94dd1-d5aa-41b8-b182-c0c42985d9dc" amount="0.109" unitId="7b75baf0-cbee-45e6-bf66-af119da06553">
+          <name xml:lang="en">price</name>
+          <unitName xml:lang="en">EUR2005</unitName>
+          <comment xml:lang="en">Temporary price data. Calculated as 90% of purchasers price based on: Same prices per energy output as natural gas, based on the proportional lower heating value (2/3 that of natural gas)</comment>
+        </property>
+        <property propertyId="a9358458-9724-4f03-b622-106eda248916" amount="0.0" isDefiningValue="false" unitId="577e242a-461f-44a7-922c-d8e1c3d2bf45">
+          <name xml:lang="en">water content</name>
+          <unitName xml:lang="en">dimensionless</unitName>
+          <comment xml:lang="en">water mass/dry mass</comment>
+        </property>
+        <property propertyId="6d9e1462-80e3-4f10-b3f4-71febd6f1168" amount="0.0" isDefiningValue="false" unitId="487df68b-4994-4027-8fdc-a4dc298257b7">
+          <name xml:lang="en">water in wet mass</name>
+          <unitName xml:lang="en">kg</unitName>
+        </property>
+        <property propertyId="67f102e2-9cb6-4d20-aa16-bf74d8a03326" amount="1.15" isDefiningValue="false" unitId="487df68b-4994-4027-8fdc-a4dc298257b7">
+          <name xml:lang="en">wet mass</name>
+          <unitName xml:lang="en">kg</unitName>
+          <comment xml:lang="en">Density of biogas from sewage sludge is 1.15 kg/Nm3 (Tab 12.8, ecoinvent v2.2 report n17)</comment>
+        </property>
+        <productionVolumeComment xml:lang="en">Production volume amount was scaled from the respective Swiss value. GDP scaling was employed with Switzerland accounting for roughly 0.8% of the global GDP, yielding a global production volume of 557888532 m3. Production volume comment for Switzerland: According to the Swiss ministry of Environment, in 2016 in Switzerland, 947 TJ of energy produced from anaerobic digestion dedicated to the treatment of Biowaste. Values aexpressed in gross energy production. Assuming a calorific value of 21 MJ per Nm3 of biogas, the production volume is calculated to be 44631083 m3 of biogass. Source: Kaufmann, U. (2017). Schweizerische Statistik der erneuerbaren Energien. Ausgabe 2016, 75. Retrieved from http://www.bfe.admin.ch/php/modules/publikationen/stream.php?extlang=de&amp;name=de_729286095.pdf&amp;endung=Schweizerische</productionVolumeComment>
+        <classification classificationId="39b0f0ab-1a2f-401b-9f4d-6e39400760a4">
+          <classificationSystem xml:lang="en">By-product classification</classificationSystem>
+          <classificationValue xml:lang="en">allocatable product</classificationValue>
+        </classification>
+        <classification classificationId="8c8fb31c-3c73-4800-842e-4b7d4980b2c1">
+          <classificationSystem xml:lang="en">CPC</classificationSystem>
+          <classificationValue xml:lang="en">17200: Coal gas, water gas, producer gas and similar gases, other than petroleum gases and other gaseous hydrocarbons</classificationValue>
+        </classification>
+        <classification classificationId="00700fdf-3c42-5485-bbb5-071250379da9">
+          <classificationSystem xml:lang="en">HS2017</classificationSystem>
+          <classificationValue xml:lang="en">271129: Petroleum gases and other gaseous hydrocarbons; in gaseous state, other than natural gas</classificationValue>
+        </classification>
+        <outputGroup>0</outputGroup>
+      </intermediateExchange>
+      <parameter parameterId="7dcf7605-ae45-4f53-a640-fc32930a462d" amount="0.3" variableName="fraction_digestate_liquid" unitId="577e242a-461f-44a7-922c-d8e1c3d2bf45">
+        <name xml:lang="en">fraction_digestate_liquid</name>
+        <unitName xml:lang="en">dimensionless</unitName>
+        <comment xml:lang="en">Denotes the fraction of liquid digestate, resulting from anaerobic digesting 1 kg of biowaste.</comment>
+      </parameter>
+      <parameter parameterId="f574e822-e775-4cb2-b17a-64cc7ca26c32" amount="0.32" variableName="fraction_digestate_solid" unitId="577e242a-461f-44a7-922c-d8e1c3d2bf45">
+        <name xml:lang="en">fraction_digestate_solid</name>
+        <unitName xml:lang="en">dimensionless</unitName>
+        <comment xml:lang="en">Denotes the fraction of solid digestate, resulting from anaerobic digesting 1 kg of biowaste.</comment>
+      </parameter>
+    </flowData>
+    <modellingAndValidation>
+      <representativeness systemModelId="290c1f85-4cc4-4fa1-b0c8-2cb7f4276dce">
+        <systemModelName xml:lang="en">Allocation, cut-off by classification</systemModelName>
+        <samplingProcedure xml:lang="en">The data for this dataset was generated within a project in 2009-2011 financed by the Swiss Federal Office for Energy.</samplingProcedure>
+        <extrapolations xml:lang="en">none</extrapolations>
+      </representativeness>
+      <review reviewedMajorRelease="3" reviewedMinorRelease="0" reviewedMajorRevision="2" reviewedMinorRevision="12" reviewerId="c4597934-ecac-422c-b431-382e85fdcb83" reviewerName="[System]" reviewerEmail="support@ecoinvent.org" reviewDate="2020-02-20">
+        <otherDetails xml:lang="en">Validation warnings:
+
+- Mass and/or economic deficit in activity dataset exceeds either 0.1% of input or output sum:
+
+Property "carbon content, fossil":
+ - Input="1.35911563182936E-07", Output="0"
+ - Input &gt; output by 1.35911563182936E-07 kg
+
+Property "carbon content, non-fossil":
+ - Input="0.1624", Output="0.148875476978246"
+ - Input &gt; output by 0.013524523021754 kg (9.08% of output)
+
+Property "dry mass":
+ - Input="0.400075932135118", Output="0.437963973274285"
+ - Input &lt; output by 0.0378880411391674 kg (8.65% of output)
+
+Property "water in wet mass":
+ - Input="0.824924067864882", Output="0.734561961725715"
+ - Input &gt; output by 0.0903621061391674 kg (12.3% of output)
+
+Property "wet mass":
+ - Input="1.225", Output="1.172525935"
+ - Input &gt; output by 0.0524740650000002 kg (4.48% of output)
+
+Property "price":
+ - Input="0", Output="0.0109"
+ - Input &lt; output by 0.0109 EUR2005 (100% of output)
+
+
+- Amount of property "nitrogen content=0.009" of exchange "biowaste" deviates from the default amount in the master file.
+Amount of property "water content=1.49999999999999" of exchange "biowaste" deviates from the default amount in the master file.
+Amount of property "carbon content, non-fossil=0.406" of exchange "biowaste" deviates from the default amount in the master file.
+Amount of property "lower heating value=0" of exchange "biogas" deviates from the default amount in the master file.
+Amount of property "water content=4.61797752808988" of exchange "digester sludge" deviates from the default amount in the master file.
+Amount of property "water in wet mass=0.822" of exchange "digester sludge" deviates from the default amount in the master file.
+Amount of property "dry mass=0.178" of exchange "digester sludge" deviates from the default amount in the master file.
+Amount of property "water content=2962.17230710237" of exchange "tap water" deviates from the default amount in the master file.
+
+- The total water in wet mass of all input exchanges (0.824924067864882) and output exchanges (0.734561961725715) is unbalanced.
+
+- Uncertainty shall always be provided for all primary data inputs (exchange amounts, properties and parameters), except for the amount and properties of reference products.
+ -- Exchange(s): tap water, Phosphorus
+ -- Property(ies): carbon content, fossil=0, carbon content, non-fossil=0.449939130434783, dry mass=1.15, lower heating value=0, price=0.109, water content=0, water in wet mass=0, wet mass=1.15, carbon content, fossil=0, carbon content, non-fossil=0.3444, dry mass=0.178, price=0, water content=4.61797752808988, water in wet mass=0.822, wet mass=1, carbon content, fossil=0, carbon content, non-fossil=0.194039401033427, dry mass=0.346836774601289, water content=2882.20060970917, water in wet mass=999.653163225399, wet mass=1000, carbon content, fossil=0, carbon content, non-fossil=0, dry mass=1, water content=0, water in wet mass=0, wet mass=1, carbon content, fossil=0, carbon content, non-fossil=0.272916486782489, dry mass=1, water content=0, water in wet mass=0, wet mass=1, carbon content, fossil=0, carbon content, non-fossil=0, dry mass=1, water content=0, water in wet mass=0, wet mass=1, carbon content, fossil=0, carbon content, non-fossil=0, dry mass=1, water content=0, water in wet mass=0, wet mass=1, carbon content, fossil=0, carbon content, non-fossil=0.748686634968048, dry mass=1, water content=0, water in wet mass=0, wet mass=1, carbon content, fossil=0, carbon content, non-fossil=0, dry mass=1, water content=0, water in wet mass=0, wet mass=1, carbon content, fossil=0, carbon content, non-fossil=0, dry mass=1, water content=0, water in wet mass=0, wet mass=1, carbon content, fossil=0, carbon content, non-fossil=0.37, dry mass=1, water content=0, water in wet mass=0, wet mass=1, carbon content, fossil=0, carbon content, non-fossil=0, dry mass=1, water content=0, water in wet mass=0, wet mass=1
+ -- Parameter(s): fraction_digestate_liquid, fraction_digestate_solid
+
+- Pedigree information shall always be provided for all uncertainties of primary data inputs (exchange amounts, properties and parameters), except for the amount and properties of reference products.
+ -- Exchange(s): tap water, Phosphorus
+ -- Property(ies): carbon content, fossil=0, carbon content, non-fossil=0.449939130434783, dry mass=1.15, lower heating value=0, price=0.109, water content=0, water in wet mass=0, wet mass=1.15, carbon content, fossil=0, carbon content, non-fossil=0.3444, dry mass=0.178, price=0, water content=4.61797752808988, water in wet mass=0.822, wet mass=1, carbon content, fossil=0, carbon content, non-fossil=0.194039401033427, dry mass=0.346836774601289, water content=2882.20060970917, water in wet mass=999.653163225399, wet mass=1000, carbon content, fossil=0, carbon content, non-fossil=0, dry mass=1, water content=0, water in wet mass=0, wet mass=1, carbon content, fossil=0, carbon content, non-fossil=0.272916486782489, dry mass=1, water content=0, water in wet mass=0, wet mass=1, carbon content, fossil=0, carbon content, non-fossil=0, dry mass=1, water content=0, water in wet mass=0, wet mass=1, carbon content, fossil=0, carbon content, non-fossil=0, dry mass=1, water content=0, water in wet mass=0, wet mass=1, carbon content, fossil=0, carbon content, non-fossil=0.748686634968048, dry mass=1, water content=0, water in wet mass=0, wet mass=1, carbon content, fossil=0, carbon content, non-fossil=0, dry mass=1, water content=0, water in wet mass=0, wet mass=1, carbon content, fossil=0, carbon content, non-fossil=0, dry mass=1, water content=0, water in wet mass=0, wet mass=1, carbon content, fossil=0, carbon content, non-fossil=0.37, dry mass=1, water content=0, water in wet mass=0, wet mass=1, carbon content, fossil=0, carbon content, non-fossil=0, dry mass=1, water content=0, water in wet mass=0, wet mass=1
+ -- Parameter(s): fraction_digestate_liquid, fraction_digestate_solid
+
+- The following negative reference products could not be identified as materials for treatment. No activities exist that produce these materials for treatment.
+ - biowaste
+
+</otherDetails>
+      </review>
+      <review reviewedMajorRelease="3" reviewedMinorRelease="0" reviewedMajorRevision="2" reviewedMinorRevision="12" reviewerId="ebf45305-b87c-4d3d-b74f-fbc6677bca1b" reviewerName="Lucia Valsasina" reviewerEmail="valsasina@ecoinvent.org" reviewDate="2020-02-20"/>
+      <review reviewedMajorRelease="3" reviewedMinorRelease="0" reviewedMajorRevision="3" reviewedMinorRevision="2" reviewerId="35d091e9-38c2-4037-9efe-a73673c57123" reviewerName="Emilia Moreno Ruiz" reviewerEmail="moreno@ecoinvent.org" reviewDate="2020-06-30"/>
+      <review reviewedMajorRelease="3" reviewedMinorRelease="0" reviewedMajorRevision="3" reviewedMinorRevision="2" reviewerId="c4597934-ecac-422c-b431-382e85fdcb83" reviewerName="[System]" reviewerEmail="support@ecoinvent.org" reviewDate="2020-06-30">
+        <otherDetails xml:lang="en">Validation warnings:
+
+- Mass and/or economic deficit in activity dataset exceeds either 0.1% of input or output sum:
+
+Property "carbon content, fossil":
+ - Input="1.35911563182936E-07", Output="0"
+ - Input &gt; output by 1.35911563182936E-07 kg
+
+Property "wet mass":
+ - Input="1.225", Output="1.172525935"
+ - Input &gt; output by 0.0524740650000002 kg (4.48% of output)
+
+Property "water in wet mass":
+ - Input="0.824924067864882", Output="0.734561961725715"
+ - Input &gt; output by 0.0903621061391674 kg (12.3% of output)
+
+Property "carbon content, non-fossil":
+ - Input="0.1624", Output="0.148875476978246"
+ - Input &gt; output by 0.013524523021754 kg (9.08% of output)
+
+Property "dry mass":
+ - Input="0.400075932135118", Output="0.437963973274285"
+ - Input &lt; output by 0.0378880411391674 kg (8.65% of output)
+
+Property "price":
+ - Input="0", Output="0.0109"
+ - Input &lt; output by 0.0109 EUR2005 (100% of output)
+
+
+- Amount of property "water content=2962.17230710237" of exchange "tap water" deviates from the default amount in the master file.
+Amount of property "water content=4.61797752808988" of exchange "digester sludge" deviates from the default amount in the master file.
+Amount of property "water in wet mass=0.822" of exchange "digester sludge" deviates from the default amount in the master file.
+Amount of property "dry mass=0.178" of exchange "digester sludge" deviates from the default amount in the master file.
+Amount of property "lower heating value=0" of exchange "biogas" deviates from the default amount in the master file.
+Amount of property "carbon content, non-fossil=0.406" of exchange "biowaste" deviates from the default amount in the master file.
+Amount of property "nitrogen content=0.009" of exchange "biowaste" deviates from the default amount in the master file.
+Amount of property "water content=1.49999999999999" of exchange "biowaste" deviates from the default amount in the master file.
+
+- The total water in wet mass of all input exchanges (0.824924067864882) and output exchanges (0.734561961725715) is unbalanced.
+
+- Uncertainty shall always be provided for all primary data inputs (exchange amounts, properties and parameters), except for the amount and properties of reference products.
+ -- Exchange(s): tap water, Phosphorus
+ -- Property(ies): carbon content, fossil=0, water in wet mass=0.822, dry mass=0.178, carbon content, non-fossil=0.3444, price=0, wet mass=1, water content=4.61797752808988, lower heating value=0, water in wet mass=0, wet mass=1.15, price=0.109, dry mass=1.15, carbon content, non-fossil=0.449939130434783, carbon content, fossil=0, water content=0, dry mass=0.346836774601289, carbon content, fossil=0, water in wet mass=999.653163225399, carbon content, non-fossil=0.194039401033427, wet mass=1000, water content=2882.20060970917, carbon content, fossil=0, water content=0, wet mass=1, water in wet mass=0, carbon content, non-fossil=0, dry mass=1, carbon content, fossil=0, water content=0, wet mass=1, dry mass=1, water in wet mass=0, carbon content, non-fossil=0.748686634968048, wet mass=1, dry mass=1, water in wet mass=0, carbon content, fossil=0, carbon content, non-fossil=0.37, water content=0, water content=0, carbon content, fossil=0, carbon content, non-fossil=0, wet mass=1, water in wet mass=0, dry mass=1, carbon content, fossil=0, water content=0, water in wet mass=0, wet mass=1, carbon content, non-fossil=0, dry mass=1, carbon content, non-fossil=0.272916486782489, wet mass=1, carbon content, fossil=0, water in wet mass=0, water content=0, dry mass=1, water in wet mass=0, wet mass=1, carbon content, fossil=0, water content=0, dry mass=1, carbon content, non-fossil=0, water in wet mass=0, wet mass=1, dry mass=1, water content=0, carbon content, non-fossil=0, carbon content, fossil=0, dry mass=1, carbon content, fossil=0, wet mass=1, carbon content, non-fossil=0, water content=0, water in wet mass=0
+ -- Parameter(s): fraction_digestate_solid, fraction_digestate_liquid
+
+- Pedigree information shall always be provided for all uncertainties of primary data inputs (exchange amounts, properties and parameters), except for the amount and properties of reference products.
+ -- Exchange(s): tap water, Phosphorus
+ -- Property(ies): carbon content, fossil=0, water in wet mass=0.822, dry mass=0.178, carbon content, non-fossil=0.3444, price=0, wet mass=1, water content=4.61797752808988, lower heating value=0, water in wet mass=0, wet mass=1.15, price=0.109, dry mass=1.15, carbon content, non-fossil=0.449939130434783, carbon content, fossil=0, water content=0, dry mass=0.346836774601289, carbon content, fossil=0, water in wet mass=999.653163225399, carbon content, non-fossil=0.194039401033427, wet mass=1000, water content=2882.20060970917, carbon content, fossil=0, water content=0, wet mass=1, water in wet mass=0, carbon content, non-fossil=0, dry mass=1, carbon content, fossil=0, water content=0, wet mass=1, dry mass=1, water in wet mass=0, carbon content, non-fossil=0.748686634968048, wet mass=1, dry mass=1, water in wet mass=0, carbon content, fossil=0, carbon content, non-fossil=0.37, water content=0, water content=0, carbon content, fossil=0, carbon content, non-fossil=0, wet mass=1, water in wet mass=0, dry mass=1, carbon content, fossil=0, water content=0, water in wet mass=0, wet mass=1, carbon content, non-fossil=0, dry mass=1, carbon content, non-fossil=0.272916486782489, wet mass=1, carbon content, fossil=0, water in wet mass=0, water content=0, dry mass=1, water in wet mass=0, wet mass=1, carbon content, fossil=0, water content=0, dry mass=1, carbon content, non-fossil=0, water in wet mass=0, wet mass=1, dry mass=1, water content=0, carbon content, non-fossil=0, carbon content, fossil=0, dry mass=1, carbon content, fossil=0, wet mass=1, carbon content, non-fossil=0, water content=0, water in wet mass=0
+ -- Parameter(s): fraction_digestate_solid, fraction_digestate_liquid
+
+- The following negative reference products could not be identified as materials for treatment. No activities exist that produce these materials for treatment.
+ - biowaste
+
+</otherDetails>
+      </review>
+      <review reviewedMajorRelease="3" reviewedMinorRelease="0" reviewedMajorRevision="6" reviewedMinorRevision="2" reviewerId="847a56f5-d9e5-4a65-ab51-b056e0039130" reviewerName="Avraam Symeonidis" reviewerEmail="Symeonidis@ecoinvent.org" reviewDate="2021-01-27">
+        <otherDetails xml:lang="en"/>
+      </review>
+      <review reviewedMajorRelease="3" reviewedMinorRelease="0" reviewedMajorRevision="6" reviewedMinorRevision="2" reviewerId="c4597934-ecac-422c-b431-382e85fdcb83" reviewerName="[System]" reviewerEmail="support@ecoinvent.org" reviewDate="2021-01-27">
+        <otherDetails xml:lang="en">Validation warnings:
+
+- Mass and/or economic deficit in activity dataset exceeds either 0.1% of input or output sum:
+
+Property 'water in wet mass':
+ - Input='0.824924067864882', Output='0.734561961725715'
+ - Input &gt; output by 0.0903621061391674 kg (12.3% of output)
+
+Property 'carbon content, fossil':
+ - Input='1.35911563182936E-07', Output='0'
+ - Input &gt; output by 1.35911563182936E-07 kg
+
+Property 'carbon content, non-fossil':
+ - Input='0.1624', Output='0.148875476978246'
+ - Input &gt; output by 0.013524523021754 kg (9.08% of output)
+
+Property 'dry mass':
+ - Input='0.400075932135118', Output='0.437963973274285'
+ - Input &lt; output by 0.0378880411391675 kg (8.65% of output)
+
+Property 'wet mass':
+ - Input='1.225', Output='1.172525935'
+ - Input &gt; output by 0.052474065 kg (4.48% of output)
+
+Property 'price':
+ - Input='0', Output='0.0109'
+ - Input &lt; output by 0.0109 EUR2005 (100% of output)
+
+
+- Amount of property 'carbon content, non-fossil=0.406' of exchange 'biowaste' deviates from the default amount in the master file.
+Amount of property 'nitrogen content=0.009' of exchange 'biowaste' deviates from the default amount in the master file.
+Amount of property 'water content=1.49999999999999' of exchange 'biowaste' deviates from the default amount in the master file.
+Property 'lower heating value=' of master data exchange was removed from exchange 'biogas'.
+Amount of property 'water content=4.61797752808988' of exchange 'digester sludge' deviates from the default amount in the master file.
+Amount of property 'water in wet mass=0.822' of exchange 'digester sludge' deviates from the default amount in the master file.
+Amount of property 'dry mass=0.178' of exchange 'digester sludge' deviates from the default amount in the master file.
+Amount of property 'water content=2962.17230710237' of exchange 'tap water' deviates from the default amount in the master file.
+
+- The total water in wet mass of all input exchanges (0.824924067864882) and output exchanges (0.734561961725715) is unbalanced.
+
+- Uncertainty shall always be provided for all primary data inputs (exchange amounts, properties and parameters), except for the amount and properties of reference products.
+ -- Exchange(s): tap water, Phosphorus
+ -- Property(ies): wet mass=1.15, water content=0, carbon content, non-fossil=0.449939130434783, dry mass=1.15, water in wet mass=0, carbon content, fossil=0, price=0.109, heating value, net=26.14, carbon content, fossil=0, dry mass=0.178, water in wet mass=0.822, heating value, net=2.42, carbon content, non-fossil=0.3444, water content=4.61797752808988, price=0, wet mass=1, price=0, carbon content, fossil=0, dry mass=0.346836774601289, water in wet mass=999.653163225399, water content=2882.20060970917, wet mass=1000, carbon content, non-fossil=0.194039401033427, water in wet mass=0, carbon content, fossil=0, water content=0, carbon content, non-fossil=0, dry mass=1, wet mass=1, carbon content, non-fossil=0.748686634968048, wet mass=1, dry mass=1, water content=0, carbon content, fossil=0, water in wet mass=0, water in wet mass=0, carbon content, non-fossil=0, water content=0, dry mass=1, carbon content, fossil=0, wet mass=1, wet mass=1, carbon content, fossil=0, water content=0, dry mass=1, carbon content, non-fossil=0, water in wet mass=0, carbon content, non-fossil=0, dry mass=1, water content=0, carbon content, fossil=0, water in wet mass=0, wet mass=1, carbon content, non-fossil=0, dry mass=1, water content=0, carbon content, fossil=0, wet mass=1, water in wet mass=0, carbon content, non-fossil=0.37, water in wet mass=0, carbon content, fossil=0, wet mass=1, dry mass=1, water content=0, dry mass=1, water in wet mass=0, water content=0, carbon content, non-fossil=0, wet mass=1, carbon content, fossil=0, carbon content, fossil=0, water in wet mass=0, dry mass=1, carbon content, non-fossil=0.272916486782489, wet mass=1, water content=0
+ -- Parameter(s): fraction_digestate_liquid, fraction_digestate_solid
+
+- Pedigree information shall always be provided for all uncertainties of primary data inputs (exchange amounts, properties and parameters), except for the amount and properties of reference products.
+ -- Exchange(s): tap water, Phosphorus
+ -- Property(ies): wet mass=1.15, water content=0, carbon content, non-fossil=0.449939130434783, dry mass=1.15, water in wet mass=0, carbon content, fossil=0, price=0.109, heating value, net=26.14, carbon content, fossil=0, dry mass=0.178, water in wet mass=0.822, heating value, net=2.42, carbon content, non-fossil=0.3444, water content=4.61797752808988, price=0, wet mass=1, price=0, carbon content, fossil=0, dry mass=0.346836774601289, water in wet mass=999.653163225399, water content=2882.20060970917, wet mass=1000, carbon content, non-fossil=0.194039401033427, water in wet mass=0, carbon content, fossil=0, water content=0, carbon content, non-fossil=0, dry mass=1, wet mass=1, carbon content, non-fossil=0.748686634968048, wet mass=1, dry mass=1, water content=0, carbon content, fossil=0, water in wet mass=0, water in wet mass=0, carbon content, non-fossil=0, water content=0, dry mass=1, carbon content, fossil=0, wet mass=1, wet mass=1, carbon content, fossil=0, water content=0, dry mass=1, carbon content, non-fossil=0, water in wet mass=0, carbon content, non-fossil=0, dry mass=1, water content=0, carbon content, fossil=0, water in wet mass=0, wet mass=1, carbon content, non-fossil=0, dry mass=1, water content=0, carbon content, fossil=0, wet mass=1, water in wet mass=0, carbon content, non-fossil=0.37, water in wet mass=0, carbon content, fossil=0, wet mass=1, dry mass=1, water content=0, dry mass=1, water in wet mass=0, water content=0, carbon content, non-fossil=0, wet mass=1, carbon content, fossil=0, carbon content, fossil=0, water in wet mass=0, dry mass=1, carbon content, non-fossil=0.272916486782489, wet mass=1, water content=0
+ -- Parameter(s): fraction_digestate_liquid, fraction_digestate_solid
+
+</otherDetails>
+      </review>
+      <review reviewedMajorRelease="3" reviewedMinorRelease="0" reviewedMajorRevision="8" reviewedMinorRevision="3" reviewerId="44a0bdd8-6624-4a73-a661-7190ddf070b3" reviewerName="David FitzGerald" reviewerEmail="fitzgerald@ecoinvent.org" reviewDate="2022-02-04">
+        <otherDetails xml:lang="en"/>
+      </review>
+      <review reviewedMajorRelease="3" reviewedMinorRelease="0" reviewedMajorRevision="8" reviewedMinorRevision="3" reviewerId="c4597934-ecac-422c-b431-382e85fdcb83" reviewerName="[System]" reviewerEmail="support@ecoinvent.org" reviewDate="2022-02-04">
+        <otherDetails xml:lang="en">Validation warnings:
+
+- Mass and/or economic deficit in activity dataset exceeds either 0.1% of input or output sum:
+
+Property 'dry mass':
+ - Input='0.400075932135118', Output='0.437963973274285'
+ - Input &lt; output by 0.0378880411391674 kg (8.65% of output)
+
+Property 'water in wet mass':
+ - Input='0.824924067864882', Output='0.734561961725715'
+ - Input &gt; output by 0.0903621061391674 kg (12.3% of output)
+
+Property 'wet mass':
+ - Input='1.225', Output='1.172525935'
+ - Input &gt; output by 0.0524740650000002 kg (4.48% of output)
+
+Property 'carbon content, fossil':
+ - Input='1.35911563182936E-07', Output='0'
+ - Input &gt; output by 1.35911563182936E-07 kg
+
+Property 'carbon content, non-fossil':
+ - Input='0.1624', Output='0.148875476978246'
+ - Input &gt; output by 0.013524523021754 kg (9.08% of output)
+
+Property 'price':
+ - Input='0', Output='0.0109'
+ - Input &lt; output by 0.0109 EUR2005 (100% of output)
+
+
+- Amount of property 'water content=2962.17230710237' of exchange 'tap water' deviates from the default amount in the master file.
+Amount of property 'water content=4.61797752808988' of exchange 'digester sludge' deviates from the default amount in the master file.
+Amount of property 'water in wet mass=0.822' of exchange 'digester sludge' deviates from the default amount in the master file.
+Amount of property 'dry mass=0.178' of exchange 'digester sludge' deviates from the default amount in the master file.
+Amount of property 'carbon content, non-fossil=0.406' of exchange 'biowaste' deviates from the default amount in the master file.
+Amount of property 'nitrogen content=0.009' of exchange 'biowaste' deviates from the default amount in the master file.
+Amount of property 'water content=1.49999999999999' of exchange 'biowaste' deviates from the default amount in the master file.
+
+- The total water in wet mass of all input exchanges (0.824924067864882) and output exchanges (0.734561961725715) is unbalanced.
+
+- Uncertainty shall always be provided for all primary data inputs (exchange amounts, properties and parameters), except for the amount and properties of reference products.
+ -- Exchange(s): tap water, Phosphorus
+ -- Property(ies): carbon content, non-fossil=0.449939130434783, wet mass=1.15, water content=0, water in wet mass=0, dry mass=1.15, price=0.109, carbon content, fossil=0, heating value, net=22.73, carbon content, fossil=0, dry mass=0.178, water content=4.61797752808988, price=0, heating value, net=2.42, wet mass=1, water in wet mass=0.822, carbon content, non-fossil=0.3444, dry mass=0.346836774601289, water in wet mass=999.653163225399, water content=2882.20060970917, carbon content, non-fossil=0.194039401033427, wet mass=1000, price=0, carbon content, fossil=0, water content=0, dry mass=1, water in wet mass=0, wet mass=1, carbon content, fossil=0, carbon content, non-fossil=0.272916486782489, wet mass=1, dry mass=1, water content=0, water in wet mass=0, carbon content, fossil=0, carbon content, non-fossil=0, dry mass=1, carbon content, non-fossil=0.37, water content=0, wet mass=1, carbon content, fossil=0, water in wet mass=0, dry mass=1, carbon content, non-fossil=0, water content=0, wet mass=1, water in wet mass=0, carbon content, fossil=0, water in wet mass=0, carbon content, fossil=0, wet mass=1, carbon content, non-fossil=0.748686634968048, dry mass=1, water content=0, wet mass=1, carbon content, fossil=0, carbon content, non-fossil=0, water content=0, dry mass=1, water in wet mass=0, water in wet mass=0, dry mass=1, carbon content, non-fossil=0, carbon content, fossil=0, water content=0, wet mass=1, water content=0, water in wet mass=0, carbon content, non-fossil=0, carbon content, fossil=0, dry mass=1, wet mass=1, carbon content, non-fossil=0, wet mass=1, carbon content, fossil=0, water in wet mass=0, dry mass=1, water content=0
+ -- Parameter(s): fraction_digestate_solid, fraction_digestate_liquid
+
+- Pedigree information shall always be provided for all uncertainties of primary data inputs (exchange amounts, properties and parameters), except for the amount and properties of reference products.
+ -- Exchange(s): tap water, Phosphorus
+ -- Property(ies): carbon content, non-fossil=0.449939130434783, wet mass=1.15, water content=0, water in wet mass=0, dry mass=1.15, price=0.109, carbon content, fossil=0, heating value, net=22.73, carbon content, fossil=0, dry mass=0.178, water content=4.61797752808988, price=0, heating value, net=2.42, wet mass=1, water in wet mass=0.822, carbon content, non-fossil=0.3444, dry mass=0.346836774601289, water in wet mass=999.653163225399, water content=2882.20060970917, carbon content, non-fossil=0.194039401033427, wet mass=1000, price=0, carbon content, fossil=0, water content=0, dry mass=1, water in wet mass=0, wet mass=1, carbon content, fossil=0, carbon content, non-fossil=0.272916486782489, wet mass=1, dry mass=1, water content=0, water in wet mass=0, carbon content, fossil=0, carbon content, non-fossil=0, dry mass=1, carbon content, non-fossil=0.37, water content=0, wet mass=1, carbon content, fossil=0, water in wet mass=0, dry mass=1, carbon content, non-fossil=0, water content=0, wet mass=1, water in wet mass=0, carbon content, fossil=0, water in wet mass=0, carbon content, fossil=0, wet mass=1, carbon content, non-fossil=0.748686634968048, dry mass=1, water content=0, wet mass=1, carbon content, fossil=0, carbon content, non-fossil=0, water content=0, dry mass=1, water in wet mass=0, water in wet mass=0, dry mass=1, carbon content, non-fossil=0, carbon content, fossil=0, water content=0, wet mass=1, water content=0, water in wet mass=0, carbon content, non-fossil=0, carbon content, fossil=0, dry mass=1, wet mass=1, carbon content, non-fossil=0, wet mass=1, carbon content, fossil=0, water in wet mass=0, dry mass=1, water content=0
+ -- Parameter(s): fraction_digestate_solid, fraction_digestate_liquid
+
+</otherDetails>
+      </review>
+    </modellingAndValidation>
+    <administrativeInformation>
+      <dataEntryBy personId="fb0e4bc2-6d48-4df3-9015-ab56bacd8393" isActiveAuthor="true" personName="Mischa Zschokke-Gohl" personEmail="m.zschokke@carbotech.ch"/>
+      <dataGeneratorAndPublication personId="fb0e4bc2-6d48-4df3-9015-ab56bacd8393" personName="Mischa Zschokke-Gohl" personEmail="m.zschokke@carbotech.ch" dataPublishedIn="2" publishedSourceId="b0e27450-e82c-4cf1-9a15-81e10e4626f5" publishedSourceYear="2019" publishedSourceFirstAuthor="Kaegi Thomas" isCopyrightProtected="true" accessRestrictedTo="1"/>
+      <fileAttributes majorRelease="3" minorRelease="0" majorRevision="9" minorRevision="0" internalSchemaVersion="2.0.12" defaultLanguage="en" creationTimestamp="2019-11-07T13:05:32" lastEditTimestamp="2022-02-04T11:39:24" fileGenerator="EcoEditor 3.13.5000.19341" fileTimestamp="2022-02-04T11:39:24" contextId="de659012-50c4-4e96-b54a-fc781bf987ab">
+        <contextName xml:lang="en">ecoinvent</contextName>
+      </fileAttributes>
+    </administrativeInformation>
+  </childActivityDataset>
+</ecoSpold>

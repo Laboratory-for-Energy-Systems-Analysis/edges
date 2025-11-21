@@ -1,0 +1,211 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<ecoSpold xmlns="http://www.EcoInvent.org/EcoSpold02" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.EcoInvent.org/EcoSpold02 ../../schemas/datasets/EcoSpold02.xsd http://www.EcoInvent.org/UsedUserMasterData ../../schemas/datasets/EcoSpold02UserMasterData.xsd">
+  <childActivityDataset>
+    <activityDescription>
+      <activity specialActivityType="0" id="f5fc85bb-46f1-5129-9965-a17f8bb1df2b" activityNameId="d1b52917-5b9d-4263-971a-9b38d6144096" activityNameContextId="de659012-50c4-4e96-b54a-fc781bf987ab" parentActivityId="cf4dbc23-95c2-4500-8021-7e0b64c423d8" inheritanceDepth="0" type="2">
+        <activityName xml:lang="en">land already in use, perennial cropland to perennial crop</activityName>
+        <includedActivitiesStart xml:lang="en">This activity starts with the land already in use. From cradle, i.e. including all upstream activities.</includedActivitiesStart>
+        <includedActivitiesEnd xml:lang="en">The dataset includes all interventions associated with the provision of 1 kg NPP from land already in use as perennial cropland.
+This activity ends with the provision of arable land tenure, measured in unit kg carbon Potential Net Primary Production (NPP).</includedActivitiesEnd>
+        <generalComment>
+          <text xml:lang="en" index="0">This dataset represents the interventions associated with the provision of 1 kg NPP0 (Net Primary Production) by land that is already in use.</text>
+          <text xml:lang="en" index="1">NPP (net primary productivity of a given land, in kg C / m2 and year) and VEG (above-ground biomass) values are parameterized.</text>
+          <text xml:lang="en" index="2">NPP values are reported by Haberl et al. (2007)</text>
+          <text xml:lang="en" index="3">VEG values have the following sources:</text>
+          <text xml:lang="en" index="4">- Forests: Global Forest Resources Assessment 2010: http://www.fao.org/forestry/fra/fra2010/en/</text>
+          <text xml:lang="en" index="5">- Grassland: IPCC 2006 Guidelines, Voiume 6, Table 6.4. All values in tonne C/ha, converted to carbon based on 47% carbon content of dry matter biomass (see for example section 6.2.1.4 of IPCC 2006).</text>
+          <text xml:lang="en" index="6">- Crops: Cveg croplands, based on Table 11 of the European Commission decision.* All values in tonne C/ha.</text>
+          <text xml:lang="en" index="7">* C(2010) 3751: COMMISSION DECISION of 10 June 2010 on guidelines for the calculation of land carbon stocks for the purpose of Annex V to Directive 2009/28/EC, Official Journal of the European Union, L 151/19. Exceptions based on the Table 12 of the EC decision: Coconuts, Jatropha, Jojoba Seeds, Oil palm fruit, Sugar cane</text>
+          <text xml:lang="en" index="8">Distinction is made between primary and secondary forests. The respective land area of each type forest is known from FAOSTAT data. Based on empirical values, it is considered that the secondary VEG is 74% of the primary VEG. The same ratio is applied as the weighted average between primary and secondary forest is always equal to the GFRA 2010 value. </text>
+        </generalComment>
+        <tag>WFLDB</tag>
+      </activity>
+      <classification classificationId="bbe2eb06-fac9-48bb-9610-f402b9d3f2d0">
+        <classificationSystem xml:lang="en">ISIC rev.4 ecoinvent</classificationSystem>
+        <classificationValue xml:lang="en">0161:Support activities for crop production</classificationValue>
+      </classification>
+      <geography geographyId="0c852cde-7d7e-11de-9ae2-0019e336be3a">
+        <shortname xml:lang="en">CL</shortname>
+      </geography>
+      <technology technologyLevel="3"/>
+      <timePeriod startDate="2010-01-01" endDate="2023-12-31" isDataValidForEntirePeriod="true"/>
+      <macroEconomicScenario macroEconomicScenarioId="d9f57f0a-a01f-42eb-a57b-8f18d6635801">
+        <name xml:lang="en">Business-as-Usual</name>
+      </macroEconomicScenario>
+    </activityDescription>
+    <flowData>
+      <intermediateExchange id="3f0c8070-81c9-50a8-a49e-0f46bf3cdc04" unitId="487df68b-4994-4027-8fdc-a4dc298257b7" amount="1.0" intermediateExchangeId="9b9edcf3-0539-4642-9516-0df642a5c41a" productionVolumeAmount="6617.01492303" productionVolumeMathematicalRelation="" productionVolumeSourceId="6f188887-6212-4d29-ae69-24f04b593544">
+        <name xml:lang="en">land tenure, arable land, measured as carbon net primary productivity, perennial crop</name>
+        <unitName xml:lang="en">kg</unitName>
+        <comment xml:lang="en">Yield = 1.0 kg/haLand that is made available for the cultivation of perennial crops, expressed in kg carbon net pripary productivity</comment>
+        <property propertyId="f2283db2-62e4-467f-b9ac-c4f45be563b4" amount="1.0" isDefiningValue="false" isCalculatedAmount="false" unitId="487df68b-4994-4027-8fdc-a4dc298257b7">
+          <name xml:lang="en">carbon allocation</name>
+          <unitName xml:lang="en">kg</unitName>
+        </property>
+        <property propertyId="a301a838-7975-4d89-9e74-8eb77ad03cd1" amount="1.0" isDefiningValue="false" isCalculatedAmount="false" unitId="577e242a-461f-44a7-922c-d8e1c3d2bf45">
+          <name xml:lang="en">carbon content</name>
+          <unitName xml:lang="en">dimensionless</unitName>
+        </property>
+        <property propertyId="6393c14b-db78-445d-a47b-c0cb866a1b25" amount="1.0" mathematicalRelation="" unitId="577e242a-461f-44a7-922c-d8e1c3d2bf45">
+          <name xml:lang="en">carbon content, non-fossil</name>
+          <unitName xml:lang="en">dimensionless</unitName>
+          <comment xml:lang="en">The flow is expressed in kg carbon Potential Net Primary Production (NPP0)</comment>
+        </property>
+        <property propertyId="3a0af1d6-04c3-41c6-a3da-92c4f61e0eaa" amount="1.0" mathematicalRelation="" unitId="487df68b-4994-4027-8fdc-a4dc298257b7">
+          <name xml:lang="en">dry mass</name>
+          <unitName xml:lang="en">kg</unitName>
+        </property>
+        <property propertyId="38f94dd1-d5aa-41b8-b182-c0c42985d9dc" amount="0.0" unitId="7b75baf0-cbee-45e6-bf66-af119da06553">
+          <name xml:lang="en">price</name>
+          <unitName xml:lang="en">EUR2005</unitName>
+          <comment xml:lang="en">No price assigned.</comment>
+        </property>
+        <property propertyId="a9358458-9724-4f03-b622-106eda248916" amount="0.0" mathematicalRelation="" unitId="577e242a-461f-44a7-922c-d8e1c3d2bf45">
+          <name xml:lang="en">water content</name>
+          <unitName xml:lang="en">dimensionless</unitName>
+        </property>
+        <property propertyId="6d9e1462-80e3-4f10-b3f4-71febd6f1168" amount="0.0" mathematicalRelation="" unitId="487df68b-4994-4027-8fdc-a4dc298257b7">
+          <name xml:lang="en">water in wet mass</name>
+          <unitName xml:lang="en">kg</unitName>
+        </property>
+        <property propertyId="67f102e2-9cb6-4d20-aa16-bf74d8a03326" amount="1.0" mathematicalRelation="" unitId="487df68b-4994-4027-8fdc-a4dc298257b7">
+          <name xml:lang="en">wet mass</name>
+          <unitName xml:lang="en">kg</unitName>
+        </property>
+        <productionVolumeComment xml:lang="en">This production volume has been estimated by decoupling the different land tenures contributing to the perennial land use change, per country, and multiplying by the national perennial land use change production volume. Land use change production volume is estimated based in FAO statistic and following the concept of Total Biomass Appropriation (TBA), developped by Krausmann et al., 2008. The ha of land devoted to perennial crops per country is multiplied by the share of TBA of the country, in order to weight the relative land use change of the country, in a Global context. The shares of TBA are calculated in relation to the total sum of TBA of the World.\nAdditional source:\nNemecek T., Bengoa X., Lansche J., Mouron P., Riedener E., Rossi V. &amp; Humbert S. (2015) Methodological Guidelines for the Life Cycle Inventory of Agricultural Products. Version 3.0, July 2015. World Food LCA Database (WFLDB). Quantis and Agroscope, Lausanne and Zurich, Switzerland.</productionVolumeComment>
+        <classification classificationId="39b0f0ab-1a2f-401b-9f4d-6e39400760a4">
+          <classificationSystem xml:lang="en">By-product classification</classificationSystem>
+          <classificationValue xml:lang="en">allocatable product</classificationValue>
+        </classification>
+        <classification classificationId="6c6f6640-de93-4f39-ade6-13b51de75241">
+          <classificationSystem xml:lang="en">CPC</classificationSystem>
+          <classificationValue xml:lang="en">91131: Public administrative services related to agriculture, forestry, fishing and hunting</classificationValue>
+        </classification>
+        <outputGroup>0</outputGroup>
+      </intermediateExchange>
+      <elementaryExchange id="cb0319a8-0c27-4c25-87fc-bedf2be9caf4" unitId="1017f68a-f818-4f9d-a34d-a31e7386f628" amount="2.46913580246914" elementaryExchangeId="fcb77a5a-6882-4aeb-82a9-ba57688d2224">
+        <name xml:lang="en">Transformation, from permanent crop</name>
+        <unitName xml:lang="en">m2</unitName>
+        <compartment subcompartmentId="7d704b6f-d455-4f41-9c28-50b4f372f315">
+          <compartment xml:lang="en">natural resource</compartment>
+          <subcompartment xml:lang="en">land</subcompartment>
+        </compartment>
+        <inputGroup>4</inputGroup>
+      </elementaryExchange>
+      <elementaryExchange id="9dd6de45-1d2f-4ceb-a959-6d4006e79ee7" unitId="1017f68a-f818-4f9d-a34d-a31e7386f628" amount="2.46913580246914" elementaryExchangeId="6e02ccfc-9eb5-4a51-be9a-870c1087c833">
+        <name xml:lang="en">Transformation, to permanent crop</name>
+        <unitName xml:lang="en">m2</unitName>
+        <compartment subcompartmentId="7d704b6f-d455-4f41-9c28-50b4f372f315">
+          <compartment xml:lang="en">natural resource</compartment>
+          <subcompartment xml:lang="en">land</subcompartment>
+        </compartment>
+        <inputGroup>4</inputGroup>
+      </elementaryExchange>
+      <parameter parameterId="d04b3869-291f-49f6-b0fe-e1b4ea89623b" amount="4.32" variableName="VEG" mathematicalRelation="" unitId="577e242a-461f-44a7-922c-d8e1c3d2bf45">
+        <name xml:lang="en">Above and below ground biomass</name>
+        <unitName xml:lang="en">dimensionless</unitName>
+        <uncertainty>
+          <lognormal meanValue="4.32" mu="1.46325540226" variance="0.0006" varianceWithPedigreeUncertainty="0.017425000000000003"/>
+          <pedigreeMatrix reliability="2" completeness="5" temporalCorrelation="2" geographicalCorrelation="2" furtherTechnologyCorrelation="3"/>
+        </uncertainty>
+      </parameter>
+      <parameter parameterId="df700e91-4922-4ad9-b7cc-ba7d8ddd7a85" amount="1.0" variableName="LUC_crop_specific" mathematicalRelation="" unitId="577e242a-461f-44a7-922c-d8e1c3d2bf45">
+        <name xml:lang="en">LUC_crop_specific</name>
+        <unitName xml:lang="en">dimensionless</unitName>
+        <comment xml:lang="en">This parameter allows to switch between a 'crop specific' and a 'country specific' approach when calculating the LUC of a crop. By default, the chosen approach is 'crop specific', so the value of the parameter is 1. If you want to apply a 'country specific' approach, turn the parameter to 0.</comment>
+      </parameter>
+      <parameter parameterId="f3c1f79b-7fc0-4de6-9b7d-01019413cf78" amount="0.405" variableName="NPP" mathematicalRelation="" unitId="577e242a-461f-44a7-922c-d8e1c3d2bf45">
+        <name xml:lang="en">NPP0, net primary productivity</name>
+        <unitName xml:lang="en">dimensionless</unitName>
+        <uncertainty>
+          <lognormal meanValue="0.405" mu="-0.903868211876" variance="0.006" varianceWithPedigreeUncertainty="0.022825"/>
+          <pedigreeMatrix reliability="2" completeness="5" temporalCorrelation="2" geographicalCorrelation="2" furtherTechnologyCorrelation="3"/>
+        </uncertainty>
+      </parameter>
+    </flowData>
+    <modellingAndValidation>
+      <representativeness systemModelId="290c1f85-4cc4-4fa1-b0c8-2cb7f4276dce">
+        <systemModelName xml:lang="en">Allocation, cut-off by classification</systemModelName>
+        <samplingProcedure xml:lang="en">Literature data: NPP values taken from Haberl et al. (2007). VEG values taken from GFRA (2010), IPCC (2006) and European Commission (2010).</samplingProcedure>
+        <extrapolations xml:lang="en">This dataset has been extrapolated from year 2009 to the year of the calculation</extrapolations>
+      </representativeness>
+      <review reviewedMajorRelease="3" reviewedMinorRelease="3" reviewedMajorRevision="1" reviewedMinorRevision="1" reviewerId="33d4d633-d019-42fa-8584-be63f4ac20df" reviewerName="Jürgen Reinhard" reviewerEmail="Juergen.Reinhard@empa.ch" reviewDate="2016-05-29"/>
+      <review reviewedMajorRelease="3" reviewedMinorRelease="3" reviewedMajorRevision="1" reviewedMinorRevision="1" reviewerId="c4597934-ecac-422c-b431-382e85fdcb83" reviewerName="[System]" reviewerEmail="support@ecoinvent.org" reviewDate="2016-05-29">
+        <otherDetails xml:lang="en">Validation warnings:
+
+- Consider if it would be better to create this dataset as a child dataset relative to a parent dataset. See the ecoinvent Data Quality Guideline Chapter 4.2 for further advice.
+- Mass and/or economic deficit in activity dataset exceeds either 0.1% of input or output sum:
+
+Property 'dry mass':
+ - Input='0', Output='1'
+ - Input &lt; output by 1 kg (100% of output)
+
+Property 'carbon content, non-fossil':
+ - Input='0', Output='1'
+ - Input &lt; output by 1 kg (100% of output)
+
+Property 'wet mass':
+ - Input='0', Output='1'
+ - Input &lt; output by 1 kg (100% of output)
+
+
+- Amount of property 'carbon content, non-fossil=1' of exchange 'land tenure, arable land, measured as carbon net primary productivity, perennial crop' deviates from the default amount in the master file.
+Amount of property 'dry mass=1' of exchange 'land tenure, arable land, measured as carbon net primary productivity, perennial crop' deviates from the default amount in the master file.
+Amount of property 'wet mass=1' of exchange 'land tenure, arable land, measured as carbon net primary productivity, perennial crop' deviates from the default amount in the master file.
+
+- Uncertainty shall always be provided for all primary data inputs (exchange amounts, properties and parameters), except for the amount and properties of reference products.
+ -- Exchange(s): Transformation, to permanent crop, Transformation, from permanent crop
+ -- Parameter(s): LUC_crop_specific
+
+- Pedigree information shall always be provided for all uncertainties of primary data inputs (exchange amounts, properties and parameters), except for the amount and properties of reference products.
+ -- Exchange(s): Transformation, to permanent crop, Transformation, from permanent crop
+ -- Parameter(s): LUC_crop_specific
+
+</otherDetails>
+      </review>
+      <review reviewedMajorRelease="3" reviewedMinorRelease="0" reviewedMajorRevision="2" reviewedMinorRevision="1" reviewerId="33d4d633-d019-42fa-8584-be63f4ac20df" reviewerName="Jürgen Reinhard" reviewerEmail="Juergen.Reinhard@empa.ch" reviewDate="2016-06-08">
+        <otherDetails xml:lang="en"/>
+      </review>
+      <review reviewedMajorRelease="3" reviewedMinorRelease="0" reviewedMajorRevision="2" reviewedMinorRevision="1" reviewerId="c4597934-ecac-422c-b431-382e85fdcb83" reviewerName="[System]" reviewerEmail="support@ecoinvent.org" reviewDate="2016-06-08">
+        <otherDetails xml:lang="en">Validation warnings:
+
+- Consider if it would be better to create this dataset as a child dataset relative to a parent dataset. See the ecoinvent Data Quality Guideline Chapter 4.2 for further advice.
+- Mass and/or economic deficit in activity dataset exceeds either 0.1% of input or output sum:
+
+Property 'dry mass':
+ - Input='0', Output='1'
+ - Input &lt; output by 1 kg (100% of output)
+
+Property 'wet mass':
+ - Input='0', Output='1'
+ - Input &lt; output by 1 kg (100% of output)
+
+Property 'carbon content, non-fossil':
+ - Input='0', Output='1'
+ - Input &lt; output by 1 kg (100% of output)
+
+
+- Amount of property 'carbon content, non-fossil=1' of exchange 'land tenure, arable land, measured as carbon net primary productivity, perennial crop' deviates from the default amount in the master file.
+Amount of property 'dry mass=1' of exchange 'land tenure, arable land, measured as carbon net primary productivity, perennial crop' deviates from the default amount in the master file.
+Amount of property 'wet mass=1' of exchange 'land tenure, arable land, measured as carbon net primary productivity, perennial crop' deviates from the default amount in the master file.
+
+- Uncertainty shall always be provided for all primary data inputs (exchange amounts, properties and parameters), except for the amount and properties of reference products.
+ -- Exchange(s): Transformation, from permanent crop, Transformation, to permanent crop
+ -- Parameter(s): LUC_crop_specific
+
+- Pedigree information shall always be provided for all uncertainties of primary data inputs (exchange amounts, properties and parameters), except for the amount and properties of reference products.
+ -- Exchange(s): Transformation, from permanent crop, Transformation, to permanent crop
+ -- Parameter(s): LUC_crop_specific
+
+</otherDetails>
+      </review>
+    </modellingAndValidation>
+    <administrativeInformation>
+      <dataEntryBy personId="a55ea4cf-a20f-41b3-879d-504eb49639ee" personName="Xavier Bengoa" personEmail="xavier.bengoa@quantis-intl.com"/>
+      <dataGeneratorAndPublication personId="8d9ec4d2-bb82-4e33-b3b7-3b8da648908c" personName="Vincent Rossi" personEmail="vincent.rossi@quantis-intl.com" dataPublishedIn="0" isCopyrightProtected="true" accessRestrictedTo="1"/>
+      <fileAttributes majorRelease="3" minorRelease="0" majorRevision="4" minorRevision="0" defaultLanguage="en" creationTimestamp="2016-05-29T15:41:56" fileTimestamp="2016-05-29T15:41:56" contextId="de659012-50c4-4e96-b54a-fc781bf987ab">
+        <contextName xml:lang="en">ecoinvent</contextName>
+      </fileAttributes>
+    </administrativeInformation>
+  </childActivityDataset>
+</ecoSpold>

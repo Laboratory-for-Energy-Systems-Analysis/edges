@@ -1,0 +1,136 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<ecoSpold xmlns="http://www.EcoInvent.org/EcoSpold02" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.EcoInvent.org/EcoSpold02 ../../schemas/datasets/EcoSpold02.xsd http://www.EcoInvent.org/UsedUserMasterData ../../schemas/datasets/EcoSpold02UserMasterData.xsd">
+  <childActivityDataset>
+    <activityDescription>
+      <activity specialActivityType="0" id="fa9367d2-fff6-53af-9611-859a69d6e88e" activityNameId="925700b2-f67f-4133-a9a9-6de22cb3eeda" parentActivityId="d7b35dd0-94be-557e-88eb-206deac8ea82" inheritanceDepth="0" type="2">
+        <activityName xml:lang="en">cement production, CEM II/A</activityName>
+        <synonym xml:lang="en">Portland composite cement</synonym>
+        <synonym xml:lang="en"> CEM II/A</synonym>
+        <includedActivitiesStart xml:lang="en">From cradle, i.e. including all upstream activities. As source of gypsum, waste gypsum from flue gas treatment is assumed. From cradle, i.e. including all upstream activities.</includedActivitiesStart>
+        <includedActivitiesEnd xml:lang="en">This activity ends with the cement produced in the cement mill. The dataset does not include packaging and administration.</includedActivitiesEnd>
+        <generalComment>
+          <text xml:lang="en" index="0">The dataset describes the production of cement (CEM II/A)</text>
+        </generalComment>
+        <tag>combined production</tag>
+      </activity>
+      <classification classificationId="36cd730c-4485-4fe9-8efe-8850f771796d">
+        <classificationSystem xml:lang="en">ISIC rev.4 ecoinvent</classificationSystem>
+        <classificationValue xml:lang="en">2394:Manufacture of cement, lime and plaster</classificationValue>
+      </classification>
+      <geography geographyId="7846b897-7c04-4f9f-b607-2b83fcd9a74c">
+        <shortname xml:lang="en">RoW</shortname>
+      </geography>
+      <technology technologyLevel="3"/>
+      <timePeriod startDate="2005-01-01" endDate="2023-12-31" isDataValidForEntirePeriod="true"/>
+      <macroEconomicScenario macroEconomicScenarioId="d9f57f0a-a01f-42eb-a57b-8f18d6635801">
+        <name xml:lang="en">Business-as-Usual</name>
+      </macroEconomicScenario>
+    </activityDescription>
+    <flowData>
+      <intermediateExchange id="001c2645-c2cb-5f49-97ac-a29717a4156a" unitId="487df68b-4994-4027-8fdc-a4dc298257b7" variableName="flyash" amount="-1.0" intermediateExchangeId="76ab0018-e176-43e0-b42c-12e82b937fef" productionVolumeAmount="15107238948.03677" productionVolumeMathematicalRelation="APV_cement/ cement*ABS( flyash)">
+        <name xml:lang="en">hard coal ash</name>
+        <unitName xml:lang="en">kg</unitName>
+        <comment xml:lang="en">Literature Value</comment>
+        <property propertyId="f2283db2-62e4-467f-b9ac-c4f45be563b4" amount="0.0" isDefiningValue="false" isCalculatedAmount="false" unitId="487df68b-4994-4027-8fdc-a4dc298257b7">
+          <name xml:lang="en">carbon allocation</name>
+          <unitName xml:lang="en">kg</unitName>
+        </property>
+        <property propertyId="a301a838-7975-4d89-9e74-8eb77ad03cd1" amount="0.0" isDefiningValue="false" isCalculatedAmount="false" unitId="577e242a-461f-44a7-922c-d8e1c3d2bf45">
+          <name xml:lang="en">carbon content</name>
+          <unitName xml:lang="en">dimensionless</unitName>
+        </property>
+        <property propertyId="c74c3729-e577-4081-b572-a283d2561a75" amount="0.0" unitId="577e242a-461f-44a7-922c-d8e1c3d2bf45">
+          <name xml:lang="en">carbon content, fossil</name>
+          <unitName xml:lang="en">dimensionless</unitName>
+        </property>
+        <property propertyId="6393c14b-db78-445d-a47b-c0cb866a1b25" amount="0.0" unitId="577e242a-461f-44a7-922c-d8e1c3d2bf45">
+          <name xml:lang="en">carbon content, non-fossil</name>
+          <unitName xml:lang="en">dimensionless</unitName>
+        </property>
+        <property propertyId="3a0af1d6-04c3-41c6-a3da-92c4f61e0eaa" amount="1.0" unitId="487df68b-4994-4027-8fdc-a4dc298257b7">
+          <name xml:lang="en">dry mass</name>
+          <unitName xml:lang="en">kg</unitName>
+        </property>
+        <property propertyId="38f94dd1-d5aa-41b8-b182-c0c42985d9dc" amount="0.0" unitId="7b75baf0-cbee-45e6-bf66-af119da06553">
+          <name xml:lang="en">price</name>
+          <unitName xml:lang="en">EUR2005</unitName>
+          <comment xml:lang="en">Waste products are assigned a price of zero as they are assumed to require further treatment.</comment>
+        </property>
+        <property propertyId="a9358458-9724-4f03-b622-106eda248916" amount="0.0" unitId="577e242a-461f-44a7-922c-d8e1c3d2bf45">
+          <name xml:lang="en">water content</name>
+          <unitName xml:lang="en">dimensionless</unitName>
+        </property>
+        <property propertyId="6d9e1462-80e3-4f10-b3f4-71febd6f1168" amount="0.0" unitId="487df68b-4994-4027-8fdc-a4dc298257b7">
+          <name xml:lang="en">water in wet mass</name>
+          <unitName xml:lang="en">kg</unitName>
+        </property>
+        <property propertyId="67f102e2-9cb6-4d20-aa16-bf74d8a03326" amount="1.0" unitId="487df68b-4994-4027-8fdc-a4dc298257b7">
+          <name xml:lang="en">wet mass</name>
+          <unitName xml:lang="en">kg</unitName>
+        </property>
+        <productionVolumeComment xml:lang="en">Amount relative to produced amount of reference product</productionVolumeComment>
+        <classification classificationId="ee3238ec-ca7a-4ddc-af1b-e7c35957b9b6">
+          <classificationSystem xml:lang="en">By-product classification</classificationSystem>
+          <classificationValue xml:lang="en">Waste</classificationValue>
+        </classification>
+        <classification classificationId="6d3f4523-869c-45b8-a1cc-67ff0e657c80">
+          <classificationSystem xml:lang="en">CPC</classificationSystem>
+          <classificationValue xml:lang="en">39320: Ash and residue (except from the manufacture of iron or steel), containing metals or metallic compounds, excep[…]</classificationValue>
+        </classification>
+        <classification classificationId="ecd99b80-4545-5c1d-afda-c836ab885019">
+          <classificationSystem xml:lang="en">HS2017</classificationSystem>
+          <classificationValue xml:lang="en">262099: Slag, ash and residues; (not from the manufacture of iron or steel), containing mainly metals or their comp[...]</classificationValue>
+        </classification>
+        <outputGroup>0</outputGroup>
+      </intermediateExchange>
+    </flowData>
+    <modellingAndValidation>
+      <representativeness systemModelId="290c1f85-4cc4-4fa1-b0c8-2cb7f4276dce" percent="10.0">
+        <systemModelName xml:lang="en">Allocation, cut-off by classification</systemModelName>
+        <samplingProcedure xml:lang="en">Data approximates average European production</samplingProcedure>
+      </representativeness>
+      <review reviewedMajorRelease="3" reviewedMinorRelease="0" reviewedMajorRevision="0" reviewedMinorRevision="6" reviewerId="44a0bdd8-6624-4a73-a661-7190ddf070b3" reviewerName="David FitzGerald" reviewerEmail="fitzgerald@ecoinvent.org" reviewDate="2022-08-04">
+        <otherDetails xml:lang="en"/>
+      </review>
+      <review reviewedMajorRelease="3" reviewedMinorRelease="0" reviewedMajorRevision="0" reviewedMinorRevision="6" reviewerId="c4597934-ecac-422c-b431-382e85fdcb83" reviewerName="[System]" reviewerEmail="support@ecoinvent.org" reviewDate="2022-08-04">
+        <otherDetails xml:lang="en">Validation warnings:
+
+- Mass and/or economic deficit in activity dataset exceeds either 0.1% of input or output sum:
+
+Property 'carbon content, fossil':
+ - Input='0.0122765831797235', Output='0'
+ - Input &gt; output by 0.0122765831797235 kg
+
+Property 'dry mass':
+ - Input='1.002112', Output='1'
+ - Input &gt; output by 0.00211200000000011 kg (0.21% of output)
+
+Property 'wet mass':
+ - Input='1.00232', Output='1'
+ - Input &gt; output by 0.0023200000000001 kg (0.23% of output)
+
+Property 'water in wet mass':
+ - Input='0.000208', Output='0'
+ - Input &gt; output by 0.000208 kg
+
+
+- Amount of property 'dry mass=1' of exchange 'blast furnace slag' deviates from the default amount in the master file.
+Amount of property 'water in wet mass=0' of exchange 'blast furnace slag' deviates from the default amount in the master file.
+Amount of property 'water content=0' of exchange 'blast furnace slag' deviates from the default amount in the master file.
+Amount of property 'carbon content, fossil=0' of exchange 'blast furnace slag' deviates from the default amount in the master file.
+
+- The total water in wet mass of all input exchanges (0.000208) and output exchanges (0) is unbalanced.
+
+- A non-global market exists for the reference product 'hard coal ash' but is not supplied by any instances of the activity 'cement production, CEM II/A'.
+</otherDetails>
+      </review>
+    </modellingAndValidation>
+    <administrativeInformation>
+      <dataEntryBy personId="a35d6e99-19d3-4784-b54a-3585ba03431c" isActiveAuthor="true" personName="Michael Elias Boesch" personEmail="michael.boesch@aveny.ch"/>
+      <dataGeneratorAndPublication personId="a35d6e99-19d3-4784-b54a-3585ba03431c" personName="Michael Elias Boesch" personEmail="michael.boesch@aveny.ch" dataPublishedIn="2" publishedSourceId="05d78044-8e55-4c61-81e6-58fc92f92789" publishedSourceYear="2010" publishedSourceFirstAuthor="Boesch, M.E." isCopyrightProtected="true" accessRestrictedTo="1"/>
+      <fileAttributes majorRelease="3" minorRelease="0" majorRevision="1" minorRevision="0" internalSchemaVersion="2.0.12" defaultLanguage="en" creationTimestamp="2022-08-04T12:38:42" lastEditTimestamp="2022-08-04T15:48:21" fileGenerator="EcoEditor 3.13.5000.19341" fileTimestamp="2022-08-04T15:48:21" contextId="de659012-50c4-4e96-b54a-fc781bf987ab">
+        <contextName xml:lang="en">ecoinvent</contextName>
+      </fileAttributes>
+    </administrativeInformation>
+  </childActivityDataset>
+</ecoSpold>

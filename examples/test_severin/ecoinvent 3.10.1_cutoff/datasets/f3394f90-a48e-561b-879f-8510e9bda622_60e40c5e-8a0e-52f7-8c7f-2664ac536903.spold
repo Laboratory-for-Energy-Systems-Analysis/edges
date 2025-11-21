@@ -1,0 +1,149 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<ecoSpold xmlns="http://www.EcoInvent.org/EcoSpold02" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.EcoInvent.org/EcoSpold02 ../../schemas/datasets/EcoSpold02.xsd http://www.EcoInvent.org/UsedUserMasterData ../../schemas/datasets/EcoSpold02UserMasterData.xsd">
+  <childActivityDataset>
+    <activityDescription>
+      <activity specialActivityType="0" id="f3394f90-a48e-561b-879f-8510e9bda622" activityNameId="230a6ec5-a13d-4833-be20-702d9b95dca2" parentActivityId="de8cc7bf-ef25-407b-aecc-09c9f6a4fb24" inheritanceDepth="0" type="2">
+        <activityName xml:lang="en">treatment of sewage sludge, 97% water, WWT, WW from CRT production, landfarming</activityName>
+        <includedActivitiesStart xml:lang="en">The activity starts with the waste being available for landfarming. Collection and transportation of the waste to this process is not included. From cradle, i.e. including all upstream activities.</includedActivitiesStart>
+        <includedActivitiesEnd xml:lang="en">The activity ends with the waste being treated and waste-specific emissions from the landfarming process are released to the environment (air, water and soil). The activity is considering local fate of emissions and the initial specific wastewater composition (generating the sewage sludge). Further, it includes provision of fertiliser functions for N, P, K, if present in the sludge.</includedActivitiesEnd>
+        <generalComment>
+          <text xml:lang="en" index="0">The process represents the treatment of a waste (sewage sludge) that is exclusively produced from another waste treatment. Sewage sludge is generated in the wastewater treatment (WWT) of 'wastewater from CRT production'. Recommended use of this dataset: to be used within the specific chain of treatments for 'wastewater from CRT production'. Share of biogenic carbon in the sludge: 0%. "CRT" stands for "cathode-ray tube".</text>
+        </generalComment>
+      </activity>
+      <classification classificationId="9a63625a-358b-4c1d-bf95-50ba038a759b">
+        <classificationSystem xml:lang="en">ISIC rev.4 ecoinvent</classificationSystem>
+        <classificationValue xml:lang="en">3821:Treatment and disposal of non-hazardous waste</classificationValue>
+      </classification>
+      <geography geographyId="131278d6-7d7e-11de-9ae2-0019e336be3a">
+        <shortname xml:lang="en">CH</shortname>
+        <comment>
+          <text xml:lang="en" index="0">The site has mean annual temperature (MAT) of 9.5 degC, mean annual precipitation (MAP) of 1483.00559816076 mm/year, mean annual actual evaporation (EAT) of 528.63778611689 mm/year. Climate will influence the local fate emissions based on the elemental composition of the sludge as well as water evaporation to air (= consumptive water use).</text>
+          <text xml:lang="en" index="1">References: UN data, 2020. Precipitation, Environment Statistics Database, United Nations Statistics Division Available at: http://data.un.org/Data.aspx?q=precipitation&amp;d=ENV&amp;f=variableID%3a6;</text>
+          <text xml:lang="en" index="2">World Bank, 2022. Surface area (sq.km), World Bank Group Available at: https://data.worldbank.org/indicator/AG.SRF.TOTL.K2;</text>
+          <text xml:lang="en" index="3">MeteoSwiss, 2022. Data on Swiss temperature mean, Federal Department of Home Affairs FDHA. Federal Office of Meteorology and Climatology. Swiss Climate Available at: https://www.MeteoSwiss.admin.ch/home/climate/swiss-climate-in-detail/Swiss-temperature-mean/Data-on-the-Swiss-temperature-mean.html?query=TEMPERATURE+DATA&amp;topic=/content/MeteoSwiss/tags/topics/klima&amp;pageIndex=0&amp;tab=search_tab;</text>
+          <text xml:lang="en" index="4">Doka G.,2021. A model for composition-specific life cycle inventories of regionalised wastewater fates, Zurich, Switzerland. http://www.doka.ch/publications.htm</text>
+        </comment>
+      </geography>
+      <technology technologyLevel="3">
+        <comment>
+          <text xml:lang="en" index="0">Landfarming is the process of spreading a substrate on agricultural soil. Sewage sludge is generated in the wastewater treatment of wastewater from CRT production. Spreading of liquid sewage sludge (97w% water content) on agricultural fields with mobile vacuum tanker.</text>
+        </comment>
+      </technology>
+      <timePeriod startDate="2000-01-01" endDate="2023-12-31" isDataValidForEntirePeriod="true"/>
+      <macroEconomicScenario macroEconomicScenarioId="d9f57f0a-a01f-42eb-a57b-8f18d6635801">
+        <name xml:lang="en">Business-as-Usual</name>
+      </macroEconomicScenario>
+    </activityDescription>
+    <flowData>
+      <intermediateExchange id="be455565-69a7-5a50-9271-b1d077aa7bbd" unitId="487df68b-4994-4027-8fdc-a4dc298257b7" amount="1.0" intermediateExchangeId="60e40c5e-8a0e-52f7-8c7f-2664ac536903" productionVolumeAmount="6.20609199366458E-10">
+        <name xml:lang="en">organic nitrogen fertiliser, as N</name>
+        <unitName xml:lang="en">kg</unitName>
+        <comment xml:lang="en">gross fertilizer function provided from sewage sludge spreading on agricultural fields.</comment>
+        <property propertyId="f2283db2-62e4-467f-b9ac-c4f45be563b4" amount="0.0" isDefiningValue="false" isCalculatedAmount="false" unitId="487df68b-4994-4027-8fdc-a4dc298257b7">
+          <name xml:lang="en">carbon allocation</name>
+          <unitName xml:lang="en">kg</unitName>
+        </property>
+        <property propertyId="a301a838-7975-4d89-9e74-8eb77ad03cd1" amount="0.0" isDefiningValue="false" isCalculatedAmount="false" unitId="577e242a-461f-44a7-922c-d8e1c3d2bf45">
+          <name xml:lang="en">carbon content</name>
+          <unitName xml:lang="en">dimensionless</unitName>
+        </property>
+        <property propertyId="c74c3729-e577-4081-b572-a283d2561a75" amount="0.0" unitId="577e242a-461f-44a7-922c-d8e1c3d2bf45">
+          <name xml:lang="en">carbon content, fossil</name>
+          <unitName xml:lang="en">dimensionless</unitName>
+        </property>
+        <property propertyId="6393c14b-db78-445d-a47b-c0cb866a1b25" amount="0.0" unitId="577e242a-461f-44a7-922c-d8e1c3d2bf45">
+          <name xml:lang="en">carbon content, non-fossil</name>
+          <unitName xml:lang="en">dimensionless</unitName>
+        </property>
+        <property propertyId="3a0af1d6-04c3-41c6-a3da-92c4f61e0eaa" amount="1.0" unitId="487df68b-4994-4027-8fdc-a4dc298257b7">
+          <name xml:lang="en">dry mass</name>
+          <unitName xml:lang="en">kg</unitName>
+        </property>
+        <property propertyId="f53a5dbc-3bd3-4570-adff-b00790ea3ffc" amount="1.0" unitId="577e242a-461f-44a7-922c-d8e1c3d2bf45">
+          <name xml:lang="en">nitrogen content</name>
+          <unitName xml:lang="en">dimensionless</unitName>
+          <comment xml:lang="en">Nitrogen content (on a dry matter basis) of organic nitrogen fertiliser, as N is calculated from the molecular formula of the substance (Nitrogen).</comment>
+        </property>
+        <property propertyId="38f94dd1-d5aa-41b8-b182-c0c42985d9dc" amount="0.473" unitId="7b75baf0-cbee-45e6-bf66-af119da06553">
+          <name xml:lang="en">price</name>
+          <unitName xml:lang="en">EUR2005</unitName>
+          <comment xml:lang="en">Set equal to the price of the corresponding inorganic fertiliser</comment>
+        </property>
+        <property propertyId="a9358458-9724-4f03-b622-106eda248916" amount="0.0" unitId="577e242a-461f-44a7-922c-d8e1c3d2bf45">
+          <name xml:lang="en">water content</name>
+          <unitName xml:lang="en">dimensionless</unitName>
+        </property>
+        <property propertyId="6d9e1462-80e3-4f10-b3f4-71febd6f1168" amount="0.0" unitId="487df68b-4994-4027-8fdc-a4dc298257b7">
+          <name xml:lang="en">water in wet mass</name>
+          <unitName xml:lang="en">kg</unitName>
+        </property>
+        <property propertyId="67f102e2-9cb6-4d20-aa16-bf74d8a03326" amount="1.0" unitId="487df68b-4994-4027-8fdc-a4dc298257b7">
+          <name xml:lang="en">wet mass</name>
+          <unitName xml:lang="en">kg</unitName>
+        </property>
+        <productionVolumeComment xml:lang="en">Calculated in proportion to wastewater reference product.</productionVolumeComment>
+        <classification classificationId="39b0f0ab-1a2f-401b-9f4d-6e39400760a4">
+          <classificationSystem xml:lang="en">By-product classification</classificationSystem>
+          <classificationValue xml:lang="en">allocatable product</classificationValue>
+        </classification>
+        <classification classificationId="9485509a-3a03-4f2b-b2dc-7d0b7efb1649">
+          <classificationSystem xml:lang="en">CPC</classificationSystem>
+          <classificationValue xml:lang="en">34659: Fertilizers n.e.c.</classificationValue>
+        </classification>
+        <classification classificationId="144c2b6a-89ca-5e72-8721-fd7803086333">
+          <classificationSystem xml:lang="en">HS2017</classificationSystem>
+          <classificationValue xml:lang="en">310290: Fertilizers, mineral or chemical; nitrogenous, other kinds including mixtures not specified in the foregoin[...]</classificationValue>
+        </classification>
+        <outputGroup>0</outputGroup>
+      </intermediateExchange>
+    </flowData>
+    <modellingAndValidation>
+      <representativeness systemModelId="290c1f85-4cc4-4fa1-b0c8-2cb7f4276dce">
+        <systemModelName xml:lang="en">Allocation, cut-off by classification</systemModelName>
+      </representativeness>
+      <review reviewedMajorRelease="3" reviewedMinorRelease="0" reviewedMajorRevision="4" reviewedMinorRevision="4" reviewerId="847a56f5-d9e5-4a65-ab51-b056e0039130" reviewerName="Avraam Symeonidis" reviewerEmail="Symeonidis@ecoinvent.org" reviewDate="2023-09-27">
+        <otherDetails xml:lang="en"/>
+      </review>
+      <review reviewedMajorRelease="3" reviewedMinorRelease="0" reviewedMajorRevision="4" reviewedMinorRevision="4" reviewerId="c4597934-ecac-422c-b431-382e85fdcb83" reviewerName="[System]" reviewerEmail="support@ecoinvent.org" reviewDate="2023-09-27">
+        <otherDetails xml:lang="en">Validation warnings:
+
+- Mass and/or economic deficit in activity dataset exceeds either 0.1% of input or output sum:
+
+Property 'wet mass':
+ - Input='1', Output='1.03186138895'
+ - Input &lt; output by 0.0318613889500001 kg (3.09% of output)
+
+Property 'dry mass':
+ - Input='0.03', Output='0.06186138895'
+ - Input &lt; output by 0.03186138895 kg (51.5% of output)
+
+
+- Amount of property 'zinc content=0.000761503' of exchange 'sewage sludge, 97% water, WWT, WW from CRT production' deviates from the default amount in the master file.
+Amount of property 'carbon content, fossil=0.560639' of exchange 'sewage sludge, 97% water, WWT, WW from CRT production' deviates from the default amount in the master file.
+Amount of property 'heating value, gross=2.86133' of exchange 'sewage sludge, 97% water, WWT, WW from CRT production' deviates from the default amount in the master file.
+Amount of property 'chromium content=0.000811847' of exchange 'sewage sludge, 97% water, WWT, WW from CRT production' deviates from the default amount in the master file.
+Amount of property 'lead content=0.000821527' of exchange 'sewage sludge, 97% water, WWT, WW from CRT production' deviates from the default amount in the master file.
+Amount of property 'nitrogen content=0.00229246' of exchange 'sewage sludge, 97% water, WWT, WW from CRT production' deviates from the default amount in the master file.
+Amount of property 'hydrogen content=0.0762089' of exchange 'sewage sludge, 97% water, WWT, WW from CRT production' deviates from the default amount in the master file.
+Amount of property 'oxygen content=0.358465' of exchange 'sewage sludge, 97% water, WWT, WW from CRT production' deviates from the default amount in the master file.
+
+- Uncertainty shall always be provided for all primary data inputs (exchange amounts, properties and parameters), except for the amount and properties of reference products.
+ -- Exchange(s): liquid manure spreading, by vacuum tanker, Ammonia, Nitrate, Non-hazardous waste disposed
+ -- Property(ies): carbon content, non-fossil=0, water content=0, carbon content, fossil=0, dry mass=1, water in wet mass=0, nitrogen content=1, wet mass=1, wet mass=1, water in wet mass=0, dry mass=1, water content=0, carbon content, fossil=0.272916486782489, carbon content, non-fossil=0, water content=0, carbon content, non-fossil=0, dry mass=1, carbon content, fossil=0, water in wet mass=0, wet mass=1, dry mass=1, carbon content, non-fossil=0, water content=0, water in wet mass=0, wet mass=1, carbon content, fossil=0, dry mass=1, carbon content, fossil=0, carbon content, non-fossil=0, water content=0, water in wet mass=0, wet mass=1, water in wet mass=0, wet mass=1, carbon content, non-fossil=0, carbon content, fossil=0, water content=0, dry mass=1, water in wet mass=1000, dry mass=0, carbon content, non-fossil=0, wet mass=1000, carbon content, fossil=0, water in wet mass=0, water content=0, wet mass=1, carbon content, fossil=0, carbon content, non-fossil=0, dry mass=1, carbon content, fossil=0, wet mass=1, dry mass=1, water in wet mass=0, carbon content, non-fossil=0, water content=0, water content=0, dry mass=1, carbon content, fossil=0, water in wet mass=0, carbon content, non-fossil=0, wet mass=1, carbon content, fossil=0, water in wet mass=1000, wet mass=1000, carbon content, non-fossil=0, dry mass=0
+
+- Pedigree information shall always be provided for all uncertainties of primary data inputs (exchange amounts, properties and parameters), except for the amount and properties of reference products.
+ -- Exchange(s): liquid manure spreading, by vacuum tanker, Ammonia, Nitrate, Non-hazardous waste disposed
+ -- Property(ies): carbon content, non-fossil=0, water content=0, carbon content, fossil=0, dry mass=1, water in wet mass=0, nitrogen content=1, wet mass=1, wet mass=1, water in wet mass=0, dry mass=1, water content=0, carbon content, fossil=0.272916486782489, carbon content, non-fossil=0, water content=0, carbon content, non-fossil=0, dry mass=1, carbon content, fossil=0, water in wet mass=0, wet mass=1, dry mass=1, carbon content, non-fossil=0, water content=0, water in wet mass=0, wet mass=1, carbon content, fossil=0, dry mass=1, carbon content, fossil=0, carbon content, non-fossil=0, water content=0, water in wet mass=0, wet mass=1, water in wet mass=0, wet mass=1, carbon content, non-fossil=0, carbon content, fossil=0, water content=0, dry mass=1, water in wet mass=1000, dry mass=0, carbon content, non-fossil=0, wet mass=1000, carbon content, fossil=0, water in wet mass=0, water content=0, wet mass=1, carbon content, fossil=0, carbon content, non-fossil=0, dry mass=1, carbon content, fossil=0, wet mass=1, dry mass=1, water in wet mass=0, carbon content, non-fossil=0, water content=0, water content=0, dry mass=1, carbon content, fossil=0, water in wet mass=0, carbon content, non-fossil=0, wet mass=1, carbon content, fossil=0, water in wet mass=1000, wet mass=1000, carbon content, non-fossil=0, dry mass=0
+
+</otherDetails>
+      </review>
+    </modellingAndValidation>
+    <administrativeInformation>
+      <dataEntryBy personId="e98986e8-51ee-468d-b4de-00f989a6dc7f" isActiveAuthor="true" personName="Nikolia Stoikou" personEmail="stoikou@ecoinvent.org"/>
+      <dataGeneratorAndPublication personId="e98986e8-51ee-468d-b4de-00f989a6dc7f" personName="Nikolia Stoikou" personEmail="stoikou@ecoinvent.org" dataPublishedIn="0" isCopyrightProtected="true" accessRestrictedTo="1"/>
+      <fileAttributes majorRelease="3" minorRelease="0" majorRevision="5" minorRevision="0" internalSchemaVersion="2.0.12" defaultLanguage="en" creationTimestamp="2023-09-27T14:46:18" lastEditTimestamp="2023-09-27T16:59:48" fileGenerator="EcoEditor 3.13.8000.19451" fileTimestamp="2023-09-27T16:59:48" contextId="de659012-50c4-4e96-b54a-fc781bf987ab">
+        <contextName xml:lang="en">ecoinvent</contextName>
+      </fileAttributes>
+    </administrativeInformation>
+  </childActivityDataset>
+</ecoSpold>
