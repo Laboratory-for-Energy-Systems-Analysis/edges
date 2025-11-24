@@ -1,0 +1,143 @@
+!!python/tuple [lithium_supply_chain_w_EoL, Li⁺ (aq) extraction]:
+  name: Li⁺ (aq) extraction
+  reference product: Li⁺ (aq)
+  location: CL
+  type: process
+  unit: kg
+  exchanges:
+    - amount: 1
+      input: !!python/tuple [lithium_supply_chain_w_EoL, Li⁺ (aq) extraction]
+      type: production
+      unit: kg
+    - amount: 0.5
+      input: !!python/tuple [ lithium_supply_chain_w_EoL, hydropower_CL ]
+      type: technosphere
+      unit: kWh
+    - amount: 2000
+      input: !!python/tuple ["biosphere", "water, underground"]
+      type: biosphere
+      unit: kg
+
+!!python/tuple [lithium_supply_chain_w_EoL, hydropower_CL]:
+  name: hydropower
+  reference product: electricity
+  location: CL
+  type: process
+  unit: kWh
+  exchanges:
+    - amount: 1
+      input: !!python/tuple [lithium_supply_chain_w_EoL, hydropower_CL]
+      type: production
+      unit: kWh
+    - amount: 20
+      input: !!python/tuple ["biosphere", "water, unspecified"]
+      type: biosphere
+      unit: kg
+
+!!python/tuple [lithium_supply_chain_w_EoL, Li₂CO₃ production]:
+  name: Li₂CO₃ production
+  reference product: Li₂CO₃
+  location: CN
+  type: process
+  unit: kg
+  exchanges:
+    - amount: 1
+      input: !!python/tuple [lithium_supply_chain_w_EoL, Li₂CO₃ production]
+      type: production
+      unit: kg
+    - amount: 0.8
+      input: !!python/tuple [lithium_supply_chain_w_EoL, Li⁺ (aq) extraction]
+      type: technosphere
+      unit: kg
+    - amount: 3
+      input: !!python/tuple [ lithium_supply_chain_w_EoL, hydropower_CN ]
+      type: technosphere
+      unit: kWh
+    - amount: 3000
+      input: !!python/tuple ["biosphere", "water, surface"]
+      type: biosphere
+      unit: kg
+
+!!python/tuple [lithium_supply_chain_w_EoL, hydropower_CN]:
+  name: hydropower
+  reference product: electricity
+  location: CN
+  type: process
+  unit: kWh
+  exchanges:
+    - amount: 1
+      input: !!python/tuple [lithium_supply_chain_w_EoL, hydropower_CN]
+      type: production
+      unit: kWh
+    - amount: 15
+      input: !!python/tuple ["biosphere", "water, unspecified"]
+      type: biosphere
+      unit: kg
+
+!!python/tuple [lithium_supply_chain_w_EoL, cathode material production]:
+  name: CAM production
+  reference product: CAM
+  location: DE
+  type: process
+  unit: kg
+  exchanges:
+    - amount: 1
+      input: !!python/tuple [lithium_supply_chain_w_EoL, cathode material production]
+      type: production
+      unit: kg
+    - amount: 0.2
+      input: !!python/tuple [lithium_supply_chain_w_EoL, Li₂CO₃ production]
+      type: technosphere
+      unit: kg
+    - amount: 0.1
+      input: !!python/tuple [lithium_supply_chain_w_EoL, Li⁺ (aq) extraction]
+      type: technosphere
+      unit: kg
+    - amount: 50
+      input: !!python/tuple [ lithium_supply_chain_w_EoL, hydropower_DE ]
+      type: technosphere
+      unit: kWh
+    - amount: -1
+      input: !!python/tuple [lithium_supply_chain_w_EoL, CAM_treatment]
+      type: technosphere
+      unit: kg
+    - amount: 200
+      input: !!python/tuple ["biosphere", "water, unspecified"]
+      type: biosphere
+      unit: kg
+
+!!python/tuple [lithium_supply_chain_w_EoL, hydropower_DE]:
+  name: hydropower
+  reference product: electricity
+  location: DE
+  type: process
+  unit: kWh
+  exchanges:
+    - amount: 1
+      input: !!python/tuple [lithium_supply_chain_w_EoL, hydropower_DE]
+      type: production
+      unit: kWh
+    - amount: 5
+      input: !!python/tuple ["biosphere", "water, unspecified"]
+      type: biosphere
+      unit: kg
+
+!!python/tuple [lithium_supply_chain_w_EoL, CAM_treatment]:
+  name: CAM EoL
+  reference product: used CAM
+  location: DE
+  type: process
+  unit: kg
+  exchanges:
+    - amount: -1
+      input: !!python/tuple [lithium_supply_chain_w_EoL, CAM_treatment]
+      type: production
+      unit: kg
+    - amount: 5
+      input: !!python/tuple [ lithium_supply_chain_w_EoL, hydropower_DE ]
+      type: technosphere
+      unit: kWh
+    - amount: -0.1
+      input: !!python/tuple [ lithium_supply_chain_w_EoL, cathode material production ]
+      type: technosphere
+      unit: kg
