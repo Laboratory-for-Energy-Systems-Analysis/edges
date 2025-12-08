@@ -93,8 +93,12 @@
       input: !!python/tuple [lithium_supply_chain_w_EoL, Li⁺ (aq) extraction]
       type: technosphere
       unit: kg
-    - amount: 50
+    - amount: 25
       input: !!python/tuple [ lithium_supply_chain_w_EoL, hydropower_DE ]
+      type: technosphere
+      unit: kWh
+    - amount: 25
+      input: !!python/tuple [ lithium_supply_chain_w_EoL, hydropower_CL ]
       type: technosphere
       unit: kWh
     - amount: -1
