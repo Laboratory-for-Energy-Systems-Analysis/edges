@@ -189,7 +189,8 @@ def match_flow(flow: dict, criteria: dict) -> bool:
             elif isinstance(val, list):
                 if any(
                     term.lower() in str(t).lower()
-                    for v in val if isinstance(v, tuple)
+                    for v in val
+                    if isinstance(v, tuple)
                     for t in v
                     for term in excludes
                 ):
