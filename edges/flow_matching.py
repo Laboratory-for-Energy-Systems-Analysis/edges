@@ -187,10 +187,7 @@ def match_flow(flow: dict, criteria: dict) -> bool:
                 ):
                     return False
             elif isinstance(val, list):
-                if any(
-                    term.lower() in str(v)
-                    for v in val for term in excludes
-                ):
+                if any(term.lower() in str(v) for v in val for term in excludes):
                     return False
 
     # Handle standard field matching
