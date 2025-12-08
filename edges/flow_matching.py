@@ -186,6 +186,12 @@ def match_flow(flow: dict, criteria: dict) -> bool:
                     term.lower() in str(v).lower() for v in val for term in excludes
                 ):
                     return False
+            elif isinstance(val, list):
+                if any(
+                    term.lower() in str(v)
+                    for v in val for term in excludes
+                ):
+                    return False
 
     # Handle standard field matching
     for key, target in criteria.items():
