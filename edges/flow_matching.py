@@ -455,7 +455,11 @@ def match_with_index(
                 flow = dict(raw) if isinstance(raw, tuple) else raw
                 # Only scan string fields; short-circuit early
                 if any(
-                    isinstance(v, str) and any(e in v.lower() for e in ex)
+                    (isinstance(v, str) and any(e in v.lower() for e in ex))
+                    or (
+                        isinstance(v, list)
+                        and any(e in str(item).lower() for item in v for e in ex)
+                    )
                     for v in flow.values()
                 ):
                     continue
