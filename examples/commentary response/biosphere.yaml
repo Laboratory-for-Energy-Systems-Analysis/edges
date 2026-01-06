@@ -1,17 +1,17 @@
 !!python/tuple ["biosphere", "water, underground"]:
   name: water, underground
   type: biosphere
-  unit: kg
+  unit: m3
 
 !!python/tuple ["biosphere", "water, surface"]:
   name: water, surface
   type: biosphere
-  unit: kg
+  unit: m3
 
 !!python/tuple ["biosphere", "water, unspecified"]:
   name: water, unspecified
   type: biosphere
-  unit: kg
+  unit: m3
 
 !!python/tuple ["biosphere", "CO2"]:
   name: CO2

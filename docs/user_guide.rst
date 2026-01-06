@@ -35,7 +35,9 @@ For non-regionalized methods with fixed CFs:
     # populate the characterized_inventory matrix and a score
     lcia.lcia()
     print(lcia.score)
-    # optional, generate a dataframe with all characterized exchanges
+    # optional but RECOMMENDED, generate a dataframe with all characterized exchanges
+    # this allows you to check whether exchanges have been given the correct CFs
+    # include_unmatched=True allows you to see which exchanges were not matched (and if some should have been)
     df = lcia.generate_df_table()
     print(df.head())
 
