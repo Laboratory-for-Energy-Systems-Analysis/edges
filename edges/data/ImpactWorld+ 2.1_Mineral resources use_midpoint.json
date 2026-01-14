@@ -1,0 +1,3067 @@
+{
+  "name": "ImpactWorld+ 2.1 - Mineral resources use_midpoint",
+  "unit": "kg deprived",
+  "version": "2.1",
+  "edges version": "2.0",
+  "strategies": [
+    "map_exchanges",
+    "map_aggregate_locations",
+    "map_dynamic_locations",
+    "map_contained_locations",
+    "map_remaining_locations_to_global"
+  ],
+  "exchanges": [
+    {
+      "supplier": {
+        "name": "Antimony",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.85
+    },
+    {
+      "supplier": {
+        "name": "Antimony, in ground",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.85
+    },
+    {
+      "supplier": {
+        "name": "Zirconia, as baddeleyite, in ground",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.7
+    },
+    {
+      "supplier": {
+        "name": "Zirconia, as baddeleyite",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.7
+    },
+    {
+      "supplier": {
+        "name": "Barite",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.89
+    },
+    {
+      "supplier": {
+        "name": "Barite, 15% in crude ore, in ground",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.89
+    },
+    {
+      "supplier": {
+        "name": "Barite, 15% in crude ore",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.89
+    },
+    {
+      "supplier": {
+        "name": "Bismuth, in ground",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.41
+    },
+    {
+      "supplier": {
+        "name": "Bismuth",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.41
+    },
+    {
+      "supplier": {
+        "name": "Cadmium",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.55
+    },
+    {
+      "supplier": {
+        "name": "Cadmium, 0.30% in sulfide, Cd 0.18%, Pb, Zn, Ag, In, in ground",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.55
+    },
+    {
+      "supplier": {
+        "name": "Cadmium, in ground",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.55
+    },
+    {
+      "supplier": {
+        "name": "Cadmium, 0.30% in sulfide, Cd 0.18%, Pb, Zn, Ag, In",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.55
+    },
+    {
+      "supplier": {
+        "name": "Chromium",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.97
+    },
+    {
+      "supplier": {
+        "name": "Chromium, 25.5% in chromite, 11.6% in crude ore, in ground",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.97
+    },
+    {
+      "supplier": {
+        "name": "Chromium, in ground",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.97
+    },
+    {
+      "supplier": {
+        "name": "Chromium, 25.5% in chromite, 11.6% in crude ore",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.97
+    },
+    {
+      "supplier": {
+        "name": "Cobalt",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.52
+    },
+    {
+      "supplier": {
+        "name": "Cobalt, Co 5.0E-2%, in mixed ore, in ground",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.52
+    },
+    {
+      "supplier": {
+        "name": "Cobalt, in ground",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.52
+    },
+    {
+      "supplier": {
+        "name": "Cobalt, Co 5.0E-2%, in mixed ore",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.52
+    },
+    {
+      "supplier": {
+        "name": "Copper",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.12
+    },
+    {
+      "supplier": {
+        "name": "Copper, 0.52% in sulfide, Cu 0.27% and Mo 8.2E-3% in crude ore, in ground",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.12
+    },
+    {
+      "supplier": {
+        "name": "Copper, 0.59% in sulfide, Cu 0.22% and Mo 8.2E-3% in crude ore, in ground",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.12
+    },
+    {
+      "supplier": {
+        "name": "Copper, 0.97% in sulfide, Cu 0.36% and Mo 4.1E-2% in crude ore, in ground",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.12
+    },
+    {
+      "supplier": {
+        "name": "Copper, 0.99% in sulfide, Cu 0.36% and Mo 8.2E-3% in crude ore, in ground",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.12
+    },
+    {
+      "supplier": {
+        "name": "Copper, 1.13% in sulfide, Cu 0.76% and Ni 0.76% in crude ore, in ground",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.12
+    },
+    {
+      "supplier": {
+        "name": "Copper, 1.18% in sulfide, Cu 0.39% and Mo 8.2E-3% in crude ore, in ground",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.12
+    },
+    {
+      "supplier": {
+        "name": "Copper, 1.25% in sulfide, Cu 0.24% and Zn 0,1% in crude ore, in ground",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.12
+    },
+    {
+      "supplier": {
+        "name": "Copper, 1.42% in sulfide, Cu 0.81% and Mo 8.2E-3% in crude ore, in ground",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.12
+    },
+    {
+      "supplier": {
+        "name": "Copper, 2.19% in sulfide, Cu 1.83% and Mo 8.2E-3% in crude ore, in ground",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.12
+    },
+    {
+      "supplier": {
+        "name": "Copper, Cu 0.2%, in mixed ore, in ground",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.12
+    },
+    {
+      "supplier": {
+        "name": "Copper, Cu 0.38%, in mixed ore, in ground",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.12
+    },
+    {
+      "supplier": {
+        "name": "Copper, Cu 6.8E-1%, in mixed ore, in ground",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.12
+    },
+    {
+      "supplier": {
+        "name": "Copper, in ground",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.12
+    },
+    {
+      "supplier": {
+        "name": "Cu, Cu 3.2E+0%, Pt 2.5E-4%, Pd 7.3E-4%, Rh 2.0E-5%, Ni 2.3E+0% in ore, in ground",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.12
+    },
+    {
+      "supplier": {
+        "name": "Cu, Cu 5.2E-2%, Pt 4.8E-4%, Pd 2.0E-4%, Rh 2.4E-5%, Ni 3.7E-2% in ore, in ground",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.12
+    },
+    {
+      "supplier": {
+        "name": "Copper, 0.52% in sulfide, Cu 0.27% and Mo 8.2E-3% in crude ore",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.12
+    },
+    {
+      "supplier": {
+        "name": "Copper, 0.59% in sulfide, Cu 0.22% and Mo 8.2E-3% in crude ore",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.12
+    },
+    {
+      "supplier": {
+        "name": "Copper, 0.97% in sulfide, Cu 0.36% and Mo 4.1E-2% in crude ore",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.12
+    },
+    {
+      "supplier": {
+        "name": "Copper, 0.99% in sulfide, Cu 0.36% and Mo 8.2E-3% in crude ore",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.12
+    },
+    {
+      "supplier": {
+        "name": "Copper, 1.13% in sulfide, Cu 0.76% and Ni 0.76% in crude ore",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.12
+    },
+    {
+      "supplier": {
+        "name": "Copper, 1.18% in sulfide, Cu 0.39% and Mo 8.2E-3% in crude ore",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.12
+    },
+    {
+      "supplier": {
+        "name": "Copper, 1.25% in sulfide, Cu 0.24% and Zn 0,1% in crude ore",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.12
+    },
+    {
+      "supplier": {
+        "name": "Copper, 1.42% in sulfide, Cu 0.81% and Mo 8.2E-3% in crude ore",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.12
+    },
+    {
+      "supplier": {
+        "name": "Copper, 2.19% in sulfide, Cu 1.83% and Mo 8.2E-3% in crude ore",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.12
+    },
+    {
+      "supplier": {
+        "name": "Copper, Cu 0.2%, in mixed ore",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.12
+    },
+    {
+      "supplier": {
+        "name": "Copper, Cu 0.38%, in mixed ore",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.12
+    },
+    {
+      "supplier": {
+        "name": "Copper, Cu 6.8E-1%, in mixed ore",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.12
+    },
+    {
+      "supplier": {
+        "name": "Cu, Cu 3.2E+0%, Pt 2.5E-4%, Pd 7.3E-4%, Rh 2.0E-5%, Ni 2.3E+0% in ore",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.12
+    },
+    {
+      "supplier": {
+        "name": "Cu, Cu 5.2E-2%, Pt 4.8E-4%, Pd 2.0E-4%, Rh 2.4E-5%, Ni 3.7E-2% in ore",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.12
+    },
+    {
+      "supplier": {
+        "name": "Fluorspar, 92%, in ground",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.92
+    },
+    {
+      "supplier": {
+        "name": "Fluorspar, in ground",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.92
+    },
+    {
+      "supplier": {
+        "name": "Fluorspar",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.92
+    },
+    {
+      "supplier": {
+        "name": "Fluorspar, 92%",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.92
+    },
+    {
+      "supplier": {
+        "name": "Germanium, in ground",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.4
+    },
+    {
+      "supplier": {
+        "name": "Germanium",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.4
+    },
+    {
+      "supplier": {
+        "name": "Gold",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.86
+    },
+    {
+      "supplier": {
+        "name": "Gold, Au 1.0E-7%, in mixed ore, in ground",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.86
+    },
+    {
+      "supplier": {
+        "name": "Gold, Au 1.1E-4%, Ag 4.2E-3%, in ore, in ground",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.86
+    },
+    {
+      "supplier": {
+        "name": "Gold, Au 1.3E-4%, Ag 4.6E-5%, in ore, in ground",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.86
+    },
+    {
+      "supplier": {
+        "name": "Gold, Au 1.4E-4%, in ore, in ground",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.86
+    },
+    {
+      "supplier": {
+        "name": "Gold, Au 1.8E-4%, in mixed ore, in ground",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.86
+    },
+    {
+      "supplier": {
+        "name": "Gold, Au 2.1E-4%, Ag 2.1E-4%, in ore, in ground",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.86
+    },
+    {
+      "supplier": {
+        "name": "Gold, Au 4.3E-4%, in ore, in ground",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.86
+    },
+    {
+      "supplier": {
+        "name": "Gold, Au 4.9E-5%, in ore, in ground",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.86
+    },
+    {
+      "supplier": {
+        "name": "Gold, Au 5.4E-4%, Ag 1.5E-5%, in ore, in ground",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.86
+    },
+    {
+      "supplier": {
+        "name": "Gold, Au 6.7E-4%, in ore, in ground",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.86
+    },
+    {
+      "supplier": {
+        "name": "Gold, Au 6.8E-4%, Ag 1.5E-4%, in ore, in ground",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.86
+    },
+    {
+      "supplier": {
+        "name": "Gold, Au 7.1E-4%, in ore, in ground",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.86
+    },
+    {
+      "supplier": {
+        "name": "Gold, Au 9.7E-4%, in mixed ore, in ground",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.86
+    },
+    {
+      "supplier": {
+        "name": "Gold, Au 9.7E-5%, Ag 7.6E-5%, in ore, in ground",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.86
+    },
+    {
+      "supplier": {
+        "name": "Gold, in ground",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.86
+    },
+    {
+      "supplier": {
+        "name": "Gold, Au 1.0E-7%, in mixed ore",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.86
+    },
+    {
+      "supplier": {
+        "name": "Gold, Au 1.1E-4%, Ag 4.2E-3%, in ore",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.86
+    },
+    {
+      "supplier": {
+        "name": "Gold, Au 1.3E-4%, Ag 4.6E-5%, in ore",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.86
+    },
+    {
+      "supplier": {
+        "name": "Gold, Au 1.4E-4%, in ore",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.86
+    },
+    {
+      "supplier": {
+        "name": "Gold, Au 1.8E-4%, in mixed ore",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.86
+    },
+    {
+      "supplier": {
+        "name": "Gold, Au 2.1E-4%, Ag 2.1E-4%, in ore",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.86
+    },
+    {
+      "supplier": {
+        "name": "Gold, Au 4.3E-4%, in ore",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.86
+    },
+    {
+      "supplier": {
+        "name": "Gold, Au 4.9E-5%, in ore",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.86
+    },
+    {
+      "supplier": {
+        "name": "Gold, Au 5.4E-4%, Ag 1.5E-5%, in ore",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.86
+    },
+    {
+      "supplier": {
+        "name": "Gold, Au 6.7E-4%, in ore",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.86
+    },
+    {
+      "supplier": {
+        "name": "Gold, Au 6.8E-4%, Ag 1.5E-4%, in ore",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.86
+    },
+    {
+      "supplier": {
+        "name": "Gold, Au 7.1E-4%, in ore",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.86
+    },
+    {
+      "supplier": {
+        "name": "Gold, Au 9.7E-4%, in mixed ore",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.86
+    },
+    {
+      "supplier": {
+        "name": "Gold, Au 9.7E-5%, Ag 7.6E-5%, in ore",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.86
+    },
+    {
+      "supplier": {
+        "name": "Helium",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.76
+    },
+    {
+      "supplier": {
+        "name": "Helium, 0.08% in natural gas, in ground",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.76
+    },
+    {
+      "supplier": {
+        "name": "Helium, in natural gas, in ground",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.76
+    },
+    {
+      "supplier": {
+        "name": "Helium, 0.08% in natural gas",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.76
+    },
+    {
+      "supplier": {
+        "name": "Helium, in natural gas",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.76
+    },
+    {
+      "supplier": {
+        "name": "Indium, 0.005% in sulfide, In 0.003%, Pb, Zn, Ag, Cd, in ground",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.93
+    },
+    {
+      "supplier": {
+        "name": "Indium, in ground",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.93
+    },
+    {
+      "supplier": {
+        "name": "Indium",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.93
+    },
+    {
+      "supplier": {
+        "name": "Indium, 0.005% in sulfide, In 0.003%, Pb, Zn, Ag, Cd",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.93
+    },
+    {
+      "supplier": {
+        "name": "Iron",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.78
+    },
+    {
+      "supplier": {
+        "name": "Iron, 46% in ore, 25% in crude ore, in ground",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.78
+    },
+    {
+      "supplier": {
+        "name": "Iron, 72% in magnetite, 14% in crude ore, in ground",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.78
+    },
+    {
+      "supplier": {
+        "name": "Iron, in ground",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.78
+    },
+    {
+      "supplier": {
+        "name": "Iron, 46% in ore, 25% in crude ore",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.78
+    },
+    {
+      "supplier": {
+        "name": "Iron, 72% in magnetite, 14% in crude ore",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.78
+    },
+    {
+      "supplier": {
+        "name": "Lead",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.44
+    },
+    {
+      "supplier": {
+        "name": "Lead, 5.0% in sulfide, Pb 3.0%, Zn, Ag, Cd, In, in ground",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.44
+    },
+    {
+      "supplier": {
+        "name": "Lead, in ground",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.44
+    },
+    {
+      "supplier": {
+        "name": "Lead, Pb 0.014%, in mixed ore, in ground",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.44
+    },
+    {
+      "supplier": {
+        "name": "Lead, Pb 3.6E-1%, in mixed ore, in ground",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.44
+    },
+    {
+      "supplier": {
+        "name": "Lead, 5.0% in sulfide, Pb 3.0%, Zn, Ag, Cd, In",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.44
+    },
+    {
+      "supplier": {
+        "name": "Lead, Pb 0.014%, in mixed ore",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.44
+    },
+    {
+      "supplier": {
+        "name": "Lead, Pb 3.6E-1%, in mixed ore",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.44
+    },
+    {
+      "supplier": {
+        "name": "Lithium",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.58
+    },
+    {
+      "supplier": {
+        "name": "Lithium, 0.15% in brine, in ground",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.58
+    },
+    {
+      "supplier": {
+        "name": "Lithium, in ground",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.58
+    },
+    {
+      "supplier": {
+        "name": "Lithium, 0.15% in brine",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.58
+    },
+    {
+      "supplier": {
+        "name": "Magnesite, 60% in crude ore, in ground",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.05
+    },
+    {
+      "supplier": {
+        "name": "Magnesite, in ground",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.05
+    },
+    {
+      "supplier": {
+        "name": "Magnesite",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.05
+    },
+    {
+      "supplier": {
+        "name": "Magnesite, 60% in crude ore",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.05
+    },
+    {
+      "supplier": {
+        "name": "Manganese",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.9
+    },
+    {
+      "supplier": {
+        "name": "Manganese, 35.7% in sedimentary deposit, 14.2% in crude ore, in ground",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.9
+    },
+    {
+      "supplier": {
+        "name": "Manganese-55",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.9
+    },
+    {
+      "supplier": {
+        "name": "Manganese, in ground",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.9
+    },
+    {
+      "supplier": {
+        "name": "Manganese, 35.7% in sedimentary deposit, 14.2% in crude ore",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.9
+    },
+    {
+      "supplier": {
+        "name": "Molybdenum",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.38
+    },
+    {
+      "supplier": {
+        "name": "Molybdenum, 0.010% in sulfide, Mo 8.2E-3% and Cu 1.83% in crude ore, in ground",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.38
+    },
+    {
+      "supplier": {
+        "name": "Molybdenum, 0.014% in sulfide, Mo 8.2E-3% and Cu 0.81% in crude ore, in ground",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.38
+    },
+    {
+      "supplier": {
+        "name": "Molybdenum, 0.016% in sulfide, Mo 8.2E-3% and Cu 0.27% in crude ore, in ground",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.38
+    },
+    {
+      "supplier": {
+        "name": "Molybdenum, 0.022% in sulfide, Mo 8.2E-3% and Cu 0.22% in crude ore, in ground",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.38
+    },
+    {
+      "supplier": {
+        "name": "Molybdenum, 0.022% in sulfide, Mo 8.2E-3% and Cu 0.36% in crude ore, in ground",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.38
+    },
+    {
+      "supplier": {
+        "name": "Molybdenum, 0.025% in sulfide, Mo 8.2E-3% and Cu 0.39% in crude ore, in ground",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.38
+    },
+    {
+      "supplier": {
+        "name": "Molybdenum, 0.11% in sulfide, Mo 4.1E-2% and Cu 0.36% in crude ore, in ground",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.38
+    },
+    {
+      "supplier": {
+        "name": "Molybdenum, in ground",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.38
+    },
+    {
+      "supplier": {
+        "name": "Molybdenum, 0.010% in sulfide, Mo 8.2E-3% and Cu 1.83% in crude ore",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.38
+    },
+    {
+      "supplier": {
+        "name": "Molybdenum, 0.014% in sulfide, Mo 8.2E-3% and Cu 0.81% in crude ore",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.38
+    },
+    {
+      "supplier": {
+        "name": "Molybdenum, 0.016% in sulfide, Mo 8.2E-3% and Cu 0.27% in crude ore",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.38
+    },
+    {
+      "supplier": {
+        "name": "Molybdenum, 0.022% in sulfide, Mo 8.2E-3% and Cu 0.22% in crude ore",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.38
+    },
+    {
+      "supplier": {
+        "name": "Molybdenum, 0.022% in sulfide, Mo 8.2E-3% and Cu 0.36% in crude ore",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.38
+    },
+    {
+      "supplier": {
+        "name": "Molybdenum, 0.025% in sulfide, Mo 8.2E-3% and Cu 0.39% in crude ore",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.38
+    },
+    {
+      "supplier": {
+        "name": "Molybdenum, 0.11% in sulfide, Mo 4.1E-2% and Cu 0.36% in crude ore",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.38
+    },
+    {
+      "supplier": {
+        "name": "Ni, Ni 2.3E+0%, Pt 2.5E-4%, Pd 7.3E-4%, Rh 2.0E-5%, Cu 3.2E+0% in ore, in ground",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.81
+    },
+    {
+      "supplier": {
+        "name": "Ni, Ni 3.7E-2%, Pt 4.8E-4%, Pd 2.0E-4%, Rh 2.4E-5%, Cu 5.2E-2% in ore, in ground",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.81
+    },
+    {
+      "supplier": {
+        "name": "Nickel",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.81
+    },
+    {
+      "supplier": {
+        "name": "Nickel, 1.13% in sulfide, Ni 0.76% and Cu 0.76% in crude ore, in ground",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.81
+    },
+    {
+      "supplier": {
+        "name": "Nickel, 1.98% in silicates, 1.04% in crude ore, in ground",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.81
+    },
+    {
+      "supplier": {
+        "name": "Nickel, in ground",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.81
+    },
+    {
+      "supplier": {
+        "name": "Nickel, Ni 2.5E+0%, in mixed ore, in ground",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.81
+    },
+    {
+      "supplier": {
+        "name": "Ni, Ni 2.3E+0%, Pt 2.5E-4%, Pd 7.3E-4%, Rh 2.0E-5%, Cu 3.2E+0% in ore",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.81
+    },
+    {
+      "supplier": {
+        "name": "Ni, Ni 3.7E-2%, Pt 4.8E-4%, Pd 2.0E-4%, Rh 2.4E-5%, Cu 5.2E-2% in ore",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.81
+    },
+    {
+      "supplier": {
+        "name": "Nickel, 1.13% in sulfide, Ni 0.76% and Cu 0.76% in crude ore",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.81
+    },
+    {
+      "supplier": {
+        "name": "Nickel, 1.98% in silicates, 1.04% in crude ore",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.81
+    },
+    {
+      "supplier": {
+        "name": "Nickel, Ni 2.5E+0%, in mixed ore",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.81
+    },
+    {
+      "supplier": {
+        "name": "Niobium, in ground",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.44
+    },
+    {
+      "supplier": {
+        "name": "Niobium",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.44
+    },
+    {
+      "supplier": {
+        "name": "Perlite, in ground",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.07
+    },
+    {
+      "supplier": {
+        "name": "Perlite",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.07
+    },
+    {
+      "supplier": {
+        "name": "Platinum",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.73
+    },
+    {
+      "supplier": {
+        "name": "Platinum, in ground",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.73
+    },
+    {
+      "supplier": {
+        "name": "Platinum, Pt 4.7E-7%, in mixed ore, in ground",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.73
+    },
+    {
+      "supplier": {
+        "name": "Pt, Pt 2.5E-4%, Pd 7.3E-4%, Rh 2.0E-5%, Ni 2.3E+0%, Cu 3.2E+0% in ore, in ground",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.73
+    },
+    {
+      "supplier": {
+        "name": "Pt, Pt 4.8E-4%, Pd 2.0E-4%, Rh 2.4E-5%, Ni 3.7E-2%, Cu 5.2E-2% in ore, in ground",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.73
+    },
+    {
+      "supplier": {
+        "name": "Platinum, Pt 4.7E-7%, in mixed ore",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.73
+    },
+    {
+      "supplier": {
+        "name": "Pt, Pt 2.5E-4%, Pd 7.3E-4%, Rh 2.0E-5%, Ni 2.3E+0%, Cu 3.2E+0% in ore",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.73
+    },
+    {
+      "supplier": {
+        "name": "Pt, Pt 4.8E-4%, Pd 2.0E-4%, Rh 2.4E-5%, Ni 3.7E-2%, Cu 5.2E-2% in ore",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.73
+    },
+    {
+      "supplier": {
+        "name": "Rhenium, in crude ore, in ground",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.76
+    },
+    {
+      "supplier": {
+        "name": "Rhenium, in ground",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.76
+    },
+    {
+      "supplier": {
+        "name": "Rhenium",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.76
+    },
+    {
+      "supplier": {
+        "name": "Rhenium, in crude ore",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.76
+    },
+    {
+      "supplier": {
+        "name": "Selenium",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.71
+    },
+    {
+      "supplier": {
+        "name": "Selenium, in ground",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.71
+    },
+    {
+      "supplier": {
+        "name": "Silver",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.73
+    },
+    {
+      "supplier": {
+        "name": "Silver, 0.007% in sulfide, Ag 0.004%, Pb, Zn, Cd, In, in ground",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.73
+    },
+    {
+      "supplier": {
+        "name": "Silver, 0.01% in crude ore, in ground",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.73
+    },
+    {
+      "supplier": {
+        "name": "Silver, 3.2ppm in sulfide, Ag 1.2ppm, Cu and Te, in crude ore, in ground",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.73
+    },
+    {
+      "supplier": {
+        "name": "Silver, Ag 1.5E-4%, Au 6.8E-4%, in ore, in ground",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.73
+    },
+    {
+      "supplier": {
+        "name": "Silver, Ag 1.5E-5%, Au 5.4E-4%, in ore, in ground",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.73
+    },
+    {
+      "supplier": {
+        "name": "Silver, Ag 1.8E-6%, in mixed ore, in ground",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.73
+    },
+    {
+      "supplier": {
+        "name": "Silver, Ag 2.1E-4%, Au 2.1E-4%, in ore, in ground",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.73
+    },
+    {
+      "supplier": {
+        "name": "Silver, Ag 4.2E-3%, Au 1.1E-4%, in ore, in ground",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.73
+    },
+    {
+      "supplier": {
+        "name": "Silver, Ag 4.6E-5%, Au 1.3E-4%, in ore, in ground",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.73
+    },
+    {
+      "supplier": {
+        "name": "Silver, Ag 5.4E-3%, in mixed ore, in ground",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.73
+    },
+    {
+      "supplier": {
+        "name": "Silver, Ag 7.6E-5%, Au 9.7E-5%, in ore, in ground",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.73
+    },
+    {
+      "supplier": {
+        "name": "Silver, Ag 9.7E-4%, in mixed ore, in ground",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.73
+    },
+    {
+      "supplier": {
+        "name": "Silver, in ground",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.73
+    },
+    {
+      "supplier": {
+        "name": "Silver, 0.007% in sulfide, Ag 0.004%, Pb, Zn, Cd, In",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.73
+    },
+    {
+      "supplier": {
+        "name": "Silver, 0.01% in crude ore",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.73
+    },
+    {
+      "supplier": {
+        "name": "Silver, 3.2ppm in sulfide, Ag 1.2ppm, Cu and Te, in crude ore",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.73
+    },
+    {
+      "supplier": {
+        "name": "Silver, Ag 1.5E-4%, Au 6.8E-4%, in ore",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.73
+    },
+    {
+      "supplier": {
+        "name": "Silver, Ag 1.5E-5%, Au 5.4E-4%, in ore",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.73
+    },
+    {
+      "supplier": {
+        "name": "Silver, Ag 1.8E-6%, in mixed ore",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.73
+    },
+    {
+      "supplier": {
+        "name": "Silver, Ag 2.1E-4%, Au 2.1E-4%, in ore",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.73
+    },
+    {
+      "supplier": {
+        "name": "Silver, Ag 4.2E-3%, Au 1.1E-4%, in ore",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.73
+    },
+    {
+      "supplier": {
+        "name": "Silver, Ag 4.6E-5%, Au 1.3E-4%, in ore",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.73
+    },
+    {
+      "supplier": {
+        "name": "Silver, Ag 5.4E-3%, in mixed ore",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.73
+    },
+    {
+      "supplier": {
+        "name": "Silver, Ag 7.6E-5%, Au 9.7E-5%, in ore",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.73
+    },
+    {
+      "supplier": {
+        "name": "Silver, Ag 9.7E-4%, in mixed ore",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.73
+    },
+    {
+      "supplier": {
+        "name": "Strontium",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.93
+    },
+    {
+      "supplier": {
+        "name": "strontium, in ground",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.93
+    },
+    {
+      "supplier": {
+        "name": "Strontium, in ground",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.93
+    },
+    {
+      "supplier": {
+        "name": "Thallium",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.91
+    },
+    {
+      "supplier": {
+        "name": "Thallium, in ground",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.91
+    },
+    {
+      "supplier": {
+        "name": "Tungsten",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.23
+    },
+    {
+      "supplier": {
+        "name": "Tungsten, in ground",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.23
+    },
+    {
+      "supplier": {
+        "name": "Vanadium",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.05
+    },
+    {
+      "supplier": {
+        "name": "Vanadium, in ground",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.05
+    },
+    {
+      "supplier": {
+        "name": "Yttrium, in ground",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.77
+    },
+    {
+      "supplier": {
+        "name": "Yttrium",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.77
+    },
+    {
+      "supplier": {
+        "name": "Zinc",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.61
+    },
+    {
+      "supplier": {
+        "name": "Zinc, 9.0% in sulfide, Zn 5.3%, Pb, Ag, Cd, In, in ground",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.61
+    },
+    {
+      "supplier": {
+        "name": "Zinc, in ground",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.61
+    },
+    {
+      "supplier": {
+        "name": "Zinc, Zn 0.63%, in mixed ore, in ground",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.61
+    },
+    {
+      "supplier": {
+        "name": "Zinc, Zn 3.1%, in mixed ore, in ground",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.61
+    },
+    {
+      "supplier": {
+        "name": "Zinc, 9.0% in sulfide, Zn 5.3%, Pb, Ag, Cd, In",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.61
+    },
+    {
+      "supplier": {
+        "name": "Zinc, Zn 0.63%, in mixed ore",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.61
+    },
+    {
+      "supplier": {
+        "name": "Zinc, Zn 3.1%, in mixed ore",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.61
+    },
+    {
+      "supplier": {
+        "name": "Zirconium",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.7
+    },
+    {
+      "supplier": {
+        "name": "Zirconium, 50% in zircon, 0.39% in crude ore, in ground",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.7
+    },
+    {
+      "supplier": {
+        "name": "Zirconium, in ground",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.7
+    },
+    {
+      "supplier": {
+        "name": "Zirconium, 50% in zircon, 0.39% in crude ore",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.7
+    }
+  ]
+}

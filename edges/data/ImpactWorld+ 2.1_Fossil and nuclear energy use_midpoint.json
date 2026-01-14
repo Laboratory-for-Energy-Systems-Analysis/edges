@@ -1,0 +1,123 @@
+{
+  "name": "ImpactWorld+ 2.1 - Fossil and nuclear energy use_midpoint",
+  "unit": "MJ deprived",
+  "version": "2.1",
+  "edges version": "2.0",
+  "strategies": [
+    "map_exchanges",
+    "map_aggregate_locations",
+    "map_dynamic_locations",
+    "map_contained_locations",
+    "map_remaining_locations_to_global"
+  ],
+  "exchanges": [
+    {
+      "supplier": {
+        "name": "Peat, in ground",
+        "categories": [
+          "natural resource"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 9.9
+    },
+    {
+      "supplier": {
+        "name": "Peat",
+        "categories": [
+          "natural resource"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 9.9
+    },
+    {
+      "supplier": {
+        "name": "Peat, in ground",
+        "categories": [
+          "natural resource",
+          "biotic"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 9.9
+    },
+    {
+      "supplier": {
+        "name": "Peat",
+        "categories": [
+          "natural resource",
+          "biotic"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 9.9
+    },
+    {
+      "supplier": {
+        "name": "Uranium",
+        "categories": [
+          "natural resource"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 560000.0
+    },
+    {
+      "supplier": {
+        "name": "Uranium, in ground",
+        "categories": [
+          "natural resource"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 560000.0
+    },
+    {
+      "supplier": {
+        "name": "Uranium",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 560000.0
+    },
+    {
+      "supplier": {
+        "name": "Uranium, in ground",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 560000.0
+    }
+  ]
+}

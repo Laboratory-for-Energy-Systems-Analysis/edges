@@ -1,0 +1,1464 @@
+{
+  "name": "ImpactWorld+ 2.1 - Climate change, human health, short term_damage",
+  "unit": "DALY",
+  "version": "2.1",
+  "edges version": "2.0",
+  "strategies": [
+    "map_exchanges",
+    "map_aggregate_locations",
+    "map_dynamic_locations",
+    "map_contained_locations",
+    "map_remaining_locations_to_global"
+  ],
+  "exchanges": [
+    {
+      "supplier": {
+        "name": "Bromopropane",
+        "categories": [
+          "air"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 7.117296041006153e-08
+    },
+    {
+      "supplier": {
+        "name": "Bromopropane",
+        "categories": [
+          "air",
+          "urban air close to ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 7.117296041006153e-08
+    },
+    {
+      "supplier": {
+        "name": "Bromopropane",
+        "categories": [
+          "air",
+          "non-urban air or from high stacks"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 7.117296041006153e-08
+    },
+    {
+      "supplier": {
+        "name": "Bromopropane",
+        "categories": [
+          "air",
+          "lower stratosphere + upper troposphere"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 7.117296041006153e-08
+    },
+    {
+      "supplier": {
+        "name": "Bromopropane",
+        "categories": [
+          "air",
+          "indoor"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 7.117296041006153e-08
+    },
+    {
+      "supplier": {
+        "name": "Butane",
+        "categories": [
+          "air"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1.37505323893622e-08
+    },
+    {
+      "supplier": {
+        "name": "Butane",
+        "categories": [
+          "air",
+          "urban air close to ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1.37505323893622e-08
+    },
+    {
+      "supplier": {
+        "name": "Butane",
+        "categories": [
+          "air",
+          "non-urban air or from high stacks"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1.37505323893622e-08
+    },
+    {
+      "supplier": {
+        "name": "Butane",
+        "categories": [
+          "air",
+          "lower stratosphere + upper troposphere"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1.37505323893622e-08
+    },
+    {
+      "supplier": {
+        "name": "Butane",
+        "categories": [
+          "air",
+          "indoor"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1.37505323893622e-08
+    },
+    {
+      "supplier": {
+        "name": "Butane",
+        "categories": [
+          "air"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.01577597417950481
+    },
+    {
+      "supplier": {
+        "name": "Butane",
+        "categories": [
+          "air",
+          "urban air close to ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.01577597417950481
+    },
+    {
+      "supplier": {
+        "name": "Butane",
+        "categories": [
+          "air",
+          "non-urban air or from high stacks"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.01577597417950481
+    },
+    {
+      "supplier": {
+        "name": "Butane",
+        "categories": [
+          "air",
+          "lower stratosphere + upper troposphere"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.01577597417950481
+    },
+    {
+      "supplier": {
+        "name": "Butane",
+        "categories": [
+          "air",
+          "indoor"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.01577597417950481
+    },
+    {
+      "supplier": {
+        "name": "Chloroform",
+        "categories": [
+          "air"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 3.552231304160597e-05
+    },
+    {
+      "supplier": {
+        "name": "Chloroform",
+        "categories": [
+          "air",
+          "urban air close to ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 3.552231304160597e-05
+    },
+    {
+      "supplier": {
+        "name": "Chloroform",
+        "categories": [
+          "air",
+          "non-urban air or from high stacks"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 3.552231304160597e-05
+    },
+    {
+      "supplier": {
+        "name": "Chloroform",
+        "categories": [
+          "air",
+          "lower stratosphere + upper troposphere"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 3.552231304160597e-05
+    },
+    {
+      "supplier": {
+        "name": "Chloroform",
+        "categories": [
+          "air",
+          "indoor"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 3.552231304160597e-05
+    },
+    {
+      "supplier": {
+        "name": "Dinitrogen monoxide",
+        "categories": [
+          "air"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.0005084432217913008
+    },
+    {
+      "supplier": {
+        "name": "Dinitrogen monoxide",
+        "categories": [
+          "air",
+          "urban air close to ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.0005084432217913008
+    },
+    {
+      "supplier": {
+        "name": "Dinitrogen monoxide",
+        "categories": [
+          "air",
+          "non-urban air or from high stacks"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.0005084432217913008
+    },
+    {
+      "supplier": {
+        "name": "Dinitrogen monoxide",
+        "categories": [
+          "air",
+          "lower stratosphere + upper troposphere"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.0005084432217913008
+    },
+    {
+      "supplier": {
+        "name": "Dinitrogen monoxide",
+        "categories": [
+          "air",
+          "indoor"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.0005084432217913008
+    },
+    {
+      "supplier": {
+        "name": "Ethane",
+        "categories": [
+          "air"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 5.795122999099214e-07
+    },
+    {
+      "supplier": {
+        "name": "Ethane",
+        "categories": [
+          "air",
+          "urban air close to ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 5.795122999099214e-07
+    },
+    {
+      "supplier": {
+        "name": "Ethane",
+        "categories": [
+          "air",
+          "non-urban air or from high stacks"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 5.795122999099214e-07
+    },
+    {
+      "supplier": {
+        "name": "Ethane",
+        "categories": [
+          "air",
+          "lower stratosphere + upper troposphere"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 5.795122999099214e-07
+    },
+    {
+      "supplier": {
+        "name": "Ethane",
+        "categories": [
+          "air",
+          "indoor"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 5.795122999099214e-07
+    },
+    {
+      "supplier": {
+        "name": "Ethane",
+        "categories": [
+          "air"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1.735868464330475e-06
+    },
+    {
+      "supplier": {
+        "name": "Ethane",
+        "categories": [
+          "air",
+          "urban air close to ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1.735868464330475e-06
+    },
+    {
+      "supplier": {
+        "name": "Ethane",
+        "categories": [
+          "air",
+          "non-urban air or from high stacks"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1.735868464330475e-06
+    },
+    {
+      "supplier": {
+        "name": "Ethane",
+        "categories": [
+          "air",
+          "lower stratosphere + upper troposphere"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1.735868464330475e-06
+    },
+    {
+      "supplier": {
+        "name": "Ethane",
+        "categories": [
+          "air",
+          "indoor"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1.735868464330475e-06
+    },
+    {
+      "supplier": {
+        "name": "Ethane",
+        "categories": [
+          "air"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 2.271693940430403e-06
+    },
+    {
+      "supplier": {
+        "name": "Ethane",
+        "categories": [
+          "air",
+          "urban air close to ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 2.271693940430403e-06
+    },
+    {
+      "supplier": {
+        "name": "Ethane",
+        "categories": [
+          "air",
+          "non-urban air or from high stacks"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 2.271693940430403e-06
+    },
+    {
+      "supplier": {
+        "name": "Ethane",
+        "categories": [
+          "air",
+          "lower stratosphere + upper troposphere"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 2.271693940430403e-06
+    },
+    {
+      "supplier": {
+        "name": "Ethane",
+        "categories": [
+          "air",
+          "indoor"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 2.271693940430403e-06
+    },
+    {
+      "supplier": {
+        "name": "Ethane",
+        "categories": [
+          "air"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 8.22811148281759e-07
+    },
+    {
+      "supplier": {
+        "name": "Ethane",
+        "categories": [
+          "air",
+          "urban air close to ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 8.22811148281759e-07
+    },
+    {
+      "supplier": {
+        "name": "Ethane",
+        "categories": [
+          "air",
+          "non-urban air or from high stacks"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 8.22811148281759e-07
+    },
+    {
+      "supplier": {
+        "name": "Ethane",
+        "categories": [
+          "air",
+          "lower stratosphere + upper troposphere"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 8.22811148281759e-07
+    },
+    {
+      "supplier": {
+        "name": "Ethane",
+        "categories": [
+          "air",
+          "indoor"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 8.22811148281759e-07
+    },
+    {
+      "supplier": {
+        "name": "Ethane",
+        "categories": [
+          "air"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 8.916885878825695e-07
+    },
+    {
+      "supplier": {
+        "name": "Ethane",
+        "categories": [
+          "air",
+          "urban air close to ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 8.916885878825695e-07
+    },
+    {
+      "supplier": {
+        "name": "Ethane",
+        "categories": [
+          "air",
+          "non-urban air or from high stacks"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 8.916885878825695e-07
+    },
+    {
+      "supplier": {
+        "name": "Ethane",
+        "categories": [
+          "air",
+          "lower stratosphere + upper troposphere"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 8.916885878825695e-07
+    },
+    {
+      "supplier": {
+        "name": "Ethane",
+        "categories": [
+          "air",
+          "indoor"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 8.916885878825695e-07
+    },
+    {
+      "supplier": {
+        "name": "Ethanol",
+        "categories": [
+          "air"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 6.109200218255567e-05
+    },
+    {
+      "supplier": {
+        "name": "Ethanol",
+        "categories": [
+          "air",
+          "urban air close to ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 6.109200218255567e-05
+    },
+    {
+      "supplier": {
+        "name": "Ethanol",
+        "categories": [
+          "air",
+          "non-urban air or from high stacks"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 6.109200218255567e-05
+    },
+    {
+      "supplier": {
+        "name": "Ethanol",
+        "categories": [
+          "air",
+          "lower stratosphere + upper troposphere"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 6.109200218255567e-05
+    },
+    {
+      "supplier": {
+        "name": "Ethanol",
+        "categories": [
+          "air",
+          "indoor"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 6.109200218255567e-05
+    },
+    {
+      "supplier": {
+        "name": "Ethene",
+        "categories": [
+          "air"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1.06003387732991e-05
+    },
+    {
+      "supplier": {
+        "name": "Ethylene",
+        "categories": [
+          "air"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1.06003387732991e-05
+    },
+    {
+      "supplier": {
+        "name": "Ethene",
+        "categories": [
+          "air",
+          "urban air close to ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1.06003387732991e-05
+    },
+    {
+      "supplier": {
+        "name": "Ethylene",
+        "categories": [
+          "air",
+          "urban air close to ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1.06003387732991e-05
+    },
+    {
+      "supplier": {
+        "name": "Ethene",
+        "categories": [
+          "air",
+          "non-urban air or from high stacks"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1.06003387732991e-05
+    },
+    {
+      "supplier": {
+        "name": "Ethylene",
+        "categories": [
+          "air",
+          "non-urban air or from high stacks"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1.06003387732991e-05
+    },
+    {
+      "supplier": {
+        "name": "Ethene",
+        "categories": [
+          "air",
+          "lower stratosphere + upper troposphere"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1.06003387732991e-05
+    },
+    {
+      "supplier": {
+        "name": "Ethylene",
+        "categories": [
+          "air",
+          "lower stratosphere + upper troposphere"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1.06003387732991e-05
+    },
+    {
+      "supplier": {
+        "name": "Ethene",
+        "categories": [
+          "air",
+          "indoor"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1.06003387732991e-05
+    },
+    {
+      "supplier": {
+        "name": "Ethylene",
+        "categories": [
+          "air",
+          "indoor"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1.06003387732991e-05
+    },
+    {
+      "supplier": {
+        "name": "Ethene",
+        "categories": [
+          "air"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 7.270572428295555e-08
+    },
+    {
+      "supplier": {
+        "name": "Ethylene",
+        "categories": [
+          "air"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 7.270572428295555e-08
+    },
+    {
+      "supplier": {
+        "name": "Ethene",
+        "categories": [
+          "air",
+          "urban air close to ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 7.270572428295555e-08
+    },
+    {
+      "supplier": {
+        "name": "Ethylene",
+        "categories": [
+          "air",
+          "urban air close to ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 7.270572428295555e-08
+    },
+    {
+      "supplier": {
+        "name": "Ethene",
+        "categories": [
+          "air",
+          "non-urban air or from high stacks"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 7.270572428295555e-08
+    },
+    {
+      "supplier": {
+        "name": "Ethylene",
+        "categories": [
+          "air",
+          "non-urban air or from high stacks"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 7.270572428295555e-08
+    },
+    {
+      "supplier": {
+        "name": "Ethene",
+        "categories": [
+          "air",
+          "lower stratosphere + upper troposphere"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 7.270572428295555e-08
+    },
+    {
+      "supplier": {
+        "name": "Ethylene",
+        "categories": [
+          "air",
+          "lower stratosphere + upper troposphere"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 7.270572428295555e-08
+    },
+    {
+      "supplier": {
+        "name": "Ethene",
+        "categories": [
+          "air",
+          "indoor"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 7.270572428295555e-08
+    },
+    {
+      "supplier": {
+        "name": "Ethylene",
+        "categories": [
+          "air",
+          "indoor"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 7.270572428295555e-08
+    },
+    {
+      "supplier": {
+        "name": "Hexane",
+        "categories": [
+          "air"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.01355537121512325
+    },
+    {
+      "supplier": {
+        "name": "Hexane",
+        "categories": [
+          "air",
+          "urban air close to ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.01355537121512325
+    },
+    {
+      "supplier": {
+        "name": "Hexane",
+        "categories": [
+          "air",
+          "non-urban air or from high stacks"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.01355537121512325
+    },
+    {
+      "supplier": {
+        "name": "Hexane",
+        "categories": [
+          "air",
+          "lower stratosphere + upper troposphere"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.01355537121512325
+    },
+    {
+      "supplier": {
+        "name": "Hexane",
+        "categories": [
+          "air",
+          "indoor"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.01355537121512325
+    },
+    {
+      "supplier": {
+        "name": "Nitrogen fluoride",
+        "categories": [
+          "air"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.02746914662638939
+    },
+    {
+      "supplier": {
+        "name": "Nitrogen fluoride",
+        "categories": [
+          "air",
+          "urban air close to ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.02746914662638939
+    },
+    {
+      "supplier": {
+        "name": "Nitrogen fluoride",
+        "categories": [
+          "air",
+          "non-urban air or from high stacks"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.02746914662638939
+    },
+    {
+      "supplier": {
+        "name": "Nitrogen fluoride",
+        "categories": [
+          "air",
+          "lower stratosphere + upper troposphere"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.02746914662638939
+    },
+    {
+      "supplier": {
+        "name": "Nitrogen fluoride",
+        "categories": [
+          "air",
+          "indoor"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.02746914662638939
+    },
+    {
+      "supplier": {
+        "name": "Pentane",
+        "categories": [
+          "air"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.01450860745535791
+    },
+    {
+      "supplier": {
+        "name": "Pentane",
+        "categories": [
+          "air",
+          "urban air close to ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.01450860745535791
+    },
+    {
+      "supplier": {
+        "name": "Pentane",
+        "categories": [
+          "air",
+          "non-urban air or from high stacks"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.01450860745535791
+    },
+    {
+      "supplier": {
+        "name": "Pentane",
+        "categories": [
+          "air",
+          "lower stratosphere + upper troposphere"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.01450860745535791
+    },
+    {
+      "supplier": {
+        "name": "Pentane",
+        "categories": [
+          "air",
+          "indoor"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.01450860745535791
+    },
+    {
+      "supplier": {
+        "name": "Propane",
+        "categories": [
+          "air"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.01461359359403657
+    },
+    {
+      "supplier": {
+        "name": "Propane",
+        "categories": [
+          "air",
+          "urban air close to ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.01461359359403657
+    },
+    {
+      "supplier": {
+        "name": "Propane",
+        "categories": [
+          "air",
+          "non-urban air or from high stacks"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.01461359359403657
+    },
+    {
+      "supplier": {
+        "name": "Propane",
+        "categories": [
+          "air",
+          "lower stratosphere + upper troposphere"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.01461359359403657
+    },
+    {
+      "supplier": {
+        "name": "Propane",
+        "categories": [
+          "air",
+          "indoor"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.01461359359403657
+    },
+    {
+      "supplier": {
+        "name": "Sulfur hexafluoride",
+        "categories": [
+          "air"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.03840893010113849
+    },
+    {
+      "supplier": {
+        "name": "Sulfur hexafluoride",
+        "categories": [
+          "air",
+          "urban air close to ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.03840893010113849
+    },
+    {
+      "supplier": {
+        "name": "Sulfur hexafluoride",
+        "categories": [
+          "air",
+          "non-urban air or from high stacks"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.03840893010113849
+    },
+    {
+      "supplier": {
+        "name": "Sulfur hexafluoride",
+        "categories": [
+          "air",
+          "lower stratosphere + upper troposphere"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.03840893010113849
+    },
+    {
+      "supplier": {
+        "name": "Sulfur hexafluoride",
+        "categories": [
+          "air",
+          "indoor"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.03840893010113849
+    },
+    {
+      "supplier": {
+        "name": "Sulfuryl fluoride",
+        "categories": [
+          "air"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.007788220641764265
+    },
+    {
+      "supplier": {
+        "name": "Sulfuryl fluoride",
+        "categories": [
+          "air",
+          "urban air close to ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.007788220641764265
+    },
+    {
+      "supplier": {
+        "name": "Sulfuryl fluoride",
+        "categories": [
+          "air",
+          "non-urban air or from high stacks"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.007788220641764265
+    },
+    {
+      "supplier": {
+        "name": "Sulfuryl fluoride",
+        "categories": [
+          "air",
+          "lower stratosphere + upper troposphere"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.007788220641764265
+    },
+    {
+      "supplier": {
+        "name": "Sulfuryl fluoride",
+        "categories": [
+          "air",
+          "indoor"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.007788220641764265
+    }
+  ]
+}

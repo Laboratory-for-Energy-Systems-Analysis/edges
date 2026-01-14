@@ -1,0 +1,4215 @@
+{
+  "name": "ImpactWorld+ 2.1 - Human toxicity cancer, long term_damage",
+  "unit": "DALY",
+  "version": "2.1",
+  "edges version": "2.0",
+  "strategies": [
+    "map_exchanges",
+    "map_aggregate_locations",
+    "map_dynamic_locations",
+    "map_contained_locations",
+    "map_remaining_locations_to_global"
+  ],
+  "exchanges": [
+    {
+      "supplier": {
+        "name": "N-methyl-2-pyrrolidone",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1.173e-07
+    },
+    {
+      "supplier": {
+        "name": "2-Phenylphenol",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1.38e-06
+    },
+    {
+      "supplier": {
+        "name": "2-Nitrobenzoic acid",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 8.1075e-06
+    },
+    {
+      "supplier": {
+        "name": "p-Nitrotoluene",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 8.579000000000001e-07
+    },
+    {
+      "supplier": {
+        "name": "Acenaphthene",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1.1845e-06
+    },
+    {
+      "supplier": {
+        "name": "Acenaphthene",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 6.187e-05
+    },
+    {
+      "supplier": {
+        "name": "Acenaphthylene",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 2.369e-07
+    },
+    {
+      "supplier": {
+        "name": "Acephate",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1.288e-06
+    },
+    {
+      "supplier": {
+        "name": "Acetaldehyde",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 9.821e-08
+    },
+    {
+      "supplier": {
+        "name": "Acetaldehyde",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 2.1965e-06
+    },
+    {
+      "supplier": {
+        "name": "Acetamide",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 6.302e-06
+    },
+    {
+      "supplier": {
+        "name": "Acetamide",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 2.714e-06
+    },
+    {
+      "supplier": {
+        "name": "Acetamide",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.00057385
+    },
+    {
+      "supplier": {
+        "name": "Acetamide",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.00026105
+    },
+    {
+      "supplier": {
+        "name": "Acetamide",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.0015295
+    },
+    {
+      "supplier": {
+        "name": "Acetic acid",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 4.7725e-06
+    },
+    {
+      "supplier": {
+        "name": "Acifluorfen",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 5.014e-05
+    },
+    {
+      "supplier": {
+        "name": "Acrylonitrile",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 4.508e-06
+    },
+    {
+      "supplier": {
+        "name": "Aldrin",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.0001679
+    },
+    {
+      "supplier": {
+        "name": "Amitrole",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.0001863
+    },
+    {
+      "supplier": {
+        "name": "Aniline",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 9.867e-09
+    },
+    {
+      "supplier": {
+        "name": "Aniline",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 2.668e-06
+    },
+    {
+      "supplier": {
+        "name": "Aniline",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.0002553
+    },
+    {
+      "supplier": {
+        "name": "Aniline",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1.84e-08
+    },
+    {
+      "supplier": {
+        "name": "Anthracene",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.00012075
+    },
+    {
+      "supplier": {
+        "name": "Aramite",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 2.2425e-06
+    },
+    {
+      "supplier": {
+        "name": "Arsenic, ion",
+        "categories": [
+          "air"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.001498713689608642
+    },
+    {
+      "supplier": {
+        "name": "Arsenic ion",
+        "categories": [
+          "air"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.001498713689608642
+    },
+    {
+      "supplier": {
+        "name": "Arsenic, ion",
+        "categories": [
+          "air",
+          "non-urban air or from high stacks"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.001529418924927792
+    },
+    {
+      "supplier": {
+        "name": "Arsenic ion",
+        "categories": [
+          "air",
+          "non-urban air or from high stacks"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.001529418924927792
+    },
+    {
+      "supplier": {
+        "name": "Arsenic, ion",
+        "categories": [
+          "air",
+          "urban air close to ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.001468008454289493
+    },
+    {
+      "supplier": {
+        "name": "Arsenic ion",
+        "categories": [
+          "air",
+          "urban air close to ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.001468008454289493
+    },
+    {
+      "supplier": {
+        "name": "Arsenic, ion",
+        "categories": [
+          "air",
+          "lower stratosphere + upper troposphere"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.001529418924927792
+    },
+    {
+      "supplier": {
+        "name": "Arsenic ion",
+        "categories": [
+          "air",
+          "lower stratosphere + upper troposphere"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.001529418924927792
+    },
+    {
+      "supplier": {
+        "name": "Arsenic, ion",
+        "categories": [
+          "air",
+          "indoor"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.001498714810631838
+    },
+    {
+      "supplier": {
+        "name": "Arsenic ion",
+        "categories": [
+          "air",
+          "indoor"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.001498714810631838
+    },
+    {
+      "supplier": {
+        "name": "Arsenic, ion",
+        "categories": [
+          "water"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1.777015962462254e-05
+    },
+    {
+      "supplier": {
+        "name": "Arsenic ion",
+        "categories": [
+          "water"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1.777015962462254e-05
+    },
+    {
+      "supplier": {
+        "name": "Arsenic, ion",
+        "categories": [
+          "water",
+          "ocean"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1.180904368402552e-07
+    },
+    {
+      "supplier": {
+        "name": "Arsenic ion",
+        "categories": [
+          "water",
+          "ocean"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1.180904368402552e-07
+    },
+    {
+      "supplier": {
+        "name": "Arsenic, ion",
+        "categories": [
+          "soil"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.001235937543324682
+    },
+    {
+      "supplier": {
+        "name": "Arsenic ion",
+        "categories": [
+          "soil"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.001235937543324682
+    },
+    {
+      "supplier": {
+        "name": "Arsenic, ion",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.003383661897629092
+    },
+    {
+      "supplier": {
+        "name": "Arsenic ion",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.003383661897629092
+    },
+    {
+      "supplier": {
+        "name": "Arsenic, ion",
+        "categories": [
+          "water",
+          "surface water"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1.777015962462254e-05
+    },
+    {
+      "supplier": {
+        "name": "Arsenic ion",
+        "categories": [
+          "water",
+          "surface water"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1.777015962462254e-05
+    },
+    {
+      "supplier": {
+        "name": "Arsenic, ion",
+        "categories": [
+          "soil",
+          "industrial"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.001235937543324682
+    },
+    {
+      "supplier": {
+        "name": "Arsenic ion",
+        "categories": [
+          "soil",
+          "industrial"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.001235937543324682
+    },
+    {
+      "supplier": {
+        "name": "Arsenic, ion",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.002875
+    },
+    {
+      "supplier": {
+        "name": "Arsenic ion",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.002875
+    },
+    {
+      "supplier": {
+        "name": "Atrazine",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 2.208e-05
+    },
+    {
+      "supplier": {
+        "name": "Benzaldehyde",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 2.438e-08
+    },
+    {
+      "supplier": {
+        "name": "Benzene",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 9.614e-07
+    },
+    {
+      "supplier": {
+        "name": "Benzene",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 7.8775e-07
+    },
+    {
+      "supplier": {
+        "name": "Benzene",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1.771e-09
+    },
+    {
+      "supplier": {
+        "name": "Benzene",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1.03155e-06
+    },
+    {
+      "supplier": {
+        "name": "Benzene",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 8.808999999999999e-05
+    },
+    {
+      "supplier": {
+        "name": "Benzene",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1.955e-06
+    },
+    {
+      "supplier": {
+        "name": "Benzene",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1.0741e-06
+    },
+    {
+      "supplier": {
+        "name": "Benzene",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 2.8635e-07
+    },
+    {
+      "supplier": {
+        "name": "Benzene",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 2.8865e-05
+    },
+    {
+      "supplier": {
+        "name": "Benzene",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 7.141499999999999e-05
+    },
+    {
+      "supplier": {
+        "name": "Benzene",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 5.083e-05
+    },
+    {
+      "supplier": {
+        "name": "Benzene",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1.8285e-05
+    },
+    {
+      "supplier": {
+        "name": "Benzene",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 3.887e-07
+    },
+    {
+      "supplier": {
+        "name": "Benzene",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 5.3705e-07
+    },
+    {
+      "supplier": {
+        "name": "Benzene",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.00078315
+    },
+    {
+      "supplier": {
+        "name": "Benzene",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 6.9575e-05
+    },
+    {
+      "supplier": {
+        "name": "Benz(a)anthracene",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.004025
+    },
+    {
+      "supplier": {
+        "name": "Benzo(a)pyrene",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.04186
+    },
+    {
+      "supplier": {
+        "name": "Benzo(b)fluoranthene",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.0100165
+    },
+    {
+      "supplier": {
+        "name": "Benzo(ghi)perylene",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.00033005
+    },
+    {
+      "supplier": {
+        "name": "Benzo(k)fluoranthene",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.004370000000000001
+    },
+    {
+      "supplier": {
+        "name": "Benzal chloride",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1.3685e-06
+    },
+    {
+      "supplier": {
+        "name": "Beryllium II",
+        "categories": [
+          "air"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 9.740878893424454e-21
+    },
+    {
+      "supplier": {
+        "name": "Beryllium II",
+        "categories": [
+          "air",
+          "non-urban air or from high stacks"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1.948175778684891e-20
+    },
+    {
+      "supplier": {
+        "name": "Beryllium II",
+        "categories": [
+          "air",
+          "lower stratosphere + upper troposphere"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1.948175778684891e-20
+    },
+    {
+      "supplier": {
+        "name": "Beryllium II",
+        "categories": [
+          "water",
+          "ocean"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1.06521097959337e-25
+    },
+    {
+      "supplier": {
+        "name": "Beryllium II",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.000110055
+    },
+    {
+      "supplier": {
+        "name": "Biphenyl",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 8.418e-05
+    },
+    {
+      "supplier": {
+        "name": "Butadiene",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1.863e-07
+    },
+    {
+      "supplier": {
+        "name": "Butadiene",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1.8745e-05
+    },
+    {
+      "supplier": {
+        "name": "Butane",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 2.507e-07
+    },
+    {
+      "supplier": {
+        "name": "Butyrolactone",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 5.244e-06
+    },
+    {
+      "supplier": {
+        "name": "Cacodylic acid",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.00017365
+    },
+    {
+      "supplier": {
+        "name": "Cadmium, ion",
+        "categories": [
+          "air"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.0005003550315410556
+    },
+    {
+      "supplier": {
+        "name": "Cadmium II",
+        "categories": [
+          "air"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.0005003550315410556
+    },
+    {
+      "supplier": {
+        "name": "Cadmium, ion",
+        "categories": [
+          "air",
+          "non-urban air or from high stacks"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.0005105806214537174
+    },
+    {
+      "supplier": {
+        "name": "Cadmium II",
+        "categories": [
+          "air",
+          "non-urban air or from high stacks"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.0005105806214537174
+    },
+    {
+      "supplier": {
+        "name": "Cadmium, ion",
+        "categories": [
+          "air",
+          "urban air close to ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.0004901294416283939
+    },
+    {
+      "supplier": {
+        "name": "Cadmium II",
+        "categories": [
+          "air",
+          "urban air close to ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.0004901294416283939
+    },
+    {
+      "supplier": {
+        "name": "Cadmium, ion",
+        "categories": [
+          "air",
+          "lower stratosphere + upper troposphere"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.0005105806214537174
+    },
+    {
+      "supplier": {
+        "name": "Cadmium II",
+        "categories": [
+          "air",
+          "lower stratosphere + upper troposphere"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.0005105806214537174
+    },
+    {
+      "supplier": {
+        "name": "Cadmium, ion",
+        "categories": [
+          "air",
+          "indoor"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.0005003563414681909
+    },
+    {
+      "supplier": {
+        "name": "Cadmium II",
+        "categories": [
+          "air",
+          "indoor"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.0005003563414681909
+    },
+    {
+      "supplier": {
+        "name": "Cadmium, ion",
+        "categories": [
+          "water"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 9.592545488652662e-06
+    },
+    {
+      "supplier": {
+        "name": "Cadmium II",
+        "categories": [
+          "water"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 9.592545488652662e-06
+    },
+    {
+      "supplier": {
+        "name": "Cadmium, ion",
+        "categories": [
+          "water",
+          "ocean"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 4.339663511701019e-07
+    },
+    {
+      "supplier": {
+        "name": "Cadmium II",
+        "categories": [
+          "water",
+          "ocean"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 4.339663511701019e-07
+    },
+    {
+      "supplier": {
+        "name": "Cadmium, ion",
+        "categories": [
+          "soil"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 2.428010317684075e-05
+    },
+    {
+      "supplier": {
+        "name": "Cadmium II",
+        "categories": [
+          "soil"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 2.428010317684075e-05
+    },
+    {
+      "supplier": {
+        "name": "Cadmium, ion",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.001357281720310173
+    },
+    {
+      "supplier": {
+        "name": "Cadmium II",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.001357281720310173
+    },
+    {
+      "supplier": {
+        "name": "Cadmium, ion",
+        "categories": [
+          "water",
+          "surface water"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 9.592545488652662e-06
+    },
+    {
+      "supplier": {
+        "name": "Cadmium II",
+        "categories": [
+          "water",
+          "surface water"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 9.592545488652662e-06
+    },
+    {
+      "supplier": {
+        "name": "Cadmium, ion",
+        "categories": [
+          "soil",
+          "industrial"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 2.428010317684075e-05
+    },
+    {
+      "supplier": {
+        "name": "Cadmium II",
+        "categories": [
+          "soil",
+          "industrial"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 2.428010317684075e-05
+    },
+    {
+      "supplier": {
+        "name": "Cadmium, ion",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.0032085
+    },
+    {
+      "supplier": {
+        "name": "Cadmium II",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.0032085
+    },
+    {
+      "supplier": {
+        "name": "Captan",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 9.4875e-08
+    },
+    {
+      "supplier": {
+        "name": "Carbaryl",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1.863e-05
+    },
+    {
+      "supplier": {
+        "name": "Chloral hydrate",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1.8515e-06
+    },
+    {
+      "supplier": {
+        "name": "Chlorobenzilate",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1.978e-05
+    },
+    {
+      "supplier": {
+        "name": "Chloroform",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1.472e-06
+    },
+    {
+      "supplier": {
+        "name": "Chloroprene",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 2.2885e-06
+    },
+    {
+      "supplier": {
+        "name": "Chlorothalonil",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 4.4505e-07
+    },
+    {
+      "supplier": {
+        "name": "Chromium VI",
+        "categories": [
+          "air"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 4.185301499845214e-05
+    },
+    {
+      "supplier": {
+        "name": "Chromium VI",
+        "categories": [
+          "air",
+          "non-urban air or from high stacks"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 4.271070747650972e-05
+    },
+    {
+      "supplier": {
+        "name": "Chromium VI",
+        "categories": [
+          "air",
+          "urban air close to ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 4.099532252039456e-05
+    },
+    {
+      "supplier": {
+        "name": "Chromium VI",
+        "categories": [
+          "air",
+          "lower stratosphere + upper troposphere"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 4.271070747650972e-05
+    },
+    {
+      "supplier": {
+        "name": "Chromium VI",
+        "categories": [
+          "air",
+          "indoor"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 4.185343592266744e-05
+    },
+    {
+      "supplier": {
+        "name": "Chromium VI",
+        "categories": [
+          "water"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 4.480326696474843e-07
+    },
+    {
+      "supplier": {
+        "name": "Chromium VI",
+        "categories": [
+          "water",
+          "ocean"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 5.239300985301985e-09
+    },
+    {
+      "supplier": {
+        "name": "Chromium VI",
+        "categories": [
+          "soil"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 7.064082026407527e-05
+    },
+    {
+      "supplier": {
+        "name": "Chromium VI",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 7.201340770689483e-05
+    },
+    {
+      "supplier": {
+        "name": "Chromium VI",
+        "categories": [
+          "water",
+          "surface water"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 4.480326696474843e-07
+    },
+    {
+      "supplier": {
+        "name": "Chromium VI",
+        "categories": [
+          "soil",
+          "industrial"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 7.064082026407527e-05
+    },
+    {
+      "supplier": {
+        "name": "Chromium VI",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.03772
+    },
+    {
+      "supplier": {
+        "name": "Chrysene",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.00045195
+    },
+    {
+      "supplier": {
+        "name": "Cyanazine",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 7.475e-05
+    },
+    {
+      "supplier": {
+        "name": "Daminozide",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1.932e-06
+    },
+    {
+      "supplier": {
+        "name": "Diallate",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 4.071e-05
+    },
+    {
+      "supplier": {
+        "name": "Dibenz(a,h)anthracene",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.057615
+    },
+    {
+      "supplier": {
+        "name": "Dichlorvos",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1.8745e-05
+    },
+    {
+      "supplier": {
+        "name": "Dicofol",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.00018285
+    },
+    {
+      "supplier": {
+        "name": "Dieldrin",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.003266
+    },
+    {
+      "supplier": {
+        "name": "Diethylene glycol",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 3.979e-07
+    },
+    {
+      "supplier": {
+        "name": "Epichlorohydrin",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 4.6345e-06
+    },
+    {
+      "supplier": {
+        "name": "Ethane",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 4.669000000000001e-06
+    },
+    {
+      "supplier": {
+        "name": "Ethane",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 5.589e-06
+    },
+    {
+      "supplier": {
+        "name": "Ethane",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 4.807e-06
+    },
+    {
+      "supplier": {
+        "name": "Ethane",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 8.3145e-05
+    },
+    {
+      "supplier": {
+        "name": "Ethane",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1.955e-06
+    },
+    {
+      "supplier": {
+        "name": "Ethane",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.05865000000000001
+    },
+    {
+      "supplier": {
+        "name": "Ethane",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1.03615e-06
+    },
+    {
+      "supplier": {
+        "name": "Ethane",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1.3915e-07
+    },
+    {
+      "supplier": {
+        "name": "Ethane",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 9.8325e-06
+    },
+    {
+      "supplier": {
+        "name": "Ethane",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1.564e-05
+    },
+    {
+      "supplier": {
+        "name": "Ethanol",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 6.7735e-09
+    },
+    {
+      "supplier": {
+        "name": "Ethanol",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 3.6915e-08
+    },
+    {
+      "supplier": {
+        "name": "Ethanol",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 7.1875e-06
+    },
+    {
+      "supplier": {
+        "name": "Ethene",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 9.706e-07
+    },
+    {
+      "supplier": {
+        "name": "Ethylene",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 9.706e-07
+    },
+    {
+      "supplier": {
+        "name": "Ethene",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1.449e-06
+    },
+    {
+      "supplier": {
+        "name": "Ethylene",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1.449e-06
+    },
+    {
+      "supplier": {
+        "name": "Ethene",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 4.462e-06
+    },
+    {
+      "supplier": {
+        "name": "Ethylene",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 4.462e-06
+    },
+    {
+      "supplier": {
+        "name": "Ethene",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 2.047e-06
+    },
+    {
+      "supplier": {
+        "name": "Ethylene",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 2.047e-06
+    },
+    {
+      "supplier": {
+        "name": "Ethene",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 7.912e-08
+    },
+    {
+      "supplier": {
+        "name": "Ethylene",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 7.912e-08
+    },
+    {
+      "supplier": {
+        "name": "Ethyl acrylate",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 2.806e-09
+    },
+    {
+      "supplier": {
+        "name": "Ethylene oxide",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 3.0015e-06
+    },
+    {
+      "supplier": {
+        "name": "Fluoranthene",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 5.198e-05
+    },
+    {
+      "supplier": {
+        "name": "Fluorene",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 8.176499999999999e-06
+    },
+    {
+      "supplier": {
+        "name": "Folpet",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 4.784e-07
+    },
+    {
+      "supplier": {
+        "name": "Fomesafen",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.00014375
+    },
+    {
+      "supplier": {
+        "name": "Formaldehyde",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1.3915e-05
+    },
+    {
+      "supplier": {
+        "name": "Fosetyl",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 8.0845e-08
+    },
+    {
+      "supplier": {
+        "name": "Fosetyl-aluminium",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 8.0845e-08
+    },
+    {
+      "supplier": {
+        "name": "Fosetyl-Al",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 8.0845e-08
+    },
+    {
+      "supplier": {
+        "name": "Furan",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1.5295e-05
+    },
+    {
+      "supplier": {
+        "name": "Furan",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 3.634e-08
+    },
+    {
+      "supplier": {
+        "name": "Furfural",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 5.4165e-08
+    },
+    {
+      "supplier": {
+        "name": "Griseofulvin",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1.8515e-05
+    },
+    {
+      "supplier": {
+        "name": "Heptachlor",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.00018055
+    },
+    {
+      "supplier": {
+        "name": "Hexachlorocyclohexane",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.0003519
+    },
+    {
+      "supplier": {
+        "name": "Hexane",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1.8055e-09
+    },
+    {
+      "supplier": {
+        "name": "Hydrazine",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.0001196
+    },
+    {
+      "supplier": {
+        "name": "Hydrazine",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 4.232e-07
+    },
+    {
+      "supplier": {
+        "name": "Hydrazine",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 2.024e-05
+    },
+    {
+      "supplier": {
+        "name": "Hydrazine",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 3.5075e-06
+    },
+    {
+      "supplier": {
+        "name": "Hydrazine",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 2.76e-05
+    },
+    {
+      "supplier": {
+        "name": "Hydrazine",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 7.682e-06
+    },
+    {
+      "supplier": {
+        "name": "Hydrazine",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1.8055e-05
+    },
+    {
+      "supplier": {
+        "name": "Hydrazine",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.00098325
+    },
+    {
+      "supplier": {
+        "name": "Hydrazine",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.0001288
+    },
+    {
+      "supplier": {
+        "name": "Hydrazine",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1.5985e-05
+    },
+    {
+      "supplier": {
+        "name": "Hydrazine",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 2.438e-06
+    },
+    {
+      "supplier": {
+        "name": "Hydrazine",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.000114195
+    },
+    {
+      "supplier": {
+        "name": "Indeno(1,2,3-cd)pyrene",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.004324
+    },
+    {
+      "supplier": {
+        "name": "Isophorone",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 5.934e-09
+    },
+    {
+      "supplier": {
+        "name": "Isoprene",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1.6445e-08
+    },
+    {
+      "supplier": {
+        "name": "Lead II",
+        "categories": [
+          "air"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.0004365862724949953
+    },
+    {
+      "supplier": {
+        "name": "Lead II",
+        "categories": [
+          "air",
+          "non-urban air or from high stacks"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.000445560028776948
+    },
+    {
+      "supplier": {
+        "name": "Lead II",
+        "categories": [
+          "air",
+          "urban air close to ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.0004276125162130426
+    },
+    {
+      "supplier": {
+        "name": "Lead II",
+        "categories": [
+          "air",
+          "lower stratosphere + upper troposphere"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.000445560028776948
+    },
+    {
+      "supplier": {
+        "name": "Lead II",
+        "categories": [
+          "air",
+          "indoor"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.0004365863754803824
+    },
+    {
+      "supplier": {
+        "name": "Lead II",
+        "categories": [
+          "water"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 9.489792349147049e-07
+    },
+    {
+      "supplier": {
+        "name": "Lead II",
+        "categories": [
+          "water",
+          "ocean"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1.179559553500617e-20
+    },
+    {
+      "supplier": {
+        "name": "Lead II",
+        "categories": [
+          "soil"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 7.873094194761544e-07
+    },
+    {
+      "supplier": {
+        "name": "Lead II",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.001204138060299834
+    },
+    {
+      "supplier": {
+        "name": "Lead II",
+        "categories": [
+          "water",
+          "surface water"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 9.489792349147049e-07
+    },
+    {
+      "supplier": {
+        "name": "Lead II",
+        "categories": [
+          "soil",
+          "industrial"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 7.873094194761544e-07
+    },
+    {
+      "supplier": {
+        "name": "Lead II",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.0005255500000000001
+    },
+    {
+      "supplier": {
+        "name": "Lindane",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 9.050499999999999e-05
+    },
+    {
+      "supplier": {
+        "name": "Lindane",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.0007636
+    },
+    {
+      "supplier": {
+        "name": "Lindane",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.00018285
+    },
+    {
+      "supplier": {
+        "name": "Maneb",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 3.1625e-07
+    },
+    {
+      "supplier": {
+        "name": "Mercury II",
+        "categories": [
+          "air"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.1143962994901783
+    },
+    {
+      "supplier": {
+        "name": "Mercury II",
+        "categories": [
+          "air",
+          "non-urban air or from high stacks"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.1167468225395106
+    },
+    {
+      "supplier": {
+        "name": "Mercury II",
+        "categories": [
+          "air",
+          "urban air close to ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.1120457764408461
+    },
+    {
+      "supplier": {
+        "name": "Mercury II",
+        "categories": [
+          "air",
+          "lower stratosphere + upper troposphere"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.1167468225395106
+    },
+    {
+      "supplier": {
+        "name": "Mercury II",
+        "categories": [
+          "air",
+          "indoor"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.1143963114693965
+    },
+    {
+      "supplier": {
+        "name": "Mercury II",
+        "categories": [
+          "water"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.0003694973052300525
+    },
+    {
+      "supplier": {
+        "name": "Mercury II",
+        "categories": [
+          "soil"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.001104126414740134
+    },
+    {
+      "supplier": {
+        "name": "Mercury II",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.3149043145487041
+    },
+    {
+      "supplier": {
+        "name": "Mercury II",
+        "categories": [
+          "water",
+          "surface water"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.0003694973052300525
+    },
+    {
+      "supplier": {
+        "name": "Mercury II",
+        "categories": [
+          "soil",
+          "industrial"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.001104126414740134
+    },
+    {
+      "supplier": {
+        "name": "Mercury II",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.12535
+    },
+    {
+      "supplier": {
+        "name": "Methidathion",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1.61e-05
+    },
+    {
+      "supplier": {
+        "name": "Mirex",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.017135
+    },
+    {
+      "supplier": {
+        "name": "Mirex",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.011385
+    },
+    {
+      "supplier": {
+        "name": "N-nitrosodimethylamine",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.0012305
+    },
+    {
+      "supplier": {
+        "name": "N-nitrosodimethylamine",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.0014145
+    },
+    {
+      "supplier": {
+        "name": "Naphtalene",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 8.636500000000001e-07
+    },
+    {
+      "supplier": {
+        "name": "Naphthalene",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 8.636500000000001e-07
+    },
+    {
+      "supplier": {
+        "name": "Naphtalene",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 2.1275e-06
+    },
+    {
+      "supplier": {
+        "name": "Naphthalene",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 2.1275e-06
+    },
+    {
+      "supplier": {
+        "name": "Nickel, ion",
+        "categories": [
+          "air"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.0004397779388477982
+    },
+    {
+      "supplier": {
+        "name": "Nickel II",
+        "categories": [
+          "air"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.0004397779388477982
+    },
+    {
+      "supplier": {
+        "name": "Nickel, ion",
+        "categories": [
+          "air",
+          "non-urban air or from high stacks"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.0004487508673267732
+    },
+    {
+      "supplier": {
+        "name": "Nickel II",
+        "categories": [
+          "air",
+          "non-urban air or from high stacks"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.0004487508673267732
+    },
+    {
+      "supplier": {
+        "name": "Nickel, ion",
+        "categories": [
+          "air",
+          "urban air close to ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.0004308050103688232
+    },
+    {
+      "supplier": {
+        "name": "Nickel II",
+        "categories": [
+          "air",
+          "urban air close to ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.0004308050103688232
+    },
+    {
+      "supplier": {
+        "name": "Nickel, ion",
+        "categories": [
+          "air",
+          "lower stratosphere + upper troposphere"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.0004487508673267732
+    },
+    {
+      "supplier": {
+        "name": "Nickel II",
+        "categories": [
+          "air",
+          "lower stratosphere + upper troposphere"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.0004487508673267732
+    },
+    {
+      "supplier": {
+        "name": "Nickel, ion",
+        "categories": [
+          "air",
+          "indoor"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.000439778558835551
+    },
+    {
+      "supplier": {
+        "name": "Nickel II",
+        "categories": [
+          "air",
+          "indoor"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.000439778558835551
+    },
+    {
+      "supplier": {
+        "name": "Nickel, ion",
+        "categories": [
+          "water"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1.060659796427234e-05
+    },
+    {
+      "supplier": {
+        "name": "Nickel II",
+        "categories": [
+          "water"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1.060659796427234e-05
+    },
+    {
+      "supplier": {
+        "name": "Nickel, ion",
+        "categories": [
+          "water",
+          "ocean"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 4.408825771325483e-06
+    },
+    {
+      "supplier": {
+        "name": "Nickel II",
+        "categories": [
+          "water",
+          "ocean"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 4.408825771325483e-06
+    },
+    {
+      "supplier": {
+        "name": "Nickel, ion",
+        "categories": [
+          "soil"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.0002664848548197619
+    },
+    {
+      "supplier": {
+        "name": "Nickel II",
+        "categories": [
+          "soil"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.0002664848548197619
+    },
+    {
+      "supplier": {
+        "name": "Nickel, ion",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.001043663173917455
+    },
+    {
+      "supplier": {
+        "name": "Nickel II",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.001043663173917455
+    },
+    {
+      "supplier": {
+        "name": "Nickel, ion",
+        "categories": [
+          "water",
+          "surface water"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1.060659796427234e-05
+    },
+    {
+      "supplier": {
+        "name": "Nickel II",
+        "categories": [
+          "water",
+          "surface water"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1.060659796427234e-05
+    },
+    {
+      "supplier": {
+        "name": "Nickel, ion",
+        "categories": [
+          "soil",
+          "industrial"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.0002664848548197619
+    },
+    {
+      "supplier": {
+        "name": "Nickel II",
+        "categories": [
+          "soil",
+          "industrial"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.0002664848548197619
+    },
+    {
+      "supplier": {
+        "name": "Nickel, ion",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.001242
+    },
+    {
+      "supplier": {
+        "name": "Nickel II",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.001242
+    },
+    {
+      "supplier": {
+        "name": "Nitrobenzene",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 3.726e-06
+    },
+    {
+      "supplier": {
+        "name": "Phenanthrene",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 3.0015e-05
+    },
+    {
+      "supplier": {
+        "name": "Phenol",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 6.4515e-06
+    },
+    {
+      "supplier": {
+        "name": "Phenol",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1.1615e-07
+    },
+    {
+      "supplier": {
+        "name": "Phenol",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1.8745e-06
+    },
+    {
+      "supplier": {
+        "name": "Phenol",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1.426e-05
+    },
+    {
+      "supplier": {
+        "name": "Phenol",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1.541e-06
+    },
+    {
+      "supplier": {
+        "name": "Phenol",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 9.360999999999999e-05
+    },
+    {
+      "supplier": {
+        "name": "Phosphate",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1.633e-06
+    },
+    {
+      "supplier": {
+        "name": "Phosphate",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 3.9905e-07
+    },
+    {
+      "supplier": {
+        "name": "Piperonyl butoxide",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1.04765e-06
+    },
+    {
+      "supplier": {
+        "name": "Piperonyl sulfoxide",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 6.509e-06
+    },
+    {
+      "supplier": {
+        "name": "Polychlorinated biphenyls",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.0001449
+    },
+    {
+      "supplier": {
+        "name": "Polychlorinated biphenyls",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.010994
+    },
+    {
+      "supplier": {
+        "name": "Polychlorinated biphenyls",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.0098095
+    },
+    {
+      "supplier": {
+        "name": "Polychlorinated biphenyls",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.0006370999999999999
+    },
+    {
+      "supplier": {
+        "name": "Prochloraz",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1.5755e-05
+    },
+    {
+      "supplier": {
+        "name": "Pronamide",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1.8515e-05
+    },
+    {
+      "supplier": {
+        "name": "Propane",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.0002139
+    },
+    {
+      "supplier": {
+        "name": "Propane",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.00059915
+    },
+    {
+      "supplier": {
+        "name": "Propane",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 8.257e-07
+    },
+    {
+      "supplier": {
+        "name": "Propene",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 5.5545e-07
+    },
+    {
+      "supplier": {
+        "name": "Propylene",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 5.5545e-07
+    },
+    {
+      "supplier": {
+        "name": "Propene",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 6.1755e-06
+    },
+    {
+      "supplier": {
+        "name": "Propylene",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 6.1755e-06
+    },
+    {
+      "supplier": {
+        "name": "Propene",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1.4605e-06
+    },
+    {
+      "supplier": {
+        "name": "Propylene",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1.4605e-06
+    },
+    {
+      "supplier": {
+        "name": "Propene",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1.104e-08
+    },
+    {
+      "supplier": {
+        "name": "Propylene",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1.104e-08
+    },
+    {
+      "supplier": {
+        "name": "Propylene oxide",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 8.774500000000001e-07
+    },
+    {
+      "supplier": {
+        "name": "Pyrene",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 3.151e-05
+    },
+    {
+      "supplier": {
+        "name": "Pyrene",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.0008487000000000001
+    },
+    {
+      "supplier": {
+        "name": "Styrene",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1.8515e-07
+    },
+    {
+      "supplier": {
+        "name": "Sulfallate",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1.2075e-06
+    },
+    {
+      "supplier": {
+        "name": "Thiourea",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 5.600499999999999e-06
+    },
+    {
+      "supplier": {
+        "name": "Thiourea",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 9.867e-08
+    },
+    {
+      "supplier": {
+        "name": "Thiourea",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1.2535e-07
+    },
+    {
+      "supplier": {
+        "name": "Toluene",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 5.2785e-11
+    },
+    {
+      "supplier": {
+        "name": "Toluene",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1.8515e-05
+    },
+    {
+      "supplier": {
+        "name": "Toluene",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 6.049e-05
+    },
+    {
+      "supplier": {
+        "name": "Toluene",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.002254
+    },
+    {
+      "supplier": {
+        "name": "Toluene",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 5.0945e-05
+    },
+    {
+      "supplier": {
+        "name": "Toluene",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 2.9095e-07
+    },
+    {
+      "supplier": {
+        "name": "Trifluralin",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1.196e-06
+    },
+    {
+      "supplier": {
+        "name": "Xylene",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 5.1175e-09
+    },
+    {
+      "supplier": {
+        "name": "Zineb",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 2.4725e-07
+    },
+    {
+      "supplier": {
+        "name": "Ziram",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 3.0475e-06
+    },
+    {
+      "supplier": {
+        "name": "Tert-butanol",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1.2535e-06
+    },
+    {
+      "supplier": {
+        "name": "t-Butyl methyl ether",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1.5295e-07
+    }
+  ]
+}
