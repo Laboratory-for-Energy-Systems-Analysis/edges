@@ -10,5 +10,642 @@
     "map_contained_locations",
     "map_remaining_locations_to_global"
   ],
-  "exchanges": []
+  "exchanges": [
+    {
+      "supplier": {
+        "name": "Carbon dioxide, fossil",
+        "categories": [
+          "air"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.152
+    },
+    {
+      "supplier": {
+        "name": "Carbon dioxide, from soil or biomass stock",
+        "categories": [
+          "air"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.152
+    },
+    {
+      "supplier": {
+        "name": "Carbon dioxide, fossil",
+        "categories": [
+          "air",
+          "urban air close to ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.152
+    },
+    {
+      "supplier": {
+        "name": "Carbon dioxide, from soil or biomass stock",
+        "categories": [
+          "air",
+          "urban air close to ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.152
+    },
+    {
+      "supplier": {
+        "name": "Carbon dioxide, fossil",
+        "categories": [
+          "air",
+          "non-urban air or from high stacks"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.152
+    },
+    {
+      "supplier": {
+        "name": "Carbon dioxide, from soil or biomass stock",
+        "categories": [
+          "air",
+          "non-urban air or from high stacks"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.152
+    },
+    {
+      "supplier": {
+        "name": "Carbon dioxide, fossil",
+        "categories": [
+          "air",
+          "lower stratosphere + upper troposphere"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.152
+    },
+    {
+      "supplier": {
+        "name": "Carbon dioxide, from soil or biomass stock",
+        "categories": [
+          "air",
+          "lower stratosphere + upper troposphere"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.152
+    },
+    {
+      "supplier": {
+        "name": "Carbon dioxide, fossil",
+        "categories": [
+          "air",
+          "indoor"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.152
+    },
+    {
+      "supplier": {
+        "name": "Carbon dioxide, from soil or biomass stock",
+        "categories": [
+          "air",
+          "indoor"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.152
+    },
+    {
+      "supplier": {
+        "name": "Carbon dioxide, fossil",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.1685
+    },
+    {
+      "supplier": {
+        "name": "Carbon dioxide, from soil or biomass stock",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.1685
+    },
+    {
+      "supplier": {
+        "name": "Carbon monoxide, fossil",
+        "categories": [
+          "air"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.239
+    },
+    {
+      "supplier": {
+        "name": "Carbon monoxide, from soil or biomass stock",
+        "categories": [
+          "air"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.239
+    },
+    {
+      "supplier": {
+        "name": "Carbon monoxide, fossil",
+        "categories": [
+          "air",
+          "urban air close to ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.239
+    },
+    {
+      "supplier": {
+        "name": "Carbon monoxide, from soil or biomass stock",
+        "categories": [
+          "air",
+          "urban air close to ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.239
+    },
+    {
+      "supplier": {
+        "name": "Carbon monoxide, fossil",
+        "categories": [
+          "air",
+          "non-urban air or from high stacks"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.239
+    },
+    {
+      "supplier": {
+        "name": "Carbon monoxide, from soil or biomass stock",
+        "categories": [
+          "air",
+          "non-urban air or from high stacks"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.239
+    },
+    {
+      "supplier": {
+        "name": "Carbon monoxide, fossil",
+        "categories": [
+          "air",
+          "lower stratosphere + upper troposphere"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.239
+    },
+    {
+      "supplier": {
+        "name": "Carbon monoxide, from soil or biomass stock",
+        "categories": [
+          "air",
+          "lower stratosphere + upper troposphere"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.239
+    },
+    {
+      "supplier": {
+        "name": "Carbon monoxide, fossil",
+        "categories": [
+          "air",
+          "indoor"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.239
+    },
+    {
+      "supplier": {
+        "name": "Carbon monoxide, from soil or biomass stock",
+        "categories": [
+          "air",
+          "indoor"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.239
+    },
+    {
+      "supplier": {
+        "name": "Carbon monoxide, fossil",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.2649
+    },
+    {
+      "supplier": {
+        "name": "Carbon monoxide, from soil or biomass stock",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.2649
+    },
+    {
+      "supplier": {
+        "name": "Methane",
+        "categories": [
+          "air"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.304
+    },
+    {
+      "supplier": {
+        "name": "Methane, fossil",
+        "categories": [
+          "air"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.304
+    },
+    {
+      "supplier": {
+        "name": "Methane, from soil or biomass stock",
+        "categories": [
+          "air"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.304
+    },
+    {
+      "supplier": {
+        "name": "Methane",
+        "categories": [
+          "air",
+          "urban air close to ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.304
+    },
+    {
+      "supplier": {
+        "name": "Methane, fossil",
+        "categories": [
+          "air",
+          "urban air close to ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.304
+    },
+    {
+      "supplier": {
+        "name": "Methane, from soil or biomass stock",
+        "categories": [
+          "air",
+          "urban air close to ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.304
+    },
+    {
+      "supplier": {
+        "name": "Methane",
+        "categories": [
+          "air",
+          "non-urban air or from high stacks"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.304
+    },
+    {
+      "supplier": {
+        "name": "Methane, fossil",
+        "categories": [
+          "air",
+          "non-urban air or from high stacks"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.304
+    },
+    {
+      "supplier": {
+        "name": "Methane, from soil or biomass stock",
+        "categories": [
+          "air",
+          "non-urban air or from high stacks"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.304
+    },
+    {
+      "supplier": {
+        "name": "Methane",
+        "categories": [
+          "air",
+          "lower stratosphere + upper troposphere"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.304
+    },
+    {
+      "supplier": {
+        "name": "Methane, fossil",
+        "categories": [
+          "air",
+          "lower stratosphere + upper troposphere"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.304
+    },
+    {
+      "supplier": {
+        "name": "Methane, from soil or biomass stock",
+        "categories": [
+          "air",
+          "lower stratosphere + upper troposphere"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.304
+    },
+    {
+      "supplier": {
+        "name": "Methane",
+        "categories": [
+          "air",
+          "indoor"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.304
+    },
+    {
+      "supplier": {
+        "name": "Methane, fossil",
+        "categories": [
+          "air",
+          "indoor"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.304
+    },
+    {
+      "supplier": {
+        "name": "Methane, from soil or biomass stock",
+        "categories": [
+          "air",
+          "indoor"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.304
+    },
+    {
+      "supplier": {
+        "name": "Methane",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.337
+    },
+    {
+      "supplier": {
+        "name": "Methane, fossil",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.337
+    },
+    {
+      "supplier": {
+        "name": "Methane, from soil or biomass stock",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.337
+    },
+    {
+      "supplier": {
+        "name": "Carbon dioxide, to soil or biomass stock",
+        "categories": [
+          "soil"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": -0.152
+    },
+    {
+      "supplier": {
+        "name": "Carbon dioxide, to soil or biomass stock",
+        "categories": [
+          "soil",
+          "industrial"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": -0.152
+    },
+    {
+      "supplier": {
+        "name": "Carbon dioxide, to soil or biomass stock",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": -0.152
+    },
+    {
+      "supplier": {
+        "name": "Carbon dioxide, to soil or biomass stock",
+        "categories": [
+          "soil",
+          "forestry"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": -0.152
+    }
+  ]
 }

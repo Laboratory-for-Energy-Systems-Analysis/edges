@@ -21,6 +21,20 @@
         "matrix": "biosphere"
       },
       "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.307104727361737
+    },
+    {
+      "supplier": {
+        "name": "Occupation, heterogeneous, agricultural",
+        "categories": [
+          "natural resource",
+          "land"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
         "matrix": "technosphere",
         "location": "AD"
       },
@@ -1193,20 +1207,6 @@
       "consumer": {
         "matrix": "technosphere",
         "location": "GI"
-      },
-      "value": 0.307104727361737
-    },
-    {
-      "supplier": {
-        "name": "Occupation, heterogeneous, agricultural",
-        "categories": [
-          "natural resource",
-          "land"
-        ],
-        "matrix": "biosphere"
-      },
-      "consumer": {
-        "matrix": "technosphere"
       },
       "value": 0.307104727361737
     },
@@ -3560,6 +3560,188 @@
         "matrix": "biosphere"
       },
       "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1.0
+    },
+    {
+      "supplier": {
+        "name": "Occupation, annual crop, flooded crop",
+        "categories": [
+          "natural resource",
+          "land"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1.0
+    },
+    {
+      "supplier": {
+        "name": "Occupation, annual crop, greenhouse",
+        "categories": [
+          "natural resource",
+          "land"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1.0
+    },
+    {
+      "supplier": {
+        "name": "Occupation, annual crop, irrigated",
+        "categories": [
+          "natural resource",
+          "land"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1.0
+    },
+    {
+      "supplier": {
+        "name": "Occupation, annual crop, irrigated, extensive",
+        "categories": [
+          "natural resource",
+          "land"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1.0
+    },
+    {
+      "supplier": {
+        "name": "Occupation, annual crop, irrigated, intensive",
+        "categories": [
+          "natural resource",
+          "land"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1.0
+    },
+    {
+      "supplier": {
+        "name": "Occupation, annual crop, non-irrigated",
+        "categories": [
+          "natural resource",
+          "land"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1.0
+    },
+    {
+      "supplier": {
+        "name": "Occupation, annual crop, non-irrigated, extensive",
+        "categories": [
+          "natural resource",
+          "land"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1.0
+    },
+    {
+      "supplier": {
+        "name": "Occupation, annual crop, non-irrigated, intensive",
+        "categories": [
+          "natural resource",
+          "land"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1.0
+    },
+    {
+      "supplier": {
+        "name": "Occupation, arable land, unspecified use",
+        "categories": [
+          "natural resource",
+          "land"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1.0
+    },
+    {
+      "supplier": {
+        "name": "Occupation, arable, conservation tillage (obsolete)",
+        "categories": [
+          "natural resource",
+          "land"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1.0
+    },
+    {
+      "supplier": {
+        "name": "Occupation, arable, conventional tillage (obsolete)",
+        "categories": [
+          "natural resource",
+          "land"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1.0
+    },
+    {
+      "supplier": {
+        "name": "Occupation, arable, reduced tillage (obsolete)",
+        "categories": [
+          "natural resource",
+          "land"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1.0
+    },
+    {
+      "supplier": {
+        "name": "Occupation, annual crop",
+        "categories": [
+          "natural resource",
+          "land"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
         "matrix": "technosphere",
         "location": "AD"
       },
@@ -18952,188 +19134,6 @@
       "consumer": {
         "matrix": "technosphere",
         "location": "GI"
-      },
-      "value": 1.0
-    },
-    {
-      "supplier": {
-        "name": "Occupation, annual crop",
-        "categories": [
-          "natural resource",
-          "land"
-        ],
-        "matrix": "biosphere"
-      },
-      "consumer": {
-        "matrix": "technosphere"
-      },
-      "value": 1.0
-    },
-    {
-      "supplier": {
-        "name": "Occupation, annual crop, flooded crop",
-        "categories": [
-          "natural resource",
-          "land"
-        ],
-        "matrix": "biosphere"
-      },
-      "consumer": {
-        "matrix": "technosphere"
-      },
-      "value": 1.0
-    },
-    {
-      "supplier": {
-        "name": "Occupation, annual crop, greenhouse",
-        "categories": [
-          "natural resource",
-          "land"
-        ],
-        "matrix": "biosphere"
-      },
-      "consumer": {
-        "matrix": "technosphere"
-      },
-      "value": 1.0
-    },
-    {
-      "supplier": {
-        "name": "Occupation, annual crop, irrigated",
-        "categories": [
-          "natural resource",
-          "land"
-        ],
-        "matrix": "biosphere"
-      },
-      "consumer": {
-        "matrix": "technosphere"
-      },
-      "value": 1.0
-    },
-    {
-      "supplier": {
-        "name": "Occupation, annual crop, irrigated, extensive",
-        "categories": [
-          "natural resource",
-          "land"
-        ],
-        "matrix": "biosphere"
-      },
-      "consumer": {
-        "matrix": "technosphere"
-      },
-      "value": 1.0
-    },
-    {
-      "supplier": {
-        "name": "Occupation, annual crop, irrigated, intensive",
-        "categories": [
-          "natural resource",
-          "land"
-        ],
-        "matrix": "biosphere"
-      },
-      "consumer": {
-        "matrix": "technosphere"
-      },
-      "value": 1.0
-    },
-    {
-      "supplier": {
-        "name": "Occupation, annual crop, non-irrigated",
-        "categories": [
-          "natural resource",
-          "land"
-        ],
-        "matrix": "biosphere"
-      },
-      "consumer": {
-        "matrix": "technosphere"
-      },
-      "value": 1.0
-    },
-    {
-      "supplier": {
-        "name": "Occupation, annual crop, non-irrigated, extensive",
-        "categories": [
-          "natural resource",
-          "land"
-        ],
-        "matrix": "biosphere"
-      },
-      "consumer": {
-        "matrix": "technosphere"
-      },
-      "value": 1.0
-    },
-    {
-      "supplier": {
-        "name": "Occupation, annual crop, non-irrigated, intensive",
-        "categories": [
-          "natural resource",
-          "land"
-        ],
-        "matrix": "biosphere"
-      },
-      "consumer": {
-        "matrix": "technosphere"
-      },
-      "value": 1.0
-    },
-    {
-      "supplier": {
-        "name": "Occupation, arable land, unspecified use",
-        "categories": [
-          "natural resource",
-          "land"
-        ],
-        "matrix": "biosphere"
-      },
-      "consumer": {
-        "matrix": "technosphere"
-      },
-      "value": 1.0
-    },
-    {
-      "supplier": {
-        "name": "Occupation, arable, conservation tillage (obsolete)",
-        "categories": [
-          "natural resource",
-          "land"
-        ],
-        "matrix": "biosphere"
-      },
-      "consumer": {
-        "matrix": "technosphere"
-      },
-      "value": 1.0
-    },
-    {
-      "supplier": {
-        "name": "Occupation, arable, conventional tillage (obsolete)",
-        "categories": [
-          "natural resource",
-          "land"
-        ],
-        "matrix": "biosphere"
-      },
-      "consumer": {
-        "matrix": "technosphere"
-      },
-      "value": 1.0
-    },
-    {
-      "supplier": {
-        "name": "Occupation, arable, reduced tillage (obsolete)",
-        "categories": [
-          "natural resource",
-          "land"
-        ],
-        "matrix": "biosphere"
-      },
-      "consumer": {
-        "matrix": "technosphere"
       },
       "value": 1.0
     },
@@ -49556,6 +49556,160 @@
         "location": "ZW"
       },
       "value": 0.9864469194476575
+    },
+    {
+      "supplier": {
+        "name": "Occupation, construction site",
+        "categories": [
+          "natural resource",
+          "land"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.6295529083804061
+    },
+    {
+      "supplier": {
+        "name": "Occupation, dump site",
+        "categories": [
+          "natural resource",
+          "land"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.6295529083804061
+    },
+    {
+      "supplier": {
+        "name": "Occupation, industrial area",
+        "categories": [
+          "natural resource",
+          "land"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.6295529083804061
+    },
+    {
+      "supplier": {
+        "name": "Occupation, mineral extraction site",
+        "categories": [
+          "natural resource",
+          "land"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.6295529083804061
+    },
+    {
+      "supplier": {
+        "name": "Occupation, traffic area, rail network",
+        "categories": [
+          "natural resource",
+          "land"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.6295529083804061
+    },
+    {
+      "supplier": {
+        "name": "Occupation, traffic area, rail/road embankment",
+        "categories": [
+          "natural resource",
+          "land"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.6295529083804061
+    },
+    {
+      "supplier": {
+        "name": "Occupation, traffic area, road network",
+        "categories": [
+          "natural resource",
+          "land"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.6295529083804061
+    },
+    {
+      "supplier": {
+        "name": "Occupation, urban, continuously built",
+        "categories": [
+          "natural resource",
+          "land"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.6295529083804061
+    },
+    {
+      "supplier": {
+        "name": "Occupation, urban, discontinuously built",
+        "categories": [
+          "natural resource",
+          "land"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.6295529083804061
+    },
+    {
+      "supplier": {
+        "name": "Occupation, urban, green area",
+        "categories": [
+          "natural resource",
+          "land"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.6295529083804061
+    },
+    {
+      "supplier": {
+        "name": "Occupation, urban/industrial fallow (non-use)",
+        "categories": [
+          "natural resource",
+          "land"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.6295529083804061
     },
     {
       "supplier": {
@@ -62589,160 +62743,6 @@
       "consumer": {
         "matrix": "technosphere",
         "location": "GI"
-      },
-      "value": 0.6295529083804061
-    },
-    {
-      "supplier": {
-        "name": "Occupation, construction site",
-        "categories": [
-          "natural resource",
-          "land"
-        ],
-        "matrix": "biosphere"
-      },
-      "consumer": {
-        "matrix": "technosphere"
-      },
-      "value": 0.6295529083804061
-    },
-    {
-      "supplier": {
-        "name": "Occupation, dump site",
-        "categories": [
-          "natural resource",
-          "land"
-        ],
-        "matrix": "biosphere"
-      },
-      "consumer": {
-        "matrix": "technosphere"
-      },
-      "value": 0.6295529083804061
-    },
-    {
-      "supplier": {
-        "name": "Occupation, industrial area",
-        "categories": [
-          "natural resource",
-          "land"
-        ],
-        "matrix": "biosphere"
-      },
-      "consumer": {
-        "matrix": "technosphere"
-      },
-      "value": 0.6295529083804061
-    },
-    {
-      "supplier": {
-        "name": "Occupation, mineral extraction site",
-        "categories": [
-          "natural resource",
-          "land"
-        ],
-        "matrix": "biosphere"
-      },
-      "consumer": {
-        "matrix": "technosphere"
-      },
-      "value": 0.6295529083804061
-    },
-    {
-      "supplier": {
-        "name": "Occupation, traffic area, rail network",
-        "categories": [
-          "natural resource",
-          "land"
-        ],
-        "matrix": "biosphere"
-      },
-      "consumer": {
-        "matrix": "technosphere"
-      },
-      "value": 0.6295529083804061
-    },
-    {
-      "supplier": {
-        "name": "Occupation, traffic area, rail/road embankment",
-        "categories": [
-          "natural resource",
-          "land"
-        ],
-        "matrix": "biosphere"
-      },
-      "consumer": {
-        "matrix": "technosphere"
-      },
-      "value": 0.6295529083804061
-    },
-    {
-      "supplier": {
-        "name": "Occupation, traffic area, road network",
-        "categories": [
-          "natural resource",
-          "land"
-        ],
-        "matrix": "biosphere"
-      },
-      "consumer": {
-        "matrix": "technosphere"
-      },
-      "value": 0.6295529083804061
-    },
-    {
-      "supplier": {
-        "name": "Occupation, urban, continuously built",
-        "categories": [
-          "natural resource",
-          "land"
-        ],
-        "matrix": "biosphere"
-      },
-      "consumer": {
-        "matrix": "technosphere"
-      },
-      "value": 0.6295529083804061
-    },
-    {
-      "supplier": {
-        "name": "Occupation, urban, discontinuously built",
-        "categories": [
-          "natural resource",
-          "land"
-        ],
-        "matrix": "biosphere"
-      },
-      "consumer": {
-        "matrix": "technosphere"
-      },
-      "value": 0.6295529083804061
-    },
-    {
-      "supplier": {
-        "name": "Occupation, urban, green area",
-        "categories": [
-          "natural resource",
-          "land"
-        ],
-        "matrix": "biosphere"
-      },
-      "consumer": {
-        "matrix": "technosphere"
-      },
-      "value": 0.6295529083804061
-    },
-    {
-      "supplier": {
-        "name": "Occupation, urban/industrial fallow (non-use)",
-        "categories": [
-          "natural resource",
-          "land"
-        ],
-        "matrix": "biosphere"
-      },
-      "consumer": {
-        "matrix": "technosphere"
       },
       "value": 0.6295529083804061
     },
@@ -88485,6 +88485,48 @@
         "location": "ZW"
       },
       "value": 0.6295529083804061
+    },
+    {
+      "supplier": {
+        "name": "Occupation, forest, extensive",
+        "categories": [
+          "natural resource",
+          "land"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.243886117271906
+    },
+    {
+      "supplier": {
+        "name": "Occupation, forest, intensive",
+        "categories": [
+          "natural resource",
+          "land"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.243886117271906
+    },
+    {
+      "supplier": {
+        "name": "Occupation, forest, unspecified",
+        "categories": [
+          "natural resource",
+          "land"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.243886117271906
     },
     {
       "supplier": {
@@ -92038,48 +92080,6 @@
       "consumer": {
         "matrix": "technosphere",
         "location": "GI"
-      },
-      "value": 0.243886117271906
-    },
-    {
-      "supplier": {
-        "name": "Occupation, forest, extensive",
-        "categories": [
-          "natural resource",
-          "land"
-        ],
-        "matrix": "biosphere"
-      },
-      "consumer": {
-        "matrix": "technosphere"
-      },
-      "value": 0.243886117271906
-    },
-    {
-      "supplier": {
-        "name": "Occupation, forest, intensive",
-        "categories": [
-          "natural resource",
-          "land"
-        ],
-        "matrix": "biosphere"
-      },
-      "consumer": {
-        "matrix": "technosphere"
-      },
-      "value": 0.243886117271906
-    },
-    {
-      "supplier": {
-        "name": "Occupation, forest, unspecified",
-        "categories": [
-          "natural resource",
-          "land"
-        ],
-        "matrix": "biosphere"
-      },
-      "consumer": {
-        "matrix": "technosphere"
       },
       "value": 0.243886117271906
     },
@@ -99113,6 +99113,62 @@
         "matrix": "biosphere"
       },
       "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.3045444489266158
+    },
+    {
+      "supplier": {
+        "name": "Occupation, pasture, man made",
+        "categories": [
+          "natural resource",
+          "land"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.3045444489266158
+    },
+    {
+      "supplier": {
+        "name": "Occupation, pasture, man made, extensive",
+        "categories": [
+          "natural resource",
+          "land"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.3045444489266158
+    },
+    {
+      "supplier": {
+        "name": "Occupation, pasture, man made, intensive",
+        "categories": [
+          "natural resource",
+          "land"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.3045444489266158
+    },
+    {
+      "supplier": {
+        "name": "Occupation, grassland, natural, for livestock grazing",
+        "categories": [
+          "natural resource",
+          "land"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
         "matrix": "technosphere",
         "location": "AD"
       },
@@ -103842,62 +103898,6 @@
         "location": "GI"
       },
       "value": 0.3642265548729812
-    },
-    {
-      "supplier": {
-        "name": "Occupation, grassland, natural, for livestock grazing",
-        "categories": [
-          "natural resource",
-          "land"
-        ],
-        "matrix": "biosphere"
-      },
-      "consumer": {
-        "matrix": "technosphere"
-      },
-      "value": 0.3045444489266158
-    },
-    {
-      "supplier": {
-        "name": "Occupation, pasture, man made",
-        "categories": [
-          "natural resource",
-          "land"
-        ],
-        "matrix": "biosphere"
-      },
-      "consumer": {
-        "matrix": "technosphere"
-      },
-      "value": 0.3045444489266158
-    },
-    {
-      "supplier": {
-        "name": "Occupation, pasture, man made, extensive",
-        "categories": [
-          "natural resource",
-          "land"
-        ],
-        "matrix": "biosphere"
-      },
-      "consumer": {
-        "matrix": "technosphere"
-      },
-      "value": 0.3045444489266158
-    },
-    {
-      "supplier": {
-        "name": "Occupation, pasture, man made, intensive",
-        "categories": [
-          "natural resource",
-          "land"
-        ],
-        "matrix": "biosphere"
-      },
-      "consumer": {
-        "matrix": "technosphere"
-      },
-      "value": 0.3045444489266158
     },
     {
       "supplier": {
@@ -113269,6 +113269,104 @@
         "matrix": "biosphere"
       },
       "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.2880160386468059
+    },
+    {
+      "supplier": {
+        "name": "Occupation, permanent crop, irrigated",
+        "categories": [
+          "natural resource",
+          "land"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.2880160386468059
+    },
+    {
+      "supplier": {
+        "name": "Occupation, permanent crop, irrigated, extensive",
+        "categories": [
+          "natural resource",
+          "land"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.2880160386468059
+    },
+    {
+      "supplier": {
+        "name": "Occupation, permanent crop, irrigated, intensive",
+        "categories": [
+          "natural resource",
+          "land"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.2880160386468059
+    },
+    {
+      "supplier": {
+        "name": "Occupation, permanent crop, non-irrigated",
+        "categories": [
+          "natural resource",
+          "land"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.2880160386468059
+    },
+    {
+      "supplier": {
+        "name": "Occupation, permanent crop, non-irrigated, extensive",
+        "categories": [
+          "natural resource",
+          "land"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.2880160386468059
+    },
+    {
+      "supplier": {
+        "name": "Occupation, permanent crop, non-irrigated, intensive",
+        "categories": [
+          "natural resource",
+          "land"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.2880160386468059
+    },
+    {
+      "supplier": {
+        "name": "Occupation, permanent crop",
+        "categories": [
+          "natural resource",
+          "land"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
         "matrix": "technosphere",
         "location": "AD"
       },
@@ -121551,104 +121649,6 @@
       "consumer": {
         "matrix": "technosphere",
         "location": "GI"
-      },
-      "value": 0.2880160386468059
-    },
-    {
-      "supplier": {
-        "name": "Occupation, permanent crop",
-        "categories": [
-          "natural resource",
-          "land"
-        ],
-        "matrix": "biosphere"
-      },
-      "consumer": {
-        "matrix": "technosphere"
-      },
-      "value": 0.2880160386468059
-    },
-    {
-      "supplier": {
-        "name": "Occupation, permanent crop, irrigated",
-        "categories": [
-          "natural resource",
-          "land"
-        ],
-        "matrix": "biosphere"
-      },
-      "consumer": {
-        "matrix": "technosphere"
-      },
-      "value": 0.2880160386468059
-    },
-    {
-      "supplier": {
-        "name": "Occupation, permanent crop, irrigated, extensive",
-        "categories": [
-          "natural resource",
-          "land"
-        ],
-        "matrix": "biosphere"
-      },
-      "consumer": {
-        "matrix": "technosphere"
-      },
-      "value": 0.2880160386468059
-    },
-    {
-      "supplier": {
-        "name": "Occupation, permanent crop, irrigated, intensive",
-        "categories": [
-          "natural resource",
-          "land"
-        ],
-        "matrix": "biosphere"
-      },
-      "consumer": {
-        "matrix": "technosphere"
-      },
-      "value": 0.2880160386468059
-    },
-    {
-      "supplier": {
-        "name": "Occupation, permanent crop, non-irrigated",
-        "categories": [
-          "natural resource",
-          "land"
-        ],
-        "matrix": "biosphere"
-      },
-      "consumer": {
-        "matrix": "technosphere"
-      },
-      "value": 0.2880160386468059
-    },
-    {
-      "supplier": {
-        "name": "Occupation, permanent crop, non-irrigated, extensive",
-        "categories": [
-          "natural resource",
-          "land"
-        ],
-        "matrix": "biosphere"
-      },
-      "consumer": {
-        "matrix": "technosphere"
-      },
-      "value": 0.2880160386468059
-    },
-    {
-      "supplier": {
-        "name": "Occupation, permanent crop, non-irrigated, intensive",
-        "categories": [
-          "natural resource",
-          "land"
-        ],
-        "matrix": "biosphere"
-      },
-      "consumer": {
-        "matrix": "technosphere"
       },
       "value": 0.2880160386468059
     },
@@ -138031,6 +138031,20 @@
         "location": "ZW"
       },
       "value": 0.2880160386468059
+    },
+    {
+      "supplier": {
+        "name": "Occupation, shrub land, sclerophyllous",
+        "categories": [
+          "natural resource",
+          "land"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.1887945678983373
     },
     {
       "supplier": {
@@ -139214,20 +139228,6 @@
       "consumer": {
         "matrix": "technosphere",
         "location": "GI"
-      },
-      "value": 0.1887945678983373
-    },
-    {
-      "supplier": {
-        "name": "Occupation, shrub land, sclerophyllous",
-        "categories": [
-          "natural resource",
-          "land"
-        ],
-        "matrix": "biosphere"
-      },
-      "consumer": {
-        "matrix": "technosphere"
       },
       "value": 0.1887945678983373
     },
@@ -141581,6 +141581,62 @@
         "matrix": "biosphere"
       },
       "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.2962142214745566
+    },
+    {
+      "supplier": {
+        "name": "Occupation, lake, artificial",
+        "categories": [
+          "natural resource",
+          "land"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.2962142214745566
+    },
+    {
+      "supplier": {
+        "name": "Occupation, river, artificial",
+        "categories": [
+          "natural resource",
+          "land"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.2962142214745566
+    },
+    {
+      "supplier": {
+        "name": "Occupation, unspecified",
+        "categories": [
+          "natural resource",
+          "land"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.2962142214745566
+    },
+    {
+      "supplier": {
+        "name": "Occupation, inland waterbody, unspecified",
+        "categories": [
+          "natural resource",
+          "land"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
         "matrix": "technosphere",
         "location": "AD"
       },
@@ -146250,62 +146306,6 @@
         "location": "GI"
       },
       "value": 0.01669337459519915
-    },
-    {
-      "supplier": {
-        "name": "Occupation, inland waterbody, unspecified",
-        "categories": [
-          "natural resource",
-          "land"
-        ],
-        "matrix": "biosphere"
-      },
-      "consumer": {
-        "matrix": "technosphere"
-      },
-      "value": 0.2962142214745566
-    },
-    {
-      "supplier": {
-        "name": "Occupation, lake, artificial",
-        "categories": [
-          "natural resource",
-          "land"
-        ],
-        "matrix": "biosphere"
-      },
-      "consumer": {
-        "matrix": "technosphere"
-      },
-      "value": 0.2962142214745566
-    },
-    {
-      "supplier": {
-        "name": "Occupation, river, artificial",
-        "categories": [
-          "natural resource",
-          "land"
-        ],
-        "matrix": "biosphere"
-      },
-      "consumer": {
-        "matrix": "technosphere"
-      },
-      "value": 0.2962142214745566
-    },
-    {
-      "supplier": {
-        "name": "Occupation, unspecified",
-        "categories": [
-          "natural resource",
-          "land"
-        ],
-        "matrix": "biosphere"
-      },
-      "consumer": {
-        "matrix": "technosphere"
-      },
-      "value": 0.2962142214745566
     },
     {
       "supplier": {

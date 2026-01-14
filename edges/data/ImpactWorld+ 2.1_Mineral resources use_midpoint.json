@@ -251,6 +251,62 @@
     },
     {
       "supplier": {
+        "name": "Clay, bentonite, in ground",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.61
+    },
+    {
+      "supplier": {
+        "name": "Clay, bentonite",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.61
+    },
+    {
+      "supplier": {
+        "name": "Clay, unspecified, in ground",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.61
+    },
+    {
+      "supplier": {
+        "name": "Clay, unspecified",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.61
+    },
+    {
+      "supplier": {
         "name": "Cobalt",
         "categories": [
           "natural resource",

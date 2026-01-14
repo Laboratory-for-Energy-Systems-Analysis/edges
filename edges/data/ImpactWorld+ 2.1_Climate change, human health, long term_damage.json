@@ -96,7 +96,7 @@
     },
     {
       "supplier": {
-        "name": "Butane",
+        "name": "Carbon dioxide, fossil",
         "categories": [
           "air"
         ],
@@ -105,11 +105,24 @@
       "consumer": {
         "matrix": "technosphere"
       },
-      "value": 5.3065655139906e-09
+      "value": 5.604176047506329e-06
     },
     {
       "supplier": {
-        "name": "Butane",
+        "name": "Carbon dioxide, from soil or biomass stock",
+        "categories": [
+          "air"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 5.604176047506329e-06
+    },
+    {
+      "supplier": {
+        "name": "Carbon dioxide, fossil",
         "categories": [
           "air",
           "urban air close to ground"
@@ -119,80 +132,11 @@
       "consumer": {
         "matrix": "technosphere"
       },
-      "value": 5.3065655139906e-09
+      "value": 5.604176047506329e-06
     },
     {
       "supplier": {
-        "name": "Butane",
-        "categories": [
-          "air",
-          "non-urban air or from high stacks"
-        ],
-        "matrix": "biosphere"
-      },
-      "consumer": {
-        "matrix": "technosphere"
-      },
-      "value": 5.3065655139906e-09
-    },
-    {
-      "supplier": {
-        "name": "Butane",
-        "categories": [
-          "air",
-          "lower stratosphere + upper troposphere"
-        ],
-        "matrix": "biosphere"
-      },
-      "consumer": {
-        "matrix": "technosphere"
-      },
-      "value": 5.3065655139906e-09
-    },
-    {
-      "supplier": {
-        "name": "Butane",
-        "categories": [
-          "air",
-          "indoor"
-        ],
-        "matrix": "biosphere"
-      },
-      "consumer": {
-        "matrix": "technosphere"
-      },
-      "value": 5.3065655139906e-09
-    },
-    {
-      "supplier": {
-        "name": "Butane",
-        "categories": [
-          "air",
-          "low population density, long-term"
-        ],
-        "matrix": "biosphere"
-      },
-      "consumer": {
-        "matrix": "technosphere"
-      },
-      "value": 1.90570979033528e-08
-    },
-    {
-      "supplier": {
-        "name": "Butane",
-        "categories": [
-          "air"
-        ],
-        "matrix": "biosphere"
-      },
-      "consumer": {
-        "matrix": "technosphere"
-      },
-      "value": 0.08054147852165533
-    },
-    {
-      "supplier": {
-        "name": "Butane",
+        "name": "Carbon dioxide, from soil or biomass stock",
         "categories": [
           "air",
           "urban air close to ground"
@@ -202,11 +146,11 @@
       "consumer": {
         "matrix": "technosphere"
       },
-      "value": 0.08054147852165533
+      "value": 5.604176047506329e-06
     },
     {
       "supplier": {
-        "name": "Butane",
+        "name": "Carbon dioxide, fossil",
         "categories": [
           "air",
           "non-urban air or from high stacks"
@@ -216,11 +160,25 @@
       "consumer": {
         "matrix": "technosphere"
       },
-      "value": 0.08054147852165533
+      "value": 5.604176047506329e-06
     },
     {
       "supplier": {
-        "name": "Butane",
+        "name": "Carbon dioxide, from soil or biomass stock",
+        "categories": [
+          "air",
+          "non-urban air or from high stacks"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 5.604176047506329e-06
+    },
+    {
+      "supplier": {
+        "name": "Carbon dioxide, fossil",
         "categories": [
           "air",
           "lower stratosphere + upper troposphere"
@@ -230,11 +188,25 @@
       "consumer": {
         "matrix": "technosphere"
       },
-      "value": 0.08054147852165533
+      "value": 5.604176047506329e-06
     },
     {
       "supplier": {
-        "name": "Butane",
+        "name": "Carbon dioxide, from soil or biomass stock",
+        "categories": [
+          "air",
+          "lower stratosphere + upper troposphere"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 5.604176047506329e-06
+    },
+    {
+      "supplier": {
+        "name": "Carbon dioxide, fossil",
         "categories": [
           "air",
           "indoor"
@@ -244,11 +216,25 @@
       "consumer": {
         "matrix": "technosphere"
       },
-      "value": 0.08054147852165533
+      "value": 5.604176047506329e-06
     },
     {
       "supplier": {
-        "name": "Butane",
+        "name": "Carbon dioxide, from soil or biomass stock",
+        "categories": [
+          "air",
+          "indoor"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 5.604176047506329e-06
+    },
+    {
+      "supplier": {
+        "name": "Carbon dioxide, fossil",
         "categories": [
           "air",
           "low population density, long-term"
@@ -258,7 +244,187 @@
       "consumer": {
         "matrix": "technosphere"
       },
-      "value": 0.09631745270116014
+      "value": 7.197288788407747e-06
+    },
+    {
+      "supplier": {
+        "name": "Carbon dioxide, from soil or biomass stock",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 7.197288788407747e-06
+    },
+    {
+      "supplier": {
+        "name": "Carbon monoxide, fossil",
+        "categories": [
+          "air"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 5.08861529306131e-09
+    },
+    {
+      "supplier": {
+        "name": "Carbon monoxide, from soil or biomass stock",
+        "categories": [
+          "air"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 5.08861529306131e-09
+    },
+    {
+      "supplier": {
+        "name": "Carbon monoxide, fossil",
+        "categories": [
+          "air",
+          "urban air close to ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 5.08861529306131e-09
+    },
+    {
+      "supplier": {
+        "name": "Carbon monoxide, from soil or biomass stock",
+        "categories": [
+          "air",
+          "urban air close to ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 5.08861529306131e-09
+    },
+    {
+      "supplier": {
+        "name": "Carbon monoxide, fossil",
+        "categories": [
+          "air",
+          "non-urban air or from high stacks"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 5.08861529306131e-09
+    },
+    {
+      "supplier": {
+        "name": "Carbon monoxide, from soil or biomass stock",
+        "categories": [
+          "air",
+          "non-urban air or from high stacks"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 5.08861529306131e-09
+    },
+    {
+      "supplier": {
+        "name": "Carbon monoxide, fossil",
+        "categories": [
+          "air",
+          "lower stratosphere + upper troposphere"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 5.08861529306131e-09
+    },
+    {
+      "supplier": {
+        "name": "Carbon monoxide, from soil or biomass stock",
+        "categories": [
+          "air",
+          "lower stratosphere + upper troposphere"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 5.08861529306131e-09
+    },
+    {
+      "supplier": {
+        "name": "Carbon monoxide, fossil",
+        "categories": [
+          "air",
+          "indoor"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 5.08861529306131e-09
+    },
+    {
+      "supplier": {
+        "name": "Carbon monoxide, from soil or biomass stock",
+        "categories": [
+          "air",
+          "indoor"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 5.08861529306131e-09
+    },
+    {
+      "supplier": {
+        "name": "Carbon monoxide, fossil",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1.872732916544099e-08
+    },
+    {
+      "supplier": {
+        "name": "Carbon monoxide, from soil or biomass stock",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1.872732916544099e-08
     },
     {
       "supplier": {
@@ -511,7 +677,1003 @@
     },
     {
       "supplier": {
-        "name": "Ethane",
+        "name": "Ethane, 1,1,1,2-tetrafluoro-, HFC-134a",
+        "categories": [
+          "air"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.0009874802987238588
+    },
+    {
+      "supplier": {
+        "name": "1,1,1,2-Tetrafluoroethane",
+        "categories": [
+          "air"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.0009874802987238588
+    },
+    {
+      "supplier": {
+        "name": "Ethane, 1,1,1,2-tetrafluoro-, HFC-134a",
+        "categories": [
+          "air",
+          "urban air close to ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.0009874802987238588
+    },
+    {
+      "supplier": {
+        "name": "1,1,1,2-Tetrafluoroethane",
+        "categories": [
+          "air",
+          "urban air close to ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.0009874802987238588
+    },
+    {
+      "supplier": {
+        "name": "Ethane, 1,1,1,2-tetrafluoro-, HFC-134a",
+        "categories": [
+          "air",
+          "non-urban air or from high stacks"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.0009874802987238588
+    },
+    {
+      "supplier": {
+        "name": "1,1,1,2-Tetrafluoroethane",
+        "categories": [
+          "air",
+          "non-urban air or from high stacks"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.0009874802987238588
+    },
+    {
+      "supplier": {
+        "name": "Ethane, 1,1,1,2-tetrafluoro-, HFC-134a",
+        "categories": [
+          "air",
+          "lower stratosphere + upper troposphere"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.0009874802987238588
+    },
+    {
+      "supplier": {
+        "name": "1,1,1,2-Tetrafluoroethane",
+        "categories": [
+          "air",
+          "lower stratosphere + upper troposphere"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.0009874802987238588
+    },
+    {
+      "supplier": {
+        "name": "Ethane, 1,1,1,2-tetrafluoro-, HFC-134a",
+        "categories": [
+          "air",
+          "indoor"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.0009874802987238588
+    },
+    {
+      "supplier": {
+        "name": "1,1,1,2-Tetrafluoroethane",
+        "categories": [
+          "air",
+          "indoor"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.0009874802987238588
+    },
+    {
+      "supplier": {
+        "name": "Ethane, 1,1,1,2-tetrafluoro-, HFC-134a",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.003636783775770349
+    },
+    {
+      "supplier": {
+        "name": "1,1,1,2-Tetrafluoroethane",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.003636783775770349
+    },
+    {
+      "supplier": {
+        "name": "Ethane, 1,1,1-trichloro-, HCFC-140",
+        "categories": [
+          "air"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.0001014253841408527
+    },
+    {
+      "supplier": {
+        "name": "1,1,1-Trichloroethane",
+        "categories": [
+          "air"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.0001014253841408527
+    },
+    {
+      "supplier": {
+        "name": "Ethane, 1,1,1-trichloro-, HCFC-140",
+        "categories": [
+          "air",
+          "urban air close to ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.0001014253841408527
+    },
+    {
+      "supplier": {
+        "name": "1,1,1-Trichloroethane",
+        "categories": [
+          "air",
+          "urban air close to ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.0001014253841408527
+    },
+    {
+      "supplier": {
+        "name": "Ethane, 1,1,1-trichloro-, HCFC-140",
+        "categories": [
+          "air",
+          "non-urban air or from high stacks"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.0001014253841408527
+    },
+    {
+      "supplier": {
+        "name": "1,1,1-Trichloroethane",
+        "categories": [
+          "air",
+          "non-urban air or from high stacks"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.0001014253841408527
+    },
+    {
+      "supplier": {
+        "name": "Ethane, 1,1,1-trichloro-, HCFC-140",
+        "categories": [
+          "air",
+          "lower stratosphere + upper troposphere"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.0001014253841408527
+    },
+    {
+      "supplier": {
+        "name": "1,1,1-Trichloroethane",
+        "categories": [
+          "air",
+          "lower stratosphere + upper troposphere"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.0001014253841408527
+    },
+    {
+      "supplier": {
+        "name": "Ethane, 1,1,1-trichloro-, HCFC-140",
+        "categories": [
+          "air",
+          "indoor"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.0001014253841408527
+    },
+    {
+      "supplier": {
+        "name": "1,1,1-Trichloroethane",
+        "categories": [
+          "air",
+          "indoor"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.0001014253841408527
+    },
+    {
+      "supplier": {
+        "name": "Ethane, 1,1,1-trichloro-, HCFC-140",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.0003870813387477185
+    },
+    {
+      "supplier": {
+        "name": "1,1,1-Trichloroethane",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.0003870813387477185
+    },
+    {
+      "supplier": {
+        "name": "Ethane, 1,1,1-trifluoro-, HFC-143a",
+        "categories": [
+          "air"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.006340011638639094
+    },
+    {
+      "supplier": {
+        "name": "1,1,1-Trifluoroethane",
+        "categories": [
+          "air"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.006340011638639094
+    },
+    {
+      "supplier": {
+        "name": "Ethane, 1,1,1-trifluoro-, HFC-143a",
+        "categories": [
+          "air",
+          "urban air close to ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.006340011638639094
+    },
+    {
+      "supplier": {
+        "name": "1,1,1-Trifluoroethane",
+        "categories": [
+          "air",
+          "urban air close to ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.006340011638639094
+    },
+    {
+      "supplier": {
+        "name": "Ethane, 1,1,1-trifluoro-, HFC-143a",
+        "categories": [
+          "air",
+          "non-urban air or from high stacks"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.006340011638639094
+    },
+    {
+      "supplier": {
+        "name": "1,1,1-Trifluoroethane",
+        "categories": [
+          "air",
+          "non-urban air or from high stacks"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.006340011638639094
+    },
+    {
+      "supplier": {
+        "name": "Ethane, 1,1,1-trifluoro-, HFC-143a",
+        "categories": [
+          "air",
+          "lower stratosphere + upper troposphere"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.006340011638639094
+    },
+    {
+      "supplier": {
+        "name": "1,1,1-Trifluoroethane",
+        "categories": [
+          "air",
+          "lower stratosphere + upper troposphere"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.006340011638639094
+    },
+    {
+      "supplier": {
+        "name": "Ethane, 1,1,1-trifluoro-, HFC-143a",
+        "categories": [
+          "air",
+          "indoor"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.006340011638639094
+    },
+    {
+      "supplier": {
+        "name": "1,1,1-Trifluoroethane",
+        "categories": [
+          "air",
+          "indoor"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.006340011638639094
+    },
+    {
+      "supplier": {
+        "name": "Ethane, 1,1,1-trifluoro-, HFC-143a",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.01596012586726793
+    },
+    {
+      "supplier": {
+        "name": "1,1,1-Trifluoroethane",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.01596012586726793
+    },
+    {
+      "supplier": {
+        "name": "Ethane, 1,1,2-trichloro-1,2,2-trifluoro-, CFC-113",
+        "categories": [
+          "air"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.01224433898456454
+    },
+    {
+      "supplier": {
+        "name": "1,1,2-Trichloro-1,2,2-trifluoroethane",
+        "categories": [
+          "air"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.01224433898456454
+    },
+    {
+      "supplier": {
+        "name": "Ethane, 1,1,2-trichloro-1,2,2-trifluoro-, CFC-113",
+        "categories": [
+          "air",
+          "urban air close to ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.01224433898456454
+    },
+    {
+      "supplier": {
+        "name": "1,1,2-Trichloro-1,2,2-trifluoroethane",
+        "categories": [
+          "air",
+          "urban air close to ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.01224433898456454
+    },
+    {
+      "supplier": {
+        "name": "Ethane, 1,1,2-trichloro-1,2,2-trifluoro-, CFC-113",
+        "categories": [
+          "air",
+          "non-urban air or from high stacks"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.01224433898456454
+    },
+    {
+      "supplier": {
+        "name": "1,1,2-Trichloro-1,2,2-trifluoroethane",
+        "categories": [
+          "air",
+          "non-urban air or from high stacks"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.01224433898456454
+    },
+    {
+      "supplier": {
+        "name": "Ethane, 1,1,2-trichloro-1,2,2-trifluoro-, CFC-113",
+        "categories": [
+          "air",
+          "lower stratosphere + upper troposphere"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.01224433898456454
+    },
+    {
+      "supplier": {
+        "name": "1,1,2-Trichloro-1,2,2-trifluoroethane",
+        "categories": [
+          "air",
+          "lower stratosphere + upper troposphere"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.01224433898456454
+    },
+    {
+      "supplier": {
+        "name": "Ethane, 1,1,2-trichloro-1,2,2-trifluoro-, CFC-113",
+        "categories": [
+          "air",
+          "indoor"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.01224433898456454
+    },
+    {
+      "supplier": {
+        "name": "1,1,2-Trichloro-1,2,2-trifluoroethane",
+        "categories": [
+          "air",
+          "indoor"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.01224433898456454
+    },
+    {
+      "supplier": {
+        "name": "Ethane, 1,1,2-trichloro-1,2,2-trifluoro-, CFC-113",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.02280974183916036
+    },
+    {
+      "supplier": {
+        "name": "1,1,2-Trichloro-1,2,2-trifluoroethane",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.02280974183916036
+    },
+    {
+      "supplier": {
+        "name": "Ethane, 1,1-dichloro-1-fluoro-, HCFC-141b",
+        "categories": [
+          "air"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.0005471506310480881
+    },
+    {
+      "supplier": {
+        "name": "1,1-Dichloro-1-fluoroethane",
+        "categories": [
+          "air"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.0005471506310480881
+    },
+    {
+      "supplier": {
+        "name": "Ethane, 1,1-dichloro-1-fluoro-, HCFC-141b",
+        "categories": [
+          "air",
+          "urban air close to ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.0005471506310480881
+    },
+    {
+      "supplier": {
+        "name": "1,1-Dichloro-1-fluoroethane",
+        "categories": [
+          "air",
+          "urban air close to ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.0005471506310480881
+    },
+    {
+      "supplier": {
+        "name": "Ethane, 1,1-dichloro-1-fluoro-, HCFC-141b",
+        "categories": [
+          "air",
+          "non-urban air or from high stacks"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.0005471506310480881
+    },
+    {
+      "supplier": {
+        "name": "1,1-Dichloro-1-fluoroethane",
+        "categories": [
+          "air",
+          "non-urban air or from high stacks"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.0005471506310480881
+    },
+    {
+      "supplier": {
+        "name": "Ethane, 1,1-dichloro-1-fluoro-, HCFC-141b",
+        "categories": [
+          "air",
+          "lower stratosphere + upper troposphere"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.0005471506310480881
+    },
+    {
+      "supplier": {
+        "name": "1,1-Dichloro-1-fluoroethane",
+        "categories": [
+          "air",
+          "lower stratosphere + upper troposphere"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.0005471506310480881
+    },
+    {
+      "supplier": {
+        "name": "Ethane, 1,1-dichloro-1-fluoro-, HCFC-141b",
+        "categories": [
+          "air",
+          "indoor"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.0005471506310480881
+    },
+    {
+      "supplier": {
+        "name": "1,1-Dichloro-1-fluoroethane",
+        "categories": [
+          "air",
+          "indoor"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.0005471506310480881
+    },
+    {
+      "supplier": {
+        "name": "Ethane, 1,1-dichloro-1-fluoro-, HCFC-141b",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.002055917337438422
+    },
+    {
+      "supplier": {
+        "name": "1,1-Dichloro-1-fluoroethane",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.002055917337438422
+    },
+    {
+      "supplier": {
+        "name": "Ethane, 1,1-difluoro-, HFC-152a",
+        "categories": [
+          "air"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.000101684306107701
+    },
+    {
+      "supplier": {
+        "name": "1,1-Difluoroethane",
+        "categories": [
+          "air"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.000101684306107701
+    },
+    {
+      "supplier": {
+        "name": "Ethane, 1,1-difluoro-, HFC-152a",
+        "categories": [
+          "air",
+          "urban air close to ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.000101684306107701
+    },
+    {
+      "supplier": {
+        "name": "1,1-Difluoroethane",
+        "categories": [
+          "air",
+          "urban air close to ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.000101684306107701
+    },
+    {
+      "supplier": {
+        "name": "Ethane, 1,1-difluoro-, HFC-152a",
+        "categories": [
+          "air",
+          "non-urban air or from high stacks"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.000101684306107701
+    },
+    {
+      "supplier": {
+        "name": "1,1-Difluoroethane",
+        "categories": [
+          "air",
+          "non-urban air or from high stacks"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.000101684306107701
+    },
+    {
+      "supplier": {
+        "name": "Ethane, 1,1-difluoro-, HFC-152a",
+        "categories": [
+          "air",
+          "lower stratosphere + upper troposphere"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.000101684306107701
+    },
+    {
+      "supplier": {
+        "name": "1,1-Difluoroethane",
+        "categories": [
+          "air",
+          "lower stratosphere + upper troposphere"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.000101684306107701
+    },
+    {
+      "supplier": {
+        "name": "Ethane, 1,1-difluoro-, HFC-152a",
+        "categories": [
+          "air",
+          "indoor"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.000101684306107701
+    },
+    {
+      "supplier": {
+        "name": "1,1-Difluoroethane",
+        "categories": [
+          "air",
+          "indoor"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.000101684306107701
+    },
+    {
+      "supplier": {
+        "name": "Ethane, 1,1-difluoro-, HFC-152a",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.0003906721432721233
+    },
+    {
+      "supplier": {
+        "name": "1,1-Difluoroethane",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.0003906721432721233
+    },
+    {
+      "supplier": {
+        "name": "1,2-Dibromoethane",
         "categories": [
           "air"
         ],
@@ -524,7 +1686,7 @@
     },
     {
       "supplier": {
-        "name": "Ethane",
+        "name": "1,2-Dibromoethane",
         "categories": [
           "air",
           "urban air close to ground"
@@ -538,7 +1700,7 @@
     },
     {
       "supplier": {
-        "name": "Ethane",
+        "name": "1,2-Dibromoethane",
         "categories": [
           "air",
           "non-urban air or from high stacks"
@@ -552,7 +1714,7 @@
     },
     {
       "supplier": {
-        "name": "Ethane",
+        "name": "1,2-Dibromoethane",
         "categories": [
           "air",
           "lower stratosphere + upper troposphere"
@@ -566,7 +1728,7 @@
     },
     {
       "supplier": {
-        "name": "Ethane",
+        "name": "1,2-Dibromoethane",
         "categories": [
           "air",
           "indoor"
@@ -580,7 +1742,7 @@
     },
     {
       "supplier": {
-        "name": "Ethane",
+        "name": "1,2-Dibromoethane",
         "categories": [
           "air",
           "low population density, long-term"
@@ -594,7 +1756,7 @@
     },
     {
       "supplier": {
-        "name": "Ethane",
+        "name": "Ethane, 1,2-dichloro-",
         "categories": [
           "air"
         ],
@@ -607,7 +1769,20 @@
     },
     {
       "supplier": {
-        "name": "Ethane",
+        "name": "Ethylene dichloride",
+        "categories": [
+          "air"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 8.382418469531311e-07
+    },
+    {
+      "supplier": {
+        "name": "Ethane, 1,2-dichloro-",
         "categories": [
           "air",
           "urban air close to ground"
@@ -621,7 +1796,21 @@
     },
     {
       "supplier": {
-        "name": "Ethane",
+        "name": "Ethylene dichloride",
+        "categories": [
+          "air",
+          "urban air close to ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 8.382418469531311e-07
+    },
+    {
+      "supplier": {
+        "name": "Ethane, 1,2-dichloro-",
         "categories": [
           "air",
           "non-urban air or from high stacks"
@@ -635,7 +1824,21 @@
     },
     {
       "supplier": {
-        "name": "Ethane",
+        "name": "Ethylene dichloride",
+        "categories": [
+          "air",
+          "non-urban air or from high stacks"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 8.382418469531311e-07
+    },
+    {
+      "supplier": {
+        "name": "Ethane, 1,2-dichloro-",
         "categories": [
           "air",
           "lower stratosphere + upper troposphere"
@@ -649,7 +1852,21 @@
     },
     {
       "supplier": {
-        "name": "Ethane",
+        "name": "Ethylene dichloride",
+        "categories": [
+          "air",
+          "lower stratosphere + upper troposphere"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 8.382418469531311e-07
+    },
+    {
+      "supplier": {
+        "name": "Ethane, 1,2-dichloro-",
         "categories": [
           "air",
           "indoor"
@@ -663,7 +1880,21 @@
     },
     {
       "supplier": {
-        "name": "Ethane",
+        "name": "Ethylene dichloride",
+        "categories": [
+          "air",
+          "indoor"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 8.382418469531311e-07
+    },
+    {
+      "supplier": {
+        "name": "Ethane, 1,2-dichloro-",
         "categories": [
           "air",
           "low population density, long-term"
@@ -677,76 +1908,7 @@
     },
     {
       "supplier": {
-        "name": "Ethane",
-        "categories": [
-          "air"
-        ],
-        "matrix": "biosphere"
-      },
-      "consumer": {
-        "matrix": "technosphere"
-      },
-      "value": 3.08928395918153e-07
-    },
-    {
-      "supplier": {
-        "name": "Ethane",
-        "categories": [
-          "air",
-          "urban air close to ground"
-        ],
-        "matrix": "biosphere"
-      },
-      "consumer": {
-        "matrix": "technosphere"
-      },
-      "value": 3.08928395918153e-07
-    },
-    {
-      "supplier": {
-        "name": "Ethane",
-        "categories": [
-          "air",
-          "non-urban air or from high stacks"
-        ],
-        "matrix": "biosphere"
-      },
-      "consumer": {
-        "matrix": "technosphere"
-      },
-      "value": 3.08928395918153e-07
-    },
-    {
-      "supplier": {
-        "name": "Ethane",
-        "categories": [
-          "air",
-          "lower stratosphere + upper troposphere"
-        ],
-        "matrix": "biosphere"
-      },
-      "consumer": {
-        "matrix": "technosphere"
-      },
-      "value": 3.08928395918153e-07
-    },
-    {
-      "supplier": {
-        "name": "Ethane",
-        "categories": [
-          "air",
-          "indoor"
-        ],
-        "matrix": "biosphere"
-      },
-      "consumer": {
-        "matrix": "technosphere"
-      },
-      "value": 3.08928395918153e-07
-    },
-    {
-      "supplier": {
-        "name": "Ethane",
+        "name": "Ethylene dichloride",
         "categories": [
           "air",
           "low population density, long-term"
@@ -756,11 +1918,675 @@
       "consumer": {
         "matrix": "technosphere"
       },
-      "value": 1.131739544199912e-06
+      "value": 3.109935787383534e-06
     },
     {
       "supplier": {
-        "name": "Ethane",
+        "name": "Ethane, 1,2-dichloro-1,1,2,2-tetrafluoro-, CFC-114",
+        "categories": [
+          "air"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.03250112586997123
+    },
+    {
+      "supplier": {
+        "name": "1,2-Dichloro-1,1,2,2-tetrafluoroethane",
+        "categories": [
+          "air"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.03250112586997123
+    },
+    {
+      "supplier": {
+        "name": "Ethane, 1,2-dichloro-1,1,2,2-tetrafluoro-, CFC-114",
+        "categories": [
+          "air",
+          "urban air close to ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.03250112586997123
+    },
+    {
+      "supplier": {
+        "name": "1,2-Dichloro-1,1,2,2-tetrafluoroethane",
+        "categories": [
+          "air",
+          "urban air close to ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.03250112586997123
+    },
+    {
+      "supplier": {
+        "name": "Ethane, 1,2-dichloro-1,1,2,2-tetrafluoro-, CFC-114",
+        "categories": [
+          "air",
+          "non-urban air or from high stacks"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.03250112586997123
+    },
+    {
+      "supplier": {
+        "name": "1,2-Dichloro-1,1,2,2-tetrafluoroethane",
+        "categories": [
+          "air",
+          "non-urban air or from high stacks"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.03250112586997123
+    },
+    {
+      "supplier": {
+        "name": "Ethane, 1,2-dichloro-1,1,2,2-tetrafluoro-, CFC-114",
+        "categories": [
+          "air",
+          "lower stratosphere + upper troposphere"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.03250112586997123
+    },
+    {
+      "supplier": {
+        "name": "1,2-Dichloro-1,1,2,2-tetrafluoroethane",
+        "categories": [
+          "air",
+          "lower stratosphere + upper troposphere"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.03250112586997123
+    },
+    {
+      "supplier": {
+        "name": "Ethane, 1,2-dichloro-1,1,2,2-tetrafluoro-, CFC-114",
+        "categories": [
+          "air",
+          "indoor"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.03250112586997123
+    },
+    {
+      "supplier": {
+        "name": "1,2-Dichloro-1,1,2,2-tetrafluoroethane",
+        "categories": [
+          "air",
+          "indoor"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.03250112586997123
+    },
+    {
+      "supplier": {
+        "name": "Ethane, 1,2-dichloro-1,1,2,2-tetrafluoro-, CFC-114",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.04755661997419197
+    },
+    {
+      "supplier": {
+        "name": "1,2-Dichloro-1,1,2,2-tetrafluoroethane",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.04755661997419197
+    },
+    {
+      "supplier": {
+        "name": "Ethane, 1-chloro-1,1-difluoro-, HCFC-142b",
+        "categories": [
+          "air"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.001524512581224252
+    },
+    {
+      "supplier": {
+        "name": "1-Chloro-1,1-difluoroethane",
+        "categories": [
+          "air"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.001524512581224252
+    },
+    {
+      "supplier": {
+        "name": "Ethane, 1-chloro-1,1-difluoro-, HCFC-142b",
+        "categories": [
+          "air",
+          "urban air close to ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.001524512581224252
+    },
+    {
+      "supplier": {
+        "name": "1-Chloro-1,1-difluoroethane",
+        "categories": [
+          "air",
+          "urban air close to ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.001524512581224252
+    },
+    {
+      "supplier": {
+        "name": "Ethane, 1-chloro-1,1-difluoro-, HCFC-142b",
+        "categories": [
+          "air",
+          "non-urban air or from high stacks"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.001524512581224252
+    },
+    {
+      "supplier": {
+        "name": "1-Chloro-1,1-difluoroethane",
+        "categories": [
+          "air",
+          "non-urban air or from high stacks"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.001524512581224252
+    },
+    {
+      "supplier": {
+        "name": "Ethane, 1-chloro-1,1-difluoro-, HCFC-142b",
+        "categories": [
+          "air",
+          "lower stratosphere + upper troposphere"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.001524512581224252
+    },
+    {
+      "supplier": {
+        "name": "1-Chloro-1,1-difluoroethane",
+        "categories": [
+          "air",
+          "lower stratosphere + upper troposphere"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.001524512581224252
+    },
+    {
+      "supplier": {
+        "name": "Ethane, 1-chloro-1,1-difluoro-, HCFC-142b",
+        "categories": [
+          "air",
+          "indoor"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.001524512581224252
+    },
+    {
+      "supplier": {
+        "name": "1-Chloro-1,1-difluoroethane",
+        "categories": [
+          "air",
+          "indoor"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.001524512581224252
+    },
+    {
+      "supplier": {
+        "name": "Ethane, 1-chloro-1,1-difluoro-, HCFC-142b",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.005480187441094953
+    },
+    {
+      "supplier": {
+        "name": "1-Chloro-1,1-difluoroethane",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.005480187441094953
+    },
+    {
+      "supplier": {
+        "name": "Ethane, 2,2-dichloro-1,1,1-trifluoro-, HCFC-123",
+        "categories": [
+          "air"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 5.591615713700285e-05
+    },
+    {
+      "supplier": {
+        "name": "2,2-Dichloro-1,1,1-trifluoroethane",
+        "categories": [
+          "air"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 5.591615713700285e-05
+    },
+    {
+      "supplier": {
+        "name": "Ethane, 2,2-dichloro-1,1,1-trifluoro-, HCFC-123",
+        "categories": [
+          "air",
+          "urban air close to ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 5.591615713700285e-05
+    },
+    {
+      "supplier": {
+        "name": "2,2-Dichloro-1,1,1-trifluoroethane",
+        "categories": [
+          "air",
+          "urban air close to ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 5.591615713700285e-05
+    },
+    {
+      "supplier": {
+        "name": "Ethane, 2,2-dichloro-1,1,1-trifluoro-, HCFC-123",
+        "categories": [
+          "air",
+          "non-urban air or from high stacks"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 5.591615713700285e-05
+    },
+    {
+      "supplier": {
+        "name": "2,2-Dichloro-1,1,1-trifluoroethane",
+        "categories": [
+          "air",
+          "non-urban air or from high stacks"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 5.591615713700285e-05
+    },
+    {
+      "supplier": {
+        "name": "Ethane, 2,2-dichloro-1,1,1-trifluoro-, HCFC-123",
+        "categories": [
+          "air",
+          "lower stratosphere + upper troposphere"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 5.591615713700285e-05
+    },
+    {
+      "supplier": {
+        "name": "2,2-Dichloro-1,1,1-trifluoroethane",
+        "categories": [
+          "air",
+          "lower stratosphere + upper troposphere"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 5.591615713700285e-05
+    },
+    {
+      "supplier": {
+        "name": "Ethane, 2,2-dichloro-1,1,1-trifluoro-, HCFC-123",
+        "categories": [
+          "air",
+          "indoor"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 5.591615713700285e-05
+    },
+    {
+      "supplier": {
+        "name": "2,2-Dichloro-1,1,1-trifluoroethane",
+        "categories": [
+          "air",
+          "indoor"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 5.591615713700285e-05
+    },
+    {
+      "supplier": {
+        "name": "Ethane, 2,2-dichloro-1,1,1-trifluoro-, HCFC-123",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.0002146402163057419
+    },
+    {
+      "supplier": {
+        "name": "2,2-Dichloro-1,1,1-trifluoroethane",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.0002146402163057419
+    },
+    {
+      "supplier": {
+        "name": "Ethane, 2-chloro-1,1,1,2-tetrafluoro-, HCFC-124",
+        "categories": [
+          "air"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.0003737199687569498
+    },
+    {
+      "supplier": {
+        "name": "2-Chloro-1,1,1,2-tetrafluoroethane",
+        "categories": [
+          "air"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.0003737199687569498
+    },
+    {
+      "supplier": {
+        "name": "Ethane, 2-chloro-1,1,1,2-tetrafluoro-, HCFC-124",
+        "categories": [
+          "air",
+          "urban air close to ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.0003737199687569498
+    },
+    {
+      "supplier": {
+        "name": "2-Chloro-1,1,1,2-tetrafluoroethane",
+        "categories": [
+          "air",
+          "urban air close to ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.0003737199687569498
+    },
+    {
+      "supplier": {
+        "name": "Ethane, 2-chloro-1,1,1,2-tetrafluoro-, HCFC-124",
+        "categories": [
+          "air",
+          "non-urban air or from high stacks"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.0003737199687569498
+    },
+    {
+      "supplier": {
+        "name": "2-Chloro-1,1,1,2-tetrafluoroethane",
+        "categories": [
+          "air",
+          "non-urban air or from high stacks"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.0003737199687569498
+    },
+    {
+      "supplier": {
+        "name": "Ethane, 2-chloro-1,1,1,2-tetrafluoro-, HCFC-124",
+        "categories": [
+          "air",
+          "lower stratosphere + upper troposphere"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.0003737199687569498
+    },
+    {
+      "supplier": {
+        "name": "2-Chloro-1,1,1,2-tetrafluoroethane",
+        "categories": [
+          "air",
+          "lower stratosphere + upper troposphere"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.0003737199687569498
+    },
+    {
+      "supplier": {
+        "name": "Ethane, 2-chloro-1,1,1,2-tetrafluoro-, HCFC-124",
+        "categories": [
+          "air",
+          "indoor"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.0003737199687569498
+    },
+    {
+      "supplier": {
+        "name": "2-Chloro-1,1,1,2-tetrafluoroethane",
+        "categories": [
+          "air",
+          "indoor"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.0003737199687569498
+    },
+    {
+      "supplier": {
+        "name": "Ethane, 2-chloro-1,1,1,2-tetrafluoro-, HCFC-124",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.00142205808723363
+    },
+    {
+      "supplier": {
+        "name": "2-Chloro-1,1,1,2-tetrafluoroethane",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.00142205808723363
+    },
+    {
+      "supplier": {
+        "name": "Monochloroethane",
         "categories": [
           "air"
         ],
@@ -773,7 +2599,7 @@
     },
     {
       "supplier": {
-        "name": "Ethane",
+        "name": "Monochloroethane",
         "categories": [
           "air",
           "urban air close to ground"
@@ -787,7 +2613,7 @@
     },
     {
       "supplier": {
-        "name": "Ethane",
+        "name": "Monochloroethane",
         "categories": [
           "air",
           "non-urban air or from high stacks"
@@ -801,7 +2627,7 @@
     },
     {
       "supplier": {
-        "name": "Ethane",
+        "name": "Monochloroethane",
         "categories": [
           "air",
           "lower stratosphere + upper troposphere"
@@ -815,7 +2641,7 @@
     },
     {
       "supplier": {
-        "name": "Ethane",
+        "name": "Monochloroethane",
         "categories": [
           "air",
           "indoor"
@@ -829,7 +2655,7 @@
     },
     {
       "supplier": {
-        "name": "Ethane",
+        "name": "Monochloroethane",
         "categories": [
           "air",
           "low population density, long-term"
@@ -843,7 +2669,7 @@
     },
     {
       "supplier": {
-        "name": "Ethanol",
+        "name": "Ethane, chloropentafluoro-, CFC-115",
         "categories": [
           "air"
         ],
@@ -852,11 +2678,24 @@
       "consumer": {
         "matrix": "technosphere"
       },
-      "value": 2.195922606001723e-05
+      "value": 0.05773344100398128
     },
     {
       "supplier": {
-        "name": "Ethanol",
+        "name": "Monochloropentafluoroethane",
+        "categories": [
+          "air"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.05773344100398128
+    },
+    {
+      "supplier": {
+        "name": "Ethane, chloropentafluoro-, CFC-115",
         "categories": [
           "air",
           "urban air close to ground"
@@ -866,11 +2705,25 @@
       "consumer": {
         "matrix": "technosphere"
       },
-      "value": 2.195922606001723e-05
+      "value": 0.05773344100398128
     },
     {
       "supplier": {
-        "name": "Ethanol",
+        "name": "Monochloropentafluoroethane",
+        "categories": [
+          "air",
+          "urban air close to ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.05773344100398128
+    },
+    {
+      "supplier": {
+        "name": "Ethane, chloropentafluoro-, CFC-115",
         "categories": [
           "air",
           "non-urban air or from high stacks"
@@ -880,11 +2733,25 @@
       "consumer": {
         "matrix": "technosphere"
       },
-      "value": 2.195922606001723e-05
+      "value": 0.05773344100398128
     },
     {
       "supplier": {
-        "name": "Ethanol",
+        "name": "Monochloropentafluoroethane",
+        "categories": [
+          "air",
+          "non-urban air or from high stacks"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.05773344100398128
+    },
+    {
+      "supplier": {
+        "name": "Ethane, chloropentafluoro-, CFC-115",
         "categories": [
           "air",
           "lower stratosphere + upper troposphere"
@@ -894,11 +2761,25 @@
       "consumer": {
         "matrix": "technosphere"
       },
-      "value": 2.195922606001723e-05
+      "value": 0.05773344100398128
     },
     {
       "supplier": {
-        "name": "Ethanol",
+        "name": "Monochloropentafluoroethane",
+        "categories": [
+          "air",
+          "lower stratosphere + upper troposphere"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.05773344100398128
+    },
+    {
+      "supplier": {
+        "name": "Ethane, chloropentafluoro-, CFC-115",
         "categories": [
           "air",
           "indoor"
@@ -908,11 +2789,25 @@
       "consumer": {
         "matrix": "technosphere"
       },
-      "value": 2.195922606001723e-05
+      "value": 0.05773344100398128
     },
     {
       "supplier": {
-        "name": "Ethanol",
+        "name": "Monochloropentafluoroethane",
+        "categories": [
+          "air",
+          "indoor"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.05773344100398128
+    },
+    {
+      "supplier": {
+        "name": "Ethane, chloropentafluoro-, CFC-115",
         "categories": [
           "air",
           "low population density, long-term"
@@ -922,11 +2817,440 @@
       "consumer": {
         "matrix": "technosphere"
       },
-      "value": 8.30512282425729e-05
+      "value": 0.07289504703529745
     },
     {
       "supplier": {
-        "name": "Ethene",
+        "name": "Monochloropentafluoroethane",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.07289504703529745
+    },
+    {
+      "supplier": {
+        "name": "Ethane, hexafluoro-, HFC-116",
+        "categories": [
+          "air"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.1057713430292021
+    },
+    {
+      "supplier": {
+        "name": "Hexafluoroethane",
+        "categories": [
+          "air"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.1057713430292021
+    },
+    {
+      "supplier": {
+        "name": "Ethane, hexafluoro-, HFC-116",
+        "categories": [
+          "air",
+          "urban air close to ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.1057713430292021
+    },
+    {
+      "supplier": {
+        "name": "Hexafluoroethane",
+        "categories": [
+          "air",
+          "urban air close to ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.1057713430292021
+    },
+    {
+      "supplier": {
+        "name": "Ethane, hexafluoro-, HFC-116",
+        "categories": [
+          "air",
+          "non-urban air or from high stacks"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.1057713430292021
+    },
+    {
+      "supplier": {
+        "name": "Hexafluoroethane",
+        "categories": [
+          "air",
+          "non-urban air or from high stacks"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.1057713430292021
+    },
+    {
+      "supplier": {
+        "name": "Ethane, hexafluoro-, HFC-116",
+        "categories": [
+          "air",
+          "lower stratosphere + upper troposphere"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.1057713430292021
+    },
+    {
+      "supplier": {
+        "name": "Hexafluoroethane",
+        "categories": [
+          "air",
+          "lower stratosphere + upper troposphere"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.1057713430292021
+    },
+    {
+      "supplier": {
+        "name": "Ethane, hexafluoro-, HFC-116",
+        "categories": [
+          "air",
+          "indoor"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.1057713430292021
+    },
+    {
+      "supplier": {
+        "name": "Hexafluoroethane",
+        "categories": [
+          "air",
+          "indoor"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.1057713430292021
+    },
+    {
+      "supplier": {
+        "name": "Ethane, hexafluoro-, HFC-116",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.125270633363199
+    },
+    {
+      "supplier": {
+        "name": "Hexafluoroethane",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.125270633363199
+    },
+    {
+      "supplier": {
+        "name": "Ethane, pentafluoro-, HFC-125",
+        "categories": [
+          "air"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.002887944218635882
+    },
+    {
+      "supplier": {
+        "name": "Pentafluoroethane",
+        "categories": [
+          "air"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.002887944218635882
+    },
+    {
+      "supplier": {
+        "name": "Ethane, pentafluoro-, HFC-125",
+        "categories": [
+          "air",
+          "urban air close to ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.002887944218635882
+    },
+    {
+      "supplier": {
+        "name": "Pentafluoroethane",
+        "categories": [
+          "air",
+          "urban air close to ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.002887944218635882
+    },
+    {
+      "supplier": {
+        "name": "Ethane, pentafluoro-, HFC-125",
+        "categories": [
+          "air",
+          "non-urban air or from high stacks"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.002887944218635882
+    },
+    {
+      "supplier": {
+        "name": "Pentafluoroethane",
+        "categories": [
+          "air",
+          "non-urban air or from high stacks"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.002887944218635882
+    },
+    {
+      "supplier": {
+        "name": "Ethane, pentafluoro-, HFC-125",
+        "categories": [
+          "air",
+          "lower stratosphere + upper troposphere"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.002887944218635882
+    },
+    {
+      "supplier": {
+        "name": "Pentafluoroethane",
+        "categories": [
+          "air",
+          "lower stratosphere + upper troposphere"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.002887944218635882
+    },
+    {
+      "supplier": {
+        "name": "Ethane, pentafluoro-, HFC-125",
+        "categories": [
+          "air",
+          "indoor"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.002887944218635882
+    },
+    {
+      "supplier": {
+        "name": "Pentafluoroethane",
+        "categories": [
+          "air",
+          "indoor"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.002887944218635882
+    },
+    {
+      "supplier": {
+        "name": "Ethane, pentafluoro-, HFC-125",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.009234949173915628
+    },
+    {
+      "supplier": {
+        "name": "Pentafluoroethane",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.009234949173915628
+    },
+    {
+      "supplier": {
+        "name": "Vinylidene fluoride",
+        "categories": [
+          "air"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 3.324168584393262e-08
+    },
+    {
+      "supplier": {
+        "name": "Vinylidene fluoride",
+        "categories": [
+          "air",
+          "urban air close to ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 3.324168584393262e-08
+    },
+    {
+      "supplier": {
+        "name": "Vinylidene fluoride",
+        "categories": [
+          "air",
+          "non-urban air or from high stacks"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 3.324168584393262e-08
+    },
+    {
+      "supplier": {
+        "name": "Vinylidene fluoride",
+        "categories": [
+          "air",
+          "lower stratosphere + upper troposphere"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 3.324168584393262e-08
+    },
+    {
+      "supplier": {
+        "name": "Vinylidene fluoride",
+        "categories": [
+          "air",
+          "indoor"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 3.324168584393262e-08
+    },
+    {
+      "supplier": {
+        "name": "Vinylidene fluoride",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1.193971715386729e-07
+    },
+    {
+      "supplier": {
+        "name": "Ethene, tetrachloro-",
         "categories": [
           "air"
         ],
@@ -939,7 +3263,7 @@
     },
     {
       "supplier": {
-        "name": "Ethylene",
+        "name": "Tetrachloroethylene",
         "categories": [
           "air"
         ],
@@ -952,7 +3276,7 @@
     },
     {
       "supplier": {
-        "name": "Ethene",
+        "name": "Ethene, tetrachloro-",
         "categories": [
           "air",
           "urban air close to ground"
@@ -966,7 +3290,7 @@
     },
     {
       "supplier": {
-        "name": "Ethylene",
+        "name": "Tetrachloroethylene",
         "categories": [
           "air",
           "urban air close to ground"
@@ -980,7 +3304,7 @@
     },
     {
       "supplier": {
-        "name": "Ethene",
+        "name": "Ethene, tetrachloro-",
         "categories": [
           "air",
           "non-urban air or from high stacks"
@@ -994,7 +3318,7 @@
     },
     {
       "supplier": {
-        "name": "Ethylene",
+        "name": "Tetrachloroethylene",
         "categories": [
           "air",
           "non-urban air or from high stacks"
@@ -1008,7 +3332,7 @@
     },
     {
       "supplier": {
-        "name": "Ethene",
+        "name": "Ethene, tetrachloro-",
         "categories": [
           "air",
           "lower stratosphere + upper troposphere"
@@ -1022,7 +3346,7 @@
     },
     {
       "supplier": {
-        "name": "Ethylene",
+        "name": "Tetrachloroethylene",
         "categories": [
           "air",
           "lower stratosphere + upper troposphere"
@@ -1036,7 +3360,7 @@
     },
     {
       "supplier": {
-        "name": "Ethene",
+        "name": "Ethene, tetrachloro-",
         "categories": [
           "air",
           "indoor"
@@ -1050,7 +3374,7 @@
     },
     {
       "supplier": {
-        "name": "Ethylene",
+        "name": "Tetrachloroethylene",
         "categories": [
           "air",
           "indoor"
@@ -1064,7 +3388,7 @@
     },
     {
       "supplier": {
-        "name": "Ethene",
+        "name": "Ethene, tetrachloro-",
         "categories": [
           "air",
           "low population density, long-term"
@@ -1078,7 +3402,7 @@
     },
     {
       "supplier": {
-        "name": "Ethylene",
+        "name": "Tetrachloroethylene",
         "categories": [
           "air",
           "low population density, long-term"
@@ -1092,7 +3416,7 @@
     },
     {
       "supplier": {
-        "name": "Ethene",
+        "name": "Ethene, trichloro-",
         "categories": [
           "air"
         ],
@@ -1105,7 +3429,7 @@
     },
     {
       "supplier": {
-        "name": "Ethylene",
+        "name": "Trichloroethylene",
         "categories": [
           "air"
         ],
@@ -1118,7 +3442,7 @@
     },
     {
       "supplier": {
-        "name": "Ethene",
+        "name": "Ethene, trichloro-",
         "categories": [
           "air",
           "urban air close to ground"
@@ -1132,7 +3456,7 @@
     },
     {
       "supplier": {
-        "name": "Ethylene",
+        "name": "Trichloroethylene",
         "categories": [
           "air",
           "urban air close to ground"
@@ -1146,7 +3470,7 @@
     },
     {
       "supplier": {
-        "name": "Ethene",
+        "name": "Ethene, trichloro-",
         "categories": [
           "air",
           "non-urban air or from high stacks"
@@ -1160,7 +3484,7 @@
     },
     {
       "supplier": {
-        "name": "Ethylene",
+        "name": "Trichloroethylene",
         "categories": [
           "air",
           "non-urban air or from high stacks"
@@ -1174,7 +3498,7 @@
     },
     {
       "supplier": {
-        "name": "Ethene",
+        "name": "Ethene, trichloro-",
         "categories": [
           "air",
           "lower stratosphere + upper troposphere"
@@ -1188,7 +3512,7 @@
     },
     {
       "supplier": {
-        "name": "Ethylene",
+        "name": "Trichloroethylene",
         "categories": [
           "air",
           "lower stratosphere + upper troposphere"
@@ -1202,7 +3526,7 @@
     },
     {
       "supplier": {
-        "name": "Ethene",
+        "name": "Ethene, trichloro-",
         "categories": [
           "air",
           "indoor"
@@ -1216,7 +3540,7 @@
     },
     {
       "supplier": {
-        "name": "Ethylene",
+        "name": "Trichloroethylene",
         "categories": [
           "air",
           "indoor"
@@ -1230,7 +3554,7 @@
     },
     {
       "supplier": {
-        "name": "Ethene",
+        "name": "Ethene, trichloro-",
         "categories": [
           "air",
           "low population density, long-term"
@@ -1244,7 +3568,7 @@
     },
     {
       "supplier": {
-        "name": "Ethylene",
+        "name": "Trichloroethylene",
         "categories": [
           "air",
           "low population density, long-term"
@@ -1258,7 +3582,7 @@
     },
     {
       "supplier": {
-        "name": "Hexane",
+        "name": "Methane, non-fossil",
         "categories": [
           "air"
         ],
@@ -1267,11 +3591,11 @@
       "consumer": {
         "matrix": "technosphere"
       },
-      "value": 0.07011767478542748
+      "value": 8.361378296435213e-06
     },
     {
       "supplier": {
-        "name": "Hexane",
+        "name": "Methane, non-fossil",
         "categories": [
           "air",
           "urban air close to ground"
@@ -1281,11 +3605,11 @@
       "consumer": {
         "matrix": "technosphere"
       },
-      "value": 0.07011767478542748
+      "value": 8.361378296435213e-06
     },
     {
       "supplier": {
-        "name": "Hexane",
+        "name": "Methane, non-fossil",
         "categories": [
           "air",
           "non-urban air or from high stacks"
@@ -1295,11 +3619,11 @@
       "consumer": {
         "matrix": "technosphere"
       },
-      "value": 0.07011767478542748
+      "value": 8.361378296435213e-06
     },
     {
       "supplier": {
-        "name": "Hexane",
+        "name": "Methane, non-fossil",
         "categories": [
           "air",
           "lower stratosphere + upper troposphere"
@@ -1309,11 +3633,11 @@
       "consumer": {
         "matrix": "technosphere"
       },
-      "value": 0.07011767478542748
+      "value": 8.361378296435213e-06
     },
     {
       "supplier": {
-        "name": "Hexane",
+        "name": "Methane, non-fossil",
         "categories": [
           "air",
           "indoor"
@@ -1323,11 +3647,11 @@
       "consumer": {
         "matrix": "technosphere"
       },
-      "value": 0.07011767478542748
+      "value": 8.361378296435213e-06
     },
     {
       "supplier": {
-        "name": "Hexane",
+        "name": "Methane, non-fossil",
         "categories": [
           "air",
           "low population density, long-term"
@@ -1337,7 +3661,2829 @@
       "consumer": {
         "matrix": "technosphere"
       },
-      "value": 0.08367304600055073
+      "value": 4.011724827683173e-05
+    },
+    {
+      "supplier": {
+        "name": "Methane, bromo-, Halon 1001",
+        "categories": [
+          "air"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1.383398125140516e-06
+    },
+    {
+      "supplier": {
+        "name": "Bromomethane",
+        "categories": [
+          "air"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1.383398125140516e-06
+    },
+    {
+      "supplier": {
+        "name": "Methane, bromo-, Halon 1001",
+        "categories": [
+          "air",
+          "urban air close to ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1.383398125140516e-06
+    },
+    {
+      "supplier": {
+        "name": "Bromomethane",
+        "categories": [
+          "air",
+          "urban air close to ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1.383398125140516e-06
+    },
+    {
+      "supplier": {
+        "name": "Methane, bromo-, Halon 1001",
+        "categories": [
+          "air",
+          "non-urban air or from high stacks"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1.383398125140516e-06
+    },
+    {
+      "supplier": {
+        "name": "Bromomethane",
+        "categories": [
+          "air",
+          "non-urban air or from high stacks"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1.383398125140516e-06
+    },
+    {
+      "supplier": {
+        "name": "Methane, bromo-, Halon 1001",
+        "categories": [
+          "air",
+          "lower stratosphere + upper troposphere"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1.383398125140516e-06
+    },
+    {
+      "supplier": {
+        "name": "Bromomethane",
+        "categories": [
+          "air",
+          "lower stratosphere + upper troposphere"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1.383398125140516e-06
+    },
+    {
+      "supplier": {
+        "name": "Methane, bromo-, Halon 1001",
+        "categories": [
+          "air",
+          "indoor"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1.383398125140516e-06
+    },
+    {
+      "supplier": {
+        "name": "Bromomethane",
+        "categories": [
+          "air",
+          "indoor"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1.383398125140516e-06
+    },
+    {
+      "supplier": {
+        "name": "Methane, bromo-, Halon 1001",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 5.28580910855658e-06
+    },
+    {
+      "supplier": {
+        "name": "Bromomethane",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 5.28580910855658e-06
+    },
+    {
+      "supplier": {
+        "name": "Methane, bromochlorodifluoro-, Halon 1211",
+        "categories": [
+          "air"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.001264176198720715
+    },
+    {
+      "supplier": {
+        "name": "Bromochlorodifluoromethane",
+        "categories": [
+          "air"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.001264176198720715
+    },
+    {
+      "supplier": {
+        "name": "Methane, bromochlorodifluoro-, Halon 1211",
+        "categories": [
+          "air",
+          "urban air close to ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.001264176198720715
+    },
+    {
+      "supplier": {
+        "name": "Bromochlorodifluoromethane",
+        "categories": [
+          "air",
+          "urban air close to ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.001264176198720715
+    },
+    {
+      "supplier": {
+        "name": "Methane, bromochlorodifluoro-, Halon 1211",
+        "categories": [
+          "air",
+          "non-urban air or from high stacks"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.001264176198720715
+    },
+    {
+      "supplier": {
+        "name": "Bromochlorodifluoromethane",
+        "categories": [
+          "air",
+          "non-urban air or from high stacks"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.001264176198720715
+    },
+    {
+      "supplier": {
+        "name": "Methane, bromochlorodifluoro-, Halon 1211",
+        "categories": [
+          "air",
+          "lower stratosphere + upper troposphere"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.001264176198720715
+    },
+    {
+      "supplier": {
+        "name": "Bromochlorodifluoromethane",
+        "categories": [
+          "air",
+          "lower stratosphere + upper troposphere"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.001264176198720715
+    },
+    {
+      "supplier": {
+        "name": "Methane, bromochlorodifluoro-, Halon 1211",
+        "categories": [
+          "air",
+          "indoor"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.001264176198720715
+    },
+    {
+      "supplier": {
+        "name": "Bromochlorodifluoromethane",
+        "categories": [
+          "air",
+          "indoor"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.001264176198720715
+    },
+    {
+      "supplier": {
+        "name": "Methane, bromochlorodifluoro-, Halon 1211",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.004604328253096643
+    },
+    {
+      "supplier": {
+        "name": "Bromochlorodifluoromethane",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.004604328253096643
+    },
+    {
+      "supplier": {
+        "name": "Methane, bromotrifluoro-, Halon 1301",
+        "categories": [
+          "air"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.01063685599857102
+    },
+    {
+      "supplier": {
+        "name": "Bromotrifluoromethane",
+        "categories": [
+          "air"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.01063685599857102
+    },
+    {
+      "supplier": {
+        "name": "Methane, bromotrifluoro-, Halon 1301",
+        "categories": [
+          "air",
+          "urban air close to ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.01063685599857102
+    },
+    {
+      "supplier": {
+        "name": "Bromotrifluoromethane",
+        "categories": [
+          "air",
+          "urban air close to ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.01063685599857102
+    },
+    {
+      "supplier": {
+        "name": "Methane, bromotrifluoro-, Halon 1301",
+        "categories": [
+          "air",
+          "non-urban air or from high stacks"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.01063685599857102
+    },
+    {
+      "supplier": {
+        "name": "Bromotrifluoromethane",
+        "categories": [
+          "air",
+          "non-urban air or from high stacks"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.01063685599857102
+    },
+    {
+      "supplier": {
+        "name": "Methane, bromotrifluoro-, Halon 1301",
+        "categories": [
+          "air",
+          "lower stratosphere + upper troposphere"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.01063685599857102
+    },
+    {
+      "supplier": {
+        "name": "Bromotrifluoromethane",
+        "categories": [
+          "air",
+          "lower stratosphere + upper troposphere"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.01063685599857102
+    },
+    {
+      "supplier": {
+        "name": "Methane, bromotrifluoro-, Halon 1301",
+        "categories": [
+          "air",
+          "indoor"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.01063685599857102
+    },
+    {
+      "supplier": {
+        "name": "Bromotrifluoromethane",
+        "categories": [
+          "air",
+          "indoor"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.01063685599857102
+    },
+    {
+      "supplier": {
+        "name": "Methane, bromotrifluoro-, Halon 1301",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.02238884635922231
+    },
+    {
+      "supplier": {
+        "name": "Bromotrifluoromethane",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.02238884635922231
+    },
+    {
+      "supplier": {
+        "name": "Methane, chlorodifluoro-, HCFC-22",
+        "categories": [
+          "air"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.001257323725153562
+    },
+    {
+      "supplier": {
+        "name": "Chlorodifluoromethane",
+        "categories": [
+          "air"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.001257323725153562
+    },
+    {
+      "supplier": {
+        "name": "Methane, chlorodifluoro-, HCFC-22",
+        "categories": [
+          "air",
+          "urban air close to ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.001257323725153562
+    },
+    {
+      "supplier": {
+        "name": "Chlorodifluoromethane",
+        "categories": [
+          "air",
+          "urban air close to ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.001257323725153562
+    },
+    {
+      "supplier": {
+        "name": "Methane, chlorodifluoro-, HCFC-22",
+        "categories": [
+          "air",
+          "non-urban air or from high stacks"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.001257323725153562
+    },
+    {
+      "supplier": {
+        "name": "Chlorodifluoromethane",
+        "categories": [
+          "air",
+          "non-urban air or from high stacks"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.001257323725153562
+    },
+    {
+      "supplier": {
+        "name": "Methane, chlorodifluoro-, HCFC-22",
+        "categories": [
+          "air",
+          "lower stratosphere + upper troposphere"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.001257323725153562
+    },
+    {
+      "supplier": {
+        "name": "Chlorodifluoromethane",
+        "categories": [
+          "air",
+          "lower stratosphere + upper troposphere"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.001257323725153562
+    },
+    {
+      "supplier": {
+        "name": "Methane, chlorodifluoro-, HCFC-22",
+        "categories": [
+          "air",
+          "indoor"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.001257323725153562
+    },
+    {
+      "supplier": {
+        "name": "Chlorodifluoromethane",
+        "categories": [
+          "air",
+          "indoor"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.001257323725153562
+    },
+    {
+      "supplier": {
+        "name": "Methane, chlorodifluoro-, HCFC-22",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.004676651346245669
+    },
+    {
+      "supplier": {
+        "name": "Chlorodifluoromethane",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.004676651346245669
+    },
+    {
+      "supplier": {
+        "name": "Methane, chloro-fluoro-, HCFC-31",
+        "categories": [
+          "air"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 4.897351265351004e-05
+    },
+    {
+      "supplier": {
+        "name": "Chloro-fluoromethane",
+        "categories": [
+          "air"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 4.897351265351004e-05
+    },
+    {
+      "supplier": {
+        "name": "Methane, chloro-fluoro-, HCFC-31",
+        "categories": [
+          "air",
+          "urban air close to ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 4.897351265351004e-05
+    },
+    {
+      "supplier": {
+        "name": "Chloro-fluoromethane",
+        "categories": [
+          "air",
+          "urban air close to ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 4.897351265351004e-05
+    },
+    {
+      "supplier": {
+        "name": "Methane, chloro-fluoro-, HCFC-31",
+        "categories": [
+          "air",
+          "non-urban air or from high stacks"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 4.897351265351004e-05
+    },
+    {
+      "supplier": {
+        "name": "Chloro-fluoromethane",
+        "categories": [
+          "air",
+          "non-urban air or from high stacks"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 4.897351265351004e-05
+    },
+    {
+      "supplier": {
+        "name": "Methane, chloro-fluoro-, HCFC-31",
+        "categories": [
+          "air",
+          "lower stratosphere + upper troposphere"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 4.897351265351004e-05
+    },
+    {
+      "supplier": {
+        "name": "Chloro-fluoromethane",
+        "categories": [
+          "air",
+          "lower stratosphere + upper troposphere"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 4.897351265351004e-05
+    },
+    {
+      "supplier": {
+        "name": "Methane, chloro-fluoro-, HCFC-31",
+        "categories": [
+          "air",
+          "indoor"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 4.897351265351004e-05
+    },
+    {
+      "supplier": {
+        "name": "Chloro-fluoromethane",
+        "categories": [
+          "air",
+          "indoor"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 4.897351265351004e-05
+    },
+    {
+      "supplier": {
+        "name": "Methane, chloro-fluoro-, HCFC-31",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.0001878942198491652
+    },
+    {
+      "supplier": {
+        "name": "Chloro-fluoromethane",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.0001878942198491652
+    },
+    {
+      "supplier": {
+        "name": "Methane, chlorotrifluoro-, CFC-13",
+        "categories": [
+          "air"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.1032979605108722
+    },
+    {
+      "supplier": {
+        "name": "Chlorotrifluoromethane",
+        "categories": [
+          "air"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.1032979605108722
+    },
+    {
+      "supplier": {
+        "name": "Methane, chlorotrifluoro-, CFC-13",
+        "categories": [
+          "air",
+          "urban air close to ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.1032979605108722
+    },
+    {
+      "supplier": {
+        "name": "Chlorotrifluoromethane",
+        "categories": [
+          "air",
+          "urban air close to ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.1032979605108722
+    },
+    {
+      "supplier": {
+        "name": "Methane, chlorotrifluoro-, CFC-13",
+        "categories": [
+          "air",
+          "non-urban air or from high stacks"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.1032979605108722
+    },
+    {
+      "supplier": {
+        "name": "Chlorotrifluoromethane",
+        "categories": [
+          "air",
+          "non-urban air or from high stacks"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.1032979605108722
+    },
+    {
+      "supplier": {
+        "name": "Methane, chlorotrifluoro-, CFC-13",
+        "categories": [
+          "air",
+          "lower stratosphere + upper troposphere"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.1032979605108722
+    },
+    {
+      "supplier": {
+        "name": "Chlorotrifluoromethane",
+        "categories": [
+          "air",
+          "lower stratosphere + upper troposphere"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.1032979605108722
+    },
+    {
+      "supplier": {
+        "name": "Methane, chlorotrifluoro-, CFC-13",
+        "categories": [
+          "air",
+          "indoor"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.1032979605108722
+    },
+    {
+      "supplier": {
+        "name": "Chlorotrifluoromethane",
+        "categories": [
+          "air",
+          "indoor"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.1032979605108722
+    },
+    {
+      "supplier": {
+        "name": "Methane, chlorotrifluoro-, CFC-13",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.1289662428191576
+    },
+    {
+      "supplier": {
+        "name": "Chlorotrifluoromethane",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.1289662428191576
+    },
+    {
+      "supplier": {
+        "name": "Methane, dichloro-, HCC-30",
+        "categories": [
+          "air"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 6.901784721175251e-06
+    },
+    {
+      "supplier": {
+        "name": "Dichloromethane",
+        "categories": [
+          "air"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 6.901784721175251e-06
+    },
+    {
+      "supplier": {
+        "name": "Methane, dichloro-, HCC-30",
+        "categories": [
+          "air",
+          "urban air close to ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 6.901784721175251e-06
+    },
+    {
+      "supplier": {
+        "name": "Dichloromethane",
+        "categories": [
+          "air",
+          "urban air close to ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 6.901784721175251e-06
+    },
+    {
+      "supplier": {
+        "name": "Methane, dichloro-, HCC-30",
+        "categories": [
+          "air",
+          "non-urban air or from high stacks"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 6.901784721175251e-06
+    },
+    {
+      "supplier": {
+        "name": "Dichloromethane",
+        "categories": [
+          "air",
+          "non-urban air or from high stacks"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 6.901784721175251e-06
+    },
+    {
+      "supplier": {
+        "name": "Methane, dichloro-, HCC-30",
+        "categories": [
+          "air",
+          "lower stratosphere + upper troposphere"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 6.901784721175251e-06
+    },
+    {
+      "supplier": {
+        "name": "Dichloromethane",
+        "categories": [
+          "air",
+          "lower stratosphere + upper troposphere"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 6.901784721175251e-06
+    },
+    {
+      "supplier": {
+        "name": "Methane, dichloro-, HCC-30",
+        "categories": [
+          "air",
+          "indoor"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 6.901784721175251e-06
+    },
+    {
+      "supplier": {
+        "name": "Dichloromethane",
+        "categories": [
+          "air",
+          "indoor"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 6.901784721175251e-06
+    },
+    {
+      "supplier": {
+        "name": "Methane, dichloro-, HCC-30",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 2.61462997964157e-05
+    },
+    {
+      "supplier": {
+        "name": "Dichloromethane",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 2.61462997964157e-05
+    },
+    {
+      "supplier": {
+        "name": "Methane, dichlorodifluoro-, CFC-12",
+        "categories": [
+          "air"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.02557394025229013
+    },
+    {
+      "supplier": {
+        "name": "Dichlorodifluoromethane",
+        "categories": [
+          "air"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.02557394025229013
+    },
+    {
+      "supplier": {
+        "name": "Methane, dichlorodifluoro-, CFC-12",
+        "categories": [
+          "air",
+          "urban air close to ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.02557394025229013
+    },
+    {
+      "supplier": {
+        "name": "Dichlorodifluoromethane",
+        "categories": [
+          "air",
+          "urban air close to ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.02557394025229013
+    },
+    {
+      "supplier": {
+        "name": "Methane, dichlorodifluoro-, CFC-12",
+        "categories": [
+          "air",
+          "non-urban air or from high stacks"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.02557394025229013
+    },
+    {
+      "supplier": {
+        "name": "Dichlorodifluoromethane",
+        "categories": [
+          "air",
+          "non-urban air or from high stacks"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.02557394025229013
+    },
+    {
+      "supplier": {
+        "name": "Methane, dichlorodifluoro-, CFC-12",
+        "categories": [
+          "air",
+          "lower stratosphere + upper troposphere"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.02557394025229013
+    },
+    {
+      "supplier": {
+        "name": "Dichlorodifluoromethane",
+        "categories": [
+          "air",
+          "lower stratosphere + upper troposphere"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.02557394025229013
+    },
+    {
+      "supplier": {
+        "name": "Methane, dichlorodifluoro-, CFC-12",
+        "categories": [
+          "air",
+          "indoor"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.02557394025229013
+    },
+    {
+      "supplier": {
+        "name": "Dichlorodifluoromethane",
+        "categories": [
+          "air",
+          "indoor"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.02557394025229013
+    },
+    {
+      "supplier": {
+        "name": "Methane, dichlorodifluoro-, CFC-12",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.04577439290126201
+    },
+    {
+      "supplier": {
+        "name": "Dichlorodifluoromethane",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.04577439290126201
+    },
+    {
+      "supplier": {
+        "name": "Methane, dichlorofluoro-, HCFC-21",
+        "categories": [
+          "air"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 9.859579475868393e-05
+    },
+    {
+      "supplier": {
+        "name": "Dichlorofluoromethane",
+        "categories": [
+          "air"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 9.859579475868393e-05
+    },
+    {
+      "supplier": {
+        "name": "Methane, dichlorofluoro-, HCFC-21",
+        "categories": [
+          "air",
+          "urban air close to ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 9.859579475868393e-05
+    },
+    {
+      "supplier": {
+        "name": "Dichlorofluoromethane",
+        "categories": [
+          "air",
+          "urban air close to ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 9.859579475868393e-05
+    },
+    {
+      "supplier": {
+        "name": "Methane, dichlorofluoro-, HCFC-21",
+        "categories": [
+          "air",
+          "non-urban air or from high stacks"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 9.859579475868393e-05
+    },
+    {
+      "supplier": {
+        "name": "Dichlorofluoromethane",
+        "categories": [
+          "air",
+          "non-urban air or from high stacks"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 9.859579475868393e-05
+    },
+    {
+      "supplier": {
+        "name": "Methane, dichlorofluoro-, HCFC-21",
+        "categories": [
+          "air",
+          "lower stratosphere + upper troposphere"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 9.859579475868393e-05
+    },
+    {
+      "supplier": {
+        "name": "Dichlorofluoromethane",
+        "categories": [
+          "air",
+          "lower stratosphere + upper troposphere"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 9.859579475868393e-05
+    },
+    {
+      "supplier": {
+        "name": "Methane, dichlorofluoro-, HCFC-21",
+        "categories": [
+          "air",
+          "indoor"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 9.859579475868393e-05
+    },
+    {
+      "supplier": {
+        "name": "Dichlorofluoromethane",
+        "categories": [
+          "air",
+          "indoor"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 9.859579475868393e-05
+    },
+    {
+      "supplier": {
+        "name": "Methane, dichlorofluoro-, HCFC-21",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.0003788597550183812
+    },
+    {
+      "supplier": {
+        "name": "Dichlorofluoromethane",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.0003788597550183812
+    },
+    {
+      "supplier": {
+        "name": "Methane, difluoro-, HFC-32",
+        "categories": [
+          "air"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.0004803390847992851
+    },
+    {
+      "supplier": {
+        "name": "Difluoromethane",
+        "categories": [
+          "air"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.0004803390847992851
+    },
+    {
+      "supplier": {
+        "name": "Methane, difluoro-, HFC-32",
+        "categories": [
+          "air",
+          "urban air close to ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.0004803390847992851
+    },
+    {
+      "supplier": {
+        "name": "Difluoromethane",
+        "categories": [
+          "air",
+          "urban air close to ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.0004803390847992851
+    },
+    {
+      "supplier": {
+        "name": "Methane, difluoro-, HFC-32",
+        "categories": [
+          "air",
+          "non-urban air or from high stacks"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.0004803390847992851
+    },
+    {
+      "supplier": {
+        "name": "Difluoromethane",
+        "categories": [
+          "air",
+          "non-urban air or from high stacks"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.0004803390847992851
+    },
+    {
+      "supplier": {
+        "name": "Methane, difluoro-, HFC-32",
+        "categories": [
+          "air",
+          "lower stratosphere + upper troposphere"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.0004803390847992851
+    },
+    {
+      "supplier": {
+        "name": "Difluoromethane",
+        "categories": [
+          "air",
+          "lower stratosphere + upper troposphere"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.0004803390847992851
+    },
+    {
+      "supplier": {
+        "name": "Methane, difluoro-, HFC-32",
+        "categories": [
+          "air",
+          "indoor"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.0004803390847992851
+    },
+    {
+      "supplier": {
+        "name": "Difluoromethane",
+        "categories": [
+          "air",
+          "indoor"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.0004803390847992851
+    },
+    {
+      "supplier": {
+        "name": "Methane, difluoro-, HFC-32",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.001830802127777961
+    },
+    {
+      "supplier": {
+        "name": "Difluoromethane",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.001830802127777961
+    },
+    {
+      "supplier": {
+        "name": "Methane",
+        "categories": [
+          "air"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 2.373504829897552e-05
+    },
+    {
+      "supplier": {
+        "name": "Methane, fossil",
+        "categories": [
+          "air"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 2.373504829897552e-05
+    },
+    {
+      "supplier": {
+        "name": "Methane, from soil or biomass stock",
+        "categories": [
+          "air"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 2.373504829897552e-05
+    },
+    {
+      "supplier": {
+        "name": "Methane",
+        "categories": [
+          "air",
+          "urban air close to ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 2.373504829897552e-05
+    },
+    {
+      "supplier": {
+        "name": "Methane, fossil",
+        "categories": [
+          "air",
+          "urban air close to ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 2.373504829897552e-05
+    },
+    {
+      "supplier": {
+        "name": "Methane, from soil or biomass stock",
+        "categories": [
+          "air",
+          "urban air close to ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 2.373504829897552e-05
+    },
+    {
+      "supplier": {
+        "name": "Methane",
+        "categories": [
+          "air",
+          "non-urban air or from high stacks"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 2.373504829897552e-05
+    },
+    {
+      "supplier": {
+        "name": "Methane, fossil",
+        "categories": [
+          "air",
+          "non-urban air or from high stacks"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 2.373504829897552e-05
+    },
+    {
+      "supplier": {
+        "name": "Methane, from soil or biomass stock",
+        "categories": [
+          "air",
+          "non-urban air or from high stacks"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 2.373504829897552e-05
+    },
+    {
+      "supplier": {
+        "name": "Methane",
+        "categories": [
+          "air",
+          "lower stratosphere + upper troposphere"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 2.373504829897552e-05
+    },
+    {
+      "supplier": {
+        "name": "Methane, fossil",
+        "categories": [
+          "air",
+          "lower stratosphere + upper troposphere"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 2.373504829897552e-05
+    },
+    {
+      "supplier": {
+        "name": "Methane, from soil or biomass stock",
+        "categories": [
+          "air",
+          "lower stratosphere + upper troposphere"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 2.373504829897552e-05
+    },
+    {
+      "supplier": {
+        "name": "Methane",
+        "categories": [
+          "air",
+          "indoor"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 2.373504829897552e-05
+    },
+    {
+      "supplier": {
+        "name": "Methane, fossil",
+        "categories": [
+          "air",
+          "indoor"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 2.373504829897552e-05
+    },
+    {
+      "supplier": {
+        "name": "Methane, from soil or biomass stock",
+        "categories": [
+          "air",
+          "indoor"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 2.373504829897552e-05
+    },
+    {
+      "supplier": {
+        "name": "Methane",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 5.986122880278235e-05
+    },
+    {
+      "supplier": {
+        "name": "Methane, fossil",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 5.986122880278235e-05
+    },
+    {
+      "supplier": {
+        "name": "Methane, from soil or biomass stock",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 5.986122880278235e-05
+    },
+    {
+      "supplier": {
+        "name": "Methane, monochloro-, R-40",
+        "categories": [
+          "air"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 3.659421735505717e-06
+    },
+    {
+      "supplier": {
+        "name": "Chloromethane",
+        "categories": [
+          "air"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 3.659421735505717e-06
+    },
+    {
+      "supplier": {
+        "name": "Methylchloride",
+        "categories": [
+          "air"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 3.659421735505717e-06
+    },
+    {
+      "supplier": {
+        "name": "Methane, monochloro-, R-40",
+        "categories": [
+          "air",
+          "urban air close to ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 3.659421735505717e-06
+    },
+    {
+      "supplier": {
+        "name": "Chloromethane",
+        "categories": [
+          "air",
+          "urban air close to ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 3.659421735505717e-06
+    },
+    {
+      "supplier": {
+        "name": "Methylchloride",
+        "categories": [
+          "air",
+          "urban air close to ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 3.659421735505717e-06
+    },
+    {
+      "supplier": {
+        "name": "Methane, monochloro-, R-40",
+        "categories": [
+          "air",
+          "non-urban air or from high stacks"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 3.659421735505717e-06
+    },
+    {
+      "supplier": {
+        "name": "Chloromethane",
+        "categories": [
+          "air",
+          "non-urban air or from high stacks"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 3.659421735505717e-06
+    },
+    {
+      "supplier": {
+        "name": "Methylchloride",
+        "categories": [
+          "air",
+          "non-urban air or from high stacks"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 3.659421735505717e-06
+    },
+    {
+      "supplier": {
+        "name": "Methane, monochloro-, R-40",
+        "categories": [
+          "air",
+          "lower stratosphere + upper troposphere"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 3.659421735505717e-06
+    },
+    {
+      "supplier": {
+        "name": "Chloromethane",
+        "categories": [
+          "air",
+          "lower stratosphere + upper troposphere"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 3.659421735505717e-06
+    },
+    {
+      "supplier": {
+        "name": "Methylchloride",
+        "categories": [
+          "air",
+          "lower stratosphere + upper troposphere"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 3.659421735505717e-06
+    },
+    {
+      "supplier": {
+        "name": "Methane, monochloro-, R-40",
+        "categories": [
+          "air",
+          "indoor"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 3.659421735505717e-06
+    },
+    {
+      "supplier": {
+        "name": "Chloromethane",
+        "categories": [
+          "air",
+          "indoor"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 3.659421735505717e-06
+    },
+    {
+      "supplier": {
+        "name": "Methylchloride",
+        "categories": [
+          "air",
+          "indoor"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 3.659421735505717e-06
+    },
+    {
+      "supplier": {
+        "name": "Methane, monochloro-, R-40",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1.400279732431401e-05
+    },
+    {
+      "supplier": {
+        "name": "Chloromethane",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1.400279732431401e-05
+    },
+    {
+      "supplier": {
+        "name": "Methylchloride",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1.400279732431401e-05
+    },
+    {
+      "supplier": {
+        "name": "Methane, tetrachloro-, R-10",
+        "categories": [
+          "air"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.001744221300482721
+    },
+    {
+      "supplier": {
+        "name": "Carbon tetrachloride",
+        "categories": [
+          "air"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.001744221300482721
+    },
+    {
+      "supplier": {
+        "name": "Methane, tetrachloro-, R-10",
+        "categories": [
+          "air",
+          "urban air close to ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.001744221300482721
+    },
+    {
+      "supplier": {
+        "name": "Carbon tetrachloride",
+        "categories": [
+          "air",
+          "urban air close to ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.001744221300482721
+    },
+    {
+      "supplier": {
+        "name": "Methane, tetrachloro-, R-10",
+        "categories": [
+          "air",
+          "non-urban air or from high stacks"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.001744221300482721
+    },
+    {
+      "supplier": {
+        "name": "Carbon tetrachloride",
+        "categories": [
+          "air",
+          "non-urban air or from high stacks"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.001744221300482721
+    },
+    {
+      "supplier": {
+        "name": "Methane, tetrachloro-, R-10",
+        "categories": [
+          "air",
+          "lower stratosphere + upper troposphere"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.001744221300482721
+    },
+    {
+      "supplier": {
+        "name": "Carbon tetrachloride",
+        "categories": [
+          "air",
+          "lower stratosphere + upper troposphere"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.001744221300482721
+    },
+    {
+      "supplier": {
+        "name": "Methane, tetrachloro-, R-10",
+        "categories": [
+          "air",
+          "indoor"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.001744221300482721
+    },
+    {
+      "supplier": {
+        "name": "Carbon tetrachloride",
+        "categories": [
+          "air",
+          "indoor"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.001744221300482721
+    },
+    {
+      "supplier": {
+        "name": "Methane, tetrachloro-, R-10",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.0054484739219624
+    },
+    {
+      "supplier": {
+        "name": "Carbon tetrachloride",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.0054484739219624
+    },
+    {
+      "supplier": {
+        "name": "Methane, tetrafluoro-, R-14",
+        "categories": [
+          "air"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.06425059843456288
+    },
+    {
+      "supplier": {
+        "name": "Tetrafluoromethane",
+        "categories": [
+          "air"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.06425059843456288
+    },
+    {
+      "supplier": {
+        "name": "Methane, tetrafluoro-, R-14",
+        "categories": [
+          "air",
+          "urban air close to ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.06425059843456288
+    },
+    {
+      "supplier": {
+        "name": "Tetrafluoromethane",
+        "categories": [
+          "air",
+          "urban air close to ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.06425059843456288
+    },
+    {
+      "supplier": {
+        "name": "Methane, tetrafluoro-, R-14",
+        "categories": [
+          "air",
+          "non-urban air or from high stacks"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.06425059843456288
+    },
+    {
+      "supplier": {
+        "name": "Tetrafluoromethane",
+        "categories": [
+          "air",
+          "non-urban air or from high stacks"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.06425059843456288
+    },
+    {
+      "supplier": {
+        "name": "Methane, tetrafluoro-, R-14",
+        "categories": [
+          "air",
+          "lower stratosphere + upper troposphere"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.06425059843456288
+    },
+    {
+      "supplier": {
+        "name": "Tetrafluoromethane",
+        "categories": [
+          "air",
+          "lower stratosphere + upper troposphere"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.06425059843456288
+    },
+    {
+      "supplier": {
+        "name": "Methane, tetrafluoro-, R-14",
+        "categories": [
+          "air",
+          "indoor"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.06425059843456288
+    },
+    {
+      "supplier": {
+        "name": "Tetrafluoromethane",
+        "categories": [
+          "air",
+          "indoor"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.06425059843456288
+    },
+    {
+      "supplier": {
+        "name": "Methane, tetrafluoro-, R-14",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.07589273109135884
+    },
+    {
+      "supplier": {
+        "name": "Tetrafluoromethane",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.07589273109135884
+    },
+    {
+      "supplier": {
+        "name": "Methane, trichlorofluoro-, CFC-11",
+        "categories": [
+          "air"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.006916641613110188
+    },
+    {
+      "supplier": {
+        "name": "Trichlorofluoromethane",
+        "categories": [
+          "air"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.006916641613110188
+    },
+    {
+      "supplier": {
+        "name": "Methane, trichlorofluoro-, CFC-11",
+        "categories": [
+          "air",
+          "urban air close to ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.006916641613110188
+    },
+    {
+      "supplier": {
+        "name": "Trichlorofluoromethane",
+        "categories": [
+          "air",
+          "urban air close to ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.006916641613110188
+    },
+    {
+      "supplier": {
+        "name": "Methane, trichlorofluoro-, CFC-11",
+        "categories": [
+          "air",
+          "non-urban air or from high stacks"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.006916641613110188
+    },
+    {
+      "supplier": {
+        "name": "Trichlorofluoromethane",
+        "categories": [
+          "air",
+          "non-urban air or from high stacks"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.006916641613110188
+    },
+    {
+      "supplier": {
+        "name": "Methane, trichlorofluoro-, CFC-11",
+        "categories": [
+          "air",
+          "lower stratosphere + upper troposphere"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.006916641613110188
+    },
+    {
+      "supplier": {
+        "name": "Trichlorofluoromethane",
+        "categories": [
+          "air",
+          "lower stratosphere + upper troposphere"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.006916641613110188
+    },
+    {
+      "supplier": {
+        "name": "Methane, trichlorofluoro-, CFC-11",
+        "categories": [
+          "air",
+          "indoor"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.006916641613110188
+    },
+    {
+      "supplier": {
+        "name": "Trichlorofluoromethane",
+        "categories": [
+          "air",
+          "indoor"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.006916641613110188
+    },
+    {
+      "supplier": {
+        "name": "Methane, trichlorofluoro-, CFC-11",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.01723689895815842
+    },
+    {
+      "supplier": {
+        "name": "Trichlorofluoromethane",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.01723689895815842
+    },
+    {
+      "supplier": {
+        "name": "Methane, trifluoro-, HFC-23",
+        "categories": [
+          "air"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.05735819007173852
+    },
+    {
+      "supplier": {
+        "name": "Trifluoromethane",
+        "categories": [
+          "air"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.05735819007173852
+    },
+    {
+      "supplier": {
+        "name": "Methane, trifluoro-, HFC-23",
+        "categories": [
+          "air",
+          "urban air close to ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.05735819007173852
+    },
+    {
+      "supplier": {
+        "name": "Trifluoromethane",
+        "categories": [
+          "air",
+          "urban air close to ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.05735819007173852
+    },
+    {
+      "supplier": {
+        "name": "Methane, trifluoro-, HFC-23",
+        "categories": [
+          "air",
+          "non-urban air or from high stacks"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.05735819007173852
+    },
+    {
+      "supplier": {
+        "name": "Trifluoromethane",
+        "categories": [
+          "air",
+          "non-urban air or from high stacks"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.05735819007173852
+    },
+    {
+      "supplier": {
+        "name": "Methane, trifluoro-, HFC-23",
+        "categories": [
+          "air",
+          "lower stratosphere + upper troposphere"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.05735819007173852
+    },
+    {
+      "supplier": {
+        "name": "Trifluoromethane",
+        "categories": [
+          "air",
+          "lower stratosphere + upper troposphere"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.05735819007173852
+    },
+    {
+      "supplier": {
+        "name": "Methane, trifluoro-, HFC-23",
+        "categories": [
+          "air",
+          "indoor"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.05735819007173852
+    },
+    {
+      "supplier": {
+        "name": "Trifluoromethane",
+        "categories": [
+          "air",
+          "indoor"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.05735819007173852
+    },
+    {
+      "supplier": {
+        "name": "Methane, trifluoro-, HFC-23",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.08059421275599817
+    },
+    {
+      "supplier": {
+        "name": "Trifluoromethane",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.08059421275599817
     },
     {
       "supplier": {
@@ -1424,7 +6570,7 @@
     },
     {
       "supplier": {
-        "name": "Pentane",
+        "name": "Perfluoropentane",
         "categories": [
           "air"
         ],
@@ -1437,7 +6583,7 @@
     },
     {
       "supplier": {
-        "name": "Pentane",
+        "name": "Perfluoropentane",
         "categories": [
           "air",
           "urban air close to ground"
@@ -1451,7 +6597,7 @@
     },
     {
       "supplier": {
-        "name": "Pentane",
+        "name": "Perfluoropentane",
         "categories": [
           "air",
           "non-urban air or from high stacks"
@@ -1465,7 +6611,7 @@
     },
     {
       "supplier": {
-        "name": "Pentane",
+        "name": "Perfluoropentane",
         "categories": [
           "air",
           "lower stratosphere + upper troposphere"
@@ -1479,7 +6625,7 @@
     },
     {
       "supplier": {
-        "name": "Pentane",
+        "name": "Perfluoropentane",
         "categories": [
           "air",
           "indoor"
@@ -1493,7 +6639,7 @@
     },
     {
       "supplier": {
-        "name": "Pentane",
+        "name": "Perfluoropentane",
         "categories": [
           "air",
           "low population density, long-term"
@@ -1507,7 +6653,7 @@
     },
     {
       "supplier": {
-        "name": "Propane",
+        "name": "1,1,2,2-Tetrafluoroethene",
         "categories": [
           "air"
         ],
@@ -1516,11 +6662,11 @@
       "consumer": {
         "matrix": "technosphere"
       },
-      "value": 0.07460714762752252
+      "value": 2.455628372042115e-09
     },
     {
       "supplier": {
-        "name": "Propane",
+        "name": "1,1,2,2-Tetrafluoroethene",
         "categories": [
           "air",
           "urban air close to ground"
@@ -1530,11 +6676,11 @@
       "consumer": {
         "matrix": "technosphere"
       },
-      "value": 0.07460714762752252
+      "value": 2.455628372042115e-09
     },
     {
       "supplier": {
-        "name": "Propane",
+        "name": "1,1,2,2-Tetrafluoroethene",
         "categories": [
           "air",
           "non-urban air or from high stacks"
@@ -1544,11 +6690,11 @@
       "consumer": {
         "matrix": "technosphere"
       },
-      "value": 0.07460714762752252
+      "value": 2.455628372042115e-09
     },
     {
       "supplier": {
-        "name": "Propane",
+        "name": "1,1,2,2-Tetrafluoroethene",
         "categories": [
           "air",
           "lower stratosphere + upper troposphere"
@@ -1558,11 +6704,11 @@
       "consumer": {
         "matrix": "technosphere"
       },
-      "value": 0.07460714762752252
+      "value": 2.455628372042115e-09
     },
     {
       "supplier": {
-        "name": "Propane",
+        "name": "1,1,2,2-Tetrafluoroethene",
         "categories": [
           "air",
           "indoor"
@@ -1572,11 +6718,11 @@
       "consumer": {
         "matrix": "technosphere"
       },
-      "value": 0.07460714762752252
+      "value": 2.455628372042115e-09
     },
     {
       "supplier": {
-        "name": "Propane",
+        "name": "1,1,2,2-Tetrafluoroethene",
         "categories": [
           "air",
           "low population density, long-term"
@@ -1586,7 +6732,7 @@
       "consumer": {
         "matrix": "technosphere"
       },
-      "value": 0.08922074122155908
+      "value": 8.806377610037831e-09
     },
     {
       "supplier": {
@@ -1753,6 +6899,61 @@
         "matrix": "technosphere"
       },
       "value": 0.0117247388825223
+    },
+    {
+      "supplier": {
+        "name": "Carbon dioxide, to soil or biomass stock",
+        "categories": [
+          "soil"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": -5.604176047506329e-06
+    },
+    {
+      "supplier": {
+        "name": "Carbon dioxide, to soil or biomass stock",
+        "categories": [
+          "soil",
+          "industrial"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": -5.604176047506329e-06
+    },
+    {
+      "supplier": {
+        "name": "Carbon dioxide, to soil or biomass stock",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": -5.604176047506329e-06
+    },
+    {
+      "supplier": {
+        "name": "Carbon dioxide, to soil or biomass stock",
+        "categories": [
+          "soil",
+          "forestry"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": -5.604176047506329e-06
     }
   ]
 }

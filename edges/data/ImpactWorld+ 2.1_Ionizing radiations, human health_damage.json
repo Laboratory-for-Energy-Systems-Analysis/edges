@@ -1112,6 +1112,254 @@
     },
     {
       "supplier": {
+        "name": "Hydrogen-3, Tritium",
+        "categories": [
+          "water",
+          "ocean"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 6.909e-17
+    },
+    {
+      "supplier": {
+        "name": "Tritium",
+        "categories": [
+          "water",
+          "ocean"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 6.909e-17
+    },
+    {
+      "supplier": {
+        "name": "Hydrogen-3, Tritium",
+        "categories": [
+          "air"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1.4259e-14
+    },
+    {
+      "supplier": {
+        "name": "Tritium",
+        "categories": [
+          "air"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1.4259e-14
+    },
+    {
+      "supplier": {
+        "name": "Hydrogen-3, Tritium",
+        "categories": [
+          "water"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 4.494e-16
+    },
+    {
+      "supplier": {
+        "name": "Tritium",
+        "categories": [
+          "water"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 4.494e-16
+    },
+    {
+      "supplier": {
+        "name": "Hydrogen-3, Tritium",
+        "categories": [
+          "air",
+          "urban air close to ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1.4259e-14
+    },
+    {
+      "supplier": {
+        "name": "Tritium",
+        "categories": [
+          "air",
+          "urban air close to ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1.4259e-14
+    },
+    {
+      "supplier": {
+        "name": "Hydrogen-3, Tritium",
+        "categories": [
+          "air",
+          "non-urban air or from high stacks"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1.4259e-14
+    },
+    {
+      "supplier": {
+        "name": "Tritium",
+        "categories": [
+          "air",
+          "non-urban air or from high stacks"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1.4259e-14
+    },
+    {
+      "supplier": {
+        "name": "Hydrogen-3, Tritium",
+        "categories": [
+          "air",
+          "lower stratosphere + upper troposphere"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1.4259e-14
+    },
+    {
+      "supplier": {
+        "name": "Tritium",
+        "categories": [
+          "air",
+          "lower stratosphere + upper troposphere"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1.4259e-14
+    },
+    {
+      "supplier": {
+        "name": "Hydrogen-3, Tritium",
+        "categories": [
+          "air",
+          "indoor"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1.4259e-14
+    },
+    {
+      "supplier": {
+        "name": "Tritium",
+        "categories": [
+          "air",
+          "indoor"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1.4259e-14
+    },
+    {
+      "supplier": {
+        "name": "Hydrogen-3, Tritium",
+        "categories": [
+          "water",
+          "surface water"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 4.494e-16
+    },
+    {
+      "supplier": {
+        "name": "Tritium",
+        "categories": [
+          "water",
+          "surface water"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 4.494e-16
+    },
+    {
+      "supplier": {
+        "name": "Hydrogen-3, Tritium",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1.4259e-14
+    },
+    {
+      "supplier": {
+        "name": "Tritium",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1.4259e-14
+    },
+    {
+      "supplier": {
         "name": "Iodine-129",
         "categories": [
           "water"

@@ -4238,89 +4238,6 @@
         "matrix": "biosphere"
       },
       "consumer": {
-        "matrix": "technosphere"
-      },
-      "value": 0.3707865494864695
-    },
-    {
-      "supplier": {
-        "name": "Ammonia",
-        "categories": [
-          "air",
-          "urban air close to ground"
-        ],
-        "matrix": "biosphere"
-      },
-      "consumer": {
-        "matrix": "technosphere"
-      },
-      "value": 0.3707865494864695
-    },
-    {
-      "supplier": {
-        "name": "Ammonia",
-        "categories": [
-          "air",
-          "non-urban air or from high stacks"
-        ],
-        "matrix": "biosphere"
-      },
-      "consumer": {
-        "matrix": "technosphere"
-      },
-      "value": 0.3707865494864695
-    },
-    {
-      "supplier": {
-        "name": "Ammonia",
-        "categories": [
-          "air",
-          "lower stratosphere + upper troposphere"
-        ],
-        "matrix": "biosphere"
-      },
-      "consumer": {
-        "matrix": "technosphere"
-      },
-      "value": 0.3707865494864695
-    },
-    {
-      "supplier": {
-        "name": "Ammonia",
-        "categories": [
-          "air",
-          "indoor"
-        ],
-        "matrix": "biosphere"
-      },
-      "consumer": {
-        "matrix": "technosphere"
-      },
-      "value": 0.3707865494864695
-    },
-    {
-      "supplier": {
-        "name": "Ammonia",
-        "categories": [
-          "air",
-          "low population density, long-term"
-        ],
-        "matrix": "biosphere"
-      },
-      "consumer": {
-        "matrix": "technosphere"
-      },
-      "value": 0.3707865494864695
-    },
-    {
-      "supplier": {
-        "name": "Ammonia",
-        "categories": [
-          "air"
-        ],
-        "matrix": "biosphere"
-      },
-      "consumer": {
         "matrix": "technosphere",
         "location": "BR-PA"
       },
@@ -17214,89 +17131,6 @@
       "consumer": {
         "matrix": "technosphere",
         "location": "IN-DN"
-      },
-      "value": 0.4475375725446109
-    },
-    {
-      "supplier": {
-        "name": "Ammonia",
-        "categories": [
-          "air"
-        ],
-        "matrix": "biosphere"
-      },
-      "consumer": {
-        "matrix": "technosphere"
-      },
-      "value": 0.4475375725446109
-    },
-    {
-      "supplier": {
-        "name": "Ammonia",
-        "categories": [
-          "air",
-          "urban air close to ground"
-        ],
-        "matrix": "biosphere"
-      },
-      "consumer": {
-        "matrix": "technosphere"
-      },
-      "value": 0.4475375725446109
-    },
-    {
-      "supplier": {
-        "name": "Ammonia",
-        "categories": [
-          "air",
-          "non-urban air or from high stacks"
-        ],
-        "matrix": "biosphere"
-      },
-      "consumer": {
-        "matrix": "technosphere"
-      },
-      "value": 0.4475375725446109
-    },
-    {
-      "supplier": {
-        "name": "Ammonia",
-        "categories": [
-          "air",
-          "lower stratosphere + upper troposphere"
-        ],
-        "matrix": "biosphere"
-      },
-      "consumer": {
-        "matrix": "technosphere"
-      },
-      "value": 0.4475375725446109
-    },
-    {
-      "supplier": {
-        "name": "Ammonia",
-        "categories": [
-          "air",
-          "indoor"
-        ],
-        "matrix": "biosphere"
-      },
-      "consumer": {
-        "matrix": "technosphere"
-      },
-      "value": 0.4475375725446109
-    },
-    {
-      "supplier": {
-        "name": "Ammonia",
-        "categories": [
-          "air",
-          "low population density, long-term"
-        ],
-        "matrix": "biosphere"
-      },
-      "consumer": {
-        "matrix": "technosphere"
       },
       "value": 0.4475375725446109
     },
@@ -32874,47 +32708,6 @@
         "location": "ZW"
       },
       "value": 0.1380259711976738
-    },
-    {
-      "supplier": {
-        "name": "Ammonia",
-        "categories": [
-          "water"
-        ],
-        "matrix": "biosphere"
-      },
-      "consumer": {
-        "matrix": "technosphere"
-      },
-      "value": 8.761762753035423
-    },
-    {
-      "supplier": {
-        "name": "Ammonia",
-        "categories": [
-          "water",
-          "ocean"
-        ],
-        "matrix": "biosphere"
-      },
-      "consumer": {
-        "matrix": "technosphere"
-      },
-      "value": 12.51680393290775
-    },
-    {
-      "supplier": {
-        "name": "Ammonia",
-        "categories": [
-          "water",
-          "surface water"
-        ],
-        "matrix": "biosphere"
-      },
-      "consumer": {
-        "matrix": "technosphere"
-      },
-      "value": 8.761762753035423
     },
     {
       "supplier": {
@@ -42954,6 +42747,88 @@
         "matrix": "biosphere"
       },
       "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 6.745932415519396
+    },
+    {
+      "supplier": {
+        "name": "Ammonium",
+        "categories": [
+          "water"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 6.745932415519396
+    },
+    {
+      "supplier": {
+        "name": "Ammonium, ion",
+        "categories": [
+          "water",
+          "ocean"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 9.63704630788485
+    },
+    {
+      "supplier": {
+        "name": "Ammonium",
+        "categories": [
+          "water",
+          "ocean"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 9.63704630788485
+    },
+    {
+      "supplier": {
+        "name": "Ammonium, ion",
+        "categories": [
+          "water",
+          "surface water"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 6.745932415519396
+    },
+    {
+      "supplier": {
+        "name": "Ammonium",
+        "categories": [
+          "water",
+          "surface water"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 6.745932415519396
+    },
+    {
+      "supplier": {
+        "name": "Ammonium, ion",
+        "categories": [
+          "water"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
         "matrix": "technosphere",
         "location": "AD"
       },
@@ -58606,88 +58481,6 @@
       "consumer": {
         "matrix": "technosphere",
         "location": "RW"
-      },
-      "value": 6.745932415519396
-    },
-    {
-      "supplier": {
-        "name": "Ammonium, ion",
-        "categories": [
-          "water"
-        ],
-        "matrix": "biosphere"
-      },
-      "consumer": {
-        "matrix": "technosphere"
-      },
-      "value": 6.745932415519396
-    },
-    {
-      "supplier": {
-        "name": "Ammonium",
-        "categories": [
-          "water"
-        ],
-        "matrix": "biosphere"
-      },
-      "consumer": {
-        "matrix": "technosphere"
-      },
-      "value": 6.745932415519396
-    },
-    {
-      "supplier": {
-        "name": "Ammonium, ion",
-        "categories": [
-          "water",
-          "ocean"
-        ],
-        "matrix": "biosphere"
-      },
-      "consumer": {
-        "matrix": "technosphere"
-      },
-      "value": 9.63704630788485
-    },
-    {
-      "supplier": {
-        "name": "Ammonium",
-        "categories": [
-          "water",
-          "ocean"
-        ],
-        "matrix": "biosphere"
-      },
-      "consumer": {
-        "matrix": "technosphere"
-      },
-      "value": 9.63704630788485
-    },
-    {
-      "supplier": {
-        "name": "Ammonium, ion",
-        "categories": [
-          "water",
-          "surface water"
-        ],
-        "matrix": "biosphere"
-      },
-      "consumer": {
-        "matrix": "technosphere"
-      },
-      "value": 6.745932415519396
-    },
-    {
-      "supplier": {
-        "name": "Ammonium",
-        "categories": [
-          "water",
-          "surface water"
-        ],
-        "matrix": "biosphere"
-      },
-      "consumer": {
-        "matrix": "technosphere"
       },
       "value": 6.745932415519396
     },
@@ -126516,89 +126309,6 @@
         "matrix": "biosphere"
       },
       "consumer": {
-        "matrix": "technosphere"
-      },
-      "value": 0.1024032950513628
-    },
-    {
-      "supplier": {
-        "name": "Nitrogen oxides",
-        "categories": [
-          "air",
-          "urban air close to ground"
-        ],
-        "matrix": "biosphere"
-      },
-      "consumer": {
-        "matrix": "technosphere"
-      },
-      "value": 0.1024032950513628
-    },
-    {
-      "supplier": {
-        "name": "Nitrogen oxides",
-        "categories": [
-          "air",
-          "non-urban air or from high stacks"
-        ],
-        "matrix": "biosphere"
-      },
-      "consumer": {
-        "matrix": "technosphere"
-      },
-      "value": 0.1024032950513628
-    },
-    {
-      "supplier": {
-        "name": "Nitrogen oxides",
-        "categories": [
-          "air",
-          "lower stratosphere + upper troposphere"
-        ],
-        "matrix": "biosphere"
-      },
-      "consumer": {
-        "matrix": "technosphere"
-      },
-      "value": 0.1024032950513628
-    },
-    {
-      "supplier": {
-        "name": "Nitrogen oxides",
-        "categories": [
-          "air",
-          "indoor"
-        ],
-        "matrix": "biosphere"
-      },
-      "consumer": {
-        "matrix": "technosphere"
-      },
-      "value": 0.1024032950513628
-    },
-    {
-      "supplier": {
-        "name": "Nitrogen oxides",
-        "categories": [
-          "air",
-          "low population density, long-term"
-        ],
-        "matrix": "biosphere"
-      },
-      "consumer": {
-        "matrix": "technosphere"
-      },
-      "value": 0.1024032950513628
-    },
-    {
-      "supplier": {
-        "name": "Nitrogen oxides",
-        "categories": [
-          "air"
-        ],
-        "matrix": "biosphere"
-      },
-      "consumer": {
         "matrix": "technosphere",
         "location": "BR-PA"
       },
@@ -139403,89 +139113,6 @@
       "consumer": {
         "matrix": "technosphere",
         "location": "IN-DN"
-      },
-      "value": 0.2079572363072354
-    },
-    {
-      "supplier": {
-        "name": "Nitrogen oxides",
-        "categories": [
-          "air"
-        ],
-        "matrix": "biosphere"
-      },
-      "consumer": {
-        "matrix": "technosphere"
-      },
-      "value": 0.2079572363072354
-    },
-    {
-      "supplier": {
-        "name": "Nitrogen oxides",
-        "categories": [
-          "air",
-          "urban air close to ground"
-        ],
-        "matrix": "biosphere"
-      },
-      "consumer": {
-        "matrix": "technosphere"
-      },
-      "value": 0.2079572363072354
-    },
-    {
-      "supplier": {
-        "name": "Nitrogen oxides",
-        "categories": [
-          "air",
-          "non-urban air or from high stacks"
-        ],
-        "matrix": "biosphere"
-      },
-      "consumer": {
-        "matrix": "technosphere"
-      },
-      "value": 0.2079572363072354
-    },
-    {
-      "supplier": {
-        "name": "Nitrogen oxides",
-        "categories": [
-          "air",
-          "lower stratosphere + upper troposphere"
-        ],
-        "matrix": "biosphere"
-      },
-      "consumer": {
-        "matrix": "technosphere"
-      },
-      "value": 0.2079572363072354
-    },
-    {
-      "supplier": {
-        "name": "Nitrogen oxides",
-        "categories": [
-          "air",
-          "indoor"
-        ],
-        "matrix": "biosphere"
-      },
-      "consumer": {
-        "matrix": "technosphere"
-      },
-      "value": 0.2079572363072354
-    },
-    {
-      "supplier": {
-        "name": "Nitrogen oxides",
-        "categories": [
-          "air",
-          "low population density, long-term"
-        ],
-        "matrix": "biosphere"
-      },
-      "consumer": {
-        "matrix": "technosphere"
       },
       "value": 0.2079572363072354
     },
@@ -155066,7 +154693,7 @@
     },
     {
       "supplier": {
-        "name": "Nitrogen",
+        "name": "Nitrogen, organic bound",
         "categories": [
           "water"
         ],
@@ -155079,7 +154706,7 @@
     },
     {
       "supplier": {
-        "name": "Nitrogen",
+        "name": "Nitrogen, organic bound",
         "categories": [
           "water",
           "ocean"
@@ -155093,7 +154720,7 @@
     },
     {
       "supplier": {
-        "name": "Nitrogen",
+        "name": "Nitrogen, organic bound",
         "categories": [
           "water",
           "surface water"

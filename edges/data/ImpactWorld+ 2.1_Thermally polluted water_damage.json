@@ -20,6 +20,88 @@
         "matrix": "biosphere"
       },
       "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 4.11e-05
+    },
+    {
+      "supplier": {
+        "name": "Water, turbine use, unspecified natural origin",
+        "categories": [
+          "natural resource"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 4.11e-05
+    },
+    {
+      "supplier": {
+        "name": "Water, cooling, unspecified natural origin",
+        "categories": [
+          "natural resource",
+          "in water"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 4.11e-05
+    },
+    {
+      "supplier": {
+        "name": "Water, turbine use, unspecified natural origin",
+        "categories": [
+          "natural resource",
+          "in water"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 4.11e-05
+    },
+    {
+      "supplier": {
+        "name": "Water, cooling, unspecified natural origin",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 4.11e-05
+    },
+    {
+      "supplier": {
+        "name": "Water, turbine use, unspecified natural origin",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 4.11e-05
+    },
+    {
+      "supplier": {
+        "name": "Water, cooling, unspecified natural origin",
+        "categories": [
+          "natural resource"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
         "matrix": "technosphere",
         "location": "AD"
       },
@@ -4144,88 +4226,6 @@
       "consumer": {
         "matrix": "technosphere",
         "location": "BR-MT"
-      },
-      "value": 4.11e-05
-    },
-    {
-      "supplier": {
-        "name": "Water, cooling, unspecified natural origin",
-        "categories": [
-          "natural resource"
-        ],
-        "matrix": "biosphere"
-      },
-      "consumer": {
-        "matrix": "technosphere"
-      },
-      "value": 4.11e-05
-    },
-    {
-      "supplier": {
-        "name": "Water, turbine use, unspecified natural origin",
-        "categories": [
-          "natural resource"
-        ],
-        "matrix": "biosphere"
-      },
-      "consumer": {
-        "matrix": "technosphere"
-      },
-      "value": 4.11e-05
-    },
-    {
-      "supplier": {
-        "name": "Water, cooling, unspecified natural origin",
-        "categories": [
-          "natural resource",
-          "in water"
-        ],
-        "matrix": "biosphere"
-      },
-      "consumer": {
-        "matrix": "technosphere"
-      },
-      "value": 4.11e-05
-    },
-    {
-      "supplier": {
-        "name": "Water, turbine use, unspecified natural origin",
-        "categories": [
-          "natural resource",
-          "in water"
-        ],
-        "matrix": "biosphere"
-      },
-      "consumer": {
-        "matrix": "technosphere"
-      },
-      "value": 4.11e-05
-    },
-    {
-      "supplier": {
-        "name": "Water, cooling, unspecified natural origin",
-        "categories": [
-          "natural resource",
-          "in ground"
-        ],
-        "matrix": "biosphere"
-      },
-      "consumer": {
-        "matrix": "technosphere"
-      },
-      "value": 4.11e-05
-    },
-    {
-      "supplier": {
-        "name": "Water, turbine use, unspecified natural origin",
-        "categories": [
-          "natural resource",
-          "in ground"
-        ],
-        "matrix": "biosphere"
-      },
-      "consumer": {
-        "matrix": "technosphere"
       },
       "value": 4.11e-05
     },

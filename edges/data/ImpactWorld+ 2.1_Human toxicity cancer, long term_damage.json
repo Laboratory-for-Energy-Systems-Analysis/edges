@@ -27,6 +27,20 @@
     },
     {
       "supplier": {
+        "name": "1,4-Dichloro-2-butene",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 2.553e-05
+    },
+    {
+      "supplier": {
         "name": "2-Phenylphenol",
         "categories": [
           "air",
@@ -83,20 +97,6 @@
     },
     {
       "supplier": {
-        "name": "Acenaphthene",
-        "categories": [
-          "air",
-          "low population density, long-term"
-        ],
-        "matrix": "biosphere"
-      },
-      "consumer": {
-        "matrix": "technosphere"
-      },
-      "value": 6.187e-05
-    },
-    {
-      "supplier": {
         "name": "Acenaphthylene",
         "categories": [
           "air",
@@ -139,20 +139,6 @@
     },
     {
       "supplier": {
-        "name": "Acetaldehyde",
-        "categories": [
-          "air",
-          "low population density, long-term"
-        ],
-        "matrix": "biosphere"
-      },
-      "consumer": {
-        "matrix": "technosphere"
-      },
-      "value": 2.1965e-06
-    },
-    {
-      "supplier": {
         "name": "Acetamide",
         "categories": [
           "air",
@@ -164,76 +150,6 @@
         "matrix": "technosphere"
       },
       "value": 6.302e-06
-    },
-    {
-      "supplier": {
-        "name": "Acetamide",
-        "categories": [
-          "air",
-          "low population density, long-term"
-        ],
-        "matrix": "biosphere"
-      },
-      "consumer": {
-        "matrix": "technosphere"
-      },
-      "value": 2.714e-06
-    },
-    {
-      "supplier": {
-        "name": "Acetamide",
-        "categories": [
-          "air",
-          "low population density, long-term"
-        ],
-        "matrix": "biosphere"
-      },
-      "consumer": {
-        "matrix": "technosphere"
-      },
-      "value": 0.00057385
-    },
-    {
-      "supplier": {
-        "name": "Acetamide",
-        "categories": [
-          "air",
-          "low population density, long-term"
-        ],
-        "matrix": "biosphere"
-      },
-      "consumer": {
-        "matrix": "technosphere"
-      },
-      "value": 0.00026105
-    },
-    {
-      "supplier": {
-        "name": "Acetamide",
-        "categories": [
-          "air",
-          "low population density, long-term"
-        ],
-        "matrix": "biosphere"
-      },
-      "consumer": {
-        "matrix": "technosphere"
-      },
-      "value": 0.0015295
-    },
-    {
-      "supplier": {
-        "name": "Acetic acid",
-        "categories": [
-          "air",
-          "low population density, long-term"
-        ],
-        "matrix": "biosphere"
-      },
-      "consumer": {
-        "matrix": "technosphere"
-      },
-      "value": 4.7725e-06
     },
     {
       "supplier": {
@@ -279,6 +195,20 @@
     },
     {
       "supplier": {
+        "name": "Chloramben",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 5.428e-07
+    },
+    {
+      "supplier": {
         "name": "Amitrole",
         "categories": [
           "air",
@@ -304,48 +234,6 @@
         "matrix": "technosphere"
       },
       "value": 9.867e-09
-    },
-    {
-      "supplier": {
-        "name": "Aniline",
-        "categories": [
-          "air",
-          "low population density, long-term"
-        ],
-        "matrix": "biosphere"
-      },
-      "consumer": {
-        "matrix": "technosphere"
-      },
-      "value": 2.668e-06
-    },
-    {
-      "supplier": {
-        "name": "Aniline",
-        "categories": [
-          "air",
-          "low population density, long-term"
-        ],
-        "matrix": "biosphere"
-      },
-      "consumer": {
-        "matrix": "technosphere"
-      },
-      "value": 0.0002553
-    },
-    {
-      "supplier": {
-        "name": "Aniline",
-        "categories": [
-          "air",
-          "low population density, long-term"
-        ],
-        "matrix": "biosphere"
-      },
-      "consumer": {
-        "matrix": "technosphere"
-      },
-      "value": 1.84e-08
     },
     {
       "supplier": {
@@ -749,105 +637,7 @@
     },
     {
       "supplier": {
-        "name": "Benzene",
-        "categories": [
-          "air",
-          "low population density, long-term"
-        ],
-        "matrix": "biosphere"
-      },
-      "consumer": {
-        "matrix": "technosphere"
-      },
-      "value": 7.8775e-07
-    },
-    {
-      "supplier": {
-        "name": "Benzene",
-        "categories": [
-          "air",
-          "low population density, long-term"
-        ],
-        "matrix": "biosphere"
-      },
-      "consumer": {
-        "matrix": "technosphere"
-      },
-      "value": 1.771e-09
-    },
-    {
-      "supplier": {
-        "name": "Benzene",
-        "categories": [
-          "air",
-          "low population density, long-term"
-        ],
-        "matrix": "biosphere"
-      },
-      "consumer": {
-        "matrix": "technosphere"
-      },
-      "value": 1.03155e-06
-    },
-    {
-      "supplier": {
-        "name": "Benzene",
-        "categories": [
-          "air",
-          "low population density, long-term"
-        ],
-        "matrix": "biosphere"
-      },
-      "consumer": {
-        "matrix": "technosphere"
-      },
-      "value": 8.808999999999999e-05
-    },
-    {
-      "supplier": {
-        "name": "Benzene",
-        "categories": [
-          "air",
-          "low population density, long-term"
-        ],
-        "matrix": "biosphere"
-      },
-      "consumer": {
-        "matrix": "technosphere"
-      },
-      "value": 1.955e-06
-    },
-    {
-      "supplier": {
-        "name": "Benzene",
-        "categories": [
-          "air",
-          "low population density, long-term"
-        ],
-        "matrix": "biosphere"
-      },
-      "consumer": {
-        "matrix": "technosphere"
-      },
-      "value": 1.0741e-06
-    },
-    {
-      "supplier": {
-        "name": "Benzene",
-        "categories": [
-          "air",
-          "low population density, long-term"
-        ],
-        "matrix": "biosphere"
-      },
-      "consumer": {
-        "matrix": "technosphere"
-      },
-      "value": 2.8635e-07
-    },
-    {
-      "supplier": {
-        "name": "Benzene",
+        "name": "o-Nitrotoluene",
         "categories": [
           "air",
           "low population density, long-term"
@@ -861,7 +651,7 @@
     },
     {
       "supplier": {
-        "name": "Benzene",
+        "name": "Nitrofen",
         "categories": [
           "air",
           "low population density, long-term"
@@ -875,35 +665,7 @@
     },
     {
       "supplier": {
-        "name": "Benzene",
-        "categories": [
-          "air",
-          "low population density, long-term"
-        ],
-        "matrix": "biosphere"
-      },
-      "consumer": {
-        "matrix": "technosphere"
-      },
-      "value": 5.083e-05
-    },
-    {
-      "supplier": {
-        "name": "Benzene",
-        "categories": [
-          "air",
-          "low population density, long-term"
-        ],
-        "matrix": "biosphere"
-      },
-      "consumer": {
-        "matrix": "technosphere"
-      },
-      "value": 1.8285e-05
-    },
-    {
-      "supplier": {
-        "name": "Benzene",
+        "name": "Benzene, chloro-",
         "categories": [
           "air",
           "low population density, long-term"
@@ -917,7 +679,21 @@
     },
     {
       "supplier": {
-        "name": "Benzene",
+        "name": "Monochlorobenzene",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 3.887e-07
+    },
+    {
+      "supplier": {
+        "name": "Benzene, ethyl-",
         "categories": [
           "air",
           "low population density, long-term"
@@ -931,7 +707,21 @@
     },
     {
       "supplier": {
-        "name": "Benzene",
+        "name": "Ethyl benzene",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 5.3705e-07
+    },
+    {
+      "supplier": {
+        "name": "Benzene, hexachloro-",
         "categories": [
           "air",
           "low population density, long-term"
@@ -945,7 +735,21 @@
     },
     {
       "supplier": {
-        "name": "Benzene",
+        "name": "Hexachlorobenzene",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.00078315
+    },
+    {
+      "supplier": {
+        "name": "Quintozene",
         "categories": [
           "air",
           "low population density, long-term"
@@ -1029,20 +833,6 @@
     },
     {
       "supplier": {
-        "name": "Benzal chloride",
-        "categories": [
-          "air",
-          "low population density, long-term"
-        ],
-        "matrix": "biosphere"
-      },
-      "consumer": {
-        "matrix": "technosphere"
-      },
-      "value": 1.3685e-06
-    },
-    {
-      "supplier": {
         "name": "Beryllium II",
         "categories": [
           "air"
@@ -1112,20 +902,6 @@
     },
     {
       "supplier": {
-        "name": "Biphenyl",
-        "categories": [
-          "air",
-          "low population density, long-term"
-        ],
-        "matrix": "biosphere"
-      },
-      "consumer": {
-        "matrix": "technosphere"
-      },
-      "value": 8.418e-05
-    },
-    {
-      "supplier": {
         "name": "Butadiene",
         "categories": [
           "air",
@@ -1137,48 +913,6 @@
         "matrix": "technosphere"
       },
       "value": 1.863e-07
-    },
-    {
-      "supplier": {
-        "name": "Butadiene",
-        "categories": [
-          "air",
-          "low population density, long-term"
-        ],
-        "matrix": "biosphere"
-      },
-      "consumer": {
-        "matrix": "technosphere"
-      },
-      "value": 1.8745e-05
-    },
-    {
-      "supplier": {
-        "name": "Butane",
-        "categories": [
-          "air",
-          "low population density, long-term"
-        ],
-        "matrix": "biosphere"
-      },
-      "consumer": {
-        "matrix": "technosphere"
-      },
-      "value": 2.507e-07
-    },
-    {
-      "supplier": {
-        "name": "Butyrolactone",
-        "categories": [
-          "air",
-          "low population density, long-term"
-        ],
-        "matrix": "biosphere"
-      },
-      "consumer": {
-        "matrix": "technosphere"
-      },
-      "value": 5.244e-06
     },
     {
       "supplier": {
@@ -1568,6 +1302,20 @@
     },
     {
       "supplier": {
+        "name": "Chlordane",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.003197
+    },
+    {
+      "supplier": {
         "name": "Chlorobenzilate",
         "categories": [
           "air",
@@ -1817,6 +1565,34 @@
     },
     {
       "supplier": {
+        "name": "p,p'-DDD",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.0081075
+    },
+    {
+      "supplier": {
+        "name": "Clofenotane",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.0005106
+    },
+    {
+      "supplier": {
         "name": "Daminozide",
         "categories": [
           "air",
@@ -1915,6 +1691,171 @@
     },
     {
       "supplier": {
+        "name": "Dioxins, measured as 2,3,7,8-tetrachlorodibenzo-p-dioxin",
+        "categories": [
+          "air"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 17.22286699687109
+    },
+    {
+      "supplier": {
+        "name": "Dioxins, measured as 2,3,7,8-tetrachlorodibenzo-p-dioxin",
+        "categories": [
+          "air",
+          "non-urban air or from high stacks"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 17.39653364018371
+    },
+    {
+      "supplier": {
+        "name": "Dioxins, measured as 2,3,7,8-tetrachlorodibenzo-p-dioxin",
+        "categories": [
+          "air",
+          "urban air close to ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 17.04920035355848
+    },
+    {
+      "supplier": {
+        "name": "Dioxins, measured as 2,3,7,8-tetrachlorodibenzo-p-dioxin",
+        "categories": [
+          "air",
+          "lower stratosphere + upper troposphere"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 17.39653364018371
+    },
+    {
+      "supplier": {
+        "name": "Dioxins, measured as 2,3,7,8-tetrachlorodibenzo-p-dioxin",
+        "categories": [
+          "air",
+          "indoor"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 17.2228914141468
+    },
+    {
+      "supplier": {
+        "name": "Dioxins, measured as 2,3,7,8-tetrachlorodibenzo-p-dioxin",
+        "categories": [
+          "water"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 2.338743657668459
+    },
+    {
+      "supplier": {
+        "name": "Dioxins, measured as 2,3,7,8-tetrachlorodibenzo-p-dioxin",
+        "categories": [
+          "water",
+          "ocean"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1.255876736190189
+    },
+    {
+      "supplier": {
+        "name": "Dioxins, measured as 2,3,7,8-tetrachlorodibenzo-p-dioxin",
+        "categories": [
+          "soil"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 68.903158307519
+    },
+    {
+      "supplier": {
+        "name": "Dioxins, measured as 2,3,7,8-tetrachlorodibenzo-p-dioxin",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 114.7758497906408
+    },
+    {
+      "supplier": {
+        "name": "Dioxins, measured as 2,3,7,8-tetrachlorodibenzo-p-dioxin",
+        "categories": [
+          "water",
+          "surface water"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 2.338743657668459
+    },
+    {
+      "supplier": {
+        "name": "Dioxins, measured as 2,3,7,8-tetrachlorodibenzo-p-dioxin",
+        "categories": [
+          "soil",
+          "industrial"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 68.903158307519
+    },
+    {
+      "supplier": {
+        "name": "Dioxins, measured as 2,3,7,8-tetrachlorodibenzo-p-dioxin",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 401.35
+    },
+    {
+      "supplier": {
         "name": "Epichlorohydrin",
         "categories": [
           "air",
@@ -1929,7 +1870,7 @@
     },
     {
       "supplier": {
-        "name": "Ethane",
+        "name": "Ethane, 1,1,1,2-tetrafluoro-, HFC-134a",
         "categories": [
           "air",
           "low population density, long-term"
@@ -1939,11 +1880,11 @@
       "consumer": {
         "matrix": "technosphere"
       },
-      "value": 4.669000000000001e-06
+      "value": 1.288e-07
     },
     {
       "supplier": {
-        "name": "Ethane",
+        "name": "1,1,1,2-Tetrafluoroethane",
         "categories": [
           "air",
           "low population density, long-term"
@@ -1953,11 +1894,11 @@
       "consumer": {
         "matrix": "technosphere"
       },
-      "value": 5.589e-06
+      "value": 1.288e-07
     },
     {
       "supplier": {
-        "name": "Ethane",
+        "name": "Ethane, 1,1,2-trichloro-",
         "categories": [
           "air",
           "low population density, long-term"
@@ -1971,7 +1912,49 @@
     },
     {
       "supplier": {
-        "name": "Ethane",
+        "name": "1,1,2-Trichloroethane",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 4.807e-06
+    },
+    {
+      "supplier": {
+        "name": "Ethane, 1,1-dichloro-1-fluoro-, HCFC-141b",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 4.4965e-07
+    },
+    {
+      "supplier": {
+        "name": "1,1-Dichloro-1-fluoroethane",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 4.4965e-07
+    },
+    {
+      "supplier": {
+        "name": "1,2-Dibromoethane",
         "categories": [
           "air",
           "low population density, long-term"
@@ -1985,7 +1968,7 @@
     },
     {
       "supplier": {
-        "name": "Ethane",
+        "name": "Ethane, 1,2-dichloro-",
         "categories": [
           "air",
           "low population density, long-term"
@@ -1999,7 +1982,7 @@
     },
     {
       "supplier": {
-        "name": "Ethane",
+        "name": "Ethylene dichloride",
         "categories": [
           "air",
           "low population density, long-term"
@@ -2009,11 +1992,11 @@
       "consumer": {
         "matrix": "technosphere"
       },
-      "value": 0.05865000000000001
+      "value": 1.955e-06
     },
     {
       "supplier": {
-        "name": "Ethane",
+        "name": "Ethane, 2,2-dichloro-1,1,1-trifluoro-, HCFC-123",
         "categories": [
           "air",
           "low population density, long-term"
@@ -2023,11 +2006,25 @@
       "consumer": {
         "matrix": "technosphere"
       },
-      "value": 1.03615e-06
+      "value": 3.8525e-07
     },
     {
       "supplier": {
-        "name": "Ethane",
+        "name": "2,2-Dichloro-1,1,1-trifluoroethane",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 3.8525e-07
+    },
+    {
+      "supplier": {
+        "name": "Monochloroethane",
         "categories": [
           "air",
           "low population density, long-term"
@@ -2041,7 +2038,7 @@
     },
     {
       "supplier": {
-        "name": "Ethane",
+        "name": "Ethane, hexachloro-",
         "categories": [
           "air",
           "low population density, long-term"
@@ -2055,7 +2052,7 @@
     },
     {
       "supplier": {
-        "name": "Ethane",
+        "name": "Hexachloroethane",
         "categories": [
           "air",
           "low population density, long-term"
@@ -2065,7 +2062,7 @@
       "consumer": {
         "matrix": "technosphere"
       },
-      "value": 1.564e-05
+      "value": 9.8325e-06
     },
     {
       "supplier": {
@@ -2083,35 +2080,7 @@
     },
     {
       "supplier": {
-        "name": "Ethanol",
-        "categories": [
-          "air",
-          "low population density, long-term"
-        ],
-        "matrix": "biosphere"
-      },
-      "consumer": {
-        "matrix": "technosphere"
-      },
-      "value": 3.6915e-08
-    },
-    {
-      "supplier": {
-        "name": "Ethanol",
-        "categories": [
-          "air",
-          "low population density, long-term"
-        ],
-        "matrix": "biosphere"
-      },
-      "consumer": {
-        "matrix": "technosphere"
-      },
-      "value": 7.1875e-06
-    },
-    {
-      "supplier": {
-        "name": "Ethene",
+        "name": "Vinylidene chloride",
         "categories": [
           "air",
           "low population density, long-term"
@@ -2125,49 +2094,7 @@
     },
     {
       "supplier": {
-        "name": "Ethylene",
-        "categories": [
-          "air",
-          "low population density, long-term"
-        ],
-        "matrix": "biosphere"
-      },
-      "consumer": {
-        "matrix": "technosphere"
-      },
-      "value": 9.706e-07
-    },
-    {
-      "supplier": {
-        "name": "Ethene",
-        "categories": [
-          "air",
-          "low population density, long-term"
-        ],
-        "matrix": "biosphere"
-      },
-      "consumer": {
-        "matrix": "technosphere"
-      },
-      "value": 1.449e-06
-    },
-    {
-      "supplier": {
-        "name": "Ethylene",
-        "categories": [
-          "air",
-          "low population density, long-term"
-        ],
-        "matrix": "biosphere"
-      },
-      "consumer": {
-        "matrix": "technosphere"
-      },
-      "value": 1.449e-06
-    },
-    {
-      "supplier": {
-        "name": "Ethene",
+        "name": "Ethene, chloro-",
         "categories": [
           "air",
           "low population density, long-term"
@@ -2181,7 +2108,7 @@
     },
     {
       "supplier": {
-        "name": "Ethylene",
+        "name": "Chloroethylene",
         "categories": [
           "air",
           "low population density, long-term"
@@ -2195,7 +2122,21 @@
     },
     {
       "supplier": {
-        "name": "Ethene",
+        "name": "Vinyl chloride",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 4.462e-06
+    },
+    {
+      "supplier": {
+        "name": "Ethene, tetrachloro-",
         "categories": [
           "air",
           "low population density, long-term"
@@ -2209,7 +2150,7 @@
     },
     {
       "supplier": {
-        "name": "Ethylene",
+        "name": "Tetrachloroethylene",
         "categories": [
           "air",
           "low population density, long-term"
@@ -2223,7 +2164,7 @@
     },
     {
       "supplier": {
-        "name": "Ethene",
+        "name": "Ethene, trichloro-",
         "categories": [
           "air",
           "low population density, long-term"
@@ -2237,7 +2178,7 @@
     },
     {
       "supplier": {
-        "name": "Ethylene",
+        "name": "Trichloroethylene",
         "categories": [
           "air",
           "low population density, long-term"
@@ -2405,20 +2346,6 @@
     },
     {
       "supplier": {
-        "name": "Furan",
-        "categories": [
-          "air",
-          "low population density, long-term"
-        ],
-        "matrix": "biosphere"
-      },
-      "consumer": {
-        "matrix": "technosphere"
-      },
-      "value": 3.634e-08
-    },
-    {
-      "supplier": {
         "name": "Furfural",
         "categories": [
           "air",
@@ -2430,6 +2357,20 @@
         "matrix": "technosphere"
       },
       "value": 5.4165e-08
+    },
+    {
+      "supplier": {
+        "name": "Glycidol",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 3.956e-05
     },
     {
       "supplier": {
@@ -2489,6 +2430,20 @@
     },
     {
       "supplier": {
+        "name": "2-Ethylhexanol",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 3.473e-08
+    },
+    {
+      "supplier": {
         "name": "Hydrazine",
         "categories": [
           "air",
@@ -2503,91 +2458,7 @@
     },
     {
       "supplier": {
-        "name": "Hydrazine",
-        "categories": [
-          "air",
-          "low population density, long-term"
-        ],
-        "matrix": "biosphere"
-      },
-      "consumer": {
-        "matrix": "technosphere"
-      },
-      "value": 4.232e-07
-    },
-    {
-      "supplier": {
-        "name": "Hydrazine",
-        "categories": [
-          "air",
-          "low population density, long-term"
-        ],
-        "matrix": "biosphere"
-      },
-      "consumer": {
-        "matrix": "technosphere"
-      },
-      "value": 2.024e-05
-    },
-    {
-      "supplier": {
-        "name": "Hydrazine",
-        "categories": [
-          "air",
-          "low population density, long-term"
-        ],
-        "matrix": "biosphere"
-      },
-      "consumer": {
-        "matrix": "technosphere"
-      },
-      "value": 3.5075e-06
-    },
-    {
-      "supplier": {
-        "name": "Hydrazine",
-        "categories": [
-          "air",
-          "low population density, long-term"
-        ],
-        "matrix": "biosphere"
-      },
-      "consumer": {
-        "matrix": "technosphere"
-      },
-      "value": 2.76e-05
-    },
-    {
-      "supplier": {
-        "name": "Hydrazine",
-        "categories": [
-          "air",
-          "low population density, long-term"
-        ],
-        "matrix": "biosphere"
-      },
-      "consumer": {
-        "matrix": "technosphere"
-      },
-      "value": 7.682e-06
-    },
-    {
-      "supplier": {
-        "name": "Hydrazine",
-        "categories": [
-          "air",
-          "low population density, long-term"
-        ],
-        "matrix": "biosphere"
-      },
-      "consumer": {
-        "matrix": "technosphere"
-      },
-      "value": 1.8055e-05
-    },
-    {
-      "supplier": {
-        "name": "Hydrazine",
+        "name": "2-Hydroxyethylhydrazine",
         "categories": [
           "air",
           "low population density, long-term"
@@ -2598,62 +2469,6 @@
         "matrix": "technosphere"
       },
       "value": 0.00098325
-    },
-    {
-      "supplier": {
-        "name": "Hydrazine",
-        "categories": [
-          "air",
-          "low population density, long-term"
-        ],
-        "matrix": "biosphere"
-      },
-      "consumer": {
-        "matrix": "technosphere"
-      },
-      "value": 0.0001288
-    },
-    {
-      "supplier": {
-        "name": "Hydrazine",
-        "categories": [
-          "air",
-          "low population density, long-term"
-        ],
-        "matrix": "biosphere"
-      },
-      "consumer": {
-        "matrix": "technosphere"
-      },
-      "value": 1.5985e-05
-    },
-    {
-      "supplier": {
-        "name": "Hydrazine",
-        "categories": [
-          "air",
-          "low population density, long-term"
-        ],
-        "matrix": "biosphere"
-      },
-      "consumer": {
-        "matrix": "technosphere"
-      },
-      "value": 2.438e-06
-    },
-    {
-      "supplier": {
-        "name": "Hydrazine",
-        "categories": [
-          "air",
-          "low population density, long-term"
-        ],
-        "matrix": "biosphere"
-      },
-      "consumer": {
-        "matrix": "technosphere"
-      },
-      "value": 0.000114195
     },
     {
       "supplier": {
@@ -2696,6 +2511,20 @@
         "matrix": "technosphere"
       },
       "value": 1.6445e-08
+    },
+    {
+      "supplier": {
+        "name": "Chlordecone",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.005428
     },
     {
       "supplier": {
@@ -2878,7 +2707,21 @@
     },
     {
       "supplier": {
-        "name": "Lindane",
+        "name": "Delta-lindane",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 9.050499999999999e-05
+    },
+    {
+      "supplier": {
+        "name": "Alpha-lindane",
         "categories": [
           "air",
           "low population density, long-term"
@@ -2892,7 +2735,7 @@
     },
     {
       "supplier": {
-        "name": "Lindane",
+        "name": "Beta-lindane",
         "categories": [
           "air",
           "low population density, long-term"
@@ -3071,6 +2914,104 @@
     },
     {
       "supplier": {
+        "name": "Metapa",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 8.671e-05
+    },
+    {
+      "supplier": {
+        "name": "Methane, chloro-fluoro-, HCFC-31",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1.84e-05
+    },
+    {
+      "supplier": {
+        "name": "Chloro-fluoromethane",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1.84e-05
+    },
+    {
+      "supplier": {
+        "name": "Methane, dichloro-, HCC-30",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 3.8525e-07
+    },
+    {
+      "supplier": {
+        "name": "Dichloromethane",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 3.8525e-07
+    },
+    {
+      "supplier": {
+        "name": "Methane, tetrachloro-, R-10",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 2.461e-05
+    },
+    {
+      "supplier": {
+        "name": "Carbon tetrachloride",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 2.461e-05
+    },
+    {
+      "supplier": {
         "name": "Methidathion",
         "categories": [
           "air",
@@ -3099,7 +3040,7 @@
     },
     {
       "supplier": {
-        "name": "Mirex",
+        "name": "Monuron",
         "categories": [
           "air",
           "low population density, long-term"
@@ -3109,21 +3050,7 @@
       "consumer": {
         "matrix": "technosphere"
       },
-      "value": 0.011385
-    },
-    {
-      "supplier": {
-        "name": "N-nitrosodimethylamine",
-        "categories": [
-          "air",
-          "low population density, long-term"
-        ],
-        "matrix": "biosphere"
-      },
-      "consumer": {
-        "matrix": "technosphere"
-      },
-      "value": 0.0012305
+      "value": 1.03385e-05
     },
     {
       "supplier": {
@@ -3166,34 +3093,6 @@
         "matrix": "technosphere"
       },
       "value": 8.636500000000001e-07
-    },
-    {
-      "supplier": {
-        "name": "Naphtalene",
-        "categories": [
-          "air",
-          "low population density, long-term"
-        ],
-        "matrix": "biosphere"
-      },
-      "consumer": {
-        "matrix": "technosphere"
-      },
-      "value": 2.1275e-06
-    },
-    {
-      "supplier": {
-        "name": "Naphthalene",
-        "categories": [
-          "air",
-          "low population density, long-term"
-        ],
-        "matrix": "biosphere"
-      },
-      "consumer": {
-        "matrix": "technosphere"
-      },
-      "value": 2.1275e-06
     },
     {
       "supplier": {
@@ -3541,6 +3440,20 @@
     },
     {
       "supplier": {
+        "name": "1,1,2,2-Tetrafluoroethene",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 5.773e-06
+    },
+    {
+      "supplier": {
         "name": "Phenanthrene",
         "categories": [
           "air",
@@ -3555,7 +3468,7 @@
     },
     {
       "supplier": {
-        "name": "Phenol",
+        "name": "2,4,6-Trichlorophenol",
         "categories": [
           "air",
           "low population density, long-term"
@@ -3569,63 +3482,7 @@
     },
     {
       "supplier": {
-        "name": "Phenol",
-        "categories": [
-          "air",
-          "low population density, long-term"
-        ],
-        "matrix": "biosphere"
-      },
-      "consumer": {
-        "matrix": "technosphere"
-      },
-      "value": 1.1615e-07
-    },
-    {
-      "supplier": {
-        "name": "Phenol",
-        "categories": [
-          "air",
-          "low population density, long-term"
-        ],
-        "matrix": "biosphere"
-      },
-      "consumer": {
-        "matrix": "technosphere"
-      },
-      "value": 1.8745e-06
-    },
-    {
-      "supplier": {
-        "name": "Phenol",
-        "categories": [
-          "air",
-          "low population density, long-term"
-        ],
-        "matrix": "biosphere"
-      },
-      "consumer": {
-        "matrix": "technosphere"
-      },
-      "value": 1.426e-05
-    },
-    {
-      "supplier": {
-        "name": "Phenol",
-        "categories": [
-          "air",
-          "low population density, long-term"
-        ],
-        "matrix": "biosphere"
-      },
-      "consumer": {
-        "matrix": "technosphere"
-      },
-      "value": 1.541e-06
-    },
-    {
-      "supplier": {
-        "name": "Phenol",
+        "name": "Phenol, pentachloro-",
         "categories": [
           "air",
           "low population density, long-term"
@@ -3639,7 +3496,7 @@
     },
     {
       "supplier": {
-        "name": "Phosphate",
+        "name": "Pentachlorophenol",
         "categories": [
           "air",
           "low population density, long-term"
@@ -3649,11 +3506,11 @@
       "consumer": {
         "matrix": "technosphere"
       },
-      "value": 1.633e-06
+      "value": 9.360999999999999e-05
     },
     {
       "supplier": {
-        "name": "Phosphate",
+        "name": "Phthalate, butyl-benzyl-",
         "categories": [
           "air",
           "low population density, long-term"
@@ -3663,7 +3520,35 @@
       "consumer": {
         "matrix": "technosphere"
       },
-      "value": 3.9905e-07
+      "value": 1.6905e-06
+    },
+    {
+      "supplier": {
+        "name": "Butyl benzyl phthalate",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1.6905e-06
+    },
+    {
+      "supplier": {
+        "name": "Phthalate, dioctyl-",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 5.3705e-06
     },
     {
       "supplier": {
@@ -3692,48 +3577,6 @@
         "matrix": "technosphere"
       },
       "value": 6.509e-06
-    },
-    {
-      "supplier": {
-        "name": "Polychlorinated biphenyls",
-        "categories": [
-          "air",
-          "low population density, long-term"
-        ],
-        "matrix": "biosphere"
-      },
-      "consumer": {
-        "matrix": "technosphere"
-      },
-      "value": 0.0001449
-    },
-    {
-      "supplier": {
-        "name": "Polychlorinated biphenyls",
-        "categories": [
-          "air",
-          "low population density, long-term"
-        ],
-        "matrix": "biosphere"
-      },
-      "consumer": {
-        "matrix": "technosphere"
-      },
-      "value": 0.010994
-    },
-    {
-      "supplier": {
-        "name": "Polychlorinated biphenyls",
-        "categories": [
-          "air",
-          "low population density, long-term"
-        ],
-        "matrix": "biosphere"
-      },
-      "consumer": {
-        "matrix": "technosphere"
-      },
-      "value": 0.0098095
     },
     {
       "supplier": {
@@ -3779,35 +3622,7 @@
     },
     {
       "supplier": {
-        "name": "Propane",
-        "categories": [
-          "air",
-          "low population density, long-term"
-        ],
-        "matrix": "biosphere"
-      },
-      "consumer": {
-        "matrix": "technosphere"
-      },
-      "value": 0.0002139
-    },
-    {
-      "supplier": {
-        "name": "Propane",
-        "categories": [
-          "air",
-          "low population density, long-term"
-        ],
-        "matrix": "biosphere"
-      },
-      "consumer": {
-        "matrix": "technosphere"
-      },
-      "value": 0.00059915
-    },
-    {
-      "supplier": {
-        "name": "Propane",
+        "name": "1,2-Dichloropropane",
         "categories": [
           "air",
           "low population density, long-term"
@@ -3821,7 +3636,7 @@
     },
     {
       "supplier": {
-        "name": "Propene",
+        "name": "1,3-Dichloropropene",
         "categories": [
           "air",
           "low population density, long-term"
@@ -3832,104 +3647,6 @@
         "matrix": "technosphere"
       },
       "value": 5.5545e-07
-    },
-    {
-      "supplier": {
-        "name": "Propylene",
-        "categories": [
-          "air",
-          "low population density, long-term"
-        ],
-        "matrix": "biosphere"
-      },
-      "consumer": {
-        "matrix": "technosphere"
-      },
-      "value": 5.5545e-07
-    },
-    {
-      "supplier": {
-        "name": "Propene",
-        "categories": [
-          "air",
-          "low population density, long-term"
-        ],
-        "matrix": "biosphere"
-      },
-      "consumer": {
-        "matrix": "technosphere"
-      },
-      "value": 6.1755e-06
-    },
-    {
-      "supplier": {
-        "name": "Propylene",
-        "categories": [
-          "air",
-          "low population density, long-term"
-        ],
-        "matrix": "biosphere"
-      },
-      "consumer": {
-        "matrix": "technosphere"
-      },
-      "value": 6.1755e-06
-    },
-    {
-      "supplier": {
-        "name": "Propene",
-        "categories": [
-          "air",
-          "low population density, long-term"
-        ],
-        "matrix": "biosphere"
-      },
-      "consumer": {
-        "matrix": "technosphere"
-      },
-      "value": 1.4605e-06
-    },
-    {
-      "supplier": {
-        "name": "Propylene",
-        "categories": [
-          "air",
-          "low population density, long-term"
-        ],
-        "matrix": "biosphere"
-      },
-      "consumer": {
-        "matrix": "technosphere"
-      },
-      "value": 1.4605e-06
-    },
-    {
-      "supplier": {
-        "name": "Propene",
-        "categories": [
-          "air",
-          "low population density, long-term"
-        ],
-        "matrix": "biosphere"
-      },
-      "consumer": {
-        "matrix": "technosphere"
-      },
-      "value": 1.104e-08
-    },
-    {
-      "supplier": {
-        "name": "Propylene",
-        "categories": [
-          "air",
-          "low population density, long-term"
-        ],
-        "matrix": "biosphere"
-      },
-      "consumer": {
-        "matrix": "technosphere"
-      },
-      "value": 1.104e-08
     },
     {
       "supplier": {
@@ -3958,20 +3675,6 @@
         "matrix": "technosphere"
       },
       "value": 3.151e-05
-    },
-    {
-      "supplier": {
-        "name": "Pyrene",
-        "categories": [
-          "air",
-          "low population density, long-term"
-        ],
-        "matrix": "biosphere"
-      },
-      "consumer": {
-        "matrix": "technosphere"
-      },
-      "value": 0.0008487000000000001
     },
     {
       "supplier": {
@@ -4017,34 +3720,6 @@
     },
     {
       "supplier": {
-        "name": "Thiourea",
-        "categories": [
-          "air",
-          "low population density, long-term"
-        ],
-        "matrix": "biosphere"
-      },
-      "consumer": {
-        "matrix": "technosphere"
-      },
-      "value": 9.867e-08
-    },
-    {
-      "supplier": {
-        "name": "Thiourea",
-        "categories": [
-          "air",
-          "low population density, long-term"
-        ],
-        "matrix": "biosphere"
-      },
-      "consumer": {
-        "matrix": "technosphere"
-      },
-      "value": 1.2535e-07
-    },
-    {
-      "supplier": {
         "name": "Toluene",
         "categories": [
           "air",
@@ -4059,21 +3734,7 @@
     },
     {
       "supplier": {
-        "name": "Toluene",
-        "categories": [
-          "air",
-          "low population density, long-term"
-        ],
-        "matrix": "biosphere"
-      },
-      "consumer": {
-        "matrix": "technosphere"
-      },
-      "value": 1.8515e-05
-    },
-    {
-      "supplier": {
-        "name": "Toluene",
+        "name": "2,4-Diaminotoluene",
         "categories": [
           "air",
           "low population density, long-term"
@@ -4084,48 +3745,6 @@
         "matrix": "technosphere"
       },
       "value": 6.049e-05
-    },
-    {
-      "supplier": {
-        "name": "Toluene",
-        "categories": [
-          "air",
-          "low population density, long-term"
-        ],
-        "matrix": "biosphere"
-      },
-      "consumer": {
-        "matrix": "technosphere"
-      },
-      "value": 0.002254
-    },
-    {
-      "supplier": {
-        "name": "Toluene",
-        "categories": [
-          "air",
-          "low population density, long-term"
-        ],
-        "matrix": "biosphere"
-      },
-      "consumer": {
-        "matrix": "technosphere"
-      },
-      "value": 5.0945e-05
-    },
-    {
-      "supplier": {
-        "name": "Toluene",
-        "categories": [
-          "air",
-          "low population density, long-term"
-        ],
-        "matrix": "biosphere"
-      },
-      "consumer": {
-        "matrix": "technosphere"
-      },
-      "value": 2.9095e-07
     },
     {
       "supplier": {
@@ -4186,6 +3805,20 @@
     {
       "supplier": {
         "name": "Tert-butanol",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1.2535e-06
+    },
+    {
+      "supplier": {
+        "name": "tert-Butanol",
         "categories": [
           "air",
           "low population density, long-term"
