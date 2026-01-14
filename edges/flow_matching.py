@@ -110,8 +110,6 @@ def process_cf_list(
             best_score = match_score
             best_specificity = specificity
             best_cf = cf
-            if best_score == 2 and best_specificity >= specificity:
-                break
 
     if best_cf:
         results.append(best_cf)
@@ -125,11 +123,12 @@ def process_cf_list(
     return results
 
 
-def count_specificity(criteria: dict) -> int:
+def count_specificity(criteria: dict, include_classifications: bool = False) -> int:
     """
     Count how many concrete criteria fields are specified for matching.
 
     :param criteria: Matching criteria (fields, operator, excludes, classifications).
+    :param include_classifications: Whether to count classifications as specificity.
     :return: Number of non-special fields with concrete targets.
     """
     count = 0
@@ -140,11 +139,12 @@ def count_specificity(criteria: dict) -> int:
             "weight",
             "position",
             "excludes",
-            "classifications",
         }:
             continue
         if target == "__ANY__":
             continue
+        count += 1
+    if include_classifications and criteria.get("classifications"):
         count += 1
     return count
 
