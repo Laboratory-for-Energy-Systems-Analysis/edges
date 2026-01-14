@@ -46,6 +46,7 @@ from .flow_matching import (
     cached_match_with_index,
     preprocess_flows,
     build_index,
+    count_specificity,
     compute_cf_memoized_factory,
     resolve_candidate_locations,
     group_edges_by_signature,
@@ -698,6 +699,17 @@ class EdgeLCIA:
             cf["_norm_consumer_cls"] = _norm_cls(
                 cf.get("consumer", {}).get("classifications")
             )
+
+        self.raw_cfs_data.sort(
+            key=lambda cf: -(
+                count_specificity(
+                    cf.get("supplier", {}), include_classifications=True
+                )
+                + count_specificity(
+                    cf.get("consumer", {}), include_classifications=True
+                )
+            )
+        )
 
         self.cfs_number = len(self.raw_cfs_data)
 
