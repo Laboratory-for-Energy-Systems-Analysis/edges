@@ -702,9 +702,7 @@ class EdgeLCIA:
 
         self.raw_cfs_data.sort(
             key=lambda cf: -(
-                count_specificity(
-                    cf.get("supplier", {}), include_classifications=True
-                )
+                count_specificity(cf.get("supplier", {}), include_classifications=True)
                 + count_specificity(
                     cf.get("consumer", {}), include_classifications=True
                 )
