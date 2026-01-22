@@ -2935,105 +2935,105 @@ class EdgeLCIA:
                             )
                         )
 
-                # ---- Pass 1 (prefiltered_groups) ----
-                if len(prefiltered_groups) > 0:
-                    for sig, group_edges in tqdm(
-                        prefiltered_groups.items(),
-                        desc="Processing global groups (pass 1)",
-                    ):
-                        supplier_info = group_edges[0][2]
-                        consumer_info = group_edges[0][3]
+            # ---- Pass 1 (prefiltered_groups) ----
+            if len(prefiltered_groups) > 0:
+                for sig, group_edges in tqdm(
+                    prefiltered_groups.items(),
+                    desc="Processing global groups (pass 1)",
+                ):
+                    supplier_info = group_edges[0][2]
+                    consumer_info = group_edges[0][3]
 
-                        # 1) Try DIRECT GLO on the CONSUMER side
-                        #    Supplier candidates: keep as-is if present, else "__ANY__"
-                        if supplier_wildcard:
-                            direct_sup_candidates = ["__ANY__"]
-                        else:
-                            sup_loc = supplier_info.get("location")
-                            direct_sup_candidates = (
-                                [sup_loc] if sup_loc is not None else []
+                    # 1) Try DIRECT GLO on the CONSUMER side
+                    #    Supplier candidates: keep as-is if present, else "__ANY__"
+                    if supplier_wildcard:
+                        direct_sup_candidates = ["__ANY__"]
+                    else:
+                        sup_loc = supplier_info.get("location")
+                        direct_sup_candidates = (
+                            [sup_loc] if sup_loc is not None else []
+                        )
+                    direct_con_candidates = ["GLO"]
+
+                    # compute_average_cf already ignores fields not present in CFs,
+                    # so if supplier 'location' isn't in CF schema, it won't block matches.
+                    glo_cf, matched_cf_obj, glo_unc = compute_average_cf(
+                        candidate_suppliers=direct_sup_candidates,
+                        candidate_consumers=direct_con_candidates,
+                        supplier_info=supplier_info,
+                        consumer_info=consumer_info,
+                        required_supplier_fields=self.required_supplier_fields,
+                        required_consumer_fields=self.required_consumer_fields,
+                        cf_index=self.cf_index,
+                    )
+
+                    if glo_cf != 0:
+                        for supplier_idx, consumer_idx, _, _, _, _ in group_edges:
+                            add_cf_entry(
+                                cfs_mapping=self.cfs_mapping,
+                                supplier_info=supplier_info,
+                                consumer_info=consumer_info,
+                                direction=direction,
+                                indices=[(supplier_idx, consumer_idx)],
+                                value=glo_cf,
+                                uncertainty=(
+                                    glo_unc
+                                    if glo_unc is not None
+                                    else (
+                                        matched_cf_obj.get("uncertainty")
+                                        if matched_cf_obj
+                                        else None
+                                    )
+                                ),
                             )
-                        direct_con_candidates = ["GLO"]
+                        continue  # done with this group
 
-                        # compute_average_cf already ignores fields not present in CFs,
-                        # so if supplier 'location' isn't in CF schema, it won't block matches.
-                        glo_cf, matched_cf_obj, glo_unc = compute_average_cf(
-                            candidate_suppliers=direct_sup_candidates,
-                            candidate_consumers=direct_con_candidates,
-                            supplier_info=supplier_info,
-                            consumer_info=consumer_info,
-                            required_supplier_fields=self.required_supplier_fields,
-                            required_consumer_fields=self.required_consumer_fields,
-                            cf_index=self.cf_index,
-                        )
+            # ---- Pass 2 (grouped_edges) ----
+            compute_cf_memoized = compute_cf_memoized_factory(
+                cf_index=self.cf_index,
+                required_supplier_fields=self.required_supplier_fields,
+                required_consumer_fields=self.required_consumer_fields,
+            )
 
-                        if glo_cf != 0:
-                            for supplier_idx, consumer_idx, _, _, _, _ in group_edges:
-                                add_cf_entry(
-                                    cfs_mapping=self.cfs_mapping,
-                                    supplier_info=supplier_info,
-                                    consumer_info=consumer_info,
-                                    direction=direction,
-                                    indices=[(supplier_idx, consumer_idx)],
-                                    value=glo_cf,
-                                    uncertainty=(
-                                        glo_unc
-                                        if glo_unc is not None
-                                        else (
-                                            matched_cf_obj.get("uncertainty")
-                                            if matched_cf_obj
-                                            else None
-                                        )
-                                    ),
-                                )
-                            continue  # done with this group
+            grouped_edges = group_edges_by_signature(
+                edge_list=remaining_edges,
+                required_supplier_fields=self.required_supplier_fields,
+                required_consumer_fields=self.required_consumer_fields,
+            )
 
-                # ---- Pass 2 (grouped_edges) ----
-                compute_cf_memoized = compute_cf_memoized_factory(
-                    cf_index=self.cf_index,
-                    required_supplier_fields=self.required_supplier_fields,
-                    required_consumer_fields=self.required_consumer_fields,
-                )
+            if len(grouped_edges) > 0:
+                for (
+                    s_key,
+                    c_key,
+                    (candidate_suppliers, candidate_consumers),
+                ), edge_group in tqdm(
+                    grouped_edges.items(), desc="Processing global groups (pass 2)"
+                ):
 
-                grouped_edges = group_edges_by_signature(
-                    edge_list=remaining_edges,
-                    required_supplier_fields=self.required_supplier_fields,
-                    required_consumer_fields=self.required_consumer_fields,
-                )
+                    glo_cf, matched_cf_obj, glo_unc = compute_cf_memoized(
+                        s_key, c_key, candidate_suppliers, candidate_consumers
+                    )
 
-                if len(grouped_edges) > 0:
-                    for (
-                        s_key,
-                        c_key,
-                        (candidate_suppliers, candidate_consumers),
-                    ), edge_group in tqdm(
-                        grouped_edges.items(), desc="Processing global groups (pass 2)"
-                    ):
-
-                        glo_cf, matched_cf_obj, glo_unc = compute_cf_memoized(
-                            s_key, c_key, candidate_suppliers, candidate_consumers
-                        )
-
-                        if glo_cf != 0:
-                            for supplier_idx, consumer_idx in edge_group:
-                                add_cf_entry(
-                                    cfs_mapping=self.cfs_mapping,
-                                    supplier_info=dict(s_key),
-                                    consumer_info=dict(c_key),
-                                    direction=direction,
-                                    indices=[(supplier_idx, consumer_idx)],
-                                    value=glo_cf,
-                                    uncertainty=(
-                                        glo_unc
-                                        if glo_unc is not None
-                                        else (
-                                            matched_cf_obj.get("uncertainty")
-                                            if matched_cf_obj
-                                            else None
-                                        )
-                                    ),
-                                )
-                            continue
+                    if glo_cf != 0:
+                        for supplier_idx, consumer_idx in edge_group:
+                            add_cf_entry(
+                                cfs_mapping=self.cfs_mapping,
+                                supplier_info=dict(s_key),
+                                consumer_info=dict(c_key),
+                                direction=direction,
+                                indices=[(supplier_idx, consumer_idx)],
+                                value=glo_cf,
+                                uncertainty=(
+                                    glo_unc
+                                    if glo_unc is not None
+                                    else (
+                                        matched_cf_obj.get("uncertainty")
+                                        if matched_cf_obj
+                                        else None
+                                    )
+                                ),
+                            )
+                        continue
 
         self._update_unprocessed_edges()
         self.applied_strategies.append("map_remaining_locations_to_global")
