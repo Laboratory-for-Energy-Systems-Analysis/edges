@@ -2950,9 +2950,7 @@ class EdgeLCIA:
                         direct_sup_candidates = ["__ANY__"]
                     else:
                         sup_loc = supplier_info.get("location")
-                        direct_sup_candidates = (
-                            [sup_loc] if sup_loc is not None else []
-                        )
+                        direct_sup_candidates = [sup_loc] if sup_loc is not None else []
                     direct_con_candidates = ["GLO"]
 
                     # compute_average_cf already ignores fields not present in CFs,
