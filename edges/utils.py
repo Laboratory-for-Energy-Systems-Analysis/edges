@@ -36,7 +36,6 @@ import numbers
 
 from .filesystem_constants import DATA_DIR
 
-
 logger = logging.getLogger(__name__)
 logger.addHandler(logging.NullHandler())
 

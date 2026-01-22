@@ -19,7 +19,6 @@ import html
 import re
 import plotly.io as pio
 
-
 try:
     from bw2data.backends.peewee import Activity
 except ImportError:  # bw2data >= 4.0

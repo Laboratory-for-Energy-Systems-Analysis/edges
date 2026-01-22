@@ -4,7 +4,6 @@ from edges import EdgeLCIA, get_available_methods
 import bw2data, bw2io
 import time
 
-
 total_start_time = time.time()
 # Start timer
 start_time = time.time()

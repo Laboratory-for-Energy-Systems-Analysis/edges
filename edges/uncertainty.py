@@ -12,7 +12,6 @@ import logging
 
 from edges.utils import safe_eval
 
-
 logger = logging.getLogger(__name__)
 logger.addHandler(logging.NullHandler())
 
