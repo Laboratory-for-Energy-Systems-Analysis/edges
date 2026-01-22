@@ -1,0 +1,528 @@
+{
+  "name": "ImpactWorld+ 2.1 - Fossil and nuclear energy use_midpoint",
+  "unit": "MJ deprived",
+  "version": "2.1",
+  "edges version": "2.0",
+  "strategies": [
+    "map_exchanges",
+    "map_aggregate_locations",
+    "map_dynamic_locations",
+    "map_contained_locations",
+    "map_remaining_locations_to_global"
+  ],
+  "exchanges": [
+    {
+      "supplier": {
+        "name": "Coal, brown, in ground",
+        "categories": [
+          "natural resource"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 9.9
+    },
+    {
+      "supplier": {
+        "name": "Coal, brown",
+        "categories": [
+          "natural resource"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 9.9
+    },
+    {
+      "supplier": {
+        "name": "Coal, brown, in ground",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 9.9
+    },
+    {
+      "supplier": {
+        "name": "Coal, brown",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 9.9
+    },
+    {
+      "supplier": {
+        "name": "Coal, hard, unspecified, in ground",
+        "categories": [
+          "natural resource"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 19.1
+    },
+    {
+      "supplier": {
+        "name": "Coal, hard, unspecified",
+        "categories": [
+          "natural resource"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 19.1
+    },
+    {
+      "supplier": {
+        "name": "Coal, hard",
+        "categories": [
+          "natural resource"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 19.1
+    },
+    {
+      "supplier": {
+        "name": "Coal, hard, unspecified, in ground",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 19.1
+    },
+    {
+      "supplier": {
+        "name": "Coal, hard, unspecified",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 19.1
+    },
+    {
+      "supplier": {
+        "name": "Coal, hard",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 19.1
+    },
+    {
+      "supplier": {
+        "name": "Exported energy - electricity",
+        "categories": [
+          "natural resource"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1.0
+    },
+    {
+      "supplier": {
+        "name": "Exported energy - heat",
+        "categories": [
+          "natural resource"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1.0
+    },
+    {
+      "supplier": {
+        "name": "Exported energy - electricity",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1.0
+    },
+    {
+      "supplier": {
+        "name": "Exported energy - heat",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1.0
+    },
+    {
+      "supplier": {
+        "name": "Gas, mine, off-gas, process, coal mining",
+        "categories": [
+          "natural resource"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 40.0
+    },
+    {
+      "supplier": {
+        "name": "Gas, natural, in ground",
+        "categories": [
+          "natural resource"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 40.0
+    },
+    {
+      "supplier": {
+        "name": "Gas, natural",
+        "categories": [
+          "natural resource"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 40.0
+    },
+    {
+      "supplier": {
+        "name": "Gas, mine, off-gas, process, coal mining",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 40.0
+    },
+    {
+      "supplier": {
+        "name": "Gas, natural, in ground",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 40.0
+    },
+    {
+      "supplier": {
+        "name": "Gas, natural",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 40.0
+    },
+    {
+      "supplier": {
+        "name": "Methane",
+        "categories": [
+          "natural resource"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 50.4
+    },
+    {
+      "supplier": {
+        "name": "Methane, fossil",
+        "categories": [
+          "natural resource"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 50.4
+    },
+    {
+      "supplier": {
+        "name": "Methane, from soil or biomass stock",
+        "categories": [
+          "natural resource"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 50.4
+    },
+    {
+      "supplier": {
+        "name": "Methane",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 50.4
+    },
+    {
+      "supplier": {
+        "name": "Methane, fossil",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 50.4
+    },
+    {
+      "supplier": {
+        "name": "Methane, from soil or biomass stock",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 50.4
+    },
+    {
+      "supplier": {
+        "name": "Oil, crude, in ground",
+        "categories": [
+          "natural resource"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 46.0
+    },
+    {
+      "supplier": {
+        "name": "Oil, crude",
+        "categories": [
+          "natural resource"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 46.0
+    },
+    {
+      "supplier": {
+        "name": "Oil, crude, in ground",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 46.0
+    },
+    {
+      "supplier": {
+        "name": "Oil, crude",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 46.0
+    },
+    {
+      "supplier": {
+        "name": "Peat, in ground",
+        "categories": [
+          "natural resource"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 9.9
+    },
+    {
+      "supplier": {
+        "name": "Peat",
+        "categories": [
+          "natural resource"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 9.9
+    },
+    {
+      "supplier": {
+        "name": "Peat, in ground",
+        "categories": [
+          "natural resource",
+          "biotic"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 9.9
+    },
+    {
+      "supplier": {
+        "name": "Peat",
+        "categories": [
+          "natural resource",
+          "biotic"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 9.9
+    },
+    {
+      "supplier": {
+        "name": "Uranium",
+        "categories": [
+          "natural resource"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 560000.0
+    },
+    {
+      "supplier": {
+        "name": "Uranium, in ground",
+        "categories": [
+          "natural resource"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 560000.0
+    },
+    {
+      "supplier": {
+        "name": "Uranium",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 560000.0
+    },
+    {
+      "supplier": {
+        "name": "Uranium, in ground",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 560000.0
+    }
+  ]
+}

@@ -1,0 +1,2431 @@
+{
+  "name": "ImpactWorld+ 2.1 - Ionizing radiations, ecosystem quality_damage",
+  "unit": "PDF.m2.yr",
+  "version": "2.1",
+  "edges version": "2.0",
+  "strategies": [
+    "map_exchanges",
+    "map_aggregate_locations",
+    "map_dynamic_locations",
+    "map_contained_locations",
+    "map_remaining_locations_to_global"
+  ],
+  "exchanges": [
+    {
+      "supplier": {
+        "name": "Antimony-124",
+        "categories": [
+          "air"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1.01741629338293e-11
+    },
+    {
+      "supplier": {
+        "name": "Radioactive species, from fission and activation",
+        "categories": [
+          "air"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1.01741629338293e-11
+    },
+    {
+      "supplier": {
+        "name": "Antimony-124",
+        "categories": [
+          "air",
+          "non-urban air or from high stacks"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1.0215886969586e-11
+    },
+    {
+      "supplier": {
+        "name": "Radioactive species, from fission and activation",
+        "categories": [
+          "air",
+          "non-urban air or from high stacks"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1.0215886969586e-11
+    },
+    {
+      "supplier": {
+        "name": "Antimony-124",
+        "categories": [
+          "air",
+          "urban air close to ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1.01324388980725e-11
+    },
+    {
+      "supplier": {
+        "name": "Radioactive species, from fission and activation",
+        "categories": [
+          "air",
+          "urban air close to ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1.01324388980725e-11
+    },
+    {
+      "supplier": {
+        "name": "Antimony-124",
+        "categories": [
+          "water"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 2.53096750547916e-11
+    },
+    {
+      "supplier": {
+        "name": "Radioactive species, from fission and activation",
+        "categories": [
+          "water"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 2.53096750547916e-11
+    },
+    {
+      "supplier": {
+        "name": "Antimony-124",
+        "categories": [
+          "soil"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1.27418639029707e-11
+    },
+    {
+      "supplier": {
+        "name": "Radioactive species, from fission and activation",
+        "categories": [
+          "soil"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1.27418639029707e-11
+    },
+    {
+      "supplier": {
+        "name": "Antimony-124",
+        "categories": [
+          "air",
+          "lower stratosphere + upper troposphere"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1.01741629338293e-11
+    },
+    {
+      "supplier": {
+        "name": "Radioactive species, from fission and activation",
+        "categories": [
+          "air",
+          "lower stratosphere + upper troposphere"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1.01741629338293e-11
+    },
+    {
+      "supplier": {
+        "name": "Antimony-124",
+        "categories": [
+          "air",
+          "indoor"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1.01741629338293e-11
+    },
+    {
+      "supplier": {
+        "name": "Radioactive species, from fission and activation",
+        "categories": [
+          "air",
+          "indoor"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1.01741629338293e-11
+    },
+    {
+      "supplier": {
+        "name": "Antimony-124",
+        "categories": [
+          "water",
+          "surface water"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 2.53096750547916e-11
+    },
+    {
+      "supplier": {
+        "name": "Radioactive species, from fission and activation",
+        "categories": [
+          "water",
+          "surface water"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 2.53096750547916e-11
+    },
+    {
+      "supplier": {
+        "name": "Antimony-124",
+        "categories": [
+          "soil",
+          "industrial"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1.27418639029707e-11
+    },
+    {
+      "supplier": {
+        "name": "Radioactive species, from fission and activation",
+        "categories": [
+          "soil",
+          "industrial"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1.27418639029707e-11
+    },
+    {
+      "supplier": {
+        "name": "Antimony-124",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1.27418639029707e-11
+    },
+    {
+      "supplier": {
+        "name": "Radioactive species, from fission and activation",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1.27418639029707e-11
+    },
+    {
+      "supplier": {
+        "name": "Antimony-124",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1.0215886969586e-11
+    },
+    {
+      "supplier": {
+        "name": "Radioactive species, from fission and activation",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1.0215886969586e-11
+    },
+    {
+      "supplier": {
+        "name": "Antimony-125",
+        "categories": [
+          "air"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 3.32043811229574e-12
+    },
+    {
+      "supplier": {
+        "name": "Antimony-125",
+        "categories": [
+          "air",
+          "non-urban air or from high stacks"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 3.33405516162222e-12
+    },
+    {
+      "supplier": {
+        "name": "Antimony-125",
+        "categories": [
+          "air",
+          "urban air close to ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 3.30682106296926e-12
+    },
+    {
+      "supplier": {
+        "name": "Antimony-125",
+        "categories": [
+          "water"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 8.2600613149529e-12
+    },
+    {
+      "supplier": {
+        "name": "Antimony-125",
+        "categories": [
+          "soil"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 4.158432570844e-12
+    },
+    {
+      "supplier": {
+        "name": "Antimony-125",
+        "categories": [
+          "air",
+          "lower stratosphere + upper troposphere"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 3.32043811229574e-12
+    },
+    {
+      "supplier": {
+        "name": "Antimony-125",
+        "categories": [
+          "air",
+          "indoor"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 3.32043811229574e-12
+    },
+    {
+      "supplier": {
+        "name": "Antimony-125",
+        "categories": [
+          "water",
+          "surface water"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 8.2600613149529e-12
+    },
+    {
+      "supplier": {
+        "name": "Antimony-125",
+        "categories": [
+          "soil",
+          "industrial"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 4.158432570844e-12
+    },
+    {
+      "supplier": {
+        "name": "Antimony-125",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 4.158432570844e-12
+    },
+    {
+      "supplier": {
+        "name": "Antimony-125",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 3.33405516162222e-12
+    },
+    {
+      "supplier": {
+        "name": "Carbon-14",
+        "categories": [
+          "air"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 3.86081346847146e-11
+    },
+    {
+      "supplier": {
+        "name": "Carbon-14",
+        "categories": [
+          "air",
+          "non-urban air or from high stacks"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 3.87787324434157e-11
+    },
+    {
+      "supplier": {
+        "name": "Carbon-14",
+        "categories": [
+          "air",
+          "urban air close to ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 3.84375369260136e-11
+    },
+    {
+      "supplier": {
+        "name": "Carbon-14",
+        "categories": [
+          "water"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 9.45106858199742e-11
+    },
+    {
+      "supplier": {
+        "name": "Carbon-14",
+        "categories": [
+          "soil"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 4.84154938161063e-11
+    },
+    {
+      "supplier": {
+        "name": "Carbon-14",
+        "categories": [
+          "air",
+          "lower stratosphere + upper troposphere"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 3.86081346847146e-11
+    },
+    {
+      "supplier": {
+        "name": "Carbon-14",
+        "categories": [
+          "air",
+          "indoor"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 3.86081346847146e-11
+    },
+    {
+      "supplier": {
+        "name": "Carbon-14",
+        "categories": [
+          "water",
+          "surface water"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 9.45106858199742e-11
+    },
+    {
+      "supplier": {
+        "name": "Carbon-14",
+        "categories": [
+          "soil",
+          "industrial"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 4.84154938161063e-11
+    },
+    {
+      "supplier": {
+        "name": "Carbon-14",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 4.84154938161063e-11
+    },
+    {
+      "supplier": {
+        "name": "Carbon-14",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 3.87787324434157e-11
+    },
+    {
+      "supplier": {
+        "name": "Cesium-134",
+        "categories": [
+          "air"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 3.01252997935328e-11
+    },
+    {
+      "supplier": {
+        "name": "Caesium-134",
+        "categories": [
+          "air"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 3.01252997935328e-11
+    },
+    {
+      "supplier": {
+        "name": "Cesium-134",
+        "categories": [
+          "air",
+          "non-urban air or from high stacks"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 3.03043130753564e-11
+    },
+    {
+      "supplier": {
+        "name": "Caesium-134",
+        "categories": [
+          "air",
+          "non-urban air or from high stacks"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 3.03043130753564e-11
+    },
+    {
+      "supplier": {
+        "name": "Cesium-134",
+        "categories": [
+          "air",
+          "urban air close to ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 2.99462865117091e-11
+    },
+    {
+      "supplier": {
+        "name": "Caesium-134",
+        "categories": [
+          "air",
+          "urban air close to ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 2.99462865117091e-11
+    },
+    {
+      "supplier": {
+        "name": "Cesium-134",
+        "categories": [
+          "water"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 6.80107834610592e-11
+    },
+    {
+      "supplier": {
+        "name": "Caesium-134",
+        "categories": [
+          "water"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 6.80107834610592e-11
+    },
+    {
+      "supplier": {
+        "name": "Cesium-134",
+        "categories": [
+          "soil"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 3.80159631545811e-11
+    },
+    {
+      "supplier": {
+        "name": "Caesium-134",
+        "categories": [
+          "soil"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 3.80159631545811e-11
+    },
+    {
+      "supplier": {
+        "name": "Cesium-134",
+        "categories": [
+          "air",
+          "lower stratosphere + upper troposphere"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 3.01252997935328e-11
+    },
+    {
+      "supplier": {
+        "name": "Caesium-134",
+        "categories": [
+          "air",
+          "lower stratosphere + upper troposphere"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 3.01252997935328e-11
+    },
+    {
+      "supplier": {
+        "name": "Cesium-134",
+        "categories": [
+          "air",
+          "indoor"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 3.01252997935328e-11
+    },
+    {
+      "supplier": {
+        "name": "Caesium-134",
+        "categories": [
+          "air",
+          "indoor"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 3.01252997935328e-11
+    },
+    {
+      "supplier": {
+        "name": "Cesium-134",
+        "categories": [
+          "water",
+          "surface water"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 6.80107834610592e-11
+    },
+    {
+      "supplier": {
+        "name": "Caesium-134",
+        "categories": [
+          "water",
+          "surface water"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 6.80107834610592e-11
+    },
+    {
+      "supplier": {
+        "name": "Cesium-134",
+        "categories": [
+          "soil",
+          "industrial"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 3.80159631545811e-11
+    },
+    {
+      "supplier": {
+        "name": "Caesium-134",
+        "categories": [
+          "soil",
+          "industrial"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 3.80159631545811e-11
+    },
+    {
+      "supplier": {
+        "name": "Cesium-134",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 3.80159631545811e-11
+    },
+    {
+      "supplier": {
+        "name": "Caesium-134",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 3.80159631545811e-11
+    },
+    {
+      "supplier": {
+        "name": "Cesium-134",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 3.03043130753564e-11
+    },
+    {
+      "supplier": {
+        "name": "Caesium-134",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 3.03043130753564e-11
+    },
+    {
+      "supplier": {
+        "name": "Cesium-137",
+        "categories": [
+          "air"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 2.46166735455725e-11
+    },
+    {
+      "supplier": {
+        "name": "Radioactive species, other beta emitters",
+        "categories": [
+          "air"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 2.46166735455725e-11
+    },
+    {
+      "supplier": {
+        "name": "Caesium-137",
+        "categories": [
+          "air"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 2.46166735455725e-11
+    },
+    {
+      "supplier": {
+        "name": "Cesium-137",
+        "categories": [
+          "air",
+          "non-urban air or from high stacks"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 2.47629529701484e-11
+    },
+    {
+      "supplier": {
+        "name": "Radioactive species, other beta emitters",
+        "categories": [
+          "air",
+          "non-urban air or from high stacks"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 2.47629529701484e-11
+    },
+    {
+      "supplier": {
+        "name": "Caesium-137",
+        "categories": [
+          "air",
+          "non-urban air or from high stacks"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 2.47629529701484e-11
+    },
+    {
+      "supplier": {
+        "name": "Cesium-137",
+        "categories": [
+          "air",
+          "urban air close to ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 2.44703941209966e-11
+    },
+    {
+      "supplier": {
+        "name": "Radioactive species, other beta emitters",
+        "categories": [
+          "air",
+          "urban air close to ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 2.44703941209966e-11
+    },
+    {
+      "supplier": {
+        "name": "Caesium-137",
+        "categories": [
+          "air",
+          "urban air close to ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 2.44703941209966e-11
+    },
+    {
+      "supplier": {
+        "name": "Cesium-137",
+        "categories": [
+          "water"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 5.55745259138941e-11
+    },
+    {
+      "supplier": {
+        "name": "Radioactive species, other beta emitters",
+        "categories": [
+          "water"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 5.55745259138941e-11
+    },
+    {
+      "supplier": {
+        "name": "Caesium-137",
+        "categories": [
+          "water"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 5.55745259138941e-11
+    },
+    {
+      "supplier": {
+        "name": "Cesium-137",
+        "categories": [
+          "soil"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 3.1064472749172e-11
+    },
+    {
+      "supplier": {
+        "name": "Radioactive species, other beta emitters",
+        "categories": [
+          "soil"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 3.1064472749172e-11
+    },
+    {
+      "supplier": {
+        "name": "Caesium-137",
+        "categories": [
+          "soil"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 3.1064472749172e-11
+    },
+    {
+      "supplier": {
+        "name": "Cesium-137",
+        "categories": [
+          "air",
+          "lower stratosphere + upper troposphere"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 2.46166735455725e-11
+    },
+    {
+      "supplier": {
+        "name": "Radioactive species, other beta emitters",
+        "categories": [
+          "air",
+          "lower stratosphere + upper troposphere"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 2.46166735455725e-11
+    },
+    {
+      "supplier": {
+        "name": "Caesium-137",
+        "categories": [
+          "air",
+          "lower stratosphere + upper troposphere"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 2.46166735455725e-11
+    },
+    {
+      "supplier": {
+        "name": "Cesium-137",
+        "categories": [
+          "air",
+          "indoor"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 2.46166735455725e-11
+    },
+    {
+      "supplier": {
+        "name": "Radioactive species, other beta emitters",
+        "categories": [
+          "air",
+          "indoor"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 2.46166735455725e-11
+    },
+    {
+      "supplier": {
+        "name": "Caesium-137",
+        "categories": [
+          "air",
+          "indoor"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 2.46166735455725e-11
+    },
+    {
+      "supplier": {
+        "name": "Cesium-137",
+        "categories": [
+          "water",
+          "surface water"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 5.55745259138941e-11
+    },
+    {
+      "supplier": {
+        "name": "Radioactive species, other beta emitters",
+        "categories": [
+          "water",
+          "surface water"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 5.55745259138941e-11
+    },
+    {
+      "supplier": {
+        "name": "Caesium-137",
+        "categories": [
+          "water",
+          "surface water"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 5.55745259138941e-11
+    },
+    {
+      "supplier": {
+        "name": "Cesium-137",
+        "categories": [
+          "soil",
+          "industrial"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 3.1064472749172e-11
+    },
+    {
+      "supplier": {
+        "name": "Radioactive species, other beta emitters",
+        "categories": [
+          "soil",
+          "industrial"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 3.1064472749172e-11
+    },
+    {
+      "supplier": {
+        "name": "Caesium-137",
+        "categories": [
+          "soil",
+          "industrial"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 3.1064472749172e-11
+    },
+    {
+      "supplier": {
+        "name": "Cesium-137",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 3.1064472749172e-11
+    },
+    {
+      "supplier": {
+        "name": "Radioactive species, other beta emitters",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 3.1064472749172e-11
+    },
+    {
+      "supplier": {
+        "name": "Caesium-137",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 3.1064472749172e-11
+    },
+    {
+      "supplier": {
+        "name": "Cesium-137",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 2.47629529701484e-11
+    },
+    {
+      "supplier": {
+        "name": "Radioactive species, other beta emitters",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 2.47629529701484e-11
+    },
+    {
+      "supplier": {
+        "name": "Caesium-137",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 2.47629529701484e-11
+    },
+    {
+      "supplier": {
+        "name": "Cobalt-58",
+        "categories": [
+          "air"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 5.5709567109645e-12
+    },
+    {
+      "supplier": {
+        "name": "Cobalt-58",
+        "categories": [
+          "air",
+          "non-urban air or from high stacks"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 5.59809798506491e-12
+    },
+    {
+      "supplier": {
+        "name": "Cobalt-58",
+        "categories": [
+          "air",
+          "urban air close to ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 5.5438154368641e-12
+    },
+    {
+      "supplier": {
+        "name": "Cobalt-58",
+        "categories": [
+          "water"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1.33219611719733e-11
+    },
+    {
+      "supplier": {
+        "name": "Cobalt-58",
+        "categories": [
+          "soil"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 6.99920867903007e-12
+    },
+    {
+      "supplier": {
+        "name": "Cobalt-58",
+        "categories": [
+          "air",
+          "lower stratosphere + upper troposphere"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 5.5709567109645e-12
+    },
+    {
+      "supplier": {
+        "name": "Cobalt-58",
+        "categories": [
+          "air",
+          "indoor"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 5.5709567109645e-12
+    },
+    {
+      "supplier": {
+        "name": "Cobalt-58",
+        "categories": [
+          "water",
+          "surface water"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1.33219611719733e-11
+    },
+    {
+      "supplier": {
+        "name": "Cobalt-58",
+        "categories": [
+          "soil",
+          "industrial"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 6.99920867903007e-12
+    },
+    {
+      "supplier": {
+        "name": "Cobalt-58",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 6.99920867903007e-12
+    },
+    {
+      "supplier": {
+        "name": "Cobalt-58",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 5.59809798506491e-12
+    },
+    {
+      "supplier": {
+        "name": "Cobalt-60",
+        "categories": [
+          "air"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1.24046636097476e-11
+    },
+    {
+      "supplier": {
+        "name": "Cobalt-60",
+        "categories": [
+          "air",
+          "non-urban air or from high stacks"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1.24650981800779e-11
+    },
+    {
+      "supplier": {
+        "name": "Cobalt-60",
+        "categories": [
+          "air",
+          "urban air close to ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1.23442290394174e-11
+    },
+    {
+      "supplier": {
+        "name": "Cobalt-60",
+        "categories": [
+          "water"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 2.96635668762605e-11
+    },
+    {
+      "supplier": {
+        "name": "Cobalt-60",
+        "categories": [
+          "soil"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1.55849046586403e-11
+    },
+    {
+      "supplier": {
+        "name": "Cobalt-60",
+        "categories": [
+          "air",
+          "lower stratosphere + upper troposphere"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1.24046636097476e-11
+    },
+    {
+      "supplier": {
+        "name": "Cobalt-60",
+        "categories": [
+          "air",
+          "indoor"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1.24046636097476e-11
+    },
+    {
+      "supplier": {
+        "name": "Cobalt-60",
+        "categories": [
+          "water",
+          "surface water"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 2.96635668762605e-11
+    },
+    {
+      "supplier": {
+        "name": "Cobalt-60",
+        "categories": [
+          "soil",
+          "industrial"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1.55849046586403e-11
+    },
+    {
+      "supplier": {
+        "name": "Cobalt-60",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1.55849046586403e-11
+    },
+    {
+      "supplier": {
+        "name": "Cobalt-60",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1.24650981800779e-11
+    },
+    {
+      "supplier": {
+        "name": "Hydrogen-3, Tritium",
+        "categories": [
+          "air"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 2.51421603209911e-15
+    },
+    {
+      "supplier": {
+        "name": "Tritium",
+        "categories": [
+          "air"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 2.51421603209911e-15
+    },
+    {
+      "supplier": {
+        "name": "Hydrogen-3, Tritium",
+        "categories": [
+          "air",
+          "non-urban air or from high stacks"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 2.52532559808249e-15
+    },
+    {
+      "supplier": {
+        "name": "Tritium",
+        "categories": [
+          "air",
+          "non-urban air or from high stacks"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 2.52532559808249e-15
+    },
+    {
+      "supplier": {
+        "name": "Hydrogen-3, Tritium",
+        "categories": [
+          "air",
+          "urban air close to ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 2.50310646611573e-15
+    },
+    {
+      "supplier": {
+        "name": "Tritium",
+        "categories": [
+          "air",
+          "urban air close to ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 2.50310646611573e-15
+    },
+    {
+      "supplier": {
+        "name": "Hydrogen-3, Tritium",
+        "categories": [
+          "water"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 6.1546687882653e-15
+    },
+    {
+      "supplier": {
+        "name": "Tritium",
+        "categories": [
+          "water"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 6.1546687882653e-15
+    },
+    {
+      "supplier": {
+        "name": "Hydrogen-3, Tritium",
+        "categories": [
+          "soil"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 3.1528850528716e-15
+    },
+    {
+      "supplier": {
+        "name": "Tritium",
+        "categories": [
+          "soil"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 3.1528850528716e-15
+    },
+    {
+      "supplier": {
+        "name": "Hydrogen-3, Tritium",
+        "categories": [
+          "air",
+          "lower stratosphere + upper troposphere"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 2.51421603209911e-15
+    },
+    {
+      "supplier": {
+        "name": "Tritium",
+        "categories": [
+          "air",
+          "lower stratosphere + upper troposphere"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 2.51421603209911e-15
+    },
+    {
+      "supplier": {
+        "name": "Hydrogen-3, Tritium",
+        "categories": [
+          "air",
+          "indoor"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 2.51421603209911e-15
+    },
+    {
+      "supplier": {
+        "name": "Tritium",
+        "categories": [
+          "air",
+          "indoor"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 2.51421603209911e-15
+    },
+    {
+      "supplier": {
+        "name": "Hydrogen-3, Tritium",
+        "categories": [
+          "water",
+          "surface water"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 6.1546687882653e-15
+    },
+    {
+      "supplier": {
+        "name": "Tritium",
+        "categories": [
+          "water",
+          "surface water"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 6.1546687882653e-15
+    },
+    {
+      "supplier": {
+        "name": "Hydrogen-3, Tritium",
+        "categories": [
+          "soil",
+          "industrial"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 3.1528850528716e-15
+    },
+    {
+      "supplier": {
+        "name": "Tritium",
+        "categories": [
+          "soil",
+          "industrial"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 3.1528850528716e-15
+    },
+    {
+      "supplier": {
+        "name": "Hydrogen-3, Tritium",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 3.1528850528716e-15
+    },
+    {
+      "supplier": {
+        "name": "Tritium",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 3.1528850528716e-15
+    },
+    {
+      "supplier": {
+        "name": "Hydrogen-3, Tritium",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 2.52532559808249e-15
+    },
+    {
+      "supplier": {
+        "name": "Tritium",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 2.52532559808249e-15
+    },
+    {
+      "supplier": {
+        "name": "Iodine-131",
+        "categories": [
+          "air"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 5.69223887774116e-12
+    },
+    {
+      "supplier": {
+        "name": "Iodine-131",
+        "categories": [
+          "air",
+          "non-urban air or from high stacks"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 5.7149456101915e-12
+    },
+    {
+      "supplier": {
+        "name": "Iodine-131",
+        "categories": [
+          "air",
+          "urban air close to ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 5.66953214529081e-12
+    },
+    {
+      "supplier": {
+        "name": "Iodine-131",
+        "categories": [
+          "water"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1.42398394013639e-11
+    },
+    {
+      "supplier": {
+        "name": "Iodine-131",
+        "categories": [
+          "soil"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 7.12551063740872e-12
+    },
+    {
+      "supplier": {
+        "name": "Iodine-131",
+        "categories": [
+          "air",
+          "lower stratosphere + upper troposphere"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 5.69223887774116e-12
+    },
+    {
+      "supplier": {
+        "name": "Iodine-131",
+        "categories": [
+          "air",
+          "indoor"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 5.69223887774116e-12
+    },
+    {
+      "supplier": {
+        "name": "Iodine-131",
+        "categories": [
+          "water",
+          "surface water"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1.42398394013639e-11
+    },
+    {
+      "supplier": {
+        "name": "Iodine-131",
+        "categories": [
+          "soil",
+          "industrial"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 7.12551063740872e-12
+    },
+    {
+      "supplier": {
+        "name": "Iodine-131",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 7.12551063740872e-12
+    },
+    {
+      "supplier": {
+        "name": "Iodine-131",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 5.7149456101915e-12
+    },
+    {
+      "supplier": {
+        "name": "Manganese-54",
+        "categories": [
+          "air"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 2.62151950438507e-12
+    },
+    {
+      "supplier": {
+        "name": "Manganese-54",
+        "categories": [
+          "air",
+          "non-urban air or from high stacks"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 2.63709733476557e-12
+    },
+    {
+      "supplier": {
+        "name": "Manganese-54",
+        "categories": [
+          "air",
+          "urban air close to ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 2.60594167400457e-12
+    },
+    {
+      "supplier": {
+        "name": "Manganese-54",
+        "categories": [
+          "water"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 5.91833430741185e-12
+    },
+    {
+      "supplier": {
+        "name": "Manganese-54",
+        "categories": [
+          "soil"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 3.30816919784324e-12
+    },
+    {
+      "supplier": {
+        "name": "Manganese-54",
+        "categories": [
+          "air",
+          "lower stratosphere + upper troposphere"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 2.62151950438507e-12
+    },
+    {
+      "supplier": {
+        "name": "Manganese-54",
+        "categories": [
+          "air",
+          "indoor"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 2.62151950438507e-12
+    },
+    {
+      "supplier": {
+        "name": "Manganese-54",
+        "categories": [
+          "water",
+          "surface water"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 5.91833430741185e-12
+    },
+    {
+      "supplier": {
+        "name": "Manganese-54",
+        "categories": [
+          "soil",
+          "industrial"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 3.30816919784324e-12
+    },
+    {
+      "supplier": {
+        "name": "Manganese-54",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 3.30816919784324e-12
+    },
+    {
+      "supplier": {
+        "name": "Manganese-54",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 2.63709733476557e-12
+    },
+    {
+      "supplier": {
+        "name": "Silver-110",
+        "categories": [
+          "air"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 3.12206642444033e-12
+    },
+    {
+      "supplier": {
+        "name": "Silver-110",
+        "categories": [
+          "air",
+          "non-urban air or from high stacks"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 3.13673735145958e-12
+    },
+    {
+      "supplier": {
+        "name": "Silver-110",
+        "categories": [
+          "air",
+          "urban air close to ground"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 3.10739549742109e-12
+    },
+    {
+      "supplier": {
+        "name": "Silver-110",
+        "categories": [
+          "water"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 7.53327950284377e-12
+    },
+    {
+      "supplier": {
+        "name": "Silver-110",
+        "categories": [
+          "soil"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 3.91968569113074e-12
+    },
+    {
+      "supplier": {
+        "name": "Silver-110",
+        "categories": [
+          "air",
+          "lower stratosphere + upper troposphere"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 3.12206642444033e-12
+    },
+    {
+      "supplier": {
+        "name": "Silver-110",
+        "categories": [
+          "air",
+          "indoor"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 3.12206642444033e-12
+    },
+    {
+      "supplier": {
+        "name": "Silver-110",
+        "categories": [
+          "water",
+          "surface water"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 7.53327950284377e-12
+    },
+    {
+      "supplier": {
+        "name": "Silver-110",
+        "categories": [
+          "soil",
+          "industrial"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 3.91968569113074e-12
+    },
+    {
+      "supplier": {
+        "name": "Silver-110",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 3.91968569113074e-12
+    },
+    {
+      "supplier": {
+        "name": "Silver-110",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 3.13673735145958e-12
+    }
+  ]
+}

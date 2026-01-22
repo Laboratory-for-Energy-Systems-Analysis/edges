@@ -122,7 +122,9 @@ LCA.evaluate_cfs()
 LCA.lcia()
 print(LCA.score)
 
-# Print a dataframe with the characterization factors used
+# Optional but recommended: print a dataframe with the characterization factors used
+# this allows you to check whether exchanges have been given the correct CFs
+# include_unmatched=True allows you to see which exchanges were not matched (and if some should have been)
 LCA.generate_cf_table()
 
 ```

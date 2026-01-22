@@ -1,0 +1,71 @@
+{
+  "name": "ImpactWorld+ 2.1 - Fisheries impact_damage",
+  "unit": "PDF.m2.yr",
+  "version": "2.1",
+  "edges version": "2.0",
+  "strategies": [
+    "map_exchanges",
+    "map_aggregate_locations",
+    "map_dynamic_locations",
+    "map_contained_locations",
+    "map_remaining_locations_to_global"
+  ],
+  "exchanges": [
+    {
+      "supplier": {
+        "name": "Fish, demersal, in ocean",
+        "categories": [
+          "natural resource",
+          "biotic"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 19.34272239185596
+    },
+    {
+      "supplier": {
+        "name": "Discarded fish, demersal, to ocean",
+        "categories": [
+          "natural resource",
+          "biotic"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 3.438049029824584
+    },
+    {
+      "supplier": {
+        "name": "Fish, pelagic, in ocean",
+        "categories": [
+          "natural resource",
+          "biotic"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 3.046514084751669
+    },
+    {
+      "supplier": {
+        "name": "Discarded fish, pelagic, to ocean",
+        "categories": [
+          "natural resource",
+          "biotic"
+        ],
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 3.438049029824584
+    }
+  ]
+}

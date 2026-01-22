@@ -41,5 +41,7 @@ This minimal example walks you through performing a basic LCIA using `edges`.
     # Step 5 (optional): Print a summary
     print(lcia.statistics())
 
-    # Step 6 (optional): Print a table with all exchanges characterized
-    df = lcia.generate_cf_table()
+    # Step 6 (optional but RECOMMENDED): Print a table with all exchanges characterized
+    # this allows you to check whether exchanges have been given the correct CFs
+    # include_unmatched=True allows you to see which exchanges were not matched (and if some should have been)
+    df = lcia.generate_cf_table(include_unmatched=False)

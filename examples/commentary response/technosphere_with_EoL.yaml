@@ -13,10 +13,10 @@
       input: !!python/tuple [ lithium_supply_chain_w_EoL, hydropower_CL ]
       type: technosphere
       unit: kWh
-    - amount: 2000
+    - amount: 2.0
       input: !!python/tuple ["biosphere", "water, underground"]
       type: biosphere
-      unit: kg
+      unit: m3
 
 !!python/tuple [lithium_supply_chain_w_EoL, hydropower_CL]:
   name: hydropower
@@ -29,10 +29,10 @@
       input: !!python/tuple [lithium_supply_chain_w_EoL, hydropower_CL]
       type: production
       unit: kWh
-    - amount: 20
+    - amount: 0.02
       input: !!python/tuple ["biosphere", "water, unspecified"]
       type: biosphere
-      unit: kg
+      unit: m3
 
 !!python/tuple [lithium_supply_chain_w_EoL, Li₂CO₃ production]:
   name: Li₂CO₃ production
@@ -53,10 +53,10 @@
       input: !!python/tuple [ lithium_supply_chain_w_EoL, hydropower_CN ]
       type: technosphere
       unit: kWh
-    - amount: 3000
+    - amount: 3.0
       input: !!python/tuple ["biosphere", "water, surface"]
       type: biosphere
-      unit: kg
+      unit: m3
 
 !!python/tuple [lithium_supply_chain_w_EoL, hydropower_CN]:
   name: hydropower
@@ -69,10 +69,10 @@
       input: !!python/tuple [lithium_supply_chain_w_EoL, hydropower_CN]
       type: production
       unit: kWh
-    - amount: 15
+    - amount: 0.015
       input: !!python/tuple ["biosphere", "water, unspecified"]
       type: biosphere
-      unit: kg
+      unit: m3
 
 !!python/tuple [lithium_supply_chain_w_EoL, cathode material production]:
   name: CAM production
@@ -105,10 +105,10 @@
       input: !!python/tuple [lithium_supply_chain_w_EoL, CAM_treatment]
       type: technosphere
       unit: kg
-    - amount: 200
+    - amount: 0.200
       input: !!python/tuple ["biosphere", "water, unspecified"]
       type: biosphere
-      unit: kg
+      unit: m3
 
 !!python/tuple [lithium_supply_chain_w_EoL, hydropower_DE]:
   name: hydropower
@@ -121,10 +121,10 @@
       input: !!python/tuple [lithium_supply_chain_w_EoL, hydropower_DE]
       type: production
       unit: kWh
-    - amount: 5
+    - amount: 0.005
       input: !!python/tuple ["biosphere", "water, unspecified"]
       type: biosphere
-      unit: kg
+      unit: m3
 
 !!python/tuple [lithium_supply_chain_w_EoL, CAM_treatment]:
   name: CAM EoL
