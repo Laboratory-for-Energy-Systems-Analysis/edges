@@ -732,8 +732,9 @@ def group_edges_by_signature(
 
         grouped[(s_key, c_key, loc_key)].append((supplier_idx, consumer_idx))
 
-        for _k in grouped:
-            grouped[_k].sort()
+    # Sort once per group to keep deterministic order without O(n^2) re-sorting
+    for edges in grouped.values():
+        edges.sort()
 
     return grouped
 
