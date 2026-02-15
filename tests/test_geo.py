@@ -1,6 +1,7 @@
 from edges.utils import get_str
 from edges.georesolver import GeoResolver
 from constructive_geometries import Geomatcher
+import logging
 
 
 def test_geo():
@@ -35,3 +36,9 @@ def test_georesolver_tuple_weights():
         }
     )
     assert "RER" in geo.resolve("IT", containing=False)
+
+
+def test_georesolver_does_not_mutate_global_logging():
+    before = logging.lastResort
+    _ = GeoResolver(weights={"RER": 1.0})
+    assert logging.lastResort is before

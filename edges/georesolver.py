@@ -10,20 +10,6 @@ logger = logging.getLogger(__name__)
 logger.addHandler(logging.NullHandler())
 
 
-for name in ("country_converter", "country_converter.country_converter"):
-    l = logging.getLogger(name)
-    # remove existing handlers
-    while l.handlers:
-        h = l.handlers.pop()
-        try:
-            h.close()
-        except:
-            pass
-    l.propagate = False  # don’t bubble to root
-    l.setLevel(logging.ERROR)  # drop WARNINGs
-logging.lastResort = None
-
-
 class GeoResolver:
     """
     Resolve geographic containment/coverage using constructive_geometries + project weights.

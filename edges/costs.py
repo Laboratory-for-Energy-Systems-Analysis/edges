@@ -5,8 +5,14 @@ LCIA class.
 """
 
 import numpy as np
+import pandas as pd
+import bw2data
+from typing import Optional
 
-from .edgelcia import *
+from .edgelcia import EdgeLCIA
+from .matrix_builders import build_technosphere_edges_matrix, initialize_lcia_matrix
+from .utils import get_flow_matrix_positions, safe_eval_cached
+from .uncertainty import sample_cf_distribution
 from scipy import sparse
 from scipy.optimize import linprog
 from scipy.sparse import diags, csr_matrix, coo_matrix
@@ -115,7 +121,7 @@ class CostLCIA(EdgeLCIA):
         - If cost distributions are defined, use `evaluate_cfs()` with `use_distributions=True`.
         """
 
-        print("Build price vector")
+        self.logger.info("Building price vector.")
 
         self.price_vector = np.zeros_like(self.lca.supply_array)
 
@@ -132,8 +138,10 @@ class CostLCIA(EdgeLCIA):
 
         # print the number of zero values
         zero_count = np.count_nonzero(self.price_vector == 0)
-        print(
-            f"Number of zero values in price vector: {zero_count}, out of {len(self.price_vector)}"
+        self.logger.info(
+            "Price vector has %d zero values out of %d entries.",
+            zero_count,
+            len(self.price_vector),
         )
 
     def infer_missing_costs(self):
@@ -154,7 +162,7 @@ class CostLCIA(EdgeLCIA):
         - Works only for technosphere flows.
         """
 
-        print("Inferring missing costs in the technosphere matrix...")
+        self.logger.info("Inferring missing costs in the technosphere matrix...")
 
         # --- Part 1: Normalize technosphere matrix to build A* ---
         T = self.lca.technosphere_matrix.tocsc()
@@ -216,28 +224,23 @@ class CostLCIA(EdgeLCIA):
         c = np.ones(n)
 
         # --- Diagnostics ---
-        print("Price vector stats:")
-        print("  Min:", np.min(original_prices))
-        print("  Max:", np.max(original_prices))
-        print("  NaNs:", np.isnan(original_prices).sum())
-        print("  Zeros:", np.count_nonzero(original_prices == 0))
-        print(
-            "  Anchored prices:",
+        self.logger.info(
+            "Price vector stats: min=%s max=%s nans=%s zeros=%s anchored=%s/%s",
+            np.min(original_prices),
+            np.max(original_prices),
+            np.isnan(original_prices).sum(),
+            np.count_nonzero(original_prices == 0),
             sum(lb == ub and lb is not None for lb, ub in bounds),
-            "/",
             n,
         )
-
-        print("A_ub diagnostics:")
-        print("  Max abs value:", np.max(np.abs(A_ub)))
-        print(
-            "  Non-zeros per row (min/max):",
+        self.logger.info(
+            "A_ub diagnostics: max_abs=%s nnz_per_row=%s/%s rows=%s cols=%s",
+            np.max(np.abs(A_ub)),
             np.min(np.count_nonzero(A_ub, axis=1)),
-            "/",
             np.max(np.count_nonzero(A_ub, axis=1)),
+            A_ub.shape[0],
+            A_ub.shape[1],
         )
-        print("  Total constraints (rows):", A_ub.shape[0])
-        print("  Total variables (columns):", A_ub.shape[1])
 
         assert np.all(np.isfinite(A_ub)), "A_ub contains non-finite values"
         assert np.all(np.isfinite(b_ub)), "b_ub contains non-finite values"
@@ -259,16 +262,19 @@ class CostLCIA(EdgeLCIA):
             zero_count_before = np.count_nonzero(self.price_vector == 0)
             zero_count_after = np.count_nonzero(result.x == 0)
             self.price_vector = result.x
-            print(
-                f"Inferred {zero_count_before - zero_count_after} missing prices successfully. "
-                f"Remaining {zero_count_after} missing prices."
+            self.logger.info(
+                "Inferred %d missing prices; %d remain zero.",
+                zero_count_before - zero_count_after,
+                zero_count_after,
             )
         else:
-            print("Linear programming failed.")
-            print("Status:", result.status)
-            print("Message:", result.message)
-            print("Number of variables:", len(c))
-            print("Number of constraints:", len(b_ub))
+            self.logger.error(
+                "Linear programming failed: status=%s message=%s nvars=%d nconstraints=%d",
+                result.status,
+                result.message,
+                len(c),
+                len(b_ub),
+            )
             raise RuntimeError(
                 "Linear program failed to find a consistent price vector."
             )
@@ -291,7 +297,7 @@ class CostLCIA(EdgeLCIA):
         - Supports a fallback pricing strategy that complements `build_price_vector()` and `infer_missing_costs()`.
         """
 
-        print("Inferring missing costs using HiGHS...")
+        self.logger.info("Inferring missing costs using HiGHS...")
 
         T = self.lca.technosphere_matrix.tocsc()
         n = T.shape[0]
@@ -360,7 +366,7 @@ class CostLCIA(EdgeLCIA):
 
         if status == model.ModelStatus.OPTIMAL:
             solution = model.getSolution().col_value
-            print("Inference successful.")
+            self.logger.info("HiGHS inference successful.")
             return np.array(solution)
         else:
             raise RuntimeError(f"HiGHS failed: status {status}")
@@ -389,8 +395,9 @@ class CostLCIA(EdgeLCIA):
         """
 
         if self.use_distributions and self.iterations > 1:
-            coords_i, coords_j, coords_k = [], [], []
-            data = []
+            coord_blocks: list[np.ndarray] = []
+            data_blocks: list[np.ndarray] = []
+            k_index = np.arange(self.iterations, dtype=np.int64)
 
             for cf in self.cfs_mapping:
                 samples = sample_cf_distribution(
@@ -401,17 +408,27 @@ class CostLCIA(EdgeLCIA):
                     use_distributions=self.use_distributions,
                     SAFE_GLOBALS=self.SAFE_GLOBALS,
                 )
-                for i, j in cf["positions"]:
-                    for k in range(self.iterations):
-                        coords_i.append(i)
-                        coords_j.append(j)
-                        coords_k.append(k)
-                        data.append(samples[k])
+                samples = np.asarray(samples, dtype=float)
+                positions = np.asarray(cf["positions"], dtype=np.int64)
+                if positions.size == 0:
+                    continue
+                i_block = np.repeat(positions[:, 0], self.iterations)
+                j_block = np.repeat(positions[:, 1], self.iterations)
+                k_block = np.tile(k_index, positions.shape[0])
+                v_block = np.tile(samples, positions.shape[0])
+                coord_blocks.append(np.vstack((i_block, j_block, k_block)))
+                data_blocks.append(v_block)
 
             n_rows, n_cols = self.lca.technosphere_matrix.shape
 
+            if coord_blocks:
+                coords = np.concatenate(coord_blocks, axis=1)
+                data = np.concatenate(data_blocks)
+            else:
+                coords = np.empty((3, 0), dtype=np.int64)
+                data = np.empty((0,), dtype=float)
             self.characterization_matrix = sparse.COO(
-                coords=[coords_i, coords_j, coords_k],
+                coords=coords,
                 data=data,
                 shape=(n_rows, n_cols, self.iterations),
             )
@@ -529,7 +546,7 @@ class CostLCIA(EdgeLCIA):
         """
 
         if not self.scenario_cfs:
-            print("You must run evaluate_cfs() first.")
+            self.logger.warning("You must run evaluate_cfs() first.")
             return pd.DataFrame()
 
         is_biosphere = False

@@ -52,6 +52,10 @@ Currently, the library provides regionalized CFs for:
 * GeoPolRisk 1.0
 * GLAM3 Land use impacts on biodiversity
 
+> [!NOTE]
+> Mixed CF methods combining both `biosphere` and `technosphere` supplier matrices
+> in a single method file are currently not supported.
+
 ## Installation
 
 You can install the library using pip:

@@ -89,6 +89,11 @@ When using region-specific methods like AWARE or ImpactWorld+:
     lcia.lcia()
     print(lcia.score)
 
+.. note::
+   Methods that mix both ``supplier.matrix = "biosphere"`` and
+   ``supplier.matrix = "technosphere"`` entries in the same JSON are currently
+   not supported.
+
 ---
 
 

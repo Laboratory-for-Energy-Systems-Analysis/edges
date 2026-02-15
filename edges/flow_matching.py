@@ -325,17 +325,27 @@ def build_cf_index(raw_cfs: list[dict]) -> dict:
     return index
 
 
-@lru_cache(maxsize=None)
-def cached_match_with_index(flow_to_match_hashable, required_fields_tuple):
+def cached_match_with_index(
+    flow_to_match_hashable,
+    required_fields_tuple,
+    index,
+    lookup_mapping,
+    reversed_lookup,
+):
+    """
+    Stateless wrapper around ``match_with_index``.
+
+    Caching is intentionally handled by callers (e.g., EdgeLCIA) to avoid
+    mutable global context and cross-instance/thread contamination.
+    """
     flow_to_match = dict(flow_to_match_hashable)
     required_fields = set(required_fields_tuple)
-    # the contexts live on the function as attributes
     return match_with_index(
         flow_to_match,
-        cached_match_with_index.index,
-        cached_match_with_index.lookup_mapping,
+        index,
+        lookup_mapping,
         required_fields,
-        cached_match_with_index.reversed_lookup,
+        reversed_lookup,
     )
 
 
@@ -425,7 +435,7 @@ def match_with_index(
     )
     op = flow_to_match.get("operator", "equals")
 
-    allowed_keys = getattr(cached_match_with_index, "allowed_keys", None)
+    allowed_keys = None
 
     def field_candidates(field, target, operator_value):
         field_index = index.get(field, {})

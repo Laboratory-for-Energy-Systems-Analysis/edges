@@ -121,6 +121,7 @@ def add_cf_entry(
     indices: tuple,
     value: float,
     uncertainty: dict,
+    seen_positions: set[tuple[str, int, int]] | None = None,
 ) -> None:
     """
     Append a characterized-exchange entry to the in-memory CF mapping,
@@ -129,12 +130,15 @@ def add_cf_entry(
     """
 
     # Build a set of already-used (direction, i, j) for this mapping so far.
-    # O(N) over current cfs_mapping, but keeps this function self-contained.
-    seen = set()
-    for e in cfs_mapping:
-        ed = e.get("direction", direction)
-        for ii, jj in e.get("positions", ()):
-            seen.add((ed, int(ii), int(jj)))
+    # If a shared set is provided, this is O(1); otherwise fall back to scanning.
+    if seen_positions is not None:
+        seen = seen_positions
+    else:
+        seen = set()
+        for e in cfs_mapping:
+            ed = e.get("direction", direction)
+            for ii, jj in e.get("positions", ()):
+                seen.add((ed, int(ii), int(jj)))
 
     # De-dup incoming indices (also handles duplicates within `indices`)
     unique_positions = []
@@ -177,6 +181,8 @@ def add_cf_entry(
         entry["uncertainty"] = uncertainty
 
     cfs_mapping.append(entry)
+    if seen_positions is not None:
+        seen_positions.update((direction, i, j) for i, j in unique_positions)
 
 
 @lru_cache(maxsize=None)
@@ -414,12 +420,6 @@ class EdgeLCIA:
 
         try:
             _equality_supplier_signature_cached.cache_clear()
-            # cached_match_with_index.cache_clear()
-        except Exception:
-            pass
-        try:
-            # _equality_supplier_signature_cached.cache_clear()
-            cached_match_with_index.cache_clear()
         except Exception:
             pass
 
@@ -503,6 +503,7 @@ class EdgeLCIA:
         self._flows_version = None
         self._cls_hits_cache = {}
         self.applied_strategies = []
+        self._seen_positions: set[tuple[str, int, int]] = set()
 
         # One-time flags for this run:
         self._include_cls_in_supplier_sig = any(
@@ -1444,17 +1445,13 @@ class EdgeLCIA:
             if hit is not None:
                 return hit
 
-            try:
-                cached_match_with_index.cache_clear()
-            except Exception:
-                pass
-
-            # Configure matcher context only here
-            cached_match_with_index.index = index
-            cached_match_with_index.lookup_mapping = lookup
-            cached_match_with_index.reversed_lookup = reversed_lookup
-
-            res = cached_match_with_index(flow_key, req_fields)
+            res = cached_match_with_index(
+                flow_key,
+                req_fields,
+                index,
+                lookup,
+                reversed_lookup,
+            )
             _match_memo[key] = res
             return res
 
@@ -1712,6 +1709,7 @@ class EdgeLCIA:
                     indices=positions,
                     value=cf["value"],
                     uncertainty=cf.get("uncertainty"),
+                    seen_positions=self._seen_positions,
                 )
 
             # ---------- Near-miss allowlists (location-only) --------------------------
@@ -2027,6 +2025,7 @@ class EdgeLCIA:
                                 indices=[(supplier_idx, consumer_idx)],
                                 value=new_cf,
                                 uncertainty=agg_uncertainty,
+                                seen_positions=self._seen_positions,
                             )
 
             # Pass 2
@@ -2065,6 +2064,7 @@ class EdgeLCIA:
                                 indices=[(supplier_idx, consumer_idx)],
                                 value=new_cf,
                                 uncertainty=agg_uncertainty,
+                                seen_positions=self._seen_positions,
                             )
                     else:
 
@@ -2382,6 +2382,7 @@ class EdgeLCIA:
                                 indices=[(supplier_idx, consumer_idx)],
                                 value=new_cf,
                                 uncertainty=agg_uncertainty,
+                                seen_positions=self._seen_positions,
                             )
                         else:
                             self.logger.warning(
@@ -2432,6 +2433,7 @@ class EdgeLCIA:
                                 indices=[(supplier_idx, consumer_idx)],
                                 value=new_cf,
                                 uncertainty=agg_uncertainty,
+                                seen_positions=self._seen_positions,
                             )
                     else:
                         self.logger.warning(
@@ -2707,6 +2709,7 @@ class EdgeLCIA:
                                 indices=[(supplier_idx, consumer_idx)],
                                 value=new_cf,
                                 uncertainty=agg_uncertainty,
+                                seen_positions=self._seen_positions,
                             )
                     else:
                         self.logger.warning(
@@ -2752,6 +2755,7 @@ class EdgeLCIA:
                                 indices=[(supplier_idx, consumer_idx)],
                                 value=new_cf,
                                 uncertainty=agg_uncertainty,
+                                seen_positions=self._seen_positions,
                             )
                     else:
                         self.logger.warning(
@@ -2991,6 +2995,7 @@ class EdgeLCIA:
                                         else None
                                     )
                                 ),
+                                seen_positions=self._seen_positions,
                             )
                         continue  # done with this group
 
@@ -3038,13 +3043,14 @@ class EdgeLCIA:
                                         else None
                                     )
                                 ),
+                                seen_positions=self._seen_positions,
                             )
                         continue
 
         self._update_unprocessed_edges()
         self.applied_strategies.append("map_remaining_locations_to_global")
 
-    def apply_strategies(self, strategies: list[str] | None = None) -> None:
+    def apply_strategies(self, strategies: list[str] | None = None) -> "EdgeLCIA":
         """
         Execute mapping strategies (strings only) in order.
 
@@ -3112,6 +3118,7 @@ class EdgeLCIA:
             self.logger.info("Running %s()", name)
             fn()
             self.logger.info("Finished %s in %.3fs", name, time.perf_counter() - t0)
+        return self
 
     def evaluate_cfs(self, scenario_idx: str | int = 0, scenario=None):
         """
@@ -3160,9 +3167,10 @@ class EdgeLCIA:
         """
 
         if self.use_distributions and self.iterations > 1:
-            coords_i, coords_j, coords_k = [], [], []
-            data = []
+            coord_blocks: list[np.ndarray] = []
+            data_blocks: list[np.ndarray] = []
             sample_cache = {}
+            k_index = np.arange(self.iterations, dtype=np.int64)
 
             unique = {}
             for cf in self.cfs_mapping:
@@ -3205,13 +3213,18 @@ class EdgeLCIA:
                 neg = (cf.get("uncertainty") or {}).get("negative", 0)
                 if neg == 1:
                     samples = -samples
+                samples = np.asarray(samples, dtype=float)
+                positions = np.asarray(cf["positions"], dtype=np.int64)
+                if positions.size == 0:
+                    continue
 
-                for i, j in cf["positions"]:
-                    for k in range(self.iterations):
-                        coords_i.append(i)
-                        coords_j.append(j)
-                        coords_k.append(k)
-                        data.append(samples[k])
+                i_block = np.repeat(positions[:, 0], self.iterations)
+                j_block = np.repeat(positions[:, 1], self.iterations)
+                k_block = np.tile(k_index, positions.shape[0])
+                v_block = np.tile(samples, positions.shape[0])
+
+                coord_blocks.append(np.vstack((i_block, j_block, k_block)))
+                data_blocks.append(v_block)
 
             matrix_type = (
                 "biosphere" if len(self.biosphere_edges) > 0 else "technosphere"
@@ -3223,13 +3236,18 @@ class EdgeLCIA:
             )
 
             # Sort all (i, j, k) indices to ensure consistent iteration ordering
-            coords = np.array([coords_i, coords_j, coords_k])
-            data = np.array(data)
+            if coord_blocks:
+                coords = np.concatenate(coord_blocks, axis=1)
+                data = np.concatenate(data_blocks)
+            else:
+                coords = np.empty((3, 0), dtype=np.int64)
+                data = np.empty((0,), dtype=float)
 
             # Lexicographic sort by i, j, k
-            order = np.lexsort((coords[2], coords[1], coords[0]))
-            coords = coords[:, order]
-            data = data[order]
+            if data.size:
+                order = np.lexsort((coords[2], coords[1], coords[0]))
+                coords = coords[:, order]
+                data = data[order]
 
             self.characterization_matrix = sparse.COO(
                 coords=coords,
@@ -3623,8 +3641,10 @@ class EdgeLCIA:
             ), "Expected sparse.COO in uncertainty mode."
 
             # Collect coords/data to append
-            coords_i, coords_j, coords_k, data = [], [], [], []
+            coord_blocks: list[np.ndarray] = []
+            data_blocks: list[np.ndarray] = []
             sample_cache = {}
+            k_index = np.arange(self.iterations, dtype=np.int64)
 
             for cf in new_cf_entries:
                 # Draw (or reuse) samples for this distribution/spec
@@ -3655,18 +3675,23 @@ class EdgeLCIA:
                 neg = (cf.get("uncertainty") or {}).get("negative", 0)
                 if neg == 1:
                     samples = -samples
+                samples = np.asarray(samples, dtype=float)
+                positions = np.asarray(cf["positions"], dtype=np.int64)
+                if positions.size == 0:
+                    continue
 
-                for i, j in cf["positions"]:
-                    for k in range(self.iterations):
-                        coords_i.append(i)
-                        coords_j.append(j)
-                        coords_k.append(k)
-                        data.append(samples[k])
+                i_block = np.repeat(positions[:, 0], self.iterations)
+                j_block = np.repeat(positions[:, 1], self.iterations)
+                k_block = np.tile(k_index, positions.shape[0])
+                v_block = np.tile(samples, positions.shape[0])
 
-            if data:
+                coord_blocks.append(np.vstack((i_block, j_block, k_block)))
+                data_blocks.append(v_block)
+
+            if data_blocks:
                 # Concatenate to existing COO
-                new_coords = np.array([coords_i, coords_j, coords_k])
-                new_data = np.array(data)
+                new_coords = np.concatenate(coord_blocks, axis=1)
+                new_data = np.concatenate(data_blocks)
                 # Merge
                 merged_coords = np.concatenate([cm.coords, new_coords], axis=1)
                 merged_data = np.concatenate([cm.data, new_data])
