@@ -691,6 +691,17 @@ class EdgeLCIA:
         # Normalize classification entries (your current helper)
         self.raw_cfs_data = normalize_classification_entries(self.raw_cfs_data)
 
+        # Mixed supplier matrices are currently unsupported.
+        supplier_matrices = {
+            str(cf.get("supplier", {}).get("matrix", "")).strip().lower()
+            for cf in self.raw_cfs_data
+        }
+        if "biosphere" in supplier_matrices and "technosphere" in supplier_matrices:
+            raise NotImplementedError(
+                "Mixed biosphere + technosphere CF methods are not supported. "
+                "Provide a method with a single supplier matrix type."
+            )
+
         # Precompute normalized classification tuples for fast matching (unchanged)
         for cf in self.raw_cfs_data:
             cf["_norm_supplier_cls"] = _norm_cls(
@@ -1648,9 +1659,6 @@ class EdgeLCIA:
                         hit = cs & c_cands
                         if not hit:
                             continue
-
-                        # list literal is faster than generator to extend
-                        positions.extend((s, c) for c in hit)
 
                         # prune rem, ebs, ebc with minimal lookups
                         if hit:
@@ -3810,7 +3818,11 @@ class EdgeLCIA:
         if isinstance(self.method, tuple):
             method_name = str(self.method)
         else:
-            method_name = self.method["name"]
+            method_name = (
+                (self.method_metadata or {}).get("name")
+                if isinstance(self.method_metadata, dict)
+                else None
+            ) or str(self.method)
 
         rows.append(["Method name", fill(method_name, width=45)])
         if "unit" in self.method_metadata:

@@ -39,8 +39,27 @@ class GeoResolver:
         :param weights: Mapping of (supplier_loc, consumer_loc) -> weight value.
         :return: None
         """
-        self.weights = {get_str(k): v for k, v in weights.items()}
-        self.weights_key = ",".join(sorted(self.weights.keys()))
+        # Keep supplier/consumer keys intact when provided as tuples.
+        # Backward-compatible: also accept flat string keys.
+        norm_weights = {}
+        for k, v in weights.items():
+            if isinstance(k, tuple) and len(k) == 2:
+                norm_key = (get_str(k[0]), get_str(k[1]))
+            else:
+                # Legacy flat location key; keep on both sides
+                loc = get_str(k)
+                norm_key = (loc, loc)
+            norm_weights[norm_key] = v
+
+        self.weights = norm_weights
+        self.available_supplier_locations = {s for s, _ in self.weights.keys()}
+        self.available_consumer_locations = {c for _, c in self.weights.keys()}
+        self.available_locations = (
+            self.available_supplier_locations | self.available_consumer_locations
+        )
+        self.weights_key = ",".join(
+            sorted(f"{s}|{c}" for s, c in self.weights.keys())
+        )
         self.logger = logging.getLogger(f"{__name__}.{self.__class__.__name__}")
 
         # Dependencies from constructive_geometries and your utils
@@ -120,7 +139,9 @@ class GeoResolver:
         """
         return self.find_locations(
             location=location,
-            weights_available=tuple(self.weights.keys()),
+            # GeoResolver resolves candidate geographies agnostic of side.
+            # Side-specific filtering is handled in resolve_candidate_locations().
+            weights_available=tuple(self.available_locations),
             containing=containing,
             exceptions=exceptions,
         )

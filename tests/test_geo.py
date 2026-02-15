@@ -26,3 +26,12 @@ def test_georesolver():
         }
     )
     assert "RER" in geo.resolve("IT", containing=False)
+
+
+def test_georesolver_tuple_weights():
+    geo = GeoResolver(
+        weights={
+            ("CH", "RER"): 1.0,
+        }
+    )
+    assert "RER" in geo.resolve("IT", containing=False)

@@ -130,6 +130,8 @@ def add_population_and_gdp_data(data: list, weight: str) -> list:
     :param weight: the type of weight to include.
     :return: The data for the LCIA method with population and GDP data.
     """
+    weighting_data = {}
+
     # load population data from data/population.yaml
 
     if weight == "population":
@@ -150,6 +152,10 @@ def add_population_and_gdp_data(data: list, weight: str) -> list:
         except FileNotFoundError:
             logger.error("GDP metadata file not found at %s", path)
             raise
+    elif weight not in {"population", "gdp", None}:
+        logger.warning(
+            "Unknown weight scheme '%s'. No metadata weights will be injected.", weight
+        )
 
     # add to the data dictionary
     missing = 0
