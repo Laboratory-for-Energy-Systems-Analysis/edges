@@ -10,3 +10,4 @@ plotly
 ecoinvent_interface
 highspy
 packaging
+clipspy

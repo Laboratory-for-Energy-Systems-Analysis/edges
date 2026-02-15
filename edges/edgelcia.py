@@ -398,6 +398,7 @@ class EdgeLCIA:
         iterations: Optional[int] = 100,
         lca: Optional[bw2calc.LCA] = None,
         additional_topologies: Optional[dict] = None,
+        matcher_backend: Optional[str] = "python",
     ):
         """
         Initialize an EdgeLCIA object for exchange-level life cycle impact assessment.
@@ -514,6 +515,12 @@ class EdgeLCIA:
         )
 
         self.additional_topologies = additional_topologies
+        self.matcher_backend = str(matcher_backend or "python").strip().lower()
+        if self.matcher_backend not in {"python", "clips"}:
+            raise ValueError(
+                f"Unknown matcher backend '{self.matcher_backend}'. "
+                "Supported values are: 'python', 'clips'."
+            )
 
     def log_platform(self):
         """
@@ -1419,6 +1426,39 @@ class EdgeLCIA:
             self._flows_version = new_version
 
     def map_exchanges(self):
+        """
+        Dispatch exchange matching to the selected backend.
+
+        Backends:
+        - ``python``: native matcher implementation.
+        - ``clips``: CLIPSpy/RETE adapter (experimental).
+        """
+        backend = getattr(self, "matcher_backend", "python")
+        if backend not in {"python", "clips"}:
+            raise ValueError(
+                f"Unsupported matcher backend '{backend}'. "
+                "Supported values are: 'python', 'clips'."
+            )
+
+        # Ensure inventory/edges are initialized (same behavior as apply_strategies).
+        # Keep this tolerant for lightweight unit tests that instantiate via __new__.
+        if hasattr(self, "biosphere_edges") and hasattr(self, "technosphere_edges"):
+            edges_ready = not (
+                (self.biosphere_edges is None and self.technosphere_edges is None)
+                or (not self.biosphere_edges and not self.technosphere_edges)
+            )
+            if not edges_ready:
+                self.lci()
+
+        if backend == "python":
+            return self.map_exchanges_python()
+        if backend == "clips":
+            from .rete.adapter import map_exchanges_clips
+
+            return map_exchanges_clips(self)
+        raise RuntimeError(f"Unexpected matcher backend state '{backend}'.")
+
+    def map_exchanges_python(self):
         """
         Direction-aware matching with per-direction adjacency, indices, and allowlists.
         Uses pivoted set intersections (iterate on the smaller side) and batch pruning.
