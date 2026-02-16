@@ -44,6 +44,17 @@ def map_exchanges_clips(lcia: "EdgeLCIA"):
 
     rules = compile_rules(lcia.raw_cfs_data)
     rules_by_id = {int(r["id"]): r for r in rules}
+    direction_by_id: dict[int, str] = {}
+    is_bio_rule_by_id: dict[int, bool] = {}
+    for rid, rule in rules_by_id.items():
+        supplier = rule.get("supplier", {}) or {}
+        consumer = rule.get("consumer", {}) or {}
+        direction = (
+            f"{supplier.get('matrix', 'technosphere')}-"
+            f"{consumer.get('matrix', 'technosphere')}"
+        )
+        direction_by_id[rid] = direction
+        is_bio_rule_by_id[rid] = direction.startswith("biosphere-")
 
     tech_nodes = build_technosphere_nodes(lcia.technosphere_flows or [])
     bio_nodes = build_biosphere_nodes(lcia.biosphere_flows or [])
@@ -62,28 +73,45 @@ def map_exchanges_clips(lcia: "EdgeLCIA"):
         edges=sorted(edge_union),
     )
 
+    full_bio_matches: set[tuple[int, int]] = set()
+    full_tech_matches: set[tuple[int, int]] = set()
+    no_loc_bio_matches: set[tuple[int, int]] = set()
+    no_loc_tech_matches: set[tuple[int, int]] = set()
+
     def _on_match(rule_id: int, supplier_id: int, consumer_id: int):
         rule = rules_by_id[rule_id]
         rule_supplier = rule.get("supplier", {})
         rule_consumer = rule.get("consumer", {})
-        direction = f"{rule_supplier.get('matrix', 'technosphere')}-{rule_consumer.get('matrix', 'technosphere')}"
+        direction = direction_by_id[rule_id]
+
+        pair = (int(supplier_id), int(consumer_id))
+        if is_bio_rule_by_id[rule_id]:
+            full_bio_matches.add(pair)
+        else:
+            full_tech_matches.add(pair)
 
         add_cf_entry(
             cfs_mapping=lcia.cfs_mapping,
             supplier_info=rule_supplier,
             consumer_info=rule_consumer,
             direction=direction,
-            indices=[(int(supplier_id), int(consumer_id))],
+            indices=[pair],
             value=rule["value"],
             uncertainty=rule.get("uncertainty"),
             seen_positions=lcia._seen_positions,
         )
 
     engine = ClipsEngine()
-    engine.run(data, on_match=_on_match)
+    loc_rejects = engine.run(data, on_match=_on_match)
+    for kind, supplier_id, consumer_id in loc_rejects:
+        pair = (int(supplier_id), int(consumer_id))
+        if kind == "bio":
+            no_loc_bio_matches.add(pair)
+        else:
+            no_loc_tech_matches.add(pair)
 
     lcia._update_unprocessed_edges()
-    # For now we don't propagate location-only allowlists from CLIPS.
-    lcia.eligible_edges_for_next_bio = set()
-    lcia.eligible_edges_for_next_tech = set()
+
+    lcia.eligible_edges_for_next_bio = no_loc_bio_matches - full_bio_matches
+    lcia.eligible_edges_for_next_tech = no_loc_tech_matches - full_tech_matches
     lcia.applied_strategies.append("map_exchanges")

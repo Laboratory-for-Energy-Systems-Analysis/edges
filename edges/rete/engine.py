@@ -37,9 +37,16 @@ class ClipsEngine:
         self._clips = clips
         self.env = clips.Environment()
 
-    def run(self, data: ReteExecutionInput, on_match: Callable[[int, int, int], None]):
+    def run(
+        self,
+        data: ReteExecutionInput,
+        on_match: Callable[[int, int, int], None],
+    ) -> list[tuple[str, int, int]]:
         """
         Execute RETE matching and call ``on_match(rule_id, supplier_id, consumer_id)``.
+
+        Returns unique location rejects as ``(kind, supplier_id, consumer_id)``,
+        where ``kind`` is ``"bio"`` or ``"tech"``.
         """
         rules_by_id = {int(rule["id"]): rule for rule in data.rules}
         nodes_by_id = {
@@ -60,14 +67,25 @@ class ClipsEngine:
 
         self._build_template("tech_node")
         self._build_template("bio_node")
+        self._build_template("loc_reject")
 
         self._add_rules(data.rules)
         self._bulk_assert_facts(data.tech_nodes, "tech_node")
         self._bulk_assert_facts(data.bio_nodes, "bio_node")
 
         self.env.run()
+        return self._collect_location_rejects()
 
     def _build_template(self, template_name: str):
+        if template_name == "loc_reject":
+            template = """(deftemplate loc_reject
+  (slot kind (type SYMBOL))
+  (slot sid (type INTEGER))
+  (slot cid (type INTEGER))
+)"""
+            self.env.build(template)
+            return
+
         template = f"""(deftemplate {template_name}
   (slot id (type INTEGER))
   (slot name (type LEXEME))
@@ -79,6 +97,14 @@ class ClipsEngine:
   (multislot tech_suppliers (type INTEGER))
 )"""
         self.env.build(template)
+
+    def _collect_location_rejects(self) -> list[tuple[str, int, int]]:
+        out: list[tuple[str, int, int]] = []
+        for fact in self.env.facts():
+            if fact.template.name != "loc_reject":
+                continue
+            out.append((str(fact["kind"]), int(fact["sid"]), int(fact["cid"])))
+        return out
 
     def _bulk_assert_facts(self, nodes: list[dict[str, Any]], template_name: str):
         if not nodes:
@@ -122,8 +148,9 @@ class ClipsEngine:
     def _add_rules(self, rules: list[dict[str, Any]]):
         buff = StringIO()
         for r in rules:
-            buff.write(self._build_rule(r))
-            buff.write("\n")
+            for rule_txt in self._build_rule(r):
+                buff.write(rule_txt)
+                buff.write("\n")
         self._bulk_load(buff.getvalue(), facts=False)
 
     @staticmethod
@@ -132,6 +159,7 @@ class ClipsEngine:
 
     @staticmethod
     def _to_clips_test(var_name: str, operator: str, pattern: str, neg: bool = False):
+        pattern = pattern.replace("\\", "\\\\").replace('"', '\\"')
         if operator == "contains":
             op = "eq" if neg else "neq"
             return f'({op} (str-index "{pattern}" {var_name}) FALSE)'
@@ -241,6 +269,8 @@ class ClipsEngine:
         rule_side: dict[str, Any],
         is_supplier: bool,
         supplier_matrix: str | None = None,
+        include_location: bool = True,
+        location_bind_var: str | None = None,
     ) -> str:
         matrix = str(rule_side.get("matrix", "technosphere")).strip().lower()
         template = "bio_node" if matrix == "biosphere" else "tech_node"
@@ -253,9 +283,13 @@ class ClipsEngine:
             parts.append(f"({slot} $? ?from_id $?)")
 
         for field_name in ("location", "name", "reference_product", "categories_path"):
+            if field_name == "location" and not include_location:
+                continue
             slot = self._field_slot(field_name, rule_side)
             if slot:
                 parts.append(slot)
+        if (not include_location) and location_bind_var:
+            parts.append(f"(location {location_bind_var})")
         cls_slot = self._classification_slot(rule_side)
         if cls_slot:
             parts.append(cls_slot)
@@ -263,7 +297,28 @@ class ClipsEngine:
         parts.append(")")
         return " ".join(parts)
 
-    def _build_rule(self, rule: dict[str, Any]) -> str:
+    def _location_match_expr(self, var_name: str, rule_side: dict[str, Any]) -> str | None:
+        target = self._rule_value(rule_side, "location")
+        excludes = rule_side.get("excludes") or []
+        operator = rule_side.get("operator", "equals")
+        tests: list[str] = []
+
+        if target not in (None, "__ANY__"):
+            if operator == "equals":
+                tests.append(f"(eq {var_name} {self._safe_lexeme(target)})")
+            else:
+                tests.append(self._to_clips_test(var_name, operator, str(target), neg=False))
+
+        for exc in excludes:
+            tests.append(self._to_clips_test(var_name, "contains", str(exc), neg=True))
+
+        if not tests:
+            return None
+        if len(tests) == 1:
+            return tests[0]
+        return f"(and {' '.join(tests)})"
+
+    def _build_rule(self, rule: dict[str, Any]) -> list[str]:
         rule_id = int(rule["id"])
         supplier_side = dict(rule.get("supplier") or {})
         consumer_side = dict(rule.get("consumer") or {})
@@ -271,19 +326,54 @@ class ClipsEngine:
             supplier_side.get("matrix", "technosphere")
         ).strip().lower()
 
-        supplier_pattern = self._node_pattern(supplier_side, is_supplier=True)
-        consumer_pattern = self._node_pattern(
-            consumer_side, is_supplier=False, supplier_matrix=supplier_matrix
+        supplier_pattern = self._node_pattern(
+            supplier_side,
+            is_supplier=True,
+            include_location=False,
+            location_bind_var="?s_loc",
         )
+        consumer_pattern = self._node_pattern(
+            consumer_side,
+            is_supplier=False,
+            supplier_matrix=supplier_matrix,
+            include_location=False,
+            location_bind_var="?c_loc",
+        )
+        loc_tests = []
+        s_loc_match = self._location_match_expr("?s_loc", supplier_side)
+        if s_loc_match:
+            loc_tests.append(s_loc_match)
+        c_loc_match = self._location_match_expr("?c_loc", consumer_side)
+        if c_loc_match:
+            loc_tests.append(c_loc_match)
+        if not loc_tests:
+            loc_match_expr = "TRUE"
+        elif len(loc_tests) == 1:
+            loc_match_expr = loc_tests[0]
+        else:
+            loc_match_expr = f"(and {' '.join(loc_tests)})"
 
-        return (
+        if loc_tests:
+            direction_symbol = "bio" if supplier_matrix == "biosphere" else "tech"
+            rhs = (
+                f"(if {loc_match_expr}\n"
+                f"   then\n"
+                f"    (add_result {rule_id} ?from_id ?to_id)\n"
+                f"   else\n"
+                f"    (assert (loc_reject (kind {direction_symbol}) (sid ?from_id) (cid ?to_id))))"
+            )
+        else:
+            rhs = f"(add_result {rule_id} ?from_id ?to_id)"
+
+        rule_txt = (
             f"(defrule R{rule_id}\n"
             f"  {supplier_pattern}\n"
             f"  {consumer_pattern}\n"
             f"  =>\n"
-            f"  (add_result {rule_id} ?from_id ?to_id)\n"
+            f"  {rhs}\n"
             f")"
         )
+        return [rule_txt]
 
     def _bulk_load(self, text: str, facts: bool):
         tmp_file = None
