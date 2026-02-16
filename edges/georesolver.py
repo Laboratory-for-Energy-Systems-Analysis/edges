@@ -43,9 +43,7 @@ class GeoResolver:
         self.available_locations = (
             self.available_supplier_locations | self.available_consumer_locations
         )
-        self.weights_key = ",".join(
-            sorted(f"{s}|{c}" for s, c in self.weights.keys())
-        )
+        self.weights_key = ",".join(sorted(f"{s}|{c}" for s, c in self.weights.keys()))
         self.logger = logging.getLogger(f"{__name__}.{self.__class__.__name__}")
 
         # Dependencies from constructive_geometries and your utils

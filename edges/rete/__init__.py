@@ -8,4 +8,3 @@ structures unchanged. The current integration is experimental.
 from .adapter import map_exchanges_clips
 
 __all__ = ("map_exchanges_clips",)
-
