@@ -42,6 +42,7 @@ from .matrix_builders import initialize_lcia_matrix, build_technosphere_edges_ma
 from .flow_matching import (
     preprocess_cfs,
     normalize_classification_entries,
+    normalize_signature_data,
     build_cf_index,
     cached_match_with_index,
     preprocess_flows,
@@ -505,6 +506,7 @@ class EdgeLCIA:
         self._cls_hits_cache = {}
         self.applied_strategies = []
         self._seen_positions: set[tuple[str, int, int]] = set()
+        self._cf_avg_cache: dict[tuple, tuple] = {}
 
         # One-time flags for this run:
         self._include_cls_in_supplier_sig = any(
@@ -987,6 +989,69 @@ class EdgeLCIA:
             for edge in self.technosphere_edges
             if edge not in self.processed_technosphere_edges
         ]
+
+    @staticmethod
+    def _canonical_candidate_tuple(values) -> tuple:
+        """Deterministic, hashable candidate tuple for cache keys."""
+        if not values:
+            return tuple()
+        uniq = {make_hashable(v) for v in values}
+        return tuple(sorted(uniq, key=repr))
+
+    def _compute_average_cf_cached(
+        self,
+        *,
+        candidate_suppliers,
+        candidate_consumers,
+        supplier_info: dict,
+        consumer_info: dict,
+        cf_index: dict,
+        required_supplier_fields: set,
+        required_consumer_fields: set,
+    ):
+        """
+        Cross-strategy cache for compute_average_cf.
+
+        Avoids recomputing the same (supplier signature, consumer signature,
+        candidate location pools) combinations across static/dynamic/contained/global
+        mapping passes.
+        """
+        s_fields = set(required_supplier_fields or set())
+        c_fields = set(required_consumer_fields or set())
+        s_fields.discard("location")
+        c_fields.discard("location")
+
+        s_sig = normalize_signature_data(supplier_info, s_fields)
+        c_sig = normalize_signature_data(consumer_info, c_fields)
+        s_key = make_hashable(s_sig)
+        c_key = make_hashable(c_sig)
+        sup_cands = self._canonical_candidate_tuple(candidate_suppliers)
+        con_cands = self._canonical_candidate_tuple(candidate_consumers)
+
+        key = (
+            id(cf_index),
+            s_key,
+            c_key,
+            sup_cands,
+            con_cands,
+            tuple(sorted(s_fields)),
+            tuple(sorted(c_fields)),
+        )
+        cached = self._cf_avg_cache.get(key)
+        if cached is not None:
+            return cached
+
+        result = compute_average_cf(
+            candidate_suppliers=list(sup_cands),
+            candidate_consumers=list(con_cands),
+            supplier_info=supplier_info,
+            consumer_info=consumer_info,
+            required_supplier_fields=required_supplier_fields,
+            required_consumer_fields=required_consumer_fields,
+            cf_index=cf_index,
+        )
+        self._cf_avg_cache[key] = result
+        return result
 
     def _preprocess_lookups(
         self,
@@ -2042,9 +2107,9 @@ class EdgeLCIA:
 
                         if mkey not in memo:
                             new_cf, matched_cf_obj, agg_uncertainty = (
-                                compute_average_cf(
-                                    candidate_suppliers=list(cand_sup_s),
-                                    candidate_consumers=list(cand_con_s),
+                                self._compute_average_cf_cached(
+                                    candidate_suppliers=cand_sup_s,
+                                    candidate_consumers=cand_con_s,
                                     supplier_info=supplier_info,
                                     consumer_info=consumer_info,
                                     required_supplier_fields=self.required_supplier_fields,
@@ -2073,6 +2138,7 @@ class EdgeLCIA:
                 cf_index=self.cf_index,
                 required_supplier_fields=self.required_supplier_fields,
                 required_consumer_fields=self.required_consumer_fields,
+                compute_fn=self._compute_average_cf_cached,
             )
 
             grouped_edges = group_edges_by_signature(
@@ -2399,9 +2465,9 @@ class EdgeLCIA:
                         if memo_key not in memo:
 
                             new_cf, matched_cf_obj, agg_uncertainty = (
-                                compute_average_cf(
-                                    candidate_suppliers=list(cand_sup_s),
-                                    candidate_consumers=list(cand_con_s),
+                                self._compute_average_cf_cached(
+                                    candidate_suppliers=cand_sup_s,
+                                    candidate_consumers=cand_con_s,
                                     supplier_info=supplier_info,
                                     consumer_info=consumer_info,
                                     required_supplier_fields=self.required_supplier_fields,
@@ -2439,6 +2505,7 @@ class EdgeLCIA:
                 cf_index=self.cf_index,
                 required_supplier_fields=self.required_supplier_fields,
                 required_consumer_fields=self.required_consumer_fields,
+                compute_fn=self._compute_average_cf_cached,
             )
 
             grouped_edges = group_edges_by_signature(
@@ -2722,14 +2789,16 @@ class EdgeLCIA:
                     candidate_supplier_locations = group_edges[0][-2]
                     candidate_consumer_locations = group_edges[0][-1]
 
-                    new_cf, matched_cf_obj, agg_uncertainty = compute_average_cf(
-                        candidate_suppliers=candidate_supplier_locations,
-                        candidate_consumers=candidate_consumer_locations,
-                        supplier_info=supplier_info,
-                        consumer_info=consumer_info,
-                        required_supplier_fields=self.required_supplier_fields,
-                        required_consumer_fields=self.required_consumer_fields,
-                        cf_index=self.cf_index,
+                    new_cf, matched_cf_obj, agg_uncertainty = (
+                        self._compute_average_cf_cached(
+                            candidate_suppliers=candidate_supplier_locations,
+                            candidate_consumers=candidate_consumer_locations,
+                            supplier_info=supplier_info,
+                            consumer_info=consumer_info,
+                            required_supplier_fields=self.required_supplier_fields,
+                            required_consumer_fields=self.required_consumer_fields,
+                            cf_index=self.cf_index,
+                        )
                     )
 
                     if new_cf:
@@ -2762,6 +2831,7 @@ class EdgeLCIA:
                 cf_index=self.cf_index,
                 required_supplier_fields=self.required_supplier_fields,
                 required_consumer_fields=self.required_consumer_fields,
+                compute_fn=self._compute_average_cf_cached,
             )
 
             grouped_edges = group_edges_by_signature(
@@ -3007,7 +3077,7 @@ class EdgeLCIA:
 
                     # compute_average_cf already ignores fields not present in CFs,
                     # so if supplier 'location' isn't in CF schema, it won't block matches.
-                    glo_cf, matched_cf_obj, glo_unc = compute_average_cf(
+                    glo_cf, matched_cf_obj, glo_unc = self._compute_average_cf_cached(
                         candidate_suppliers=direct_sup_candidates,
                         candidate_consumers=direct_con_candidates,
                         supplier_info=supplier_info,
@@ -3044,6 +3114,7 @@ class EdgeLCIA:
                 cf_index=self.cf_index,
                 required_supplier_fields=self.required_supplier_fields,
                 required_consumer_fields=self.required_consumer_fields,
+                compute_fn=self._compute_average_cf_cached,
             )
 
             grouped_edges = group_edges_by_signature(
@@ -3123,6 +3194,12 @@ class EdgeLCIA:
             isinstance(s, str) for s in strategies
         ):
             raise TypeError("'strategies' must be a list/tuple of strings")
+
+        # Reset per-run CF average cache.
+        if not hasattr(self, "_cf_avg_cache"):
+            self._cf_avg_cache = {}
+        else:
+            self._cf_avg_cache.clear()
 
         # ---- dispatch table
         dispatch = {

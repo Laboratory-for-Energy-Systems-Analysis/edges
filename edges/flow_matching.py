@@ -581,7 +581,7 @@ def match_with_index(
 
 
 def compute_cf_memoized_factory(
-    cf_index, required_supplier_fields, required_consumer_fields
+    cf_index, required_supplier_fields, required_consumer_fields, compute_fn=None
 ):
     """
     Factory for a memoized compute_average_cf over signature/location candidates.
@@ -592,9 +592,11 @@ def compute_cf_memoized_factory(
     :return: Cached function(s_key, c_key, supplier_candidates, consumer_candidates) -> tuple.
     """
 
+    compute_impl = compute_fn or compute_average_cf
+
     @lru_cache(maxsize=None)
     def compute_cf(s_key, c_key, supplier_candidates, consumer_candidates):
-        return compute_average_cf(
+        return compute_impl(
             candidate_suppliers=list(supplier_candidates),
             candidate_consumers=list(consumer_candidates),
             supplier_info=dict(s_key),
