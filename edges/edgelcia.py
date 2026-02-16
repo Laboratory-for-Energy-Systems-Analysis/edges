@@ -507,6 +507,8 @@ class EdgeLCIA:
         self.applied_strategies = []
         self._seen_positions: set[tuple[str, int, int]] = set()
         self._cf_avg_cache: dict[tuple, tuple] = {}
+        self._cf_avg_cache_hits = 0
+        self._cf_avg_cache_misses = 0
 
         # One-time flags for this run:
         self._include_cls_in_supplier_sig = any(
@@ -1039,8 +1041,10 @@ class EdgeLCIA:
         )
         cached = self._cf_avg_cache.get(key)
         if cached is not None:
+            self._cf_avg_cache_hits += 1
             return cached
 
+        self._cf_avg_cache_misses += 1
         result = compute_average_cf(
             candidate_suppliers=list(sup_cands),
             candidate_consumers=list(con_cands),
@@ -3200,6 +3204,8 @@ class EdgeLCIA:
             self._cf_avg_cache = {}
         else:
             self._cf_avg_cache.clear()
+        self._cf_avg_cache_hits = 0
+        self._cf_avg_cache_misses = 0
 
         # ---- dispatch table
         dispatch = {
@@ -3235,6 +3241,22 @@ class EdgeLCIA:
             self.logger.info("Running %s()", name)
             fn()
             self.logger.info("Finished %s in %.3fs", name, time.perf_counter() - t0)
+
+        total_cf_avg_calls = self._cf_avg_cache_hits + self._cf_avg_cache_misses
+        if self.logger.isEnabledFor(logging.DEBUG):
+            hit_rate = (
+                (self._cf_avg_cache_hits / total_cf_avg_calls) * 100.0
+                if total_cf_avg_calls
+                else 0.0
+            )
+            self.logger.debug(
+                "CF average cache stats: calls=%d, hits=%d, misses=%d, hit_rate=%.2f%%, cache_size=%d",
+                total_cf_avg_calls,
+                self._cf_avg_cache_hits,
+                self._cf_avg_cache_misses,
+                hit_rate,
+                len(self._cf_avg_cache),
+            )
         return self
 
     def evaluate_cfs(self, scenario_idx: str | int = 0, scenario=None):
