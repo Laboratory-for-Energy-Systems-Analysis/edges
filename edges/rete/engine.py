@@ -36,10 +36,44 @@ class ClipsEngine:
             ) from exc
         self._clips = clips
         self.env = clips.Environment()
+        self._templates_built = False
+        self._rules_signature: str | None = None
+        self._on_match: Callable[[int, int, int], None] | None = None
+        self.env.define_function(self._dispatch_add_result, name="add_result")
+
+    def _dispatch_add_result(self, rule_id, supplier_id, consumer_id):
+        if self._on_match is None:
+            return
+        self._on_match(int(rule_id), int(supplier_id), int(consumer_id))
+
+    def prepare(self, rules: list[dict[str, Any]], rules_signature: str):
+        """
+        Ensure templates and rules are loaded in the CLIPS environment.
+
+        Rules are only (re)loaded when ``rules_signature`` changes.
+        """
+        if self._templates_built and self._rules_signature == rules_signature:
+            return
+
+        # Full clear when changing rule-set keeps the environment consistent.
+        self.env.clear()
+        self._templates_built = False
+        self._rules_signature = None
+        self._on_match = None
+        self.env.define_function(self._dispatch_add_result, name="add_result")
+
+        self._build_template("tech_node")
+        self._build_template("bio_node")
+        self._build_template("loc_reject")
+        self._templates_built = True
+        self._add_rules(rules)
+        self._rules_signature = rules_signature
 
     def run(
         self,
         data: ReteExecutionInput,
+        *,
+        rules_signature: str,
         on_match: Callable[[int, int, int], None],
     ) -> list[tuple[str, int, int]]:
         """
@@ -53,28 +87,23 @@ class ClipsEngine:
             int(node["id"]): node for node in (data.bio_nodes + data.tech_nodes)
         }
 
-        def add_result(rule_id, supplier_id, consumer_id):
-            rid = int(rule_id)
-            sid = int(supplier_id)
-            cid = int(consumer_id)
+        def add_result(rid: int, sid: int, cid: int):
             if rid not in rules_by_id:
                 return
             if sid not in nodes_by_id or cid not in nodes_by_id:
                 return
             on_match(rid, sid, cid)
 
-        self.env.define_function(add_result)
-
-        self._build_template("tech_node")
-        self._build_template("bio_node")
-        self._build_template("loc_reject")
-
-        self._add_rules(data.rules)
+        self.prepare(data.rules, rules_signature=rules_signature)
+        self._on_match = add_result
+        self.env.reset()
         self._bulk_assert_facts(data.tech_nodes, "tech_node")
         self._bulk_assert_facts(data.bio_nodes, "bio_node")
 
         self.env.run()
-        return self._collect_location_rejects()
+        out = self._collect_location_rejects()
+        self._on_match = None
+        return out
 
     def _build_template(self, template_name: str):
         if template_name == "loc_reject":

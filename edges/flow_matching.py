@@ -13,6 +13,96 @@ import logging
 logger = logging.getLogger(__name__)
 logger.addHandler(logging.NullHandler())
 
+SPECIAL_MATCH_KEYS = {
+    "matrix",
+    "operator",
+    "weight",
+    "position",
+    "excludes",
+    "classifications",
+}
+
+
+def _compile_criteria(criteria: dict) -> tuple[str, tuple[str, ...], tuple[tuple[str, object], ...], int]:
+    """
+    Lazily compile criteria into fast-match components and cache them in-place.
+    """
+    compiled = criteria.get("__compiled_match__")
+    if compiled is not None:
+        return compiled
+
+    operator = criteria.get("operator", "equals")
+    excludes = tuple(
+        str(term).lower()
+        for term in (criteria.get("excludes") or ())
+        if term is not None and str(term)
+    )
+    fields = tuple(
+        (k, v)
+        for k, v in criteria.items()
+        if k not in SPECIAL_MATCH_KEYS and v != "__ANY__"
+    )
+    specificity = len(fields)
+    compiled = (operator, excludes, fields, specificity)
+    criteria["__compiled_match__"] = compiled
+    return compiled
+
+
+def _flow_exclude_tokens(flow: dict) -> tuple[str, ...]:
+    tokens: list[str] = []
+    for val in flow.values():
+        if isinstance(val, str):
+            tokens.append(val.lower())
+        elif isinstance(val, tuple):
+            tokens.extend(str(v).lower() for v in val)
+        elif isinstance(val, list):
+            for v in val:
+                if isinstance(v, tuple):
+                    tokens.extend(str(t).lower() for t in v)
+    return tuple(tokens)
+
+
+def _match_compiled_flow(
+    flow: dict,
+    compiled: tuple[str, tuple[str, ...], tuple[tuple[str, object], ...], int],
+    exclude_tokens: tuple[str, ...],
+) -> bool:
+    operator, excludes, fields, _specificity = compiled
+
+    if excludes and exclude_tokens:
+        for term in excludes:
+            if any(term in tok for tok in exclude_tokens):
+                return False
+
+    for key, target in fields:
+        value = flow.get(key)
+        if value is None:
+            return False
+
+        if operator == "equals":
+            if value != target:
+                return False
+        elif operator == "startswith":
+            if isinstance(value, str):
+                if not value.startswith(target):
+                    return False
+            elif isinstance(value, tuple):
+                if not value or not str(value[0]).startswith(str(target)):
+                    return False
+            else:
+                return False
+        elif operator == "contains":
+            try:
+                if target not in value:
+                    return False
+            except Exception:
+                return False
+        else:
+            if not match_operator(value, target, operator):
+                return False
+
+    return True
+
 
 def preprocess_cfs(cf_list, by="consumer"):
     """
@@ -64,26 +154,42 @@ def process_cf_list(
     :param filtered_consumer: Consumer-side fields to match against.
     :return: List with the single best CF (or empty if none matched).
     """
-    results = []
     best_score = -1
     best_specificity = -1
     best_cf = None
+    supplier_tokens = None
+    consumer_tokens = None
+    ds_class = filtered_supplier.get("classifications")
+    ds_cons_class = filtered_consumer.get("classifications")
+    cls_match_cache: dict[tuple[int, int], bool] | None = (
+        {} if (ds_class is not None or ds_cons_class is not None) else None
+    )
 
     for cf in cf_list:
         supplier_cf = cf.get("supplier", {})
         consumer_cf = cf.get("consumer", {})
+        supplier_compiled = _compile_criteria(supplier_cf)
+        consumer_compiled = _compile_criteria(consumer_cf)
+        supplier_excludes = supplier_compiled[1]
+        consumer_excludes = consumer_compiled[1]
+        if supplier_excludes and supplier_tokens is None:
+            supplier_tokens = _flow_exclude_tokens(filtered_supplier)
+        if consumer_excludes and consumer_tokens is None:
+            consumer_tokens = _flow_exclude_tokens(filtered_consumer)
 
-        supplier_match = match_flow(
+        supplier_match = _match_compiled_flow(
             flow=filtered_supplier,
-            criteria=supplier_cf,
+            compiled=supplier_compiled,
+            exclude_tokens=supplier_tokens or (),
         )
 
         if not supplier_match:
             continue
 
-        consumer_match = match_flow(
+        consumer_match = _match_compiled_flow(
             flow=filtered_consumer,
-            criteria=consumer_cf,
+            compiled=consumer_compiled,
+            exclude_tokens=consumer_tokens or (),
         )
 
         if not consumer_match:
@@ -91,20 +197,28 @@ def process_cf_list(
 
         match_score = 0
         cf_class = supplier_cf.get("classifications")
-        ds_class = filtered_supplier.get("classifications")
-        if cf_class and ds_class and matches_classifications(cf_class, ds_class):
-            match_score += 1
+        if cf_class and ds_class:
+            key = (id(cf_class), id(ds_class))
+            ok = cls_match_cache.get(key) if cls_match_cache is not None else None
+            if ok is None:
+                ok = matches_classifications(cf_class, ds_class)
+                if cls_match_cache is not None:
+                    cls_match_cache[key] = ok
+            if ok:
+                match_score += 1
 
         cf_cons_class = consumer_cf.get("classifications")
-        ds_cons_class = filtered_consumer.get("classifications")
-        if (
-            cf_cons_class
-            and ds_cons_class
-            and matches_classifications(cf_cons_class, ds_cons_class)
-        ):
-            match_score += 1
+        if cf_cons_class and ds_cons_class:
+            key = (id(cf_cons_class), id(ds_cons_class))
+            ok = cls_match_cache.get(key) if cls_match_cache is not None else None
+            if ok is None:
+                ok = matches_classifications(cf_cons_class, ds_cons_class)
+                if cls_match_cache is not None:
+                    cls_match_cache[key] = ok
+            if ok:
+                match_score += 1
 
-        specificity = count_specificity(supplier_cf) + count_specificity(consumer_cf)
+        specificity = supplier_compiled[3] + consumer_compiled[3]
 
         if (match_score, specificity) > (best_score, best_specificity):
             best_score = match_score
@@ -112,15 +226,14 @@ def process_cf_list(
             best_cf = cf
 
     if best_cf:
-        results.append(best_cf)
-    else:
-        logger.debug(
-            "No matching CF found for supplier %s and consumer %s.",
-            filtered_supplier,
-            filtered_consumer,
-        )
+        return [best_cf]
 
-    return results
+    logger.debug(
+        "No matching CF found for supplier %s and consumer %s.",
+        filtered_supplier,
+        filtered_consumer,
+    )
+    return []
 
 
 def count_specificity(criteria: dict, include_classifications: bool = False) -> int:
