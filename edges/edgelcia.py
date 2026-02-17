@@ -25,7 +25,6 @@ import sparse
 import pandas as pd
 from prettytable import PrettyTable
 import bw2data
-from tqdm import tqdm
 from textwrap import fill
 from functools import lru_cache
 
@@ -1657,7 +1656,7 @@ class EdgeLCIA:
         req_con_nc = self._req_con_nc
 
         # Iterate CFs
-        for i, cf in enumerate(tqdm(self.raw_cfs_data, desc="Mapping exchanges")):
+        for i, cf in enumerate(self.raw_cfs_data):
             # Early exit if everything got characterized in both directions
             if not rem_bio and not rem_tec:
                 break
@@ -2078,9 +2077,7 @@ class EdgeLCIA:
 
             # Pass 1 (corrected): compute per unique (cand_sup, cand_con, consumer_sig) within each supplier group
             if len(prefiltered_groups) > 0:
-                for sig, group_edges in tqdm(
-                    prefiltered_groups.items(), desc="Processing static groups (pass 1)"
-                ):
+                for sig, group_edges in prefiltered_groups.items():
                     memo = {}
 
                     def _consumer_sig(consumer_info: dict) -> tuple:
@@ -2156,9 +2153,7 @@ class EdgeLCIA:
                     s_key,
                     c_key,
                     (candidate_suppliers, candidate_consumers),
-                ), edge_group in tqdm(
-                    grouped_edges.items(), desc="Processing static groups (pass 2)"
-                ):
+                ), edge_group in grouped_edges.items():
 
                     new_cf, matched_cf_obj, agg_uncertainty = compute_cf_memoized(
                         s_key, c_key, candidate_suppliers, candidate_consumers
@@ -2430,10 +2425,7 @@ class EdgeLCIA:
 
             # Pass 1 (corrected): compute per unique (cand_sup, cand_con, consumer_sig)
             if len(prefiltered_groups) > 0:
-                for sig, group_edges in tqdm(
-                    prefiltered_groups.items(),
-                    desc="Processing dynamic groups (pass 1)",
-                ):
+                for sig, group_edges in prefiltered_groups.items():
                     # Build a small memo to avoid recomputing identical combos in this group
                     memo = {}
 
@@ -2523,9 +2515,7 @@ class EdgeLCIA:
                     s_key,
                     c_key,
                     (candidate_supplier_locations, candidate_consumer_locations),
-                ), edge_group in tqdm(
-                    grouped_edges.items(), desc="Processing dynamic groups (pass 2)"
-                ):
+                ), edge_group in grouped_edges.items():
 
                     new_cf, matched_cf_obj, agg_uncertainty = compute_cf_memoized(
                         s_key,
@@ -2784,10 +2774,7 @@ class EdgeLCIA:
 
             # Pass 1
             if len(prefiltered_groups) > 0:
-                for sig, group_edges in tqdm(
-                    prefiltered_groups.items(),
-                    desc="Processing contained groups (pass 1)",
-                ):
+                for sig, group_edges in prefiltered_groups.items():
                     supplier_info = group_edges[0][2]
                     consumer_info = group_edges[0][3]
                     candidate_supplier_locations = group_edges[0][-2]
@@ -2849,9 +2836,7 @@ class EdgeLCIA:
                     supplier_info,
                     consumer_info,
                     (candidate_suppliers, candidate_consumers),
-                ), edge_group in tqdm(
-                    grouped_edges.items(), desc="Processing contained groups (pass 2)"
-                ):
+                ), edge_group in grouped_edges.items():
 
                     new_cf, matched_cf_obj, agg_uncertainty = compute_cf_memoized(
                         supplier_info,
@@ -3063,10 +3048,7 @@ class EdgeLCIA:
 
             # ---- Pass 1 (prefiltered_groups) ----
             if len(prefiltered_groups) > 0:
-                for sig, group_edges in tqdm(
-                    prefiltered_groups.items(),
-                    desc="Processing global groups (pass 1)",
-                ):
+                for sig, group_edges in prefiltered_groups.items():
                     supplier_info = group_edges[0][2]
                     consumer_info = group_edges[0][3]
 
@@ -3132,9 +3114,7 @@ class EdgeLCIA:
                     s_key,
                     c_key,
                     (candidate_suppliers, candidate_consumers),
-                ), edge_group in tqdm(
-                    grouped_edges.items(), desc="Processing global groups (pass 2)"
-                ):
+                ), edge_group in grouped_edges.items():
 
                     glo_cf, matched_cf_obj, glo_unc = compute_cf_memoized(
                         s_key, c_key, candidate_suppliers, candidate_consumers
@@ -3234,11 +3214,22 @@ class EdgeLCIA:
 
         # ---- execute
         self.logger.info("Applying strategies: %s", strategies)
+        stage_labels = {
+            "map_exchanges": ("Finding direct matches", 1),
+            "map_aggregate_locations": ("Resolving aggregate locations", 2),
+            "map_dynamic_locations": ("Resolving dynamic locations", 3),
+            "map_contained_locations": ("Resolving contained locations", 4),
+            "map_remaining_locations_to_global": ("Resolving global locations", 5),
+        }
+        stage_label_width = max(len(label) for label, _ in stage_labels.values())
 
         for name in strategies:
             fn = dispatch[name]
             t0 = time.perf_counter()
             self.logger.info("Running %s()", name)
+            if name in stage_labels:
+                stage_label, step = stage_labels[name]
+                print(f"{stage_label.ljust(stage_label_width)} [{step}/5]")
             fn()
             self.logger.info("Finished %s in %.3fs", name, time.perf_counter() - t0)
 
