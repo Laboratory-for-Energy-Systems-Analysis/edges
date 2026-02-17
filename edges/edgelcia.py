@@ -11,10 +11,13 @@ import math
 import os
 import sys
 import platform
+import sqlite3
 import scipy
 import sparse as sp
 import time
 import copy
+import pickle
+import hashlib
 from collections import defaultdict
 import json
 from pathlib import Path
@@ -507,6 +510,20 @@ class EdgeLCIA:
         self._cf_pair_match_cache: dict[tuple, Any] = {}
         self._cf_valid_pairs_cache: dict[tuple, tuple] = {}
         self._cf_runtime_stats: dict[str, int] = {}
+        persist_flag = str(os.environ.get("EDGES_PERSIST_CF_CACHE", "0")).strip().lower()
+        self._cf_persistent_cache_enabled = persist_flag in {"1", "true", "yes", "on"}
+        self._cf_persistent_cache_path = Path(
+            os.environ.get("EDGES_PERSIST_CF_CACHE_PATH", "/tmp/edges_cf_avg_cache.sqlite3")
+        )
+        self._cf_persistent_cache_conn: sqlite3.Connection | None = None
+        try:
+            method_blob = json.dumps(self.raw_cfs_data, sort_keys=True, default=str)
+        except Exception:
+            method_blob = repr(self.method)
+        self._cf_persistent_namespace = hashlib.sha1(method_blob.encode("utf-8")).hexdigest()
+        self._cf_persistent_hits = 0
+        self._cf_persistent_misses = 0
+        self._cf_persistent_errors = 0
         self._fallback_cf_failures_count = 0
         self._fallback_cf_failure_examples: list[str] = []
         self._fallback_cf_miss_records: dict[tuple[str, int, int], dict[str, Any]] = {}
@@ -554,6 +571,72 @@ class EdgeLCIA:
                 ]
             },
         )
+
+    def _get_persistent_cf_cache_conn(self) -> sqlite3.Connection | None:
+        if not self._cf_persistent_cache_enabled:
+            return None
+        if self._cf_persistent_cache_conn is not None:
+            return self._cf_persistent_cache_conn
+        try:
+            self._cf_persistent_cache_path.parent.mkdir(parents=True, exist_ok=True)
+            conn = sqlite3.connect(str(self._cf_persistent_cache_path))
+            conn.execute(
+                "CREATE TABLE IF NOT EXISTS cf_avg_cache ("
+                "method_ns TEXT NOT NULL, "
+                "key_hash TEXT NOT NULL, "
+                "value BLOB NOT NULL, "
+                "PRIMARY KEY(method_ns, key_hash))"
+            )
+            conn.execute("PRAGMA journal_mode=WAL")
+            conn.execute("PRAGMA synchronous=NORMAL")
+            self._cf_persistent_cache_conn = conn
+            return conn
+        except Exception as exc:
+            self._cf_persistent_errors += 1
+            self.logger.isEnabledFor(logging.DEBUG) and self.logger.debug(
+                "Persistent CF cache init failed: %s", exc
+            )
+            return None
+
+    def _persistent_cf_cache_get(self, key: tuple) -> tuple | None:
+        conn = self._get_persistent_cf_cache_conn()
+        if conn is None:
+            return None
+        try:
+            key_hash = hashlib.sha1(repr(key).encode("utf-8")).hexdigest()
+            row = conn.execute(
+                "SELECT value FROM cf_avg_cache WHERE method_ns = ? AND key_hash = ?",
+                (self._cf_persistent_namespace, key_hash),
+            ).fetchone()
+            if row is None:
+                self._cf_persistent_misses += 1
+                return None
+            self._cf_persistent_hits += 1
+            return pickle.loads(row[0])
+        except Exception as exc:
+            self._cf_persistent_errors += 1
+            self.logger.isEnabledFor(logging.DEBUG) and self.logger.debug(
+                "Persistent CF cache read failed: %s", exc
+            )
+            return None
+
+    def _persistent_cf_cache_set(self, key: tuple, value: tuple) -> None:
+        conn = self._get_persistent_cf_cache_conn()
+        if conn is None:
+            return
+        try:
+            key_hash = hashlib.sha1(repr(key).encode("utf-8")).hexdigest()
+            payload = pickle.dumps(value, protocol=pickle.HIGHEST_PROTOCOL)
+            conn.execute(
+                "INSERT OR REPLACE INTO cf_avg_cache(method_ns, key_hash, value) VALUES(?, ?, ?)",
+                (self._cf_persistent_namespace, key_hash, payload),
+            )
+            conn.commit()
+        except Exception as exc:
+            self._cf_persistent_errors += 1
+            self.logger.isEnabledFor(logging.DEBUG) and self.logger.debug(
+                "Persistent CF cache write failed: %s", exc
+            )
 
     def _resolve_method(
         self,
@@ -1046,6 +1129,21 @@ class EdgeLCIA:
             self._cf_avg_cache_hits += 1
             return cached
 
+        persistent_key = (
+            self._cf_persistent_namespace,
+            s_key,
+            c_key,
+            sup_cands,
+            con_cands,
+            tuple(sorted(s_fields)),
+            tuple(sorted(c_fields)),
+        )
+        persistent_cached = self._persistent_cf_cache_get(persistent_key)
+        if persistent_cached is not None:
+            self._cf_avg_cache_hits += 1
+            self._cf_avg_cache[key] = persistent_cached
+            return persistent_cached
+
         self._cf_avg_cache_misses += 1
         result = compute_average_cf(
             candidate_suppliers=sup_cands,
@@ -1060,6 +1158,7 @@ class EdgeLCIA:
             stats=self._cf_runtime_stats,
         )
         self._cf_avg_cache[key] = result
+        self._persistent_cf_cache_set(persistent_key, result)
         return result
 
     def _record_fallback_cf_failure(
@@ -1156,7 +1255,6 @@ class EdgeLCIA:
               self.cls_prefidx_supplier_bio / self.cls_prefidx_supplier_tech
               self.cls_prefidx_consumer
         """
-
         # ---- Figure out required CONSUMER fields once (ignore control/metafields)
         IGNORED_FIELDS = {"matrix", "operator", "weight", "classifications", "position"}
         if not hasattr(self, "required_consumer_fields"):
@@ -1325,6 +1423,25 @@ class EdgeLCIA:
             self.consumer_cls, self._cf_needed_prefixes
         )
         self._cls_hits_cache.clear()
+
+    def _prepare_restricted_lookups_from_unprocessed(
+        self,
+    ) -> tuple[set[int], set[int], set[int]]:
+        """
+        Build restriction sets from current unprocessed edges and ensure filtered lookups are ready.
+        """
+        restrict_sup_bio = {s for s, _ in self.unprocessed_biosphere_edges}
+        restrict_sup_tec = {s for s, _ in self.unprocessed_technosphere_edges}
+        restrict_con = {c for _, c in self.unprocessed_biosphere_edges} | {
+            c for _, c in self.unprocessed_technosphere_edges
+        }
+
+        self._preprocess_lookups(
+            restrict_supplier_positions_bio=restrict_sup_bio or None,
+            restrict_supplier_positions_tech=restrict_sup_tec or None,
+            restrict_consumer_positions=restrict_con or None,
+        )
+        return restrict_sup_bio, restrict_sup_tec, restrict_con
 
     def _get_supplier_info(self, supplier_idx: int, direction: str) -> dict:
         """
@@ -1623,18 +1740,7 @@ class EdgeLCIA:
 
         self._ensure_filtered_lookups_for_current_edges()
 
-        # IMPORTANT: rebuild filtered lookups to cover the (current) unprocessed edges
-        restrict_sup_bio = {s for s, _ in self.unprocessed_biosphere_edges}
-        restrict_sup_tec = {s for s, _ in self.unprocessed_technosphere_edges}
-        restrict_con = {c for _, c in self.unprocessed_biosphere_edges} | {
-            c for _, c in self.unprocessed_technosphere_edges
-        }
-
-        self._preprocess_lookups(
-            restrict_supplier_positions_bio=restrict_sup_bio or None,
-            restrict_supplier_positions_tech=restrict_sup_tec or None,
-            restrict_consumer_positions=restrict_con or None,
-        )
+        self._prepare_restricted_lookups_from_unprocessed()
 
         self._initialize_weights()
         weight_keys = frozenset(k for k, v in self.weights.items())
@@ -1938,18 +2044,7 @@ class EdgeLCIA:
 
         self._ensure_filtered_lookups_for_current_edges()
 
-        # IMPORTANT: rebuild filtered lookups to cover the (current) unprocessed edges
-        restrict_sup_bio = {s for s, _ in self.unprocessed_biosphere_edges}
-        restrict_sup_tec = {s for s, _ in self.unprocessed_technosphere_edges}
-        restrict_con = {c for _, c in self.unprocessed_biosphere_edges} | {
-            c for _, c in self.unprocessed_technosphere_edges
-        }
-
-        self._preprocess_lookups(
-            restrict_supplier_positions_bio=restrict_sup_bio or None,
-            restrict_supplier_positions_tech=restrict_sup_tec or None,
-            restrict_consumer_positions=restrict_con or None,
-        )
+        self._prepare_restricted_lookups_from_unprocessed()
 
         self._initialize_weights()
         weight_keys = frozenset(k for k, v in self.weights.items())
@@ -2302,18 +2397,7 @@ class EdgeLCIA:
 
         self._ensure_filtered_lookups_for_current_edges()
 
-        # IMPORTANT: rebuild filtered lookups to cover the (current) unprocessed edges
-        restrict_sup_bio = {s for s, _ in self.unprocessed_biosphere_edges}
-        restrict_sup_tec = {s for s, _ in self.unprocessed_technosphere_edges}
-        restrict_con = {c for _, c in self.unprocessed_biosphere_edges} | {
-            c for _, c in self.unprocessed_technosphere_edges
-        }
-
-        self._preprocess_lookups(
-            restrict_supplier_positions_bio=restrict_sup_bio or None,
-            restrict_supplier_positions_tech=restrict_sup_tec or None,
-            restrict_consumer_positions=restrict_con or None,
-        )
+        self._prepare_restricted_lookups_from_unprocessed()
 
         self._initialize_weights()
 
@@ -2632,18 +2716,7 @@ class EdgeLCIA:
 
         self._ensure_filtered_lookups_for_current_edges()
 
-        # IMPORTANT: rebuild filtered lookups to cover the (current) unprocessed edges
-        restrict_sup_bio = {s for s, _ in self.unprocessed_biosphere_edges}
-        restrict_sup_tec = {s for s, _ in self.unprocessed_technosphere_edges}
-        restrict_con = {c for _, c in self.unprocessed_biosphere_edges} | {
-            c for _, c in self.unprocessed_technosphere_edges
-        }
-
-        self._preprocess_lookups(
-            restrict_supplier_positions_bio=restrict_sup_bio or None,
-            restrict_supplier_positions_tech=restrict_sup_tec or None,
-            restrict_consumer_positions=restrict_con or None,
-        )
+        self._prepare_restricted_lookups_from_unprocessed()
 
         self._initialize_weights()
         weight_keys = frozenset(k for k, v in self.weights.items())
@@ -2964,6 +3037,9 @@ class EdgeLCIA:
         self._cf_runtime_stats = {}
         self._cf_avg_cache_hits = 0
         self._cf_avg_cache_misses = 0
+        self._cf_persistent_hits = 0
+        self._cf_persistent_misses = 0
+        self._cf_persistent_errors = 0
         self._fallback_cf_failures_count = 0
         self._fallback_cf_failure_examples = []
         self._fallback_cf_miss_records = {}
@@ -3043,6 +3119,14 @@ class EdgeLCIA:
                 int(self._cf_runtime_stats.get("valid_pairs_cache_hits", 0)),
                 int(self._cf_runtime_stats.get("valid_pairs_cache_misses", 0)),
                 int(self._cf_runtime_stats.get("process_cf_list_calls", 0)),
+            )
+            self.logger.debug(
+                "CF persistent cache: enabled=%s, path=%s, hits=%d, misses=%d, errors=%d",
+                self._cf_persistent_cache_enabled,
+                self._cf_persistent_cache_path,
+                self._cf_persistent_hits,
+                self._cf_persistent_misses,
+                self._cf_persistent_errors,
             )
         if self._fallback_cf_failures_count:
             unique_missed_edges = len(self._fallback_cf_miss_records)
