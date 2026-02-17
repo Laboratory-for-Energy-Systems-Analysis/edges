@@ -12,7 +12,7 @@ from edges import EdgeLCIA
 
 
 GEOPOLRISK_METHOD = ("GeoPolRisk", "paired", "2024")
-DEFAULT_PROJECT = "ecoinvent-3.12-cutoff"
+DEFAULT_PROJECT = "ecoinvent-3.10-cutoff"
 DEFAULT_OUTPUT = Path("dev/profiling/outputs/geopolrisk_clips.prof")
 
 
@@ -21,7 +21,7 @@ def ensure_h2_pem(project_name: str) -> None:
     print(f"Project: {project_name}")
 
     if "h2_pem" in bw2data.databases:
-        return
+        del bw2data.databases["h2_pem"]
 
     lci = bw2io.ExcelImporter("lci-hydrogen-electrolysis-ei310.xlsx")
     lci.apply_strategies()
@@ -58,6 +58,10 @@ def run_stage(activity, stage: str) -> tuple[EdgeLCIA, float]:
         lca.lcia()
 
     elapsed = time.time() - t0
+
+    df = lca.generate_cf_table()
+    df.to_excel("dev/profiling/outputs/geopolrisk_cf_table.xlsx")
+
     return lca, elapsed
 
 
