@@ -229,6 +229,11 @@ jobs:
           activate-environment: test
           conda-solver: ${{ matrix.solver }}
       - name: Pull distribution 📦 from Anaconda and test it if master branch
+        shell: bash -l {0}
         run: |
-          conda install -y "python==${{ matrix.python-version }}.*"
-          conda update edges
+          conda install -n test -y "python==${{ matrix.python-version }}.*"
+          if conda list -n test "^edges$" | grep -q "^edges"; then
+            conda update -n test -y edges
+          else
+            conda install -n test -y edges
+          fi
