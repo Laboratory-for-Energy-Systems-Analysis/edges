@@ -98,6 +98,7 @@ def map_exchanges_clips(lcia: "EdgeLCIA"):
         "categories",
         "classifications",
         "excludes",
+        "__compiled_match__",
     }
     unsupported = set()
     for cf in lcia.raw_cfs_data:
