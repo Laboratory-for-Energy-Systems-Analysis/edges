@@ -280,6 +280,7 @@ at [romain.sacchi@psi.ch](mailto:romain.sacchi@psi.ch).
 
 - [Romain Sacchi](https://github.com/romainsacchi)
 - [Alvaro Hahn Menacho](https://github.com/alvarojhahn)
+- [Raphaël Jolivet](https://github.com/raphaeljolivet) - contributed to the CLIPSpy-based rule engine implementation.
 
 ## Acknowledgments
 The development of this library was supported by the French agency for 
