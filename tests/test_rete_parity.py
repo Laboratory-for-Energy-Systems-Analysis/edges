@@ -6,7 +6,6 @@ from packaging.version import Version
 
 from edges import EdgeLCIA
 
-
 if isinstance(__version__, tuple):
     __version__ = ".".join(map(str, __version__))
 __version__ = Version(__version__)
@@ -24,9 +23,7 @@ activity_D = get_activity(("lcia-test-db", "D"))
 
 def _matched_positions(lcia: EdgeLCIA) -> set[tuple[int, int]]:
     return {
-        (int(i), int(j))
-        for cf in lcia.cfs_mapping
-        for i, j in cf.get("positions", [])
+        (int(i), int(j)) for cf in lcia.cfs_mapping for i, j in cf.get("positions", [])
     }
 
 
