@@ -21,6 +21,7 @@ SPECIAL_MATCH_KEYS = {
     "excludes",
     "classifications",
 }
+_NO_MATCH = object()
 
 
 def _compile_criteria(
@@ -874,6 +875,9 @@ def compute_average_cf(
     cf_index: dict,
     required_supplier_fields: set = None,
     required_consumer_fields: set = None,
+    pair_match_cache: dict | None = None,
+    valid_pairs_cache: dict | None = None,
+    stats: dict | None = None,
 ) -> tuple[str | float, Optional[dict], Optional[dict]]:
     """
     Compute a weighted CF expression and aggregated uncertainty for composite regions.
@@ -945,14 +949,34 @@ def compute_average_cf(
     setS, setC = set(S), set(C)
 
     # ---------- 2) Efficient valid (s,c) pair discovery ----------
-    idx_keys = cf_index.keys()
-    prod_size = len(S) * len(C)
-    if prod_size and prod_size <= len(idx_keys):
-        valid_location_pairs = [(s, c) for s in S for c in C if (s, c) in cf_index]
-        # S and C are already sorted; this is lexicographically ordered
+    valid_pairs_key = None
+    if valid_pairs_cache is not None:
+        valid_pairs_key = (S, C, id(cf_index))
+        cached_pairs = valid_pairs_cache.get(valid_pairs_key)
     else:
-        valid_location_pairs = [k for k in idx_keys if k[0] in setS and k[1] in setC]
-        valid_location_pairs.sort()
+        cached_pairs = None
+
+    if cached_pairs is not None:
+        if stats is not None:
+            stats["valid_pairs_cache_hits"] = (
+                int(stats.get("valid_pairs_cache_hits", 0)) + 1
+            )
+        valid_location_pairs = list(cached_pairs)
+    else:
+        idx_keys = cf_index.keys()
+        prod_size = len(S) * len(C)
+        if prod_size and prod_size <= len(idx_keys):
+            valid_location_pairs = [(s, c) for s in S for c in C if (s, c) in cf_index]
+            # S and C are already sorted; this is lexicographically ordered
+        else:
+            valid_location_pairs = [k for k in idx_keys if k[0] in setS and k[1] in setC]
+            valid_location_pairs.sort()
+        if valid_pairs_cache is not None and valid_pairs_key is not None:
+            valid_pairs_cache[valid_pairs_key] = tuple(valid_location_pairs)
+            if stats is not None:
+                stats["valid_pairs_cache_misses"] = (
+                    int(stats.get("valid_pairs_cache_misses", 0)) + 1
+                )
 
     if not valid_location_pairs:
         if logger.isEnabledFor(logging.DEBUG):
@@ -985,6 +1009,9 @@ def compute_average_cf(
     matched: list[tuple[str, str, dict]] = []
     total_candidates_seen = 0
 
+    base_supplier_key = make_hashable(base_supplier)
+    base_consumer_key = make_hashable(base_consumer)
+
     for s_loc, c_loc in valid_location_pairs:
         cands = cf_index.get((s_loc, c_loc)) or []
         total_candidates_seen += len(cands)
@@ -992,7 +1019,39 @@ def compute_average_cf(
         fs = {**base_supplier, "location": s_loc}
         fc = {**base_consumer, "location": c_loc}
 
-        got = process_cf_list(cands, fs, fc)
+        got = None
+        if pair_match_cache is not None:
+            cache_key = (
+                id(cands),
+                s_loc,
+                c_loc,
+                base_supplier_key,
+                base_consumer_key,
+            )
+            cached_match = pair_match_cache.get(cache_key, None)
+            if cached_match is not None:
+                if stats is not None:
+                    stats["pair_match_cache_hits"] = (
+                        int(stats.get("pair_match_cache_hits", 0)) + 1
+                    )
+                got = [] if cached_match is _NO_MATCH else list(cached_match)
+            else:
+                if stats is not None:
+                    stats["pair_match_cache_misses"] = (
+                        int(stats.get("pair_match_cache_misses", 0)) + 1
+                    )
+                got = process_cf_list(cands, fs, fc)
+                pair_match_cache[cache_key] = tuple(got) if got else _NO_MATCH
+                if stats is not None:
+                    stats["process_cf_list_calls"] = (
+                        int(stats.get("process_cf_list_calls", 0)) + 1
+                    )
+        else:
+            got = process_cf_list(cands, fs, fc)
+            if stats is not None:
+                stats["process_cf_list_calls"] = (
+                    int(stats.get("process_cf_list_calls", 0)) + 1
+                )
         if got and logger.isEnabledFor(logging.DEBUG):
             logger.debug(
                 "CF-AVG: matched %d/%d CFs @ (%s,%s); example=%s",
@@ -1169,6 +1228,12 @@ def compute_average_cf(
             agg_sign,
             (dt * 1000.0) if dt else -1.0,
             expr,
+        )
+
+    if stats is not None:
+        stats["matched_pairs"] = int(stats.get("matched_pairs", 0)) + len(matched)
+        stats["total_candidates_seen"] = (
+            int(stats.get("total_candidates_seen", 0)) + int(total_candidates_seen)
         )
 
     return expr, None, agg_uncertainty

@@ -504,6 +504,9 @@ class EdgeLCIA:
         self._cf_avg_cache: dict[tuple, tuple] = {}
         self._cf_avg_cache_hits = 0
         self._cf_avg_cache_misses = 0
+        self._cf_pair_match_cache: dict[tuple, Any] = {}
+        self._cf_valid_pairs_cache: dict[tuple, tuple] = {}
+        self._cf_runtime_stats: dict[str, int] = {}
         self._fallback_cf_failures_count = 0
         self._fallback_cf_failure_examples: list[str] = []
         self._fallback_cf_miss_records: dict[tuple[str, int, int], dict[str, Any]] = {}
@@ -1045,13 +1048,16 @@ class EdgeLCIA:
 
         self._cf_avg_cache_misses += 1
         result = compute_average_cf(
-            candidate_suppliers=list(sup_cands),
-            candidate_consumers=list(con_cands),
+            candidate_suppliers=sup_cands,
+            candidate_consumers=con_cands,
             supplier_info=supplier_info,
             consumer_info=consumer_info,
             required_supplier_fields=required_supplier_fields,
             required_consumer_fields=required_consumer_fields,
             cf_index=cf_index,
+            pair_match_cache=self._cf_pair_match_cache,
+            valid_pairs_cache=self._cf_valid_pairs_cache,
+            stats=self._cf_runtime_stats,
         )
         self._cf_avg_cache[key] = result
         return result
@@ -2947,6 +2953,15 @@ class EdgeLCIA:
             self._cf_avg_cache = {}
         else:
             self._cf_avg_cache.clear()
+        if not hasattr(self, "_cf_pair_match_cache"):
+            self._cf_pair_match_cache = {}
+        else:
+            self._cf_pair_match_cache.clear()
+        if not hasattr(self, "_cf_valid_pairs_cache"):
+            self._cf_valid_pairs_cache = {}
+        else:
+            self._cf_valid_pairs_cache.clear()
+        self._cf_runtime_stats = {}
         self._cf_avg_cache_hits = 0
         self._cf_avg_cache_misses = 0
         self._fallback_cf_failures_count = 0
@@ -3017,6 +3032,17 @@ class EdgeLCIA:
                 self._cf_avg_cache_misses,
                 hit_rate,
                 len(self._cf_avg_cache),
+            )
+            self.logger.debug(
+                "CF runtime caches: pair_match_cache_size=%d, valid_pairs_cache_size=%d, "
+                "pair_match_hits=%d, pair_match_misses=%d, valid_pairs_hits=%d, valid_pairs_misses=%d, process_cf_list_calls=%d",
+                len(self._cf_pair_match_cache),
+                len(self._cf_valid_pairs_cache),
+                int(self._cf_runtime_stats.get("pair_match_cache_hits", 0)),
+                int(self._cf_runtime_stats.get("pair_match_cache_misses", 0)),
+                int(self._cf_runtime_stats.get("valid_pairs_cache_hits", 0)),
+                int(self._cf_runtime_stats.get("valid_pairs_cache_misses", 0)),
+                int(self._cf_runtime_stats.get("process_cf_list_calls", 0)),
             )
         if self._fallback_cf_failures_count:
             unique_missed_edges = len(self._fallback_cf_miss_records)
