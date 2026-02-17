@@ -11,9 +11,9 @@ import bw2io
 from edges import EdgeLCIA
 
 
-AWARE_METHOD = ("AWARE 2.0", "Country", "all", "yearly")
+GEOPOLRISK_METHOD = ("GeoPolRisk", "paired", "2024")
 DEFAULT_PROJECT = "ecoinvent-3.12-cutoff"
-DEFAULT_OUTPUT = Path("dev/profiling/outputs/aware_clips.prof")
+DEFAULT_OUTPUT = Path("dev/profiling/outputs/geopolrisk_clips.prof")
 
 
 def ensure_h2_pem(project_name: str) -> None:
@@ -45,7 +45,7 @@ def pick_activity():
 
 def run_stage(activity, stage: str) -> tuple[EdgeLCIA, float]:
     t0 = time.time()
-    lca = EdgeLCIA({activity: 1}, AWARE_METHOD, matcher_backend="clips")
+    lca = EdgeLCIA({activity: 1}, GEOPOLRISK_METHOD, matcher_backend="clips")
 
     if stage == "map_exchanges":
         lca.lci()
@@ -63,7 +63,7 @@ def run_stage(activity, stage: str) -> tuple[EdgeLCIA, float]:
 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(
-        description="Profile AWARE with CLIPSpy backend only."
+        description="Profile GeoPolRisk with CLIPSpy backend only."
     )
     parser.add_argument(
         "--project",
