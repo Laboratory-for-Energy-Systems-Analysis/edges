@@ -3553,17 +3553,32 @@ class EdgeLCIA:
             self.lca.demand.clear()
             self.lca.demand.update(demand)
 
-        # Decide direction (tech-only vs bio) from CFs (doesn't require lci)
+
         only_tech = all(
             cf["supplier"]["matrix"] == "technosphere" for cf in self.raw_cfs_data
         )
+
+        # Capture the best available "previous run" snapshot before recomputing LCI.
+        # On first redo, this prevents seeding ever_seen with current edges.
+        if only_tech:
+            previous_edges_snapshot = set(self._last_edges_snapshot_tech or set())
+            if not previous_edges_snapshot:
+                previous_edges_snapshot = set(
+                    self._last_nonempty_edges_snapshot_tech or set()
+                )
+            if not previous_edges_snapshot:
+                previous_edges_snapshot = set(self.technosphere_edges or set())
+        else:
+            previous_edges_snapshot = set(self._last_edges_snapshot_bio or set())
+            if not previous_edges_snapshot:
+                previous_edges_snapshot = set(
+                    self._last_nonempty_edges_snapshot_bio or set()
+                )
+            if not previous_edges_snapshot:
+                previous_edges_snapshot = set(self.biosphere_edges or set())
 
         # 2) Recompute inventory & edges for the *new* demand
         self.lca.redo_lci(demand=demand)  # updates matrices
-
-        only_tech = all(
-            cf["supplier"]["matrix"] == "technosphere" for cf in self.raw_cfs_data
-        )
 
         # Recompute CURRENT edges from fresh matrices
         if only_tech:
@@ -3588,21 +3603,7 @@ class EdgeLCIA:
 
         # Seed ever_seen the first time with the best baseline we have
         if not ever_seen:
-            baseline_seed = set()
-            if only_tech:
-                if self._last_edges_snapshot_tech:
-                    baseline_seed = set(self._last_edges_snapshot_tech)
-                elif self._last_nonempty_edges_snapshot_tech:
-                    baseline_seed = set(self._last_nonempty_edges_snapshot_tech)
-                elif self.technosphere_flow_matrix is not None:
-                    baseline_seed = set(zip(*self.technosphere_flow_matrix.nonzero()))
-            else:
-                if self._last_edges_snapshot_bio:
-                    baseline_seed = set(self._last_edges_snapshot_bio)
-                elif self._last_nonempty_edges_snapshot_bio:
-                    baseline_seed = set(self._last_nonempty_edges_snapshot_bio)
-                elif getattr(self.lca, "inventory", None) is not None:
-                    baseline_seed = set(zip(*self.lca.inventory.nonzero()))
+            baseline_seed = set(previous_edges_snapshot)
             ever_seen |= baseline_seed
 
         # Compute new edges strictly as (current − covered − failed − ever_seen)
