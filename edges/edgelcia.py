@@ -508,6 +508,12 @@ class EdgeLCIA:
         self._cf_avg_cache: dict[tuple, tuple] = {}
         self._cf_avg_cache_hits = 0
         self._cf_avg_cache_misses = 0
+        self._fallback_cf_failures_count = 0
+        self._fallback_cf_failure_examples: list[str] = []
+        self._fallback_cf_miss_records: dict[
+            tuple[str, int, int], dict[str, Any]
+        ] = {}
+        self._fallback_cf_unresolved_keys: set[tuple[str, int, int]] = set()
 
         # One-time flags for this run:
         self._include_cls_in_supplier_sig = any(
@@ -737,7 +743,7 @@ class EdgeLCIA:
         if not self.parameters:
             self.parameters = raw.get("scenarios", raw.get("parameters", {}))
         if not self.parameters:
-            self.logger.warning(
+            self.logger.info(
                 f"No parameters or scenarios found in method source: {self.filepath or '<inline method>'}"
             )
 
@@ -1055,6 +1061,71 @@ class EdgeLCIA:
         )
         self._cf_avg_cache[key] = result
         return result
+
+    def _record_fallback_cf_failure(
+        self,
+        *,
+        supplier_info,
+        consumer_info,
+        candidate_suppliers,
+        candidate_consumers,
+        direction: str,
+        indices: list[tuple[int, int]] | tuple[tuple[int, int], ...],
+    ) -> None:
+        """
+        Aggregate fallback CF misses and keep only a small debug sample.
+        """
+        self._fallback_cf_failures_count += 1
+        msg = (
+            f"Fallback CF could not be computed for supplier={supplier_info}, consumer={consumer_info} "
+            f"with candidate suppliers={candidate_suppliers} and consumers={candidate_consumers}"
+        )
+        if len(self._fallback_cf_failure_examples) < 5:
+            self._fallback_cf_failure_examples.append(msg)
+        if self.logger.isEnabledFor(logging.DEBUG):
+            self.logger.debug(msg)
+
+        stage = str(getattr(self, "_current_strategy_name", "unknown"))
+        for s_idx, c_idx in indices:
+            key = (direction, int(s_idx), int(c_idx))
+            rec = self._fallback_cf_miss_records.get(key)
+            if rec is None:
+                self._fallback_cf_miss_records[key] = {
+                    "direction": direction,
+                    "edge": (int(s_idx), int(c_idx)),
+                    "first_miss_stage": stage,
+                    "last_miss_stage": stage,
+                    "resolved_stage": None,
+                    "miss_count": 1,
+                }
+            else:
+                rec["last_miss_stage"] = stage
+                rec["miss_count"] = int(rec.get("miss_count", 0)) + 1
+            self._fallback_cf_unresolved_keys.add(key)
+
+    def _mark_fallback_cf_resolutions(self, stage_name: str) -> None:
+        """
+        Mark previously missed fallback edges that have since been characterized.
+        """
+        if not self._fallback_cf_unresolved_keys:
+            return
+        processed_bio = set(getattr(self, "processed_biosphere_edges", set()) or set())
+        processed_tech = set(
+            getattr(self, "processed_technosphere_edges", set()) or set()
+        )
+        for key in tuple(self._fallback_cf_unresolved_keys):
+            direction, s_idx, c_idx = key
+            edge = (int(s_idx), int(c_idx))
+            done = (
+                edge in processed_bio
+                if direction == "biosphere-technosphere"
+                else edge in processed_tech
+            )
+            if done:
+                rec = self._fallback_cf_miss_records.get(key)
+                if rec is not None and rec.get("resolved_stage") is None:
+                    rec["resolved_stage"] = stage_name
+                self._fallback_cf_unresolved_keys.discard(key)
 
     def _preprocess_lookups(
         self,
@@ -2172,10 +2243,13 @@ class EdgeLCIA:
                                 seen_positions=self._seen_positions,
                             )
                     else:
-
-                        self.logger.warning(
-                            f"Fallback CF could not be computed for supplier={s_key}, consumer={c_key} "
-                            f"with candidate suppliers={candidate_suppliers} and consumers={candidate_consumers}"
+                        self._record_fallback_cf_failure(
+                            supplier_info=s_key,
+                            consumer_info=c_key,
+                            candidate_suppliers=candidate_suppliers,
+                            candidate_consumers=candidate_consumers,
+                            direction=direction,
+                            indices=edge_group,
                         )
 
         self._update_unprocessed_edges()
@@ -2487,13 +2561,13 @@ class EdgeLCIA:
                                 seen_positions=self._seen_positions,
                             )
                         else:
-                            self.logger.warning(
-                                "Fallback CF could not be computed for supplier=%s, consumer=%s "
-                                "with candidate suppliers=%s and consumers=%s",
-                                supplier_info.get("location"),
-                                consumer_info.get("location"),
-                                list(cand_sup_s),
-                                list(cand_con_s),
+                            self._record_fallback_cf_failure(
+                                supplier_info=supplier_info,
+                                consumer_info=consumer_info,
+                                candidate_suppliers=list(cand_sup_s),
+                                candidate_consumers=list(cand_con_s),
+                                direction=direction,
+                                indices=[(supplier_idx, consumer_idx)],
                             )
 
             # Pass 2
@@ -2537,9 +2611,13 @@ class EdgeLCIA:
                                 seen_positions=self._seen_positions,
                             )
                     else:
-                        self.logger.warning(
-                            f"Fallback CF could not be computed for supplier={s_key}, consumer={c_key} "
-                            f"with candidate suppliers={candidate_supplier_locations} and consumers={candidate_consumer_locations}"
+                        self._record_fallback_cf_failure(
+                            supplier_info=s_key,
+                            consumer_info=c_key,
+                            candidate_suppliers=candidate_supplier_locations,
+                            candidate_consumers=candidate_consumer_locations,
+                            direction=direction,
+                            indices=edge_group,
                         )
 
         self._update_unprocessed_edges()
@@ -2812,9 +2890,13 @@ class EdgeLCIA:
                                 seen_positions=self._seen_positions,
                             )
                     else:
-                        self.logger.warning(
-                            f"Fallback CF could not be computed for supplier={supplier_info}, consumer={consumer_info} "
-                            f"with candidate suppliers={candidate_supplier_locations} and consumers={candidate_consumer_locations}"
+                        self._record_fallback_cf_failure(
+                            supplier_info=supplier_info,
+                            consumer_info=consumer_info,
+                            candidate_suppliers=candidate_supplier_locations,
+                            candidate_consumers=candidate_consumer_locations,
+                            direction=direction,
+                            indices=[(supplier_idx, consumer_idx) for supplier_idx, consumer_idx, *_ in group_edges],
                         )
 
             # Pass 2
@@ -2857,9 +2939,13 @@ class EdgeLCIA:
                                 seen_positions=self._seen_positions,
                             )
                     else:
-                        self.logger.warning(
-                            f"Fallback CF could not be computed for supplier={supplier_info}, consumer={consumer_info} "
-                            f"with candidate suppliers={candidate_suppliers} and consumers={candidate_consumers}"
+                        self._record_fallback_cf_failure(
+                            supplier_info=supplier_info,
+                            consumer_info=consumer_info,
+                            candidate_suppliers=candidate_suppliers,
+                            candidate_consumers=candidate_consumers,
+                            direction=direction,
+                            indices=edge_group,
                         )
 
         self._update_unprocessed_edges()
@@ -2931,13 +3017,27 @@ class EdgeLCIA:
             supplier=False,
         )
 
-        # If supplier side is wildcard-only, keep that wildcard as the candidate
-        if not global_supplier_locs:
-            sup_keys = {k[0] for k in self.weights.keys()}
-            if "__ANY__" in sup_keys:
-                global_supplier_locs = ["__ANY__"]
+        sup_keys = {k[0] for k in self.weights.keys()}
+        con_keys = {k[1] for k in self.weights.keys()}
+        supplier_wildcard = "__ANY__" in sup_keys
 
-        supplier_wildcard = any(k[0] == "__ANY__" for k in self.weights.keys())
+        supplier_global_pool = list(global_supplier_locs or [])
+        if "GLO" in sup_keys:
+            supplier_global_pool.append("GLO")
+        if "__ANY__" in sup_keys:
+            supplier_global_pool.append("__ANY__")
+        supplier_global_pool = sorted({str(x).strip() for x in supplier_global_pool if x is not None})
+        if not supplier_global_pool:
+            supplier_global_pool = ["__ANY__"]
+
+        consumer_global_pool = list(global_consumer_locs or [])
+        if "GLO" in con_keys:
+            consumer_global_pool.append("GLO")
+        if "__ANY__" in con_keys:
+            consumer_global_pool.append("__ANY__")
+        consumer_global_pool = sorted({str(x).strip() for x in consumer_global_pool if x is not None})
+        if not consumer_global_pool:
+            consumer_global_pool = ["__ANY__"]
 
         for direction in ["biosphere-technosphere", "technosphere-technosphere"]:
 
@@ -2992,19 +3092,17 @@ class EdgeLCIA:
 
             for (consumer_location, supplier_location), edges in edges_index.items():
 
-                if supplier_wildcard:
-                    candidate_suppliers_locations = ["__ANY__"]
-                elif supplier_location is None:
+                if supplier_location is None and "__ANY__" in supplier_global_pool:
                     candidate_suppliers_locations = ["__ANY__"]
                 else:
-                    candidate_suppliers_locations = global_supplier_locs
+                    candidate_suppliers_locations = supplier_global_pool
 
                 if consumer_location is None:
                     candidate_consumers_locations = [
                         "__ANY__",
                     ]
                 else:
-                    candidate_consumers_locations = global_consumer_locs
+                    candidate_consumers_locations = consumer_global_pool
 
                 for supplier_idx, consumer_idx in edges:
 
@@ -3055,10 +3153,21 @@ class EdgeLCIA:
                     # 1) Try DIRECT GLO on the CONSUMER side
                     #    Supplier candidates: keep as-is if present, else "__ANY__"
                     if supplier_wildcard:
-                        direct_sup_candidates = ["__ANY__"]
+                        direct_sup_candidates = [
+                            loc
+                            for loc in ("GLO", "__ANY__")
+                            if loc in supplier_global_pool
+                        ] or list(supplier_global_pool)
                     else:
                         sup_loc = supplier_info.get("location")
                         direct_sup_candidates = [sup_loc] if sup_loc is not None else []
+                        if "GLO" in supplier_global_pool:
+                            direct_sup_candidates.append("GLO")
+                        if "__ANY__" in supplier_global_pool:
+                            direct_sup_candidates.append("__ANY__")
+                        direct_sup_candidates = list(
+                            dict.fromkeys(str(x).strip() for x in direct_sup_candidates if x is not None)
+                        )
                     direct_con_candidates = ["GLO"]
 
                     # compute_average_cf already ignores fields not present in CFs,
@@ -3094,6 +3203,8 @@ class EdgeLCIA:
                                 seen_positions=self._seen_positions,
                             )
                         continue  # done with this group
+                    # If direct GLO fallback didn't work, keep these edges for pass 2.
+                    remaining_edges.extend(group_edges)
 
             # ---- Pass 2 (grouped_edges) ----
             compute_cf_memoized = compute_cf_memoized_factory(
@@ -3186,6 +3297,10 @@ class EdgeLCIA:
             self._cf_avg_cache.clear()
         self._cf_avg_cache_hits = 0
         self._cf_avg_cache_misses = 0
+        self._fallback_cf_failures_count = 0
+        self._fallback_cf_failure_examples = []
+        self._fallback_cf_miss_records = {}
+        self._fallback_cf_unresolved_keys = set()
 
         # ---- dispatch table
         dispatch = {
@@ -3227,11 +3342,14 @@ class EdgeLCIA:
             fn = dispatch[name]
             t0 = time.perf_counter()
             self.logger.info("Running %s()", name)
+            self._current_strategy_name = name
             if name in stage_labels:
                 stage_label, step = stage_labels[name]
                 print(f"{stage_label.ljust(stage_label_width)} [{step}/5]")
             fn()
+            self._mark_fallback_cf_resolutions(name)
             self.logger.info("Finished %s in %.3fs", name, time.perf_counter() - t0)
+        self._current_strategy_name = None
 
         total_cf_avg_calls = self._cf_avg_cache_hits + self._cf_avg_cache_misses
         if self.logger.isEnabledFor(logging.DEBUG):
@@ -3248,6 +3366,27 @@ class EdgeLCIA:
                 hit_rate,
                 len(self._cf_avg_cache),
             )
+        if self._fallback_cf_failures_count:
+            unique_missed_edges = len(self._fallback_cf_miss_records)
+            print(
+                f"Warning: {self._fallback_cf_failures_count} fallback miss event(s) "
+                f"across {unique_missed_edges} unique edge(s)."
+            )
+            resolved_later = sum(
+                1
+                for rec in self._fallback_cf_miss_records.values()
+                if rec.get("resolved_stage") is not None
+            )
+            unresolved_now = len(self._fallback_cf_unresolved_keys)
+            print(
+                f"Fallback follow-up: {resolved_later} edge(s) were resolved later; "
+                f"{unresolved_now} edge(s) remain unmatched."
+            )
+            if self.logger.isEnabledFor(logging.DEBUG):
+                self.logger.debug(
+                    "Sample fallback CF misses (up to 5): %s",
+                    self._fallback_cf_failure_examples,
+                )
         return self
 
     def evaluate_cfs(self, scenario_idx: str | int = 0, scenario=None):
