@@ -415,7 +415,7 @@ class EdgeLCIA:
         3. Optionally: regional mapping methods
         4. `evaluate_cfs()`
         5. `lcia()`
-        6. Optionally: `statistics()`, `generate_df_table()`
+        6. Optionally: `statistics()`, `generate_cf_table()`
         """
 
         try:

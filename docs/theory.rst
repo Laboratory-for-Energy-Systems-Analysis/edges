@@ -126,7 +126,7 @@ The core LCC workflow mirrors LCIA:
 2. Match exchanges with cost factors via `map_exchanges()` (and mapping steps)
 3. Evaluate symbolic costs via `evaluate_cfs()`
 4. Compute the total life cycle cost using `lcia()`
-5. Export detailed cost breakdowns via `generate_df_table()`
+5. Export detailed cost breakdowns via `generate_cf_table()`
 
 This allows integrated techno-economic and environmental modeling under consistent spatial, structural, and scenario assumptions.
 
@@ -137,7 +137,7 @@ This allows integrated techno-economic and environmental modeling under consiste
     import bw2data
     from edges import CostLCIA
 
-    bw2data.project.set_current("some project")
+    bw2data.projects.set_current("some project")
     act = bw2data.Database("some db").random()
 
     lcia = CostLCIA(
@@ -149,7 +149,7 @@ This allows integrated techno-economic and environmental modeling under consiste
     lcia.map_exchanges()
     lcia.evaluate_cfs()
     lcia.lcia()
-    df = lcia.generate_df_table()
+    df = lcia.generate_cf_table()
     print(df.head())
 
 ---

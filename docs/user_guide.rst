@@ -18,7 +18,7 @@ For non-regionalized methods with fixed CFs:
     import bw2data
     from edges import EdgeLCIA
 
-    bw2data.project.set_current("some project")
+    bw2data.projects.set_current("some project")
     act = bw2data.Database("some db").random()
 
     # here, the user provides his/her own LCIA method file
@@ -38,7 +38,7 @@ For non-regionalized methods with fixed CFs:
     # optional but RECOMMENDED, generate a dataframe with all characterized exchanges
     # this allows you to check whether exchanges have been given the correct CFs
     # include_unmatched=True allows you to see which exchanges were not matched (and if some should have been)
-    df = lcia.generate_df_table()
+    df = lcia.generate_cf_table()
     print(df.head())
 
 ---
@@ -55,6 +55,11 @@ You can list available method files with:
 
 Use the name in the `method=` argument when instantiating `EdgeLCIA`.
 
+.. note::
+   The matcher backend is `CLIPSpy <https://clipspy.readthedocs.io/en/latest/>`_
+   (Python wrapper for `CLIPS <http://www.clipsrules.net/>`_). Use the default
+   ``matcher_backend="clips"``.
+
 ---
 
 Regionalized LCIA
@@ -67,7 +72,7 @@ When using region-specific methods like AWARE or ImpactWorld+:
     import bw2data
     from edges import EdgeLCIA
 
-    bw2data.project.set_current("some project")
+    bw2data.projects.set_current("some project")
     act = bw2data.Database("some db").random()
 
     # here, we use a method already included in `edges`
@@ -108,10 +113,13 @@ Your method file should follow the expected CF JSON schema:
     import bw2data
     from edges import EdgeLCIA
 
-    bw2data.project.set_current("some project")
+    bw2data.projects.set_current("some project")
     act = bw2data.Database("some db").random()
 
-    lcia = EdgeLCIA(method="my_custom_method.json")
+    lcia = EdgeLCIA(
+        demand={act: 1},
+        method="my_custom_method.json",
+    )
     lcia.lci()
     lcia.map_exchanges()
     lcia.evaluate_cfs(parameters={"H": 100, "C_CH4": 1866})
@@ -129,7 +137,7 @@ If the method uses symbolic expressions, pass parameter values:
     import bw2data
     from edges import EdgeLCIA
 
-    bw2data.project.set_current("some project")
+    bw2data.projects.set_current("some project")
     act = bw2data.Database("some db").random()
 
     # Define scenario parameters (e.g., atmospheric CO₂ concentration
@@ -156,7 +164,7 @@ If the method uses symbolic expressions, pass parameter values:
         demand={act: 1},
         method=method,
         parameters=params,
-        filepath="lcia_parameterized_gwp.json")
+        filepath="lcia_parameterized_gwp.json",
     )
     lcia.lci()
     lcia.map_exchanges()
@@ -194,7 +202,7 @@ you can get statistics:
     import bw2data
     from edges import EdgeLCIA
 
-    bw2data.project.set_current("some project")
+    bw2data.projects.set_current("some project")
     act = bw2data.Database("some db").random()
 
     lcia = EdgeLCIA(
@@ -216,7 +224,7 @@ you can get statistics:
     print(lcia.score.mean())
 
     #plot histogram of results distirbution
-    import matplitlib.pyplot as plt
+    import matplotlib.pyplot as plt
     plt.hist(lcia.score, bins=100)
 
     # get dataframe with statistics
@@ -237,7 +245,7 @@ Working with Technosphere CFs (e.g., GeoPolRisk)
     import bw2data
     from edges import EdgeLCIA
 
-    bw2data.project.set_current("some project")
+    bw2data.projects.set_current("some project")
     act = bw2data.Database("some db").random()
 
     lcia = EdgeLCIA(
@@ -252,7 +260,7 @@ Working with Technosphere CFs (e.g., GeoPolRisk)
     lcia.map_remaining_locations_to_global()
     lcia.evaluate_cfs()
     lcia.lcia()
-    df = lcia.generate_df_table()
+    df = lcia.generate_cf_table()
     df.to_csv("results.csv")
 
 ---
@@ -267,10 +275,13 @@ Supports expressions depending on extraction volume and discount rate:
     import bw2data
     from edges import EdgeLCIA
 
-    bw2data.project.set_current("some project")
+    bw2data.projects.set_current("some project")
     act = bw2data.Database("some db").random()
 
-    lcia = EdgeLCIA(method="SCP_1.0.json")
+    lcia = EdgeLCIA(
+        demand={act: 1},
+        method="SCP_1.0.json",
+    )
     lcia.lci()
     lcia.map_exchanges()
     lcia.evaluate_cfs(parameters={"MCI_OIL": 0.5, "P_OIL": 450, "d": 0.03})
