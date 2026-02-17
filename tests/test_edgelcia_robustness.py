@@ -101,20 +101,6 @@ def test_evaluate_cfs_deterministic_across_cf_order():
     assert (lcia_a.characterization_matrix != lcia_b.characterization_matrix).nnz == 0
 
 
-def test_map_exchanges_dispatches_python_backend():
-    lcia = EdgeLCIA.__new__(EdgeLCIA)
-    lcia.matcher_backend = "python"
-    called = {"python": False}
-
-    def _py():
-        called["python"] = True
-        return "ok"
-
-    lcia.map_exchanges_python = _py
-    assert lcia.map_exchanges() == "ok"
-    assert called["python"] is True
-
-
 def test_map_exchanges_rejects_unknown_backend():
     lcia = EdgeLCIA.__new__(EdgeLCIA)
     lcia.matcher_backend = "unknown"

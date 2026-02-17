@@ -85,7 +85,7 @@ def map_exchanges_clips(lcia: "EdgeLCIA"):
     Executes exchange matching through CLIPS/RETE and writes results into
     ``lcia.cfs_mapping`` via ``add_cf_entry``.
     """
-    # Keep initialization behavior aligned with python backend.
+    # Keep initialization behavior aligned with legacy matcher setup.
     lcia._ensure_filtered_lookups_for_current_edges()
     lcia._initialize_weights()
 

@@ -17,7 +17,6 @@ import time
 import copy
 from collections import defaultdict
 import json
-from typing import Optional
 from pathlib import Path
 import bw2calc
 import numpy as np
@@ -43,15 +42,12 @@ from .flow_matching import (
     normalize_classification_entries,
     normalize_signature_data,
     build_cf_index,
-    cached_match_with_index,
     preprocess_flows,
-    build_index,
     count_specificity,
     compute_cf_memoized_factory,
     resolve_candidate_locations,
     group_edges_by_signature,
     compute_average_cf,
-    MatchResult,
 )
 from .georesolver import GeoResolver
 from .uncertainty import sample_cf_distribution, make_distribution_key, get_rng_for_key
@@ -398,7 +394,7 @@ class EdgeLCIA:
         iterations: Optional[int] = 100,
         lca: Optional[bw2calc.LCA] = None,
         additional_topologies: Optional[dict] = None,
-        matcher_backend: Optional[str] = "python",
+        matcher_backend: Optional[str] = "clips",
     ):
         """
         Initialize an EdgeLCIA object for exchange-level life cycle impact assessment.
@@ -524,11 +520,11 @@ class EdgeLCIA:
         )
 
         self.additional_topologies = additional_topologies
-        self.matcher_backend = str(matcher_backend or "python").strip().lower()
-        if self.matcher_backend not in {"python", "clips"}:
+        self.matcher_backend = str(matcher_backend or "clips").strip().lower()
+        if self.matcher_backend != "clips":
             raise ValueError(
                 f"Unknown matcher backend '{self.matcher_backend}'. "
-                "Supported values are: 'python', 'clips'."
+                "Supported value is: 'clips'."
             )
 
     def log_platform(self):
@@ -1566,17 +1562,13 @@ class EdgeLCIA:
 
     def map_exchanges(self):
         """
-        Dispatch exchange matching to the selected backend.
-
-        Backends:
-        - ``python``: native matcher implementation.
-        - ``clips``: CLIPSpy/RETE adapter (experimental).
+        Match exchanges using the CLIPSpy/RETE adapter.
         """
-        backend = getattr(self, "matcher_backend", "python")
-        if backend not in {"python", "clips"}:
+        backend = getattr(self, "matcher_backend", "clips")
+        if backend != "clips":
             raise ValueError(
                 f"Unsupported matcher backend '{backend}'. "
-                "Supported values are: 'python', 'clips'."
+                "Supported value is: 'clips'."
             )
 
         # Ensure inventory/edges are initialized (same behavior as apply_strategies).
@@ -1589,358 +1581,9 @@ class EdgeLCIA:
             if not edges_ready:
                 self.lci()
 
-        if backend == "python":
-            return self.map_exchanges_python()
-        if backend == "clips":
-            from .rete.adapter import map_exchanges_clips
+        from .rete.adapter import map_exchanges_clips
 
-            return map_exchanges_clips(self)
-        raise RuntimeError(f"Unexpected matcher backend state '{backend}'.")
-
-    def map_exchanges_python(self):
-        """
-        Direction-aware matching with per-direction adjacency, indices, and allowlists.
-        Uses pivoted set intersections (iterate on the smaller side) and batch pruning.
-        Leaves near-misses due to 'location' for later geo steps.
-        """
-
-        self._ensure_filtered_lookups_for_current_edges()
-        self._initialize_weights()
-
-        # Cache per unique supplier+consumer signature
-        _match_memo: dict[tuple, MatchResult] = {}
-
-        # ---- Memoized wrapper around cached_match_with_index ------------------------
-        def _match_with_memo(flow_key, req_fields, index, lookup, reversed_lookup):
-            key = (
-                "mi",
-                id(index),
-                id(lookup),
-                id(reversed_lookup),
-                tuple(req_fields),  # req_fields is already a tuple in your code
-                flow_key,
-            )
-            hit = _match_memo.get(key)
-            if hit is not None:
-                return hit
-
-            res = cached_match_with_index(
-                flow_key,
-                req_fields,
-                index,
-                lookup,
-                reversed_lookup,
-            )
-            _match_memo[key] = res
-            return res
-
-        DIR_BIO = "biosphere-technosphere"
-        DIR_TECH = "technosphere-technosphere"
-
-        # ---- Build adjacency once ---------------------------------------------------
-        def build_adj(edges):
-            ebs, ebc = defaultdict(set), defaultdict(set)
-            rem = set(edges)
-            for s, c in rem:
-                ebs[s].add(c)
-                ebc[c].add(s)
-            return rem, ebs, ebc
-
-        rem_bio, ebs_bio, ebc_bio = build_adj(self.biosphere_edges)
-        rem_tec, ebs_tec, ebc_tec = build_adj(self.technosphere_edges)
-
-        if not rem_bio and not rem_tec:
-            self.eligible_edges_for_next_bio = set()
-            self.eligible_edges_for_next_tech = set()
-            self._update_unprocessed_edges()
-            return
-
-        # Restrict lookups to positions we might touch (cheap, one-time)
-        restrict_sup_bio = set(ebs_bio.keys())
-        restrict_sup_tec = set(ebs_tec.keys())
-        restrict_con = set(ebc_bio.keys()) | set(ebc_tec.keys())
-
-        self._preprocess_lookups(
-            restrict_supplier_positions_bio=restrict_sup_bio,
-            restrict_supplier_positions_tech=restrict_sup_tec,
-            restrict_consumer_positions=restrict_con,
-        )
-
-        # Build per-direction indexes (filtered view)
-        supplier_index_bio = (
-            build_index(self.supplier_lookup_bio, self.required_supplier_fields)
-            if self.supplier_lookup_bio
-            else {}
-        )
-        supplier_index_tec = (
-            build_index(self.supplier_lookup_tech, self.required_supplier_fields)
-            if self.supplier_lookup_tech
-            else {}
-        )
-        consumer_index = (
-            build_index(self.consumer_lookup, self.required_consumer_fields)
-            if self.consumer_lookup
-            else {}
-        )
-
-        allow_bio, allow_tec = set(), set()
-
-        def get_dir_bundle(supplier_matrix: str):
-            if supplier_matrix == "biosphere":
-                return (
-                    DIR_BIO,
-                    rem_bio,
-                    ebs_bio,
-                    ebc_bio,
-                    supplier_index_bio,
-                    self.supplier_lookup_bio,
-                    self.reversed_supplier_lookup_bio,
-                )
-            else:
-                return (
-                    DIR_TECH,
-                    rem_tec,
-                    ebs_tec,
-                    ebc_tec,
-                    supplier_index_tec,
-                    self.supplier_lookup_tech,
-                    self.reversed_supplier_lookup_tech,
-                )
-
-        # Hot locals (read once)
-        consumer_lookup = self.consumer_lookup
-        reversed_consumer_lookup = self.reversed_consumer_lookup
-
-        # Precompute required field lists (no 'classifications')
-        if getattr(self, "_req_sup_nc", None) is None:
-            self._req_sup_nc = tuple(
-                sorted(
-                    k for k in self.required_supplier_fields if k != "classifications"
-                )
-            )
-            self._req_con_nc = tuple(
-                sorted(
-                    k for k in self.required_consumer_fields if k != "classifications"
-                )
-            )
-        req_sup_nc = self._req_sup_nc
-        req_con_nc = self._req_con_nc
-
-        # Iterate CFs
-        for i, cf in enumerate(self.raw_cfs_data):
-            # Early exit if everything got characterized in both directions
-            if not rem_bio and not rem_tec:
-                break
-
-            # PERF: hoist hot dict.get to locals
-            s_crit = cf["supplier"]
-            c_crit = cf["consumer"]
-            s_matrix = s_crit.get("matrix", "biosphere")
-            s_loc = s_crit.get("location")
-            c_loc = c_crit.get("location")
-
-            # Direction bundle
-            dir_name, rem, ebs, ebc, s_index, s_lookup, s_reversed = get_dir_bundle(
-                s_matrix
-            )
-            if not rem:
-                continue
-
-            # Pre-bind map .get once per CF branch (used a lot below)
-            ebs_get = ebs.get
-            ebc_get = ebc.get
-
-            # ---------- SUPPLIER side ----------
-            norm_s = cf.get("_norm_supplier_cls")  # pre-normalized & sanitized once
-            s_class_hits = (
-                self._cls_candidates_from_cf_cached(
-                    norm_s,
-                    (
-                        self.cls_prefidx_supplier_bio
-                        if dir_name == DIR_BIO
-                        else self.cls_prefidx_supplier_tech
-                    ),
-                    adjacency_keys=None,  # get base frozenset (no allocation)
-                )
-                if norm_s
-                else None
-            )
-
-            # Hashable flow minus classifications (location stays inside match logic)
-            s_nonclass = {k: v for k, v in s_crit.items() if k != "classifications"}
-
-            # If supplier criteria are empty (ignoring 'matrix'), treat as wildcard:
-            if not any(k for k in s_nonclass.keys() if k != "matrix"):
-                # all supplier positions that have outgoing edges (restricted by adjacency)
-                s_cands = set(ebs.keys())
-                s_loc_only = set()
-                s_loc_required = False
-            else:
-                s_key = make_hashable(s_nonclass)
-                s_out = _match_with_memo(
-                    flow_key=s_key,
-                    req_fields=req_sup_nc,
-                    index=s_index,
-                    lookup=s_lookup,
-                    reversed_lookup=s_reversed,
-                )
-                s_cands = set(s_out.matches)
-                if s_class_hits is not None:
-                    s_cands &= s_class_hits
-                s_loc_only = set(s_out.location_only_rejects)
-                if s_class_hits is not None:
-                    s_loc_only &= s_class_hits
-                s_loc_required = ("location" in s_crit) and (s_loc is not None)
-
-            # ---------- CONSUMER side ----------
-            norm_c = cf.get("_norm_consumer_cls")
-            c_class_hits = (
-                self._cls_candidates_from_cf_cached(
-                    norm_c, self.cls_prefidx_consumer, adjacency_keys=None
-                )
-                if norm_c
-                else None
-            )
-
-            c_nonclass = {k: v for k, v in c_crit.items() if k != "classifications"}
-            c_key = make_hashable(c_nonclass)
-            c_out = _match_with_memo(
-                flow_key=c_key,
-                req_fields=req_con_nc,
-                index=consumer_index,
-                lookup=consumer_lookup,
-                reversed_lookup=reversed_consumer_lookup,
-            )
-            c_cands = set(c_out.matches)
-            if c_class_hits is not None:
-                c_cands &= c_class_hits
-
-            c_loc_only = set(c_out.location_only_rejects)
-            if c_class_hits is not None:
-                c_loc_only &= c_class_hits
-            c_loc_required = ("location" in c_crit) and (c_loc is not None)
-
-            # ---------- Combine full matches using set intersections ----------
-            positions = []
-            if s_cands and c_cands:
-                # Pick the cheaper side to iterate
-                iterate_suppliers = len(s_cands) <= len(c_cands)
-
-                if iterate_suppliers:
-                    # suppliers → consumers
-                    for s in list(s_cands):
-                        cs = ebs_get(s)
-                        if not cs:
-                            continue
-                        hit = cs & c_cands
-                        if not hit:
-                            continue
-
-                        # prune rem, ebs, ebc with minimal lookups
-                        if hit:
-                            # build once, reuse
-                            pairs = [(s, c) for c in hit]
-                            positions.extend(pairs)
-                            rem.difference_update(pairs)
-
-                        cs.difference_update(hit)
-                        if not cs:
-                            # optional: keep empty to avoid dict churn; if you delete, do it once
-                            del ebs[s]
-
-                        for c in hit:
-                            bucket = ebc_get(c)
-                            if bucket:
-                                bucket.discard(s)
-                                if not bucket:
-                                    del ebc[c]
-                else:
-                    # consumers → suppliers
-                    for c in list(c_cands):
-                        ss = ebc_get(c)
-                        if not ss:
-                            continue
-                        hit = ss & s_cands
-                        if not hit:
-                            continue
-
-                        pairs = [(s, c) for s in hit]
-                        positions.extend(pairs)
-                        rem.difference_update(pairs)
-
-                        ss.difference_update(hit)
-                        if not ss:
-                            del ebc[c]
-
-                        for s in hit:
-                            nb = ebs_get(s)
-                            if nb:
-                                nb.discard(c)
-                                if not nb:
-                                    del ebs[s]
-
-            if positions:
-                add_cf_entry(
-                    cfs_mapping=self.cfs_mapping,
-                    supplier_info=s_crit,
-                    consumer_info=c_crit,
-                    direction=dir_name,
-                    indices=positions,
-                    value=cf["value"],
-                    uncertainty=cf.get("uncertainty"),
-                    seen_positions=self._seen_positions,
-                )
-
-            # ---------- Near-miss allowlists (location-only) --------------------------
-            if s_loc_required and s_loc_only and c_cands:
-                cset = c_cands
-                bucket = allow_bio if dir_name == DIR_BIO else allow_tec
-                for s in list(s_loc_only):
-                    cs = ebs_get(s)
-                    if not cs:
-                        continue
-                    hit = cs & cset
-                    if not hit:
-                        continue
-                    for c in hit:
-                        if (s, c) in rem:
-                            bucket.add((s, c))
-
-            if c_loc_required and c_loc_only and s_cands:
-                sset = s_cands
-                bucket = allow_bio if dir_name == DIR_BIO else allow_tec
-                for c in list(c_loc_only):
-                    ss = ebc_get(c)
-                    if not ss:
-                        continue
-                    hit = ss & sset
-                    if not hit:
-                        continue
-                    for s in hit:
-                        if (s, c) in rem:
-                            bucket.add((s, c))
-
-            if s_loc_required and c_loc_required and s_loc_only and c_loc_only:
-                cset = set(c_loc_only)  # local once
-                bucket = allow_bio if dir_name == DIR_BIO else allow_tec
-                for s in list(s_loc_only):
-                    cs = ebs_get(s)
-                    if not cs:
-                        continue
-                    hit = cs & cset
-                    if not hit:
-                        continue
-                    for c in hit:
-                        if (s, c) in rem:
-                            bucket.add((s, c))
-
-        self._update_unprocessed_edges()
-
-        # store per-direction allowlists for later passes
-        self.eligible_edges_for_next_bio = allow_bio
-        self.eligible_edges_for_next_tech = allow_tec
-
-        self.applied_strategies.append("map_exchanges")
+        return map_exchanges_clips(self)
 
     def map_aggregate_locations(self) -> None:
         """
