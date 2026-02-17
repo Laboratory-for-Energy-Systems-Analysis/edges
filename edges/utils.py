@@ -74,19 +74,25 @@ def check_presence_of_required_fields(data: list):
     :return: True if the required fields are present, False otherwise.
     """
 
-    assert len(data) > 0, "No data provided."
+    if not data:
+        raise ValueError("No exchanges provided in LCIA method.")
 
     for cf in data:
-        assert all(
-            x in cf for x in ["supplier", "consumer"]
-        ), f"Missing supplier or consumer in {cf}."
-        assert any(x in cf for x in ["value", "formula"])
-        assert "matrix" in cf["supplier"], f"Missing matrix fields in {cf['supplier']}."
-        assert "matrix" in cf["consumer"], f"Missing matrix fields in {cf['consumer']}."
-        assert any(
-            x.get("operator", "equals") in ["equals", "contains", "startswith"]
-            for x in [cf["supplier"], cf["consumer"]]
-        ), f"Invalid operator in {cf}."
+        if not all(x in cf for x in ["supplier", "consumer"]):
+            raise ValueError(f"Missing supplier or consumer in exchange: {cf}")
+        if not any(x in cf for x in ["value", "formula"]):
+            raise ValueError(f"Missing 'value' or 'formula' in exchange: {cf}")
+        if "matrix" not in cf["supplier"]:
+            raise ValueError(f"Missing supplier 'matrix' in exchange: {cf}")
+        if "matrix" not in cf["consumer"]:
+            raise ValueError(f"Missing consumer 'matrix' in exchange: {cf}")
+
+        for side in ("supplier", "consumer"):
+            op = cf[side].get("operator", "equals")
+            if op not in {"equals", "contains", "startswith"}:
+                raise ValueError(
+                    f"Invalid operator '{op}' in {side} for exchange: {cf}"
+                )
 
 
 def format_data(data: dict, weight: str) -> tuple[list, dict[Any, Any]]:
@@ -97,9 +103,12 @@ def format_data(data: dict, weight: str) -> tuple[list, dict[Any, Any]]:
     :return: The formatted data for the LCIA method.
     """
 
-    assert all(
-        x in data for x in ("name", "version", "unit", "exchanges")
-    ), "Missing required fields in data."
+    if not isinstance(data, dict):
+        raise TypeError("Method data must be a mapping/dictionary.")
+    if "exchanges" not in data:
+        raise ValueError("Method data must contain an 'exchanges' field.")
+    if not isinstance(data["exchanges"], list):
+        raise TypeError("'exchanges' must be a list.")
 
     # Extract and attach scenario-specific parameters if present
     scenario_parameters = data.get("parameters", {})
@@ -116,7 +125,16 @@ def format_data(data: dict, weight: str) -> tuple[list, dict[Any, Any]]:
         data=data["exchanges"], weight=weight
     )
 
-    metadata = {k: v for k, v in data.items() if k != "exchanges"}
+    metadata = {
+        "name": data.get("name", "Custom LCIA method"),
+        "version": data.get("version", "0.0"),
+        "unit": data.get("unit", "unspecified"),
+        **{
+            k: v
+            for k, v in data.items()
+            if k not in {"name", "version", "unit", "exchanges"}
+        },
+    }
     if scenario_parameters:
         metadata["parameters"] = scenario_parameters
 
@@ -130,6 +148,8 @@ def add_population_and_gdp_data(data: list, weight: str) -> list:
     :param weight: the type of weight to include.
     :return: The data for the LCIA method with population and GDP data.
     """
+    weighting_data = {}
+
     # load population data from data/population.yaml
 
     if weight == "population":
@@ -150,6 +170,10 @@ def add_population_and_gdp_data(data: list, weight: str) -> list:
         except FileNotFoundError:
             logger.error("GDP metadata file not found at %s", path)
             raise
+    elif weight not in {"population", "gdp", None}:
+        logger.warning(
+            "Unknown weight scheme '%s'. No metadata weights will be injected.", weight
+        )
 
     # add to the data dictionary
     missing = 0

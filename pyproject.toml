@@ -42,7 +42,7 @@ docs = [
 [tool.setuptools]
 license-files = ["LICENSE"]
 include-package-data = true
-packages = ["edges"]
+packages = ["edges", "edges.rete"]
 
 [tool.setuptools.package-data]
 edges = ["data/**/*"]

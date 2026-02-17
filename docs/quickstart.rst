@@ -9,7 +9,7 @@ This minimal example walks you through performing a basic LCIA using `edges`.
     import bw2data
     from edges import EdgeLCIA, get_available_methods
 
-    bw2data.project.set_current("some project")
+    bw2data.projects.set_current("some project")
     act = bw2data.Database("some db").random()
 
     # get available method
@@ -26,7 +26,7 @@ This minimal example walks you through performing a basic LCIA using `edges`.
 
     # Step 2.a: Match exchanges to characterization factors
     lcia.map_exchanges()
-    # Step 2.b: since this si a regionalized method, a few more steps are required
+    # Step 2.b: since this is a regionalized method, a few more steps are required
     lcia.map_aggregate_locations() # finds matches for aggregate regions ("RER", "US" etc.)
     lcia.map_dynamic_locations() # finds matches for dynamic regions ("RoW", "RoW", etc.)
     lcia.map_contained_locations() # finds matches for contained regions ("CA" for "CA-QC" if factor of "CA-QC" is not available)

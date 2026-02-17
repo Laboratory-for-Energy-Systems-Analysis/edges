@@ -1,6 +1,7 @@
 import pytest
 from edges.utils import (
     format_method_name,
+    format_data,
     make_hashable,
     get_str,
     safe_eval,
@@ -54,3 +55,44 @@ def test_safe_eval_cached():
         )
         == 6
     )
+
+
+def test_format_data_minimal_schema_defaults():
+    data = {
+        "exchanges": [
+            {
+                "supplier": {"matrix": "biosphere", "name": "CO2"},
+                "consumer": {"matrix": "technosphere"},
+                "value": 1.0,
+            }
+        ]
+    }
+    formatted, metadata = format_data(data, weight=None)
+    assert len(formatted) == 1
+    assert metadata["name"] == "Custom LCIA method"
+    assert metadata["version"] == "0.0"
+    assert metadata["unit"] == "unspecified"
+
+
+def test_format_data_unknown_weight_scheme_does_not_crash():
+    data = {
+        "name": "test",
+        "version": "1",
+        "unit": "kg",
+        "exchanges": [
+            {
+                "supplier": {
+                    "matrix": "biosphere",
+                    "name": "CO2",
+                    "location": "CH",
+                },
+                "consumer": {
+                    "matrix": "technosphere",
+                    "location": "FR",
+                },
+                "value": 1.0,
+            }
+        ],
+    }
+    formatted, _ = format_data(data, weight="unknown-scheme")
+    assert formatted[0].get("weight") == 0

@@ -13,6 +13,99 @@ import logging
 logger = logging.getLogger(__name__)
 logger.addHandler(logging.NullHandler())
 
+SPECIAL_MATCH_KEYS = {
+    "matrix",
+    "operator",
+    "weight",
+    "position",
+    "excludes",
+    "classifications",
+}
+_NO_MATCH = object()
+
+
+def _compile_criteria(
+    criteria: dict,
+) -> tuple[str, tuple[str, ...], tuple[tuple[str, object], ...], int]:
+    """
+    Lazily compile criteria into fast-match components and cache them in-place.
+    """
+    compiled = criteria.get("__compiled_match__")
+    if compiled is not None:
+        return compiled
+
+    operator = criteria.get("operator", "equals")
+    excludes = tuple(
+        str(term).lower()
+        for term in (criteria.get("excludes") or ())
+        if term is not None and str(term)
+    )
+    fields = tuple(
+        (k, v)
+        for k, v in criteria.items()
+        if k not in SPECIAL_MATCH_KEYS and v != "__ANY__"
+    )
+    specificity = len(fields)
+    compiled = (operator, excludes, fields, specificity)
+    criteria["__compiled_match__"] = compiled
+    return compiled
+
+
+def _flow_exclude_tokens(flow: dict) -> tuple[str, ...]:
+    tokens: list[str] = []
+    for val in flow.values():
+        if isinstance(val, str):
+            tokens.append(val.lower())
+        elif isinstance(val, tuple):
+            tokens.extend(str(v).lower() for v in val)
+        elif isinstance(val, list):
+            for v in val:
+                if isinstance(v, tuple):
+                    tokens.extend(str(t).lower() for t in v)
+    return tuple(tokens)
+
+
+def _match_compiled_flow(
+    flow: dict,
+    compiled: tuple[str, tuple[str, ...], tuple[tuple[str, object], ...], int],
+    exclude_tokens: tuple[str, ...],
+) -> bool:
+    operator, excludes, fields, _specificity = compiled
+
+    if excludes and exclude_tokens:
+        for term in excludes:
+            if any(term in tok for tok in exclude_tokens):
+                return False
+
+    for key, target in fields:
+        value = flow.get(key)
+        if value is None:
+            return False
+
+        if operator == "equals":
+            if value != target:
+                return False
+        elif operator == "startswith":
+            if isinstance(value, str):
+                if not value.startswith(target):
+                    return False
+            elif isinstance(value, tuple):
+                if not value or not str(value[0]).startswith(str(target)):
+                    return False
+            else:
+                return False
+        elif operator == "contains":
+            try:
+                if target not in value:
+                    return False
+            except Exception:
+                return False
+        else:
+            if not match_operator(value, target, operator):
+                return False
+
+    return True
+
 
 def preprocess_cfs(cf_list, by="consumer"):
     """
@@ -64,26 +157,42 @@ def process_cf_list(
     :param filtered_consumer: Consumer-side fields to match against.
     :return: List with the single best CF (or empty if none matched).
     """
-    results = []
     best_score = -1
     best_specificity = -1
     best_cf = None
+    supplier_tokens = None
+    consumer_tokens = None
+    ds_class = filtered_supplier.get("classifications")
+    ds_cons_class = filtered_consumer.get("classifications")
+    cls_match_cache: dict[tuple[int, int], bool] | None = (
+        {} if (ds_class is not None or ds_cons_class is not None) else None
+    )
 
     for cf in cf_list:
         supplier_cf = cf.get("supplier", {})
         consumer_cf = cf.get("consumer", {})
+        supplier_compiled = _compile_criteria(supplier_cf)
+        consumer_compiled = _compile_criteria(consumer_cf)
+        supplier_excludes = supplier_compiled[1]
+        consumer_excludes = consumer_compiled[1]
+        if supplier_excludes and supplier_tokens is None:
+            supplier_tokens = _flow_exclude_tokens(filtered_supplier)
+        if consumer_excludes and consumer_tokens is None:
+            consumer_tokens = _flow_exclude_tokens(filtered_consumer)
 
-        supplier_match = match_flow(
+        supplier_match = _match_compiled_flow(
             flow=filtered_supplier,
-            criteria=supplier_cf,
+            compiled=supplier_compiled,
+            exclude_tokens=supplier_tokens or (),
         )
 
         if not supplier_match:
             continue
 
-        consumer_match = match_flow(
+        consumer_match = _match_compiled_flow(
             flow=filtered_consumer,
-            criteria=consumer_cf,
+            compiled=consumer_compiled,
+            exclude_tokens=consumer_tokens or (),
         )
 
         if not consumer_match:
@@ -91,20 +200,28 @@ def process_cf_list(
 
         match_score = 0
         cf_class = supplier_cf.get("classifications")
-        ds_class = filtered_supplier.get("classifications")
-        if cf_class and ds_class and matches_classifications(cf_class, ds_class):
-            match_score += 1
+        if cf_class and ds_class:
+            key = (id(cf_class), id(ds_class))
+            ok = cls_match_cache.get(key) if cls_match_cache is not None else None
+            if ok is None:
+                ok = matches_classifications(cf_class, ds_class)
+                if cls_match_cache is not None:
+                    cls_match_cache[key] = ok
+            if ok:
+                match_score += 1
 
         cf_cons_class = consumer_cf.get("classifications")
-        ds_cons_class = filtered_consumer.get("classifications")
-        if (
-            cf_cons_class
-            and ds_cons_class
-            and matches_classifications(cf_cons_class, ds_cons_class)
-        ):
-            match_score += 1
+        if cf_cons_class and ds_cons_class:
+            key = (id(cf_cons_class), id(ds_cons_class))
+            ok = cls_match_cache.get(key) if cls_match_cache is not None else None
+            if ok is None:
+                ok = matches_classifications(cf_cons_class, ds_cons_class)
+                if cls_match_cache is not None:
+                    cls_match_cache[key] = ok
+            if ok:
+                match_score += 1
 
-        specificity = count_specificity(supplier_cf) + count_specificity(consumer_cf)
+        specificity = supplier_compiled[3] + consumer_compiled[3]
 
         if (match_score, specificity) > (best_score, best_specificity):
             best_score = match_score
@@ -112,15 +229,14 @@ def process_cf_list(
             best_cf = cf
 
     if best_cf:
-        results.append(best_cf)
-    else:
-        logger.debug(
-            "No matching CF found for supplier %s and consumer %s.",
-            filtered_supplier,
-            filtered_consumer,
-        )
+        return [best_cf]
 
-    return results
+    logger.debug(
+        "No matching CF found for supplier %s and consumer %s.",
+        filtered_supplier,
+        filtered_consumer,
+    )
+    return []
 
 
 def count_specificity(criteria: dict, include_classifications: bool = False) -> int:
@@ -325,17 +441,27 @@ def build_cf_index(raw_cfs: list[dict]) -> dict:
     return index
 
 
-@lru_cache(maxsize=None)
-def cached_match_with_index(flow_to_match_hashable, required_fields_tuple):
+def cached_match_with_index(
+    flow_to_match_hashable,
+    required_fields_tuple,
+    index,
+    lookup_mapping,
+    reversed_lookup,
+):
+    """
+    Stateless wrapper around ``match_with_index``.
+
+    Caching is intentionally handled by callers (e.g., EdgeLCIA) to avoid
+    mutable global context and cross-instance/thread contamination.
+    """
     flow_to_match = dict(flow_to_match_hashable)
     required_fields = set(required_fields_tuple)
-    # the contexts live on the function as attributes
     return match_with_index(
         flow_to_match,
-        cached_match_with_index.index,
-        cached_match_with_index.lookup_mapping,
+        index,
+        lookup_mapping,
         required_fields,
-        cached_match_with_index.reversed_lookup,
+        reversed_lookup,
     )
 
 
@@ -425,7 +551,7 @@ def match_with_index(
     )
     op = flow_to_match.get("operator", "equals")
 
-    allowed_keys = getattr(cached_match_with_index, "allowed_keys", None)
+    allowed_keys = None
 
     def field_candidates(field, target, operator_value):
         field_index = index.get(field, {})
@@ -571,7 +697,7 @@ def match_with_index(
 
 
 def compute_cf_memoized_factory(
-    cf_index, required_supplier_fields, required_consumer_fields
+    cf_index, required_supplier_fields, required_consumer_fields, compute_fn=None
 ):
     """
     Factory for a memoized compute_average_cf over signature/location candidates.
@@ -582,9 +708,11 @@ def compute_cf_memoized_factory(
     :return: Cached function(s_key, c_key, supplier_candidates, consumer_candidates) -> tuple.
     """
 
+    compute_impl = compute_fn or compute_average_cf
+
     @lru_cache(maxsize=None)
     def compute_cf(s_key, c_key, supplier_candidates, consumer_candidates):
-        return compute_average_cf(
+        return compute_impl(
             candidate_suppliers=list(supplier_candidates),
             candidate_consumers=list(consumer_candidates),
             supplier_info=dict(s_key),
@@ -747,6 +875,9 @@ def compute_average_cf(
     cf_index: dict,
     required_supplier_fields: set = None,
     required_consumer_fields: set = None,
+    pair_match_cache: dict | None = None,
+    valid_pairs_cache: dict | None = None,
+    stats: dict | None = None,
 ) -> tuple[str | float, Optional[dict], Optional[dict]]:
     """
     Compute a weighted CF expression and aggregated uncertainty for composite regions.
@@ -818,14 +949,36 @@ def compute_average_cf(
     setS, setC = set(S), set(C)
 
     # ---------- 2) Efficient valid (s,c) pair discovery ----------
-    idx_keys = cf_index.keys()
-    prod_size = len(S) * len(C)
-    if prod_size and prod_size <= len(idx_keys):
-        valid_location_pairs = [(s, c) for s in S for c in C if (s, c) in cf_index]
-        # S and C are already sorted; this is lexicographically ordered
+    valid_pairs_key = None
+    if valid_pairs_cache is not None:
+        valid_pairs_key = (S, C, id(cf_index))
+        cached_pairs = valid_pairs_cache.get(valid_pairs_key)
     else:
-        valid_location_pairs = [k for k in idx_keys if k[0] in setS and k[1] in setC]
-        valid_location_pairs.sort()
+        cached_pairs = None
+
+    if cached_pairs is not None:
+        if stats is not None:
+            stats["valid_pairs_cache_hits"] = (
+                int(stats.get("valid_pairs_cache_hits", 0)) + 1
+            )
+        valid_location_pairs = list(cached_pairs)
+    else:
+        idx_keys = cf_index.keys()
+        prod_size = len(S) * len(C)
+        if prod_size and prod_size <= len(idx_keys):
+            valid_location_pairs = [(s, c) for s in S for c in C if (s, c) in cf_index]
+            # S and C are already sorted; this is lexicographically ordered
+        else:
+            valid_location_pairs = [
+                k for k in idx_keys if k[0] in setS and k[1] in setC
+            ]
+            valid_location_pairs.sort()
+        if valid_pairs_cache is not None and valid_pairs_key is not None:
+            valid_pairs_cache[valid_pairs_key] = tuple(valid_location_pairs)
+            if stats is not None:
+                stats["valid_pairs_cache_misses"] = (
+                    int(stats.get("valid_pairs_cache_misses", 0)) + 1
+                )
 
     if not valid_location_pairs:
         if logger.isEnabledFor(logging.DEBUG):
@@ -858,6 +1011,9 @@ def compute_average_cf(
     matched: list[tuple[str, str, dict]] = []
     total_candidates_seen = 0
 
+    base_supplier_key = make_hashable(base_supplier)
+    base_consumer_key = make_hashable(base_consumer)
+
     for s_loc, c_loc in valid_location_pairs:
         cands = cf_index.get((s_loc, c_loc)) or []
         total_candidates_seen += len(cands)
@@ -865,7 +1021,39 @@ def compute_average_cf(
         fs = {**base_supplier, "location": s_loc}
         fc = {**base_consumer, "location": c_loc}
 
-        got = process_cf_list(cands, fs, fc)
+        got = None
+        if pair_match_cache is not None:
+            cache_key = (
+                id(cands),
+                s_loc,
+                c_loc,
+                base_supplier_key,
+                base_consumer_key,
+            )
+            cached_match = pair_match_cache.get(cache_key, None)
+            if cached_match is not None:
+                if stats is not None:
+                    stats["pair_match_cache_hits"] = (
+                        int(stats.get("pair_match_cache_hits", 0)) + 1
+                    )
+                got = [] if cached_match is _NO_MATCH else list(cached_match)
+            else:
+                if stats is not None:
+                    stats["pair_match_cache_misses"] = (
+                        int(stats.get("pair_match_cache_misses", 0)) + 1
+                    )
+                got = process_cf_list(cands, fs, fc)
+                pair_match_cache[cache_key] = tuple(got) if got else _NO_MATCH
+                if stats is not None:
+                    stats["process_cf_list_calls"] = (
+                        int(stats.get("process_cf_list_calls", 0)) + 1
+                    )
+        else:
+            got = process_cf_list(cands, fs, fc)
+            if stats is not None:
+                stats["process_cf_list_calls"] = (
+                    int(stats.get("process_cf_list_calls", 0)) + 1
+                )
         if got and logger.isEnabledFor(logging.DEBUG):
             logger.debug(
                 "CF-AVG: matched %d/%d CFs @ (%s,%s); example=%s",
@@ -1043,5 +1231,11 @@ def compute_average_cf(
             (dt * 1000.0) if dt else -1.0,
             expr,
         )
+
+    if stats is not None:
+        stats["matched_pairs"] = int(stats.get("matched_pairs", 0)) + len(matched)
+        stats["total_candidates_seen"] = int(
+            stats.get("total_candidates_seen", 0)
+        ) + int(total_candidates_seen)
 
     return expr, None, agg_uncertainty

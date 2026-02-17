@@ -35,7 +35,7 @@ These four methods present different scopes:
     import bw2data
     from edges import EdgeLCIA
 
-    bw2data.project.set_current("some project")
+    bw2data.projects.set_current("some project")
     act = bw2data.Database("some db").random()
 
     lcia = EdgeLCIA(
@@ -113,7 +113,7 @@ GeoPolRisk 1.0
     import bw2data
     from edges import EdgeLCIA
 
-    bw2data.project.set_current("some project")
+    bw2data.projects.set_current("some project")
     act = bw2data.Database("some db").random()
 
     lcia = EdgeLCIA(
@@ -220,7 +220,7 @@ ImpactWorld+ 2.1
     import bw2data
     from edges import EdgeLCIA
 
-    bw2data.project.set_current("some project")
+    bw2data.projects.set_current("some project")
     act = bw2data.Database("some db").random()
 
     lcia = EdgeLCIA(
@@ -281,7 +281,7 @@ SCP 1.0 (Surplus Cost Potential)
     import bw2data
     from edges import EdgeLCIA
 
-    bw2data.project.set_current("some project")
+    bw2data.projects.set_current("some project")
     act = bw2data.Database("some db").random()
 
     lcia = EdgeLCIA(
@@ -334,7 +334,7 @@ Parameterized GWP
     import bw2data
     from edges import EdgeLCIA
 
-    bw2data.project.set_current("some project")
+    bw2data.projects.set_current("some project")
     act = bw2data.Database("some db").random()
 
     # Define scenario parameters (e.g., atmospheric CO₂ concentration and time horizon)
@@ -360,7 +360,7 @@ Parameterized GWP
         demand={act: 1},
         method=method,
         parameters=params,
-        filepath="lcia_parameterized_gwp.json")
+        filepath="lcia_parameterized_gwp.json",
     )
     lcia.lci()
     lcia.map_exchanges()
@@ -464,7 +464,7 @@ transformation, enabling integration into LCA at multiple spatial scales.
     import bw2data
     from edges import EdgeLCIA
 
-    bw2data.project.set_current("some project")
+    bw2data.projects.set_current("some project")
     act = bw2data.Database("some db").random()
 
     lcia = EdgeLCIA(
@@ -551,4 +551,3 @@ transformation, enabling integration into LCA at multiple spatial scales.
 Scherer L, Rosa F, Sun Z, et al (2023)
 Biodiversity Impact Assessment Considering Land Use Intensities and Fragmentation.
 Environ Sci Technol https://doi.org/10.1021/acs.est.3c04191
-

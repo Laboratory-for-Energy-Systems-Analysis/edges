@@ -5,22 +5,23 @@ import logging
 
 # setup_package_logging(level=logging.DEBUG)
 
+
+# AWARE test
+
 # Start timer
 start_time = time.time()
-bw2data.projects.set_current("bw25_ei310")
-# bw2data.projects.set_current("ecoinvent-3.10.1-cutoff")
-# bw2data.projects.set_current("ecoinvent-3.10-cutoff")
-# bw2data.projects.set_current("ecoinvent-3.11-cutoff")
-# bw2data.projects.set_current("ecoinvent-3.11-cutoff-bw25")
+bw2data.projects.set_current("ecoinvent-3.12-cutoff")
+
+print("Available databases:", bw2data.databases)
 
 if "h2_pem" not in bw2data.databases:
     lci = bw2io.ExcelImporter("lci-hydrogen-electrolysis-ei310.xlsx")
     lci.apply_strategies()
     lci.match_database(fields=["name", "reference product", "location"])
     lci.match_database(
-        "ecoinvent-3.11-cutoff", fields=["name", "reference product", "location"]
+        "ecoinvent-3.12-cutoff", fields=["name", "reference product", "location"]
     )
-    lci.match_database("ecoinvent-3.11-biosphere", fields=["name", "categories"])
+    lci.match_database("biosphere3", fields=["name", "categories"])
     lci.statistics()
     lci.drop_unlinked(i_am_reckless=True)
     if len(list(lci.unlinked)) == 0:
@@ -78,9 +79,7 @@ act = [
     == "hydrogen production, gaseous, 30 bar, from PEM electrolysis, from offshore wind electricity"
 ][0]
 
-# method = ("AWARE 2.0", "Country", "all", "yearly")
-method = ("GLAM3", "biodiversity", "occupation", "average", "amphibians")
-# method = ("RELICS", "copper", "secondary")
+method = ("AWARE 2.0", "Country", "all", "yearly")
 
 LCA = EdgeLCIA(
     {act: 1},
@@ -88,30 +87,50 @@ LCA = EdgeLCIA(
     # use_distributions=True,
     # iterations=10000
 )
-# LCA.lci()
-
 LCA.apply_strategies()
-# LCA.map_exchanges()
-# LCA.map_aggregate_locations()
-# LCA.map_dynamic_locations()
-# LCA.map_contained_locations()
-# LCA.map_remaining_locations_to_global()
 
 LCA.evaluate_cfs()
 LCA.lcia()
 
-# df = LCA.generate_cf_table(include_unmatched=True)
-# df.to_excel("df_GeoPolRisk.xlsx")
-
 # Stop timer
 elapsed_time = time.time() - start_time
+
+# df = LCA.generate_cf_table(include_unmatched=True)
+# df.to_excel("df_AWARE.xlsx")
+
 
 print(f"Sum of inventory matrix: {LCA.lca.inventory.sum()}")
 print(f"Sum of characterization matrix: {LCA.characterization_matrix.sum()}")
 print(f"Sum of characterized inventory matrix: {LCA.characterized_inventory.sum()}")
 print(f"Score: {LCA.score}")
+print(f"Score: {LCA.score}. Time elapsed: {elapsed_time} seconds.")
 
-# df = LCA.generate_cf_table(include_unmatched=False)
-# df.to_csv("cf_table (local).csv", index=False)
 
+# GeoPolRisk test
+
+# Start timer
+start_time = time.time()
+method = ("GeoPolRisk", "paired", "2024")
+
+LCA = EdgeLCIA(
+    {act: 1},
+    method,
+    # use_distributions=True,
+    # iterations=10000
+)
+LCA.apply_strategies()
+
+LCA.evaluate_cfs()
+LCA.lcia()
+
+# Stop timer
+elapsed_time = time.time() - start_time
+
+# df = LCA.generate_cf_table(include_unmatched=True)
+# df.to_excel("df_GeoPolRisk.xlsx")
+
+print(f"Sum of inventory matrix: {LCA.lca.inventory.sum()}")
+print(f"Sum of characterization matrix: {LCA.characterization_matrix.sum()}")
+print(f"Sum of characterized inventory matrix: {LCA.characterized_inventory.sum()}")
+print(f"Score: {LCA.score}")
 print(f"Score: {LCA.score}. Time elapsed: {elapsed_time} seconds.")

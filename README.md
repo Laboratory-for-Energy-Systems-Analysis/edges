@@ -52,6 +52,15 @@ Currently, the library provides regionalized CFs for:
 * GeoPolRisk 1.0
 * GLAM3 Land use impacts on biodiversity
 
+> [!NOTE]
+> Mixed CF methods combining both `biosphere` and `technosphere` supplier matrices
+> in a single method file are currently not supported.
+
+> [!NOTE]
+> The exchange matcher backend is
+> [CLIPSpy](https://clipspy.readthedocs.io/en/latest/) (`matcher_backend="clips"`),
+> the Python wrapper for [CLIPS](http://www.clipsrules.net/).
+
 ## Installation
 
 You can install the library using pip:
@@ -95,7 +104,7 @@ from edges import EdgeLCIA
 act = bw2data.Database("ecoinvent-3.10-cutoff").random()
 
 # Define a method
-method = ('AWARE 1.2c', 'Country', 'unspecified', 'yearly')
+method = ('AWARE 2.0', 'Country', 'unspecified', 'yearly')
 
 # Initialize the LCA object
 LCA = EdgeLCIA({act: 1}, method)
@@ -271,6 +280,7 @@ at [romain.sacchi@psi.ch](mailto:romain.sacchi@psi.ch).
 
 - [Romain Sacchi](https://github.com/romainsacchi)
 - [Alvaro Hahn Menacho](https://github.com/alvarojhahn)
+- [Raphaël Jolivet](https://github.com/raphaeljolivet) - contributed to the CLIPSpy-based rule engine implementation.
 
 ## Acknowledgments
 The development of this library was supported by the French agency for 
