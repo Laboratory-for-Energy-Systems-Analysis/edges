@@ -3553,7 +3553,6 @@ class EdgeLCIA:
             self.lca.demand.clear()
             self.lca.demand.update(demand)
 
-
         only_tech = all(
             cf["supplier"]["matrix"] == "technosphere" for cf in self.raw_cfs_data
         )
