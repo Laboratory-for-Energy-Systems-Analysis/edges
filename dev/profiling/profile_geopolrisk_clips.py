@@ -10,7 +10,6 @@ import bw2io
 
 from edges import EdgeLCIA
 
-
 GEOPOLRISK_METHOD = ("GeoPolRisk", "paired", "2024")
 DEFAULT_PROJECT = "ecoinvent-3.10-cutoff"
 DEFAULT_OUTPUT = Path("dev/profiling/outputs/geopolrisk_clips.prof")
@@ -113,7 +112,9 @@ def main() -> None:
     if args.stage == "full":
         print(f"Score: {float(lca.score)}")
         print(f"Characterization sum: {float(lca.characterization_matrix.sum())}")
-        print(f"Characterized inventory sum: {float(lca.characterized_inventory.sum())}")
+        print(
+            f"Characterized inventory sum: {float(lca.characterized_inventory.sum())}"
+        )
     print(f"Mapped CF entries: {len(lca.cfs_mapping)}")
 
 

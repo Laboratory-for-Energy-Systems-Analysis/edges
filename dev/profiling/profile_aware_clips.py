@@ -10,7 +10,6 @@ import bw2io
 
 from edges import EdgeLCIA
 
-
 AWARE_METHOD = ("AWARE 2.0", "Country", "all", "yearly")
 DEFAULT_PROJECT = "ecoinvent-3.12-cutoff"
 DEFAULT_OUTPUT = Path("dev/profiling/outputs/aware_clips.prof")
@@ -109,7 +108,9 @@ def main() -> None:
     if args.stage == "full":
         print(f"Score: {float(lca.score)}")
         print(f"Characterization sum: {float(lca.characterization_matrix.sum())}")
-        print(f"Characterized inventory sum: {float(lca.characterized_inventory.sum())}")
+        print(
+            f"Characterized inventory sum: {float(lca.characterized_inventory.sum())}"
+        )
     print(f"Mapped CF entries: {len(lca.cfs_mapping)}")
 
 

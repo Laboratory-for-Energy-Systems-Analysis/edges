@@ -23,7 +23,9 @@ SPECIAL_MATCH_KEYS = {
 }
 
 
-def _compile_criteria(criteria: dict) -> tuple[str, tuple[str, ...], tuple[tuple[str, object], ...], int]:
+def _compile_criteria(
+    criteria: dict,
+) -> tuple[str, tuple[str, ...], tuple[tuple[str, object], ...], int]:
     """
     Lazily compile criteria into fast-match components and cache them in-place.
     """

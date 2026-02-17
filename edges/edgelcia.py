@@ -506,9 +506,7 @@ class EdgeLCIA:
         self._cf_avg_cache_misses = 0
         self._fallback_cf_failures_count = 0
         self._fallback_cf_failure_examples: list[str] = []
-        self._fallback_cf_miss_records: dict[
-            tuple[str, int, int], dict[str, Any]
-        ] = {}
+        self._fallback_cf_miss_records: dict[tuple[str, int, int], dict[str, Any]] = {}
         self._fallback_cf_unresolved_keys: set[tuple[str, int, int]] = set()
 
         # One-time flags for this run:
@@ -2539,7 +2537,10 @@ class EdgeLCIA:
                             candidate_suppliers=candidate_supplier_locations,
                             candidate_consumers=candidate_consumer_locations,
                             direction=direction,
-                            indices=[(supplier_idx, consumer_idx) for supplier_idx, consumer_idx, *_ in group_edges],
+                            indices=[
+                                (supplier_idx, consumer_idx)
+                                for supplier_idx, consumer_idx, *_ in group_edges
+                            ],
                         )
 
             # Pass 2
@@ -2669,7 +2670,9 @@ class EdgeLCIA:
             supplier_global_pool.append("GLO")
         if "__ANY__" in sup_keys:
             supplier_global_pool.append("__ANY__")
-        supplier_global_pool = sorted({str(x).strip() for x in supplier_global_pool if x is not None})
+        supplier_global_pool = sorted(
+            {str(x).strip() for x in supplier_global_pool if x is not None}
+        )
         if not supplier_global_pool:
             supplier_global_pool = ["__ANY__"]
 
@@ -2678,7 +2681,9 @@ class EdgeLCIA:
             consumer_global_pool.append("GLO")
         if "__ANY__" in con_keys:
             consumer_global_pool.append("__ANY__")
-        consumer_global_pool = sorted({str(x).strip() for x in consumer_global_pool if x is not None})
+        consumer_global_pool = sorted(
+            {str(x).strip() for x in consumer_global_pool if x is not None}
+        )
         if not consumer_global_pool:
             consumer_global_pool = ["__ANY__"]
 
@@ -2809,7 +2814,11 @@ class EdgeLCIA:
                         if "__ANY__" in supplier_global_pool:
                             direct_sup_candidates.append("__ANY__")
                         direct_sup_candidates = list(
-                            dict.fromkeys(str(x).strip() for x in direct_sup_candidates if x is not None)
+                            dict.fromkeys(
+                                str(x).strip()
+                                for x in direct_sup_candidates
+                                if x is not None
+                            )
                         )
                     direct_con_candidates = ["GLO"]
 
