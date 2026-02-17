@@ -510,17 +510,23 @@ class EdgeLCIA:
         self._cf_pair_match_cache: dict[tuple, Any] = {}
         self._cf_valid_pairs_cache: dict[tuple, tuple] = {}
         self._cf_runtime_stats: dict[str, int] = {}
-        persist_flag = str(os.environ.get("EDGES_PERSIST_CF_CACHE", "0")).strip().lower()
+        persist_flag = (
+            str(os.environ.get("EDGES_PERSIST_CF_CACHE", "0")).strip().lower()
+        )
         self._cf_persistent_cache_enabled = persist_flag in {"1", "true", "yes", "on"}
         self._cf_persistent_cache_path = Path(
-            os.environ.get("EDGES_PERSIST_CF_CACHE_PATH", "/tmp/edges_cf_avg_cache.sqlite3")
+            os.environ.get(
+                "EDGES_PERSIST_CF_CACHE_PATH", "/tmp/edges_cf_avg_cache.sqlite3"
+            )
         )
         self._cf_persistent_cache_conn: sqlite3.Connection | None = None
         try:
             method_blob = json.dumps(self.raw_cfs_data, sort_keys=True, default=str)
         except Exception:
             method_blob = repr(self.method)
-        self._cf_persistent_namespace = hashlib.sha1(method_blob.encode("utf-8")).hexdigest()
+        self._cf_persistent_namespace = hashlib.sha1(
+            method_blob.encode("utf-8")
+        ).hexdigest()
         self._cf_persistent_hits = 0
         self._cf_persistent_misses = 0
         self._cf_persistent_errors = 0

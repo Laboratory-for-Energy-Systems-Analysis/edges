@@ -969,7 +969,9 @@ def compute_average_cf(
             valid_location_pairs = [(s, c) for s in S for c in C if (s, c) in cf_index]
             # S and C are already sorted; this is lexicographically ordered
         else:
-            valid_location_pairs = [k for k in idx_keys if k[0] in setS and k[1] in setC]
+            valid_location_pairs = [
+                k for k in idx_keys if k[0] in setS and k[1] in setC
+            ]
             valid_location_pairs.sort()
         if valid_pairs_cache is not None and valid_pairs_key is not None:
             valid_pairs_cache[valid_pairs_key] = tuple(valid_location_pairs)
@@ -1232,8 +1234,8 @@ def compute_average_cf(
 
     if stats is not None:
         stats["matched_pairs"] = int(stats.get("matched_pairs", 0)) + len(matched)
-        stats["total_candidates_seen"] = (
-            int(stats.get("total_candidates_seen", 0)) + int(total_candidates_seen)
-        )
+        stats["total_candidates_seen"] = int(
+            stats.get("total_candidates_seen", 0)
+        ) + int(total_candidates_seen)
 
     return expr, None, agg_uncertainty
