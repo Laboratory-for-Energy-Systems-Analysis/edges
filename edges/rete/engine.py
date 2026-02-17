@@ -255,10 +255,10 @@ class ClipsEngine:
 
         if target not in (None, "__ANY__"):
             if operator == "equals" and not excludes:
-                return f'({field_name} {self._safe_lexeme(target)})'
+                return f"({field_name} {self._safe_lexeme(target)})"
             var = f"?{field_name}_{self._to_safe_var_suffix(str(target))}"
             if operator == "equals":
-                tests.append(f'(eq {var} {self._safe_lexeme(target)})')
+                tests.append(f"(eq {var} {self._safe_lexeme(target)})")
             else:
                 tests.append(self._to_clips_test(var, operator, str(target), neg=False))
         else:
@@ -326,7 +326,9 @@ class ClipsEngine:
         parts.append(")")
         return " ".join(parts)
 
-    def _location_match_expr(self, var_name: str, rule_side: dict[str, Any]) -> str | None:
+    def _location_match_expr(
+        self, var_name: str, rule_side: dict[str, Any]
+    ) -> str | None:
         target = self._rule_value(rule_side, "location")
         excludes = rule_side.get("excludes") or []
         operator = rule_side.get("operator", "equals")
@@ -336,7 +338,9 @@ class ClipsEngine:
             if operator == "equals":
                 tests.append(f"(eq {var_name} {self._safe_lexeme(target)})")
             else:
-                tests.append(self._to_clips_test(var_name, operator, str(target), neg=False))
+                tests.append(
+                    self._to_clips_test(var_name, operator, str(target), neg=False)
+                )
 
         for exc in excludes:
             tests.append(self._to_clips_test(var_name, "contains", str(exc), neg=True))
@@ -351,9 +355,9 @@ class ClipsEngine:
         rule_id = int(rule["id"])
         supplier_side = dict(rule.get("supplier") or {})
         consumer_side = dict(rule.get("consumer") or {})
-        supplier_matrix = str(
-            supplier_side.get("matrix", "technosphere")
-        ).strip().lower()
+        supplier_matrix = (
+            str(supplier_side.get("matrix", "technosphere")).strip().lower()
+        )
 
         supplier_pattern = self._node_pattern(
             supplier_side,

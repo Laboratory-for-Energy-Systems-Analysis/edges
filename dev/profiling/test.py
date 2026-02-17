@@ -95,9 +95,8 @@ LCA.lcia()
 # Stop timer
 elapsed_time = time.time() - start_time
 
-#df = LCA.generate_cf_table(include_unmatched=True)
-#df.to_excel("df_AWARE.xlsx")
-
+# df = LCA.generate_cf_table(include_unmatched=True)
+# df.to_excel("df_AWARE.xlsx")
 
 
 print(f"Sum of inventory matrix: {LCA.lca.inventory.sum()}")
@@ -127,8 +126,8 @@ LCA.lcia()
 # Stop timer
 elapsed_time = time.time() - start_time
 
-#df = LCA.generate_cf_table(include_unmatched=True)
-#df.to_excel("df_GeoPolRisk.xlsx")
+# df = LCA.generate_cf_table(include_unmatched=True)
+# df.to_excel("df_GeoPolRisk.xlsx")
 
 print(f"Sum of inventory matrix: {LCA.lca.inventory.sum()}")
 print(f"Sum of characterization matrix: {LCA.characterization_matrix.sum()}")

@@ -129,7 +129,11 @@ def format_data(data: dict, weight: str) -> tuple[list, dict[Any, Any]]:
         "name": data.get("name", "Custom LCIA method"),
         "version": data.get("version", "0.0"),
         "unit": data.get("unit", "unspecified"),
-        **{k: v for k, v in data.items() if k not in {"name", "version", "unit", "exchanges"}},
+        **{
+            k: v
+            for k, v in data.items()
+            if k not in {"name", "version", "unit", "exchanges"}
+        },
     }
     if scenario_parameters:
         metadata["parameters"] = scenario_parameters

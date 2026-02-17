@@ -69,7 +69,9 @@ def build_technosphere_nodes(
     return _build_nodes(technosphere_flows)
 
 
-def build_biosphere_nodes(biosphere_flows: list[dict[str, Any]]) -> list[dict[str, Any]]:
+def build_biosphere_nodes(
+    biosphere_flows: list[dict[str, Any]],
+) -> list[dict[str, Any]]:
     """
     Build RETE node facts for biosphere flows.
     """

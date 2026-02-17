@@ -15,4 +15,3 @@ def compile_rules(raw_cfs_data: list[dict[str, Any]]) -> list[dict[str, Any]]:
         c["id"] = rule_id
         out.append(c)
     return out
-

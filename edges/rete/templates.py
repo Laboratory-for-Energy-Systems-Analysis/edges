@@ -3,7 +3,6 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 from typing import Literal
 
-
 MatrixType = Literal["biosphere", "technosphere"]
 
 
@@ -33,4 +32,3 @@ class ReteRule:
     consumer: ReteRuleSide
     value: float | str
     uncertainty: dict | None = None
-
