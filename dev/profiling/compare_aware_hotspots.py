@@ -4,7 +4,6 @@ import argparse
 import pstats
 from pathlib import Path
 
-
 HOTSPOTS = (
     "map_exchanges_clips",
     "map_dynamic_locations",
@@ -16,7 +15,13 @@ HOTSPOTS = (
 
 def _extract_hotspots(stats: pstats.Stats) -> dict[str, float]:
     out = {k: 0.0 for k in HOTSPOTS}
-    for (filename, _lineno, funcname), (_cc, _nc, _tt, ct, _callers) in stats.stats.items():
+    for (filename, _lineno, funcname), (
+        _cc,
+        _nc,
+        _tt,
+        ct,
+        _callers,
+    ) in stats.stats.items():
         if not filename.startswith("/Users/romain/GitHub/edges/"):
             continue
         if funcname in out:

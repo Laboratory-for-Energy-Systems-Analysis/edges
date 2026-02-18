@@ -11,7 +11,6 @@ import bw2io
 
 from edges import EdgeLCIA
 
-
 AWARE_METHOD = ("AWARE 2.0", "Country", "all", "yearly")
 DEFAULT_PROJECT = "ecoinvent-3.12-cutoff"
 HOTSPOTS = (
@@ -51,7 +50,13 @@ def pick_activity():
 
 def _extract_hotspots(stats: pstats.Stats) -> dict[str, float]:
     out = {k: 0.0 for k in HOTSPOTS}
-    for (filename, _lineno, funcname), (_cc, _nc, _tt, ct, _callers) in stats.stats.items():
+    for (filename, _lineno, funcname), (
+        _cc,
+        _nc,
+        _tt,
+        ct,
+        _callers,
+    ) in stats.stats.items():
         if not filename.startswith("/Users/romain/GitHub/edges/edges/"):
             continue
         if funcname in out:
@@ -118,7 +123,9 @@ def print_summary(results: list[dict]) -> None:
             f"{_fmt(h['process_cf_list'])}"
         )
 
-    print("\nrun | cf_hit_rate | cf_hits/misses | pair_match hits/misses | valid_pairs hits/misses | process_cf_list_calls")
+    print(
+        "\nrun | cf_hit_rate | cf_hits/misses | pair_match hits/misses | valid_pairs hits/misses | process_cf_list_calls"
+    )
     for r in results:
         print(
             f"{r['run_id']:>3} | {r['cf_cache_hit_rate']:.2f}% | "
@@ -166,7 +173,9 @@ def main() -> None:
 
     profile_dir = Path(args.profile_dir)
     profile_dir.mkdir(parents=True, exist_ok=True)
-    excel_path = Path(__file__).resolve().parent / "lci-hydrogen-electrolysis-ei310.xlsx"
+    excel_path = (
+        Path(__file__).resolve().parent / "lci-hydrogen-electrolysis-ei310.xlsx"
+    )
 
     ensure_h2_pem(args.project, excel_path=excel_path, reset=args.reset_h2_pem)
     activity = pick_activity()

@@ -9,7 +9,6 @@ import bw2io
 
 from edges import EdgeLCIA
 
-
 OUTPUT_DIR = Path("dev/profiling/outputs")
 OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
 
@@ -44,9 +43,7 @@ def pick_activity():
 
 def mapping_keys(lca: EdgeLCIA) -> set[tuple[int, int]]:
     return {
-        (int(i), int(j))
-        for cf in lca.cfs_mapping
-        for (i, j) in cf.get("positions", [])
+        (int(i), int(j)) for cf in lca.cfs_mapping for (i, j) in cf.get("positions", [])
     }
 
 
@@ -58,7 +55,7 @@ def run_one(method: tuple, act) -> dict:
         matcher_backend="clips",
     )
     lca.apply_strategies()
-    #lca.map_exchanges()
+    # lca.map_exchanges()
     lca.evaluate_cfs()
     lca.lcia()
     elapsed = time.time() - start
