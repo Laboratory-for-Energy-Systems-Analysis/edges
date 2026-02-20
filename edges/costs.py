@@ -5,6 +5,7 @@ LCIA class.
 """
 
 import numpy as np
+import sparse
 import pandas as pd
 import bw2data
 from typing import Optional
@@ -13,7 +14,7 @@ from .edgelcia import EdgeLCIA
 from .matrix_builders import build_technosphere_edges_matrix, initialize_lcia_matrix
 from .utils import get_flow_matrix_positions, safe_eval_cached
 from .uncertainty import sample_cf_distribution
-from scipy import sparse
+from scipy.sparse
 from scipy.optimize import linprog
 from scipy.sparse import diags, csr_matrix, coo_matrix
 from highspy import Highs
