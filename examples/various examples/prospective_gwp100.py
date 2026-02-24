@@ -12,7 +12,6 @@ from matplotlib.lines import Line2D
 import edges
 from edges import EdgeLCIA, setup_package_logging
 
-
 PROJECT_NAME = "bw25_ei310"
 ECOINVENT_DB = "ecoinvent-3.10.1-cutoff"
 H2_DB = "h2_pem"
@@ -22,8 +21,12 @@ ACTIVITY_NAME = (
 )
 
 ROOT = Path(__file__).resolve().parents[2]
-INVENTORY_FILE = ROOT / "examples" / "publication examples" / "lci-hydrogen-electrolysis-ei310.xlsx"
-PLOT_FILE = ROOT / "examples" / "various examples" / "figure_prospective_gwp100_hydrogen.png"
+INVENTORY_FILE = (
+    ROOT / "examples" / "publication examples" / "lci-hydrogen-electrolysis-ei310.xlsx"
+)
+PLOT_FILE = (
+    ROOT / "examples" / "various examples" / "figure_prospective_gwp100_hydrogen.png"
+)
 
 
 def get_biosphere_database_name() -> str:
@@ -197,16 +200,28 @@ def plot_results(df: pd.DataFrame) -> None:
         Line2D([0], [0], color=model_colors[m], lw=2, label=m)
         for m in sorted(set(df["Model"]))
     ]
-    model_leg = ax.legend(handles=model_legend, title="IAM model (color)", loc="upper left")
+    model_leg = ax.legend(
+        handles=model_legend, title="IAM model (color)", loc="upper left"
+    )
     ax.add_artist(model_leg)
 
     families = sorted({get_pathway_family(s) for s in df["Scenario"].unique()})
-    style_by_family = {fam: get_scenario_style(next(s for s in df["Scenario"].unique() if get_pathway_family(s) == fam)) for fam in families}
+    style_by_family = {
+        fam: get_scenario_style(
+            next(s for s in df["Scenario"].unique() if get_pathway_family(s) == fam)
+        )
+        for fam in families
+    }
     style_legend = [
         Line2D([0], [0], color="black", lw=2, linestyle=style_by_family[f], label=f)
         for f in families
     ]
-    ax.legend(handles=style_legend, title="Pathway level (line style)", loc="lower left", fontsize=8)
+    ax.legend(
+        handles=style_legend,
+        title="Pathway level (line style)",
+        loc="lower left",
+        fontsize=8,
+    )
 
     plt.tight_layout()
     fig.savefig(PLOT_FILE, dpi=200, bbox_inches="tight")
@@ -225,7 +240,7 @@ def main() -> None:
     ensure_hydrogen_database()
     act = get_activity()
 
-    method =  ('Prospective', 'GWP100')
+    method = ("Prospective", "GWP100")
 
     lcia = EdgeLCIA(demand={act: 1}, method=method)
     lcia.lci()
