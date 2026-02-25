@@ -1,0 +1,261 @@
+from __future__ import annotations
+
+from collections import defaultdict
+from pathlib import Path
+
+import bw2data
+import bw2io
+import matplotlib.pyplot as plt
+import pandas as pd
+from matplotlib.lines import Line2D
+
+import edges
+from edges import EdgeLCIA, setup_package_logging
+
+PROJECT_NAME = "bw25_ei310"
+ECOINVENT_DB = "ecoinvent-3.10.1-cutoff"
+H2_DB = "h2_pem"
+ACTIVITY_NAME = (
+    "hydrogen production, gaseous, 30 bar, from PEM electrolysis, "
+    "from offshore wind electricity"
+)
+
+ROOT = Path(__file__).resolve().parents[2]
+INVENTORY_FILE = (
+    ROOT / "examples" / "publication examples" / "lci-hydrogen-electrolysis-ei310.xlsx"
+)
+PLOT_FILE = (
+    ROOT / "examples" / "various examples" / "figure_prospective_gwp100_hydrogen.png"
+)
+
+
+def get_biosphere_database_name() -> str:
+    if "biosphere" in bw2data.databases:
+        return "biosphere"
+
+    biosphere_candidates = sorted(
+        name for name in bw2data.databases if "biosphere" in name.lower()
+    )
+    if not biosphere_candidates:
+        raise RuntimeError(
+            "No biosphere database found in current project. "
+            "Please import ecoinvent and biosphere databases first."
+        )
+    return biosphere_candidates[0]
+
+
+def ensure_hydrogen_database() -> None:
+    if H2_DB in bw2data.databases:
+        return
+
+    importer = bw2io.ExcelImporter(str(INVENTORY_FILE))
+    importer.apply_strategies()
+    importer.match_database(fields=["name", "reference product", "location"])
+    importer.match_database(
+        ECOINVENT_DB, fields=["name", "reference product", "location"]
+    )
+    importer.match_database(
+        get_biosphere_database_name(), fields=["name", "categories"]
+    )
+    importer.drop_unlinked(i_am_reckless=True)
+
+    if len(list(importer.unlinked)) > 0:
+        raise RuntimeError(
+            f"Hydrogen inventory still has {len(list(importer.unlinked))} unlinked exchanges."
+        )
+
+    importer.write_database()
+
+
+def get_activity():
+    matches = [a for a in bw2data.Database(H2_DB) if a["name"] == ACTIVITY_NAME]
+    if not matches:
+        raise RuntimeError(f"Activity not found in '{H2_DB}': {ACTIVITY_NAME}")
+    return matches[0]
+
+
+def select_scenarios(all_scenarios: list[str], per_model: int = 2) -> list[str]:
+    grouped: dict[str, list[str]] = defaultdict(list)
+    for scen in sorted(all_scenarios):
+        model = scen.split("_-_")[0] if "_-_" in scen else scen.split("-")[0]
+        grouped[model].append(scen)
+
+    message = sorted(grouped.get("MESSAGE", []))
+    if message:
+        return message
+
+    # Fallback for datasets without MESSAGE scenarios.
+    selected: list[str] = []
+    for model in sorted(grouped):
+        selected.extend(grouped[model][:per_model])
+    return selected[: min(6, len(selected))]
+
+
+def get_scenario_pathway(scenario: str) -> str:
+    if "_-_" in scenario:
+        return scenario.split("_-_", 1)[1]
+    if "-" in scenario:
+        return scenario.split("-", 1)[1]
+    return scenario
+
+
+def get_pathway_family(scenario: str) -> str:
+    pathway = get_scenario_pathway(scenario)
+
+    if "rollBack" in pathway or pathway.endswith("-H") or "_H" in pathway:
+        return "high forcing"
+    if "NPi" in pathway or pathway.endswith("-M") or "_M" in pathway:
+        return "medium forcing"
+    if "NDC" in pathway or "PkBudg1000" in pathway or "LO" in pathway:
+        return "low forcing"
+    if "PkBudg650" in pathway or "VL" in pathway:
+        return "very low forcing"
+    if pathway.endswith("-L") or "_L" in pathway:
+        return "low forcing"
+    return "other"
+
+
+def get_scenario_style(scenario: str) -> str | tuple:
+    family = get_pathway_family(scenario)
+    style_by_family = {
+        "high forcing": "--",
+        "medium forcing": "-.",
+        "low forcing": "-",
+        "very low forcing": (0, (1, 1)),
+        "other": ":",
+    }
+    return style_by_family[family]
+
+
+def get_model_name(scenario: str) -> str:
+    return scenario.split("_-_")[0] if "_-_" in scenario else scenario.split("-")[0]
+
+
+def build_results_dataframe(lcia: EdgeLCIA) -> pd.DataFrame:
+    scenarios = select_scenarios(list(lcia.parameters.keys()), per_model=2)
+    years = sorted(int(y) for y in lcia.parameters[scenarios[0]]["CF_CH4"].keys())
+    years = [y for y in years if 2005 <= y <= 2100]
+
+    results = []
+    for scenario in scenarios:
+        for year in years:
+            lcia.evaluate_cfs(scenario=scenario, scenario_idx=str(year))
+            lcia.lcia()
+            results.append(
+                {
+                    "Scenario": scenario,
+                    "Model": get_model_name(scenario),
+                    "Year": year,
+                    "GWP100 [kg CO2-eq/kg H2]": lcia.score,
+                }
+            )
+
+    return pd.DataFrame(results)
+
+
+def plot_results(df: pd.DataFrame) -> None:
+    model_colors = {
+        "IMAGE": "#1b9e77",
+        "MESSAGE": "#d95f02",
+        "REMIND": "#7570b3",
+    }
+
+    fig, ax = plt.subplots(figsize=(9.5, 5))
+    scenario_handles = {}
+
+    for scenario in sorted(df["Scenario"].unique()):
+        data = df[df["Scenario"] == scenario].sort_values("Year")
+        model = get_model_name(scenario)
+        color = model_colors.get(model, "gray")
+        style = get_scenario_style(scenario)
+
+        (line,) = ax.plot(
+            data["Year"],
+            data["GWP100 [kg CO2-eq/kg H2]"],
+            color=color,
+            linestyle=style,
+            linewidth=2,
+            label=scenario,
+        )
+        scenario_handles[scenario] = line
+
+        # Label each curve at its end to make curve identity explicit.
+        end = data.iloc[-1]
+        ax.text(
+            end["Year"] + 0.6,
+            end["GWP100 [kg CO2-eq/kg H2]"],
+            get_scenario_pathway(scenario),
+            color=color,
+            fontsize=7,
+            va="center",
+        )
+
+    ax.set_title("Prospective GWP100 of hydrogen production (offshore wind PEM)")
+    ax.set_xlabel("Year")
+    ax.set_ylabel("GWP100 [kg CO2-eq/kg H2]")
+    ax.grid(True, linestyle="--", alpha=0.4)
+    ax.set_xlim(df["Year"].min(), df["Year"].max() + 8)
+
+    model_legend = [
+        Line2D([0], [0], color=model_colors[m], lw=2, label=m)
+        for m in sorted(set(df["Model"]))
+    ]
+    model_leg = ax.legend(
+        handles=model_legend, title="IAM model (color)", loc="upper left"
+    )
+    ax.add_artist(model_leg)
+
+    families = sorted({get_pathway_family(s) for s in df["Scenario"].unique()})
+    style_by_family = {
+        fam: get_scenario_style(
+            next(s for s in df["Scenario"].unique() if get_pathway_family(s) == fam)
+        )
+        for fam in families
+    }
+    style_legend = [
+        Line2D([0], [0], color="black", lw=2, linestyle=style_by_family[f], label=f)
+        for f in families
+    ]
+    ax.legend(
+        handles=style_legend,
+        title="Pathway level (line style)",
+        loc="lower left",
+        fontsize=8,
+    )
+
+    plt.tight_layout()
+    fig.savefig(PLOT_FILE, dpi=200, bbox_inches="tight")
+    plt.show()
+
+
+def main() -> None:
+    setup_package_logging()
+    bw2data.projects.set_current(PROJECT_NAME)
+
+    if ECOINVENT_DB not in bw2data.databases:
+        raise RuntimeError(
+            f"Database '{ECOINVENT_DB}' not found in project '{PROJECT_NAME}'."
+        )
+
+    ensure_hydrogen_database()
+    act = get_activity()
+
+    method = ("Prospective", "GWP100")
+
+    lcia = EdgeLCIA(demand={act: 1}, method=method)
+    lcia.lci()
+    lcia.map_exchanges()
+
+    df = build_results_dataframe(lcia)
+    print("\nCurves shown in the plot:")
+    for scen in sorted(df["Scenario"].unique()):
+        print(
+            f"- {scen}: model={get_model_name(scen)}, "
+            f"pathway={get_scenario_pathway(scen)}, family={get_pathway_family(scen)}"
+        )
+    plot_results(df)
+    print(f"Saved plot to: {PLOT_FILE}")
+
+
+if __name__ == "__main__":
+    main()

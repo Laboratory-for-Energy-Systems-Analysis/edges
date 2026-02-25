@@ -9,6 +9,8 @@ build:
   noarch: python
   number: 0
   script: python -m pip install --no-deps --ignore-installed .
+  post-link: post-link.sh  # [unix]
+  post-link: post-link.bat  # [win]
   script_env:
     - VERSION
     - CONDA_BLD_PATH
@@ -23,6 +25,7 @@ requirements:
 
   run:
     - python >=3.10, <3.13
+    - pip
     - numpy
     - pandas
     - scipy
