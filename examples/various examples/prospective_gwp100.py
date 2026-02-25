@@ -105,23 +105,13 @@ def get_pathway_family(scenario: str) -> str:
         return "medium forcing"
     if "NDC" in pathway or "PkBudg1000" in pathway or "LO" in pathway:
         return "low forcing"
+    # Collapse very-low targets into the low-forcing family for plotting.
     if "PkBudg650" in pathway or "VL" in pathway:
-        return "very low forcing"
+        return "low forcing"
     if pathway.endswith("-L") or "_L" in pathway:
         return "low forcing"
-    return "other"
-
-
-def get_scenario_style(scenario: str) -> str | tuple:
-    family = get_pathway_family(scenario)
-    style_by_family = {
-        "high forcing": "--",
-        "medium forcing": "-.",
-        "low forcing": "-",
-        "very low forcing": (0, (1, 1)),
-        "other": ":",
-    }
-    return style_by_family[family]
+    # Default fallback kept inside the requested high/medium/low taxonomy.
+    return "medium forcing"
 
 
 def get_model_name(scenario: str) -> str:
@@ -151,26 +141,25 @@ def build_results_dataframe(lcia: EdgeLCIA) -> pd.DataFrame:
 
 
 def plot_results(df: pd.DataFrame) -> None:
-    model_colors = {
-        "IMAGE": "#1b9e77",
-        "MESSAGE": "#d95f02",
-        "REMIND": "#7570b3",
+    forcing_colors = {
+        "high forcing": "#d73027",
+        "medium forcing": "#fc8d59",
+        "low forcing": "#1a9850",
     }
 
-    fig, ax = plt.subplots(figsize=(9.5, 5))
+    fig, ax = plt.subplots(figsize=(6.5, 6.5))
     scenario_handles = {}
 
     for scenario in sorted(df["Scenario"].unique()):
         data = df[df["Scenario"] == scenario].sort_values("Year")
-        model = get_model_name(scenario)
-        color = model_colors.get(model, "gray")
-        style = get_scenario_style(scenario)
+        forcing = get_pathway_family(scenario)
+        color = forcing_colors[forcing]
 
         (line,) = ax.plot(
             data["Year"],
             data["GWP100 [kg CO2-eq/kg H2]"],
             color=color,
-            linestyle=style,
+            linestyle="-",
             linewidth=2,
             label=scenario,
         )
@@ -187,26 +176,25 @@ def plot_results(df: pd.DataFrame) -> None:
             va="center",
         )
 
-    ax.set_title("Prospective GWP100 of hydrogen production (offshore wind PEM)")
+    ax.set_title(
+        "Prospective GWP100 of hydrogen production\n"
+        "(offshore wind-powered PEM electrolyser)"
+    )
     ax.set_xlabel("Year")
-    ax.set_ylabel("GWP100 [kg CO2-eq/kg H2]")
+    ax.set_ylabel(r"GWP100 [kg CO$_2$-eq/kg H$_2$]")
     ax.grid(True, linestyle="--", alpha=0.4)
     ax.set_xlim(df["Year"].min(), df["Year"].max() + 8)
 
-    model_legend = [
-        Line2D([0], [0], color=model_colors[m], lw=2, label=m)
-        for m in sorted(set(df["Model"]))
+    forcing_legend = [
+        Line2D([0], [0], color=forcing_colors[f], lw=2, label=f)
+        for f in ["high forcing", "medium forcing", "low forcing"]
     ]
-    model_leg = ax.legend(handles=model_legend, title="IAM model (color)", loc="upper left")
-    ax.add_artist(model_leg)
-
-    families = sorted({get_pathway_family(s) for s in df["Scenario"].unique()})
-    style_by_family = {fam: get_scenario_style(next(s for s in df["Scenario"].unique() if get_pathway_family(s) == fam)) for fam in families}
-    style_legend = [
-        Line2D([0], [0], color="black", lw=2, linestyle=style_by_family[f], label=f)
-        for f in families
-    ]
-    ax.legend(handles=style_legend, title="Pathway level (line style)", loc="lower left", fontsize=8)
+    ax.legend(
+        handles=forcing_legend,
+        title="Forcing level (color)",
+        loc="upper left",
+        fontsize=8,
+    )
 
     plt.tight_layout()
     fig.savefig(PLOT_FILE, dpi=200, bbox_inches="tight")
