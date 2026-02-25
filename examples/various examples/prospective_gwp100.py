@@ -11,14 +11,15 @@ from matplotlib.lines import Line2D
 import edges
 from edges import EdgeLCIA, setup_package_logging
 
-
 PROJECT_NAME = "bw25_ei310"
 ECOINVENT_DB = "ecoinvent-3.10.1-cutoff"
 ACTIVITY_NAME = "apple production"
 ACTIVITY_LOCATION = "IT"
 
 ROOT = Path(__file__).resolve().parents[2]
-PLOT_FILE = ROOT / "examples" / "various examples" / "figure_prospective_gwp100_apple_IT.png"
+PLOT_FILE = (
+    ROOT / "examples" / "various examples" / "figure_prospective_gwp100_apple_IT.png"
+)
 
 
 def get_activity():
@@ -145,9 +146,7 @@ def plot_results(df: pd.DataFrame) -> None:
             va="center",
         )
 
-    ax.set_title(
-        "Prospective GWP100 of apple production (IT)"
-    )
+    ax.set_title("Prospective GWP100 of apple production (IT)")
     ax.set_xlabel("Year")
     ax.set_ylabel(r"GWP100 [kg CO$_2$-eq/unit apple production]")
     ax.grid(True, linestyle="--", alpha=0.4)
@@ -180,7 +179,7 @@ def main() -> None:
 
     act = get_activity()
 
-    method =  ('Prospective', 'GWP100')
+    method = ("Prospective", "GWP100")
 
     lcia = EdgeLCIA(demand={act: 1}, method=method)
     lcia.lci()
