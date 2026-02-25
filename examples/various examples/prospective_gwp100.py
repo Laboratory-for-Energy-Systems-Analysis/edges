@@ -4,7 +4,6 @@ from collections import defaultdict
 from pathlib import Path
 
 import bw2data
-import bw2io
 import matplotlib.pyplot as plt
 import pandas as pd
 from matplotlib.lines import Line2D
@@ -15,59 +14,29 @@ from edges import EdgeLCIA, setup_package_logging
 
 PROJECT_NAME = "bw25_ei310"
 ECOINVENT_DB = "ecoinvent-3.10.1-cutoff"
-H2_DB = "h2_pem"
-ACTIVITY_NAME = (
-    "hydrogen production, gaseous, 30 bar, from PEM electrolysis, "
-    "from offshore wind electricity"
-)
+ACTIVITY_NAME = "apple production"
+ACTIVITY_LOCATION = "IT"
 
 ROOT = Path(__file__).resolve().parents[2]
-INVENTORY_FILE = ROOT / "examples" / "publication examples" / "lci-hydrogen-electrolysis-ei310.xlsx"
-PLOT_FILE = ROOT / "examples" / "various examples" / "figure_prospective_gwp100_hydrogen.png"
-
-
-def get_biosphere_database_name() -> str:
-    if "biosphere" in bw2data.databases:
-        return "biosphere"
-
-    biosphere_candidates = sorted(
-        name for name in bw2data.databases if "biosphere" in name.lower()
-    )
-    if not biosphere_candidates:
-        raise RuntimeError(
-            "No biosphere database found in current project. "
-            "Please import ecoinvent and biosphere databases first."
-        )
-    return biosphere_candidates[0]
-
-
-def ensure_hydrogen_database() -> None:
-    if H2_DB in bw2data.databases:
-        return
-
-    importer = bw2io.ExcelImporter(str(INVENTORY_FILE))
-    importer.apply_strategies()
-    importer.match_database(fields=["name", "reference product", "location"])
-    importer.match_database(
-        ECOINVENT_DB, fields=["name", "reference product", "location"]
-    )
-    importer.match_database(
-        get_biosphere_database_name(), fields=["name", "categories"]
-    )
-    importer.drop_unlinked(i_am_reckless=True)
-
-    if len(list(importer.unlinked)) > 0:
-        raise RuntimeError(
-            f"Hydrogen inventory still has {len(list(importer.unlinked))} unlinked exchanges."
-        )
-
-    importer.write_database()
+PLOT_FILE = ROOT / "examples" / "various examples" / "figure_prospective_gwp100_apple_IT.png"
 
 
 def get_activity():
-    matches = [a for a in bw2data.Database(H2_DB) if a["name"] == ACTIVITY_NAME]
+    matches = [
+        a
+        for a in bw2data.Database(ECOINVENT_DB)
+        if a["name"] == ACTIVITY_NAME and a.get("location") == ACTIVITY_LOCATION
+    ]
     if not matches:
-        raise RuntimeError(f"Activity not found in '{H2_DB}': {ACTIVITY_NAME}")
+        raise RuntimeError(
+            f"Activity not found in '{ECOINVENT_DB}': "
+            f"name='{ACTIVITY_NAME}', location='{ACTIVITY_LOCATION}'"
+        )
+    if len(matches) > 1:
+        print(
+            f"Found {len(matches)} matching datasets for '{ACTIVITY_NAME}' in "
+            f"'{ACTIVITY_LOCATION}'. Using the first one."
+        )
     return matches[0]
 
 
@@ -133,7 +102,7 @@ def build_results_dataframe(lcia: EdgeLCIA) -> pd.DataFrame:
                     "Scenario": scenario,
                     "Model": get_model_name(scenario),
                     "Year": year,
-                    "GWP100 [kg CO2-eq/kg H2]": lcia.score,
+                    "GWP100 [kg CO2-eq/unit apple production]": lcia.score,
                 }
             )
 
@@ -157,7 +126,7 @@ def plot_results(df: pd.DataFrame) -> None:
 
         (line,) = ax.plot(
             data["Year"],
-            data["GWP100 [kg CO2-eq/kg H2]"],
+            data["GWP100 [kg CO2-eq/unit apple production]"],
             color=color,
             linestyle="-",
             linewidth=2,
@@ -169,7 +138,7 @@ def plot_results(df: pd.DataFrame) -> None:
         end = data.iloc[-1]
         ax.text(
             end["Year"] + 0.6,
-            end["GWP100 [kg CO2-eq/kg H2]"],
+            end["GWP100 [kg CO2-eq/unit apple production]"],
             get_scenario_pathway(scenario),
             color=color,
             fontsize=7,
@@ -177,11 +146,10 @@ def plot_results(df: pd.DataFrame) -> None:
         )
 
     ax.set_title(
-        "Prospective GWP100 of hydrogen production\n"
-        "(offshore wind-powered PEM electrolyser)"
+        "Prospective GWP100 of apple production (IT)"
     )
     ax.set_xlabel("Year")
-    ax.set_ylabel(r"GWP100 [kg CO$_2$-eq/kg H$_2$]")
+    ax.set_ylabel(r"GWP100 [kg CO$_2$-eq/unit apple production]")
     ax.grid(True, linestyle="--", alpha=0.4)
     ax.set_xlim(df["Year"].min(), df["Year"].max() + 8)
 
@@ -210,7 +178,6 @@ def main() -> None:
             f"Database '{ECOINVENT_DB}' not found in project '{PROJECT_NAME}'."
         )
 
-    ensure_hydrogen_database()
     act = get_activity()
 
     method =  ('Prospective', 'GWP100')
