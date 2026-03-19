@@ -2587,35 +2587,54 @@ class EdgeLCIA:
                             )
                         )
 
-            # Pass 1
+            # Pass 1: compute per unique (cand_sup, cand_con, consumer_sig) within each supplier group
             if len(prefiltered_groups) > 0:
                 for sig, group_edges in prefiltered_groups.items():
-                    supplier_info = group_edges[0][2]
-                    consumer_info = group_edges[0][3]
-                    candidate_supplier_locations = group_edges[0][-2]
-                    candidate_consumer_locations = group_edges[0][-1]
+                    memo = {}
 
-                    new_cf, matched_cf_obj, agg_uncertainty = (
-                        self._compute_average_cf_cached(
-                            candidate_suppliers=candidate_supplier_locations,
-                            candidate_consumers=candidate_consumer_locations,
-                            supplier_info=supplier_info,
-                            consumer_info=consumer_info,
-                            required_supplier_fields=self.required_supplier_fields,
-                            required_consumer_fields=self.required_consumer_fields,
-                            cf_index=self.cf_index,
-                        )
-                    )
+                    def _consumer_sig(consumer_info: dict) -> tuple:
+                        fields = set(self.required_consumer_fields)
+                        if any(
+                            "classifications" in cf["consumer"]
+                            for cf in self.raw_cfs_data
+                        ):
+                            fields.add("classifications")
+                        proj = {
+                            k: consumer_info[k] for k in fields if k in consumer_info
+                        }
+                        return make_hashable(proj)
 
-                    if new_cf:
-                        for (
-                            supplier_idx,
-                            consumer_idx,
-                            supplier_info,
-                            consumer_info,
-                            _,
-                            _,
-                        ) in group_edges:
+                    for (
+                        supplier_idx,
+                        consumer_idx,
+                        supplier_info,
+                        consumer_info,
+                        cand_sup,
+                        cand_con,
+                    ) in group_edges:
+                        # Canonicalize candidate pools so equivalent edges share memoized results.
+                        cand_sup_s = tuple(sorted({str(x).strip() for x in cand_sup}))
+                        cand_con_s = tuple(sorted({str(x).strip() for x in cand_con}))
+                        c_sig = _consumer_sig(consumer_info)
+                        mkey = (cand_sup_s, cand_con_s, c_sig)
+
+                        if mkey not in memo:
+                            new_cf, matched_cf_obj, agg_uncertainty = (
+                                self._compute_average_cf_cached(
+                                    candidate_suppliers=cand_sup_s,
+                                    candidate_consumers=cand_con_s,
+                                    supplier_info=supplier_info,
+                                    consumer_info=consumer_info,
+                                    required_supplier_fields=self.required_supplier_fields,
+                                    required_consumer_fields=self.required_consumer_fields,
+                                    cf_index=self.cf_index,
+                                )
+                            )
+                            memo[mkey] = (new_cf, matched_cf_obj, agg_uncertainty)
+
+                        new_cf, matched_cf_obj, agg_uncertainty = memo[mkey]
+
+                        if new_cf != 0:
                             add_cf_entry(
                                 cfs_mapping=self.cfs_mapping,
                                 supplier_info=supplier_info,
@@ -2626,18 +2645,6 @@ class EdgeLCIA:
                                 uncertainty=agg_uncertainty,
                                 seen_positions=self._seen_positions,
                             )
-                    else:
-                        self._record_fallback_cf_failure(
-                            supplier_info=supplier_info,
-                            consumer_info=consumer_info,
-                            candidate_suppliers=candidate_supplier_locations,
-                            candidate_consumers=candidate_consumer_locations,
-                            direction=direction,
-                            indices=[
-                                (supplier_idx, consumer_idx)
-                                for supplier_idx, consumer_idx, *_ in group_edges
-                            ],
-                        )
 
             # Pass 2
             compute_cf_memoized = compute_cf_memoized_factory(
