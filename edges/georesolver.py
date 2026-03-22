@@ -24,6 +24,7 @@ def load_bafu_topologies():
     with open(BAFU_TOPOLOGY_FILE, "r", encoding="utf-8") as f:
         return json.load(f)
 
+
 class GeoResolver:
     """
     Resolve geographic containment/coverage using constructive_geometries + project weights.
