@@ -1,0 +1,12 @@
+{
+  "OCE": ["AU", "NZ", "PG", "FJ", "SB", "VU", "NC"],
+  "APAC": ["AU", "NZ", "CN", "JP", "KR", "KP", "MN", "IN", "PK", "BD", "LK", "NP", "BT", "MM", "TH", "LA", "KH", "VN", "MY", "SG", "ID", "PH", "BN", "TL"],
+  "SERC": ["US"],
+  "ASCC": ["US"],
+  "SPP": ["US"],
+  "EEU": ["AL", "BA", "BG", "CZ", "EE", "HR", "HU", "LT", "LV", "ME", "MK", "PL", "RO", "RS", "SI", "SK", "XK"],
+  "CPA": ["CN", "VN"],
+  "ERCOT": ["US"],
+  "FRCC": ["US"],
+  "RFC": ["US"]
+}
