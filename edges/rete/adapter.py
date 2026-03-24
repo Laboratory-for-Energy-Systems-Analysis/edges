@@ -92,8 +92,12 @@ def map_exchanges_clips(lcia: "EdgeLCIA"):
 
     unsupported = set()
     for cf in lcia.raw_cfs_data:
-        unsupported |= set((cf.get("supplier") or {}).keys()) - SUPPORTED_CLIPS_SIDE_FIELDS
-        unsupported |= set((cf.get("consumer") or {}).keys()) - SUPPORTED_CLIPS_SIDE_FIELDS
+        unsupported |= (
+            set((cf.get("supplier") or {}).keys()) - SUPPORTED_CLIPS_SIDE_FIELDS
+        )
+        unsupported |= (
+            set((cf.get("consumer") or {}).keys()) - SUPPORTED_CLIPS_SIDE_FIELDS
+        )
     if unsupported:
         raise NotImplementedError(
             "CLIPS backend does not support these matching fields yet: "
