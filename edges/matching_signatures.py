@@ -5,7 +5,6 @@ from typing import Any
 
 from .utils import make_hashable
 
-
 SUPPORTED_CLIPS_SIDE_FIELDS = frozenset(
     {
         "matrix",
