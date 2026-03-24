@@ -24,6 +24,16 @@ activity_D = get_activity(("lcia-test-db", "D"))
 activity_E = get_activity(("lcia-test-db", "E"))
 
 
+def _activity_demand_key(activity):
+    return activity.id if hasattr(activity, "id") else activity
+
+
+def _activity_identity(activity):
+    if hasattr(activity, "id"):
+        return activity.id
+    return getattr(activity, "key", activity)
+
+
 def _run_full(demand, filepath):
     lca = EdgeLCIA(demand=demand, filepath=filepath)
     lca.lci()
@@ -45,10 +55,10 @@ def test_redo_lcia_matches_fresh_runs_after_demand_change():
     baseline = float(lca.score)
     assert baseline > 0
 
-    lca.redo_lcia(demand={activity_A.id: 2})
+    lca.redo_lcia(demand={_activity_demand_key(activity_A): 2})
     assert pytest.approx(lca.score) == baseline * 2
 
-    lca.redo_lcia(demand={activity_A.id: 1})
+    lca.redo_lcia(demand={_activity_demand_key(activity_A): 1})
     assert pytest.approx(lca.score) == baseline
 
 
@@ -94,7 +104,7 @@ def test_redo_lcia_switch_activity_matches_fresh_full_run_with_strategies():
     fresh_d.lcia()
     assert pytest.approx(lca.score) == fresh_d.score
 
-    lca.redo_lcia(demand={activity_E.id: 1})
+    lca.redo_lcia(demand={_activity_demand_key(activity_E): 1})
     fresh_e = EdgeLCIA(demand={activity_E: 1}, method=method)
     fresh_e.lci()
     fresh_e.apply_strategies()
@@ -128,7 +138,8 @@ def test_redo_lcia_hydrogen_then_two_random_activities_with_timing():
     if hydrogen is None:
         pytest.skip("Hydrogen reference activity not found in 'h2_pem'.")
 
-    candidates = [a for a in db if a.id != hydrogen.id]
+    hydrogen_identity = _activity_identity(hydrogen)
+    candidates = [a for a in db if _activity_identity(a) != hydrogen_identity]
     if len(candidates) < 2:
         pytest.skip("Need at least 2 additional activities in 'h2_pem'.")
 
@@ -139,12 +150,12 @@ def test_redo_lcia_hydrogen_then_two_random_activities_with_timing():
     lca, t_full = _run_full_method({hydrogen: 1}, method)
 
     t0 = time.perf_counter()
-    lca.redo_lcia(demand={act2.id: 1})
+    lca.redo_lcia(demand={_activity_demand_key(act2): 1})
     t_redo_2 = time.perf_counter() - t0
     redo_score_2 = lca.score
 
     t0 = time.perf_counter()
-    lca.redo_lcia(demand={act3.id: 1})
+    lca.redo_lcia(demand={_activity_demand_key(act3): 1})
     t_redo_3 = time.perf_counter() - t0
     redo_score_3 = lca.score
 

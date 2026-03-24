@@ -15,6 +15,10 @@ import numpy as np
 from . import EdgeLCIA
 
 
+def _activity_demand_key(activity):
+    return activity.id if hasattr(activity, "id") else activity
+
+
 def find_leaves(
     activity,
     lcia_method,
@@ -46,7 +50,7 @@ def find_leaves(
         cache[k] = lca_obj.score
     else:
         if k not in cache:
-            lca_obj.lcia({activity.id: amount})
+            lca_obj.lcia({_activity_demand_key(activity): amount})
             cache[k] = lca_obj.score
             sub_score = lca_obj.score
         else:
@@ -209,7 +213,7 @@ def compare_activities_by_grouped_leaves(
 
     data = []
     for act, lst in zip(activities, objs):
-        lca.redo_lcia({act.id: 1})
+        lca.redo_lcia({_activity_demand_key(act): 1})
         idx = np.argwhere(lca.demand_array)[0][-1]
         data.append(
             [
