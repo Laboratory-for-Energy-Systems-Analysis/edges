@@ -34,6 +34,10 @@ classification, amount exchanged, etc.). This enables a more detailed and flexib
 impact characterization, accommodating parameters like the location of the consumer 
 and the magnitude of the exchange.
 
+When necessary, custom CF definitions can also match on `unit` to distinguish flows
+that would otherwise share the same `name`, `location`, `categories`, or
+`reference product`.
+
 Furthermore, ``edges`` supports the calculation of weighted CFs for both static regions 
 (e.g., RER) and dynamic regions (e.g., RoW), enhancing its ability to model complex 
 and region-specific scenarios.

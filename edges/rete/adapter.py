@@ -9,6 +9,7 @@ from .engine import ClipsEngine, ReteExecutionInput
 from .facts import attach_suppliers, build_biosphere_nodes, build_technosphere_nodes
 from .rules import compile_rules
 from edges.edgelcia import add_cf_entry
+from edges.matching_signatures import SUPPORTED_CLIPS_SIDE_FIELDS
 
 if TYPE_CHECKING:
     from edges.edgelcia import EdgeLCIA
@@ -89,21 +90,10 @@ def map_exchanges_clips(lcia: "EdgeLCIA"):
     lcia._ensure_filtered_lookups_for_current_edges()
     lcia._initialize_weights()
 
-    supported_side_fields = {
-        "matrix",
-        "operator",
-        "name",
-        "reference product",
-        "location",
-        "categories",
-        "classifications",
-        "excludes",
-        "__compiled_match__",
-    }
     unsupported = set()
     for cf in lcia.raw_cfs_data:
-        unsupported |= set((cf.get("supplier") or {}).keys()) - supported_side_fields
-        unsupported |= set((cf.get("consumer") or {}).keys()) - supported_side_fields
+        unsupported |= set((cf.get("supplier") or {}).keys()) - SUPPORTED_CLIPS_SIDE_FIELDS
+        unsupported |= set((cf.get("consumer") or {}).keys()) - SUPPORTED_CLIPS_SIDE_FIELDS
     if unsupported:
         raise NotImplementedError(
             "CLIPS backend does not support these matching fields yet: "

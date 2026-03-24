@@ -2,7 +2,9 @@ from pathlib import Path
 from types import SimpleNamespace
 import logging
 
+import numpy as np
 import pytest
+import sparse
 from scipy.sparse import csr_matrix
 
 from edges.edgelcia import EdgeLCIA
@@ -101,6 +103,34 @@ def test_evaluate_cfs_deterministic_across_cf_order():
     assert (lcia_a.characterization_matrix != lcia_b.characterization_matrix).nnz == 0
 
 
+def test_lcia_uncertainty_returns_dense_score_vector():
+    lcia = EdgeLCIA.__new__(EdgeLCIA)
+    lcia.use_distributions = True
+    lcia.iterations = 3
+    lcia.processed_biosphere_edges = {(0, 0)}
+    lcia.processed_technosphere_edges = set()
+    lcia.raw_cfs_data = [
+        {
+            "supplier": {"matrix": "biosphere"},
+            "consumer": {"matrix": "technosphere"},
+        }
+    ]
+    lcia.lca = SimpleNamespace(inventory=csr_matrix(([2.0], ([0], [1])), shape=(2, 2)))
+    lcia.technosphere_flow_matrix = None
+    lcia.characterization_matrix = sparse.COO(
+        coords=np.array([[0, 0, 0], [1, 1, 1], [0, 1, 2]]),
+        data=np.array([10.0, 20.0, 30.0]),
+        shape=(2, 2, 3),
+    )
+    lcia.logger = logging.getLogger("test.edgelcia.robustness")
+
+    lcia.lcia()
+
+    assert isinstance(lcia.score, np.ndarray)
+    assert lcia.score.shape == (3,)
+    assert np.allclose(lcia.score, np.array([20.0, 40.0, 60.0]))
+
+
 def test_map_exchanges_rejects_unknown_backend():
     lcia = EdgeLCIA.__new__(EdgeLCIA)
     lcia.matcher_backend = "unknown"
@@ -124,3 +154,38 @@ def test_map_exchanges_dispatches_clips_backend(monkeypatch):
     monkeypatch.setattr(adapter, "map_exchanges_clips", _clips)
     assert lcia.map_exchanges() == "clips-ok"
     assert called["clips"] is True
+
+
+def test_warn_duplicate_matching_signatures_logs_warning(caplog):
+    lcia = EdgeLCIA.__new__(EdgeLCIA)
+    lcia.logger = logging.getLogger("test.edgelcia.robustness.duplicates")
+    lcia.raw_cfs_data = [
+        {
+            "supplier": {
+                "matrix": "biosphere",
+                "name": "Water",
+                "categories": ("water",),
+                "unit": "m3",
+            },
+            "consumer": {"matrix": "technosphere", "location": "GLO"},
+            "value": -42.95,
+        },
+        {
+            "supplier": {
+                "matrix": "biosphere",
+                "name": "Water",
+                "categories": ("water",),
+                "unit": "m3",
+            },
+            "consumer": {"matrix": "technosphere", "location": "GLO"},
+            "value": -0.04295,
+        },
+    ]
+
+    with caplog.at_level(logging.WARNING, logger=lcia.logger.name):
+        lcia._warn_duplicate_matching_signatures()
+
+    assert len(lcia.duplicate_method_signature_groups) == 1
+    assert lcia.duplicate_method_signature_groups[0]["indices"] == (0, 1)
+    assert "duplicate CF matching signature group" in caplog.text
+    assert "Water" in caplog.text

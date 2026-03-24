@@ -55,6 +55,7 @@ from .flow_matching import (
 from .georesolver import GeoResolver
 from .uncertainty import sample_cf_distribution, make_distribution_key, get_rng_for_key
 from .filesystem_constants import DATA_DIR
+from .matching_signatures import find_duplicate_clips_signatures
 
 from bw2calc import __version__ as bw2calc_version
 
@@ -452,6 +453,7 @@ class EdgeLCIA:
         self.characterized_inventory = None
         self.ignored_locations = set()
         self.ignored_method_exchanges = list()
+        self.duplicate_method_signature_groups: list[dict[str, Any]] = []
         self.weight_scheme: str = weight
 
         # Accept both "parameters" and "scenarios" for flexibility
@@ -805,6 +807,8 @@ class EdgeLCIA:
                 "Provide a method with a single supplier matrix type."
             )
 
+        self._warn_duplicate_matching_signatures()
+
         # Precompute normalized classification tuples for fast matching (unchanged)
         for cf in self.raw_cfs_data:
             cf["_norm_supplier_cls"] = _norm_cls(
@@ -854,6 +858,41 @@ class EdgeLCIA:
         }
 
         self.cf_index = build_cf_index(self.raw_cfs_data)
+
+    def _warn_duplicate_matching_signatures(self) -> None:
+        groups = find_duplicate_clips_signatures(self.raw_cfs_data or [])
+        self.duplicate_method_signature_groups = groups
+        if not groups:
+            return
+
+        def _compact(value: Any, limit: int = 160) -> str:
+            try:
+                text = json.dumps(value, sort_keys=True, default=str)
+            except Exception:
+                text = repr(value)
+            return text if len(text) <= limit else text[: limit - 1] + "…"
+
+        examples = []
+        for group in groups[:3]:
+            examples.append(
+                "indices=%s supplier=%s consumer=%s values=%s"
+                % (
+                    list(group["indices"]),
+                    _compact(group["supplier"]),
+                    _compact(group["consumer"]),
+                    _compact(list(group["values"]), limit=80),
+                )
+            )
+
+        duplicate_entries = sum(group["count"] for group in groups)
+        self.logger.warning(
+            "Method contains %d duplicate CF matching signature group(s) covering %d CF entries. "
+            "These CFs share the same effective CLIPS matching criteria, so only the first matched CF "
+            "for a given edge will be applied. Examples: %s",
+            len(groups),
+            duplicate_entries,
+            " | ".join(examples),
+        )
 
     def _cls_candidates_from_cf_cached(
         self, norm_cls, prefix_index_by_scheme, adjacency_keys=None
@@ -3439,7 +3478,12 @@ class EdgeLCIA:
 
             # Sum across dimensions i and j to get 1 value per iteration
             self.characterized_inventory = characterized
-            self.score = characterized.sum(axis=(0, 1), dtype=np.float64)
+            score = characterized.sum(axis=(0, 1), dtype=np.float64)
+            if isinstance(score, sparse.COO):
+                score = np.asarray(score.todense(), dtype=float).reshape(-1)
+            else:
+                score = np.asarray(score, dtype=float).reshape(-1)
+            self.score = score
 
         else:
             # --- Deterministic path with a small guard against rare NotImplemented

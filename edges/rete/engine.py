@@ -120,6 +120,7 @@ class ClipsEngine:
   (slot name (type LEXEME))
   (slot location (type LEXEME))
   (slot reference_product (type LEXEME))
+  (slot unit (type LEXEME))
   (slot categories_path (type LEXEME))
   (multislot class_prefixes (type STRING))
   (multislot bio_suppliers (type INTEGER))
@@ -167,6 +168,7 @@ class ClipsEngine:
             f"(name {self._safe_lexeme(node.get('name'))}) "
             f"(location {self._safe_lexeme(node.get('location'))}) "
             f"(reference_product {self._safe_lexeme(node.get('reference product'))}) "
+            f"(unit {self._safe_lexeme(node.get('unit'))}) "
             f"(categories_path {self._safe_lexeme(node.get('_categories_path'))}) "
             f"(class_prefixes {class_prefixes_txt}) "
             f"(bio_suppliers {bio_suppliers_txt}) "
@@ -311,7 +313,13 @@ class ClipsEngine:
             slot = "bio_suppliers" if source_matrix == "biosphere" else "tech_suppliers"
             parts.append(f"({slot} $? ?from_id $?)")
 
-        for field_name in ("location", "name", "reference_product", "categories_path"):
+        for field_name in (
+            "location",
+            "name",
+            "reference_product",
+            "unit",
+            "categories_path",
+        ):
             if field_name == "location" and not include_location:
                 continue
             slot = self._field_slot(field_name, rule_side)

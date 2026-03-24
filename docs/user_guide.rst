@@ -108,6 +108,9 @@ Using a Custom Method JSON
 
 Your method file should follow the expected CF JSON schema:
 
+Supplier and consumer matching keys can include ``unit`` when otherwise identical
+flows need to remain distinct during CF matching.
+
 .. code-block:: python
 
     import bw2data
