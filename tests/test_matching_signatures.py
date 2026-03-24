@@ -89,7 +89,9 @@ def test_map_exchanges_clips_accepts_unit_field(monkeypatch):
             on_match(0, 1, 2)
             return []
 
-    monkeypatch.setattr("edges.rete.adapter._get_or_create_engine", lambda _: _FakeEngine())
+    monkeypatch.setattr(
+        "edges.rete.adapter._get_or_create_engine", lambda _: _FakeEngine()
+    )
 
     lcia = SimpleNamespace(
         method="demo",
