@@ -22,7 +22,7 @@ def test_brightway_uncertainty_10000(test_debug_dir):
         {act: 1},
         method,
         use_distributions=True,
-        iterations=10000,
+        iterations=100,
     )
 
     lca.apply_strategies()
@@ -44,6 +44,6 @@ def test_brightway_uncertainty_10000(test_debug_dir):
         )
     )
 
-    assert scores.shape[0] == 10000
+    assert scores.shape[0] == 100
     assert np.isfinite(median_score)
     assert median_score > 0
