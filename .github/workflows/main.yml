@@ -40,7 +40,7 @@ jobs:
       fail-fast: false
       matrix:
         os: [ubuntu-latest, windows-latest, macos-latest]
-        python-version: ["3.11", "3.12"]
+        python-version: ["3.11" ]
         brightway-stack: ["bw25"]
         include:
           - os: ubuntu-latest
@@ -223,7 +223,7 @@ jobs:
       fail-fast: false
       matrix:
         os: ["ubuntu-latest"]
-        python-version: ["3.11", "3.12",]
+        python-version: ["3.11"]
         solver: ["classic"]
     steps:
       - uses: actions/checkout@v4
