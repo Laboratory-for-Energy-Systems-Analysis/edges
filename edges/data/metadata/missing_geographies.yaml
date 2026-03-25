@@ -2,3 +2,126 @@ IN-DN:
   - IN
   - SAS
   - UN-ASIA
+
+# NERC electricity grid regions (NERC/EIA)
+SERC:
+  - US
+ASCC:
+  - US
+SPP:
+  - US
+RFC:
+  - US
+FRCC:
+  - US
+ERCOT:
+  - US
+
+# BAFU macro-regions
+EEU:
+  - AL
+  - BA
+  - BG
+  - CZ
+  - EE
+  - HR
+  - HU
+  - LT
+  - LV
+  - ME
+  - MK
+  - PL
+  - RO
+  - RS
+  - SI
+  - SK
+  - XK
+OCE:
+  - AU
+  - NZ
+  - PG
+  - FJ
+  - SB
+  - VU
+  - NC
+CPA:
+  - CN
+  - VN
+APAC:
+  - AU
+  - NZ
+  - CN
+  - JP
+  - KR
+  - KP
+  - MN
+  - IN
+  - PK
+  - BD
+  - LK
+  - NP
+  - BT
+  - MM
+  - TH
+  - LA
+  - KH
+  - VN
+  - MY
+  - SG
+  - ID
+  - PH
+  - BN
+  - TL
+
+# USCLI macro-regions
+Europe:
+  - AL
+  - AD
+  - AT
+  - BY
+  - BE
+  - BA
+  - BG
+  - HR
+  - CZ
+  - DK
+  - EE
+  - FI
+  - FR
+  - DE
+  - GI
+  - GR
+  - HU
+  - IS
+  - IE
+  - IT
+  - XK
+  - LV
+  - LI
+  - LT
+  - LU
+  - MK
+  - MT
+  - MD
+  - MC
+  - ME
+  - NL
+  - NO
+  - PL
+  - PT
+  - RS
+  - RO
+  - SM
+  - SK
+  - SI
+  - ES
+  - SE
+  - CH
+  - UA
+  - GB
+  - VA
+Northern America:
+  - US
+  - CA
+Global:
+  - GLO
