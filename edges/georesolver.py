@@ -1,28 +1,12 @@
-# edges/georesolver.py
 from __future__ import annotations
 
 from functools import lru_cache
 import logging
 from constructive_geometries import Geomatcher
-from .utils import load_missing_geographies, get_str, DATA_DIR
+from .utils import load_missing_geographies, get_str
 
 logger = logging.getLogger(__name__)
 logger.addHandler(logging.NullHandler())
-
-
-def load_bafu_topologies():
-    """
-    Load BAFU topologies from the variables directory.
-
-    :return: Dict of BAFU topologies.
-    """
-    import json
-    from pathlib import Path
-
-    BAFU_TOPOLOGY_FILE = DATA_DIR / "metadata" / "BAFU_topologies.json"
-
-    with open(BAFU_TOPOLOGY_FILE, "r", encoding="utf-8") as f:
-        return json.load(f)
 
 
 class GeoResolver:
@@ -70,10 +54,6 @@ class GeoResolver:
             self.geo.add_definitions(
                 {"World": ["GLO", "RoW"]}, "ecoinvent", relative=True
             )
-
-        # let's add BAFU topologies as well, since they are used in the weights and not included in the default topologies
-        bafu_topologies = load_bafu_topologies()
-        self.geo.add_definitions(bafu_topologies, "ecoinvent", relative=True)
 
     def find_locations(
         self,
