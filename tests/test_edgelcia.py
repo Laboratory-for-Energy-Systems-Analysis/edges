@@ -82,6 +82,25 @@ def test_excluded_subregions_skips_row(lcia):
     assert result == frozenset(["ES-CT", "ES-MD"])
 
 
+def test_excluded_subregions_skips_glo(lcia):
+    lcia.position_to_technosphere_flows_lookup = {
+        3: {"name": "natural gas", "reference product": "burned"},
+    }
+    lcia.technosphere_flows_lookup = {
+        ("natural gas", "burned"): ["GLO", "FR", "RoW"]
+    }
+
+    decomposed = frozenset(
+        {
+            ("GLO", ("FR", "DE", "BR")),
+            ("FR", ("FR-IDF", "FR-BRE")),
+        }
+    )
+
+    result = lcia._extract_excluded_subregions(3, decomposed)
+    assert result == frozenset(["FR-IDF", "FR-BRE"])
+
+
 def test_missing_position_does_nothing(lcia):
     lcia.position_to_technosphere_flows_lookup = {}
     lcia.technosphere_flows_lookup = {}

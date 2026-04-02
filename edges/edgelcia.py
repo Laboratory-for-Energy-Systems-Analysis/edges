@@ -1633,6 +1633,12 @@ class EdgeLCIA:
         """
         Get excluded subregions for a dynamic supplier or consumer.
 
+        Dynamic residual regions such as ``RoW`` should exclude explicit sibling
+        datasets, but they should not collapse just because a same-product
+        global fallback dataset exists in the inventory family. A ``GLO``
+        dataset is therefore treated like ``RoW``/``RoE`` here and skipped as
+        an exclusion source.
+
         :param idx: Index of the supplier or consumer flow.
         :param decomposed_exclusions: A frozenset of decomposed exclusions for the flow.
         :return: A frozenset of excluded subregions.
@@ -1646,7 +1652,7 @@ class EdgeLCIA:
 
         excluded_subregions = []
         for loc in exclusions:
-            if loc in ["RoW", "RoE"]:
+            if loc in ["GLO", "RoW", "RoE"]:
                 continue
             if decomposed_exclusions.get(loc):
                 excluded_subregions.extend(decomposed_exclusions[loc])
