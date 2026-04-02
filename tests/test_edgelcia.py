@@ -86,9 +86,7 @@ def test_excluded_subregions_skips_glo(lcia):
     lcia.position_to_technosphere_flows_lookup = {
         3: {"name": "natural gas", "reference product": "burned"},
     }
-    lcia.technosphere_flows_lookup = {
-        ("natural gas", "burned"): ["GLO", "FR", "RoW"]
-    }
+    lcia.technosphere_flows_lookup = {("natural gas", "burned"): ["GLO", "FR", "RoW"]}
 
     decomposed = frozenset(
         {
