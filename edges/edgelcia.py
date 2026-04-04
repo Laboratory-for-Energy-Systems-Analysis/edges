@@ -1513,6 +1513,23 @@ class EdgeLCIA:
             return edges
         return [edge for edge in edges if edge in allowed]
 
+    def _normalize_redo_demand(self, demand: dict | None) -> dict | None:
+        """
+        Normalize redo_lcia demand keys for the active Brightway generation.
+
+        For Brightway 2.5+, ``redo_lci`` expects integer activity ids. Accepting
+        either ``{activity: amount}`` or ``{activity.id: amount}`` here makes
+        redo_lcia consistent with the rest of the user-facing API.
+        """
+
+        if demand is None or bw2:
+            return demand
+
+        normalized = {}
+        for key, amount in demand.items():
+            normalized[getattr(key, "id", key)] = amount
+        return normalized
+
     def _get_supplier_info(self, supplier_idx: int, direction: str) -> dict:
         """
         Robustly fetch supplier info for a row index in either direction.
@@ -3613,10 +3630,12 @@ class EdgeLCIA:
             start_nnz = self.characterization_matrix.nnz
         self.logger.info(f"Starting characterization_matrix nnz = {start_nnz}")
 
+        normalized_demand = self._normalize_redo_demand(demand)
+
         # 0) Update demand vector if user passed one
-        if demand is not None:
+        if normalized_demand is not None:
             self.lca.demand.clear()
-            self.lca.demand.update(demand)
+            self.lca.demand.update(normalized_demand)
 
         only_tech = all(
             cf["supplier"]["matrix"] == "technosphere" for cf in self.raw_cfs_data
@@ -3642,7 +3661,7 @@ class EdgeLCIA:
                 previous_edges_snapshot = set(self.biosphere_edges or set())
 
         # 2) Recompute inventory & edges for the *new* demand
-        self.lca.redo_lci(demand=demand)  # updates matrices
+        self.lca.redo_lci(demand=normalized_demand)  # updates matrices
 
         # Recompute CURRENT edges from fresh matrices
         if only_tech:

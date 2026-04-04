@@ -122,6 +122,62 @@ def test_redo_lcia_switch_activity_matches_fresh_full_run_with_strategies():
 
 
 @pytest.mark.forked
+def test_redo_lcia_accepts_activity_object_or_id_in_bw25():
+    if __version__ < Version("4.0.0"):
+        pytest.skip("Brightway < 4 accepts activity objects natively.")
+
+    method = {
+        "name": "redo demand normalization",
+        "version": "1.0",
+        "unit": "kg",
+        "strategies": [
+            "map_exchanges",
+            "map_aggregate_locations",
+            "map_dynamic_locations",
+            "map_contained_locations",
+            "map_remaining_locations_to_global",
+        ],
+        "exchanges": [
+            {
+                "value": 100,
+                "weight": 1.0,
+                "supplier": {"matrix": "technosphere"},
+                "consumer": {"matrix": "technosphere", "location": "RER"},
+            },
+            {
+                "value": 200,
+                "weight": 1.0,
+                "supplier": {"matrix": "technosphere"},
+                "consumer": {"matrix": "technosphere", "location": "GLO"},
+            },
+        ],
+    }
+
+    redo_obj = EdgeLCIA(demand={activity_D: 1}, method=method)
+    redo_obj.lci()
+    redo_obj.apply_strategies()
+    redo_obj.evaluate_cfs()
+    redo_obj.lcia()
+    redo_obj.redo_lcia(demand={activity_E: 1})
+
+    redo_id = EdgeLCIA(demand={activity_D: 1}, method=method)
+    redo_id.lci()
+    redo_id.apply_strategies()
+    redo_id.evaluate_cfs()
+    redo_id.lcia()
+    redo_id.redo_lcia(demand={activity_E.id: 1})
+
+    fresh_e = EdgeLCIA(demand={activity_E: 1}, method=method)
+    fresh_e.lci()
+    fresh_e.apply_strategies()
+    fresh_e.evaluate_cfs()
+    fresh_e.lcia()
+
+    assert pytest.approx(redo_obj.score) == redo_id.score
+    assert pytest.approx(redo_obj.score) == fresh_e.score
+
+
+@pytest.mark.forked
 def test_redo_lcia_does_not_run_location_fallbacks_when_direct_match_has_no_rejects():
     method = {
         "name": "redo empty eligible set",
