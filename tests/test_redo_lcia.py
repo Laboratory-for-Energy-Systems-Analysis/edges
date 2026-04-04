@@ -20,6 +20,7 @@ else:
 
 this_dir = Path(__file__).parent
 activity_A = get_activity(("lcia-test-db", "A"))
+activity_C = get_activity(("lcia-test-db", "C"))
 activity_D = get_activity(("lcia-test-db", "D"))
 activity_E = get_activity(("lcia-test-db", "E"))
 
@@ -111,6 +112,57 @@ def test_redo_lcia_switch_activity_matches_fresh_full_run_with_strategies():
     fresh_e.evaluate_cfs()
     fresh_e.lcia()
     assert pytest.approx(lca.score) == fresh_e.score
+
+
+@pytest.mark.forked
+def test_redo_lcia_does_not_run_location_fallbacks_when_direct_match_has_no_rejects():
+    method = {
+        "name": "redo empty eligible set",
+        "version": "1.0",
+        "unit": "kg",
+        "strategies": [
+            "map_exchanges",
+            "map_aggregate_locations",
+            "map_dynamic_locations",
+            "map_contained_locations",
+            "map_remaining_locations_to_global",
+        ],
+        "exchanges": [
+            {
+                "value": 100,
+                "weight": 1.0,
+                "supplier": {
+                    "matrix": "biosphere",
+                    "name": "Carbon dioxide, in air",
+                    "categories": ("air",),
+                },
+                "consumer": {"matrix": "technosphere", "location": "RER"},
+            },
+        ],
+    }
+
+    lca = EdgeLCIA(demand={activity_A: 1}, method=method)
+    lca.lci()
+    lca.apply_strategies()
+    lca.evaluate_cfs()
+    lca.lcia()
+    assert lca.score > 0
+
+    lca.redo_lcia(demand={_activity_demand_key(activity_C): 1})
+    assert lca.eligible_edges_for_next_bio == set()
+    assert lca._fallback_cf_failures_count == 0
+    assert lca._fallback_cf_miss_records == {}
+    assert lca.score == 0
+
+    fresh_c = EdgeLCIA(demand={activity_C: 1}, method=method)
+    fresh_c.lci()
+    fresh_c.apply_strategies()
+    fresh_c.evaluate_cfs()
+    fresh_c.lcia()
+    assert fresh_c.eligible_edges_for_next_bio == set()
+    assert fresh_c._fallback_cf_failures_count == 0
+    assert fresh_c._fallback_cf_miss_records == {}
+    assert pytest.approx(lca.score) == fresh_c.score
 
 
 def _run_full_method(demand, method):

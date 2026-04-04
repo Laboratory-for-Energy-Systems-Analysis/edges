@@ -455,6 +455,8 @@ class EdgeLCIA:
         self.ignored_method_exchanges = list()
         self.duplicate_method_signature_groups: list[dict[str, Any]] = []
         self.weight_scheme: str = weight
+        self.eligible_edges_for_next_bio = None
+        self.eligible_edges_for_next_tech = None
 
         # Accept both "parameters" and "scenarios" for flexibility
         self.parameters = parameters or {}
@@ -1488,6 +1490,29 @@ class EdgeLCIA:
         )
         return restrict_sup_bio, restrict_sup_tec, restrict_con
 
+    def _filter_edges_by_location_rejects(
+        self,
+        edges: list[tuple[int, int]],
+        direction: str,
+    ) -> list[tuple[int, int]]:
+        """
+        Restrict fallback strategies to edges explicitly rejected by direct matching.
+
+        `map_exchanges()` populates `eligible_edges_for_next_*` with location-mismatch
+        candidates. An empty set means "nothing should enter later location fallback
+        stages", while `None` means the direct matcher hasn't provided a restriction.
+        """
+
+        attr = (
+            "eligible_edges_for_next_bio"
+            if direction == "biosphere-technosphere"
+            else "eligible_edges_for_next_tech"
+        )
+        allowed = getattr(self, attr, None)
+        if allowed is None:
+            return edges
+        return [edge for edge in edges if edge in allowed]
+
     def _get_supplier_info(self, supplier_idx: int, direction: str) -> dict:
         """
         Robustly fetch supplier info for a row index in either direction.
@@ -1814,14 +1839,10 @@ class EdgeLCIA:
             processed_flows = set(processed_flows)
             edges_index = defaultdict(list)
 
-            # let's remove edges that have no chance of qualifying
-            allowed = (
-                self.eligible_edges_for_next_bio
-                if direction == "biosphere-technosphere"
-                else self.eligible_edges_for_next_tech
+            # Only direct location rejects should enter fallback stages.
+            unprocessed_edges = self._filter_edges_by_location_rejects(
+                unprocessed_edges, direction
             )
-            if allowed:
-                unprocessed_edges = [e for e in unprocessed_edges if e in allowed]
 
             for supplier_idx, consumer_idx in unprocessed_edges:
                 if (supplier_idx, consumer_idx) in processed_flows:
@@ -2184,14 +2205,10 @@ class EdgeLCIA:
             prefiltered_groups = defaultdict(list)
             remaining_edges = []
 
-            # let's remove edges that have no chance of qualifying
-            allowed = (
-                self.eligible_edges_for_next_bio
-                if direction == "biosphere-technosphere"
-                else self.eligible_edges_for_next_tech
+            # Only direct location rejects should enter fallback stages.
+            unprocessed_edges = self._filter_edges_by_location_rejects(
+                unprocessed_edges, direction
             )
-            if allowed:
-                unprocessed_edges = [e for e in unprocessed_edges if e in allowed]
 
             for supplier_idx, consumer_idx in unprocessed_edges:
                 if (supplier_idx, consumer_idx) in processed_flows:
@@ -2493,14 +2510,10 @@ class EdgeLCIA:
             processed_flows = set(processed_flows)
             edges_index = defaultdict(list)
 
-            # let's remove edges that have no chance of qualifying
-            allowed = (
-                self.eligible_edges_for_next_bio
-                if direction == "biosphere-technosphere"
-                else self.eligible_edges_for_next_tech
+            # Only direct location rejects should enter fallback stages.
+            unprocessed_edges = self._filter_edges_by_location_rejects(
+                unprocessed_edges, direction
             )
-            if allowed:
-                unprocessed_edges = [e for e in unprocessed_edges if e in allowed]
 
             for supplier_idx, consumer_idx in unprocessed_edges:
                 if (supplier_idx, consumer_idx) in processed_flows:
@@ -2839,15 +2852,10 @@ class EdgeLCIA:
             processed_flows = set(processed_flows)
             edges_index = defaultdict(list)
 
-            # let's remove edges that have no chance of qualifying
-            allowed = (
-                self.eligible_edges_for_next_bio
-                if direction == "biosphere-technosphere"
-                else self.eligible_edges_for_next_tech
+            # Only direct location rejects should enter fallback stages.
+            unprocessed_edges = self._filter_edges_by_location_rejects(
+                unprocessed_edges, direction
             )
-
-            if allowed:
-                unprocessed_edges = [e for e in unprocessed_edges if e in allowed]
 
             for supplier_idx, consumer_idx in unprocessed_edges:
                 if (supplier_idx, consumer_idx) in processed_flows:
