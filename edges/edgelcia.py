@@ -3805,8 +3805,10 @@ class EdgeLCIA:
                 )
 
         else:
-            # Deterministic mode: set values directly in the existing 2D matrix
-            cm = self.characterization_matrix  # SciPy CSR
+            # Deterministic mode: batch structural inserts in LIL before
+            # converting back to CSR. Writing new nonzeros into CSR one-by-one
+            # triggers SparseEfficiencyWarning and is slower.
+            cm = self.characterization_matrix.tolil()
             # Decide scenario context (use last known if possible)
             # Decide scenario context (prefer explicit args, then last-used, then class default, then first available key, else None)
             scenario_name = (
@@ -3856,7 +3858,7 @@ class EdgeLCIA:
                     }
                 )
             # Ensure efficient structure
-            self.characterization_matrix = self.characterization_matrix.tocsr()
+            self.characterization_matrix = cm.tocsr()
 
         # --- Diagnostics: ending nnz
         if isinstance(self.characterization_matrix, sparse.COO):

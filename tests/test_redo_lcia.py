@@ -1,10 +1,12 @@
 from pathlib import Path
 import random
 import time
+import warnings
 
 import pytest
 from bw2data import __version__, get_activity, projects, Database, databases
 from packaging.version import Version
+from scipy.sparse import SparseEfficiencyWarning
 
 from edges import EdgeLCIA
 
@@ -105,7 +107,12 @@ def test_redo_lcia_switch_activity_matches_fresh_full_run_with_strategies():
     fresh_d.lcia()
     assert pytest.approx(lca.score) == fresh_d.score
 
-    lca.redo_lcia(demand={_activity_demand_key(activity_E): 1})
+    with warnings.catch_warnings(record=True) as caught:
+        warnings.simplefilter("always", SparseEfficiencyWarning)
+        lca.redo_lcia(demand={_activity_demand_key(activity_E): 1})
+    assert not any(
+        issubclass(warning.category, SparseEfficiencyWarning) for warning in caught
+    )
     fresh_e = EdgeLCIA(demand={activity_E: 1}, method=method)
     fresh_e.lci()
     fresh_e.apply_strategies()
