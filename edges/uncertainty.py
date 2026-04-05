@@ -99,6 +99,58 @@ def _canon_atom(item):
     return val_repr, fp
 
 
+def _sample_bounded_continuous_distribution(draw_fn, n, minimum, maximum):
+    """
+    Draw ``n`` samples within inclusive bounds via rejection sampling.
+
+    This preserves the shape of the distribution inside the valid interval and
+    avoids artificially stacking probability mass at the boundaries, which
+    happens when simply clipping out-of-range draws.
+
+    :param draw_fn: Callable accepting ``size=...`` and returning raw samples.
+    :param n: Number of accepted samples to return.
+    :param minimum: Inclusive lower bound.
+    :param maximum: Inclusive upper bound.
+    :return: NumPy array of shape ``(n,)``.
+
+    :raises ValueError: If valid samples cannot be obtained after repeated tries.
+    """
+    if minimum > maximum:
+        raise ValueError(
+            f"Invalid bounds for bounded sampling: minimum={minimum} > maximum={maximum}"
+        )
+
+    accepted = []
+    remaining = n
+    batch_size = max(remaining, 128)
+    attempts = 0
+
+    while remaining > 0:
+        attempts += 1
+        if attempts > 100:
+            raise ValueError(
+                "Unable to obtain enough in-bounds samples after repeated draws; "
+                f"minimum={minimum}, maximum={maximum}, remaining={remaining}"
+            )
+
+        draws = np.asarray(draw_fn(size=batch_size), dtype=float)
+        valid = draws[(draws >= minimum) & (draws <= maximum)]
+
+        if valid.size == 0:
+            batch_size *= 2
+            continue
+
+        take = min(remaining, valid.size)
+        accepted.append(valid[:take])
+        remaining -= take
+
+        if remaining:
+            acceptance_rate = valid.size / draws.size
+            batch_size = max(int(np.ceil(remaining / acceptance_rate * 1.2)), 128)
+
+    return np.concatenate(accepted)
+
+
 def sample_cf_distribution(
     cf: dict,
     n: int,
@@ -188,42 +240,62 @@ def sample_cf_distribution(
             samples = random_state.triangular(left, mode, right, size=n)
 
         elif dist_name == "normal":
-            samples = random_state.normal(
-                loc=params["loc"], scale=params["scale"], size=n
+            samples = _sample_bounded_continuous_distribution(
+                draw_fn=lambda size: random_state.normal(
+                    loc=params["loc"], scale=params["scale"], size=size
+                ),
+                n=n,
+                minimum=params["minimum"],
+                maximum=params["maximum"],
             )
-            samples = np.clip(samples, params["minimum"], params["maximum"])
 
         elif dist_name == "lognorm":
             s = params["shape_a"]
             loc = params["loc"]
             scale = params["scale"]
-            samples = stats.lognorm.rvs(
-                s=s, loc=loc, scale=scale, size=n, random_state=random_state
+            samples = _sample_bounded_continuous_distribution(
+                draw_fn=lambda size: stats.lognorm.rvs(
+                    s=s, loc=loc, scale=scale, size=size, random_state=random_state
+                ),
+                n=n,
+                minimum=params["minimum"],
+                maximum=params["maximum"],
             )
-            samples = np.clip(samples, params["minimum"], params["maximum"])
 
         elif dist_name == "beta":
             a = params["shape_a"]
             b = params["shape_b"]
-            x = random_state.beta(a, b, size=n)
-            samples = params["loc"] + x * params["scale"]
-            samples = np.clip(samples, params["minimum"], params["maximum"])
+            samples = _sample_bounded_continuous_distribution(
+                draw_fn=lambda size: params["loc"]
+                + random_state.beta(a, b, size=size) * params["scale"],
+                n=n,
+                minimum=params["minimum"],
+                maximum=params["maximum"],
+            )
 
         elif dist_name == "gamma":
-            samples = (
-                random_state.gamma(params["shape_a"], params["scale"], size=n)
-                + params["loc"]
+            samples = _sample_bounded_continuous_distribution(
+                draw_fn=lambda size: random_state.gamma(
+                    params["shape_a"], params["scale"], size=size
+                )
+                + params["loc"],
+                n=n,
+                minimum=params["minimum"],
+                maximum=params["maximum"],
             )
-            samples = np.clip(samples, params["minimum"], params["maximum"])
 
         elif dist_name == "weibull_min":
             c = params["shape_a"]
             loc = params["loc"]
             scale = params["scale"]
-            samples = stats.weibull_min.rvs(
-                c=c, loc=loc, scale=scale, size=n, random_state=random_state
+            samples = _sample_bounded_continuous_distribution(
+                draw_fn=lambda size: stats.weibull_min.rvs(
+                    c=c, loc=loc, scale=scale, size=size, random_state=random_state
+                ),
+                n=n,
+                minimum=params["minimum"],
+                maximum=params["maximum"],
             )
-            samples = np.clip(samples, params["minimum"], params["maximum"])
 
         else:
             logger.warning(

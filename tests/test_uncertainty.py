@@ -182,3 +182,27 @@ def test_fallback_to_constant_on_unknown_distribution():
         cf, parameters=parameters, n=100, random_state=random_state
     )
     assert np.allclose(samples, 7.5)
+
+
+def test_log_normal_distribution_avoids_boundary_pile_up():
+    cf = {
+        "value": 51.1,
+        "uncertainty": {
+            "distribution": "lognorm",
+            "parameters": {
+                "shape_a": 0.867,
+                "loc": 0.1,
+                "scale": 38.276,
+                "minimum": 0.1,
+                "maximum": 100.0,
+            },
+        },
+    }
+    parameters = {}
+    random_state = np.random.default_rng(42)
+    samples = sample_cf_distribution(
+        cf, parameters=parameters, n=5000, random_state=random_state
+    )
+    assert np.all(samples >= 0.1)
+    assert np.all(samples <= 100.0)
+    assert np.count_nonzero(samples == 100.0) == 0
