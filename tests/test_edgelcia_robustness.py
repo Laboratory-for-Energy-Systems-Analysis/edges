@@ -2,6 +2,7 @@ from pathlib import Path
 from types import SimpleNamespace
 import logging
 
+import bw2data
 import numpy as np
 import pytest
 import sparse
@@ -189,3 +190,126 @@ def test_warn_duplicate_matching_signatures_logs_warning(caplog):
     assert lcia.duplicate_method_signature_groups[0]["indices"] == (0, 1)
     assert "duplicate CF matching signature group" in caplog.text
     assert "Water" in caplog.text
+
+
+class _FakeInventoryMCLCA:
+    def __init__(self, inventories):
+        self._inventories = inventories
+        self._index = 0
+        self.inventory = inventories[0]
+
+    def keep_first_iteration(self):
+        self.keep_first_iteration_flag = True
+
+    def __next__(self):
+        if getattr(self, "keep_first_iteration_flag", False):
+            delattr(self, "keep_first_iteration_flag")
+        else:
+            self._index += 1
+            self.inventory = self._inventories[self._index]
+        return self
+
+
+def test_lcia_joint_uncertainty_reuses_inventory_iterations(monkeypatch):
+    lcia = EdgeLCIA.__new__(EdgeLCIA)
+    lcia.use_distributions = True
+    lcia.inventory_use_distributions = True
+    lcia.store_inventory_samples = True
+    lcia.iterations = 3
+    lcia.processed_biosphere_edges = {(0, 1)}
+    lcia.processed_technosphere_edges = set()
+    lcia.raw_cfs_data = [
+        {
+            "supplier": {"matrix": "biosphere"},
+            "consumer": {"matrix": "technosphere"},
+        }
+    ]
+    lcia.lca = SimpleNamespace(
+        inventory=csr_matrix(([2.0], ([0], [1])), shape=(2, 2)),
+        demand={},
+        use_distributions=True,
+    )
+    lcia.technosphere_flow_matrix = None
+    lcia.characterization_matrix = sparse.COO(
+        coords=np.array([[0, 0, 0], [1, 1, 1], [0, 1, 2]]),
+        data=np.array([10.0, 20.0, 30.0]),
+        shape=(2, 2, 3),
+    )
+    lcia.logger = logging.getLogger("test.edgelcia.robustness.joint")
+
+    fake_iter = _FakeInventoryMCLCA(
+        [
+            csr_matrix(([2.0], ([0], [1])), shape=(2, 2)),
+            csr_matrix(([3.0], ([0], [1])), shape=(2, 2)),
+            csr_matrix(([4.0], ([0], [1])), shape=(2, 2)),
+        ]
+    )
+    monkeypatch.setattr(lcia, "_build_inventory_mc_lca", lambda: fake_iter)
+
+    lcia.lcia()
+
+    assert isinstance(lcia.score, np.ndarray)
+    assert np.allclose(lcia.score, np.array([20.0, 60.0, 120.0]))
+    assert lcia.inventory_samples.shape == (2, 2, 3)
+    assert np.allclose(
+        np.array(lcia.inventory_samples[0, 1, :].todense()).reshape(-1),
+        np.array([2.0, 3.0, 4.0]),
+    )
+    assert hasattr(lcia.lca, "inventory_samples")
+
+
+def test_generate_cf_table_uses_inventory_samples_in_joint_mode(monkeypatch):
+    lcia = EdgeLCIA.__new__(EdgeLCIA)
+    lcia.use_distributions = False
+    lcia.inventory_use_distributions = True
+    lcia.store_inventory_samples = True
+    lcia.iterations = 3
+    lcia.logger = logging.getLogger("test.edgelcia.robustness.joint.table")
+    lcia.scenario_cfs = [
+        {
+            "supplier": {"matrix": "biosphere"},
+            "consumer": {"matrix": "technosphere"},
+            "positions": [(0, 1)],
+            "value": 10.0,
+        }
+    ]
+    lcia.characterization_matrix = csr_matrix(([10.0], ([0], [1])), shape=(2, 2))
+    lcia.technosphere_flow_matrix = None
+    lcia.lca = SimpleNamespace(
+        inventory=csr_matrix(([999.0], ([0], [1])), shape=(2, 2)),
+        use_distributions=True,
+    )
+    lcia.inventory_samples = sparse.COO(
+        coords=np.array([[0, 0, 0], [1, 1, 1], [0, 1, 2]]),
+        data=np.array([2.0, 3.0, 4.0]),
+        shape=(2, 2, 3),
+    )
+    lcia._inventory_samples_matrix_kind = "biosphere"
+    lcia.reversed_biosphere = {0: "bio-flow"}
+    lcia.reversed_activity = {1: "consumer-activity"}
+
+    def _get_activity(key):
+        if key == "bio-flow":
+            return {
+                "name": "Water",
+                "categories": ("water",),
+                "classifications": None,
+            }
+        if key == "consumer-activity":
+            return {
+                "name": "Dummy activity",
+                "reference product": "dummy product",
+                "location": "CH",
+                "classifications": None,
+            }
+        raise KeyError(key)
+
+    monkeypatch.setattr(bw2data, "get_activity", _get_activity)
+
+    df = lcia.generate_cf_table()
+
+    assert df.shape[0] == 1
+    assert df.loc[0, "amount"] == pytest.approx(3.0)
+    assert df.loc[0, "amount (mean)"] == pytest.approx(3.0)
+    assert df.loc[0, "CF (mean)"] == pytest.approx(10.0)
+    assert df.loc[0, "impact (50th)"] == pytest.approx(30.0)

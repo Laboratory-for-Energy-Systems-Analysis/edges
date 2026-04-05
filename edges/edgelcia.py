@@ -396,6 +396,8 @@ class EdgeLCIA:
         use_distributions: Optional[bool] = False,
         random_seed: Optional[int] = None,
         iterations: Optional[int] = 100,
+        inventory_use_distributions: Optional[bool] = False,
+        store_inventory_samples: Optional[bool] = False,
         lca: Optional[bw2calc.LCA] = None,
         additional_topologies: Optional[dict] = None,
         matcher_backend: Optional[str] = "clips",
@@ -406,7 +408,11 @@ class EdgeLCIA:
         :param demand: Dictionary of {activity: amount} for the functional unit.
         :param method: Tuple specifying the LCIA method (e.g., ("AWARE 2.0", "Country", "all", "yearly")).
         :param weight: Weighting scheme for location mapping (default: "population").
-        :
+        :param use_distributions: If True, sample CF uncertainty as currently implemented.
+        :param inventory_use_distributions: If True, iterate a stochastic bw2calc LCA
+            in lock-step with LCIA scoring to propagate inventory uncertainty.
+        :param store_inventory_samples: If True in inventory Monte Carlo mode, keep the
+            per-iteration assessed inventory tensor on ``self.inventory_samples`` for reporting.
 
         Notes
         -----
@@ -451,6 +457,10 @@ class EdgeLCIA:
         self.technosphere_flows = None
         self.biosphere_flows = None
         self.characterized_inventory = None
+        self.inventory_use_distributions = bool(inventory_use_distributions)
+        self.store_inventory_samples = bool(store_inventory_samples)
+        self.inventory_samples = None
+        self._inventory_samples_matrix_kind = None
         self.ignored_locations = set()
         self.ignored_method_exchanges = list()
         self.duplicate_method_signature_groups: list[dict[str, Any]] = []
@@ -470,7 +480,18 @@ class EdgeLCIA:
         self.random_seed = random_seed if random_seed is not None else 42
         self.random_state = np.random.default_rng(self.random_seed)
 
-        self.lca = lca or bw2calc.LCA(demand=self.demand)
+        if lca is not None and self.inventory_use_distributions and not getattr(
+            lca, "use_distributions", False
+        ):
+            raise ValueError(
+                "inventory_use_distributions=True requires a bw2calc.LCA initialized "
+                "with use_distributions=True."
+            )
+
+        self.lca = lca or bw2calc.LCA(
+            demand=self.demand,
+            use_distributions=self.inventory_use_distributions,
+        )
         self._load_raw_lcia_data()
         self.log_platform()
 
@@ -3435,6 +3456,92 @@ class EdgeLCIA:
 
             self.characterization_matrix = self.characterization_matrix.tocsr()
 
+    def _uses_inventory_distributions(self) -> bool:
+        """Return True when inventory uncertainty should be propagated across iterations."""
+        return bool(self.inventory_use_distributions and self.iterations and self.iterations > 1)
+
+    def _build_inventory_mc_lca(self) -> bw2calc.LCA:
+        """
+        Build a fresh stochastic bw2calc LCA iterator for inventory Monte Carlo.
+
+        Re-instantiating from the current datapackages preserves Brightway's own
+        iteration workflow while avoiding side effects on ``self.lca``.
+        """
+        if not getattr(self.lca, "use_distributions", False):
+            raise RuntimeError(
+                "Inventory uncertainty requires a bw2calc.LCA initialized with "
+                "use_distributions=True."
+            )
+
+        packages = getattr(self.lca, "packages", None)
+        if packages is None:
+            raise RuntimeError(
+                "Inventory uncertainty requires an underlying bw2calc.LCA with "
+                "accessible datapackages."
+            )
+
+        mc_lca = bw2calc.LCA(
+            demand=dict(self.lca.demand),
+            data_objs=packages,
+            use_arrays=getattr(self.lca, "use_arrays", False),
+            use_distributions=True,
+            selective_use=getattr(self.lca, "selective_use", None) or {},
+            remapping_dicts=getattr(self.lca, "remapping_dicts", None) or {},
+            seed_override=getattr(self.lca, "seed_override", None),
+        )
+        mc_lca.lci(factorize=True)
+        return mc_lca
+
+    def _get_iteration_inventory_matrix(self, lca: bw2calc.LCA, is_biosphere: bool):
+        """Return the assessed inventory matrix for one Monte Carlo iteration."""
+        if is_biosphere:
+            return lca.inventory.tocsr()
+        return build_technosphere_edges_matrix(
+            lca.technosphere_matrix, lca.supply_array
+        ).tocsr()
+
+    def _characterization_matrix_for_iteration(self, iteration: int):
+        """Return the 2D characterization slice for one Monte Carlo iteration."""
+        if isinstance(self.characterization_matrix, sparse.COO):
+            return self.characterization_matrix[:, :, iteration].to_scipy_sparse().tocsr()
+        return self.characterization_matrix.tocsr()
+
+    def _stack_iteration_matrices(self, matrices: list) -> sparse.COO:
+        """Stack 2D sparse matrices into a deterministic 3D sparse.COO tensor."""
+        if not matrices:
+            raise ValueError("Can't stack an empty sequence of inventory samples.")
+
+        coord_blocks = []
+        data_blocks = []
+        n_rows, n_cols = matrices[0].shape
+
+        for k, matrix in enumerate(matrices):
+            coo = matrix.tocoo()
+            if coo.nnz == 0:
+                continue
+            k_block = np.full(coo.nnz, k, dtype=np.int64)
+            coord_blocks.append(
+                np.vstack(
+                    (
+                        coo.row.astype(np.int64, copy=False),
+                        coo.col.astype(np.int64, copy=False),
+                        k_block,
+                    )
+                )
+            )
+            data_blocks.append(np.asarray(coo.data, dtype=float))
+
+        if coord_blocks:
+            coords = np.concatenate(coord_blocks, axis=1)
+            data = np.concatenate(data_blocks)
+        else:
+            coords = np.empty((3, 0), dtype=np.int64)
+            data = np.empty((0,), dtype=float)
+
+        return make_coo_deterministic(
+            sparse.COO(coords=coords, data=data, shape=(n_rows, n_cols, len(matrices)))
+        )
+
     def lcia(self) -> None:
         """
         Perform the life cycle impact assessment (LCIA) using the evaluated characterization matrix.
@@ -3446,7 +3553,9 @@ class EdgeLCIA:
         Behavior
         --------
         - In deterministic mode: computes a single scalar LCIA score.
-        - In uncertainty mode (3D matrix): computes a 1D array of LCIA scores across all iterations.
+        - In CF uncertainty mode: computes a 1D array of LCIA scores across all CF iterations.
+        - In inventory uncertainty mode: reuses bw2calc's matrix iteration workflow and
+          computes one LCIA score per inventory draw, optionally combined with CF uncertainty.
 
 
         Notes
@@ -3495,7 +3604,49 @@ class EdgeLCIA:
                 "Ensure lci() was called and that matrix-type detection does not rely on edge sets."
             )
 
-        if self.use_distributions and self.iterations > 1:
+        inventory_uncertainty = self._uses_inventory_distributions()
+        cf_uncertainty = bool(self.use_distributions and self.iterations > 1)
+
+        if inventory_uncertainty:
+            mc_lca = self._build_inventory_mc_lca()
+            mc_lca.keep_first_iteration()
+
+            static_cf_matrix = None if cf_uncertainty else self._characterization_matrix_for_iteration(0)
+            inventory_matrices = [] if self.store_inventory_samples else None
+            scores = np.empty(self.iterations, dtype=float)
+
+            for iteration in range(self.iterations):
+                next(mc_lca)
+                iteration_inventory = self._get_iteration_inventory_matrix(mc_lca, is_biosphere)
+                if inventory_matrices is not None:
+                    inventory_matrices.append(iteration_inventory.copy())
+
+                cf_matrix = (
+                    self._characterization_matrix_for_iteration(iteration)
+                    if cf_uncertainty
+                    else static_cf_matrix
+                )
+                prod = cf_matrix.multiply(iteration_inventory)
+                if prod is NotImplemented:
+                    prod = iteration_inventory.multiply(cf_matrix)
+                scores[iteration] = prod.sum(dtype=np.float64)
+
+            self.score = np.asarray(scores, dtype=float).reshape(-1)
+            self.characterized_inventory = None
+            self._inventory_samples_matrix_kind = (
+                "biosphere" if is_biosphere else "technosphere"
+            )
+            self.inventory_samples = (
+                self._stack_iteration_matrices(inventory_matrices)
+                if inventory_matrices is not None
+                else None
+            )
+            if self.inventory_samples is not None:
+                setattr(self.lca, "inventory_samples", self.inventory_samples)
+            elif hasattr(self.lca, "inventory_samples"):
+                delattr(self.lca, "inventory_samples")
+
+        elif cf_uncertainty:
             inventory = (
                 self.lca.inventory if is_biosphere else self.technosphere_flow_matrix
             )
@@ -3515,6 +3666,8 @@ class EdgeLCIA:
             else:
                 score = np.asarray(score, dtype=float).reshape(-1)
             self.score = score
+            self.inventory_samples = None
+            self._inventory_samples_matrix_kind = None
 
         else:
             # --- Deterministic path with a small guard against rare NotImplemented
@@ -4132,14 +4285,28 @@ class EdgeLCIA:
         data = []
         supplier_schemes_seen = set()
         consumer_schemes_seen = set()
+        inventory_uncertainty = self._uses_inventory_distributions()
+        uncertain_mode = bool(
+            hasattr(self, "iterations")
+            and self.iterations > 1
+            and (self.use_distributions or inventory_uncertainty)
+        )
+        inventory_sample_tensor = getattr(self, "inventory_samples", None)
 
-        if (
-            self.use_distributions
-            and hasattr(self, "characterization_matrix")
-            and hasattr(self, "iterations")
-        ):
+        if inventory_uncertainty and inventory_sample_tensor is None:
+            raise RuntimeError(
+                "generate_cf_table() in inventory uncertainty mode requires stored "
+                "inventory samples. Re-run lcia() with store_inventory_samples=True."
+            )
+
+        if uncertain_mode:
             cm = self.characterization_matrix
-            for i, j in zip(*cm.sum(axis=2).nonzero()):
+            if isinstance(cm, sparse.COO):
+                positions = zip(*cm.sum(axis=2).nonzero())
+            else:
+                positions = zip(*cm.nonzero())
+
+            for i, j in positions:
                 consumer = bw2data.get_activity(self.reversed_activity[j])
                 supplier = (
                     bw2data.get_activity(self.reversed_biosphere[i])
@@ -4147,10 +4314,25 @@ class EdgeLCIA:
                     else bw2data.get_activity(self.reversed_activity[i])
                 )
 
-                samples = np.array(cm[i, j, :].todense()).flatten().astype(float)
-                amount = inventory[i, j]
-                impact_samples = amount * samples
+                if isinstance(cm, sparse.COO):
+                    samples = np.array(cm[i, j, :].todense()).flatten().astype(float)
+                else:
+                    samples = np.full(self.iterations, float(cm[i, j]), dtype=float)
 
+                if inventory_uncertainty:
+                    amount_samples = (
+                        np.array(inventory_sample_tensor[i, j, :].todense())
+                        .flatten()
+                        .astype(float)
+                    )
+                    amount = float(amount_samples.mean())
+                else:
+                    amount = float(inventory[i, j])
+                    amount_samples = np.full(self.iterations, amount, dtype=float)
+
+                impact_samples = amount_samples * samples
+
+                amount_p = np.percentile(amount_samples, [5, 25, 50, 75, 95])
                 cf_p = np.percentile(samples, [5, 25, 50, 75, 95])
                 impact_p = np.percentile(impact_samples, [5, 25, 50, 75, 95])
 
@@ -4165,6 +4347,15 @@ class EdgeLCIA:
                     "consumer reference product": consumer.get("reference product"),
                     "consumer location": consumer.get("location"),
                     "amount": amount,
+                    "amount (mean)": amount_samples.mean(),
+                    "amount (std)": amount_samples.std(),
+                    "amount (min)": amount_samples.min(),
+                    "amount (5th)": amount_p[0],
+                    "amount (25th)": amount_p[1],
+                    "amount (50th)": amount_p[2],
+                    "amount (75th)": amount_p[3],
+                    "amount (95th)": amount_p[4],
+                    "amount (max)": amount_samples.max(),
                     "CF (mean)": samples.mean(),
                     "CF (std)": samples.std(),
                     "CF (min)": samples.min(),
@@ -4254,7 +4445,15 @@ class EdgeLCIA:
                 )
                 consumer = bw2data.get_activity(self.reversed_activity[j])
 
-                amount = inventory[i, j]
+                if inventory_uncertainty:
+                    amount_samples = (
+                        np.array(inventory_sample_tensor[i, j, :].todense())
+                        .flatten()
+                        .astype(float)
+                    )
+                    amount = float(amount_samples.mean())
+                else:
+                    amount = float(inventory[i, j])
 
                 s_cls = _norm_classifications(supplier.get("classifications"))
                 c_cls = _norm_classifications(consumer.get("classifications"))
@@ -4321,8 +4520,21 @@ class EdgeLCIA:
         ]
 
         # CF/impact columns
-        if self.use_distributions:
-            metric_cols = [
+        if uncertain_mode:
+            amount_metric_cols = []
+            if inventory_uncertainty:
+                amount_metric_cols = [
+                    "amount (mean)",
+                    "amount (std)",
+                    "amount (min)",
+                    "amount (5th)",
+                    "amount (25th)",
+                    "amount (50th)",
+                    "amount (75th)",
+                    "amount (95th)",
+                    "amount (max)",
+                ]
+            metric_cols = amount_metric_cols + [
                 "CF (mean)",
                 "CF (std)",
                 "CF (min)",
