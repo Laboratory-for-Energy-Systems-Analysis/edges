@@ -127,9 +127,7 @@ def test_build_inventory_mc_lca_falls_back_to_legacy_monte_carlo(monkeypatch):
 
         def __next__(self):
             self._step += 1
-            self.inventory = csr_matrix(
-                ([float(self._step)], ([0], [0])), shape=(1, 1)
-            )
+            self.inventory = csr_matrix(([float(self._step)], ([0], [0])), shape=(1, 1))
             return self.supply_array
 
     monkeypatch.setattr(
