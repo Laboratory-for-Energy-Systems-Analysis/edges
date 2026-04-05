@@ -7,6 +7,7 @@ LCIA class.
 from __future__ import annotations
 
 from typing import Union, Mapping, Sequence, Any, Optional
+import inspect
 import math
 import os
 import sys
@@ -70,6 +71,38 @@ else:
 import logging
 
 logger = logging.getLogger(__name__)
+
+
+@lru_cache(maxsize=1)
+def _bw2calc_lca_accepts_use_distributions() -> bool:
+    """Return True when bw2calc.LCA.__init__ accepts ``use_distributions``."""
+    try:
+        return "use_distributions" in inspect.signature(bw2calc.LCA.__init__).parameters
+    except (TypeError, ValueError):
+        return False
+
+
+class _LegacyInventoryMonteCarloAdapter:
+    """Wrap old ``bw2calc.MonteCarloLCA`` to match the iterator contract used here."""
+
+    def __init__(self, mc_lca):
+        self._mc_lca = mc_lca
+        self.inventory = mc_lca.inventory
+        self._keep_first_iteration = False
+
+    def keep_first_iteration(self) -> None:
+        self._keep_first_iteration = True
+
+    def __next__(self):
+        if self._keep_first_iteration:
+            self._keep_first_iteration = False
+        else:
+            next(self._mc_lca)
+            self.inventory = self._mc_lca.inventory
+        return self
+
+    def __getattr__(self, item):
+        return getattr(self._mc_lca, item)
 
 
 def _is_cf_exchange(obj: Any) -> bool:
@@ -480,20 +513,31 @@ class EdgeLCIA:
         self.random_seed = random_seed if random_seed is not None else 42
         self.random_state = np.random.default_rng(self.random_seed)
 
-        if (
-            lca is not None
-            and self.inventory_use_distributions
-            and not getattr(lca, "use_distributions", False)
-        ):
-            raise ValueError(
-                "inventory_use_distributions=True requires a bw2calc.LCA initialized "
-                "with use_distributions=True."
-            )
+        if lca is not None and self.inventory_use_distributions:
+            if _bw2calc_lca_accepts_use_distributions():
+                if not getattr(lca, "use_distributions", False):
+                    raise ValueError(
+                        "inventory_use_distributions=True requires a bw2calc.LCA initialized "
+                        "with use_distributions=True."
+                    )
+            elif hasattr(bw2calc, "MonteCarloLCA") and not isinstance(
+                lca, bw2calc.MonteCarloLCA
+            ):
+                raise ValueError(
+                    "On bw2calc versions without LCA(..., use_distributions=...), "
+                    "inventory_use_distributions=True requires passing a "
+                    "bw2calc.MonteCarloLCA or letting EdgeLCIA create its own LCA."
+                )
 
-        self.lca = lca or bw2calc.LCA(
-            demand=self.demand,
-            use_distributions=self.inventory_use_distributions,
-        )
+        if lca is not None:
+            self.lca = lca
+        elif _bw2calc_lca_accepts_use_distributions():
+            self.lca = bw2calc.LCA(
+                demand=self.demand,
+                use_distributions=self.inventory_use_distributions,
+            )
+        else:
+            self.lca = bw2calc.LCA(demand=self.demand)
         self._load_raw_lcia_data()
         self.log_platform()
 
@@ -3471,30 +3515,43 @@ class EdgeLCIA:
         Re-instantiating from the current datapackages preserves Brightway's own
         iteration workflow while avoiding side effects on ``self.lca``.
         """
-        if not getattr(self.lca, "use_distributions", False):
+        if _bw2calc_lca_accepts_use_distributions():
+            if not getattr(self.lca, "use_distributions", False):
+                raise RuntimeError(
+                    "Inventory uncertainty requires a bw2calc.LCA initialized with "
+                    "use_distributions=True."
+                )
+
+            packages = getattr(self.lca, "packages", None)
+            if packages is None:
+                raise RuntimeError(
+                    "Inventory uncertainty requires an underlying bw2calc.LCA with "
+                    "accessible datapackages."
+                )
+
+            mc_lca = bw2calc.LCA(
+                demand=dict(self.lca.demand),
+                data_objs=packages,
+                use_arrays=getattr(self.lca, "use_arrays", False),
+                use_distributions=True,
+                selective_use=getattr(self.lca, "selective_use", None) or {},
+                remapping_dicts=getattr(self.lca, "remapping_dicts", None) or {},
+                seed_override=getattr(self.lca, "seed_override", None),
+            )
+            mc_lca.lci(factorize=True)
+            return mc_lca
+
+        if not hasattr(bw2calc, "MonteCarloLCA"):
             raise RuntimeError(
-                "Inventory uncertainty requires a bw2calc.LCA initialized with "
-                "use_distributions=True."
+                "Inventory uncertainty is not supported by this bw2calc version."
             )
 
-        packages = getattr(self.lca, "packages", None)
-        if packages is None:
-            raise RuntimeError(
-                "Inventory uncertainty requires an underlying bw2calc.LCA with "
-                "accessible datapackages."
-            )
-
-        mc_lca = bw2calc.LCA(
-            demand=dict(self.lca.demand),
-            data_objs=packages,
-            use_arrays=getattr(self.lca, "use_arrays", False),
-            use_distributions=True,
-            selective_use=getattr(self.lca, "selective_use", None) or {},
-            remapping_dicts=getattr(self.lca, "remapping_dicts", None) or {},
-            seed_override=getattr(self.lca, "seed_override", None),
+        mc_lca = bw2calc.MonteCarloLCA(
+            demand=dict(getattr(self.lca, "demand", self.demand)),
+            seed=self.random_seed,
         )
-        mc_lca.lci(factorize=True)
-        return mc_lca
+        next(mc_lca)
+        return _LegacyInventoryMonteCarloAdapter(mc_lca)
 
     def _get_iteration_inventory_matrix(self, lca: bw2calc.LCA, is_biosphere: bool):
         """Return the assessed inventory matrix for one Monte Carlo iteration."""

@@ -8,6 +8,7 @@ import pytest
 import sparse
 from scipy.sparse import csr_matrix
 
+import edges.edgelcia as edgelcia_module
 from edges.edgelcia import EdgeLCIA
 
 
@@ -56,6 +57,84 @@ def test_statistics_accepts_string_method():
     lcia.unprocessed_technosphere_edges = []
 
     lcia.statistics()
+
+
+def test_constructor_skips_use_distributions_kw_when_bw2calc_lca_does_not_support_it(
+    monkeypatch,
+):
+    calls = {}
+
+    class FakeLCA:
+        def __init__(self, demand):
+            calls["demand"] = demand
+            self.demand = demand
+
+    monkeypatch.setattr(
+        edgelcia_module, "_bw2calc_lca_accepts_use_distributions", lambda: False
+    )
+    monkeypatch.setattr(edgelcia_module.bw2calc, "LCA", FakeLCA)
+    monkeypatch.setattr(EdgeLCIA, "_load_raw_lcia_data", lambda self: None)
+    monkeypatch.setattr(EdgeLCIA, "log_platform", lambda self: None)
+    monkeypatch.setattr(EdgeLCIA, "_get_candidate_supplier_keys", lambda self: set())
+
+    lcia = EdgeLCIA(
+        demand={},
+        method={
+            "name": "dummy",
+            "unit": "kg",
+            "exchanges": [
+                {
+                    "supplier": {"matrix": "biosphere", "name": "CO2"},
+                    "consumer": {"matrix": "technosphere"},
+                    "value": 1.0,
+                }
+            ],
+        },
+    )
+
+    assert isinstance(lcia.lca, FakeLCA)
+    assert calls["demand"] == {}
+
+
+def test_build_inventory_mc_lca_falls_back_to_legacy_monte_carlo(monkeypatch):
+    lcia = EdgeLCIA.__new__(EdgeLCIA)
+    lcia.lca = SimpleNamespace(demand={"foo": 1})
+    lcia.demand = {"foo": 1}
+    lcia.random_seed = 42
+
+    class FakeMonteCarloLCA:
+        def __init__(self, demand, seed=None):
+            self.demand = demand
+            self.seed = seed
+            self._step = 0
+            self.inventory = csr_matrix(([0.0], ([0], [0])), shape=(1, 1))
+            self.technosphere_matrix = csr_matrix((1, 1))
+            self.supply_array = np.array([1.0])
+
+        def __next__(self):
+            self._step += 1
+            self.inventory = csr_matrix(
+                ([float(self._step)], ([0], [0])), shape=(1, 1)
+            )
+            return self.supply_array
+
+    monkeypatch.setattr(
+        edgelcia_module, "_bw2calc_lca_accepts_use_distributions", lambda: False
+    )
+    monkeypatch.setattr(edgelcia_module.bw2calc, "MonteCarloLCA", FakeMonteCarloLCA)
+
+    mc_lca = lcia._build_inventory_mc_lca()
+    assert isinstance(mc_lca, edgelcia_module._LegacyInventoryMonteCarloAdapter)
+
+    mc_lca.keep_first_iteration()
+    next(mc_lca)
+    first = mc_lca.inventory[0, 0]
+
+    next(mc_lca)
+    second = mc_lca.inventory[0, 0]
+
+    assert first == pytest.approx(1.0)
+    assert second == pytest.approx(2.0)
 
 
 def _build_minimal_lcia(cfs_mapping):
