@@ -198,7 +198,8 @@ Uncertainty-aware LCIA
 -----------------------
 
 If CFs include uncertainty (e.g., lognormal, discrete empirical),
-you can get statistics:
+you can get statistics. In this mode, ``use_distributions=True`` samples
+the characterization factors only; the Brightway inventory remains fixed:
 
 .. code-block:: python
 
@@ -233,6 +234,73 @@ you can get statistics:
     # get dataframe with statistics
     df = lcia.generate_cf_table()
 
+
+---
+
+Joint inventory + characterization Monte Carlo
+----------------------------------------------
+
+To propagate uncertainty from both the LCIA method and the inventory,
+combine ``use_distributions=True`` with ``inventory_use_distributions=True``.
+This reuses Brightway's stochastic inventory workflow and evaluates one score
+per joint inventory + CF draw:
+
+.. code-block:: python
+
+    import bw2data
+    from edges import EdgeLCIA
+
+    bw2data.projects.set_current("some project")
+    act = bw2data.Database("some db").random()
+
+    lcia = EdgeLCIA(
+        demand={act: 1},
+        method=("AWARE 2.0", "Country", "all", "yearly"),
+        use_distributions=True,
+        inventory_use_distributions=True,
+        store_inventory_samples=True,
+        iterations=1_000,
+    )
+
+    lcia.lci()
+    lcia.map_exchanges()
+    lcia.map_aggregate_locations()
+    lcia.map_dynamic_locations()
+    lcia.map_contained_locations()
+    lcia.map_remaining_locations_to_global()
+    lcia.evaluate_cfs()
+    lcia.lcia()
+
+    # one score per joint Monte Carlo iteration
+    print(lcia.score.mean())
+
+    # with store_inventory_samples=True, amount statistics are also available
+    df = lcia.generate_cf_table()
+    print(df[["amount (mean)", "CF (mean)", "impact (mean)"]].head())
+
+.. note::
+
+   ``use_distributions=True`` on its own keeps the current ``edges`` behavior
+   of varying only the characterization factors. Add
+   ``inventory_use_distributions=True`` only when you want a joint Monte Carlo.
+
+.. note::
+
+   ``store_inventory_samples=False`` by default, to avoid storing a potentially
+   large 3D inventory tensor. Without stored inventory samples, the score vector
+   is still available, but ``generate_cf_table()`` cannot report per-iteration
+   amount statistics for the joint run.
+
+.. note::
+
+   If you pass your own ``bw2calc.LCA`` object via ``lca=``, initialize it with
+   ``use_distributions=True`` before using
+   ``inventory_use_distributions=True`` in ``EdgeLCIA``.
+
+.. note::
+
+   Joint Monte Carlo is slower than CF-only uncertainty, because the inventory
+   must be re-sampled and re-assessed at every iteration.
 
 ---
 
