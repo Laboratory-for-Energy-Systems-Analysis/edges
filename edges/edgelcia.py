@@ -3505,7 +3505,9 @@ class EdgeLCIA:
     def _uses_inventory_distributions(self) -> bool:
         """Return True when inventory uncertainty should be propagated across iterations."""
         return bool(
-            self.inventory_use_distributions and self.iterations and self.iterations > 1
+            getattr(self, "inventory_use_distributions", False)
+            and self.iterations
+            and self.iterations > 1
         )
 
     def _build_inventory_mc_lca(self) -> bw2calc.LCA:

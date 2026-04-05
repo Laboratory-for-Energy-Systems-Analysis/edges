@@ -73,7 +73,21 @@ def test_constructor_skips_use_distributions_kw_when_bw2calc_lca_does_not_suppor
         edgelcia_module, "_bw2calc_lca_accepts_use_distributions", lambda: False
     )
     monkeypatch.setattr(edgelcia_module.bw2calc, "LCA", FakeLCA)
-    monkeypatch.setattr(EdgeLCIA, "_load_raw_lcia_data", lambda self: None)
+    monkeypatch.setattr(
+        EdgeLCIA,
+        "_load_raw_lcia_data",
+        lambda self: setattr(
+            self,
+            "raw_cfs_data",
+            [
+                {
+                    "supplier": {"matrix": "biosphere", "name": "CO2"},
+                    "consumer": {"matrix": "technosphere"},
+                    "value": 1.0,
+                }
+            ],
+        ),
+    )
     monkeypatch.setattr(EdgeLCIA, "log_platform", lambda self: None)
     monkeypatch.setattr(EdgeLCIA, "_get_candidate_supplier_keys", lambda self: set())
 
@@ -121,7 +135,9 @@ def test_build_inventory_mc_lca_falls_back_to_legacy_monte_carlo(monkeypatch):
     monkeypatch.setattr(
         edgelcia_module, "_bw2calc_lca_accepts_use_distributions", lambda: False
     )
-    monkeypatch.setattr(edgelcia_module.bw2calc, "MonteCarloLCA", FakeMonteCarloLCA)
+    monkeypatch.setattr(
+        edgelcia_module.bw2calc, "MonteCarloLCA", FakeMonteCarloLCA, raising=False
+    )
 
     mc_lca = lcia._build_inventory_mc_lca()
     assert isinstance(mc_lca, edgelcia_module._LegacyInventoryMonteCarloAdapter)
