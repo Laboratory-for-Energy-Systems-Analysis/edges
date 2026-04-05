@@ -480,8 +480,10 @@ class EdgeLCIA:
         self.random_seed = random_seed if random_seed is not None else 42
         self.random_state = np.random.default_rng(self.random_seed)
 
-        if lca is not None and self.inventory_use_distributions and not getattr(
-            lca, "use_distributions", False
+        if (
+            lca is not None
+            and self.inventory_use_distributions
+            and not getattr(lca, "use_distributions", False)
         ):
             raise ValueError(
                 "inventory_use_distributions=True requires a bw2calc.LCA initialized "
@@ -3458,7 +3460,9 @@ class EdgeLCIA:
 
     def _uses_inventory_distributions(self) -> bool:
         """Return True when inventory uncertainty should be propagated across iterations."""
-        return bool(self.inventory_use_distributions and self.iterations and self.iterations > 1)
+        return bool(
+            self.inventory_use_distributions and self.iterations and self.iterations > 1
+        )
 
     def _build_inventory_mc_lca(self) -> bw2calc.LCA:
         """
@@ -3503,7 +3507,9 @@ class EdgeLCIA:
     def _characterization_matrix_for_iteration(self, iteration: int):
         """Return the 2D characterization slice for one Monte Carlo iteration."""
         if isinstance(self.characterization_matrix, sparse.COO):
-            return self.characterization_matrix[:, :, iteration].to_scipy_sparse().tocsr()
+            return (
+                self.characterization_matrix[:, :, iteration].to_scipy_sparse().tocsr()
+            )
         return self.characterization_matrix.tocsr()
 
     def _stack_iteration_matrices(self, matrices: list) -> sparse.COO:
@@ -3611,13 +3617,19 @@ class EdgeLCIA:
             mc_lca = self._build_inventory_mc_lca()
             mc_lca.keep_first_iteration()
 
-            static_cf_matrix = None if cf_uncertainty else self._characterization_matrix_for_iteration(0)
+            static_cf_matrix = (
+                None
+                if cf_uncertainty
+                else self._characterization_matrix_for_iteration(0)
+            )
             inventory_matrices = [] if self.store_inventory_samples else None
             scores = np.empty(self.iterations, dtype=float)
 
             for iteration in range(self.iterations):
                 next(mc_lca)
-                iteration_inventory = self._get_iteration_inventory_matrix(mc_lca, is_biosphere)
+                iteration_inventory = self._get_iteration_inventory_matrix(
+                    mc_lca, is_biosphere
+                )
                 if inventory_matrices is not None:
                     inventory_matrices.append(iteration_inventory.copy())
 
