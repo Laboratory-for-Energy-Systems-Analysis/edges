@@ -2,6 +2,10 @@ IN-DN:
   - IN
   - SAS
   - UN-ASIA
+IN-DD:
+  - IN
+  - SAS
+  - UN-ASIA
 
 # NERC electricity grid regions (NERC/EIA)
 SERC:

@@ -1,0 +1,24 @@
+aliases:
+  Europe,: Europe
+  HICC: US-HICC
+  IAI Area 1: IAI Area, Africa
+  IAI Area 1, Africa: IAI Area, Africa
+  IAI Area 2: IAI Area, North America
+  IAI Area 2, North America: IAI Area, North America
+  IAI Area 2, without Quebec: IAI Area, North America, without Quebec
+  IAI Area 3: IAI Area, South America
+  IAI Area 3, South America: IAI Area, South America
+  IAI Area 4&5: IAI Area, Asia, without China and GCC
+  IAI Area 4&5 without China: IAI Area, Asia, without China and GCC
+  IAI Area 4&5, without China: IAI Area, Asia, without China and GCC
+  IAI Area 8: IAI Area, Gulf Cooperation Council
+  IAI Area 8, Gulf: IAI Area, Gulf Cooperation Council
+  IAI Area, Europe outside EU & EFTA: IAI Area, Russia & RER w/o EU27 & EFTA
+  MRO, US only: US-MRO
+  NPCC, US only: US-NPCC
+  SGCC: CN-SGCC
+  TRE: US-TRE
+  WECC, US only: US-WECC
+
+unresolvable_placeholders:
+  - not identified
