@@ -3,7 +3,7 @@ from __future__ import annotations
 from functools import lru_cache
 import logging
 from constructive_geometries import Geomatcher
-from .utils import load_missing_geographies, get_str
+from .utils import load_legacy_geographies, load_missing_geographies, get_str
 
 logger = logging.getLogger(__name__)
 logger.addHandler(logging.NullHandler())
@@ -48,12 +48,24 @@ class GeoResolver:
         # Dependencies from constructive_geometries and your utils
         self.geo = Geomatcher()
         self.missing_geographies = load_missing_geographies()
+        self.legacy_geographies = load_legacy_geographies()
 
         if additional_topologies:
             self.geo.add_definitions(additional_topologies, "ecoinvent", relative=True)
             self.geo.add_definitions(
                 {"World": ["GLO", "RoW"]}, "ecoinvent", relative=True
             )
+
+    def _normalize_location(self, location: str) -> str | None:
+        """Normalize noisy legacy labels before consulting Geomatcher."""
+        cleaned = " ".join(get_str(location).split()).strip().rstrip(", ")
+        unresolvable = set(
+            self.legacy_geographies.get("unresolvable_placeholders", []) or []
+        )
+        if cleaned in unresolvable:
+            return None
+        aliases = self.legacy_geographies.get("aliases", {}) or {}
+        return aliases.get(cleaned, cleaned)
 
     def find_locations(
         self,
@@ -75,6 +87,18 @@ class GeoResolver:
 
         if exceptions:
             exceptions = tuple(get_str(e) for e in exceptions)
+
+        original_location = get_str(location)
+        location = self._normalize_location(original_location)
+        if location is None:
+            return results
+
+        if (
+            location != original_location
+            and location in weights_available
+            and (not exceptions or location not in exceptions)
+        ):
+            results.append(location)
 
         if location in self.missing_geographies:
             for e in self.missing_geographies[location]:

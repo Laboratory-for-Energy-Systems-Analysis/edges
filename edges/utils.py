@@ -372,6 +372,17 @@ def load_missing_geographies():
         return yaml.safe_load(f)
 
 
+@cache
+def load_legacy_geographies() -> dict[str, Any]:
+    """
+    Load legacy geography aliases and placeholders from the YAML file.
+    """
+    with open(
+        DATA_DIR / "metadata" / "legacy_geographies.yaml", "r", encoding="utf-8"
+    ) as f:
+        return yaml.safe_load(f) or {}
+
+
 def get_str(loc):
     if isinstance(loc, tuple):
         return loc[1]
