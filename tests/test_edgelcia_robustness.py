@@ -468,3 +468,56 @@ def test_generate_cf_table_splits_weighted_reporting_rows(monkeypatch):
     assert by_location.loc["DE", "amount"] == pytest.approx(3.0)
     assert by_location.loc["DE", "CF"] == pytest.approx(18.0)
     assert by_location.loc["DE", "impact"] == pytest.approx(54.0)
+
+
+def test_generate_cf_table_splits_single_component_reporting_row(monkeypatch):
+    lcia = EdgeLCIA.__new__(EdgeLCIA)
+    lcia.logger = logging.getLogger("test.edgelcia.robustness.split.single")
+    lcia.scenario_cfs = [
+        {
+            "supplier": {"matrix": "biosphere"},
+            "consumer": {"matrix": "technosphere"},
+            "positions": [(0, 1)],
+            "value": 8.5e-07,
+            "reporting_split": (
+                {
+                    "consumer_location": "BM",
+                    "share": 1.0,
+                    "value": 8.5e-07,
+                    "weight": 5.0,
+                },
+            ),
+        }
+    ]
+    lcia.characterization_matrix = csr_matrix(([8.5e-07], ([0], [1])), shape=(2, 2))
+    lcia.technosphere_flow_matrix = None
+    lcia.lca = SimpleNamespace(
+        inventory=csr_matrix(([4.0], ([0], [1])), shape=(2, 2)),
+    )
+    lcia.reversed_biosphere = {0: "bio-flow"}
+    lcia.reversed_activity = {1: "consumer-activity"}
+
+    def _get_activity(key):
+        if key == "bio-flow":
+            return {
+                "name": "Occupation, dump site",
+                "categories": ("natural resource", "land"),
+                "classifications": None,
+            }
+        if key == "consumer-activity":
+            return {
+                "name": "Hard coal, at mine",
+                "reference product": "hard coal",
+                "location": "RNA",
+                "classifications": None,
+            }
+        raise KeyError(key)
+
+    monkeypatch.setattr(bw2data, "get_activity", _get_activity)
+
+    df_unsplit = lcia.generate_cf_table(split_aggregate_consumers=False)
+    df_split = lcia.generate_cf_table(split_aggregate_consumers=True)
+
+    assert list(df_unsplit["consumer location"]) == ["RNA"]
+    assert list(df_split["consumer location"]) == ["BM"]
+    assert df_unsplit["impact"].sum() == pytest.approx(df_split["impact"].sum())

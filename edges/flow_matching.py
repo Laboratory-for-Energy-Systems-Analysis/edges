@@ -1132,7 +1132,16 @@ def compute_average_cf(
         for (_s, c_loc, cf), sh, w in zip(matched, shares, weights)
         if sh > 0.0
     )
-    if len(reporting_split) <= 1:
+    if len(reporting_split) == 1:
+        split_loc = reporting_split[0].get("consumer_location")
+        original_consumer_loc = consumer_info.get("location")
+        keep_single_split = (
+            len(C) > 1
+            and split_loc not in {None, original_consumer_loc, "__ANY__", "GLO", "RoW", "RoE"}
+        )
+        if not keep_single_split:
+            reporting_split = None
+    elif len(reporting_split) == 0:
         reporting_split = None
 
     # ---------- 8) Single CF shortcut ----------
@@ -1147,7 +1156,7 @@ def compute_average_cf(
                 bool(agg_uncertainty),
                 (dt * 1000.0) if dt else -1.0,
             )
-        return (expr, single_cf, agg_uncertainty, None)
+        return (expr, single_cf, agg_uncertainty, reporting_split)
 
     # ---------- 9) Aggregate uncertainty (deterministic, shallow) ----------
     def _cf_sign(cf_obj) -> int | None:

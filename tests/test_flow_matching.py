@@ -224,6 +224,38 @@ def test_compute_average_cf_returns_reporting_split_for_weighted_average():
     )
 
 
+def test_compute_average_cf_keeps_single_split_for_multi_candidate_consumer_fallback():
+    raw_cfs = [
+        {
+            "supplier": {"name": "Oil", "location": "GLO"},
+            "consumer": {"location": "BM"},
+            "value": 10,
+            "weight": 5,
+        }
+    ]
+
+    result, matched_cf, _, reporting_split = compute_average_cf(
+        candidate_suppliers=["GLO"],
+        candidate_consumers=["BM", "PM"],
+        supplier_info={"name": "Oil", "location": "GLO"},
+        consumer_info={"location": "RNA"},
+        cf_index=build_cf_index(raw_cfs),
+        required_supplier_fields={"name", "location"},
+        required_consumer_fields={"location"},
+    )
+
+    assert matched_cf is not None
+    assert eval(result) == pytest.approx(10.0)
+    assert reporting_split == (
+        {
+            "consumer_location": "BM",
+            "share": pytest.approx(1.0),
+            "value": 10,
+            "weight": pytest.approx(5.0),
+        },
+    )
+
+
 def test_compute_average_cf_preserves_full_precision_in_reporting_split():
     raw_cfs = [
         {
