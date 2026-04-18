@@ -3590,6 +3590,7 @@ class EdgeLCIA:
         for component in reporting_split:
             location = component.get("consumer_location")
             share = component.get("share")
+            raw_weight = component.get("weight")
             if location is None or share is None:
                 continue
 
@@ -3600,17 +3601,22 @@ class EdgeLCIA:
             if share <= 0:
                 continue
 
-            evaluated.append(
-                {
-                    "consumer_location": location,
-                    "share": share,
-                    "value": self._evaluate_cf_numeric_value(
-                        component.get("value"),
-                        resolved_params=resolved_params,
-                        scenario_idx=scenario_idx,
-                    ),
-                }
-            )
+            entry = {
+                "consumer_location": location,
+                "share": share,
+                "value": self._evaluate_cf_numeric_value(
+                    component.get("value"),
+                    resolved_params=resolved_params,
+                    scenario_idx=scenario_idx,
+                ),
+            }
+            if raw_weight is not None:
+                try:
+                    entry["weight"] = float(raw_weight)
+                except Exception:
+                    pass
+
+            evaluated.append(entry)
 
         return tuple(evaluated) if evaluated else None
 

@@ -112,6 +112,8 @@ def format_data(data: dict, weight: str) -> tuple[list, dict[Any, Any]]:
 
     # Extract and attach scenario-specific parameters if present
     scenario_parameters = data.get("parameters", {})
+    total_exchanges = len(data["exchanges"])
+    preweighted_rows = sum(1 for cf in data["exchanges"] if "weight" in cf)
 
     for cf in data["exchanges"]:
         for category in ["supplier", "consumer"]:
@@ -124,11 +126,36 @@ def format_data(data: dict, weight: str) -> tuple[list, dict[Any, Any]]:
     formatted_exchanges = add_population_and_gdp_data(
         data=data["exchanges"], weight=weight
     )
+    postweighted_rows = sum(1 for cf in formatted_exchanges if "weight" in cf)
+
+    if total_exchanges and preweighted_rows == total_exchanges:
+        effective_source = "method"
+        label = "embedded method weights"
+    elif preweighted_rows == 0 and postweighted_rows and weight in {"population", "gdp"}:
+        effective_source = weight
+        label = f"{weight} metadata weights"
+    elif preweighted_rows and postweighted_rows:
+        effective_source = "mixed"
+        if weight in {"population", "gdp"}:
+            label = f"mixed method + {weight} metadata weights"
+        else:
+            label = "mixed weights"
+    else:
+        effective_source = None
+        label = "no weights"
 
     metadata = {
         "name": data.get("name", "Custom LCIA method"),
         "version": data.get("version", "0.0"),
         "unit": data.get("unit", "unspecified"),
+        "weighting_metadata": {
+            "requested_scheme": weight,
+            "effective_source": effective_source,
+            "label": label,
+            "preweighted_rows": preweighted_rows,
+            "weighted_rows": postweighted_rows,
+            "total_rows": total_exchanges,
+        },
         **{
             k: v
             for k, v in data.items()

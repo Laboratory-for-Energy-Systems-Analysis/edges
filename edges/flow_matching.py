@@ -1120,15 +1120,16 @@ def compute_average_cf(
     expressions = []
     for (_s, _c, cf), sh in zip(matched, shares):
         if sh > 0.0:
-            expressions.append(f"({sh:.4f} * ({cf.get('value')}))")
+            expressions.append(f"({float(sh)!r} * ({cf.get('value')}))")
     expr = " + ".join(expressions)
     reporting_split = tuple(
         {
             "consumer_location": c_loc,
             "share": float(sh),
             "value": cf.get("value"),
+            "weight": float(w),
         }
-        for (_s, c_loc, cf), sh in zip(matched, shares)
+        for (_s, c_loc, cf), sh, w in zip(matched, shares, weights)
         if sh > 0.0
     )
     if len(reporting_split) <= 1:

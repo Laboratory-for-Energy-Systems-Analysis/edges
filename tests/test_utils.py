@@ -72,6 +72,7 @@ def test_format_data_minimal_schema_defaults():
     assert metadata["name"] == "Custom LCIA method"
     assert metadata["version"] == "0.0"
     assert metadata["unit"] == "unspecified"
+    assert metadata["weighting_metadata"]["effective_source"] is None
 
 
 def test_format_data_unknown_weight_scheme_does_not_crash():
@@ -96,3 +97,30 @@ def test_format_data_unknown_weight_scheme_does_not_crash():
     }
     formatted, _ = format_data(data, weight="unknown-scheme")
     assert formatted[0].get("weight") == 0
+
+
+def test_format_data_tracks_embedded_method_weights():
+    data = {
+        "name": "test",
+        "exchanges": [
+            {
+                "supplier": {
+                    "matrix": "biosphere",
+                    "name": "CO2",
+                    "location": "CH",
+                },
+                "consumer": {
+                    "matrix": "technosphere",
+                    "location": "FR",
+                },
+                "value": 1.0,
+                "weight": 123.0,
+            }
+        ],
+    }
+
+    _, metadata = format_data(data, weight="population")
+
+    assert metadata["weighting_metadata"]["effective_source"] == "method"
+    assert metadata["weighting_metadata"]["label"] == "embedded method weights"
+    assert metadata["weighting_metadata"]["preweighted_rows"] == 1

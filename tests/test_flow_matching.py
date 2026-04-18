@@ -209,6 +209,47 @@ def test_compute_average_cf_returns_reporting_split_for_weighted_average():
     assert matched_cf is None
     assert eval(result) == pytest.approx(17.5)
     assert reporting_split == (
-        {"consumer_location": "CH", "share": pytest.approx(0.25), "value": 10},
-        {"consumer_location": "DE", "share": pytest.approx(0.75), "value": 20},
+        {
+            "consumer_location": "CH",
+            "share": pytest.approx(0.25),
+            "value": 10,
+            "weight": pytest.approx(1.0),
+        },
+        {
+            "consumer_location": "DE",
+            "share": pytest.approx(0.75),
+            "value": 20,
+            "weight": pytest.approx(3.0),
+        },
     )
+
+
+def test_compute_average_cf_preserves_full_precision_in_reporting_split():
+    raw_cfs = [
+        {
+            "supplier": {"name": "Oil", "location": "GLO"},
+            "consumer": {"location": "CH"},
+            "value": 10,
+            "weight": 1,
+        },
+        {
+            "supplier": {"name": "Oil", "location": "GLO"},
+            "consumer": {"location": "DE"},
+            "value": 20,
+            "weight": 2,
+        },
+    ]
+
+    result, matched_cf, _, reporting_split = compute_average_cf(
+        candidate_suppliers=["GLO"],
+        candidate_consumers=["CH", "DE"],
+        supplier_info={"name": "Oil", "location": "GLO"},
+        consumer_info={"location": "RER"},
+        cf_index=build_cf_index(raw_cfs),
+        required_supplier_fields={"name", "location"},
+        required_consumer_fields={"location"},
+    )
+
+    assert matched_cf is None
+    expected = sum(component["share"] * component["value"] for component in reporting_split)
+    assert eval(result) == pytest.approx(expected, rel=1e-12, abs=1e-12)
