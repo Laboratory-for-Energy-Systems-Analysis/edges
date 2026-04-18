@@ -165,7 +165,7 @@ def test_compute_average_cf_with_any_fallback():
     consumer_info = {"location": "CH"}  # Any value — won't be used in matching
     candidate_consumers = ["__ANY__"]
 
-    result, matched_cf, _ = compute_average_cf(
+    result, matched_cf, _, reporting_split = compute_average_cf(
         candidate_suppliers=["GLO"],
         candidate_consumers=candidate_consumers,  # not empty!
         supplier_info=supplier_info,
@@ -176,4 +176,39 @@ def test_compute_average_cf_with_any_fallback():
     )
 
     assert matched_cf is not None, f"Expected a matched CF, got {matched_cf}"
+    assert reporting_split is None
     assert eval(result) == eval("(1.000 * (10))")
+
+
+def test_compute_average_cf_returns_reporting_split_for_weighted_average():
+    raw_cfs = [
+        {
+            "supplier": {"name": "Oil", "location": "GLO"},
+            "consumer": {"location": "CH"},
+            "value": 10,
+            "weight": 1,
+        },
+        {
+            "supplier": {"name": "Oil", "location": "GLO"},
+            "consumer": {"location": "DE"},
+            "value": 20,
+            "weight": 3,
+        },
+    ]
+
+    result, matched_cf, _, reporting_split = compute_average_cf(
+        candidate_suppliers=["GLO"],
+        candidate_consumers=["CH", "DE"],
+        supplier_info={"name": "Oil", "location": "GLO"},
+        consumer_info={"location": "RER"},
+        cf_index=build_cf_index(raw_cfs),
+        required_supplier_fields={"name", "location"},
+        required_consumer_fields={"location"},
+    )
+
+    assert matched_cf is None
+    assert eval(result) == pytest.approx(17.5)
+    assert reporting_split == (
+        {"consumer_location": "CH", "share": pytest.approx(0.25), "value": 10},
+        {"consumer_location": "DE", "share": pytest.approx(0.75), "value": 20},
+    )

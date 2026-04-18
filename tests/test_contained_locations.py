@@ -97,10 +97,10 @@ def test_map_contained_locations_fast_path_keeps_consumer_candidates_separate():
     ):
         calls.append((tuple(candidate_suppliers), tuple(candidate_consumers)))
         if tuple(candidate_consumers) == ("CA",):
-            return ("CF_CA", None, None)
+            return ("CF_CA", None, None, None)
         if tuple(candidate_consumers) == ("RER",):
-            return ("CF_RER", None, None)
-        return (0, None, None)
+            return ("CF_RER", None, None, None)
+        return (0, None, None, None)
 
     lca._compute_average_cf_cached = fake_compute_average_cf_cached
 

@@ -44,4 +44,12 @@ This minimal example walks you through performing a basic LCIA using `edges`.
     # Step 6 (optional but RECOMMENDED): Print a table with all exchanges characterized
     # this allows you to check whether exchanges have been given the correct CFs
     # include_unmatched=True allows you to see which exchanges were not matched (and if some should have been)
-    df = lcia.generate_cf_table(include_unmatched=False)
+    # split_aggregate_consumers=True expands weighted consumer fallback rows into countries
+    df = lcia.generate_cf_table(
+        include_unmatched=False,
+        split_aggregate_consumers=True,
+    )
+
+For deterministic regionalized runs, ``split_aggregate_consumers=True``
+replaces weighted fallback rows for consumer regions such as ``RER``, ``GLO``,
+``RoW``, and ``RoE`` with country-level rows in the exported table.

@@ -48,6 +48,7 @@ and region-specific scenarios.
 * Geographic resolution: Supports 346 national and sub-national regions. 
 * Scenario-based flexibility: Incorporate parameters (e.g., CO₂ atmospheric concentration) directly in CF calculations, enabling dynamic scenario analysis. 
 * Efficient workflow: Clearly separates expensive exchange-mapping tasks (performed once) from inexpensive scenario-based numeric CF evaluations.
+* Transparent reporting: Can expand weighted fallback consumer regions into country-specific rows in the detailed CF table for deterministic runs.
 
 Currently, the library provides regionalized CFs for:
 
@@ -138,9 +139,17 @@ print(LCA.score)
 # Optional but recommended: print a dataframe with the characterization factors used
 # this allows you to check whether exchanges have been given the correct CFs
 # include_unmatched=True allows you to see which exchanges were not matched (and if some should have been)
-LCA.generate_cf_table()
+# split_aggregate_consumers=True expands weighted consumer fallback rows
+# (e.g. RER, GLO, RoW, RoE) into country rows in deterministic runs
+LCA.generate_cf_table(split_aggregate_consumers=True)
 
 ```
+
+For deterministic regionalized runs, ``generate_cf_table(split_aggregate_consumers=True)``
+replaces weighted fallback rows for aggregate or dynamic consumer regions with
+country-specific rows whose ``amount`` and ``impact`` sum back to the original
+row. The raw split used for each exchange is also available after
+``evaluate_cfs()`` via ``lca.scenario_cfs[*]["reporting_split"]``.
 
 ### Perform parameter-based LCIA
 
@@ -240,7 +249,7 @@ results = []
 for idx in {"2020", "2050", "2100"}:
     lcia.evaluate_cfs(idx)
     lcia.lcia()
-    df = lcia.generate_cf_table()
+    df = lcia.generate_cf_table(split_aggregate_consumers=True)
 
     scenario_result = {
         "scenario": idx,

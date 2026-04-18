@@ -384,6 +384,10 @@ Parameterized GWP
 
 See also:
 
+For deterministic regionalized methods, ``generate_cf_table(split_aggregate_consumers=True)``
+can be used to replace weighted fallback consumer regions with country-specific
+rows in the exported results table.
+
 - examples/simple_parameterized_example_1.json
 
 **Sample CF JSON**:

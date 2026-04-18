@@ -406,3 +406,60 @@ def test_generate_cf_table_uses_inventory_samples_in_joint_mode(monkeypatch):
     assert df.loc[0, "amount (mean)"] == pytest.approx(3.0)
     assert df.loc[0, "CF (mean)"] == pytest.approx(10.0)
     assert df.loc[0, "impact (50th)"] == pytest.approx(30.0)
+
+
+def test_generate_cf_table_splits_weighted_reporting_rows(monkeypatch):
+    lcia = EdgeLCIA.__new__(EdgeLCIA)
+    lcia.logger = logging.getLogger("test.edgelcia.robustness.split.table")
+    lcia.scenario_cfs = [
+        {
+            "supplier": {"matrix": "biosphere"},
+            "consumer": {"matrix": "technosphere"},
+            "positions": [(0, 1)],
+            "value": 16.0,
+            "reporting_split": (
+                {"consumer_location": "CH", "share": 0.25, "value": 10.0},
+                {"consumer_location": "DE", "share": 0.25, "value": 14.0},
+                {"consumer_location": "DE", "share": 0.50, "value": 20.0},
+            ),
+        }
+    ]
+    lcia.characterization_matrix = csr_matrix(([16.0], ([0], [1])), shape=(2, 2))
+    lcia.technosphere_flow_matrix = None
+    lcia.lca = SimpleNamespace(
+        inventory=csr_matrix(([4.0], ([0], [1])), shape=(2, 2)),
+    )
+    lcia.reversed_biosphere = {0: "bio-flow"}
+    lcia.reversed_activity = {1: "consumer-activity"}
+
+    def _get_activity(key):
+        if key == "bio-flow":
+            return {
+                "name": "Water",
+                "categories": ("water",),
+                "classifications": None,
+            }
+        if key == "consumer-activity":
+            return {
+                "name": "Dummy activity",
+                "reference product": "dummy product",
+                "location": "RER",
+                "classifications": None,
+            }
+        raise KeyError(key)
+
+    monkeypatch.setattr(bw2data, "get_activity", _get_activity)
+
+    df = lcia.generate_cf_table(split_aggregate_consumers=True)
+
+    assert list(df["consumer location"]) == ["CH", "DE"]
+    assert df["amount"].sum() == pytest.approx(4.0)
+    assert df["impact"].sum() == pytest.approx(64.0)
+
+    by_location = df.set_index("consumer location")
+    assert by_location.loc["CH", "amount"] == pytest.approx(1.0)
+    assert by_location.loc["CH", "CF"] == pytest.approx(10.0)
+    assert by_location.loc["CH", "impact"] == pytest.approx(10.0)
+    assert by_location.loc["DE", "amount"] == pytest.approx(3.0)
+    assert by_location.loc["DE", "CF"] == pytest.approx(18.0)
+    assert by_location.loc["DE", "impact"] == pytest.approx(54.0)

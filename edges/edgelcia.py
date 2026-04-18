@@ -154,6 +154,7 @@ def add_cf_entry(
     indices: tuple,
     value: float,
     uncertainty: dict,
+    reporting_split: tuple[dict, ...] | None = None,
     seen_positions: set[tuple[str, int, int]] | None = None,
 ) -> None:
     """
@@ -212,6 +213,8 @@ def add_cf_entry(
     }
     if uncertainty is not None:
         entry["uncertainty"] = uncertainty
+    if reporting_split is not None:
+        entry["reporting_split"] = tuple(reporting_split)
 
     cfs_mapping.append(entry)
     if seen_positions is not None:
@@ -596,7 +599,7 @@ class EdgeLCIA:
         except Exception:
             method_blob = repr(self.method)
         self._cf_persistent_namespace = hashlib.sha1(
-            method_blob.encode("utf-8")
+            f"cfavg_v2:{method_blob}".encode("utf-8")
         ).hexdigest()
         self._cf_persistent_hits = 0
         self._cf_persistent_misses = 0
@@ -1217,6 +1220,12 @@ class EdgeLCIA:
         candidate location pools) combinations across static/dynamic/contained/global
         mapping passes.
         """
+
+        def _normalize_result(result):
+            if isinstance(result, tuple) and len(result) == 3:
+                return (*result, None)
+            return result
+
         s_fields = set(required_supplier_fields or set())
         c_fields = set(required_consumer_fields or set())
         s_fields.discard("location")
@@ -1241,7 +1250,7 @@ class EdgeLCIA:
         cached = self._cf_avg_cache.get(key)
         if cached is not None:
             self._cf_avg_cache_hits += 1
-            return cached
+            return _normalize_result(cached)
 
         persistent_key = (
             self._cf_persistent_namespace,
@@ -1255,6 +1264,7 @@ class EdgeLCIA:
         persistent_cached = self._persistent_cf_cache_get(persistent_key)
         if persistent_cached is not None:
             self._cf_avg_cache_hits += 1
+            persistent_cached = _normalize_result(persistent_cached)
             self._cf_avg_cache[key] = persistent_cached
             return persistent_cached
 
@@ -2087,7 +2097,7 @@ class EdgeLCIA:
                         mkey = (cand_sup_s, cand_con_s, c_sig)
 
                         if mkey not in memo:
-                            new_cf, matched_cf_obj, agg_uncertainty = (
+                            new_cf, matched_cf_obj, agg_uncertainty, reporting_split = (
                                 self._compute_average_cf_cached(
                                     candidate_suppliers=cand_sup_s,
                                     candidate_consumers=cand_con_s,
@@ -2098,9 +2108,16 @@ class EdgeLCIA:
                                     cf_index=self.cf_index,
                                 )
                             )
-                            memo[mkey] = (new_cf, matched_cf_obj, agg_uncertainty)
+                            memo[mkey] = (
+                                new_cf,
+                                matched_cf_obj,
+                                agg_uncertainty,
+                                reporting_split,
+                            )
 
-                        new_cf, matched_cf_obj, agg_uncertainty = memo[mkey]
+                        new_cf, matched_cf_obj, agg_uncertainty, reporting_split = memo[
+                            mkey
+                        ]
 
                         if new_cf != 0:
                             add_cf_entry(
@@ -2111,6 +2128,7 @@ class EdgeLCIA:
                                 indices=[(supplier_idx, consumer_idx)],
                                 value=new_cf,
                                 uncertainty=agg_uncertainty,
+                                reporting_split=reporting_split,
                                 seen_positions=self._seen_positions,
                             )
 
@@ -2135,8 +2153,10 @@ class EdgeLCIA:
                     (candidate_suppliers, candidate_consumers),
                 ), edge_group in grouped_edges.items():
 
-                    new_cf, matched_cf_obj, agg_uncertainty = compute_cf_memoized(
+                    new_cf, matched_cf_obj, agg_uncertainty, reporting_split = (
+                        compute_cf_memoized(
                         s_key, c_key, candidate_suppliers, candidate_consumers
+                        )
                     )
 
                     if new_cf != 0:
@@ -2149,6 +2169,7 @@ class EdgeLCIA:
                                 indices=[(supplier_idx, consumer_idx)],
                                 value=new_cf,
                                 uncertainty=agg_uncertainty,
+                                reporting_split=reporting_split,
                                 seen_positions=self._seen_positions,
                             )
                     else:
@@ -2428,7 +2449,7 @@ class EdgeLCIA:
 
                         if memo_key not in memo:
 
-                            new_cf, matched_cf_obj, agg_uncertainty = (
+                            new_cf, matched_cf_obj, agg_uncertainty, reporting_split = (
                                 self._compute_average_cf_cached(
                                     candidate_suppliers=cand_sup_s,
                                     candidate_consumers=cand_con_s,
@@ -2439,9 +2460,16 @@ class EdgeLCIA:
                                     cf_index=self.cf_index,
                                 )
                             )
-                            memo[memo_key] = (new_cf, matched_cf_obj, agg_uncertainty)
+                            memo[memo_key] = (
+                                new_cf,
+                                matched_cf_obj,
+                                agg_uncertainty,
+                                reporting_split,
+                            )
 
-                        new_cf, matched_cf_obj, agg_uncertainty = memo[memo_key]
+                        new_cf, matched_cf_obj, agg_uncertainty, reporting_split = (
+                            memo[memo_key]
+                        )
 
                         if new_cf:
                             add_cf_entry(
@@ -2452,6 +2480,7 @@ class EdgeLCIA:
                                 indices=[(supplier_idx, consumer_idx)],
                                 value=new_cf,
                                 uncertainty=agg_uncertainty,
+                                reporting_split=reporting_split,
                                 seen_positions=self._seen_positions,
                             )
                         else:
@@ -2485,11 +2514,13 @@ class EdgeLCIA:
                     (candidate_supplier_locations, candidate_consumer_locations),
                 ), edge_group in grouped_edges.items():
 
-                    new_cf, matched_cf_obj, agg_uncertainty = compute_cf_memoized(
+                    new_cf, matched_cf_obj, agg_uncertainty, reporting_split = (
+                        compute_cf_memoized(
                         s_key,
                         c_key,
                         candidate_supplier_locations,
                         candidate_consumer_locations,
+                        )
                     )
 
                     if new_cf:
@@ -2502,6 +2533,7 @@ class EdgeLCIA:
                                 indices=[(supplier_idx, consumer_idx)],
                                 value=new_cf,
                                 uncertainty=agg_uncertainty,
+                                reporting_split=reporting_split,
                                 seen_positions=self._seen_positions,
                             )
                     else:
@@ -2761,7 +2793,7 @@ class EdgeLCIA:
                         mkey = (cand_sup_s, cand_con_s, c_sig)
 
                         if mkey not in memo:
-                            new_cf, matched_cf_obj, agg_uncertainty = (
+                            new_cf, matched_cf_obj, agg_uncertainty, _reporting_split = (
                                 self._compute_average_cf_cached(
                                     candidate_suppliers=cand_sup_s,
                                     candidate_consumers=cand_con_s,
@@ -2772,9 +2804,16 @@ class EdgeLCIA:
                                     cf_index=self.cf_index,
                                 )
                             )
-                            memo[mkey] = (new_cf, matched_cf_obj, agg_uncertainty)
+                            memo[mkey] = (
+                                new_cf,
+                                matched_cf_obj,
+                                agg_uncertainty,
+                                _reporting_split,
+                            )
 
-                        new_cf, matched_cf_obj, agg_uncertainty = memo[mkey]
+                        new_cf, matched_cf_obj, agg_uncertainty, _reporting_split = (
+                            memo[mkey]
+                        )
 
                         if new_cf != 0:
                             add_cf_entry(
@@ -2809,11 +2848,13 @@ class EdgeLCIA:
                     (candidate_suppliers, candidate_consumers),
                 ), edge_group in grouped_edges.items():
 
-                    new_cf, matched_cf_obj, agg_uncertainty = compute_cf_memoized(
+                    new_cf, matched_cf_obj, agg_uncertainty, _reporting_split = (
+                        compute_cf_memoized(
                         supplier_info,
                         consumer_info,
                         candidate_suppliers,
                         candidate_consumers,
+                        )
                     )
                     if new_cf:
                         for supplier_idx, consumer_idx in edge_group:
@@ -3053,7 +3094,12 @@ class EdgeLCIA:
 
                     # compute_average_cf already ignores fields not present in CFs,
                     # so if supplier 'location' isn't in CF schema, it won't block matches.
-                    glo_cf, matched_cf_obj, glo_unc = self._compute_average_cf_cached(
+                    (
+                        glo_cf,
+                        matched_cf_obj,
+                        glo_unc,
+                        reporting_split,
+                    ) = self._compute_average_cf_cached(
                         candidate_suppliers=direct_sup_candidates,
                         candidate_consumers=direct_con_candidates,
                         supplier_info=supplier_info,
@@ -3081,6 +3127,7 @@ class EdgeLCIA:
                                         else None
                                     )
                                 ),
+                                reporting_split=reporting_split,
                                 seen_positions=self._seen_positions,
                             )
                         continue  # done with this group
@@ -3108,8 +3155,10 @@ class EdgeLCIA:
                     (candidate_suppliers, candidate_consumers),
                 ), edge_group in grouped_edges.items():
 
-                    glo_cf, matched_cf_obj, glo_unc = compute_cf_memoized(
-                        s_key, c_key, candidate_suppliers, candidate_consumers
+                    glo_cf, matched_cf_obj, glo_unc, reporting_split = (
+                        compute_cf_memoized(
+                            s_key, c_key, candidate_suppliers, candidate_consumers
+                        )
                     )
 
                     if glo_cf != 0:
@@ -3130,6 +3179,7 @@ class EdgeLCIA:
                                         else None
                                     )
                                 ),
+                                reporting_split=reporting_split,
                                 seen_positions=self._seen_positions,
                             )
                         continue
@@ -3464,30 +3514,27 @@ class EdgeLCIA:
             self._last_eval_scenario_idx = scenario_idx
 
             for cf in self.cfs_mapping:
-                if isinstance(cf["value"], str):
-                    try:
-                        value = safe_eval_cached(
-                            cf["value"],
-                            parameters=resolved_params,
-                            scenario_idx=scenario_idx,
-                            SAFE_GLOBALS=self.SAFE_GLOBALS,
-                        )
-                    except Exception as e:
-                        self.logger.error(
-                            f"Failed to evaluate symbolic CF '{cf['value']}' with parameters {resolved_params}. Error: {e}"
-                        )
-                        value = 0
-                else:
-                    value = cf["value"]
-
-                self.scenario_cfs.append(
-                    {
-                        "supplier": cf["supplier"],
-                        "consumer": cf["consumer"],
-                        "positions": sorted(cf["positions"]),
-                        "value": value,
-                    }
+                value = self._evaluate_cf_numeric_value(
+                    cf["value"],
+                    resolved_params=resolved_params,
+                    scenario_idx=scenario_idx,
                 )
+                evaluated_split = self._evaluate_reporting_split(
+                    cf.get("reporting_split"),
+                    resolved_params=resolved_params,
+                    scenario_idx=scenario_idx,
+                )
+
+                entry = {
+                    "supplier": cf["supplier"],
+                    "consumer": cf["consumer"],
+                    "positions": sorted(cf["positions"]),
+                    "value": value,
+                }
+                if evaluated_split is not None:
+                    entry["reporting_split"] = evaluated_split
+
+                self.scenario_cfs.append(entry)
 
             matrix_type = (
                 "biosphere" if len(self.biosphere_edges) > 0 else "technosphere"
@@ -3501,6 +3548,68 @@ class EdgeLCIA:
                     self.characterization_matrix[i, j] = cf["value"]
 
             self.characterization_matrix = self.characterization_matrix.tocsr()
+
+    def _evaluate_cf_numeric_value(self, raw_value, *, resolved_params, scenario_idx):
+        """Evaluate one numeric or symbolic CF value for deterministic reporting."""
+        if isinstance(raw_value, str):
+            try:
+                return float(
+                    safe_eval_cached(
+                        raw_value,
+                        parameters=resolved_params,
+                        scenario_idx=scenario_idx,
+                        SAFE_GLOBALS=self.SAFE_GLOBALS,
+                    )
+                )
+            except Exception as e:
+                self.logger.error(
+                    f"Failed to evaluate symbolic CF '{raw_value}' with parameters {resolved_params}. Error: {e}"
+                )
+                return 0.0
+
+        try:
+            return float(raw_value)
+        except Exception:
+            return 0.0
+
+    def _evaluate_reporting_split(
+        self,
+        reporting_split,
+        *,
+        resolved_params,
+        scenario_idx,
+    ) -> tuple[dict, ...] | None:
+        """Evaluate stored split components for deterministic reporting."""
+        if not reporting_split:
+            return None
+
+        evaluated = []
+        for component in reporting_split:
+            location = component.get("consumer_location")
+            share = component.get("share")
+            if location is None or share is None:
+                continue
+
+            try:
+                share = float(share)
+            except Exception:
+                continue
+            if share <= 0:
+                continue
+
+            evaluated.append(
+                {
+                    "consumer_location": location,
+                    "share": share,
+                    "value": self._evaluate_cf_numeric_value(
+                        component.get("value"),
+                        resolved_params=resolved_params,
+                        scenario_idx=scenario_idx,
+                    ),
+                }
+            )
+
+        return tuple(evaluated) if evaluated else None
 
     def _uses_inventory_distributions(self) -> bool:
         """Return True when inventory uncertainty should be propagated across iterations."""
@@ -3778,26 +3887,19 @@ class EdgeLCIA:
         Deterministic path: evaluate a single CF value for the redo.
         Mirrors the logic in evaluate_cfs() for a single entry.
         """
-        if isinstance(cf["value"], str):
-            try:
-                params = self._resolve_parameters_for_scenario(
-                    scenario_idx, scenario_name
-                )
-                return float(
-                    safe_eval_cached(
-                        cf["value"],
-                        parameters=params,
-                        scenario_idx=scenario_idx,
-                        SAFE_GLOBALS=self.SAFE_GLOBALS,
-                    )
-                )
-            except Exception as e:
-                self.logger.error(
-                    f"Failed to evaluate symbolic CF '{cf['value']}'. Error: {e}"
-                )
-                return 0.0
-        else:
-            return float(cf["value"])
+        params = self._resolve_parameters_for_scenario(scenario_idx, scenario_name)
+        return (
+            self._evaluate_cf_numeric_value(
+                cf["value"],
+                resolved_params=params,
+                scenario_idx=scenario_idx,
+            ),
+            self._evaluate_reporting_split(
+                cf.get("reporting_split"),
+                resolved_params=params,
+                scenario_idx=scenario_idx,
+            ),
+        )
 
     def redo_lcia(
         self,
@@ -4084,7 +4186,7 @@ class EdgeLCIA:
                 self.scenario_cfs = []
 
             for cf in new_cf_entries:
-                val = self._evaluate_cf_value_for_redo(
+                val, evaluated_split = self._evaluate_cf_value_for_redo(
                     cf, scenario_idx=scenario_idx, scenario_name=scenario_name
                 )
                 if val == 0:
@@ -4092,14 +4194,15 @@ class EdgeLCIA:
                 for i, j in cf["positions"]:
                     cm[i, j] = val
                 # Keep reporting structures in sync
-                self.scenario_cfs.append(
-                    {
-                        "supplier": cf["supplier"],
-                        "consumer": cf["consumer"],
-                        "positions": sorted(cf["positions"]),
-                        "value": val,
-                    }
-                )
+                entry = {
+                    "supplier": cf["supplier"],
+                    "consumer": cf["consumer"],
+                    "positions": sorted(cf["positions"]),
+                    "value": val,
+                }
+                if evaluated_split is not None:
+                    entry["reporting_split"] = evaluated_split
+                self.scenario_cfs.append(entry)
             # Ensure efficient structure
             self.characterization_matrix = cm.tocsr()
 
@@ -4262,18 +4365,48 @@ class EdgeLCIA:
 
         print(table)
 
-    def generate_cf_table(self, include_unmatched=False) -> pd.DataFrame:
+    def generate_cf_table(
+        self, include_unmatched=False, split_aggregate_consumers=False
+    ) -> pd.DataFrame:
         """
-        Generate a detailed results table of characterized exchanges, plus
-        per-scheme classification columns for suppliers and consumers.
+        Generate a detailed reporting table of characterized exchanges.
 
-        After populating rows, this function scans all rows to find the set of
-        classification schemes present in supplier and consumer activities and
-        then adds one column per scheme:
-          - supplier {scheme}
-          - consumer {scheme}
+        Parameters
+        ----------
+        include_unmatched : bool, optional
+            If ``True``, append inventory exchanges that remained unmatched.
+            These rows keep the exchange metadata and amount, with ``CF`` and
+            ``impact`` left empty.
+        split_aggregate_consumers : bool, optional
+            Deterministic mode only. If ``True``, replace weighted consumer-side
+            fallback rows with country-level rows using the exact shares stored
+            during geographic fallback matching. This affects weighted fallback
+            rows created from composite consumer regions such as ``RER``,
+            ``GLO``, ``RoW``, ``RoE``, and other non-country composite regions.
+            Direct matches and unmatched rows are left unchanged.
 
-        Each cell contains a '; '-joined, de-duplicated, sorted list of codes for that scheme.
+        Returns
+        -------
+        pd.DataFrame
+            A row-wise table of characterized exchanges. Deterministic runs
+            include ``amount``, ``CF``, and ``impact`` columns. Uncertainty
+            runs include summary statistics columns for the sampled amounts,
+            CFs, and impacts. Supplier and consumer classification schemes are
+            expanded into additional columns named ``supplier {scheme}`` and
+            ``consumer {scheme}``.
+
+        Notes
+        -----
+        - Requires :meth:`evaluate_cfs` to have been called first. If not,
+          an empty DataFrame is returned.
+        - When ``split_aggregate_consumers=True``, the original weighted
+          aggregate row disappears and is replaced by country rows whose
+          ``amount`` and ``impact`` sum back to the original row.
+        - The raw split metadata is also accessible on ``self.cfs_mapping`` and
+          on deterministic ``self.scenario_cfs`` entries via the
+          ``reporting_split`` field.
+        - ``split_aggregate_consumers=True`` is not supported in uncertainty
+          mode and raises ``NotImplementedError``.
         """
 
         def _norm_classifications(cls):
@@ -4342,6 +4475,67 @@ class EdgeLCIA:
                 return None
             return "; ".join(sorted({str(c) for c in codes if c is not None}))
 
+        def _split_reporting_rows(rows):
+            """Expand stored aggregate-consumer splits into country-level rows."""
+            split_rows = []
+            for original in rows:
+                row = dict(original)
+                reporting_split = row.pop("_reporting_split", None)
+                if (
+                    not reporting_split
+                    or row.get("CF") is None
+                    or row.get("impact") is None
+                ):
+                    split_rows.append(row)
+                    continue
+
+                try:
+                    amount = float(row["amount"])
+                except Exception:
+                    split_rows.append(row)
+                    continue
+
+                grouped = {}
+                for component in reporting_split:
+                    location = component.get("consumer_location")
+                    share = component.get("share")
+                    value = component.get("value")
+                    if location is None or share is None or value is None:
+                        continue
+
+                    try:
+                        share = float(share)
+                        value = float(value)
+                    except Exception:
+                        continue
+                    if share <= 0:
+                        continue
+
+                    bucket = grouped.setdefault(
+                        location,
+                        {"share": 0.0, "weighted_cf": 0.0},
+                    )
+                    bucket["share"] += share
+                    bucket["weighted_cf"] += share * value
+
+                if not grouped:
+                    split_rows.append(row)
+                    continue
+
+                for location, bucket in grouped.items():
+                    share = bucket["share"]
+                    if share <= 0:
+                        continue
+
+                    expanded = dict(row)
+                    expanded["consumer location"] = location
+                    expanded["amount"] = amount * share
+                    expanded["CF"] = bucket["weighted_cf"] / share
+                    expanded["impact"] = amount * bucket["weighted_cf"]
+                    split_rows.append(expanded)
+
+            return split_rows
+
         if not self.scenario_cfs:
             self.logger.warning(
                 "generate_cf_table() called before evaluate_cfs(). Returning empty DataFrame."
@@ -4362,6 +4556,11 @@ class EdgeLCIA:
             and self.iterations > 1
             and (self.use_distributions or inventory_uncertainty)
         )
+        if split_aggregate_consumers and uncertain_mode:
+            raise NotImplementedError(
+                "generate_cf_table(split_aggregate_consumers=True) is only "
+                "supported for deterministic tables."
+            )
         inventory_sample_tensor = getattr(self, "inventory_samples", None)
 
         if inventory_uncertainty and inventory_sample_tensor is None:
@@ -4490,6 +4689,7 @@ class EdgeLCIA:
                         "impact": impact,
                         "_supplier_cls": s_cls,
                         "_consumer_cls": c_cls,
+                        "_reporting_split": cf.get("reporting_split"),
                     }
 
                     if is_biosphere:
@@ -4552,6 +4752,12 @@ class EdgeLCIA:
                     entry["supplier location"] = supplier.get("location")
 
                 data.append(entry)
+
+        if split_aggregate_consumers:
+            data = _split_reporting_rows(data)
+        else:
+            for entry in data:
+                entry.pop("_reporting_split", None)
 
         # Build DataFrame
         df = pd.DataFrame(data)

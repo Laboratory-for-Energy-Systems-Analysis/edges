@@ -1,5 +1,23 @@
 # Changelog
 
+## 1.2.9 - Upcoming
+
+### Reporting
+
+- Added ``EdgeLCIA.generate_cf_table(split_aggregate_consumers=True)`` for
+  deterministic runs. Weighted fallback rows for aggregate or dynamic consumer
+  regions are now replaced by country-specific rows using the exact shares
+  stored during geographic fallback matching.
+- Stored per-exchange ``reporting_split`` metadata on fallback CF entries so
+  the raw country split can be inspected directly on ``cfs_mapping`` and
+  deterministic ``scenario_cfs`` entries.
+
+### Documentation
+
+- Documented the new reporting option and split metadata access in the README,
+  quickstart, methods guide, user guide, and the ``EdgeLCIA.generate_cf_table``
+  API docstring.
+
 ## 1.1 - 2026-04-09
 
 ### GeoPolRisk - country pairs

@@ -878,7 +878,7 @@ def compute_average_cf(
     pair_match_cache: dict | None = None,
     valid_pairs_cache: dict | None = None,
     stats: dict | None = None,
-) -> tuple[str | float, Optional[dict], Optional[dict]]:
+) -> tuple[str | float, Optional[dict], Optional[dict], Optional[tuple[dict, ...]]]:
     """
     Compute a weighted CF expression and aggregated uncertainty for composite regions.
     Deterministic across platforms without deep freezing: we sort by (s_loc, c_loc, cf_signature),
@@ -942,7 +942,7 @@ def compute_average_cf(
             candidate_suppliers,
             candidate_consumers,
         )
-        return 0, None, None
+        return 0, None, None, None
 
     S = candidate_suppliers
     C = candidate_consumers
@@ -990,7 +990,7 @@ def compute_average_cf(
                 _head(C),
                 some_keys,
             )
-        return 0, None, None
+        return 0, None, None, None
 
     # ---------- 3) Base, field-filtered views (exclude 'location' here) ----------
     required_supplier_fields = required_supplier_fields or set()
@@ -1076,7 +1076,7 @@ def compute_average_cf(
                 _head(valid_location_pairs, 10),
                 total_candidates_seen,
             )
-        return 0, None, None
+        return 0, None, None, None
 
     # ---------- 5) Deterministic ordering without deep freezing ----------
     matched.sort(key=lambda t: (t[0], t[1], _cf_signature(t[2])))
@@ -1122,6 +1122,17 @@ def compute_average_cf(
         if sh > 0.0:
             expressions.append(f"({sh:.4f} * ({cf.get('value')}))")
     expr = " + ".join(expressions)
+    reporting_split = tuple(
+        {
+            "consumer_location": c_loc,
+            "share": float(sh),
+            "value": cf.get("value"),
+        }
+        for (_s, c_loc, cf), sh in zip(matched, shares)
+        if sh > 0.0
+    )
+    if len(reporting_split) <= 1:
+        reporting_split = None
 
     # ---------- 8) Single CF shortcut ----------
     if len(matched) == 1:
@@ -1135,7 +1146,7 @@ def compute_average_cf(
                 bool(agg_uncertainty),
                 (dt * 1000.0) if dt else -1.0,
             )
-        return (expr, single_cf, agg_uncertainty)
+        return (expr, single_cf, agg_uncertainty, None)
 
     # ---------- 9) Aggregate uncertainty (deterministic, shallow) ----------
     def _cf_sign(cf_obj) -> int | None:
@@ -1180,14 +1191,14 @@ def compute_average_cf(
                         "CF-AVG: skip agg-unc (symbolic child without unc) | child=%s",
                         _short_cf(cf),
                     )
-                return expr, None, None
+                return expr, None, None, reporting_split
         child_values.append(child_unc)
         child_weights.append(float(sh))
 
     if not child_values:
         if logger.isEnabledFor(logging.DEBUG):
             logger.debug("CF-AVG: filtered children empty after cleanup.")
-        return 0, None, None
+        return 0, None, None, None
 
     w = np.asarray(child_weights, dtype=np.float64)
     w = np.clip(w, 0.0, None)
@@ -1210,7 +1221,7 @@ def compute_average_cf(
     if not filtered:
         if logger.isEnabledFor(logging.DEBUG):
             logger.debug("CF-AVG: filtered children empty after cleanup (post-sort).")
-        return 0, None, None
+        return 0, None, None, None
 
     child_values, child_weights = zip(*filtered)
 
@@ -1238,4 +1249,4 @@ def compute_average_cf(
             stats.get("total_candidates_seen", 0)
         ) + int(total_candidates_seen)
 
-    return expr, None, agg_uncertainty
+    return expr, None, agg_uncertainty, reporting_split

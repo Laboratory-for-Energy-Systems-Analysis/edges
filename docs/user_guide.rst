@@ -94,6 +94,10 @@ When using region-specific methods like AWARE or ImpactWorld+:
     lcia.lcia()
     print(lcia.score)
 
+For deterministic regionalized runs, ``generate_cf_table(split_aggregate_consumers=True)``
+replaces weighted fallback rows for aggregate or dynamic consumer regions with
+country-specific rows in the exported table.
+
 .. note::
    Methods that mix both ``supplier.matrix = "biosphere"`` and
    ``supplier.matrix = "technosphere"`` entries in the same JSON are currently
@@ -293,6 +297,11 @@ per joint inventory + CF draw:
 
 .. note::
 
+   ``split_aggregate_consumers=True`` is only available for deterministic
+   tables. It is not supported in uncertainty mode.
+
+.. note::
+
    If you pass your own ``bw2calc.LCA`` object via ``lca=``, initialize it with
    ``use_distributions=True`` before using
    ``inventory_use_distributions=True`` in ``EdgeLCIA``.
@@ -331,7 +340,7 @@ Working with Technosphere CFs (e.g., GeoPolRisk)
     lcia.map_remaining_locations_to_global()
     lcia.evaluate_cfs()
     lcia.lcia()
-    df = lcia.generate_cf_table()
+    df = lcia.generate_cf_table(split_aggregate_consumers=True)
     df.to_csv("results.csv")
 
 ---
@@ -367,5 +376,23 @@ You can inspect or save the detailed contribution table:
 
 .. code-block:: python
 
-    df = lcia.generate_cf_table()
+    df = lcia.generate_cf_table(split_aggregate_consumers=True)
     df.to_csv("edge_lcia_detailed_results.csv")
+
+For deterministic runs, ``split_aggregate_consumers=True`` replaces weighted
+fallback rows with country-level consumer rows using the exact shares stored
+during geographic fallback matching.
+
+Direct matches are left unchanged. The option only expands weighted fallback
+rows created during geographic fallback mapping.
+
+If you want to inspect the raw split for a given exchange instead of only the
+expanded table, look at ``reporting_split`` on deterministic
+``lcia.scenario_cfs`` entries after ``evaluate_cfs()``:
+
+.. code-block:: python
+
+    for cf in lcia.scenario_cfs:
+        if cf.get("reporting_split"):
+            print(cf["positions"], cf["consumer"].get("location"))
+            print(cf["reporting_split"])
