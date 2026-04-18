@@ -2155,7 +2155,7 @@ class EdgeLCIA:
 
                     new_cf, matched_cf_obj, agg_uncertainty, reporting_split = (
                         compute_cf_memoized(
-                        s_key, c_key, candidate_suppliers, candidate_consumers
+                            s_key, c_key, candidate_suppliers, candidate_consumers
                         )
                     )
 
@@ -2467,9 +2467,9 @@ class EdgeLCIA:
                                 reporting_split,
                             )
 
-                        new_cf, matched_cf_obj, agg_uncertainty, reporting_split = (
-                            memo[memo_key]
-                        )
+                        new_cf, matched_cf_obj, agg_uncertainty, reporting_split = memo[
+                            memo_key
+                        ]
 
                         if new_cf:
                             add_cf_entry(
@@ -2516,10 +2516,10 @@ class EdgeLCIA:
 
                     new_cf, matched_cf_obj, agg_uncertainty, reporting_split = (
                         compute_cf_memoized(
-                        s_key,
-                        c_key,
-                        candidate_supplier_locations,
-                        candidate_consumer_locations,
+                            s_key,
+                            c_key,
+                            candidate_supplier_locations,
+                            candidate_consumer_locations,
                         )
                     )
 
@@ -2793,16 +2793,19 @@ class EdgeLCIA:
                         mkey = (cand_sup_s, cand_con_s, c_sig)
 
                         if mkey not in memo:
-                            new_cf, matched_cf_obj, agg_uncertainty, _reporting_split = (
-                                self._compute_average_cf_cached(
-                                    candidate_suppliers=cand_sup_s,
-                                    candidate_consumers=cand_con_s,
-                                    supplier_info=supplier_info,
-                                    consumer_info=consumer_info,
-                                    required_supplier_fields=self.required_supplier_fields,
-                                    required_consumer_fields=self.required_consumer_fields,
-                                    cf_index=self.cf_index,
-                                )
+                            (
+                                new_cf,
+                                matched_cf_obj,
+                                agg_uncertainty,
+                                _reporting_split,
+                            ) = self._compute_average_cf_cached(
+                                candidate_suppliers=cand_sup_s,
+                                candidate_consumers=cand_con_s,
+                                supplier_info=supplier_info,
+                                consumer_info=consumer_info,
+                                required_supplier_fields=self.required_supplier_fields,
+                                required_consumer_fields=self.required_consumer_fields,
+                                cf_index=self.cf_index,
                             )
                             memo[mkey] = (
                                 new_cf,
@@ -2850,10 +2853,10 @@ class EdgeLCIA:
 
                     new_cf, matched_cf_obj, agg_uncertainty, _reporting_split = (
                         compute_cf_memoized(
-                        supplier_info,
-                        consumer_info,
-                        candidate_suppliers,
-                        candidate_consumers,
+                            supplier_info,
+                            consumer_info,
+                            candidate_suppliers,
+                            candidate_consumers,
                         )
                     )
                     if new_cf:
