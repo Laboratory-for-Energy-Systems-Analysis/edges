@@ -450,8 +450,13 @@ def test_generate_cf_table_splits_weighted_reporting_rows(monkeypatch):
 
     monkeypatch.setattr(bw2data, "get_activity", _get_activity)
 
+    df_unsplit = lcia.generate_cf_table(split_aggregate_consumers=False)
     df = lcia.generate_cf_table(split_aggregate_consumers=True)
 
+    assert list(df_unsplit["consumer location"]) == ["RER"]
+    assert df_unsplit["amount"].sum() == pytest.approx(4.0)
+    assert df_unsplit["impact"].sum() == pytest.approx(64.0)
+    assert df_unsplit["impact"].sum() == pytest.approx(df["impact"].sum())
     assert list(df["consumer location"]) == ["CH", "DE"]
     assert df["amount"].sum() == pytest.approx(4.0)
     assert df["impact"].sum() == pytest.approx(64.0)
