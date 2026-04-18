@@ -283,5 +283,7 @@ def test_compute_average_cf_preserves_full_precision_in_reporting_split():
     )
 
     assert matched_cf is None
-    expected = sum(component["share"] * component["value"] for component in reporting_split)
+    expected = sum(
+        component["share"] * component["value"] for component in reporting_split
+    )
     assert eval(result) == pytest.approx(expected, rel=1e-12, abs=1e-12)
