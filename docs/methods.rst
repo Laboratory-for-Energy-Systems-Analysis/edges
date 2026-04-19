@@ -4,6 +4,12 @@ Available Methods
 
 This section describes the built-in LCIA methods available in `edges`, including their purpose, implementation, citation, minimal example, and a JSON schema excerpt showing how exchanges are matched.
 
+Some built-in methods, such as the IBIF ``all pressures`` variants, mix
+``biosphere-technosphere`` and ``technosphere-technosphere`` CF rows in one
+method file. The standard ``EdgeLCIA`` workflow is unchanged for these methods;
+``generate_cf_table()`` reports the contribution family via the
+``supplier matrix`` and ``direction`` columns.
+
 ---
 
 AWARE 2.0
@@ -555,3 +561,104 @@ transformation, enabling integration into LCA at multiple spatial scales.
 Scherer L, Rosa F, Sun Z, et al (2023)
 Biodiversity Impact Assessment Considering Land Use Intensities and Fragmentation.
 Environ Sci Technol https://doi.org/10.1021/acs.est.3c04191
+
+---
+
+IBIF v2 - Biodiversity intactness
+---------------------------------
+
+**Name**: `IBIF biodiversity`
+
+**Impact Categories**:
+
+- ``("IBIF", "biodiversity", "CO2", "overall")``
+- ``("IBIF", "biodiversity", "CO2", "plants")``
+- ``("IBIF", "biodiversity", "CO2", "vertebrates")``
+- ``("IBIF", "biodiversity", "NH3", "overall")``
+- ``("IBIF", "biodiversity", "NH3", "plants")``
+- ``("IBIF", "biodiversity", "NOx", "overall")``
+- ``("IBIF", "biodiversity", "NOx", "plants")``
+- ``("IBIF", "biodiversity", "LU", "overall")``
+- ``("IBIF", "biodiversity", "LU", "plants")``
+- ``("IBIF", "biodiversity", "LU", "vertebrates")``
+- ``("IBIF", "biodiversity", "roads", "overall")``
+- ``("IBIF", "biodiversity", "roads", "vertebrates")``
+- ``("IBIF", "biodiversity", "all pressures", "overall")``
+- ``("IBIF", "biodiversity", "all pressures", "plants")``
+- ``("IBIF", "biodiversity", "all pressures", "vertebrates")``
+
+These methods present different scopes:
+
+* ``CO2``, ``NH3``, and ``NOx`` are biosphere-to-technosphere emission methods.
+* ``LU`` is a biosphere-to-technosphere land occupation method.
+* ``roads`` is a technosphere-to-technosphere method targeting road
+  infrastructure suppliers with unit ``meter-year``.
+* ``all pressures`` combines the relevant pressure families into one built-in
+  method. ``overall`` and ``vertebrates`` now include road pressure rows,
+  while ``plants`` remains biosphere-only because the source IBIF release does
+  not provide a road CF column for plants.
+
+**Description**:
+
+IBIF v2 provides country-level biodiversity-intactness factors derived from the
+GLOBIO 4 model and expressed in mean species abundance (MSA) loss space.
+Depending on the pressure family, the built-in ``edges`` methods characterize
+inventory emissions, land occupation, or road infrastructure. The dedicated
+``roads`` methods convert published road-length CFs from per-kilometer to
+per-meter so they can match ecoinvent ``meter-year`` road infrastructure
+suppliers. The mixed ``all pressures`` methods combine emissions, land use, and
+roads in one JSON file.
+
+**Usage Example**:
+
+.. code-block:: python
+
+    import bw2data
+    from edges import EdgeLCIA
+
+    bw2data.projects.set_current("some project")
+    act = bw2data.Database("some db").random()
+
+    lcia = EdgeLCIA(
+        demand={act: 1},
+        method=("IBIF", "biodiversity", "all pressures", "overall")
+    )
+
+    lcia.lci()
+    lcia.apply_strategies()
+    lcia.evaluate_cfs()
+    lcia.lcia()
+
+    df = lcia.generate_cf_table(split_aggregate_consumers=True)
+    print(df[["supplier matrix", "direction", "amount", "CF", "impact"]].head())
+
+**Sample CF JSON**:
+
+.. code-block:: json
+
+    {
+      "supplier": {
+        "name": "road",
+        "operator": "contains",
+        "excludes": ["market", "maintenance", "treatment"],
+        "unit": "meter-year",
+        "location": "AF",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.000392,
+      "weight": 17152234636.8715
+    }
+
+This sample row comes from ``("IBIF", "biodiversity", "roads", "overall")``.
+The corresponding ``all pressures`` methods append these road rows to the
+emission and land occupation CF rows already present in the biosphere side of
+the method.
+
+**Reference**:
+Schipper, A. M., et al. (2025)
+Intactness-Based Biodiversity Impact Factors (IBIF), version 2.
+Scientific Data.
+https://doi.org/10.1038/s41597-025-05946-1

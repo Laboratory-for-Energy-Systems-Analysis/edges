@@ -17,7 +17,7 @@ class _HashableActivity(dict):
         return id(self)
 
 
-def test_mixed_supplier_matrices_rejected():
+def test_mixed_supplier_matrices_allowed(monkeypatch):
     method = {
         "name": "mixed",
         "version": "1.0",
@@ -36,8 +36,388 @@ def test_mixed_supplier_matrices_rejected():
         ],
     }
 
-    with pytest.raises(NotImplementedError):
-        EdgeLCIA(demand={}, method=method, lca=object())
+    calls = {}
+
+    class FakeLCA:
+        def __init__(self, demand):
+            calls["demand"] = demand
+            self.demand = demand
+
+    monkeypatch.setattr(
+        edgelcia_module, "_bw2calc_lca_accepts_use_distributions", lambda: False
+    )
+    monkeypatch.setattr(edgelcia_module.bw2calc, "LCA", FakeLCA)
+    monkeypatch.setattr(EdgeLCIA, "log_platform", lambda self: None)
+    monkeypatch.setattr(EdgeLCIA, "_get_candidate_supplier_keys", lambda self: set())
+
+    lcia = EdgeLCIA(demand={}, method=method)
+
+    assert isinstance(lcia.lca, FakeLCA)
+    assert calls["demand"] == {}
+    assert lcia.supplier_matrix_types == {"biosphere", "technosphere"}
+
+
+def test_lci_builds_both_edge_sets_for_internal_mixed_methods(monkeypatch):
+    lcia = EdgeLCIA.__new__(EdgeLCIA)
+    lcia.raw_cfs_data = [
+        {
+            "supplier": {"matrix": "biosphere", "name": "CO2"},
+            "consumer": {"matrix": "technosphere"},
+            "value": 1.0,
+        },
+        {
+            "supplier": {"matrix": "technosphere", "name": "electricity"},
+            "consumer": {"matrix": "technosphere"},
+            "value": 2.0,
+        },
+    ]
+
+    class FakeLCA:
+        def __init__(self):
+            self.inventory = csr_matrix(([1.0], ([0], [1])), shape=(2, 2))
+            self.technosphere_matrix = csr_matrix(([1.0], ([0], [0])), shape=(2, 2))
+            self.supply_array = np.array([1.0, 1.0])
+            self.biosphere_dict = {("biosphere", "co2"): 0}
+            self.activity_dict = {("db", "A"): 0, ("db", "B"): 1}
+
+        def lci(self, factorize=True):
+            self.factorize = factorize
+
+    fake_tech_edges = csr_matrix(([3.0], ([1], [0])), shape=(2, 2))
+
+    monkeypatch.setattr(edgelcia_module, "bw2", True)
+    monkeypatch.setattr(
+        edgelcia_module,
+        "build_technosphere_edges_matrix",
+        lambda technosphere_matrix, supply_array: fake_tech_edges,
+    )
+    monkeypatch.setattr(
+        edgelcia_module,
+        "get_flow_matrix_positions",
+        lambda mapping: [
+            {"position": position, "name": str(key)}
+            for key, position in mapping.items()
+        ],
+    )
+
+    lcia.lca = FakeLCA()
+    lcia.biosphere_edges = set()
+    lcia.technosphere_edges = set()
+
+    lcia.lci()
+
+    assert lcia.biosphere_edges == {(0, 1)}
+    assert lcia.technosphere_edges == {(1, 0)}
+    assert lcia.technosphere_flow_matrix is fake_tech_edges
+    assert lcia.lca.factorize is True
+
+
+def test_evaluate_cfs_and_lcia_support_mixed_supplier_methods():
+    lcia = EdgeLCIA.__new__(EdgeLCIA)
+    lcia.use_distributions = False
+    lcia.iterations = 10
+    lcia.scenario = None
+    lcia.parameters = {}
+    lcia.SAFE_GLOBALS = {"__builtins__": None}
+    lcia.random_seed = 42
+    lcia.random_state = np.random.default_rng(42)
+    lcia.logger = logging.getLogger("test.edgelcia.robustness.mixed")
+    lcia._last_eval_scenario_name = None
+    lcia._last_eval_scenario_idx = None
+    lcia.raw_cfs_data = [
+        {"supplier": {"matrix": "biosphere"}, "consumer": {"matrix": "technosphere"}},
+        {
+            "supplier": {"matrix": "technosphere"},
+            "consumer": {"matrix": "technosphere"},
+        },
+    ]
+    lcia.cfs_mapping = [
+        {
+            "supplier": {"matrix": "biosphere"},
+            "consumer": {"matrix": "technosphere"},
+            "positions": [(0, 1)],
+            "direction": "biosphere-technosphere",
+            "value": 10.0,
+        },
+        {
+            "supplier": {"matrix": "technosphere"},
+            "consumer": {"matrix": "technosphere"},
+            "positions": [(1, 0)],
+            "direction": "technosphere-technosphere",
+            "value": 5.0,
+        },
+    ]
+    lcia.biosphere_edges = {(0, 1)}
+    lcia.technosphere_edges = {(1, 0)}
+    lcia.processed_biosphere_edges = {(0, 1)}
+    lcia.processed_technosphere_edges = {(1, 0)}
+    lcia.lca = SimpleNamespace(
+        inventory=csr_matrix(([2.0], ([0], [1])), shape=(2, 2)),
+        technosphere_matrix=csr_matrix((2, 2)),
+    )
+    lcia.technosphere_flow_matrix = csr_matrix(([3.0], ([1], [0])), shape=(2, 2))
+
+    lcia.evaluate_cfs()
+
+    assert lcia.characterization_matrix is None
+    assert lcia.characterization_matrices["biosphere"] is not None
+    assert lcia.characterization_matrices["technosphere"] is not None
+
+    lcia.lcia()
+
+    assert lcia.score == pytest.approx(35.0)
+    assert lcia.score_by_matrix["biosphere"] == pytest.approx(20.0)
+    assert lcia.score_by_matrix["technosphere"] == pytest.approx(15.0)
+    assert lcia.characterized_inventory is None
+    assert lcia.characterized_inventories["biosphere"] is not None
+    assert lcia.characterized_inventories["technosphere"] is not None
+
+
+def test_lcia_uncertainty_supports_mixed_supplier_methods():
+    lcia = EdgeLCIA.__new__(EdgeLCIA)
+    lcia.use_distributions = True
+    lcia.iterations = 3
+    lcia.processed_biosphere_edges = {(0, 1)}
+    lcia.processed_technosphere_edges = {(1, 0)}
+    lcia.raw_cfs_data = [
+        {"supplier": {"matrix": "biosphere"}, "consumer": {"matrix": "technosphere"}},
+        {
+            "supplier": {"matrix": "technosphere"},
+            "consumer": {"matrix": "technosphere"},
+        },
+    ]
+    lcia.lca = SimpleNamespace(
+        inventory=csr_matrix(([2.0], ([0], [1])), shape=(2, 2)),
+        technosphere_matrix=csr_matrix((2, 2)),
+    )
+    lcia.technosphere_flow_matrix = csr_matrix(([3.0], ([1], [0])), shape=(2, 2))
+    lcia.characterization_matrix = None
+    lcia.characterization_matrices = {
+        "biosphere": sparse.COO(
+            coords=np.array([[0, 0, 0], [1, 1, 1], [0, 1, 2]]),
+            data=np.array([10.0, 20.0, 30.0]),
+            shape=(2, 2, 3),
+        ),
+        "technosphere": sparse.COO(
+            coords=np.array([[1, 1, 1], [0, 0, 0], [0, 1, 2]]),
+            data=np.array([1.0, 2.0, 3.0]),
+            shape=(2, 2, 3),
+        ),
+    }
+    lcia.logger = logging.getLogger("test.edgelcia.robustness.mixed.uncertainty")
+
+    lcia.lcia()
+
+    assert isinstance(lcia.score, np.ndarray)
+    assert np.allclose(lcia.score, np.array([23.0, 46.0, 69.0]))
+    assert np.allclose(lcia.score_by_matrix["biosphere"], np.array([20.0, 40.0, 60.0]))
+    assert np.allclose(lcia.score_by_matrix["technosphere"], np.array([3.0, 6.0, 9.0]))
+
+
+def test_generate_cf_table_supports_mixed_supplier_methods(monkeypatch):
+    lcia = EdgeLCIA.__new__(EdgeLCIA)
+    lcia.logger = logging.getLogger("test.edgelcia.robustness.mixed.table")
+    lcia.use_distributions = False
+    lcia.inventory_use_distributions = False
+    lcia.iterations = 1
+    lcia.raw_cfs_data = [
+        {"supplier": {"matrix": "biosphere"}, "consumer": {"matrix": "technosphere"}},
+        {
+            "supplier": {"matrix": "technosphere"},
+            "consumer": {"matrix": "technosphere"},
+        },
+    ]
+    lcia.scenario_cfs = [
+        {
+            "supplier": {"matrix": "biosphere"},
+            "consumer": {"matrix": "technosphere"},
+            "positions": [(0, 1)],
+            "direction": "biosphere-technosphere",
+            "value": 10.0,
+        },
+        {
+            "supplier": {"matrix": "technosphere"},
+            "consumer": {"matrix": "technosphere"},
+            "positions": [(1, 0)],
+            "direction": "technosphere-technosphere",
+            "value": 5.0,
+        },
+    ]
+    lcia.characterization_matrix = None
+    lcia.characterization_matrices = {
+        "biosphere": csr_matrix(([10.0], ([0], [1])), shape=(2, 2)),
+        "technosphere": csr_matrix(([5.0], ([1], [0])), shape=(2, 2)),
+    }
+    lcia.lca = SimpleNamespace(
+        inventory=csr_matrix(([2.0], ([0], [1])), shape=(2, 2)),
+        technosphere_matrix=csr_matrix((2, 2)),
+    )
+    lcia.technosphere_flow_matrix = csr_matrix(([3.0], ([1], [0])), shape=(2, 2))
+    lcia.reversed_biosphere = {0: "bio-flow"}
+    lcia.reversed_activity = {0: "consumer-activity", 1: "tech-supplier"}
+    lcia.unprocessed_biosphere_edges = []
+    lcia.unprocessed_technosphere_edges = []
+
+    def _get_activity(key):
+        if key == "bio-flow":
+            return {
+                "name": "Carbon dioxide",
+                "categories": ("air",),
+                "classifications": None,
+            }
+        if key == "tech-supplier":
+            return {
+                "name": "Electricity mix",
+                "reference product": "electricity",
+                "location": "CH",
+                "classifications": None,
+            }
+        if key == "consumer-activity":
+            return {
+                "name": "Consumer activity",
+                "reference product": "service",
+                "location": "DE",
+                "classifications": None,
+            }
+        raise KeyError(key)
+
+    monkeypatch.setattr(bw2data, "get_activity", _get_activity)
+
+    df = lcia.generate_cf_table()
+
+    assert set(df["supplier matrix"]) == {"biosphere", "technosphere"}
+    assert set(df["direction"]) == {
+        "biosphere-technosphere",
+        "technosphere-technosphere",
+    }
+    by_matrix = df.set_index("supplier matrix")
+    assert by_matrix.loc["biosphere", "impact"] == pytest.approx(20.0)
+    assert by_matrix.loc["biosphere", "supplier categories"] == ("air",)
+    assert by_matrix.loc["technosphere", "impact"] == pytest.approx(15.0)
+    assert by_matrix.loc["technosphere", "supplier location"] == "CH"
+    assert by_matrix.loc["technosphere", "supplier reference product"] == "electricity"
+
+
+def test_redo_lcia_supports_mixed_supplier_methods(monkeypatch):
+    lcia = EdgeLCIA.__new__(EdgeLCIA)
+    lcia.use_distributions = False
+    lcia.inventory_use_distributions = False
+    lcia.store_inventory_samples = False
+    lcia.iterations = 1
+    lcia.random_seed = 42
+    lcia.random_state = np.random.default_rng(42)
+    lcia.parameters = {}
+    lcia.scenario = None
+    lcia.SAFE_GLOBALS = {"__builtins__": None}
+    lcia.logger = logging.getLogger("test.edgelcia.robustness.mixed.redo")
+    lcia.raw_cfs_data = [
+        {"supplier": {"matrix": "biosphere"}, "consumer": {"matrix": "technosphere"}},
+        {
+            "supplier": {"matrix": "technosphere"},
+            "consumer": {"matrix": "technosphere"},
+        },
+    ]
+    lcia.characterization_matrix = None
+    lcia.characterization_matrices = {
+        "biosphere": csr_matrix(([10.0], ([0], [1])), shape=(2, 2)),
+        "technosphere": csr_matrix(([5.0], ([1], [0])), shape=(2, 2)),
+    }
+    lcia.scenario_cfs = [
+        {
+            "supplier": {"matrix": "biosphere"},
+            "consumer": {"matrix": "technosphere"},
+            "positions": [(0, 1)],
+            "direction": "biosphere-technosphere",
+            "value": 10.0,
+        },
+        {
+            "supplier": {"matrix": "technosphere"},
+            "consumer": {"matrix": "technosphere"},
+            "positions": [(1, 0)],
+            "direction": "technosphere-technosphere",
+            "value": 5.0,
+        },
+    ]
+    lcia.scenario_cfs_by_matrix = {
+        "biosphere": [lcia.scenario_cfs[0]],
+        "technosphere": [lcia.scenario_cfs[1]],
+    }
+    lcia.cfs_mapping = list(lcia.scenario_cfs)
+    lcia.processed_biosphere_edges = {(0, 1)}
+    lcia.processed_technosphere_edges = {(1, 0)}
+    lcia.unprocessed_biosphere_edges = []
+    lcia.unprocessed_technosphere_edges = []
+    lcia.biosphere_edges = {(0, 1)}
+    lcia.technosphere_edges = {(1, 0)}
+    lcia._last_edges_snapshot_bio = set()
+    lcia._last_edges_snapshot_tech = set()
+    lcia._last_nonempty_edges_snapshot_bio = set()
+    lcia._last_nonempty_edges_snapshot_tech = set()
+    lcia._ever_seen_edges_bio = set()
+    lcia._ever_seen_edges_tech = set()
+    lcia._failed_edges_bio = set()
+    lcia._failed_edges_tech = set()
+    lcia._last_eval_scenario_name = None
+    lcia._last_eval_scenario_idx = None
+    lcia.reversed_biosphere = {0: "bio-old", 1: "bio-new"}
+    lcia.reversed_activity = {0: "tech-new", 1: "consumer"}
+
+    current_inventory = csr_matrix(([2.0, 4.0], ([0, 1], [1, 1])), shape=(2, 2))
+    current_tech_edges = csr_matrix(([5.0, 3.0], ([0, 1], [0, 0])), shape=(2, 2))
+
+    class FakeLCA:
+        def __init__(self):
+            self.inventory = current_inventory
+            self.technosphere_matrix = csr_matrix((2, 2))
+            self.supply_array = np.array([1.0, 1.0])
+            self.demand = {}
+
+        def redo_lci(self, demand=None):
+            self.last_redo_demand = demand
+
+    lcia.lca = FakeLCA()
+    lcia.technosphere_flow_matrix = csr_matrix(([3.0], ([1], [0])), shape=(2, 2))
+
+    monkeypatch.setattr(
+        edgelcia_module,
+        "build_technosphere_edges_matrix",
+        lambda technosphere_matrix, supply_array: current_tech_edges,
+    )
+
+    def _map_exchanges():
+        assert lcia.biosphere_edges == {(1, 1)}
+        assert lcia.technosphere_edges == {(0, 0)}
+        lcia.cfs_mapping.extend(
+            [
+                {
+                    "supplier": {"matrix": "biosphere"},
+                    "consumer": {"matrix": "technosphere"},
+                    "positions": [(1, 1)],
+                    "direction": "biosphere-technosphere",
+                    "value": 7.0,
+                },
+                {
+                    "supplier": {"matrix": "technosphere"},
+                    "consumer": {"matrix": "technosphere"},
+                    "positions": [(0, 0)],
+                    "direction": "technosphere-technosphere",
+                    "value": 11.0,
+                },
+            ]
+        )
+
+    lcia.map_exchanges = _map_exchanges
+    lcia.apply_strategies = lambda strategies=None: lcia
+
+    lcia.redo_lcia(recompute_score=True)
+
+    assert lcia.characterization_matrices["biosphere"][1, 1] == pytest.approx(7.0)
+    assert lcia.characterization_matrices["technosphere"][0, 0] == pytest.approx(11.0)
+    assert lcia.score == pytest.approx(118.0)
+    assert lcia.score_by_matrix["biosphere"] == pytest.approx(48.0)
+    assert lcia.score_by_matrix["technosphere"] == pytest.approx(70.0)
+    assert set(lcia.biosphere_edges) == {(0, 1), (1, 1)}
+    assert set(lcia.technosphere_edges) == {(0, 0), (1, 0)}
 
 
 def test_statistics_accepts_string_method():

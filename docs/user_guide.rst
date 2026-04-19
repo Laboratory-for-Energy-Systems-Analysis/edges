@@ -99,9 +99,11 @@ replaces weighted fallback rows for aggregate or dynamic consumer regions with
 country-specific rows in the exported table.
 
 .. note::
-   Methods that mix both ``supplier.matrix = "biosphere"`` and
-   ``supplier.matrix = "technosphere"`` entries in the same JSON are currently
-   not supported.
+   Methods can mix both ``supplier.matrix = "biosphere"`` and
+   ``supplier.matrix = "technosphere"`` entries in the same JSON. ``edges``
+   builds both edge families during ``lci()``, sums both contributions in
+   ``lcia()``, and exposes them in ``generate_cf_table()`` via the
+   ``supplier matrix`` and ``direction`` columns.
 
 ---
 
@@ -345,6 +347,54 @@ Working with Technosphere CFs (e.g., GeoPolRisk)
 
 ---
 
+Working with Mixed Supplier Methods (e.g., IBIF all pressures)
+--------------------------------------------------------------
+
+Mixed methods combine biosphere-supplier rows and technosphere-supplier rows in
+one method file. The standard workflow is unchanged:
+
+.. code-block:: python
+
+    import bw2data
+    from edges import EdgeLCIA
+
+    bw2data.projects.set_current("some project")
+    act = bw2data.Database("some db").random()
+
+    lcia = EdgeLCIA(
+        demand={act: 1},
+        method=("IBIF", "biodiversity", "all pressures", "overall")
+    )
+
+    lcia.lci()
+    lcia.apply_strategies()
+    lcia.evaluate_cfs()
+    lcia.lcia()
+    df = lcia.generate_cf_table(split_aggregate_consumers=True)
+
+In the exported table, ``supplier matrix`` tells you whether a row came from
+the biosphere or technosphere side, and ``direction`` distinguishes
+``biosphere-technosphere`` from ``technosphere-technosphere`` matches.
+
+The built-in IBIF ``all pressures`` methods now use this mixed format:
+
+- ``("IBIF", "biodiversity", "all pressures", "overall")`` combines
+  emissions, land occupation, and road infrastructure pressure.
+- ``("IBIF", "biodiversity", "all pressures", "vertebrates")`` combines
+  emissions, land occupation, and road infrastructure pressure for the
+  vertebrate scope.
+- ``("IBIF", "biodiversity", "all pressures", "plants")`` remains biosphere-only,
+  because the source IBIF release does not provide a road CF column for plants.
+
+.. note::
+
+   Most core workflows support mixed methods, including ``lci()``,
+   ``evaluate_cfs()``, ``lcia()``, ``redo_lcia()``, and
+   ``generate_cf_table()``. Some higher-level analysis helpers still assume a
+   single supplier matrix and may raise ``NotImplementedError``.
+
+---
+
 Scenario-based Fossil Resource Scarcity
 ---------------------------------------
 
@@ -385,6 +435,10 @@ during geographic fallback matching.
 
 Direct matches are left unchanged. The option only expands weighted fallback
 rows created during geographic fallback mapping.
+
+For mixed methods, the exported table can contain both biosphere and
+technosphere supplier rows. Use the ``supplier matrix`` and ``direction``
+columns to filter the table by contribution family.
 
 If you want to inspect the raw split for a given exchange instead of only the
 expanded table, look at ``reporting_split`` on deterministic

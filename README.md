@@ -49,6 +49,7 @@ and region-specific scenarios.
 * Scenario-based flexibility: Incorporate parameters (e.g., CO₂ atmospheric concentration) directly in CF calculations, enabling dynamic scenario analysis. 
 * Efficient workflow: Clearly separates expensive exchange-mapping tasks (performed once) from inexpensive scenario-based numeric CF evaluations.
 * Transparent reporting: Can expand weighted fallback consumer regions into country-specific rows in the detailed CF table for deterministic runs.
+* Mixed supplier matrices: Supports method files that combine ``biosphere-technosphere`` and ``technosphere-technosphere`` CF rows in one JSON file.
 
 Currently, the library provides regionalized CFs for:
 
@@ -56,10 +57,14 @@ Currently, the library provides regionalized CFs for:
 * ImpactWorld+ 2.1
 * GeoPolRisk 1.0
 * GLAM3 Land use impacts on biodiversity
+* IBIF v2 biodiversity intactness (CO2, NH3, NOx, land occupation, roads, and all pressures)
 
 > [!NOTE]
-> Mixed CF methods combining both `biosphere` and `technosphere` supplier matrices
-> in a single method file are currently not supported.
+> Mixed CF methods combining both `biosphere` and `technosphere` supplier
+> matrices in a single method file are supported. ``lci()`` builds both edge
+> families, ``lcia()`` sums both contributions, and
+> ``generate_cf_table()`` reports ``supplier matrix`` and ``direction`` columns
+> so mixed results remain inspectable.
 
 > [!NOTE]
 > The exchange matcher backend is
@@ -150,6 +155,11 @@ replaces weighted fallback rows for aggregate or dynamic consumer regions with
 country-specific rows whose ``amount`` and ``impact`` sum back to the original
 row. The raw split used for each exchange is also available after
 ``evaluate_cfs()`` via ``lca.scenario_cfs[*]["reporting_split"]``.
+
+When a method mixes biosphere- and technosphere-supplier CFs, the exported
+table includes ``supplier matrix`` and ``direction`` columns so you can tell
+which contributions came from ``biosphere-technosphere`` versus
+``technosphere-technosphere`` matches.
 
 ### Perform parameter-based LCIA
 
