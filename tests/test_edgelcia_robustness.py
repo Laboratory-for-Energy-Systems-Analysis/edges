@@ -95,7 +95,8 @@ def test_lci_builds_both_edge_sets_for_internal_mixed_methods(monkeypatch):
         edgelcia_module,
         "get_flow_matrix_positions",
         lambda mapping: [
-            {"position": position, "name": str(key)} for key, position in mapping.items()
+            {"position": position, "name": str(key)}
+            for key, position in mapping.items()
         ],
     )
 

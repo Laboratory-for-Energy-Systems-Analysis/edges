@@ -808,9 +808,7 @@ class EdgeLCIA:
             ):
                 continue
             matrix_type = self._matrix_type_for_direction(
-                cf.get("direction")
-                if isinstance(cf, dict)
-                else None
+                cf.get("direction") if isinstance(cf, dict) else None
             )
             if isinstance(cf, dict) and "direction" not in cf:
                 supplier = cf.get("supplier", {}) if isinstance(cf, dict) else {}
@@ -4051,7 +4049,9 @@ class EdgeLCIA:
                         mc_lca, matrix_type
                     )
                     if inventory_matrices[matrix_type] is not None:
-                        inventory_matrices[matrix_type].append(iteration_inventory.copy())
+                        inventory_matrices[matrix_type].append(
+                            iteration_inventory.copy()
+                        )
 
                     cf_matrix = (
                         self._characterization_matrix_for_iteration(
@@ -4084,7 +4084,11 @@ class EdgeLCIA:
                 sample is not None
                 for sample in self.inventory_samples_by_matrix.values()
             ):
-                setattr(self.lca, "inventory_samples_by_matrix", self.inventory_samples_by_matrix)
+                setattr(
+                    self.lca,
+                    "inventory_samples_by_matrix",
+                    self.inventory_samples_by_matrix,
+                )
                 if self.inventory_samples is not None:
                     setattr(self.lca, "inventory_samples", self.inventory_samples)
                 elif hasattr(self.lca, "inventory_samples"):
@@ -4127,7 +4131,9 @@ class EdgeLCIA:
                 self.characterized_inventories[matrix_type] = prod
                 component = prod.sum(dtype=np.float64)
                 self.score_by_matrix[matrix_type] = component
-                total_score = component if total_score is None else total_score + component
+                total_score = (
+                    component if total_score is None else total_score + component
+                )
 
             self.score = total_score
             self._sync_inventory_aliases()
@@ -4294,7 +4300,9 @@ class EdgeLCIA:
                 zip(*self.technosphere_flow_matrix.nonzero())
             )
         if "biosphere" in active_matrix_types:
-            current_edges_by_matrix["biosphere"] = set(zip(*self.lca.inventory.nonzero()))
+            current_edges_by_matrix["biosphere"] = set(
+                zip(*self.lca.inventory.nonzero())
+            )
 
         new_edges_by_matrix = {"biosphere": set(), "technosphere": set()}
         for matrix_type in active_matrix_types:
@@ -4888,12 +4896,16 @@ class EdgeLCIA:
                 )
                 | (
                     {
-                        "biosphere"
-                        if getattr(self, "unprocessed_biosphere_edges", None)
-                        else None,
-                        "technosphere"
-                        if getattr(self, "unprocessed_technosphere_edges", None)
-                        else None,
+                        (
+                            "biosphere"
+                            if getattr(self, "unprocessed_biosphere_edges", None)
+                            else None
+                        ),
+                        (
+                            "technosphere"
+                            if getattr(self, "unprocessed_technosphere_edges", None)
+                            else None
+                        ),
                     }
                     if include_unmatched
                     else set()
@@ -4934,7 +4946,9 @@ class EdgeLCIA:
                     )
 
                     if isinstance(cm, sparse.COO):
-                        samples = np.array(cm[i, j, :].todense()).flatten().astype(float)
+                        samples = (
+                            np.array(cm[i, j, :].todense()).flatten().astype(float)
+                        )
                     else:
                         samples = np.full(self.iterations, float(cm[i, j]), dtype=float)
 

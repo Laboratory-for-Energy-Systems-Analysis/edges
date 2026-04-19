@@ -1135,10 +1135,14 @@ def compute_average_cf(
     if len(reporting_split) == 1:
         split_loc = reporting_split[0].get("consumer_location")
         original_consumer_loc = consumer_info.get("location")
-        keep_single_split = (
-            len(C) > 1
-            and split_loc not in {None, original_consumer_loc, "__ANY__", "GLO", "RoW", "RoE"}
-        )
+        keep_single_split = len(C) > 1 and split_loc not in {
+            None,
+            original_consumer_loc,
+            "__ANY__",
+            "GLO",
+            "RoW",
+            "RoE",
+        }
         if not keep_single_split:
             reporting_split = None
     elif len(reporting_split) == 0:

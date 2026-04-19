@@ -6,7 +6,6 @@ import random
 import sys
 from pathlib import Path
 
-
 DEFAULT_PROJECT = "ecoinvent-3.12-cutoff"
 DEFAULT_DATABASE = "ecoinvent-3.12-cutoff"
 DEFAULT_SCOPE = "overall"
@@ -179,7 +178,9 @@ def main() -> int:
     )
 
     args.output_dir.mkdir(parents=True, exist_ok=True)
-    csv_path = args.output_dir / f"ibif_roads_{args.scope}_cf_table_seed_{args.seed}.csv"
+    csv_path = (
+        args.output_dir / f"ibif_roads_{args.scope}_cf_table_seed_{args.seed}.csv"
+    )
     df.to_csv(csv_path, index=False)
 
     print(f"Score: {lcia.score}")

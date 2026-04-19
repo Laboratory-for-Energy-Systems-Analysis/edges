@@ -6,7 +6,6 @@ import random
 import sys
 from pathlib import Path
 
-
 DEFAULT_PROJECT = "ecoinvent-3.12-cutoff"
 DEFAULT_DATABASE = "ecoinvent-3.12-cutoff"
 DEFAULT_SCOPES = ("overall", "vertebrates")
@@ -36,8 +35,7 @@ def build_parser() -> argparse.ArgumentParser:
         choices=("overall", "vertebrates"),
         default=list(DEFAULT_SCOPES),
         help=(
-            "IBIF all-pressures scopes to run. "
-            f"Default: {' '.join(DEFAULT_SCOPES)}"
+            "IBIF all-pressures scopes to run. " f"Default: {' '.join(DEFAULT_SCOPES)}"
         ),
     )
     parser.add_argument(

@@ -131,7 +131,9 @@ def format_data(data: dict, weight: str) -> tuple[list, dict[Any, Any]]:
     if total_exchanges and preweighted_rows == total_exchanges:
         effective_source = "method"
         label = "embedded method weights"
-    elif preweighted_rows == 0 and postweighted_rows and weight in {"population", "gdp"}:
+    elif (
+        preweighted_rows == 0 and postweighted_rows and weight in {"population", "gdp"}
+    ):
         effective_source = weight
         label = f"{weight} metadata weights"
     elif preweighted_rows and postweighted_rows:
