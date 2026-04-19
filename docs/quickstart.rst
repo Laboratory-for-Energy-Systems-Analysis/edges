@@ -53,3 +53,9 @@ This minimal example walks you through performing a basic LCIA using `edges`.
 For deterministic regionalized runs, ``split_aggregate_consumers=True``
 replaces weighted fallback rows for consumer regions such as ``RER``, ``GLO``,
 ``RoW``, and ``RoE`` with country-level rows in the exported table.
+
+The same workflow also applies to mixed methods that combine
+``biosphere-technosphere`` and ``technosphere-technosphere`` CF rows in one
+JSON file, such as the IBIF ``all pressures`` methods. In these runs,
+``generate_cf_table()`` adds ``supplier matrix`` and ``direction`` columns so
+the two contribution families can be inspected separately.

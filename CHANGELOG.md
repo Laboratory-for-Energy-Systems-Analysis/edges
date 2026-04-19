@@ -2,6 +2,13 @@
 
 ## 1.2.9 - Upcoming
 
+### Mixed supplier methods
+
+- Added support for LCIA methods that combine ``biosphere`` and
+  ``technosphere`` supplier matrices in one JSON file. Core workflows now
+  support mixed ``biosphere-technosphere`` and
+  ``technosphere-technosphere`` characterization in the same run.
+
 ### Reporting
 
 - Added ``EdgeLCIA.generate_cf_table(split_aggregate_consumers=True)`` for
@@ -11,12 +18,24 @@
 - Stored per-exchange ``reporting_split`` metadata on fallback CF entries so
   the raw country split can be inspected directly on ``cfs_mapping`` and
   deterministic ``scenario_cfs`` entries.
+- Mixed-method CF tables now expose ``supplier matrix`` and ``direction``
+  columns so biosphere and technosphere contributions can be distinguished in
+  the exported results.
+
+### Data
+
+- Added dedicated IBIF v2 road methods:
+  ``("IBIF", "biodiversity", "roads", "overall")`` and
+  ``("IBIF", "biodiversity", "roads", "vertebrates")``.
+- Extended the mixed IBIF ``all pressures`` methods for ``overall`` and
+  ``vertebrates`` to include the road pressure rows alongside emissions and
+  land occupation.
 
 ### Documentation
 
-- Documented the new reporting option and split metadata access in the README,
-  quickstart, methods guide, user guide, and the ``EdgeLCIA.generate_cf_table``
-  API docstring.
+- Documented mixed supplier-method support and the new IBIF road/all-pressures
+  behavior in the README, quickstart, methods guide, user guide, and the
+  ``EdgeLCIA.generate_cf_table`` API docstring.
 
 ## 1.1 - 2026-04-09
 

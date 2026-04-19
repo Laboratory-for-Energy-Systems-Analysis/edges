@@ -2,7 +2,7 @@
   "name": "IBIF v2 - all pressures - biodiversity intactness - vertebrates",
   "unit": "MSA-loss.km2.yr",
   "version": "2.0",
-  "description": "Intactness-based Biodiversity Impact Factors (IBIF) for all environmental pressures (GHG as CO2-eq, NH3, NOx emissions and land occupation) impacts on terrestrial biodiversity intactness, (vertebrates). Land occupation converted from km2 to m2 to match ecoinvent units. Based on GLOBIO 4 model and Mean Species Abundance (MSA) metric. From Schipper et al. 2025: https://doi.org/10.1038/s41597-025-05946-1. Country-level entries include a GDP-based weight used to compute weighted averages when aggregating to composite or unspecified regions.",
+  "description": "Intactness-based Biodiversity Impact Factors (IBIF) for all environmental pressures (GHG as CO2-eq, NH3, NOx emissions, land occupation, and roads) impacts on terrestrial biodiversity intactness, (vertebrates). Land occupation converted from km2 to m2 and road length converted from km to m to match ecoinvent units. Based on GLOBIO 4 model and Mean Species Abundance (MSA) metric. From Schipper et al. 2025: https://doi.org/10.1038/s41597-025-05946-1. Country-level entries include a GDP-based weight used to compute weighted averages when aggregating to composite or unspecified regions.",
   "species_group": "vertebrates",
   "pressure_type": "all",
   "strategies": [
@@ -140147,6 +140147,4091 @@
         "matrix": "technosphere"
       },
       "value": 7.5e-07,
+      "weight": 27577956471.244
+    },
+    {
+      "supplier": {
+        "name": "road",
+        "operator": "contains",
+        "excludes": [
+          "market",
+          "maintenance",
+          "treatment"
+        ],
+        "unit": "meter-year",
+        "location": "AF",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.0007830000000000001,
+      "weight": 17152234636.8715
+    },
+    {
+      "supplier": {
+        "name": "road",
+        "operator": "contains",
+        "excludes": [
+          "market",
+          "maintenance",
+          "treatment"
+        ],
+        "unit": "meter-year",
+        "location": "AL",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.000391,
+      "weight": 23547180412.3404
+    },
+    {
+      "supplier": {
+        "name": "road",
+        "operator": "contains",
+        "excludes": [
+          "market",
+          "maintenance",
+          "treatment"
+        ],
+        "unit": "meter-year",
+        "location": "DZ",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.000984,
+      "weight": 247626161016.414
+    },
+    {
+      "supplier": {
+        "name": "road",
+        "operator": "contains",
+        "excludes": [
+          "market",
+          "maintenance",
+          "treatment"
+        ],
+        "unit": "meter-year",
+        "location": "AS",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1.5799999999999999e-07,
+      "weight": 871000000.0
+    },
+    {
+      "supplier": {
+        "name": "road",
+        "operator": "contains",
+        "excludes": [
+          "market",
+          "maintenance",
+          "treatment"
+        ],
+        "unit": "meter-year",
+        "location": "AD",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.000855,
+      "weight": 3785067331.7625
+    },
+    {
+      "supplier": {
+        "name": "road",
+        "operator": "contains",
+        "excludes": [
+          "market",
+          "maintenance",
+          "treatment"
+        ],
+        "unit": "meter-year",
+        "location": "AO",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.000728,
+      "weight": 84875162197.0107
+    },
+    {
+      "supplier": {
+        "name": "road",
+        "operator": "contains",
+        "excludes": [
+          "market",
+          "maintenance",
+          "treatment"
+        ],
+        "unit": "meter-year",
+        "location": "AG",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.000437,
+      "weight": 2005785185.18518
+    },
+    {
+      "supplier": {
+        "name": "road",
+        "operator": "contains",
+        "excludes": [
+          "market",
+          "maintenance",
+          "treatment"
+        ],
+        "unit": "meter-year",
+        "location": "AZ",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.0006580000000000001,
+      "weight": 72428470588.2353
+    },
+    {
+      "supplier": {
+        "name": "road",
+        "operator": "contains",
+        "excludes": [
+          "market",
+          "maintenance",
+          "treatment"
+        ],
+        "unit": "meter-year",
+        "location": "AR",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.0010400000000000001,
+      "weight": 646075277525.125
+    },
+    {
+      "supplier": {
+        "name": "road",
+        "operator": "contains",
+        "excludes": [
+          "market",
+          "maintenance",
+          "treatment"
+        ],
+        "unit": "meter-year",
+        "location": "AU",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.0009350000000000001,
+      "weight": 1728057316695.61
+    },
+    {
+      "supplier": {
+        "name": "road",
+        "operator": "contains",
+        "excludes": [
+          "market",
+          "maintenance",
+          "treatment"
+        ],
+        "unit": "meter-year",
+        "location": "AT",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.0005510000000000001,
+      "weight": 511685203845.001
+    },
+    {
+      "supplier": {
+        "name": "road",
+        "operator": "contains",
+        "excludes": [
+          "market",
+          "maintenance",
+          "treatment"
+        ],
+        "unit": "meter-year",
+        "location": "BS",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.00068,
+      "weight": 15271300000.0
+    },
+    {
+      "supplier": {
+        "name": "road",
+        "operator": "contains",
+        "excludes": [
+          "market",
+          "maintenance",
+          "treatment"
+        ],
+        "unit": "meter-year",
+        "location": "BH",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.000192,
+      "weight": 46192260638.2979
+    },
+    {
+      "supplier": {
+        "name": "road",
+        "operator": "contains",
+        "excludes": [
+          "market",
+          "maintenance",
+          "treatment"
+        ],
+        "unit": "meter-year",
+        "location": "BD",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.000428,
+      "weight": 437415333018.291
+    },
+    {
+      "supplier": {
+        "name": "road",
+        "operator": "contains",
+        "excludes": [
+          "market",
+          "maintenance",
+          "treatment"
+        ],
+        "unit": "meter-year",
+        "location": "AM",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.00058,
+      "weight": 24085749592.3359
+    },
+    {
+      "supplier": {
+        "name": "road",
+        "operator": "contains",
+        "excludes": [
+          "market",
+          "maintenance",
+          "treatment"
+        ],
+        "unit": "meter-year",
+        "location": "BB",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.000201,
+      "weight": 6720733200.0
+    },
+    {
+      "supplier": {
+        "name": "road",
+        "operator": "contains",
+        "excludes": [
+          "market",
+          "maintenance",
+          "treatment"
+        ],
+        "unit": "meter-year",
+        "location": "BE",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.000303,
+      "weight": 644655275111.58
+    },
+    {
+      "supplier": {
+        "name": "road",
+        "operator": "contains",
+        "excludes": [
+          "market",
+          "maintenance",
+          "treatment"
+        ],
+        "unit": "meter-year",
+        "location": "BM",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.0005420000000000001,
+      "weight": 8579242000.0
+    },
+    {
+      "supplier": {
+        "name": "road",
+        "operator": "contains",
+        "excludes": [
+          "market",
+          "maintenance",
+          "treatment"
+        ],
+        "unit": "meter-year",
+        "location": "BT",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.0010400000000000001,
+      "weight": 3019253885.46989
+    },
+    {
+      "supplier": {
+        "name": "road",
+        "operator": "contains",
+        "excludes": [
+          "market",
+          "maintenance",
+          "treatment"
+        ],
+        "unit": "meter-year",
+        "location": "BO",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.00106,
+      "weight": 45135398002.8944
+    },
+    {
+      "supplier": {
+        "name": "road",
+        "operator": "contains",
+        "excludes": [
+          "market",
+          "maintenance",
+          "treatment"
+        ],
+        "unit": "meter-year",
+        "location": "BA",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.00102,
+      "weight": 27592361387.8597
+    },
+    {
+      "supplier": {
+        "name": "road",
+        "operator": "contains",
+        "excludes": [
+          "market",
+          "maintenance",
+          "treatment"
+        ],
+        "unit": "meter-year",
+        "location": "BW",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.000758,
+      "weight": 19411266967.1044
+    },
+    {
+      "supplier": {
+        "name": "road",
+        "operator": "contains",
+        "excludes": [
+          "market",
+          "maintenance",
+          "treatment"
+        ],
+        "unit": "meter-year",
+        "location": "BR",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.0010400000000000001,
+      "weight": 2191131765684.63
+    },
+    {
+      "supplier": {
+        "name": "road",
+        "operator": "contains",
+        "excludes": [
+          "market",
+          "maintenance",
+          "treatment"
+        ],
+        "unit": "meter-year",
+        "location": "BZ",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.000791,
+      "weight": 3066850000.0
+    },
+    {
+      "supplier": {
+        "name": "road",
+        "operator": "contains",
+        "excludes": [
+          "market",
+          "maintenance",
+          "treatment"
+        ],
+        "unit": "meter-year",
+        "location": "VG",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.000237,
+      "weight": 0.0
+    },
+    {
+      "supplier": {
+        "name": "road",
+        "operator": "contains",
+        "excludes": [
+          "market",
+          "maintenance",
+          "treatment"
+        ],
+        "unit": "meter-year",
+        "location": "BG",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.000805,
+      "weight": 102396840296.147
+    },
+    {
+      "supplier": {
+        "name": "road",
+        "operator": "contains",
+        "excludes": [
+          "market",
+          "maintenance",
+          "treatment"
+        ],
+        "unit": "meter-year",
+        "location": "MM",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.00125,
+      "weight": 66757619000.0
+    },
+    {
+      "supplier": {
+        "name": "road",
+        "operator": "contains",
+        "excludes": [
+          "market",
+          "maintenance",
+          "treatment"
+        ],
+        "unit": "meter-year",
+        "location": "BI",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.000429,
+      "weight": 2629391599.50157
+    },
+    {
+      "supplier": {
+        "name": "road",
+        "operator": "contains",
+        "excludes": [
+          "market",
+          "maintenance",
+          "treatment"
+        ],
+        "unit": "meter-year",
+        "location": "BY",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.0005480000000000001,
+      "weight": 72478760370.4258
+    },
+    {
+      "supplier": {
+        "name": "road",
+        "operator": "contains",
+        "excludes": [
+          "market",
+          "maintenance",
+          "treatment"
+        ],
+        "unit": "meter-year",
+        "location": "KH",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.000683,
+      "weight": 42335646895.7984
+    },
+    {
+      "supplier": {
+        "name": "road",
+        "operator": "contains",
+        "excludes": [
+          "market",
+          "maintenance",
+          "treatment"
+        ],
+        "unit": "meter-year",
+        "location": "CM",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.00115,
+      "weight": 49279410982.826
+    },
+    {
+      "supplier": {
+        "name": "road",
+        "operator": "contains",
+        "excludes": [
+          "market",
+          "maintenance",
+          "treatment"
+        ],
+        "unit": "meter-year",
+        "location": "CA",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.000968,
+      "weight": 2173339670064.33
+    },
+    {
+      "supplier": {
+        "name": "road",
+        "operator": "contains",
+        "excludes": [
+          "market",
+          "maintenance",
+          "treatment"
+        ],
+        "unit": "meter-year",
+        "location": "CV",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.000759,
+      "weight": 2539203428.73837
+    },
+    {
+      "supplier": {
+        "name": "road",
+        "operator": "contains",
+        "excludes": [
+          "market",
+          "maintenance",
+          "treatment"
+        ],
+        "unit": "meter-year",
+        "location": "KY",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.000249,
+      "weight": 7139428557.71423
+    },
+    {
+      "supplier": {
+        "name": "road",
+        "operator": "contains",
+        "excludes": [
+          "market",
+          "maintenance",
+          "treatment"
+        ],
+        "unit": "meter-year",
+        "location": "CF",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.000919,
+      "weight": 2555492085.94725
+    },
+    {
+      "supplier": {
+        "name": "road",
+        "operator": "contains",
+        "excludes": [
+          "market",
+          "maintenance",
+          "treatment"
+        ],
+        "unit": "meter-year",
+        "location": "LK",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.00044500000000000003,
+      "weight": 83716142582.1945
+    },
+    {
+      "supplier": {
+        "name": "road",
+        "operator": "contains",
+        "excludes": [
+          "market",
+          "maintenance",
+          "treatment"
+        ],
+        "unit": "meter-year",
+        "location": "TD",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.000713,
+      "weight": 19107685020.89
+    },
+    {
+      "supplier": {
+        "name": "road",
+        "operator": "contains",
+        "excludes": [
+          "market",
+          "maintenance",
+          "treatment"
+        ],
+        "unit": "meter-year",
+        "location": "CL",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.0007790000000000001,
+      "weight": 335518054097.637
+    },
+    {
+      "supplier": {
+        "name": "road",
+        "operator": "contains",
+        "excludes": [
+          "market",
+          "maintenance",
+          "treatment"
+        ],
+        "unit": "meter-year",
+        "location": "CN",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.000408,
+      "weight": 18270356654533.2
+    },
+    {
+      "supplier": {
+        "name": "road",
+        "operator": "contains",
+        "excludes": [
+          "market",
+          "maintenance",
+          "treatment"
+        ],
+        "unit": "meter-year",
+        "location": "TW",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.000297,
+      "weight": 751000000000.0
+    },
+    {
+      "supplier": {
+        "name": "road",
+        "operator": "contains",
+        "excludes": [
+          "market",
+          "maintenance",
+          "treatment"
+        ],
+        "unit": "meter-year",
+        "location": "CX",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.000674,
+      "weight": 0.0
+    },
+    {
+      "supplier": {
+        "name": "road",
+        "operator": "contains",
+        "excludes": [
+          "market",
+          "maintenance",
+          "treatment"
+        ],
+        "unit": "meter-year",
+        "location": "CO",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.000524,
+      "weight": 366291836137.916
+    },
+    {
+      "supplier": {
+        "name": "road",
+        "operator": "contains",
+        "excludes": [
+          "market",
+          "maintenance",
+          "treatment"
+        ],
+        "unit": "meter-year",
+        "location": "CG",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.0011,
+      "weight": 15321055818.3263
+    },
+    {
+      "supplier": {
+        "name": "road",
+        "operator": "contains",
+        "excludes": [
+          "market",
+          "maintenance",
+          "treatment"
+        ],
+        "unit": "meter-year",
+        "location": "CD",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.00117,
+      "weight": 67006756666.3604
+    },
+    {
+      "supplier": {
+        "name": "road",
+        "operator": "contains",
+        "excludes": [
+          "market",
+          "maintenance",
+          "treatment"
+        ],
+        "unit": "meter-year",
+        "location": "CK",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.000212,
+      "weight": 0.0
+    },
+    {
+      "supplier": {
+        "name": "road",
+        "operator": "contains",
+        "excludes": [
+          "market",
+          "maintenance",
+          "treatment"
+        ],
+        "unit": "meter-year",
+        "location": "CR",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.000617,
+      "weight": 86497941438.9809
+    },
+    {
+      "supplier": {
+        "name": "road",
+        "operator": "contains",
+        "excludes": [
+          "market",
+          "maintenance",
+          "treatment"
+        ],
+        "unit": "meter-year",
+        "location": "HR",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.000493,
+      "weight": 84393795502.4421
+    },
+    {
+      "supplier": {
+        "name": "road",
+        "operator": "contains",
+        "excludes": [
+          "market",
+          "maintenance",
+          "treatment"
+        ],
+        "unit": "meter-year",
+        "location": "CU",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.000625,
+      "weight": 107351800000.0
+    },
+    {
+      "supplier": {
+        "name": "road",
+        "operator": "contains",
+        "excludes": [
+          "market",
+          "maintenance",
+          "treatment"
+        ],
+        "unit": "meter-year",
+        "location": "CY",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.00042699999999999997,
+      "weight": 33886930712.3394
+    },
+    {
+      "supplier": {
+        "name": "road",
+        "operator": "contains",
+        "excludes": [
+          "market",
+          "maintenance",
+          "treatment"
+        ],
+        "unit": "meter-year",
+        "location": "CZ",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.000498,
+      "weight": 343206568134.637
+    },
+    {
+      "supplier": {
+        "name": "road",
+        "operator": "contains",
+        "excludes": [
+          "market",
+          "maintenance",
+          "treatment"
+        ],
+        "unit": "meter-year",
+        "location": "BJ",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.00106,
+      "weight": 19673290995.8491
+    },
+    {
+      "supplier": {
+        "name": "road",
+        "operator": "contains",
+        "excludes": [
+          "market",
+          "maintenance",
+          "treatment"
+        ],
+        "unit": "meter-year",
+        "location": "DK",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.000419,
+      "weight": 407091920305.404
+    },
+    {
+      "supplier": {
+        "name": "road",
+        "operator": "contains",
+        "excludes": [
+          "market",
+          "maintenance",
+          "treatment"
+        ],
+        "unit": "meter-year",
+        "location": "DM",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.000488,
+      "weight": 659311111.111111
+    },
+    {
+      "supplier": {
+        "name": "road",
+        "operator": "contains",
+        "excludes": [
+          "market",
+          "maintenance",
+          "treatment"
+        ],
+        "unit": "meter-year",
+        "location": "DO",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.000739,
+      "weight": 120456239153.739
+    },
+    {
+      "supplier": {
+        "name": "road",
+        "operator": "contains",
+        "excludes": [
+          "market",
+          "maintenance",
+          "treatment"
+        ],
+        "unit": "meter-year",
+        "location": "EC",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.0008010000000000001,
+      "weight": 121147057000.0
+    },
+    {
+      "supplier": {
+        "name": "road",
+        "operator": "contains",
+        "excludes": [
+          "market",
+          "maintenance",
+          "treatment"
+        ],
+        "unit": "meter-year",
+        "location": "SV",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.000376,
+      "weight": 33853940000.0
+    },
+    {
+      "supplier": {
+        "name": "road",
+        "operator": "contains",
+        "excludes": [
+          "market",
+          "maintenance",
+          "treatment"
+        ],
+        "unit": "meter-year",
+        "location": "GQ",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.000786,
+      "weight": 12337550583.754
+    },
+    {
+      "supplier": {
+        "name": "road",
+        "operator": "contains",
+        "excludes": [
+          "market",
+          "maintenance",
+          "treatment"
+        ],
+        "unit": "meter-year",
+        "location": "ET",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.0013700000000000001,
+      "weight": 126772707851.339
+    },
+    {
+      "supplier": {
+        "name": "road",
+        "operator": "contains",
+        "excludes": [
+          "market",
+          "maintenance",
+          "treatment"
+        ],
+        "unit": "meter-year",
+        "location": "ER",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.000969,
+      "weight": 2000000000.0
+    },
+    {
+      "supplier": {
+        "name": "road",
+        "operator": "contains",
+        "excludes": [
+          "market",
+          "maintenance",
+          "treatment"
+        ],
+        "unit": "meter-year",
+        "location": "EE",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.00108,
+      "weight": 41291245222.1948
+    },
+    {
+      "supplier": {
+        "name": "road",
+        "operator": "contains",
+        "excludes": [
+          "market",
+          "maintenance",
+          "treatment"
+        ],
+        "unit": "meter-year",
+        "location": "FO",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.00047299999999999995,
+      "weight": 3907323961.33964
+    },
+    {
+      "supplier": {
+        "name": "road",
+        "operator": "contains",
+        "excludes": [
+          "market",
+          "maintenance",
+          "treatment"
+        ],
+        "unit": "meter-year",
+        "location": "FK",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.0007289999999999999,
+      "weight": 0.0
+    },
+    {
+      "supplier": {
+        "name": "road",
+        "operator": "contains",
+        "excludes": [
+          "market",
+          "maintenance",
+          "treatment"
+        ],
+        "unit": "meter-year",
+        "location": "FJ",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1.05e-06,
+      "weight": 5442046552.96928
+    },
+    {
+      "supplier": {
+        "name": "road",
+        "operator": "contains",
+        "excludes": [
+          "market",
+          "maintenance",
+          "treatment"
+        ],
+        "unit": "meter-year",
+        "location": "FI",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.00126,
+      "weight": 294950618733.339
+    },
+    {
+      "supplier": {
+        "name": "road",
+        "operator": "contains",
+        "excludes": [
+          "market",
+          "maintenance",
+          "treatment"
+        ],
+        "unit": "meter-year",
+        "location": "FR",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.000435,
+      "weight": 3051831611384.76
+    },
+    {
+      "supplier": {
+        "name": "road",
+        "operator": "contains",
+        "excludes": [
+          "market",
+          "maintenance",
+          "treatment"
+        ],
+        "unit": "meter-year",
+        "location": "GF",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.000798,
+      "weight": 0.0
+    },
+    {
+      "supplier": {
+        "name": "road",
+        "operator": "contains",
+        "excludes": [
+          "market",
+          "maintenance",
+          "treatment"
+        ],
+        "unit": "meter-year",
+        "location": "PF",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.0005909999999999999,
+      "weight": 6402221222.32749
+    },
+    {
+      "supplier": {
+        "name": "road",
+        "operator": "contains",
+        "excludes": [
+          "market",
+          "maintenance",
+          "treatment"
+        ],
+        "unit": "meter-year",
+        "location": "TF",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.00134,
+      "weight": 0.0
+    },
+    {
+      "supplier": {
+        "name": "road",
+        "operator": "contains",
+        "excludes": [
+          "market",
+          "maintenance",
+          "treatment"
+        ],
+        "unit": "meter-year",
+        "location": "DJ",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.000598,
+      "weight": 3917150480.80981
+    },
+    {
+      "supplier": {
+        "name": "road",
+        "operator": "contains",
+        "excludes": [
+          "market",
+          "maintenance",
+          "treatment"
+        ],
+        "unit": "meter-year",
+        "location": "GA",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.0010500000000000002,
+      "weight": 20055720403.471
+    },
+    {
+      "supplier": {
+        "name": "road",
+        "operator": "contains",
+        "excludes": [
+          "market",
+          "maintenance",
+          "treatment"
+        ],
+        "unit": "meter-year",
+        "location": "GE",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.00103,
+      "weight": 30777833600.6515
+    },
+    {
+      "supplier": {
+        "name": "road",
+        "operator": "contains",
+        "excludes": [
+          "market",
+          "maintenance",
+          "treatment"
+        ],
+        "unit": "meter-year",
+        "location": "GM",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.000607,
+      "weight": 2396111020.8801
+    },
+    {
+      "supplier": {
+        "name": "road",
+        "operator": "contains",
+        "excludes": [
+          "market",
+          "maintenance",
+          "treatment"
+        ],
+        "unit": "meter-year",
+        "location": "PS",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.0005989999999999999,
+      "weight": 17847900000.0
+    },
+    {
+      "supplier": {
+        "name": "road",
+        "operator": "contains",
+        "excludes": [
+          "market",
+          "maintenance",
+          "treatment"
+        ],
+        "unit": "meter-year",
+        "location": "DE",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.000364,
+      "weight": 4525703903627.53
+    },
+    {
+      "supplier": {
+        "name": "road",
+        "operator": "contains",
+        "excludes": [
+          "market",
+          "maintenance",
+          "treatment"
+        ],
+        "unit": "meter-year",
+        "location": "GH",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.0006889999999999999,
+      "weight": 80547146878.3843
+    },
+    {
+      "supplier": {
+        "name": "road",
+        "operator": "contains",
+        "excludes": [
+          "market",
+          "maintenance",
+          "treatment"
+        ],
+        "unit": "meter-year",
+        "location": "GI",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 5.89e-05,
+      "weight": 0.0
+    },
+    {
+      "supplier": {
+        "name": "road",
+        "operator": "contains",
+        "excludes": [
+          "market",
+          "maintenance",
+          "treatment"
+        ],
+        "unit": "meter-year",
+        "location": "GR",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.000526,
+      "weight": 243498333237.802
+    },
+    {
+      "supplier": {
+        "name": "road",
+        "operator": "contains",
+        "excludes": [
+          "market",
+          "maintenance",
+          "treatment"
+        ],
+        "unit": "meter-year",
+        "location": "GD",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.000438,
+      "weight": 1323985600.0
+    },
+    {
+      "supplier": {
+        "name": "road",
+        "operator": "contains",
+        "excludes": [
+          "market",
+          "maintenance",
+          "treatment"
+        ],
+        "unit": "meter-year",
+        "location": "GP",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.000333,
+      "weight": 0.0
+    },
+    {
+      "supplier": {
+        "name": "road",
+        "operator": "contains",
+        "excludes": [
+          "market",
+          "maintenance",
+          "treatment"
+        ],
+        "unit": "meter-year",
+        "location": "GU",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.000675,
+      "weight": 6910000000.0
+    },
+    {
+      "supplier": {
+        "name": "road",
+        "operator": "contains",
+        "excludes": [
+          "market",
+          "maintenance",
+          "treatment"
+        ],
+        "unit": "meter-year",
+        "location": "GT",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.000734,
+      "weight": 104368413483.146
+    },
+    {
+      "supplier": {
+        "name": "road",
+        "operator": "contains",
+        "excludes": [
+          "market",
+          "maintenance",
+          "treatment"
+        ],
+        "unit": "meter-year",
+        "location": "GN",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.00116,
+      "weight": 22407615556.0571
+    },
+    {
+      "supplier": {
+        "name": "road",
+        "operator": "contains",
+        "excludes": [
+          "market",
+          "maintenance",
+          "treatment"
+        ],
+        "unit": "meter-year",
+        "location": "GY",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.000837,
+      "weight": 16918503597.1223
+    },
+    {
+      "supplier": {
+        "name": "road",
+        "operator": "contains",
+        "excludes": [
+          "market",
+          "maintenance",
+          "treatment"
+        ],
+        "unit": "meter-year",
+        "location": "HT",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.000875,
+      "weight": 19850585722.3241
+    },
+    {
+      "supplier": {
+        "name": "road",
+        "operator": "contains",
+        "excludes": [
+          "market",
+          "maintenance",
+          "treatment"
+        ],
+        "unit": "meter-year",
+        "location": "HN",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.000988,
+      "weight": 34355805527.9795
+    },
+    {
+      "supplier": {
+        "name": "road",
+        "operator": "contains",
+        "excludes": [
+          "market",
+          "maintenance",
+          "treatment"
+        ],
+        "unit": "meter-year",
+        "location": "HU",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.000489,
+      "weight": 214022571311.24
+    },
+    {
+      "supplier": {
+        "name": "road",
+        "operator": "contains",
+        "excludes": [
+          "market",
+          "maintenance",
+          "treatment"
+        ],
+        "unit": "meter-year",
+        "location": "IS",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.0009609999999999999,
+      "weight": 31452223861.9091
+    },
+    {
+      "supplier": {
+        "name": "road",
+        "operator": "contains",
+        "excludes": [
+          "market",
+          "maintenance",
+          "treatment"
+        ],
+        "unit": "meter-year",
+        "location": "IN",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.0005899999999999999,
+      "weight": 3638489096033.86
+    },
+    {
+      "supplier": {
+        "name": "road",
+        "operator": "contains",
+        "excludes": [
+          "market",
+          "maintenance",
+          "treatment"
+        ],
+        "unit": "meter-year",
+        "location": "ID",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.000533,
+      "weight": 1371169301563.62
+    },
+    {
+      "supplier": {
+        "name": "road",
+        "operator": "contains",
+        "excludes": [
+          "market",
+          "maintenance",
+          "treatment"
+        ],
+        "unit": "meter-year",
+        "location": "IR",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.00123,
+      "weight": 404625655076.275
+    },
+    {
+      "supplier": {
+        "name": "road",
+        "operator": "contains",
+        "excludes": [
+          "market",
+          "maintenance",
+          "treatment"
+        ],
+        "unit": "meter-year",
+        "location": "IQ",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.0005510000000000001,
+      "weight": 268881051643.549
+    },
+    {
+      "supplier": {
+        "name": "road",
+        "operator": "contains",
+        "excludes": [
+          "market",
+          "maintenance",
+          "treatment"
+        ],
+        "unit": "meter-year",
+        "location": "IE",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.000528,
+      "weight": 551394889339.778
+    },
+    {
+      "supplier": {
+        "name": "road",
+        "operator": "contains",
+        "excludes": [
+          "market",
+          "maintenance",
+          "treatment"
+        ],
+        "unit": "meter-year",
+        "location": "IL",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.000348,
+      "weight": 512184638998.974
+    },
+    {
+      "supplier": {
+        "name": "road",
+        "operator": "contains",
+        "excludes": [
+          "market",
+          "maintenance",
+          "treatment"
+        ],
+        "unit": "meter-year",
+        "location": "IT",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.000398,
+      "weight": 2304605139862.79
+    },
+    {
+      "supplier": {
+        "name": "road",
+        "operator": "contains",
+        "excludes": [
+          "market",
+          "maintenance",
+          "treatment"
+        ],
+        "unit": "meter-year",
+        "location": "CI",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.000755,
+      "weight": 79618056323.7639
+    },
+    {
+      "supplier": {
+        "name": "road",
+        "operator": "contains",
+        "excludes": [
+          "market",
+          "maintenance",
+          "treatment"
+        ],
+        "unit": "meter-year",
+        "location": "JM",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.000453,
+      "weight": 19423355367.2372
+    },
+    {
+      "supplier": {
+        "name": "road",
+        "operator": "contains",
+        "excludes": [
+          "market",
+          "maintenance",
+          "treatment"
+        ],
+        "unit": "meter-year",
+        "location": "JP",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.000428,
+      "weight": 4213167237905.83
+    },
+    {
+      "supplier": {
+        "name": "road",
+        "operator": "contains",
+        "excludes": [
+          "market",
+          "maintenance",
+          "treatment"
+        ],
+        "unit": "meter-year",
+        "location": "KZ",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.000366,
+      "weight": 261840101059.923
+    },
+    {
+      "supplier": {
+        "name": "road",
+        "operator": "contains",
+        "excludes": [
+          "market",
+          "maintenance",
+          "treatment"
+        ],
+        "unit": "meter-year",
+        "location": "JO",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.00117,
+      "weight": 51088476338.0282
+    },
+    {
+      "supplier": {
+        "name": "road",
+        "operator": "contains",
+        "excludes": [
+          "market",
+          "maintenance",
+          "treatment"
+        ],
+        "unit": "meter-year",
+        "location": "KE",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.000809,
+      "weight": 108038588970.595
+    },
+    {
+      "supplier": {
+        "name": "road",
+        "operator": "contains",
+        "excludes": [
+          "market",
+          "maintenance",
+          "treatment"
+        ],
+        "unit": "meter-year",
+        "location": "KP",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.000778,
+      "weight": 28000000000.0
+    },
+    {
+      "supplier": {
+        "name": "road",
+        "operator": "contains",
+        "excludes": [
+          "market",
+          "maintenance",
+          "treatment"
+        ],
+        "unit": "meter-year",
+        "location": "KR",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.000321,
+      "weight": 1712792854202.37
+    },
+    {
+      "supplier": {
+        "name": "road",
+        "operator": "contains",
+        "excludes": [
+          "market",
+          "maintenance",
+          "treatment"
+        ],
+        "unit": "meter-year",
+        "location": "KW",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.0014399999999999999,
+      "weight": 165384407267.056
+    },
+    {
+      "supplier": {
+        "name": "road",
+        "operator": "contains",
+        "excludes": [
+          "market",
+          "maintenance",
+          "treatment"
+        ],
+        "unit": "meter-year",
+        "location": "KG",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.000317,
+      "weight": 15180842369.4894
+    },
+    {
+      "supplier": {
+        "name": "road",
+        "operator": "contains",
+        "excludes": [
+          "market",
+          "maintenance",
+          "treatment"
+        ],
+        "unit": "meter-year",
+        "location": "LA",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.00135,
+      "weight": 15843155731.2552
+    },
+    {
+      "supplier": {
+        "name": "road",
+        "operator": "contains",
+        "excludes": [
+          "market",
+          "maintenance",
+          "treatment"
+        ],
+        "unit": "meter-year",
+        "location": "LB",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.000301,
+      "weight": 20078620356.9931
+    },
+    {
+      "supplier": {
+        "name": "road",
+        "operator": "contains",
+        "excludes": [
+          "market",
+          "maintenance",
+          "treatment"
+        ],
+        "unit": "meter-year",
+        "location": "LS",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.000762,
+      "weight": 2117962430.3041
+    },
+    {
+      "supplier": {
+        "name": "road",
+        "operator": "contains",
+        "excludes": [
+          "market",
+          "maintenance",
+          "treatment"
+        ],
+        "unit": "meter-year",
+        "location": "LV",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.000708,
+      "weight": 42572151720.138
+    },
+    {
+      "supplier": {
+        "name": "road",
+        "operator": "contains",
+        "excludes": [
+          "market",
+          "maintenance",
+          "treatment"
+        ],
+        "unit": "meter-year",
+        "location": "LR",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.000687,
+      "weight": 4390000000.0
+    },
+    {
+      "supplier": {
+        "name": "road",
+        "operator": "contains",
+        "excludes": [
+          "market",
+          "maintenance",
+          "treatment"
+        ],
+        "unit": "meter-year",
+        "location": "LY",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.00131,
+      "weight": 45096462972.4014
+    },
+    {
+      "supplier": {
+        "name": "road",
+        "operator": "contains",
+        "excludes": [
+          "market",
+          "maintenance",
+          "treatment"
+        ],
+        "unit": "meter-year",
+        "location": "LI",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.00126,
+      "weight": 8287748667.20832
+    },
+    {
+      "supplier": {
+        "name": "road",
+        "operator": "contains",
+        "excludes": [
+          "market",
+          "maintenance",
+          "treatment"
+        ],
+        "unit": "meter-year",
+        "location": "LT",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.000612,
+      "weight": 79789877416.1681
+    },
+    {
+      "supplier": {
+        "name": "road",
+        "operator": "contains",
+        "excludes": [
+          "market",
+          "maintenance",
+          "treatment"
+        ],
+        "unit": "meter-year",
+        "location": "LU",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.000264,
+      "weight": 87574021091.7525
+    },
+    {
+      "supplier": {
+        "name": "road",
+        "operator": "contains",
+        "excludes": [
+          "market",
+          "maintenance",
+          "treatment"
+        ],
+        "unit": "meter-year",
+        "location": "MG",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.00085,
+      "weight": 15869945477.855
+    },
+    {
+      "supplier": {
+        "name": "road",
+        "operator": "contains",
+        "excludes": [
+          "market",
+          "maintenance",
+          "treatment"
+        ],
+        "unit": "meter-year",
+        "location": "MW",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.000611,
+      "weight": 12712150082.0792
+    },
+    {
+      "supplier": {
+        "name": "road",
+        "operator": "contains",
+        "excludes": [
+          "market",
+          "maintenance",
+          "treatment"
+        ],
+        "unit": "meter-year",
+        "location": "MY",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.0006720000000000001,
+      "weight": 399705137434.074
+    },
+    {
+      "supplier": {
+        "name": "road",
+        "operator": "contains",
+        "excludes": [
+          "market",
+          "maintenance",
+          "treatment"
+        ],
+        "unit": "meter-year",
+        "location": "ML",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.000766,
+      "weight": 24621545564.8753
+    },
+    {
+      "supplier": {
+        "name": "road",
+        "operator": "contains",
+        "excludes": [
+          "market",
+          "maintenance",
+          "treatment"
+        ],
+        "unit": "meter-year",
+        "location": "MT",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.00015099999999999998,
+      "weight": 22210718401.0207
+    },
+    {
+      "supplier": {
+        "name": "road",
+        "operator": "contains",
+        "excludes": [
+          "market",
+          "maintenance",
+          "treatment"
+        ],
+        "unit": "meter-year",
+        "location": "MQ",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.00034399999999999996,
+      "weight": 0.0
+    },
+    {
+      "supplier": {
+        "name": "road",
+        "operator": "contains",
+        "excludes": [
+          "market",
+          "maintenance",
+          "treatment"
+        ],
+        "unit": "meter-year",
+        "location": "MR",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.0006720000000000001,
+      "weight": 10651709314.1644
+    },
+    {
+      "supplier": {
+        "name": "road",
+        "operator": "contains",
+        "excludes": [
+          "market",
+          "maintenance",
+          "treatment"
+        ],
+        "unit": "meter-year",
+        "location": "MU",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.000322,
+      "weight": 14101195732.6741
+    },
+    {
+      "supplier": {
+        "name": "road",
+        "operator": "contains",
+        "excludes": [
+          "market",
+          "maintenance",
+          "treatment"
+        ],
+        "unit": "meter-year",
+        "location": "MX",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.000634,
+      "weight": 1793798859343.27
+    },
+    {
+      "supplier": {
+        "name": "road",
+        "operator": "contains",
+        "excludes": [
+          "market",
+          "maintenance",
+          "treatment"
+        ],
+        "unit": "meter-year",
+        "location": "MN",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.000865,
+      "weight": 20325121393.9074
+    },
+    {
+      "supplier": {
+        "name": "road",
+        "operator": "contains",
+        "excludes": [
+          "market",
+          "maintenance",
+          "treatment"
+        ],
+        "unit": "meter-year",
+        "location": "MD",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.000537,
+      "weight": 16711906746.2133
+    },
+    {
+      "supplier": {
+        "name": "road",
+        "operator": "contains",
+        "excludes": [
+          "market",
+          "maintenance",
+          "treatment"
+        ],
+        "unit": "meter-year",
+        "location": "ME",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.00114,
+      "weight": 7530593375.22034
+    },
+    {
+      "supplier": {
+        "name": "road",
+        "operator": "contains",
+        "excludes": [
+          "market",
+          "maintenance",
+          "treatment"
+        ],
+        "unit": "meter-year",
+        "location": "MS",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.0005470000000000001,
+      "weight": 0.0
+    },
+    {
+      "supplier": {
+        "name": "road",
+        "operator": "contains",
+        "excludes": [
+          "market",
+          "maintenance",
+          "treatment"
+        ],
+        "unit": "meter-year",
+        "location": "MA",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.0009469999999999999,
+      "weight": 144417103249.646
+    },
+    {
+      "supplier": {
+        "name": "road",
+        "operator": "contains",
+        "excludes": [
+          "market",
+          "maintenance",
+          "treatment"
+        ],
+        "unit": "meter-year",
+        "location": "MZ",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.0010500000000000002,
+      "weight": 20954220983.5473
+    },
+    {
+      "supplier": {
+        "name": "road",
+        "operator": "contains",
+        "excludes": [
+          "market",
+          "maintenance",
+          "treatment"
+        ],
+        "unit": "meter-year",
+        "location": "OM",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.00122,
+      "weight": 105895708712.614
+    },
+    {
+      "supplier": {
+        "name": "road",
+        "operator": "contains",
+        "excludes": [
+          "market",
+          "maintenance",
+          "treatment"
+        ],
+        "unit": "meter-year",
+        "location": "NA",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.00101,
+      "weight": 12408271447.8691
+    },
+    {
+      "supplier": {
+        "name": "road",
+        "operator": "contains",
+        "excludes": [
+          "market",
+          "maintenance",
+          "treatment"
+        ],
+        "unit": "meter-year",
+        "location": "NP",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.000733,
+      "weight": 41047772331.0994
+    },
+    {
+      "supplier": {
+        "name": "road",
+        "operator": "contains",
+        "excludes": [
+          "market",
+          "maintenance",
+          "treatment"
+        ],
+        "unit": "meter-year",
+        "location": "NL",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.000283,
+      "weight": 1154361305398.06
+    },
+    {
+      "supplier": {
+        "name": "road",
+        "operator": "contains",
+        "excludes": [
+          "market",
+          "maintenance",
+          "treatment"
+        ],
+        "unit": "meter-year",
+        "location": "AW",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.00027100000000000003,
+      "weight": 3648573136.15155
+    },
+    {
+      "supplier": {
+        "name": "road",
+        "operator": "contains",
+        "excludes": [
+          "market",
+          "maintenance",
+          "treatment"
+        ],
+        "unit": "meter-year",
+        "location": "NC",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.00088,
+      "weight": 9623318718.31459
+    },
+    {
+      "supplier": {
+        "name": "road",
+        "operator": "contains",
+        "excludes": [
+          "market",
+          "maintenance",
+          "treatment"
+        ],
+        "unit": "meter-year",
+        "location": "VU",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.000823,
+      "weight": 1126313359.21923
+    },
+    {
+      "supplier": {
+        "name": "road",
+        "operator": "contains",
+        "excludes": [
+          "market",
+          "maintenance",
+          "treatment"
+        ],
+        "unit": "meter-year",
+        "location": "NZ",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.0007019999999999999,
+      "weight": 255194972673.122
+    },
+    {
+      "supplier": {
+        "name": "road",
+        "operator": "contains",
+        "excludes": [
+          "market",
+          "maintenance",
+          "treatment"
+        ],
+        "unit": "meter-year",
+        "location": "NI",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.000642,
+      "weight": 17805842283.8725
+    },
+    {
+      "supplier": {
+        "name": "road",
+        "operator": "contains",
+        "excludes": [
+          "market",
+          "maintenance",
+          "treatment"
+        ],
+        "unit": "meter-year",
+        "location": "NE",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.0007930000000000001,
+      "weight": 16698786973.0228
+    },
+    {
+      "supplier": {
+        "name": "road",
+        "operator": "contains",
+        "excludes": [
+          "market",
+          "maintenance",
+          "treatment"
+        ],
+        "unit": "meter-year",
+        "location": "NG",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.00078,
+      "weight": 363846332834.618
+    },
+    {
+      "supplier": {
+        "name": "road",
+        "operator": "contains",
+        "excludes": [
+          "market",
+          "maintenance",
+          "treatment"
+        ],
+        "unit": "meter-year",
+        "location": "NU",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.0,
+      "weight": 0.0
+    },
+    {
+      "supplier": {
+        "name": "road",
+        "operator": "contains",
+        "excludes": [
+          "market",
+          "maintenance",
+          "treatment"
+        ],
+        "unit": "meter-year",
+        "location": "NF",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.0,
+      "weight": 0.0
+    },
+    {
+      "supplier": {
+        "name": "road",
+        "operator": "contains",
+        "excludes": [
+          "market",
+          "maintenance",
+          "treatment"
+        ],
+        "unit": "meter-year",
+        "location": "NO",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.000929,
+      "weight": 482949731776.587
+    },
+    {
+      "supplier": {
+        "name": "road",
+        "operator": "contains",
+        "excludes": [
+          "market",
+          "maintenance",
+          "treatment"
+        ],
+        "unit": "meter-year",
+        "location": "MP",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.00047599999999999997,
+      "weight": 1096000000.0
+    },
+    {
+      "supplier": {
+        "name": "road",
+        "operator": "contains",
+        "excludes": [
+          "market",
+          "maintenance",
+          "treatment"
+        ],
+        "unit": "meter-year",
+        "location": "PW",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.000798,
+      "weight": 281849100.0
+    },
+    {
+      "supplier": {
+        "name": "road",
+        "operator": "contains",
+        "excludes": [
+          "market",
+          "maintenance",
+          "treatment"
+        ],
+        "unit": "meter-year",
+        "location": "PK",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.0008539999999999999,
+      "weight": 337885531778.052
+    },
+    {
+      "supplier": {
+        "name": "road",
+        "operator": "contains",
+        "excludes": [
+          "market",
+          "maintenance",
+          "treatment"
+        ],
+        "unit": "meter-year",
+        "location": "PA",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.000657,
+      "weight": 83318176900.0
+    },
+    {
+      "supplier": {
+        "name": "road",
+        "operator": "contains",
+        "excludes": [
+          "market",
+          "maintenance",
+          "treatment"
+        ],
+        "unit": "meter-year",
+        "location": "PG",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.000721,
+      "weight": 30816367066.9594
+    },
+    {
+      "supplier": {
+        "name": "road",
+        "operator": "contains",
+        "excludes": [
+          "market",
+          "maintenance",
+          "treatment"
+        ],
+        "unit": "meter-year",
+        "location": "PY",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.0009170000000000001,
+      "weight": 43118053174.5413
+    },
+    {
+      "supplier": {
+        "name": "road",
+        "operator": "contains",
+        "excludes": [
+          "market",
+          "maintenance",
+          "treatment"
+        ],
+        "unit": "meter-year",
+        "location": "PE",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.0008719999999999999,
+      "weight": 266958720837.988
+    },
+    {
+      "supplier": {
+        "name": "road",
+        "operator": "contains",
+        "excludes": [
+          "market",
+          "maintenance",
+          "treatment"
+        ],
+        "unit": "meter-year",
+        "location": "PH",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.0005200000000000001,
+      "weight": 437055627244.424
+    },
+    {
+      "supplier": {
+        "name": "road",
+        "operator": "contains",
+        "excludes": [
+          "market",
+          "maintenance",
+          "treatment"
+        ],
+        "unit": "meter-year",
+        "location": "PL",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.00067,
+      "weight": 812451128978.58
+    },
+    {
+      "supplier": {
+        "name": "road",
+        "operator": "contains",
+        "excludes": [
+          "market",
+          "maintenance",
+          "treatment"
+        ],
+        "unit": "meter-year",
+        "location": "PT",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.000453,
+      "weight": 289696962620.235
+    },
+    {
+      "supplier": {
+        "name": "road",
+        "operator": "contains",
+        "excludes": [
+          "market",
+          "maintenance",
+          "treatment"
+        ],
+        "unit": "meter-year",
+        "location": "GW",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.0011200000000000001,
+      "weight": 2077816134.67419
+    },
+    {
+      "supplier": {
+        "name": "road",
+        "operator": "contains",
+        "excludes": [
+          "market",
+          "maintenance",
+          "treatment"
+        ],
+        "unit": "meter-year",
+        "location": "TL",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.000687,
+      "weight": 2079916909.49485
+    },
+    {
+      "supplier": {
+        "name": "road",
+        "operator": "contains",
+        "excludes": [
+          "market",
+          "maintenance",
+          "treatment"
+        ],
+        "unit": "meter-year",
+        "location": "PR",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.00034899999999999997,
+      "weight": 118375000000.0
+    },
+    {
+      "supplier": {
+        "name": "road",
+        "operator": "contains",
+        "excludes": [
+          "market",
+          "maintenance",
+          "treatment"
+        ],
+        "unit": "meter-year",
+        "location": "QA",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.000335,
+      "weight": 213002809340.659
+    },
+    {
+      "supplier": {
+        "name": "road",
+        "operator": "contains",
+        "excludes": [
+          "market",
+          "maintenance",
+          "treatment"
+        ],
+        "unit": "meter-year",
+        "location": "RE",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.000594,
+      "weight": 0.0
+    },
+    {
+      "supplier": {
+        "name": "road",
+        "operator": "contains",
+        "excludes": [
+          "market",
+          "maintenance",
+          "treatment"
+        ],
+        "unit": "meter-year",
+        "location": "RO",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.0005679999999999999,
+      "weight": 350775856415.189
+    },
+    {
+      "supplier": {
+        "name": "road",
+        "operator": "contains",
+        "excludes": [
+          "market",
+          "maintenance",
+          "treatment"
+        ],
+        "unit": "meter-year",
+        "location": "RU",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.0011200000000000001,
+      "weight": 2071505725030.58
+    },
+    {
+      "supplier": {
+        "name": "road",
+        "operator": "contains",
+        "excludes": [
+          "market",
+          "maintenance",
+          "treatment"
+        ],
+        "unit": "meter-year",
+        "location": "RW",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.000439,
+      "weight": 14331722700.3249
+    },
+    {
+      "supplier": {
+        "name": "road",
+        "operator": "contains",
+        "excludes": [
+          "market",
+          "maintenance",
+          "treatment"
+        ],
+        "unit": "meter-year",
+        "location": "SH",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.0005809999999999999,
+      "weight": 0.0
+    },
+    {
+      "supplier": {
+        "name": "road",
+        "operator": "contains",
+        "excludes": [
+          "market",
+          "maintenance",
+          "treatment"
+        ],
+        "unit": "meter-year",
+        "location": "KN",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.00043599999999999997,
+      "weight": 1056751851.85185
+    },
+    {
+      "supplier": {
+        "name": "road",
+        "operator": "contains",
+        "excludes": [
+          "market",
+          "maintenance",
+          "treatment"
+        ],
+        "unit": "meter-year",
+        "location": "AI",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.000499,
+      "weight": 0.0
+    },
+    {
+      "supplier": {
+        "name": "road",
+        "operator": "contains",
+        "excludes": [
+          "market",
+          "maintenance",
+          "treatment"
+        ],
+        "unit": "meter-year",
+        "location": "LC",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.000574,
+      "weight": 2430166666.66667
+    },
+    {
+      "supplier": {
+        "name": "road",
+        "operator": "contains",
+        "excludes": [
+          "market",
+          "maintenance",
+          "treatment"
+        ],
+        "unit": "meter-year",
+        "location": "VC",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.000437,
+      "weight": 1072237037.03704
+    },
+    {
+      "supplier": {
+        "name": "road",
+        "operator": "contains",
+        "excludes": [
+          "market",
+          "maintenance",
+          "treatment"
+        ],
+        "unit": "meter-year",
+        "location": "SM",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.000285,
+      "weight": 1831700577.08904
+    },
+    {
+      "supplier": {
+        "name": "road",
+        "operator": "contains",
+        "excludes": [
+          "market",
+          "maintenance",
+          "treatment"
+        ],
+        "unit": "meter-year",
+        "location": "ST",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.000646,
+      "weight": 678976264.835436
+    },
+    {
+      "supplier": {
+        "name": "road",
+        "operator": "contains",
+        "excludes": [
+          "market",
+          "maintenance",
+          "treatment"
+        ],
+        "unit": "meter-year",
+        "location": "SA",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.000651,
+      "weight": 1218584533333.33
+    },
+    {
+      "supplier": {
+        "name": "road",
+        "operator": "contains",
+        "excludes": [
+          "market",
+          "maintenance",
+          "treatment"
+        ],
+        "unit": "meter-year",
+        "location": "SN",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.000902,
+      "weight": 30696331295.7826
+    },
+    {
+      "supplier": {
+        "name": "road",
+        "operator": "contains",
+        "excludes": [
+          "market",
+          "maintenance",
+          "treatment"
+        ],
+        "unit": "meter-year",
+        "location": "RS",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.000732,
+      "weight": 81342660752.3732
+    },
+    {
+      "supplier": {
+        "name": "road",
+        "operator": "contains",
+        "excludes": [
+          "market",
+          "maintenance",
+          "treatment"
+        ],
+        "unit": "meter-year",
+        "location": "SC",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.0005470000000000001,
+      "weight": 2187379754.66167
+    },
+    {
+      "supplier": {
+        "name": "road",
+        "operator": "contains",
+        "excludes": [
+          "market",
+          "maintenance",
+          "treatment"
+        ],
+        "unit": "meter-year",
+        "location": "SL",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.0007019999999999999,
+      "weight": 6411787856.06581
+    },
+    {
+      "supplier": {
+        "name": "road",
+        "operator": "contains",
+        "excludes": [
+          "market",
+          "maintenance",
+          "treatment"
+        ],
+        "unit": "meter-year",
+        "location": "SG",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 3.92e-05,
+      "weight": 505439514078.019
+    },
+    {
+      "supplier": {
+        "name": "road",
+        "operator": "contains",
+        "excludes": [
+          "market",
+          "maintenance",
+          "treatment"
+        ],
+        "unit": "meter-year",
+        "location": "SK",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.0006720000000000001,
+      "weight": 133896931490.224
+    },
+    {
+      "supplier": {
+        "name": "road",
+        "operator": "contains",
+        "excludes": [
+          "market",
+          "maintenance",
+          "treatment"
+        ],
+        "unit": "meter-year",
+        "location": "VN",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.0007930000000000001,
+      "weight": 433857681378.291
+    },
+    {
+      "supplier": {
+        "name": "road",
+        "operator": "contains",
+        "excludes": [
+          "market",
+          "maintenance",
+          "treatment"
+        ],
+        "unit": "meter-year",
+        "location": "SI",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.000646,
+      "weight": 69148468417.3208
+    },
+    {
+      "supplier": {
+        "name": "road",
+        "operator": "contains",
+        "excludes": [
+          "market",
+          "maintenance",
+          "treatment"
+        ],
+        "unit": "meter-year",
+        "location": "SO",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.000812,
+      "weight": 10968517089.9982
+    },
+    {
+      "supplier": {
+        "name": "road",
+        "operator": "contains",
+        "excludes": [
+          "market",
+          "maintenance",
+          "treatment"
+        ],
+        "unit": "meter-year",
+        "location": "ZA",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.000657,
+      "weight": 380699271816.395
+    },
+    {
+      "supplier": {
+        "name": "road",
+        "operator": "contains",
+        "excludes": [
+          "market",
+          "maintenance",
+          "treatment"
+        ],
+        "unit": "meter-year",
+        "location": "ZW",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.000825,
+      "weight": 35231369343.4002
+    },
+    {
+      "supplier": {
+        "name": "road",
+        "operator": "contains",
+        "excludes": [
+          "market",
+          "maintenance",
+          "treatment"
+        ],
+        "unit": "meter-year",
+        "location": "ES",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.000507,
+      "weight": 1620090734956.89
+    },
+    {
+      "supplier": {
+        "name": "road",
+        "operator": "contains",
+        "excludes": [
+          "market",
+          "maintenance",
+          "treatment"
+        ],
+        "unit": "meter-year",
+        "location": "SS",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.0008719999999999999,
+      "weight": 11000000000.0
+    },
+    {
+      "supplier": {
+        "name": "road",
+        "operator": "contains",
+        "excludes": [
+          "market",
+          "maintenance",
+          "treatment"
+        ],
+        "unit": "meter-year",
+        "location": "SD",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.0006360000000000001,
+      "weight": 39898289820.7951
+    },
+    {
+      "supplier": {
+        "name": "road",
+        "operator": "contains",
+        "excludes": [
+          "market",
+          "maintenance",
+          "treatment"
+        ],
+        "unit": "meter-year",
+        "location": "EH",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.000925,
+      "weight": 0.0
+    },
+    {
+      "supplier": {
+        "name": "road",
+        "operator": "contains",
+        "excludes": [
+          "market",
+          "maintenance",
+          "treatment"
+        ],
+        "unit": "meter-year",
+        "location": "SR",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.00111,
+      "weight": 3455146280.83975
+    },
+    {
+      "supplier": {
+        "name": "road",
+        "operator": "contains",
+        "excludes": [
+          "market",
+          "maintenance",
+          "treatment"
+        ],
+        "unit": "meter-year",
+        "location": "SZ",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.0007009999999999999,
+      "weight": 4604172127.36299
+    },
+    {
+      "supplier": {
+        "name": "road",
+        "operator": "contains",
+        "excludes": [
+          "market",
+          "maintenance",
+          "treatment"
+        ],
+        "unit": "meter-year",
+        "location": "SE",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.0011,
+      "weight": 585489968189.064
+    },
+    {
+      "supplier": {
+        "name": "road",
+        "operator": "contains",
+        "excludes": [
+          "market",
+          "maintenance",
+          "treatment"
+        ],
+        "unit": "meter-year",
+        "location": "CH",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.00044500000000000003,
+      "weight": 894424821645.205
+    },
+    {
+      "supplier": {
+        "name": "road",
+        "operator": "contains",
+        "excludes": [
+          "market",
+          "maintenance",
+          "treatment"
+        ],
+        "unit": "meter-year",
+        "location": "SY",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.000699,
+      "weight": 19993439949.5435
+    },
+    {
+      "supplier": {
+        "name": "road",
+        "operator": "contains",
+        "excludes": [
+          "market",
+          "maintenance",
+          "treatment"
+        ],
+        "unit": "meter-year",
+        "location": "TJ",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.000558,
+      "weight": 12244169292.7998
+    },
+    {
+      "supplier": {
+        "name": "road",
+        "operator": "contains",
+        "excludes": [
+          "market",
+          "maintenance",
+          "treatment"
+        ],
+        "unit": "meter-year",
+        "location": "TH",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.000507,
+      "weight": 515906283940.933
+    },
+    {
+      "supplier": {
+        "name": "road",
+        "operator": "contains",
+        "excludes": [
+          "market",
+          "maintenance",
+          "treatment"
+        ],
+        "unit": "meter-year",
+        "location": "TG",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.00102,
+      "weight": 9171261837.57103
+    },
+    {
+      "supplier": {
+        "name": "road",
+        "operator": "contains",
+        "excludes": [
+          "market",
+          "maintenance",
+          "treatment"
+        ],
+        "unit": "meter-year",
+        "location": "TO",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 3.46e-08,
+      "weight": 508735107.033734
+    },
+    {
+      "supplier": {
+        "name": "road",
+        "operator": "contains",
+        "excludes": [
+          "market",
+          "maintenance",
+          "treatment"
+        ],
+        "unit": "meter-year",
+        "location": "TT",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.000857,
+      "weight": 25489373405.0619
+    },
+    {
+      "supplier": {
+        "name": "road",
+        "operator": "contains",
+        "excludes": [
+          "market",
+          "maintenance",
+          "treatment"
+        ],
+        "unit": "meter-year",
+        "location": "AE",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.000375,
+      "weight": 514130432648.06
+    },
+    {
+      "supplier": {
+        "name": "road",
+        "operator": "contains",
+        "excludes": [
+          "market",
+          "maintenance",
+          "treatment"
+        ],
+        "unit": "meter-year",
+        "location": "TN",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.000617,
+      "weight": 48196281783.9479
+    },
+    {
+      "supplier": {
+        "name": "road",
+        "operator": "contains",
+        "excludes": [
+          "market",
+          "maintenance",
+          "treatment"
+        ],
+        "unit": "meter-year",
+        "location": "TR",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.000517,
+      "weight": 1118252958513.72
+    },
+    {
+      "supplier": {
+        "name": "road",
+        "operator": "contains",
+        "excludes": [
+          "market",
+          "maintenance",
+          "treatment"
+        ],
+        "unit": "meter-year",
+        "location": "TM",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.000306,
+      "weight": 60628857142.8571
+    },
+    {
+      "supplier": {
+        "name": "road",
+        "operator": "contains",
+        "excludes": [
+          "market",
+          "maintenance",
+          "treatment"
+        ],
+        "unit": "meter-year",
+        "location": "TC",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.000495,
+      "weight": 1638653000.0
+    },
+    {
+      "supplier": {
+        "name": "road",
+        "operator": "contains",
+        "excludes": [
+          "market",
+          "maintenance",
+          "treatment"
+        ],
+        "unit": "meter-year",
+        "location": "UG",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.000713,
+      "weight": 48768955859.2834
+    },
+    {
+      "supplier": {
+        "name": "road",
+        "operator": "contains",
+        "excludes": [
+          "market",
+          "maintenance",
+          "treatment"
+        ],
+        "unit": "meter-year",
+        "location": "UA",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.000597,
+      "weight": 181221517868.744
+    },
+    {
+      "supplier": {
+        "name": "road",
+        "operator": "contains",
+        "excludes": [
+          "market",
+          "maintenance",
+          "treatment"
+        ],
+        "unit": "meter-year",
+        "location": "MK",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.0006,
+      "weight": 15763604287.9867
+    },
+    {
+      "supplier": {
+        "name": "road",
+        "operator": "contains",
+        "excludes": [
+          "market",
+          "maintenance",
+          "treatment"
+        ],
+        "unit": "meter-year",
+        "location": "EG",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.000907,
+      "weight": 395926075163.006
+    },
+    {
+      "supplier": {
+        "name": "road",
+        "operator": "contains",
+        "excludes": [
+          "market",
+          "maintenance",
+          "treatment"
+        ],
+        "unit": "meter-year",
+        "location": "GB",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.000316,
+      "weight": 3369861888972.88
+    },
+    {
+      "supplier": {
+        "name": "road",
+        "operator": "contains",
+        "excludes": [
+          "market",
+          "maintenance",
+          "treatment"
+        ],
+        "unit": "meter-year",
+        "location": "IM",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.000294,
+      "weight": 7431257410.92713
+    },
+    {
+      "supplier": {
+        "name": "road",
+        "operator": "contains",
+        "excludes": [
+          "market",
+          "maintenance",
+          "treatment"
+        ],
+        "unit": "meter-year",
+        "location": "TZ",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.000768,
+      "weight": 79062403836.8432
+    },
+    {
+      "supplier": {
+        "name": "road",
+        "operator": "contains",
+        "excludes": [
+          "market",
+          "maintenance",
+          "treatment"
+        ],
+        "unit": "meter-year",
+        "location": "US",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.000648,
+      "weight": 27720709000000.0
+    },
+    {
+      "supplier": {
+        "name": "road",
+        "operator": "contains",
+        "excludes": [
+          "market",
+          "maintenance",
+          "treatment"
+        ],
+        "unit": "meter-year",
+        "location": "VI",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.00023300000000000003,
+      "weight": 4672000000.0
+    },
+    {
+      "supplier": {
+        "name": "road",
+        "operator": "contains",
+        "excludes": [
+          "market",
+          "maintenance",
+          "treatment"
+        ],
+        "unit": "meter-year",
+        "location": "BF",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.000781,
+      "weight": 20324617844.5265
+    },
+    {
+      "supplier": {
+        "name": "road",
+        "operator": "contains",
+        "excludes": [
+          "market",
+          "maintenance",
+          "treatment"
+        ],
+        "unit": "meter-year",
+        "location": "UY",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.000767,
+      "weight": 77991666837.7382
+    },
+    {
+      "supplier": {
+        "name": "road",
+        "operator": "contains",
+        "excludes": [
+          "market",
+          "maintenance",
+          "treatment"
+        ],
+        "unit": "meter-year",
+        "location": "UZ",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.000422,
+      "weight": 102641879248.764
+    },
+    {
+      "supplier": {
+        "name": "road",
+        "operator": "contains",
+        "excludes": [
+          "market",
+          "maintenance",
+          "treatment"
+        ],
+        "unit": "meter-year",
+        "location": "VE",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.000727,
+      "weight": 269000000000.0
+    },
+    {
+      "supplier": {
+        "name": "road",
+        "operator": "contains",
+        "excludes": [
+          "market",
+          "maintenance",
+          "treatment"
+        ],
+        "unit": "meter-year",
+        "location": "WF",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 3.96e-08,
+      "weight": 0.0
+    },
+    {
+      "supplier": {
+        "name": "road",
+        "operator": "contains",
+        "excludes": [
+          "market",
+          "maintenance",
+          "treatment"
+        ],
+        "unit": "meter-year",
+        "location": "WS",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1.64e-07,
+      "weight": 938189443.830393
+    },
+    {
+      "supplier": {
+        "name": "road",
+        "operator": "contains",
+        "excludes": [
+          "market",
+          "maintenance",
+          "treatment"
+        ],
+        "unit": "meter-year",
+        "location": "YE",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.000749,
+      "weight": 21000000000.0
+    },
+    {
+      "supplier": {
+        "name": "road",
+        "operator": "contains",
+        "excludes": [
+          "market",
+          "maintenance",
+          "treatment"
+        ],
+        "unit": "meter-year",
+        "location": "ZM",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.0009599999999999999,
       "weight": 27577956471.244
     }
   ]
