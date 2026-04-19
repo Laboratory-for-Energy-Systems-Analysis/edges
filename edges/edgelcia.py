@@ -468,6 +468,7 @@ class EdgeLCIA:
 
         self.cf_index = None
         self.scenario_cfs = None
+        self.scenario_cfs_by_matrix = {"biosphere": [], "technosphere": []}
         self.method_metadata = None
         self.demand = demand
         self.weights = None
@@ -484,6 +485,7 @@ class EdgeLCIA:
         self.reversed_biosphere = None
         self.reversed_activity = None
         self.characterization_matrix = None
+        self.characterization_matrices = {"biosphere": None, "technosphere": None}
         self.method = method
         self.position_to_technosphere_flows_lookup = None
         self.technosphere_flows_lookup = defaultdict(list)
@@ -493,13 +495,17 @@ class EdgeLCIA:
         self.technosphere_flows = None
         self.biosphere_flows = None
         self.characterized_inventory = None
+        self.characterized_inventories = {"biosphere": None, "technosphere": None}
         self.inventory_use_distributions = bool(inventory_use_distributions)
         self.store_inventory_samples = bool(store_inventory_samples)
         self.inventory_samples = None
+        self.inventory_samples_by_matrix = {"biosphere": None, "technosphere": None}
         self._inventory_samples_matrix_kind = None
+        self.score_by_matrix: dict[str, Any] = {}
         self.ignored_locations = set()
         self.ignored_method_exchanges = list()
         self.duplicate_method_signature_groups: list[dict[str, Any]] = []
+        self.supplier_matrix_types: set[str] = set()
         self.weight_scheme: str = weight
         self.eligible_edges_for_next_bio = None
         self.eligible_edges_for_next_tech = None
@@ -651,6 +657,216 @@ class EdgeLCIA:
                 ]
             },
         )
+
+    @staticmethod
+    def _normalize_supplier_matrix_name(value: Any) -> str:
+        """Normalize supplier matrix identifiers used in method definitions."""
+        return str(value or "").strip().lower()
+
+    def _get_supplier_matrix_types(self) -> set[str]:
+        """Return the set of supplier matrix families referenced by the method."""
+        source = (
+            getattr(self, "raw_cfs_data", None)
+            or getattr(self, "scenario_cfs", None)
+            or getattr(self, "cfs_mapping", None)
+            or []
+        )
+        return {
+            self._normalize_supplier_matrix_name(cf.get("supplier", {}).get("matrix"))
+            for cf in source
+            if cf.get("supplier")
+        }
+
+    def _uses_biosphere_supplier_matrix(self) -> bool:
+        return "biosphere" in self._get_supplier_matrix_types()
+
+    def _uses_technosphere_supplier_matrix(self) -> bool:
+        return "technosphere" in self._get_supplier_matrix_types()
+
+    def _uses_mixed_supplier_matrices(self) -> bool:
+        matrix_types = self._get_supplier_matrix_types()
+        return "biosphere" in matrix_types and "technosphere" in matrix_types
+
+    def _active_supplier_matrix_types(self) -> tuple[str, ...]:
+        active = []
+        if self._uses_biosphere_supplier_matrix():
+            active.append("biosphere")
+        if self._uses_technosphere_supplier_matrix():
+            active.append("technosphere")
+        return tuple(active)
+
+    @staticmethod
+    def _matrix_type_for_direction(direction: str | None) -> str:
+        return (
+            "biosphere"
+            if str(direction or "").strip().lower() == "biosphere-technosphere"
+            else "technosphere"
+        )
+
+    @staticmethod
+    def _direction_for_matrix_type(matrix_type: str) -> str:
+        return (
+            "biosphere-technosphere"
+            if matrix_type == "biosphere"
+            else "technosphere-technosphere"
+        )
+
+    def _infer_single_matrix_type(self) -> str:
+        matrix_types = self._get_supplier_matrix_types()
+        if matrix_types == {"technosphere"}:
+            return "technosphere"
+        return "biosphere"
+
+    def _inventory_matrix_for_type(
+        self, matrix_type: str, lca_obj: bw2calc.LCA | None = None
+    ):
+        """
+        Return the assessed inventory matrix for one supplier matrix family.
+
+        ``matrix_type`` is ``"biosphere"`` or ``"technosphere"``.
+        """
+        lca_obj = lca_obj or self.lca
+        if matrix_type == "biosphere":
+            return lca_obj.inventory
+
+        if lca_obj is self.lca and self.technosphere_flow_matrix is not None:
+            return self.technosphere_flow_matrix
+
+        return build_technosphere_edges_matrix(
+            lca_obj.technosphere_matrix, lca_obj.supply_array
+        )
+
+    def _matrix_shape_for_type(self, matrix_type: str) -> tuple[int, int]:
+        matrix = self._inventory_matrix_for_type(matrix_type)
+        return matrix.shape
+
+    def _normalize_mapping_by_matrix(
+        self,
+        mapping: dict[str, Any] | None,
+        *,
+        fallback_attr: str | None = None,
+    ) -> dict[str, Any]:
+        out = {"biosphere": None, "technosphere": None}
+        if isinstance(mapping, dict):
+            for key in out:
+                if key in mapping:
+                    out[key] = mapping[key]
+
+        if fallback_attr and not any(value is not None for value in out.values()):
+            value = getattr(self, fallback_attr, None)
+            if value is not None:
+                out[self._infer_single_matrix_type()] = value
+        return out
+
+    def _get_characterization_matrices(self) -> dict[str, Any]:
+        return self._normalize_mapping_by_matrix(
+            getattr(self, "characterization_matrices", None),
+            fallback_attr="characterization_matrix",
+        )
+
+    def _get_characterized_inventories(self) -> dict[str, Any]:
+        return self._normalize_mapping_by_matrix(
+            getattr(self, "characterized_inventories", None),
+            fallback_attr="characterized_inventory",
+        )
+
+    def _get_inventory_samples_by_matrix(self) -> dict[str, Any]:
+        out = self._normalize_mapping_by_matrix(
+            getattr(self, "inventory_samples_by_matrix", None)
+        )
+        if any(value is not None for value in out.values()):
+            return out
+
+        value = getattr(self, "inventory_samples", None)
+        if value is None:
+            return out
+
+        matrix_kind = getattr(self, "_inventory_samples_matrix_kind", None)
+        if matrix_kind in out:
+            out[matrix_kind] = value
+        else:
+            out[self._infer_single_matrix_type()] = value
+        return out
+
+    def _get_scenario_cfs_by_matrix(self) -> dict[str, list[dict[str, Any]]]:
+        out = {"biosphere": [], "technosphere": []}
+        source = getattr(self, "scenario_cfs_by_matrix", None)
+        if isinstance(source, dict):
+            for key in out:
+                values = source.get(key)
+                if values:
+                    out[key] = list(values)
+        if any(out.values()):
+            return out
+
+        for cf in getattr(self, "scenario_cfs", []) or []:
+            if (
+                isinstance(cf, dict)
+                and not cf.get("positions")
+                and not cf.get("supplier")
+                and not cf.get("consumer")
+            ):
+                continue
+            matrix_type = self._matrix_type_for_direction(
+                cf.get("direction")
+                if isinstance(cf, dict)
+                else None
+            )
+            if isinstance(cf, dict) and "direction" not in cf:
+                supplier = cf.get("supplier", {}) if isinstance(cf, dict) else {}
+                matrix_type = self._normalize_supplier_matrix_name(
+                    supplier.get("matrix")
+                )
+                if matrix_type not in out:
+                    matrix_type = self._infer_single_matrix_type()
+            out[matrix_type].append(cf)
+        return out
+
+    def _sync_characterization_aliases(self) -> None:
+        matrices = self._get_characterization_matrices()
+        active = {k: v for k, v in matrices.items() if v is not None}
+        if len(active) == 1:
+            matrix_type, matrix = next(iter(active.items()))
+            self.characterization_matrix = matrix
+            self.characterization_matrices = {
+                "biosphere": None,
+                "technosphere": None,
+            }
+            self.characterization_matrices[matrix_type] = matrix
+        else:
+            self.characterization_matrix = None
+            self.characterization_matrices = matrices
+
+    def _sync_inventory_aliases(self) -> None:
+        inventories = self._get_characterized_inventories()
+        active_inventories = {k: v for k, v in inventories.items() if v is not None}
+        if len(active_inventories) == 1:
+            matrix_type, inventory = next(iter(active_inventories.items()))
+            self.characterized_inventory = inventory
+            self.characterized_inventories = {
+                "biosphere": None,
+                "technosphere": None,
+            }
+            self.characterized_inventories[matrix_type] = inventory
+        else:
+            self.characterized_inventory = None
+            self.characterized_inventories = inventories
+
+        samples = self._get_inventory_samples_by_matrix()
+        active_samples = {k: v for k, v in samples.items() if v is not None}
+        if len(active_samples) == 1:
+            matrix_type, sample_tensor = next(iter(active_samples.items()))
+            self.inventory_samples = sample_tensor
+            self._inventory_samples_matrix_kind = matrix_type
+            self.inventory_samples_by_matrix = {
+                "biosphere": None,
+                "technosphere": None,
+            }
+            self.inventory_samples_by_matrix[matrix_type] = sample_tensor
+        else:
+            self.inventory_samples = None
+            self._inventory_samples_matrix_kind = None
+            self.inventory_samples_by_matrix = samples
 
     def _get_persistent_cf_cache_conn(self) -> sqlite3.Connection | None:
         if not self._cf_persistent_cache_enabled:
@@ -868,16 +1084,8 @@ class EdgeLCIA:
         # Normalize classification entries (your current helper)
         self.raw_cfs_data = normalize_classification_entries(self.raw_cfs_data)
 
-        # Mixed supplier matrices are currently unsupported.
-        supplier_matrices = {
-            str(cf.get("supplier", {}).get("matrix", "")).strip().lower()
-            for cf in self.raw_cfs_data
-        }
-        if "biosphere" in supplier_matrices and "technosphere" in supplier_matrices:
-            raise NotImplementedError(
-                "Mixed biosphere + technosphere CF methods are not supported. "
-                "Provide a method with a single supplier matrix type."
-            )
+        supplier_matrices = self._get_supplier_matrix_types()
+        self.supplier_matrix_types = supplier_matrices
 
         self._warn_duplicate_matching_signatures()
 
@@ -1806,16 +2014,20 @@ class EdgeLCIA:
 
         self.lca.lci(factorize=True)
 
-        if all(
-            cf["supplier"].get("matrix") == "technosphere" for cf in self.raw_cfs_data
-        ):
+        self.biosphere_edges = set()
+        self.technosphere_edges = set()
+        self.biosphere_flows = None
+        self.technosphere_flow_matrix = None
+
+        if self._uses_technosphere_supplier_matrix():
             self.technosphere_flow_matrix = build_technosphere_edges_matrix(
                 self.lca.technosphere_matrix, self.lca.supply_array
             )
             self.technosphere_edges = set(
                 list(zip(*self.technosphere_flow_matrix.nonzero()))
             )
-        else:
+
+        if self._uses_biosphere_supplier_matrix():
             self.biosphere_edges = set(list(zip(*self.lca.inventory.nonzero())))
 
         unique_biosphere_flows = set(x[0] for x in self.biosphere_edges)
@@ -3401,32 +3613,33 @@ class EdgeLCIA:
         """
 
         if self.use_distributions and self.iterations > 1:
-            coord_blocks: list[np.ndarray] = []
-            data_blocks: list[np.ndarray] = []
+            coord_blocks = {"biosphere": [], "technosphere": []}
+            data_blocks = {"biosphere": [], "technosphere": []}
             sample_cache = {}
             k_index = np.arange(self.iterations, dtype=np.int64)
 
             unique = {}
             for cf in self.cfs_mapping:
-                # positions is a list of (i, j); in practice size 1; make it a sorted tuple
-                pos_key = tuple(sorted(cf["positions"]))
-                # If you prefer "last write wins", overwrite on key collision
+                pos_key = (
+                    str(cf.get("direction", "")).strip().lower(),
+                    tuple(sorted(cf["positions"])),
+                )
                 unique[pos_key] = cf
 
             self.cfs_mapping = list(unique.values())
+            active_matrix_types = set()
 
             for cf in self.cfs_mapping:
+                matrix_type = self._matrix_type_for_direction(cf.get("direction"))
+                active_matrix_types.add(matrix_type)
 
-                # Build a hashable key that uniquely identifies
-                # the distribution definition
                 key = make_distribution_key(cf)
-
                 if key is None:
                     samples = sample_cf_distribution(
                         cf=cf,
                         n=self.iterations,
                         parameters=self.parameters,
-                        random_state=self.random_state,  # can reuse global RNG
+                        random_state=self.random_state,
                         use_distributions=self.use_distributions,
                         SAFE_GLOBALS=self.SAFE_GLOBALS,
                     )
@@ -3457,46 +3670,41 @@ class EdgeLCIA:
                 k_block = np.tile(k_index, positions.shape[0])
                 v_block = np.tile(samples, positions.shape[0])
 
-                coord_blocks.append(np.vstack((i_block, j_block, k_block)))
-                data_blocks.append(v_block)
+                coord_blocks[matrix_type].append(np.vstack((i_block, j_block, k_block)))
+                data_blocks[matrix_type].append(v_block)
 
-            matrix_type = (
-                "biosphere" if len(self.biosphere_edges) > 0 else "technosphere"
-            )
-            n_rows, n_cols = (
-                self.lca.inventory.shape
-                if matrix_type == "biosphere"
-                else self.lca.technosphere_matrix.shape
-            )
+            self.characterization_matrices = {"biosphere": None, "technosphere": None}
+            for matrix_type in sorted(active_matrix_types):
+                if coord_blocks[matrix_type]:
+                    coords = np.concatenate(coord_blocks[matrix_type], axis=1)
+                    data = np.concatenate(data_blocks[matrix_type])
+                else:
+                    coords = np.empty((3, 0), dtype=np.int64)
+                    data = np.empty((0,), dtype=float)
 
-            # Sort all (i, j, k) indices to ensure consistent iteration ordering
-            if coord_blocks:
-                coords = np.concatenate(coord_blocks, axis=1)
-                data = np.concatenate(data_blocks)
-            else:
-                coords = np.empty((3, 0), dtype=np.int64)
-                data = np.empty((0,), dtype=float)
+                if data.size:
+                    order = np.lexsort((coords[2], coords[1], coords[0]))
+                    coords = coords[:, order]
+                    data = data[order]
 
-            # Lexicographic sort by i, j, k
-            if data.size:
-                order = np.lexsort((coords[2], coords[1], coords[0]))
-                coords = coords[:, order]
-                data = data[order]
+                n_rows, n_cols = self._matrix_shape_for_type(matrix_type)
+                matrix = sparse.COO(
+                    coords=coords,
+                    data=data,
+                    shape=(n_rows, n_cols, self.iterations),
+                )
+                self.characterization_matrices[matrix_type] = make_coo_deterministic(
+                    matrix
+                )
 
-            self.characterization_matrix = sparse.COO(
-                coords=coords,
-                data=data,
-                shape=(n_rows, n_cols, self.iterations),
-            )
-            self.characterization_matrix = make_coo_deterministic(
-                self.characterization_matrix
-            )
-
-            self.scenario_cfs = [{"positions": [], "value": 0}]  # dummy
+            self.scenario_cfs_by_matrix = {"biosphere": [], "technosphere": []}
+            self.scenario_cfs = [{"positions": [], "value": 0}]
+            self._sync_characterization_aliases()
 
         else:
-            # Fallback to 2D
             self.scenario_cfs = []
+            self.scenario_cfs_by_matrix = {"biosphere": [], "technosphere": []}
+            self.characterization_matrices = {"biosphere": None, "technosphere": None}
             scenario_name = None
 
             if scenario is not None:
@@ -3504,10 +3712,9 @@ class EdgeLCIA:
             elif self.scenario is not None:
                 scenario_name = self.scenario
 
-            if scenario_name is None:
-                if isinstance(self.parameters, dict):
-                    if len(self.parameters) > 0:
-                        scenario_name = list(self.parameters.keys())[0]
+            if scenario_name is None and isinstance(self.parameters, dict):
+                if len(self.parameters) > 0:
+                    scenario_name = list(self.parameters.keys())[0]
 
             resolved_params = self._resolve_parameters_for_scenario(
                 scenario_idx, scenario_name
@@ -3517,6 +3724,12 @@ class EdgeLCIA:
             self._last_eval_scenario_idx = scenario_idx
 
             for cf in self.cfs_mapping:
+                matrix_key = self._matrix_type_for_direction(cf.get("direction"))
+                if self.characterization_matrices[matrix_key] is None:
+                    self.characterization_matrices[matrix_key] = initialize_lcia_matrix(
+                        self.lca, matrix_type=matrix_key
+                    )
+
                 value = self._evaluate_cf_numeric_value(
                     cf["value"],
                     resolved_params=resolved_params,
@@ -3532,25 +3745,23 @@ class EdgeLCIA:
                     "supplier": cf["supplier"],
                     "consumer": cf["consumer"],
                     "positions": sorted(cf["positions"]),
+                    "direction": cf.get("direction"),
                     "value": value,
                 }
                 if evaluated_split is not None:
                     entry["reporting_split"] = evaluated_split
 
                 self.scenario_cfs.append(entry)
+                self.scenario_cfs_by_matrix[matrix_key].append(entry)
 
-            matrix_type = (
-                "biosphere" if len(self.biosphere_edges) > 0 else "technosphere"
-            )
-            self.characterization_matrix = initialize_lcia_matrix(
-                self.lca, matrix_type=matrix_type
-            )
+                for i, j in entry["positions"]:
+                    self.characterization_matrices[matrix_key][i, j] = value
 
-            for cf in self.scenario_cfs:
-                for i, j in cf["positions"]:
-                    self.characterization_matrix[i, j] = cf["value"]
+            for matrix_type, matrix in list(self.characterization_matrices.items()):
+                if matrix is not None:
+                    self.characterization_matrices[matrix_type] = matrix.tocsr()
 
-            self.characterization_matrix = self.characterization_matrix.tocsr()
+            self._sync_characterization_aliases()
 
     def _evaluate_cf_numeric_value(self, raw_value, *, resolved_params, scenario_idx):
         """Evaluate one numeric or symbolic CF value for deterministic reporting."""
@@ -3673,21 +3884,32 @@ class EdgeLCIA:
         next(mc_lca)
         return _LegacyInventoryMonteCarloAdapter(mc_lca)
 
-    def _get_iteration_inventory_matrix(self, lca: bw2calc.LCA, is_biosphere: bool):
+    def _get_iteration_inventory_matrix(self, lca: bw2calc.LCA, matrix_type: str):
         """Return the assessed inventory matrix for one Monte Carlo iteration."""
-        if is_biosphere:
-            return lca.inventory.tocsr()
-        return build_technosphere_edges_matrix(
-            lca.technosphere_matrix, lca.supply_array
-        ).tocsr()
+        return self._inventory_matrix_for_type(matrix_type, lca_obj=lca).tocsr()
 
-    def _characterization_matrix_for_iteration(self, iteration: int):
+    def _characterization_matrix_for_iteration(
+        self, iteration: int, *, matrix_type: str | None = None
+    ):
         """Return the 2D characterization slice for one Monte Carlo iteration."""
-        if isinstance(self.characterization_matrix, sparse.COO):
-            return (
-                self.characterization_matrix[:, :, iteration].to_scipy_sparse().tocsr()
+        matrices = self._get_characterization_matrices()
+        if matrix_type is None:
+            active = {k: v for k, v in matrices.items() if v is not None}
+            if len(active) != 1:
+                raise RuntimeError(
+                    "Mixed supplier methods require specifying matrix_type when "
+                    "requesting one characterization slice."
+                )
+            _, matrix = next(iter(active.items()))
+        else:
+            matrix = matrices.get(matrix_type)
+        if matrix is None:
+            raise RuntimeError(
+                f"No characterization matrix is available for matrix_type='{matrix_type}'."
             )
-        return self.characterization_matrix.tocsr()
+        if isinstance(matrix, sparse.COO):
+            return matrix[:, :, iteration].to_scipy_sparse().tocsr()
+        return matrix.tocsr()
 
     def _stack_iteration_matrices(self, matrices: list) -> sparse.COO:
         """Stack 2D sparse matrices into a deterministic 3D sparse.COO tensor."""
@@ -3769,126 +3991,179 @@ class EdgeLCIA:
             )
 
             self.score = 0
+            self.score_by_matrix = {}
+            self.characterized_inventories = {
+                "biosphere": None,
+                "technosphere": None,
+            }
+            self.inventory_samples_by_matrix = {
+                "biosphere": None,
+                "technosphere": None,
+            }
+            self.characterized_inventory = None
+            self.inventory_samples = None
+            self._inventory_samples_matrix_kind = None
             return
 
-        # Decide matrix type from the method (stable across runs), not from transient edge sets
-        only_tech = all(
-            cf["supplier"]["matrix"] == "technosphere" for cf in self.raw_cfs_data
+        characterization_matrices = self._get_characterization_matrices()
+        active_matrix_types = sorted(
+            matrix_type
+            for matrix_type, matrix in characterization_matrices.items()
+            if matrix is not None
         )
-        is_biosphere = not only_tech
-
-        # Pick inventory once
-        inventory = (
-            self.lca.inventory if is_biosphere else self.technosphere_flow_matrix
-        )
-        if inventory is None:
+        if not active_matrix_types:
             raise RuntimeError(
-                f"Inventory matrix for {'biosphere' if is_biosphere else 'technosphere'} is None. "
-                "Ensure lci() was called and that matrix-type detection does not rely on edge sets."
+                "No characterization matrices are available. Run evaluate_cfs() first."
             )
 
         inventory_uncertainty = self._uses_inventory_distributions()
         cf_uncertainty = bool(self.use_distributions and self.iterations > 1)
+        self.score_by_matrix = {}
+        self.characterized_inventories = {"biosphere": None, "technosphere": None}
+        self.inventory_samples_by_matrix = {"biosphere": None, "technosphere": None}
 
         if inventory_uncertainty:
             mc_lca = self._build_inventory_mc_lca()
             mc_lca.keep_first_iteration()
-
-            static_cf_matrix = (
-                None
-                if cf_uncertainty
-                else self._characterization_matrix_for_iteration(0)
-            )
-            inventory_matrices = [] if self.store_inventory_samples else None
-            scores = np.empty(self.iterations, dtype=float)
+            static_cf_matrices = {
+                matrix_type: (
+                    None
+                    if cf_uncertainty
+                    else self._characterization_matrix_for_iteration(
+                        0, matrix_type=matrix_type
+                    )
+                )
+                for matrix_type in active_matrix_types
+            }
+            inventory_matrices = {
+                matrix_type: ([] if self.store_inventory_samples else None)
+                for matrix_type in active_matrix_types
+            }
+            scores = {
+                matrix_type: np.empty(self.iterations, dtype=float)
+                for matrix_type in active_matrix_types
+            }
 
             for iteration in range(self.iterations):
                 next(mc_lca)
-                iteration_inventory = self._get_iteration_inventory_matrix(
-                    mc_lca, is_biosphere
-                )
-                if inventory_matrices is not None:
-                    inventory_matrices.append(iteration_inventory.copy())
+                for matrix_type in active_matrix_types:
+                    iteration_inventory = self._get_iteration_inventory_matrix(
+                        mc_lca, matrix_type
+                    )
+                    if inventory_matrices[matrix_type] is not None:
+                        inventory_matrices[matrix_type].append(iteration_inventory.copy())
 
-                cf_matrix = (
-                    self._characterization_matrix_for_iteration(iteration)
-                    if cf_uncertainty
-                    else static_cf_matrix
-                )
-                prod = cf_matrix.multiply(iteration_inventory)
-                if prod is NotImplemented:
-                    prod = iteration_inventory.multiply(cf_matrix)
-                scores[iteration] = prod.sum(dtype=np.float64)
+                    cf_matrix = (
+                        self._characterization_matrix_for_iteration(
+                            iteration, matrix_type=matrix_type
+                        )
+                        if cf_uncertainty
+                        else static_cf_matrices[matrix_type]
+                    )
+                    prod = cf_matrix.multiply(iteration_inventory)
+                    if prod is NotImplemented:
+                        prod = iteration_inventory.multiply(cf_matrix)
+                    scores[matrix_type][iteration] = prod.sum(dtype=np.float64)
 
-            self.score = np.asarray(scores, dtype=float).reshape(-1)
-            self.characterized_inventory = None
-            self._inventory_samples_matrix_kind = (
-                "biosphere" if is_biosphere else "technosphere"
-            )
-            self.inventory_samples = (
-                self._stack_iteration_matrices(inventory_matrices)
-                if inventory_matrices is not None
-                else None
-            )
-            if self.inventory_samples is not None:
-                setattr(self.lca, "inventory_samples", self.inventory_samples)
-            elif hasattr(self.lca, "inventory_samples"):
-                delattr(self.lca, "inventory_samples")
+            total_score = None
+            for matrix_type in active_matrix_types:
+                component = np.asarray(scores[matrix_type], dtype=float).reshape(-1)
+                self.score_by_matrix[matrix_type] = component
+                total_score = (
+                    component if total_score is None else total_score + component
+                )
+                self.inventory_samples_by_matrix[matrix_type] = (
+                    self._stack_iteration_matrices(inventory_matrices[matrix_type])
+                    if inventory_matrices[matrix_type] is not None
+                    else None
+                )
+
+            self.score = np.asarray(total_score, dtype=float).reshape(-1)
+            self._sync_inventory_aliases()
+            if any(
+                sample is not None
+                for sample in self.inventory_samples_by_matrix.values()
+            ):
+                setattr(self.lca, "inventory_samples_by_matrix", self.inventory_samples_by_matrix)
+                if self.inventory_samples is not None:
+                    setattr(self.lca, "inventory_samples", self.inventory_samples)
+                elif hasattr(self.lca, "inventory_samples"):
+                    delattr(self.lca, "inventory_samples")
+            else:
+                if hasattr(self.lca, "inventory_samples"):
+                    delattr(self.lca, "inventory_samples")
+                if hasattr(self.lca, "inventory_samples_by_matrix"):
+                    delattr(self.lca, "inventory_samples_by_matrix")
 
         elif cf_uncertainty:
-            inventory = (
-                self.lca.inventory if is_biosphere else self.technosphere_flow_matrix
-            )
+            total_score = None
+            for matrix_type in active_matrix_types:
+                inventory = self._inventory_matrix_for_type(matrix_type).tocsr()
+                inventory_coo = sparse.COO.from_scipy_sparse(inventory)
+                inventory_coo = make_coo_deterministic(inventory_coo)
+                inv_expanded = inventory_coo[:, :, None]
 
-            inventory_coo = sparse.COO.from_scipy_sparse(inventory)
-            inventory_coo = make_coo_deterministic(inventory_coo)
-            inv_expanded = inventory_coo[:, :, None]
+                characterized = characterization_matrices[matrix_type] * inv_expanded
+                self.characterized_inventories[matrix_type] = characterized
+                score = characterized.sum(axis=(0, 1), dtype=np.float64)
+                if isinstance(score, sparse.COO):
+                    score = np.asarray(score.todense(), dtype=float).reshape(-1)
+                else:
+                    score = np.asarray(score, dtype=float).reshape(-1)
+                self.score_by_matrix[matrix_type] = score
+                total_score = score if total_score is None else total_score + score
 
-            # Element-wise multiply
-            characterized = self.characterization_matrix * inv_expanded
-
-            # Sum across dimensions i and j to get 1 value per iteration
-            self.characterized_inventory = characterized
-            score = characterized.sum(axis=(0, 1), dtype=np.float64)
-            if isinstance(score, sparse.COO):
-                score = np.asarray(score.todense(), dtype=float).reshape(-1)
-            else:
-                score = np.asarray(score, dtype=float).reshape(-1)
-            self.score = score
-            self.inventory_samples = None
-            self._inventory_samples_matrix_kind = None
+            self.score = np.asarray(total_score, dtype=float).reshape(-1)
+            self._sync_inventory_aliases()
 
         else:
-            # --- Deterministic path with a small guard against rare NotImplemented
-            cm = self.characterization_matrix.tocsr()
-            inv = inventory.tocsr()  # ensure CSR–CSR
-            prod = cm.multiply(inv)
-            if prod is NotImplemented:  # very rare, but just in case
-                prod = inv.multiply(cm)
-            self.characterized_inventory = prod
-            self.score = prod.sum(dtype=np.float64)
+            total_score = None
+            for matrix_type in active_matrix_types:
+                cm = characterization_matrices[matrix_type].tocsr()
+                inv = self._inventory_matrix_for_type(matrix_type).tocsr()
+                prod = cm.multiply(inv)
+                if prod is NotImplemented:
+                    prod = inv.multiply(cm)
+                self.characterized_inventories[matrix_type] = prod
+                component = prod.sum(dtype=np.float64)
+                self.score_by_matrix[matrix_type] = component
+                total_score = component if total_score is None else total_score + component
+
+            self.score = total_score
+            self._sync_inventory_aliases()
 
     # --- Add these helpers inside EdgeLCIA -----------------------------------
-    def _covered_positions_from_characterization(self) -> set[tuple[int, int]]:
+    def _covered_positions_from_characterization(
+        self, matrix_type: str | None = None
+    ) -> set[tuple[int, int]]:
         """
         Return the set of (i, j) positions that already have CF values
         in the current characterization matrix.
         Works for both 2D SciPy CSR and 3D sparse.COO matrices.
         """
-        if self.characterization_matrix is None:
+        matrices = self._get_characterization_matrices()
+        matrix = None
+        if matrix_type is None:
+            active = {k: v for k, v in matrices.items() if v is not None}
+            if len(active) == 1:
+                _, matrix = next(iter(active.items()))
+        else:
+            matrix = matrices.get(matrix_type)
+
+        if matrix is None:
             return set()
 
         # Uncertainty mode: 3D (i, j, k) COO
-        if isinstance(self.characterization_matrix, sparse.COO):
+        if isinstance(matrix, sparse.COO):
             # coords shape: (3, N); take unique (i, j)
-            if self.characterization_matrix.coords.size == 0:
+            if matrix.coords.size == 0:
                 return set()
-            i = self.characterization_matrix.coords[0]
-            j = self.characterization_matrix.coords[1]
+            i = matrix.coords[0]
+            j = matrix.coords[1]
             return set(zip(map(int, i), map(int, j)))
 
         # Deterministic mode: 2D SciPy sparse
-        ii, jj = self.characterization_matrix.nonzero()
+        ii, jj = matrix.nonzero()
         return set(zip(ii.tolist(), jj.tolist()))
 
     def _evaluate_cf_value_for_redo(self, cf: dict, scenario_idx, scenario_name):
@@ -3952,158 +4227,152 @@ class EdgeLCIA:
           the usual pipeline again.
         """
 
-        if self.characterization_matrix is None:
+        characterization_matrices = self._get_characterization_matrices()
+        if not any(matrix is not None for matrix in characterization_matrices.values()):
             raise RuntimeError(
-                "redo_lcia() requires an existing characterization_matrix. "
+                "redo_lcia() requires existing characterization matrices. "
                 "Run the normal pipeline (map/evaluate) once before calling this."
             )
 
-        # --- Diagnostics: starting nnz
-        if isinstance(self.characterization_matrix, sparse.COO):
-            start_nnz = len(self.characterization_matrix.data)
-        else:
-            start_nnz = self.characterization_matrix.nnz
-        self.logger.info(f"Starting characterization_matrix nnz = {start_nnz}")
+        start_nnz_by_matrix = {}
+        for matrix_type, matrix in characterization_matrices.items():
+            if matrix is None:
+                continue
+            if isinstance(matrix, sparse.COO):
+                start_nnz_by_matrix[matrix_type] = len(matrix.data)
+            else:
+                start_nnz_by_matrix[matrix_type] = matrix.nnz
+        self.logger.info(
+            "Starting characterization_matrix nnz by matrix = %s",
+            start_nnz_by_matrix,
+        )
 
         normalized_demand = self._normalize_redo_demand(demand)
 
-        # 0) Update demand vector if user passed one
         if normalized_demand is not None:
             self.lca.demand.clear()
             self.lca.demand.update(normalized_demand)
 
-        only_tech = all(
-            cf["supplier"]["matrix"] == "technosphere" for cf in self.raw_cfs_data
+        active_matrix_types = sorted(
+            set(self._active_supplier_matrix_types())
+            | {
+                matrix_type
+                for matrix_type, matrix in characterization_matrices.items()
+                if matrix is not None
+            }
         )
 
-        # Capture the best available "previous run" snapshot before recomputing LCI.
-        # On first redo, this prevents seeding ever_seen with current edges.
-        if only_tech:
-            previous_edges_snapshot = set(self._last_edges_snapshot_tech or set())
-            if not previous_edges_snapshot:
-                previous_edges_snapshot = set(
-                    self._last_nonempty_edges_snapshot_tech or set()
-                )
-            if not previous_edges_snapshot:
-                previous_edges_snapshot = set(self.technosphere_edges or set())
-        else:
-            previous_edges_snapshot = set(self._last_edges_snapshot_bio or set())
-            if not previous_edges_snapshot:
-                previous_edges_snapshot = set(
-                    self._last_nonempty_edges_snapshot_bio or set()
-                )
-            if not previous_edges_snapshot:
-                previous_edges_snapshot = set(self.biosphere_edges or set())
+        def _previous_edges_snapshot(matrix_type: str) -> set[tuple[int, int]]:
+            if matrix_type == "technosphere":
+                previous = set(self._last_edges_snapshot_tech or set())
+                if not previous:
+                    previous = set(self._last_nonempty_edges_snapshot_tech or set())
+                if not previous:
+                    previous = set(self.technosphere_edges or set())
+                return previous
 
-        # 2) Recompute inventory & edges for the *new* demand
-        self.lca.redo_lci(demand=normalized_demand)  # updates matrices
+            previous = set(self._last_edges_snapshot_bio or set())
+            if not previous:
+                previous = set(self._last_nonempty_edges_snapshot_bio or set())
+            if not previous:
+                previous = set(self.biosphere_edges or set())
+            return previous
 
-        # Recompute CURRENT edges from fresh matrices
-        if only_tech:
-            # refresh helper & edges
+        previous_snapshots = {
+            matrix_type: _previous_edges_snapshot(matrix_type)
+            for matrix_type in active_matrix_types
+        }
+
+        self.lca.redo_lci(demand=normalized_demand)
+
+        current_edges_by_matrix = {"biosphere": set(), "technosphere": set()}
+        if "technosphere" in active_matrix_types:
             self.technosphere_flow_matrix = build_technosphere_edges_matrix(
                 self.lca.technosphere_matrix, self.lca.supply_array
             )
-            current_edges = set(zip(*self.technosphere_flow_matrix.nonzero()))
-        else:
-            current_edges = set(zip(*self.lca.inventory.nonzero()))
+            current_edges_by_matrix["technosphere"] = set(
+                zip(*self.technosphere_flow_matrix.nonzero())
+            )
+        if "biosphere" in active_matrix_types:
+            current_edges_by_matrix["biosphere"] = set(zip(*self.lca.inventory.nonzero()))
 
-        # Edges that already have CF coverage in the existing characterization matrix
-        covered = self._covered_positions_from_characterization()
-        # Persistently failed edges (don’t thrash on them)
-        failed = self._failed_edges_tech if only_tech else self._failed_edges_bio
+        new_edges_by_matrix = {"biosphere": set(), "technosphere": set()}
+        for matrix_type in active_matrix_types:
+            covered = self._covered_positions_from_characterization(matrix_type)
+            if matrix_type == "technosphere":
+                failed = self._failed_edges_tech
+                ever_seen = self._ever_seen_edges_tech
+            else:
+                failed = self._failed_edges_bio
+                ever_seen = self._ever_seen_edges_bio
 
-        # --- Use cumulative "ever seen" edges to avoid rescanning after tiny runs
-        if only_tech:
-            ever_seen = self._ever_seen_edges_tech
-        else:
-            ever_seen = self._ever_seen_edges_bio
+            if not ever_seen:
+                ever_seen |= set(previous_snapshots[matrix_type])
 
-        # Seed ever_seen the first time with the best baseline we have
-        if not ever_seen:
-            baseline_seed = set(previous_edges_snapshot)
-            ever_seen |= baseline_seed
+            current_edges = current_edges_by_matrix[matrix_type]
+            new_edges = current_edges - covered - failed - ever_seen
+            new_edges_by_matrix[matrix_type] = new_edges
 
-        # Compute new edges strictly as (current − covered − failed − ever_seen)
-        new_edges = current_edges - covered - failed - ever_seen
+            if matrix_type == "technosphere":
+                self._last_edges_snapshot_tech = set(current_edges)
+                if current_edges:
+                    self._last_nonempty_edges_snapshot_tech = set(current_edges)
+                self._ever_seen_edges_tech |= new_edges
+            else:
+                self._last_edges_snapshot_bio = set(current_edges)
+                if current_edges:
+                    self._last_nonempty_edges_snapshot_bio = set(current_edges)
+                self._ever_seen_edges_bio |= new_edges
 
-        # --- Restrict mapping to *only* the newly discovered edges
-        if only_tech:
-            self.biosphere_edges = set()
-            self.technosphere_edges = set(new_edges)
-        else:
-            self.technosphere_edges = set()
-            self.biosphere_edges = set(new_edges)
+            self.logger.info(
+                "redo_lcia(%s): identified %d new edges (current=%d, covered=%d, ever_seen=%d, failed=%d)",
+                matrix_type,
+                len(new_edges),
+                len(current_edges),
+                len(covered),
+                len(ever_seen),
+                len(failed),
+            )
 
-        # Persist the CURRENT snapshot. Also update the "non-empty" snapshot only when non-empty.
-        if only_tech:
-            self._last_edges_snapshot_tech = set(current_edges)
-            if current_edges:
-                self._last_nonempty_edges_snapshot_tech = set(current_edges)
-        else:
-            self._last_edges_snapshot_bio = set(current_edges)
-            if current_edges:
-                self._last_nonempty_edges_snapshot_bio = set(current_edges)
+        self.biosphere_edges = set(new_edges_by_matrix["biosphere"])
+        self.technosphere_edges = set(new_edges_by_matrix["technosphere"])
 
-        # Extend the cumulative history so future runs won't rescan these
-        if only_tech:
-            self._ever_seen_edges_tech |= new_edges
-        else:
-            self._ever_seen_edges_bio |= new_edges
-
-        self.logger.info(
-            f"Identified {len(new_edges)} new edges to map "
-            f"(current={len(current_edges)}, covered={len(covered)}, ever_seen={len(ever_seen)}, failed={len(failed)})"
-        )
-
-        if not new_edges:
+        if not any(new_edges_by_matrix.values()):
             self.logger.info("redo_lcia(): No new exchanges to map.")
+            self.biosphere_edges = set(current_edges_by_matrix["biosphere"])
+            self.technosphere_edges = set(current_edges_by_matrix["technosphere"])
+            self._update_unprocessed_edges()
             if recompute_score:
                 self.lcia()
             return
 
-        # 3) Map only the new edges: snapshot cfs_mapping length to capture the delta later
         baseline_len = len(self.cfs_mapping)
-
-        # Primary mapping on the restricted edge set
         self.map_exchanges()
-
-        # Optional fallback passes (these operate only on unprocessed edges, which we’ve
-        # already restricted to the new edges in step 2)
         self.apply_strategies()
 
-        # Identify the CF entries created in this redo
         new_cf_entries = self.cfs_mapping[baseline_len:]
-
         self.logger.info(f"Mapping produced {len(new_cf_entries)} new CF entries")
 
         if not new_cf_entries:
             self.logger.info("redo_lcia(): Mapping produced no applicable CFs.")
-            # These 'new_edges' were attempted and still have no CF — remember them as failed
-            if only_tech:
-                self._failed_edges_tech |= set(new_edges)
-            else:
-                self._failed_edges_bio |= set(new_edges)
+            self._failed_edges_bio |= set(new_edges_by_matrix["biosphere"])
+            self._failed_edges_tech |= set(new_edges_by_matrix["technosphere"])
+            self.biosphere_edges = set(current_edges_by_matrix["biosphere"])
+            self.technosphere_edges = set(current_edges_by_matrix["technosphere"])
+            self._update_unprocessed_edges()
             if recompute_score:
                 self.lcia()
             return
 
-        # 4) Apply those *new* CFs into the existing characterization_matrix
         if self.use_distributions and self.iterations > 1:
-            # Uncertainty mode: append (i, j, k) samples to 3D COO
-            cm = self.characterization_matrix
-            assert isinstance(
-                cm, sparse.COO
-            ), "Expected sparse.COO in uncertainty mode."
-
-            # Collect coords/data to append
-            coord_blocks: list[np.ndarray] = []
-            data_blocks: list[np.ndarray] = []
+            characterization_matrices = self._get_characterization_matrices()
+            coord_blocks = {"biosphere": [], "technosphere": []}
+            data_blocks = {"biosphere": [], "technosphere": []}
             sample_cache = {}
             k_index = np.arange(self.iterations, dtype=np.int64)
 
             for cf in new_cf_entries:
-                # Draw (or reuse) samples for this distribution/spec
+                matrix_type = self._matrix_type_for_direction(cf.get("direction"))
                 key = make_distribution_key(cf)
                 if key is None:
                     samples = sample_cf_distribution(
@@ -4140,31 +4409,47 @@ class EdgeLCIA:
                 j_block = np.repeat(positions[:, 1], self.iterations)
                 k_block = np.tile(k_index, positions.shape[0])
                 v_block = np.tile(samples, positions.shape[0])
+                coord_blocks[matrix_type].append(np.vstack((i_block, j_block, k_block)))
+                data_blocks[matrix_type].append(v_block)
 
-                coord_blocks.append(np.vstack((i_block, j_block, k_block)))
-                data_blocks.append(v_block)
+            for matrix_type in {"biosphere", "technosphere"}:
+                if not data_blocks[matrix_type]:
+                    continue
 
-            if data_blocks:
-                # Concatenate to existing COO
-                new_coords = np.concatenate(coord_blocks, axis=1)
-                new_data = np.concatenate(data_blocks)
-                # Merge
-                merged_coords = np.concatenate([cm.coords, new_coords], axis=1)
-                merged_data = np.concatenate([cm.data, new_data])
-                self.characterization_matrix = sparse.COO(
-                    coords=merged_coords, data=merged_data, shape=cm.shape
+                new_coords = np.concatenate(coord_blocks[matrix_type], axis=1)
+                new_data = np.concatenate(data_blocks[matrix_type])
+                matrix = characterization_matrices.get(matrix_type)
+                if matrix is None:
+                    base_coords = np.empty((3, 0), dtype=np.int64)
+                    base_data = np.empty((0,), dtype=float)
+                    shape = (*self._matrix_shape_for_type(matrix_type), self.iterations)
+                else:
+                    if not isinstance(matrix, sparse.COO):
+                        raise RuntimeError(
+                            "Expected sparse.COO characterization matrices in uncertainty mode."
+                        )
+                    base_coords = matrix.coords
+                    base_data = matrix.data
+                    shape = matrix.shape
+
+                merged_coords = np.concatenate([base_coords, new_coords], axis=1)
+                merged_data = np.concatenate([base_data, new_data])
+                characterization_matrices[matrix_type] = make_coo_deterministic(
+                    sparse.COO(coords=merged_coords, data=merged_data, shape=shape)
                 )
-                self.characterization_matrix = make_coo_deterministic(
-                    self.characterization_matrix
-                )
+
+            self.characterization_matrices = characterization_matrices
+            self._sync_characterization_aliases()
 
         else:
-            # Deterministic mode: batch structural inserts in LIL before
-            # converting back to CSR. Writing new nonzeros into CSR one-by-one
-            # triggers SparseEfficiencyWarning and is slower.
-            cm = self.characterization_matrix.tolil()
-            # Decide scenario context (use last known if possible)
-            # Decide scenario context (prefer explicit args, then last-used, then class default, then first available key, else None)
+            characterization_matrices = self._get_characterization_matrices()
+            scenario_cfs_by_matrix = self._get_scenario_cfs_by_matrix()
+            if self.scenario_cfs is None:
+                self.scenario_cfs = []
+            for matrix_type, matrix in list(characterization_matrices.items()):
+                if matrix is not None:
+                    characterization_matrices[matrix_type] = matrix.tolil()
+
             scenario_name = (
                 scenario
                 if scenario is not None
@@ -4190,42 +4475,58 @@ class EdgeLCIA:
                     else 0
                 )
 
-            # Also extend scenario_cfs so reporting includes new rows
-            if self.scenario_cfs is None:
-                self.scenario_cfs = []
-
             for cf in new_cf_entries:
+                matrix_type = self._matrix_type_for_direction(cf.get("direction"))
+                if characterization_matrices[matrix_type] is None:
+                    characterization_matrices[matrix_type] = initialize_lcia_matrix(
+                        self.lca, matrix_type=matrix_type
+                    )
+
                 val, evaluated_split = self._evaluate_cf_value_for_redo(
                     cf, scenario_idx=scenario_idx, scenario_name=scenario_name
                 )
                 if val == 0:
                     continue
                 for i, j in cf["positions"]:
-                    cm[i, j] = val
-                # Keep reporting structures in sync
+                    characterization_matrices[matrix_type][i, j] = val
+
                 entry = {
                     "supplier": cf["supplier"],
                     "consumer": cf["consumer"],
                     "positions": sorted(cf["positions"]),
+                    "direction": cf.get("direction"),
                     "value": val,
                 }
                 if evaluated_split is not None:
                     entry["reporting_split"] = evaluated_split
                 self.scenario_cfs.append(entry)
-            # Ensure efficient structure
-            self.characterization_matrix = cm.tocsr()
+                scenario_cfs_by_matrix[matrix_type].append(entry)
 
-        # --- Diagnostics: ending nnz
-        if isinstance(self.characterization_matrix, sparse.COO):
-            end_nnz = len(self.characterization_matrix.data)
-        else:
-            end_nnz = self.characterization_matrix.nnz
-        self.logger.info(f"Ending characterization_matrix nnz = {end_nnz}")
+            for matrix_type, matrix in list(characterization_matrices.items()):
+                if matrix is not None:
+                    characterization_matrices[matrix_type] = matrix.tocsr()
 
-        # 5) Update processed/unprocessed tracking and optionally recompute score
+            self.characterization_matrices = characterization_matrices
+            self.scenario_cfs_by_matrix = scenario_cfs_by_matrix
+            self._sync_characterization_aliases()
+
+        end_nnz_by_matrix = {}
+        for matrix_type, matrix in self._get_characterization_matrices().items():
+            if matrix is None:
+                continue
+            if isinstance(matrix, sparse.COO):
+                end_nnz_by_matrix[matrix_type] = len(matrix.data)
+            else:
+                end_nnz_by_matrix[matrix_type] = matrix.nnz
+        self.logger.info(
+            "Ending characterization_matrix nnz by matrix = %s",
+            end_nnz_by_matrix,
+        )
+
+        self.biosphere_edges = set(current_edges_by_matrix["biosphere"])
+        self.technosphere_edges = set(current_edges_by_matrix["technosphere"])
         self._update_unprocessed_edges()
 
-        # Remember last evaluation context (so redo_lcia can be called repeatedly without args)
         if scenario is not None:
             self._last_eval_scenario_name = scenario
         elif getattr(self, "_last_eval_scenario_name", None) is None:
@@ -4238,12 +4539,6 @@ class EdgeLCIA:
 
         if recompute_score:
             self.lcia()
-
-        # Save the CURRENT inventory edges as the baseline for the next redo
-        if only_tech:
-            self._last_edges_snapshot_tech = current_edges
-        else:
-            self._last_edges_snapshot_bio = current_edges
 
     def statistics(self):
         """
@@ -4402,7 +4697,10 @@ class EdgeLCIA:
             runs include summary statistics columns for the sampled amounts,
             CFs, and impacts. Supplier and consumer classification schemes are
             expanded into additional columns named ``supplier {scheme}`` and
-            ``consumer {scheme}``.
+            ``consumer {scheme}``. Mixed supplier methods also include
+            ``supplier matrix`` and ``direction`` columns so
+            ``biosphere-technosphere`` and
+            ``technosphere-technosphere`` rows can be distinguished.
 
         Notes
         -----
@@ -4411,6 +4709,10 @@ class EdgeLCIA:
         - When ``split_aggregate_consumers=True``, the original weighted
           aggregate row disappears and is replaced by country rows whose
           ``amount`` and ``impact`` sum back to the original row.
+        - Mixed methods can export both biosphere and technosphere supplier
+          rows in the same table. ``split_aggregate_consumers=True`` only
+          expands weighted consumer-side geographic fallback rows; it does not
+          alter the supplier matrix family of a match.
         - The raw split metadata is also accessible on ``self.cfs_mapping`` and
           on deterministic ``self.scenario_cfs`` entries via the
           ``reporting_split`` field.
@@ -4545,16 +4847,15 @@ class EdgeLCIA:
 
             return split_rows
 
-        if not self.scenario_cfs:
+        characterization_matrices = self._get_characterization_matrices()
+        scenario_cfs_by_matrix = self._get_scenario_cfs_by_matrix()
+        if not self.scenario_cfs and not any(
+            matrix is not None for matrix in characterization_matrices.values()
+        ):
             self.logger.warning(
                 "generate_cf_table() called before evaluate_cfs(). Returning empty DataFrame."
             )
             return pd.DataFrame()
-
-        is_biosphere = True if self.technosphere_flow_matrix is None else False
-        inventory = (
-            self.lca.inventory if is_biosphere else self.technosphere_flow_matrix
-        )
 
         data = []
         supplier_schemes_seen = set()
@@ -4570,118 +4871,89 @@ class EdgeLCIA:
                 "generate_cf_table(split_aggregate_consumers=True) is only "
                 "supported for deterministic tables."
             )
-        inventory_sample_tensor = getattr(self, "inventory_samples", None)
+        inventory_samples_by_matrix = self._get_inventory_samples_by_matrix()
 
-        if inventory_uncertainty and inventory_sample_tensor is None:
+        active_matrix_types = sorted(
+            matrix_type
+            for matrix_type in (
+                set(
+                    matrix_type
+                    for matrix_type, entries in scenario_cfs_by_matrix.items()
+                    if entries
+                )
+                | set(
+                    matrix_type
+                    for matrix_type, matrix in characterization_matrices.items()
+                    if matrix is not None
+                )
+                | (
+                    {
+                        "biosphere"
+                        if getattr(self, "unprocessed_biosphere_edges", None)
+                        else None,
+                        "technosphere"
+                        if getattr(self, "unprocessed_technosphere_edges", None)
+                        else None,
+                    }
+                    if include_unmatched
+                    else set()
+                )
+            )
+            if matrix_type is not None
+        )
+
+        if inventory_uncertainty and any(
+            inventory_samples_by_matrix.get(matrix_type) is None
+            for matrix_type in active_matrix_types
+        ):
             raise RuntimeError(
                 "generate_cf_table() in inventory uncertainty mode requires stored "
                 "inventory samples. Re-run lcia() with store_inventory_samples=True."
             )
 
         if uncertain_mode:
-            cm = self.characterization_matrix
-            if isinstance(cm, sparse.COO):
-                positions = zip(*cm.sum(axis=2).nonzero())
-            else:
-                positions = zip(*cm.nonzero())
-
-            for i, j in positions:
-                consumer = bw2data.get_activity(self.reversed_activity[j])
-                supplier = (
-                    bw2data.get_activity(self.reversed_biosphere[i])
-                    if is_biosphere
-                    else bw2data.get_activity(self.reversed_activity[i])
-                )
+            for matrix_type in active_matrix_types:
+                cm = characterization_matrices.get(matrix_type)
+                if cm is None:
+                    continue
+                inventory = self._inventory_matrix_for_type(matrix_type)
+                inventory_sample_tensor = inventory_samples_by_matrix.get(matrix_type)
+                direction = self._direction_for_matrix_type(matrix_type)
 
                 if isinstance(cm, sparse.COO):
-                    samples = np.array(cm[i, j, :].todense()).flatten().astype(float)
+                    positions = zip(*cm.sum(axis=2).nonzero())
                 else:
-                    samples = np.full(self.iterations, float(cm[i, j]), dtype=float)
+                    positions = zip(*cm.nonzero())
 
-                if inventory_uncertainty:
-                    amount_samples = (
-                        np.array(inventory_sample_tensor[i, j, :].todense())
-                        .flatten()
-                        .astype(float)
-                    )
-                    amount = float(amount_samples.mean())
-                else:
-                    amount = float(inventory[i, j])
-                    amount_samples = np.full(self.iterations, amount, dtype=float)
-
-                impact_samples = amount_samples * samples
-
-                amount_p = np.percentile(amount_samples, [5, 25, 50, 75, 95])
-                cf_p = np.percentile(samples, [5, 25, 50, 75, 95])
-                impact_p = np.percentile(impact_samples, [5, 25, 50, 75, 95])
-
-                s_cls = _norm_classifications(supplier.get("classifications"))
-                c_cls = _norm_classifications(consumer.get("classifications"))
-                supplier_schemes_seen.update(s_cls.keys())
-                consumer_schemes_seen.update(c_cls.keys())
-
-                entry = {
-                    "supplier name": supplier["name"],
-                    "consumer name": consumer["name"],
-                    "consumer reference product": consumer.get("reference product"),
-                    "consumer location": consumer.get("location"),
-                    "amount": amount,
-                    "amount (mean)": amount_samples.mean(),
-                    "amount (std)": amount_samples.std(),
-                    "amount (min)": amount_samples.min(),
-                    "amount (5th)": amount_p[0],
-                    "amount (25th)": amount_p[1],
-                    "amount (50th)": amount_p[2],
-                    "amount (75th)": amount_p[3],
-                    "amount (95th)": amount_p[4],
-                    "amount (max)": amount_samples.max(),
-                    "CF (mean)": samples.mean(),
-                    "CF (std)": samples.std(),
-                    "CF (min)": samples.min(),
-                    "CF (5th)": cf_p[0],
-                    "CF (25th)": cf_p[1],
-                    "CF (50th)": cf_p[2],
-                    "CF (75th)": cf_p[3],
-                    "CF (95th)": cf_p[4],
-                    "CF (max)": samples.max(),
-                    "impact (mean)": impact_samples.mean(),
-                    "impact (std)": impact_samples.std(),
-                    "impact (min)": impact_samples.min(),
-                    "impact (5th)": impact_p[0],
-                    "impact (25th)": impact_p[1],
-                    "impact (50th)": impact_p[2],
-                    "impact (75th)": impact_p[3],
-                    "impact (95th)": impact_p[4],
-                    "impact (max)": impact_samples.max(),
-                    # hold normalized dicts temporarily
-                    "_supplier_cls": s_cls,
-                    "_consumer_cls": c_cls,
-                }
-
-                if is_biosphere:
-                    entry["supplier categories"] = supplier.get("categories")
-                else:
-                    entry["supplier reference product"] = supplier.get(
-                        "reference product"
-                    )
-                    entry["supplier location"] = supplier.get("location")
-
-                data.append(entry)
-
-        else:
-            # Deterministic fallback
-            for cf in self.scenario_cfs:
-                for i, j in cf["positions"]:
+                for i, j in positions:
                     consumer = bw2data.get_activity(self.reversed_activity[j])
                     supplier = (
                         bw2data.get_activity(self.reversed_biosphere[i])
-                        if is_biosphere
+                        if matrix_type == "biosphere"
                         else bw2data.get_activity(self.reversed_activity[i])
                     )
 
-                    amount = inventory[i, j]
-                    cf_value = cf["value"]
-                    impact = amount * cf_value
+                    if isinstance(cm, sparse.COO):
+                        samples = np.array(cm[i, j, :].todense()).flatten().astype(float)
+                    else:
+                        samples = np.full(self.iterations, float(cm[i, j]), dtype=float)
+
+                    if inventory_uncertainty:
+                        amount_samples = (
+                            np.array(inventory_sample_tensor[i, j, :].todense())
+                            .flatten()
+                            .astype(float)
+                        )
+                        amount = float(amount_samples.mean())
+                    else:
+                        amount = float(inventory[i, j])
+                        amount_samples = np.full(self.iterations, amount, dtype=float)
+
+                    impact_samples = amount_samples * samples
+
+                    amount_p = np.percentile(amount_samples, [5, 25, 50, 75, 95])
+                    cf_p = np.percentile(samples, [5, 25, 50, 75, 95])
+                    impact_p = np.percentile(impact_samples, [5, 25, 50, 75, 95])
 
                     s_cls = _norm_classifications(supplier.get("classifications"))
                     c_cls = _norm_classifications(consumer.get("classifications"))
@@ -4689,19 +4961,45 @@ class EdgeLCIA:
                     consumer_schemes_seen.update(c_cls.keys())
 
                     entry = {
+                        "supplier matrix": matrix_type,
+                        "direction": direction,
                         "supplier name": supplier["name"],
                         "consumer name": consumer["name"],
                         "consumer reference product": consumer.get("reference product"),
                         "consumer location": consumer.get("location"),
                         "amount": amount,
-                        "CF": cf_value,
-                        "impact": impact,
+                        "amount (mean)": amount_samples.mean(),
+                        "amount (std)": amount_samples.std(),
+                        "amount (min)": amount_samples.min(),
+                        "amount (5th)": amount_p[0],
+                        "amount (25th)": amount_p[1],
+                        "amount (50th)": amount_p[2],
+                        "amount (75th)": amount_p[3],
+                        "amount (95th)": amount_p[4],
+                        "amount (max)": amount_samples.max(),
+                        "CF (mean)": samples.mean(),
+                        "CF (std)": samples.std(),
+                        "CF (min)": samples.min(),
+                        "CF (5th)": cf_p[0],
+                        "CF (25th)": cf_p[1],
+                        "CF (50th)": cf_p[2],
+                        "CF (75th)": cf_p[3],
+                        "CF (95th)": cf_p[4],
+                        "CF (max)": samples.max(),
+                        "impact (mean)": impact_samples.mean(),
+                        "impact (std)": impact_samples.std(),
+                        "impact (min)": impact_samples.min(),
+                        "impact (5th)": impact_p[0],
+                        "impact (25th)": impact_p[1],
+                        "impact (50th)": impact_p[2],
+                        "impact (75th)": impact_p[3],
+                        "impact (95th)": impact_p[4],
+                        "impact (max)": impact_samples.max(),
                         "_supplier_cls": s_cls,
                         "_consumer_cls": c_cls,
-                        "_reporting_split": cf.get("reporting_split"),
                     }
 
-                    if is_biosphere:
+                    if matrix_type == "biosphere":
                         entry["supplier categories"] = supplier.get("categories")
                     else:
                         entry["supplier reference product"] = supplier.get(
@@ -4711,56 +5009,112 @@ class EdgeLCIA:
 
                     data.append(entry)
 
+        else:
+            for matrix_type in active_matrix_types:
+                inventory = self._inventory_matrix_for_type(matrix_type)
+                direction = self._direction_for_matrix_type(matrix_type)
+                for cf in scenario_cfs_by_matrix.get(matrix_type, []):
+                    for i, j in cf["positions"]:
+                        consumer = bw2data.get_activity(self.reversed_activity[j])
+                        supplier = (
+                            bw2data.get_activity(self.reversed_biosphere[i])
+                            if matrix_type == "biosphere"
+                            else bw2data.get_activity(self.reversed_activity[i])
+                        )
+
+                        amount = float(inventory[i, j])
+                        cf_value = cf["value"]
+                        impact = amount * cf_value
+
+                        s_cls = _norm_classifications(supplier.get("classifications"))
+                        c_cls = _norm_classifications(consumer.get("classifications"))
+                        supplier_schemes_seen.update(s_cls.keys())
+                        consumer_schemes_seen.update(c_cls.keys())
+
+                        entry = {
+                            "supplier matrix": matrix_type,
+                            "direction": cf.get("direction", direction),
+                            "supplier name": supplier["name"],
+                            "consumer name": consumer["name"],
+                            "consumer reference product": consumer.get(
+                                "reference product"
+                            ),
+                            "consumer location": consumer.get("location"),
+                            "amount": amount,
+                            "CF": cf_value,
+                            "impact": impact,
+                            "_supplier_cls": s_cls,
+                            "_consumer_cls": c_cls,
+                            "_reporting_split": cf.get("reporting_split"),
+                        }
+
+                        if matrix_type == "biosphere":
+                            entry["supplier categories"] = supplier.get("categories")
+                        else:
+                            entry["supplier reference product"] = supplier.get(
+                                "reference product"
+                            )
+                            entry["supplier location"] = supplier.get("location")
+
+                        data.append(entry)
+
         if include_unmatched is True:
-            unprocess_exchanges = (
-                self.unprocessed_biosphere_edges
-                if is_biosphere
-                else self.unprocessed_technosphere_edges
-            )
-            for i, j in unprocess_exchanges:
-                supplier = (
-                    bw2data.get_activity(self.reversed_biosphere[i])
-                    if is_biosphere
-                    else bw2data.get_activity(self.reversed_activity[i])
+            for matrix_type in active_matrix_types:
+                unprocess_exchanges = (
+                    self.unprocessed_biosphere_edges
+                    if matrix_type == "biosphere"
+                    else self.unprocessed_technosphere_edges
                 )
-                consumer = bw2data.get_activity(self.reversed_activity[j])
+                inventory = self._inventory_matrix_for_type(matrix_type)
+                inventory_sample_tensor = inventory_samples_by_matrix.get(matrix_type)
+                direction = self._direction_for_matrix_type(matrix_type)
 
-                if inventory_uncertainty:
-                    amount_samples = (
-                        np.array(inventory_sample_tensor[i, j, :].todense())
-                        .flatten()
-                        .astype(float)
+                for i, j in unprocess_exchanges:
+                    supplier = (
+                        bw2data.get_activity(self.reversed_biosphere[i])
+                        if matrix_type == "biosphere"
+                        else bw2data.get_activity(self.reversed_activity[i])
                     )
-                    amount = float(amount_samples.mean())
-                else:
-                    amount = float(inventory[i, j])
+                    consumer = bw2data.get_activity(self.reversed_activity[j])
 
-                s_cls = _norm_classifications(supplier.get("classifications"))
-                c_cls = _norm_classifications(consumer.get("classifications"))
-                supplier_schemes_seen.update(s_cls.keys())
-                consumer_schemes_seen.update(c_cls.keys())
+                    if inventory_uncertainty:
+                        amount_samples = (
+                            np.array(inventory_sample_tensor[i, j, :].todense())
+                            .flatten()
+                            .astype(float)
+                        )
+                        amount = float(amount_samples.mean())
+                    else:
+                        amount = float(inventory[i, j])
 
-                entry = {
-                    "supplier name": supplier["name"],
-                    "consumer name": consumer["name"],
-                    "consumer reference product": consumer.get("reference product"),
-                    "consumer location": consumer.get("location"),
-                    "amount": amount,
-                    "CF": None,
-                    "impact": None,
-                    "_supplier_cls": s_cls,
-                    "_consumer_cls": c_cls,
-                }
+                    s_cls = _norm_classifications(supplier.get("classifications"))
+                    c_cls = _norm_classifications(consumer.get("classifications"))
+                    supplier_schemes_seen.update(s_cls.keys())
+                    consumer_schemes_seen.update(c_cls.keys())
 
-                if is_biosphere:
-                    entry["supplier categories"] = supplier.get("categories")
-                else:
-                    entry["supplier reference product"] = supplier.get(
-                        "reference product"
-                    )
-                    entry["supplier location"] = supplier.get("location")
+                    entry = {
+                        "supplier matrix": matrix_type,
+                        "direction": direction,
+                        "supplier name": supplier["name"],
+                        "consumer name": consumer["name"],
+                        "consumer reference product": consumer.get("reference product"),
+                        "consumer location": consumer.get("location"),
+                        "amount": amount,
+                        "CF": None,
+                        "impact": None,
+                        "_supplier_cls": s_cls,
+                        "_consumer_cls": c_cls,
+                    }
 
-                data.append(entry)
+                    if matrix_type == "biosphere":
+                        entry["supplier categories"] = supplier.get("categories")
+                    else:
+                        entry["supplier reference product"] = supplier.get(
+                            "reference product"
+                        )
+                        entry["supplier location"] = supplier.get("location")
+
+                    data.append(entry)
 
         if split_aggregate_consumers:
             data = _split_reporting_rows(data)
@@ -4793,6 +5147,8 @@ class EdgeLCIA:
 
         # Order columns
         base_cols = [
+            "supplier matrix",
+            "direction",
             "supplier name",
             "supplier categories",
             "supplier reference product",

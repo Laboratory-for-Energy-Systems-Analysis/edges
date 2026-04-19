@@ -161,6 +161,11 @@ def compare_activities_by_grouped_leaves(
     lca = EdgeLCIA({act: 1 for act in activities}, lcia_method)
     lca.lci(factorize=True)
     lca.lcia()
+    if getattr(lca, "_uses_mixed_supplier_matrices", lambda: False)():
+        raise NotImplementedError(
+            "compare_activities_by_grouped_leaves() does not support mixed "
+            "biosphere + technosphere supplier methods."
+        )
 
     objs, cache = [], cache or {}
 
