@@ -213,6 +213,12 @@ Consider the following LCIA data file (saved under `gwp_example.json`)`:
 
 ```
 
+Symbolic CF expressions are intentionally narrow: arithmetic, parameter names,
+literal values, and bare allowlisted function calls. Arbitrary Python syntax
+such as attribute access, subscripting, comprehensions, imports, or method calls
+is rejected. Functions passed through `allowed_functions` remain trusted Python
+code.
+
 We can perform a parameter-based LCIA calculation as follows:
 
 ```python

@@ -29,12 +29,51 @@ def test_get_str():
 
 
 def test_safe_eval():
-    SAFE_GLOBALS = {"range": range}
-    params = {}
-    assert safe_eval("2 + 2", SAFE_GLOBALS=SAFE_GLOBALS, parameters=params) == 4
-    assert safe_eval(
-        "[x * 2 for x in range(3)]", SAFE_GLOBALS=SAFE_GLOBALS, parameters=params
-    ) == [0, 2, 4]
+    params = {"x": 3}
+    assert (
+        safe_eval("2 + x", SAFE_GLOBALS={"__builtins__": None}, parameters=params)
+        == 5
+    )
+    assert safe_eval("sqrt(4)", SAFE_GLOBALS=None, parameters={}) == 2
+    assert (
+        safe_eval("sum([1, 2, 3])", SAFE_GLOBALS={"sum": sum}, parameters={}) == 6
+    )
+
+
+def test_safe_eval_allows_user_defined_functions():
+    def scale(value, factor):
+        return value * factor
+
+    assert (
+        safe_eval(
+            "scale(x, 4)",
+            SAFE_GLOBALS={"scale": scale},
+            parameters={"x": 3},
+        )
+        == 12
+    )
+
+
+@pytest.mark.parametrize(
+    "expr",
+    [
+        "().__class__.__bases__[0].__subclasses__()",
+        "__import__('os')",
+        "(1).to_bytes(1, 'big')",
+        "[x * 2 for x in range(3)]",
+        "(1, 2)[0]",
+        "lambda x: x",
+        "f'{1}'",
+    ],
+)
+def test_safe_eval_rejects_unsafe_syntax(expr):
+    with pytest.raises(ValueError, match="Invalid expression"):
+        safe_eval(expr, SAFE_GLOBALS={"range": range}, parameters={})
+
+
+def test_safe_eval_missing_parameter_still_raises_keyerror():
+    with pytest.raises(KeyError):
+        safe_eval("missing + 1", SAFE_GLOBALS={}, parameters={})
 
 
 def test_safe_eval_cached():
@@ -54,6 +93,36 @@ def test_safe_eval_cached():
             parameters=params,
         )
         == 6
+    )
+
+
+def test_safe_eval_cached_includes_allowed_function_namespace():
+    def offset_one(value):
+        return value + 1
+
+    def offset_two(value):
+        return value + 2
+
+    expr = "offset(x)"
+    params = {"x": 1}
+
+    assert (
+        safe_eval_cached(
+            expr,
+            SAFE_GLOBALS={"offset": offset_one},
+            scenario_idx="same",
+            parameters=params,
+        )
+        == 2
+    )
+    assert (
+        safe_eval_cached(
+            expr,
+            SAFE_GLOBALS={"offset": offset_two},
+            scenario_idx="same",
+            parameters=params,
+        )
+        == 3
     )
 
 

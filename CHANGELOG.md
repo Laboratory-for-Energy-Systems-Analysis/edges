@@ -2,6 +2,20 @@
 
 ## 1.2.9 - Upcoming
 
+### Security
+
+- Hardened symbolic CF expression evaluation by validating expressions with a
+  narrow AST allowlist before evaluation. Supported expressions remain focused
+  on arithmetic, parameter names, literals, and bare allowlisted function calls
+  such as ``GWP(...)``.
+- Replaced the previous ``__builtins__: None`` eval sandbox with sanitized
+  globals, blocking object traversal, attribute access, subscripts,
+  comprehensions, lambdas, imports, f-strings, and method calls in method
+  expressions.
+- Documented that Python callables passed through ``allowed_functions`` are
+  trusted code, and included the allowed function namespace in the expression
+  cache key to avoid stale cached results across different callables.
+
 ### Mixed supplier methods
 
 - Added support for LCIA methods that combine ``biosphere`` and

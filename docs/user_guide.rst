@@ -140,6 +140,11 @@ Parameterized CFs
 -----------------
 
 If the method uses symbolic expressions, pass parameter values:
+Expressions support arithmetic, parameter names, literal values, and bare
+allowlisted function calls such as ``GWP(...)``. They do not support arbitrary
+Python syntax such as attribute access, subscripting, comprehensions, imports,
+or method calls. Any Python callable supplied through ``allowed_functions`` is
+trusted code and should come from the user or another trusted source.
 
 .. code-block:: python
 

@@ -2,6 +2,7 @@
 Utility functions for the LCIA methods implementation.
 """
 
+import ast
 import os
 import logging
 from typing import Any
@@ -40,6 +41,126 @@ logger = logging.getLogger(__name__)
 logger.addHandler(logging.NullHandler())
 
 _eval_cache = {}
+
+
+DEFAULT_SAFE_GLOBALS = {
+    "__builtins__": {},
+    "abs": abs,
+    "max": max,
+    "min": min,
+    "round": round,
+    "pow": pow,
+    "sqrt": math.sqrt,
+    "exp": math.exp,
+    "log10": math.log10,
+}
+
+_SAFE_EVAL_BINOPS = (
+    ast.Add,
+    ast.Sub,
+    ast.Mult,
+    ast.Div,
+    ast.FloorDiv,
+    ast.Mod,
+    ast.Pow,
+)
+_SAFE_EVAL_UNARYOPS = (ast.UAdd, ast.USub)
+
+
+def _prepare_safe_globals(SAFE_GLOBALS: dict | None = None) -> dict:
+    safe_globals = dict(DEFAULT_SAFE_GLOBALS)
+    if SAFE_GLOBALS:
+        for key, value in SAFE_GLOBALS.items():
+            if key == "__builtins__":
+                continue
+            safe_globals[key] = value
+    safe_globals["__builtins__"] = {}
+    return safe_globals
+
+
+def _safe_global_cache_token(value):
+    if callable(value):
+        return (
+            "callable",
+            getattr(value, "__module__", type(value).__module__),
+            getattr(value, "__qualname__", getattr(value, "__name__", repr(value))),
+            id(value),
+        )
+    return ("value", type(value).__module__, type(value).__qualname__, repr(value))
+
+
+def _safe_globals_cache_key(safe_globals: dict) -> tuple:
+    return tuple(
+        sorted(
+            (name, _safe_global_cache_token(value))
+            for name, value in safe_globals.items()
+            if name != "__builtins__"
+        )
+    )
+
+
+class _SafeEvalValidator(ast.NodeVisitor):
+    def __init__(self, allowed_call_names: set[str]):
+        self.allowed_call_names = allowed_call_names
+
+    def generic_visit(self, node):
+        raise ValueError(f"Disallowed expression node: {type(node).__name__}")
+
+    def visit_Expression(self, node):
+        self.visit(node.body)
+
+    def visit_Constant(self, node):
+        if isinstance(node.value, (int, float, str, bool)):
+            return
+        raise ValueError(f"Disallowed constant: {node.value!r}")
+
+    def visit_Name(self, node):
+        if not isinstance(node.ctx, ast.Load):
+            raise ValueError("Only variable reads are allowed")
+
+    def visit_BinOp(self, node):
+        if not isinstance(node.op, _SAFE_EVAL_BINOPS):
+            raise ValueError(f"Disallowed binary operator: {type(node.op).__name__}")
+        self.visit(node.left)
+        self.visit(node.right)
+
+    def visit_UnaryOp(self, node):
+        if not isinstance(node.op, _SAFE_EVAL_UNARYOPS):
+            raise ValueError(f"Disallowed unary operator: {type(node.op).__name__}")
+        self.visit(node.operand)
+
+    def visit_List(self, node):
+        if not isinstance(node.ctx, ast.Load):
+            raise ValueError("Only list literals are allowed")
+        for element in node.elts:
+            self.visit(element)
+
+    def visit_Tuple(self, node):
+        if not isinstance(node.ctx, ast.Load):
+            raise ValueError("Only tuple literals are allowed")
+        for element in node.elts:
+            self.visit(element)
+
+    def visit_Call(self, node):
+        if not isinstance(node.func, ast.Name):
+            raise ValueError("Only bare allowlisted function calls are allowed")
+        if node.func.id not in self.allowed_call_names:
+            raise ValueError(f"Function '{node.func.id}' is not allowlisted")
+        for arg in node.args:
+            self.visit(arg)
+        for keyword in node.keywords:
+            if keyword.arg is None:
+                raise ValueError("Variadic keyword arguments are not allowed")
+            self.visit(keyword.value)
+
+
+def _validate_safe_eval_ast(tree: ast.AST, safe_globals: dict) -> None:
+    allowed_call_names = {
+        name
+        for name, value in safe_globals.items()
+        if name != "__builtins__" and callable(value)
+    }
+    _SafeEvalValidator(allowed_call_names=allowed_call_names).visit(tree)
 
 
 def format_method_name(name: str) -> tuple:
@@ -420,10 +541,11 @@ def get_str(loc):
 
 def safe_eval(expr, parameters, SAFE_GLOBALS=None, scenario_idx: int | str = 0):
     """
-    Evaluate a mathematical expression safely.
+    Evaluate a narrow mathematical expression safely.
     :param expr: The expression to evaluate.
     :param parameters: A dictionary of parameters to use in the evaluation.
-    :param SAFE_GLOBALS: A dictionary of global variables to use in the evaluation.
+    :param SAFE_GLOBALS: A dictionary of explicitly allowed names. Callable entries
+        can be called by bare name, e.g. ``GWP(...)``.
     :param scenario_idx: The index of the scenario to use in the evaluation.
     :return: The result of the evaluation.
     """
@@ -436,10 +558,15 @@ def safe_eval(expr, parameters, SAFE_GLOBALS=None, scenario_idx: int | str = 0):
         for k, v in parameters.items()
     }
 
+    safe_globals = _prepare_safe_globals(SAFE_GLOBALS)
+
     try:
-        return eval(expr, SAFE_GLOBALS, eval_params)
+        tree = ast.parse(expr, mode="eval")
+        _validate_safe_eval_ast(tree, safe_globals)
+        code = compile(tree, "<edges-safe-eval>", "eval")
+        return eval(code, safe_globals, eval_params)
     except NameError as e:
-        missing_param = str(e).split("'")[1]
+        missing_param = getattr(e, "name", None) or str(e).split("'")[1]
         logger.error(f"Missing parameter '{missing_param}' in expression '{expr}'")
         raise KeyError(
             f"Missing parameter '{missing_param}' in parameters dictionary."
@@ -452,11 +579,14 @@ def safe_eval(expr, parameters, SAFE_GLOBALS=None, scenario_idx: int | str = 0):
 def safe_eval_cached(
     expr: str, parameters: dict, scenario_idx: str | int, SAFE_GLOBALS: dict
 ):
+    safe_globals = _prepare_safe_globals(SAFE_GLOBALS)
+
     # Convert parameters into a hashable string key
     key = (
         expr,
         scenario_idx,
         json.dumps(parameters, sort_keys=True),  # string representation
+        _safe_globals_cache_key(safe_globals),
     )
     cache_key = hashlib.md5(str(key).encode()).hexdigest()
 
@@ -464,7 +594,7 @@ def safe_eval_cached(
         return _eval_cache[cache_key]
 
     result = safe_eval(
-        expr, parameters, SAFE_GLOBALS=SAFE_GLOBALS, scenario_idx=scenario_idx
+        expr, parameters, SAFE_GLOBALS=safe_globals, scenario_idx=scenario_idx
     )
     _eval_cache[cache_key] = result
     return result

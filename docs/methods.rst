@@ -412,6 +412,11 @@ rows in the exported results table.
       "value": "GWP('CH4', H, C_CH4)"
     }
 
+``GWP`` must be supplied as a trusted callable, for example via
+``EdgeLCIA(..., allowed_functions={"GWP": GWP})``. Method expressions are
+sandboxed to arithmetic, parameters, literals, and bare allowlisted function
+calls; arbitrary Python syntax is not supported.
+
 **Reference**:
 IPCC AR6, 2021.
 https://www.ipcc.ch/assessment-report/ar6/

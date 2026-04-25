@@ -553,7 +553,7 @@ class EdgeLCIA:
         self.cfs_mapping = []
 
         self.SAFE_GLOBALS = {
-            "__builtins__": None,
+            "__builtins__": {},
             "abs": abs,
             "max": max,
             "min": min,

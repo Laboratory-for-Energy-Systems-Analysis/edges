@@ -94,6 +94,15 @@ The ``value`` field can be:
       "value": "GWP('CH4', H, C_CH4)"
 
   These can refer to dynamic variables or scenario-dependent parameters defined in the LCIA model context.
+  Function calls must use a bare function name that is explicitly available to
+  the evaluator, for example through ``allowed_functions``.
+
+String expressions are intentionally limited to arithmetic, parameter names,
+literal numbers/strings/lists/tuples, and bare allowlisted function calls.
+Object attribute access, subscripting, comprehensions, lambdas, imports, and
+method calls are rejected. Python callables passed through ``allowed_functions``
+are trusted code; the expression sandbox restricts the method expression, not
+the implementation of those callables.
 
 Weight Field
 ^^^^^^^^^^^^
