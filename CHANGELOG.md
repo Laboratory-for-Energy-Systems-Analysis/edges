@@ -1,6 +1,6 @@
 # Changelog
 
-## 1.2.9 - Upcoming
+## 1.3.0 - Upcoming
 
 ### Security
 
@@ -15,6 +15,8 @@
 - Documented that Python callables passed through ``allowed_functions`` are
   trusted code, and included the allowed function namespace in the expression
   cache key to avoid stale cached results across different callables.
+
+## 1.2.9 - 2026-04-19
 
 ### Mixed supplier methods
 
