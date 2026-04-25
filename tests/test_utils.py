@@ -31,13 +31,10 @@ def test_get_str():
 def test_safe_eval():
     params = {"x": 3}
     assert (
-        safe_eval("2 + x", SAFE_GLOBALS={"__builtins__": None}, parameters=params)
-        == 5
+        safe_eval("2 + x", SAFE_GLOBALS={"__builtins__": None}, parameters=params) == 5
     )
     assert safe_eval("sqrt(4)", SAFE_GLOBALS=None, parameters={}) == 2
-    assert (
-        safe_eval("sum([1, 2, 3])", SAFE_GLOBALS={"sum": sum}, parameters={}) == 6
-    )
+    assert safe_eval("sum([1, 2, 3])", SAFE_GLOBALS={"sum": sum}, parameters={}) == 6
 
 
 def test_safe_eval_allows_user_defined_functions():
