@@ -200,8 +200,10 @@ jobs:
         run: |
           PKG_NAME=edges
           USER=romainsacchi
-          conda install anaconda-client
-          conda install conda-build
+          conda install -y anaconda-client
+          # conda-build extends the base conda CLI; installing it only in the
+          # active test env leaves `conda build` unavailable.
+          conda install -n base -y conda-build
           mkdir ~/conda-bld
           conda config --set anaconda_upload no
           export CONDA_BLD_PATH=~/conda-bld
