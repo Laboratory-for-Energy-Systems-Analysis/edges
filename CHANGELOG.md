@@ -1,6 +1,23 @@
 # Changelog
 
-## 1.3.0 - Upcoming
+## 1.3.1 - Upcoming
+
+### Geography
+
+- Bundled IAM and ecoinvent topology mappings derived from premise so
+  non-ecoinvent regions such as ``OAS``, ``SSA``, ``LAM``, ``CAZ``,
+  ``EUR``, ``REF``, ``MEA``, ``NEU``, ``CHA``, and ecoinvent IAI aggregate
+  regions can participate in geographic fallback resolution.
+- Registered bundled topology files under separate namespaces to avoid silent
+  overwrites where different IAM models use the same region names with
+  different country memberships. Bare region lookups now merge matching
+  namespaced definitions.
+- Suppressed noisy ``Geomatcher`` and ``country_converter`` lookup diagnostics
+  during normal failed geography probes, keeping notebook output focused on
+  Edges progress messages and actionable warnings.
+- Added geography aliases for ``World -> GLO`` and ``US-PR -> PR``.
+
+## 1.3.0 - 2026-05-18
 
 ### Security
 
