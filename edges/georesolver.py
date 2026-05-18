@@ -1,12 +1,38 @@
 from __future__ import annotations
 
+import contextlib
 from functools import lru_cache
+from io import StringIO
 import logging
 from constructive_geometries import Geomatcher
-from .utils import load_legacy_geographies, load_missing_geographies, get_str
+from .utils import (
+    load_builtin_topologies,
+    load_legacy_geographies,
+    load_missing_geographies,
+    get_str,
+)
 
 logger = logging.getLogger(__name__)
 logger.addHandler(logging.NullHandler())
+
+
+@contextlib.contextmanager
+def _silent_geomatcher_lookup():
+    """Suppress stdout/stderr and country_converter log chatter during probes."""
+    logger_names = ("country_converter", "country_converter.country_converter")
+    loggers = [logging.getLogger(name) for name in logger_names]
+    previous = [(log.disabled, log.level) for log in loggers]
+    for log in loggers:
+        log.disabled = True
+    try:
+        with contextlib.redirect_stdout(StringIO()), contextlib.redirect_stderr(
+            StringIO()
+        ):
+            yield
+    finally:
+        for log, (disabled, level) in zip(loggers, previous):
+            log.disabled = disabled
+            log.setLevel(level)
 
 
 class GeoResolver:
@@ -17,7 +43,12 @@ class GeoResolver:
     :return: GeoResolver instance.
     """
 
-    def __init__(self, weights: dict, additional_topologies: dict = None):
+    def __init__(
+        self,
+        weights: dict,
+        additional_topologies: dict = None,
+        use_builtin_topologies: bool = True,
+    ):
         """
         Initialize the resolver and normalize internal weight keys.
 
@@ -50,11 +81,13 @@ class GeoResolver:
         self.missing_geographies = load_missing_geographies()
         self.legacy_geographies = load_legacy_geographies()
 
+        if use_builtin_topologies:
+            for namespace, topology in load_builtin_topologies().items():
+                self._add_topology_definitions(topology, namespace)
+
         if additional_topologies:
-            self.geo.add_definitions(additional_topologies, "ecoinvent", relative=True)
-            self.geo.add_definitions(
-                {"World": ["GLO", "RoW"]}, "ecoinvent", relative=True
-            )
+            self._add_topology_definitions(additional_topologies, "ecoinvent")
+        self._add_topology_definitions({"World": ["GLO", "RoW"]}, "ecoinvent")
 
     def _normalize_location(self, location: str) -> str | None:
         """Normalize noisy legacy labels before consulting Geomatcher."""
@@ -66,6 +99,65 @@ class GeoResolver:
             return None
         aliases = self.legacy_geographies.get("aliases", {}) or {}
         return aliases.get(cleaned, cleaned)
+
+    def _clean_topology_definitions(
+        self, definitions: dict[str, list[str]]
+    ) -> dict[str, list[str]]:
+        """Apply Edges geography aliases to topology members before registration."""
+        cleaned = {}
+        for region, members in (definitions or {}).items():
+            region_key = " ".join(get_str(region).split()).strip().rstrip(", ")
+            cleaned_members = []
+            for member in members or []:
+                normalized = self._normalize_location(member)
+                if normalized is not None:
+                    cleaned_members.append(normalized)
+            cleaned[region_key] = cleaned_members
+        return cleaned
+
+    def _add_topology_definitions(
+        self, definitions: dict[str, list[str]], namespace: str
+    ) -> None:
+        """Register topology definitions without leaking lookup diagnostics."""
+        cleaned = self._clean_topology_definitions(definitions)
+        with _silent_geomatcher_lookup():
+            try:
+                self.geo.add_definitions(cleaned, namespace, relative=True)
+            except KeyError as exc:
+                self.logger.info(
+                    "Skipping topology namespace %s because a member could not be resolved: %s",
+                    namespace,
+                    exc,
+                )
+
+    def _resolve_geomatcher_keys(self, location: str) -> tuple[str | tuple, ...]:
+        """
+        Resolve all Geomatcher keys that can represent a location string.
+
+        constructive_geometries delegates unknown string handling to
+        country_converter, which writes "not found" messages to stderr and ISO3
+        fallbacks to stdout before raising or returning. Edges treats these as
+        normal failed fallback candidates, so keep them out of notebook output.
+        """
+        keys = []
+
+        with _silent_geomatcher_lookup():
+            try:
+                keys.append(self.geo._actual_key(location))
+            except KeyError:
+                pass
+
+        for key in self.geo.topology:
+            if isinstance(key, tuple) and len(key) >= 2 and get_str(key) == location:
+                keys.append(key)
+
+        unique = []
+        seen = set()
+        for key in keys:
+            if key not in seen:
+                unique.append(key)
+                seen.add(key)
+        return tuple(unique)
 
     def find_locations(
         self,
@@ -107,25 +199,31 @@ class GeoResolver:
                     if not exceptions or e_str not in exceptions:
                         results.append(e_str)
         else:
+            resolved_locations = self._resolve_geomatcher_keys(location)
+            if not resolved_locations:
+                self.logger.info("Region %s: no geometry found.", location)
+                return sorted(set(results))
+
             method = "contained" if containing else "within"
             raw_candidates = []
             try:
-                for e in getattr(self.geo, method)(
-                    location,
-                    biggest_first=False,
-                    exclusive=containing,
-                    include_self=False,
-                ):
-                    e_str = get_str(e)
-                    raw_candidates.append(e_str)
-                    if (
-                        e_str in weights_available
-                        and e_str != location
-                        and (not exceptions or e_str not in exceptions)
+                for resolved_location in resolved_locations:
+                    for e in getattr(self.geo, method)(
+                        resolved_location,
+                        biggest_first=False,
+                        exclusive=containing,
+                        include_self=False,
                     ):
-                        results.append(e_str)
-                        if not containing:
-                            break
+                        e_str = get_str(e)
+                        raw_candidates.append(e_str)
+                        if (
+                            e_str in weights_available
+                            and e_str != location
+                            and (not exceptions or e_str not in exceptions)
+                        ):
+                            results.append(e_str)
+                            if not containing:
+                                break
             except KeyError:
                 self.logger.info("Region %s: no geometry found.", location)
 

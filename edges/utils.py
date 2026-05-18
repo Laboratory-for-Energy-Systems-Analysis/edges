@@ -533,6 +533,28 @@ def load_legacy_geographies() -> dict[str, Any]:
         return yaml.safe_load(f) or {}
 
 
+@cache
+def load_builtin_topologies() -> dict[str, dict[str, list[str]]]:
+    """
+    Load bundled IAM and ecoinvent topology definitions.
+
+    The returned mapping is keyed by a short namespace derived from each file
+    name, e.g. ``remind`` for ``remind-topology.json``.
+    """
+    topologies_dir = DATA_DIR / "metadata" / "topologies"
+    if not topologies_dir.exists():
+        return {}
+
+    topologies = {}
+    for path in sorted(topologies_dir.glob("*.json")):
+        namespace = path.stem
+        if namespace.endswith("-topology"):
+            namespace = namespace[: -len("-topology")]
+        with open(path, "r", encoding="utf-8") as f:
+            topologies[namespace] = json.load(f)
+    return topologies
+
+
 def get_str(loc):
     if isinstance(loc, tuple):
         return loc[1]

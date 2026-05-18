@@ -75,6 +75,66 @@ def test_georesolver_strips_trailing_commas_before_resolving():
     assert "Europe" in geo.resolve("Europe, ", containing=False)
 
 
+def test_georesolver_maps_world_alias_to_glo_without_output(capsys):
+    geo = GeoResolver(weights={"GLO": 1.0})
+    assert "GLO" in geo.resolve("World", containing=False)
+    captured = capsys.readouterr()
+    assert captured.out == ""
+    assert captured.err == ""
+
+
+def test_georesolver_silences_geomatcher_country_converter_output(capsys):
+    geo = GeoResolver(weights={"GLO": 1.0, "IN": 1.0, "US": 1.0})
+
+    assert "GLO" in geo.resolve("IND", containing=False)
+    assert geo.resolve("XYZ_NOT_A_REGION", containing=False) == []
+
+    captured = capsys.readouterr()
+    assert captured.out == ""
+    assert captured.err == ""
+
+
+def test_georesolver_uses_bundled_iam_topologies_without_output(capsys):
+    geo = GeoResolver(weights={"PK": 1.0, "OAS": 1.0, "GLO": 1.0})
+
+    assert "PK" in geo.resolve("OAS", containing=True)
+    assert "OAS" in geo.resolve("PK", containing=False)
+
+    captured = capsys.readouterr()
+    assert captured.out == ""
+    assert captured.err == ""
+
+
+def test_georesolver_uses_bundled_ei312_topology_for_iai_regions(capsys):
+    geo = GeoResolver(
+        weights={
+            "FR": 1.0,
+            "IAI Area, Western and Central Europe": 1.0,
+        }
+    )
+
+    assert "FR" in geo.resolve(
+        "IAI Area, Western and Central Europe", containing=True
+    )
+    assert "IAI Area, Western and Central Europe" in geo.resolve(
+        "FR", containing=False
+    )
+
+    captured = capsys.readouterr()
+    assert captured.out == ""
+    assert captured.err == ""
+
+
+def test_georesolver_normalizes_topology_members_before_registration(capsys):
+    geo = GeoResolver(weights={"PR": 1.0, "RCAM": 1.0})
+
+    assert "PR" in geo.resolve("RCAM", containing=True)
+
+    captured = capsys.readouterr()
+    assert captured.out == ""
+    assert captured.err == ""
+
+
 def test_georesolver_uses_missing_geographies_for_in_dd():
     geo = GeoResolver(weights={"IN": 1.0, "SAS": 1.0, "UN-ASIA": 1.0})
     result = geo.resolve("IN-DD", containing=False)
