@@ -113,12 +113,8 @@ def test_georesolver_uses_bundled_ei312_topology_for_iai_regions(capsys):
         }
     )
 
-    assert "FR" in geo.resolve(
-        "IAI Area, Western and Central Europe", containing=True
-    )
-    assert "IAI Area, Western and Central Europe" in geo.resolve(
-        "FR", containing=False
-    )
+    assert "FR" in geo.resolve("IAI Area, Western and Central Europe", containing=True)
+    assert "IAI Area, Western and Central Europe" in geo.resolve("FR", containing=False)
 
     captured = capsys.readouterr()
     assert captured.out == ""

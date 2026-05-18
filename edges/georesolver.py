@@ -25,8 +25,9 @@ def _silent_geomatcher_lookup():
     for log in loggers:
         log.disabled = True
     try:
-        with contextlib.redirect_stdout(StringIO()), contextlib.redirect_stderr(
-            StringIO()
+        with (
+            contextlib.redirect_stdout(StringIO()),
+            contextlib.redirect_stderr(StringIO()),
         ):
             yield
     finally:
