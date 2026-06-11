@@ -12,7 +12,7 @@ from matplotlib.lines import Line2D
 import edges
 from edges import EdgeLCIA, setup_package_logging
 
-PROJECT_NAME = "bw25_ei310"
+PROJECT_NAME = "ecoinvent-3.10-cutoff"
 ECOINVENT_DB = "ecoinvent-3.10.1-cutoff"
 H2_DB = "h2_pem"
 ACTIVITY_NAME = (
