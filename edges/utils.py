@@ -5,13 +5,13 @@ Utility functions for the LCIA methods implementation.
 import ast
 import os
 import logging
+import sqlite3
 from typing import Any
 
 import yaml
 import numpy as np
 
-from functools import reduce, cache
-import operator
+from functools import cache
 import hashlib
 import json
 import math
@@ -41,6 +41,10 @@ logger = logging.getLogger(__name__)
 logger.addHandler(logging.NullHandler())
 
 _eval_cache = {}
+
+_DEFAULT_SQLITE_VARIABLE_LIMIT = 999
+_SQL_VARIABLE_SAFETY_MARGIN = 8
+_MAX_ACTIVITY_QUERY_BATCH_SIZE = 20_000
 
 
 DEFAULT_SAFE_GLOBALS = {
@@ -443,9 +447,64 @@ def get_flow_matrix_positions(mapping: dict) -> list:
     return result
 
 
+def _get_sqlite_variable_limit() -> int:
+    """Return the active SQLite bound-variable limit for Brightway's activity DB."""
+    try:
+        database = AD._meta.database
+        if hasattr(database, "connect"):
+            database.connect(reuse_if_open=True)
+        connection = database.connection()
+        if hasattr(connection, "getlimit"):
+            limit = connection.getlimit(sqlite3.SQLITE_LIMIT_VARIABLE_NUMBER)
+            if isinstance(limit, int) and limit > 0:
+                return limit
+    except Exception:
+        logger.debug("Could not detect SQLite variable limit", exc_info=True)
+    return _DEFAULT_SQLITE_VARIABLE_LIMIT
+
+
+def _activity_query_batch_size(extra_variables: int = 0) -> int:
+    limit = _get_sqlite_variable_limit()
+    available = limit - int(extra_variables) - _SQL_VARIABLE_SAFETY_MARGIN
+    return max(1, min(_MAX_ACTIVITY_QUERY_BATCH_SIZE, available))
+
+
+def _iter_batches(values: list, batch_size: int):
+    for start in range(0, len(values), batch_size):
+        yield values[start : start + batch_size]
+
+
+def _activity_filter_fields() -> dict[str, Any]:
+    return {
+        "id": AD.id,
+        "code": AD.code,
+        "database": AD.database,
+        "location": AD.location,
+        "name": AD.name,
+        "product": AD.product,
+        "type": AD.type,
+    }
+
+
+def _apply_activity_filters(qs, filters: dict):
+    field_mapping = _activity_filter_fields()
+    for key, value in filters.items():
+        if key in field_mapping:
+            qs = qs.where(field_mapping[key] == value)
+    return qs
+
+
+def _wrap_activity_dataset(obj):
+    if NODE_PROCESS_CLASS_MAPPING is not None:
+        backend = databases[obj.database].get("backend", "sqlite")
+        cls = NODE_PROCESS_CLASS_MAPPING.get(backend, lambda x: x)
+        return cls(obj)
+    return obj
+
+
 def get_activities(keys, **kwargs):
     """
-    Retrieve multiple activity objects in a single SQL query.
+    Retrieve multiple activity objects using batched SQL queries.
 
     Args:
         keys: An iterable of keys, each being either a tuple (database, code)
@@ -458,47 +517,39 @@ def get_activities(keys, **kwargs):
     """
 
     keys = list(keys)
-    qs = AD.select()
+    if not keys:
+        return []
+
+    field_mapping = _activity_filter_fields()
+    extra_filter_variables = sum(1 for key in kwargs if key in field_mapping)
+    nodes = []
 
     # If keys are tuples, group by database and use an IN clause on code.
     if all(isinstance(k, tuple) for k in keys):
         groups = {}
         for db, code in keys:
             groups.setdefault(db, []).append(code)
-        conditions = []
+        batch_size = _activity_query_batch_size(
+            extra_variables=1 + extra_filter_variables
+        )
         for db, codes in groups.items():
-            conditions.append((AD.database == db) & (AD.code.in_(codes)))
-        qs = qs.where(reduce(operator.or_, conditions))
+            for batch in _iter_batches(codes, batch_size):
+                qs = AD.select().where((AD.database == db) & (AD.code.in_(batch)))
+                qs = _apply_activity_filters(qs, kwargs)
+                nodes.extend(_wrap_activity_dataset(obj) for obj in qs)
     # If keys are integers, assume they are activity ids.
     elif all(isinstance(k, numbers.Integral) for k in keys):
-        qs = qs.where(AD.id.in_(keys))
+        batch_size = _activity_query_batch_size(
+            extra_variables=extra_filter_variables
+        )
+        for batch in _iter_batches(keys, batch_size):
+            qs = AD.select().where(AD.id.in_(batch))
+            qs = _apply_activity_filters(qs, kwargs)
+            nodes.extend(_wrap_activity_dataset(obj) for obj in qs)
     else:
         raise TypeError(
             "All keys must be either tuples (database, code) or integers (ids)."
         )
-
-    # Apply additional filtering from kwargs.
-    field_mapping = {
-        "id": AD.id,
-        "code": AD.code,
-        "database": AD.database,
-        "location": AD.location,
-        "name": AD.name,
-        "product": AD.product,
-        "type": AD.type,
-    }
-    for key, value in kwargs.items():
-        if key in field_mapping:
-            qs = qs.where(field_mapping[key] == value)
-
-    nodes = []
-    for obj in qs:
-        if NODE_PROCESS_CLASS_MAPPING is not None:
-            backend = databases[obj.database].get("backend", "sqlite")
-            cls = NODE_PROCESS_CLASS_MAPPING.get(backend, lambda x: x)
-            nodes.append(cls(obj))
-        else:
-            nodes.append(obj)
 
     if len(nodes) != len(keys):
         logger.error(

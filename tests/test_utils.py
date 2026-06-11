@@ -1,4 +1,5 @@
 import pytest
+import edges.utils as utils
 from edges.utils import (
     format_method_name,
     format_data,
@@ -6,6 +7,7 @@ from edges.utils import (
     get_str,
     safe_eval,
     safe_eval_cached,
+    get_activities,
 )
 
 
@@ -190,3 +192,125 @@ def test_format_data_tracks_embedded_method_weights():
     assert metadata["weighting_metadata"]["effective_source"] == "method"
     assert metadata["weighting_metadata"]["label"] == "embedded method weights"
     assert metadata["weighting_metadata"]["preweighted_rows"] == 1
+
+
+class _FakeExpression:
+    def __init__(self, operation, field=None, value=None, left=None, right=None):
+        self.operation = operation
+        self.field = field
+        self.value = value
+        self.left = left
+        self.right = right
+
+    def __and__(self, other):
+        return _FakeExpression("and", left=self, right=other)
+
+
+class _FakeField:
+    def __init__(self, name):
+        self.name = name
+
+    def __eq__(self, value):
+        return _FakeExpression("eq", field=self.name, value=value)
+
+    def in_(self, values):
+        return _FakeExpression("in", field=self.name, value=tuple(values))
+
+
+class _FakeActivity:
+    def __init__(self, database="fake-db", code=None, id_=None):
+        self.database = database
+        self.code = code
+        self.id = id_
+
+
+def _find_expression(expr, operation, field):
+    if expr is None:
+        return None
+    if expr.operation == operation and expr.field == field:
+        return expr
+    return _find_expression(expr.left, operation, field) or _find_expression(
+        expr.right, operation, field
+    )
+
+
+def test_get_activities_chunks_tuple_keys(monkeypatch):
+    executed_batches = []
+
+    class FakeActivityDataset:
+        database = _FakeField("database")
+        code = _FakeField("code")
+        id = _FakeField("id")
+        location = _FakeField("location")
+        name = _FakeField("name")
+        product = _FakeField("product")
+        type = _FakeField("type")
+
+        @classmethod
+        def select(cls):
+            return FakeQuery()
+
+    class FakeQuery:
+        def __init__(self):
+            self.conditions = []
+
+        def where(self, condition):
+            self.conditions.append(condition)
+            return self
+
+        def __iter__(self):
+            main_condition = self.conditions[0]
+            database = _find_expression(main_condition, "eq", "database").value
+            codes = _find_expression(main_condition, "in", "code").value
+            executed_batches.append(codes)
+            return iter(_FakeActivity(database=database, code=code) for code in codes)
+
+    monkeypatch.setattr(utils, "AD", FakeActivityDataset)
+    monkeypatch.setattr(utils, "NODE_PROCESS_CLASS_MAPPING", None)
+    monkeypatch.setattr(utils, "_get_sqlite_variable_limit", lambda: 23)
+
+    keys = [("fake-db", f"act-{index}") for index in range(35)]
+
+    nodes = get_activities(keys)
+
+    assert len(nodes) == 35
+    assert [len(batch) for batch in executed_batches] == [14, 14, 7]
+
+
+def test_get_activities_chunks_integer_keys(monkeypatch):
+    executed_batches = []
+
+    class FakeActivityDataset:
+        database = _FakeField("database")
+        code = _FakeField("code")
+        id = _FakeField("id")
+        location = _FakeField("location")
+        name = _FakeField("name")
+        product = _FakeField("product")
+        type = _FakeField("type")
+
+        @classmethod
+        def select(cls):
+            return FakeQuery()
+
+    class FakeQuery:
+        def __init__(self):
+            self.conditions = []
+
+        def where(self, condition):
+            self.conditions.append(condition)
+            return self
+
+        def __iter__(self):
+            ids = _find_expression(self.conditions[0], "in", "id").value
+            executed_batches.append(ids)
+            return iter(_FakeActivity(id_=id_) for id_ in ids)
+
+    monkeypatch.setattr(utils, "AD", FakeActivityDataset)
+    monkeypatch.setattr(utils, "NODE_PROCESS_CLASS_MAPPING", None)
+    monkeypatch.setattr(utils, "_get_sqlite_variable_limit", lambda: 23)
+
+    nodes = get_activities(list(range(31)))
+
+    assert len(nodes) == 31
+    assert [len(batch) for batch in executed_batches] == [15, 15, 1]
