@@ -1,6 +1,21 @@
 # Changelog
 
-## 1.3.1 - Upcoming
+## 1.3.2 - Upcoming
+
+### Fixes
+
+- Fixed Brightway activity lookup helpers on large databases by avoiding broad
+  activity scans and improving tuple/code-based lookup paths.
+
+### Examples
+
+- Updated the French hydrogen AWARE example workflow to use the current
+  ecoinvent 3.11 Brightway project name.
+
+### CI
+
+- Fixed the conda build setup in GitHub Actions so the package under test is
+  installed reliably.
 
 ### Geography
 
