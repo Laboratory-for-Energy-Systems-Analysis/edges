@@ -539,9 +539,7 @@ def get_activities(keys, **kwargs):
                 nodes.extend(_wrap_activity_dataset(obj) for obj in qs)
     # If keys are integers, assume they are activity ids.
     elif all(isinstance(k, numbers.Integral) for k in keys):
-        batch_size = _activity_query_batch_size(
-            extra_variables=extra_filter_variables
-        )
+        batch_size = _activity_query_batch_size(extra_variables=extra_filter_variables)
         for batch in _iter_batches(keys, batch_size):
             qs = AD.select().where(AD.id.in_(batch))
             qs = _apply_activity_filters(qs, kwargs)
