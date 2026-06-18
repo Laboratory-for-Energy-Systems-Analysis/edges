@@ -305,6 +305,9 @@ See the [LICENSE.md](LICENSE.md) file for more information.
 For any questions or inquiries, please contact the project maintainer 
 at [romain.sacchi@psi.ch](mailto:romain.sacchi@psi.ch).
 
+For questions or issues around the use of ``edges``, you can also join the
+discussion group at [https://premise.groups.io/g/edgese](https://premise.groups.io/g/edgese).
+
 ## Contributors
 
 - [Romain Sacchi](https://github.com/romainsacchi)
