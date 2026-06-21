@@ -155,6 +155,7 @@ def add_cf_entry(
     value: float,
     uncertainty: dict,
     reporting_split: tuple[dict, ...] | None = None,
+    value_expression: Any | None = None,
     seen_positions: set[tuple[str, int, int]] | None = None,
 ) -> None:
     """
@@ -211,6 +212,8 @@ def add_cf_entry(
         "direction": direction,
         "value": value,
     }
+    if value_expression not in (None, ""):
+        entry["value_expression"] = value_expression
     if uncertainty is not None:
         entry["uncertainty"] = uncertainty
     if reporting_split is not None:
@@ -1075,6 +1078,7 @@ class EdgeLCIA:
         # ----- 2) Run your existing formatting + normalization -----------------------
         # Store full method metadata and exchanges the same way you already do
         self.raw_cfs_data, self.method_metadata = format_data(raw, self.weight_scheme)
+        self._resolve_uncertainty_references(raw)
 
         # check for NaNs in the raw CF data
         assert_no_nans_in_cf_list(self.raw_cfs_data, file_source=self.filepath)
@@ -1136,6 +1140,30 @@ class EdgeLCIA:
         }
 
         self.cf_index = build_cf_index(self.raw_cfs_data)
+
+    def _resolve_uncertainty_references(self, raw_method: Mapping | None) -> None:
+        """Attach top-level uncertainty definitions referenced by CF rows."""
+        if not isinstance(raw_method, Mapping):
+            return
+
+        definitions = raw_method.get("uncertainties") or raw_method.get(
+            "uncertainty_distributions"
+        )
+        if not isinstance(definitions, Mapping):
+            return
+
+        for cf in self.raw_cfs_data or []:
+            ref = cf.get("uncertainty_ref")
+            if not ref or cf.get("uncertainty") is not None:
+                continue
+            if ref not in definitions:
+                raise ValueError(f"Unknown uncertainty_ref '{ref}' in CF row.")
+
+            uncertainty = copy.deepcopy(definitions[ref])
+            uncertainty["ref"] = ref
+            if "uncertainty_negative" in cf:
+                uncertainty["negative"] = int(bool(cf["uncertainty_negative"]))
+            cf["uncertainty"] = uncertainty
 
     def _warn_duplicate_matching_signatures(self) -> None:
         groups = find_duplicate_clips_signatures(self.raw_cfs_data or [])
@@ -1312,10 +1340,14 @@ class EdgeLCIA:
     def _resolve_parameters_for_scenario(
         self, scenario_idx: int, scenario_name: Optional[str] = None
     ) -> dict:
-        """
-        Resolve symbolic parameters for a given scenario, without spamming warnings.
-        - If scenario_name is None, fall back to self.scenario, then first available key.
-        - Warn only if a *provided* scenario_name is missing from parameters.
+        """Resolve symbolic parameters for one scenario/index combination.
+
+        Parameter blocks are expected as ``scenario -> parameter -> index ->
+        value``. The requested ``scenario_idx`` is converted to a string before
+        lookup. If the index is absent, the last value in the parameter mapping
+        is used to preserve legacy behavior. Missing explicitly requested
+        scenarios are logged once through the normal package logger and resolve
+        to an empty parameter set.
         """
         # Determine effective scenario name
         effective_name = (
@@ -1354,6 +1386,22 @@ class EdgeLCIA:
             else:
                 resolved[k] = v
         return resolved
+
+    def _resolve_scenario_name(self, scenario: Optional[str] = None) -> Optional[str]:
+        """Return the scenario name to use for CF evaluation.
+
+        Explicit ``evaluate_cfs(..., scenario=...)`` arguments take precedence,
+        followed by the instance default set in ``__init__``. If neither is set
+        but the method file defines parameter/scenario blocks, the first block is
+        used to preserve existing behavior.
+        """
+        if scenario is not None:
+            return scenario
+        if self.scenario is not None:
+            return self.scenario
+        if isinstance(self.parameters, dict) and self.parameters:
+            return next(iter(self.parameters))
+        return None
 
     def _update_unprocessed_edges(self):
         """
@@ -3615,6 +3663,14 @@ class EdgeLCIA:
             data_blocks = {"biosphere": [], "technosphere": []}
             sample_cache = {}
             k_index = np.arange(self.iterations, dtype=np.int64)
+            scenario_name = self._resolve_scenario_name(scenario)
+
+            resolved_params = self._resolve_parameters_for_scenario(
+                scenario_idx, scenario_name
+            )
+
+            self._last_eval_scenario_name = scenario_name
+            self._last_eval_scenario_idx = scenario_idx
 
             unique = {}
             for cf in self.cfs_mapping:
@@ -3636,10 +3692,12 @@ class EdgeLCIA:
                     samples = sample_cf_distribution(
                         cf=cf,
                         n=self.iterations,
-                        parameters=self.parameters,
+                        parameters=resolved_params,
                         random_state=self.random_state,
                         use_distributions=self.use_distributions,
                         SAFE_GLOBALS=self.SAFE_GLOBALS,
+                        scenario_idx=scenario_idx,
+                        scenario_name=scenario_name,
                     )
                 elif key in sample_cache:
                     samples = sample_cache[key]
@@ -3648,10 +3706,12 @@ class EdgeLCIA:
                     samples = sample_cf_distribution(
                         cf=cf,
                         n=self.iterations,
-                        parameters=self.parameters,
+                        parameters=resolved_params,
                         random_state=rng,
                         use_distributions=self.use_distributions,
                         SAFE_GLOBALS=self.SAFE_GLOBALS,
+                        scenario_idx=scenario_idx,
+                        scenario_name=scenario_name,
                     )
                     sample_cache[key] = samples
 
@@ -3703,16 +3763,7 @@ class EdgeLCIA:
             self.scenario_cfs = []
             self.scenario_cfs_by_matrix = {"biosphere": [], "technosphere": []}
             self.characterization_matrices = {"biosphere": None, "technosphere": None}
-            scenario_name = None
-
-            if scenario is not None:
-                scenario_name = scenario
-            elif self.scenario is not None:
-                scenario_name = self.scenario
-
-            if scenario_name is None and isinstance(self.parameters, dict):
-                if len(self.parameters) > 0:
-                    scenario_name = list(self.parameters.keys())[0]
+            scenario_name = self._resolve_scenario_name(scenario)
 
             resolved_params = self._resolve_parameters_for_scenario(
                 scenario_idx, scenario_name
@@ -3728,16 +3779,22 @@ class EdgeLCIA:
                         self.lca, matrix_type=matrix_key
                     )
 
-                value = self._evaluate_cf_numeric_value(
-                    cf["value"],
-                    resolved_params=resolved_params,
-                    scenario_idx=scenario_idx,
-                )
                 evaluated_split = self._evaluate_reporting_split(
                     cf.get("reporting_split"),
                     resolved_params=resolved_params,
                     scenario_idx=scenario_idx,
                 )
+                split_value = self._weighted_value_from_reporting_split(
+                    evaluated_split
+                )
+                if split_value is None:
+                    value = self._evaluate_cf_numeric_value(
+                        self._raw_cf_value_for_evaluation(cf),
+                        resolved_params=resolved_params,
+                        scenario_idx=scenario_idx,
+                    )
+                else:
+                    value = split_value
 
                 entry = {
                     "supplier": cf["supplier"],
@@ -3762,27 +3819,63 @@ class EdgeLCIA:
             self._sync_characterization_aliases()
 
     def _evaluate_cf_numeric_value(self, raw_value, *, resolved_params, scenario_idx):
-        """Evaluate one numeric or symbolic CF value for deterministic reporting."""
+        """Return a numeric CF value for a literal or parameter expression.
+
+        Common method rows use a bare parameter name such as ``cf_irri_fr`` or a
+        signed parameter such as ``-cf_irri_fr``. Resolve these directly instead
+        of sending them through the generic expression parser, which is much
+        slower for large scenario parameter dictionaries. More complex
+        arithmetic expressions still go through ``safe_eval_cached``.
+        """
+        try:
+            return float(raw_value)
+        except Exception:
+            pass
+
         if isinstance(raw_value, str):
+            expr = raw_value.strip()
+            if expr in resolved_params:
+                return float(resolved_params[expr])
+            if len(expr) > 1 and expr[0] in "+-" and expr[1:] in resolved_params:
+                value = float(resolved_params[expr[1:]])
+                return -value if expr[0] == "-" else value
             try:
                 return float(
                     safe_eval_cached(
-                        raw_value,
+                        expr,
                         parameters=resolved_params,
                         scenario_idx=scenario_idx,
                         SAFE_GLOBALS=self.SAFE_GLOBALS,
                     )
                 )
             except Exception as e:
+                param_names = ", ".join(sorted(map(str, resolved_params))[:10])
+                if len(resolved_params) > 10:
+                    param_names += ", ..."
                 self.logger.error(
-                    f"Failed to evaluate symbolic CF '{raw_value}' with parameters {resolved_params}. Error: {e}"
+                    "Failed to evaluate symbolic CF %r with scenario_idx=%r "
+                    "and parameters [%s]. Error: %s",
+                    raw_value,
+                    scenario_idx,
+                    param_names,
+                    e,
                 )
                 return 0.0
 
-        try:
-            return float(raw_value)
-        except Exception:
-            return 0.0
+        return 0.0
+
+    @staticmethod
+    def _raw_cf_value_for_evaluation(cf: Mapping[str, Any]):
+        """Return the expression-bearing value field for a CF row.
+
+        ``value_expression`` is an optional dynamic override used by methods that
+        also keep a numeric baseline in ``value``. Existing methods that store
+        expressions directly in ``value`` continue to use ``value``.
+        """
+        expr = cf.get("value_expression")
+        if expr not in (None, ""):
+            return expr
+        return cf.get("value")
 
     def _evaluate_reporting_split(
         self,
@@ -3791,15 +3884,25 @@ class EdgeLCIA:
         resolved_params,
         scenario_idx,
     ) -> tuple[dict, ...] | None:
-        """Evaluate stored split components for deterministic reporting."""
+        """Evaluate aggregate fallback split rows for reporting and scoring.
+
+        Geographic fallback can represent an aggregate consumer location as a
+        weighted split over country-specific CF rows. Each component may carry
+        ``value_expression`` and ``weight_expression``. This method evaluates
+        those expressions for the selected scenario/year and, when dynamic
+        weights are present, recomputes component shares from the evaluated
+        weights.
+        """
         if not reporting_split:
             return None
 
         evaluated = []
+        has_dynamic_weights = False
         for component in reporting_split:
             location = component.get("consumer_location")
             share = component.get("share")
             raw_weight = component.get("weight")
+            raw_weight_expression = component.get("weight_expression")
             if location is None or share is None:
                 continue
 
@@ -3814,7 +3917,7 @@ class EdgeLCIA:
                 "consumer_location": location,
                 "share": share,
                 "value": self._evaluate_cf_numeric_value(
-                    component.get("value"),
+                    self._raw_cf_value_for_evaluation(component),
                     resolved_params=resolved_params,
                     scenario_idx=scenario_idx,
                 ),
@@ -3824,10 +3927,62 @@ class EdgeLCIA:
                     entry["weight"] = float(raw_weight)
                 except Exception:
                     pass
+            if raw_weight_expression not in (None, ""):
+                entry["weight"] = self._evaluate_cf_numeric_value(
+                    raw_weight_expression,
+                    resolved_params=resolved_params,
+                    scenario_idx=scenario_idx,
+                )
+                has_dynamic_weights = True
 
             evaluated.append(entry)
 
+        if has_dynamic_weights and evaluated:
+            weights = []
+            for entry in evaluated:
+                try:
+                    weight = float(entry.get("weight", 0.0))
+                except Exception:
+                    weight = 0.0
+                if not np.isfinite(weight) or weight < 0.0:
+                    weight = 0.0
+                weights.append(weight)
+
+            total = float(np.sum(weights, dtype=np.float64))
+            if total > 0.0:
+                for entry, weight in zip(evaluated, weights):
+                    entry["share"] = float(weight / total)
+            else:
+                for entry in evaluated:
+                    entry["share"] = 0.0
+
         return tuple(evaluated) if evaluated else None
+
+    @staticmethod
+    def _weighted_value_from_reporting_split(reporting_split) -> float | None:
+        """Return the weighted CF value implied by an evaluated reporting split.
+
+        ``None`` means there was no split and the caller should evaluate the
+        parent CF row normally. A numeric return value, including ``0.0``, is the
+        aggregate CF to write to the characterization matrix.
+        """
+        if not reporting_split:
+            return None
+
+        total = 0.0
+        found = False
+        for component in reporting_split:
+            try:
+                share = float(component.get("share", 0.0))
+                value = float(component.get("value"))
+            except Exception:
+                continue
+            if share <= 0.0:
+                continue
+            total += share * value
+            found = True
+
+        return total if found else 0.0
 
     def _uses_inventory_distributions(self) -> bool:
         """Return True when inventory uncertainty should be propagated across iterations."""
@@ -4138,7 +4293,6 @@ class EdgeLCIA:
             self.score = total_score
             self._sync_inventory_aliases()
 
-    # --- Add these helpers inside EdgeLCIA -----------------------------------
     def _covered_positions_from_characterization(
         self, matrix_type: str | None = None
     ) -> set[tuple[int, int]]:
@@ -4173,22 +4327,29 @@ class EdgeLCIA:
         return set(zip(ii.tolist(), jj.tolist()))
 
     def _evaluate_cf_value_for_redo(self, cf: dict, scenario_idx, scenario_name):
-        """
-        Deterministic path: evaluate a single CF value for the redo.
-        Mirrors the logic in evaluate_cfs() for a single entry.
+        """Evaluate one deterministic CF entry during ``redo_lcia``.
+
+        This mirrors the deterministic branch of ``evaluate_cfs``: aggregate
+        fallback entries are evaluated from their reporting split when present,
+        otherwise the row-level ``value_expression``/``value`` is evaluated.
         """
         params = self._resolve_parameters_for_scenario(scenario_idx, scenario_name)
+        evaluated_split = self._evaluate_reporting_split(
+            cf.get("reporting_split"),
+            resolved_params=params,
+            scenario_idx=scenario_idx,
+        )
+        split_value = self._weighted_value_from_reporting_split(evaluated_split)
+        if split_value is not None:
+            return split_value, evaluated_split
+
         return (
             self._evaluate_cf_numeric_value(
-                cf["value"],
+                self._raw_cf_value_for_evaluation(cf),
                 resolved_params=params,
                 scenario_idx=scenario_idx,
             ),
-            self._evaluate_reporting_split(
-                cf.get("reporting_split"),
-                resolved_params=params,
-                scenario_idx=scenario_idx,
-            ),
+            evaluated_split,
         )
 
     def redo_lcia(
@@ -4378,6 +4539,33 @@ class EdgeLCIA:
             data_blocks = {"biosphere": [], "technosphere": []}
             sample_cache = {}
             k_index = np.arange(self.iterations, dtype=np.int64)
+            effective_scenario_name = (
+                scenario
+                if scenario is not None
+                else (
+                    self._last_eval_scenario_name
+                    if getattr(self, "_last_eval_scenario_name", None) is not None
+                    else self.scenario
+                )
+            )
+            if (
+                effective_scenario_name is None
+                and isinstance(self.parameters, dict)
+                and self.parameters
+            ):
+                effective_scenario_name = next(iter(self.parameters), None)
+            effective_scenario_idx = (
+                scenario_idx
+                if scenario_idx is not None
+                else (
+                    self._last_eval_scenario_idx
+                    if getattr(self, "_last_eval_scenario_idx", None) is not None
+                    else 0
+                )
+            )
+            resolved_params = self._resolve_parameters_for_scenario(
+                effective_scenario_idx, effective_scenario_name
+            )
 
             for cf in new_cf_entries:
                 matrix_type = self._matrix_type_for_direction(cf.get("direction"))
@@ -4386,10 +4574,12 @@ class EdgeLCIA:
                     samples = sample_cf_distribution(
                         cf=cf,
                         n=self.iterations,
-                        parameters=self.parameters,
+                        parameters=resolved_params,
                         random_state=self.random_state,
                         use_distributions=self.use_distributions,
                         SAFE_GLOBALS=self.SAFE_GLOBALS,
+                        scenario_idx=effective_scenario_idx,
+                        scenario_name=effective_scenario_name,
                     )
                 elif key in sample_cache:
                     samples = sample_cache[key]
@@ -4398,10 +4588,12 @@ class EdgeLCIA:
                     samples = sample_cf_distribution(
                         cf=cf,
                         n=self.iterations,
-                        parameters=self.parameters,
+                        parameters=resolved_params,
                         random_state=rng,
                         use_distributions=self.use_distributions,
                         SAFE_GLOBALS=self.SAFE_GLOBALS,
+                        scenario_idx=effective_scenario_idx,
+                        scenario_name=effective_scenario_name,
                     )
                     sample_cache[key] = samples
 

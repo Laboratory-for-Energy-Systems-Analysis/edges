@@ -891,7 +891,9 @@ def compute_average_cf(
     def _cf_signature(cf: dict) -> tuple:
         # Pull once to locals (avoid many dict.get calls)
         # Choose a small set of fields that make equal CFs sort adjacent/stably
-        v = cf.get("value")
+        v = cf.get("value_expression")
+        if v in (None, ""):
+            v = cf.get("value")
         w = cf.get("weight")
         u = cf.get("unit")
         sym = cf.get("symbolic")  # expression or None
@@ -915,6 +917,14 @@ def compute_average_cf(
     def _unc_signature(unc: dict | None) -> tuple:
         if not unc:
             return ("",)
+        ref = unc.get("ref")
+        if ref is not None:
+            neg = unc.get("negative", None)
+            return (
+                "ref",
+                ref,
+                1 if neg in (1, True) else 0 if neg in (0, False) else -1,
+            )
         dist = unc.get("distribution", "")
         neg = unc.get("negative", None)
         # Shallow, order-stable snapshot of top-level parameters only
@@ -1081,8 +1091,10 @@ def compute_average_cf(
     # ---------- 5) Deterministic ordering without deep freezing ----------
     matched.sort(key=lambda t: (t[0], t[1], _cf_signature(t[2])))
 
-    # ---------- 6) Build and normalize weights ----------
-    # Pull weights once; avoid repeated cf.get in loops
+    # ---------- 6) Build and normalize baseline weights ----------
+    # Pull weights once; avoid repeated cf.get in loops. Numeric ``weight`` remains
+    # the fallback/availability weight; optional ``weight_expression`` is used for
+    # scenario-dependent aggregate CF expressions below.
     weights = []
     for _s, _c, cf in matched:
         w = cf.get("weight", 0.0)
@@ -1117,17 +1129,61 @@ def compute_average_cf(
 
     # ---------- 7) Expression assembly (uses matched order) ----------
     # Use shallow value access (no deep repr/formatting)
+    def _weight_expression(cf: dict, fallback_weight: float) -> str:
+        expr_value = cf.get("weight_expression")
+        if expr_value not in (None, ""):
+            return f"max(0.0, ({expr_value}))"
+        return repr(float(fallback_weight))
+
+    def _value_expression(cf: dict) -> str:
+        expr_value = cf.get("value_expression")
+        if expr_value not in (None, ""):
+            return str(expr_value)
+        return str(cf.get("value"))
+
+    has_dynamic_weights = any(
+        cf.get("weight_expression") not in (None, "") for _s, _c, cf in matched
+    )
+
     expressions = []
-    for (_s, _c, cf), sh in zip(matched, shares):
-        if sh > 0.0:
-            expressions.append(f"({float(sh)!r} * ({cf.get('value')}))")
-    expr = " + ".join(expressions)
+    if has_dynamic_weights and len(matched) > 1:
+        numerator_terms = []
+        denominator_terms = []
+        for (_s, _c, cf), sh, w in zip(matched, shares, weights):
+            if sh <= 0.0:
+                continue
+            w_expr = _weight_expression(cf, w)
+            numerator_terms.append(f"(({w_expr}) * ({_value_expression(cf)}))")
+            denominator_terms.append(f"({w_expr})")
+
+        if numerator_terms:
+            numerator = " + ".join(numerator_terms)
+            denominator = " + ".join(denominator_terms)
+            expr = f"(({numerator}) / max(1e-30, ({denominator})))"
+        else:
+            expr = 0
+    else:
+        for (_s, _c, cf), sh in zip(matched, shares):
+            if sh > 0.0:
+                expressions.append(f"({float(sh)!r} * ({_value_expression(cf)}))")
+        expr = " + ".join(expressions)
+
     reporting_split = tuple(
         {
             "consumer_location": c_loc,
             "share": float(sh),
             "value": cf.get("value"),
+            **(
+                {"value_expression": cf.get("value_expression")}
+                if cf.get("value_expression") not in (None, "")
+                else {}
+            ),
             "weight": float(w),
+            **(
+                {"weight_expression": cf.get("weight_expression")}
+                if cf.get("weight_expression") not in (None, "")
+                else {}
+            ),
         }
         for (_s, c_loc, cf), sh, w in zip(matched, shares, weights)
         if sh > 0.0

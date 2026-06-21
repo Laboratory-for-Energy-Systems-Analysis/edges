@@ -224,6 +224,45 @@ def test_compute_average_cf_returns_reporting_split_for_weighted_average():
     )
 
 
+def test_compute_average_cf_uses_value_expression_for_dynamic_average():
+    raw_cfs = [
+        {
+            "supplier": {"name": "Oil", "location": "GLO"},
+            "consumer": {"location": "CH"},
+            "value": 10,
+            "value_expression": "cf_ch",
+            "weight": 1,
+            "weight_expression": "wt_ch",
+        },
+        {
+            "supplier": {"name": "Oil", "location": "GLO"},
+            "consumer": {"location": "DE"},
+            "value": 20,
+            "value_expression": "cf_de",
+            "weight": 3,
+            "weight_expression": "wt_de",
+        },
+    ]
+
+    result, matched_cf, _, reporting_split = compute_average_cf(
+        candidate_suppliers=["GLO"],
+        candidate_consumers=["CH", "DE"],
+        supplier_info={"name": "Oil", "location": "GLO"},
+        consumer_info={"location": "RER"},
+        cf_index=build_cf_index(raw_cfs),
+        required_supplier_fields={"name", "location"},
+        required_consumer_fields={"location"},
+    )
+
+    assert matched_cf is None
+    assert "cf_ch" in result
+    assert "cf_de" in result
+    assert "wt_ch" in result
+    assert "wt_de" in result
+    assert reporting_split[0]["value"] == 10
+    assert reporting_split[0]["value_expression"] == "cf_ch"
+
+
 def test_compute_average_cf_keeps_single_split_for_multi_candidate_consumer_fallback():
     raw_cfs = [
         {

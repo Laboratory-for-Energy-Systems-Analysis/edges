@@ -115,6 +115,7 @@ act = bw2data.Database("ecoinvent-3.10-cutoff").random()
 
 # Define a method
 method = ('AWARE 2.0', 'Country', 'unspecified', 'yearly')
+# Prospective variant: ('AWARE 2.0 prospective', 'Country', 'all', 'yearly')
 
 # Initialize the LCA object
 LCA = EdgeLCIA({act: 1}, method)
@@ -278,6 +279,12 @@ for idx in {"2020", "2050", "2100"}:
     print(f"Scenario (CO₂ {params['some scenario']['co2ppm'][idx]} ppm): Impact = {lcia.score}")
 
 ```
+
+Scenario-dependent methods can store expressions directly in `value`, as older
+method files do, or keep a numeric baseline `value` and use `value_expression`
+for the dynamic scenario/year value. Regionalized methods can similarly pair
+numeric `weight` with `weight_expression`; aggregate fallback shares are
+recomputed from evaluated dynamic weights during `evaluate_cfs(...)`.
 
 
 ## Data Sources

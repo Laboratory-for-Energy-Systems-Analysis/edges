@@ -23,6 +23,10 @@ AWARE 2.0
 - ``("AWARE 2.0", "Country", "irri", "yearly")``
 - ``("AWARE 2.0", "Country", "non_irri", "yearly")``
 - ``("AWARE 2.0", "Country", "unspecified", "yearly")``
+- ``("AWARE 2.0 prospective", "Country", "all", "yearly")``
+- ``("AWARE 2.0 prospective", "Country", "irri", "yearly")``
+- ``("AWARE 2.0 prospective", "Country", "non_irri", "yearly")``
+- ``("AWARE 2.0 prospective", "Country", "unspecified", "yearly")``
 
 These four methods present different scopes:
 
@@ -96,6 +100,53 @@ Seitfudem, G., Berger, M., Schmied, H. M., & Boulay, A.-M. (2025).
 The updated and improved method for water scarcity impact assessment in LCA, AWARE2.0.
 Journal of Industrial Ecology, 1–17.
 https://doi.org/10.1111/jiec.70023
+
+Prospective AWARE 2.0
+^^^^^^^^^^^^^^^^^^^^^
+
+The prospective variants provide country-average annual CFs for ``SSP126``,
+``SSP370``, and ``SSP585`` in five-year steps from 2019 to 2049. They use the
+same four scopes as the static AWARE 2.0 methods; the ``all`` variant uses CPC
+classification to distinguish agricultural and non-agricultural consumers.
+Rows keep numeric ``value`` and ``weight`` fields for the baseline
+``SSP126``/``2019`` case, while ``value_expression`` and
+``weight_expression`` select the requested scenario/year during evaluation.
+This keeps the files close to the static AWARE 2.0 structure while allowing
+scenario-dependent country averages and aggregate fallback weights.
+
+Evaluate a specific scenario/year with:
+
+.. code-block:: python
+
+    lcia = EdgeLCIA(
+        demand={act: 1},
+        method=("AWARE 2.0 prospective", "Country", "all", "yearly"),
+        scenario="SSP585",
+    )
+    lcia.lci()
+    lcia.apply_strategies()
+    lcia.evaluate_cfs(scenario_idx="2049")
+    lcia.lcia()
+
+The prospective methods include country-level weights for aggregate fallback.
+When ``use_distributions=True``, country/category CFs with basin geometry
+coverage sample basin-specific CFs using basin weights allocated to countries
+from the AWARE basin GeoPackage.
+
+In deterministic mode, the exchange mapping can be performed once and the same
+``EdgeLCIA`` object can be re-evaluated for each scenario/year pair:
+
+.. code-block:: python
+
+    for scenario in ["SSP126", "SSP370", "SSP585"]:
+        for year in ["2019", "2024", "2029", "2034", "2039", "2044", "2049"]:
+            lcia.evaluate_cfs(scenario=scenario, scenario_idx=year)
+            lcia.lcia()
+            print(scenario, year, lcia.score)
+
+For stochastic runs, pass ``use_distributions=True`` and ``iterations=...`` to
+``EdgeLCIA``. Scenario/year-specific ``values_by_scenario`` and
+``weights_by_scenario`` arrays are selected during ``evaluate_cfs``.
 
 ---
 

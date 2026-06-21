@@ -161,6 +161,7 @@ def map_exchanges_clips(lcia: "EdgeLCIA"):
             indices=[pair],
             value=rule["value"],
             uncertainty=rule.get("uncertainty"),
+            value_expression=rule.get("value_expression"),
             seen_positions=lcia._seen_positions,
         )
 

@@ -203,6 +203,14 @@ trusted code and should come from the user or another trusted source.
 
 This allows integration with scenario data (e.g., from RCPs or IAMs).
 
+Scenario-dependent method rows can either store expressions directly in
+``value`` or keep a numeric baseline in ``value`` and put the dynamic expression
+in ``value_expression``. The latter is useful for prospective regionalized
+methods because the baseline row remains readable while
+``evaluate_cfs(scenario=..., scenario_idx=...)`` selects the requested
+scenario/year value. If aggregate fallback rows include ``weight_expression``,
+their country shares are recalculated from the evaluated weights.
+
 ---
 
 Uncertainty-aware LCIA

@@ -23,6 +23,16 @@ def test_sample_expression_cf():
     assert np.all(samples == 10)
 
 
+def test_sample_cf_prefers_value_expression_over_baseline_value():
+    cf = {"value": 1.0, "value_expression": "A * 2"}
+    parameters = {"A": 5}
+    random_state = np.random.default_rng(42)
+    samples = sample_cf_distribution(
+        cf, parameters=parameters, n=100, random_state=random_state
+    )
+    assert np.all(samples == 10)
+
+
 def test_sample_uniform_distribution():
     cf = {
         "value": 0,
@@ -182,6 +192,35 @@ def test_fallback_to_constant_on_unknown_distribution():
         cf, parameters=parameters, n=100, random_state=random_state
     )
     assert np.allclose(samples, 7.5)
+
+
+def test_sample_discrete_empirical_distribution_by_scenario_and_year():
+    cf = {
+        "value": 0,
+        "uncertainty": {
+            "distribution": "discrete_empirical",
+            "parameters": {
+                "values_by_scenario": {
+                    "SSP126": {"2019": [1.0, 2.0], "2024": [10.0, 20.0]},
+                    "SSP585": {"2019": [3.0, 4.0], "2024": [30.0, 40.0]},
+                },
+                "weights_by_scenario": {
+                    "SSP126": {"2019": [1.0, 0.0], "2024": [0.0, 1.0]},
+                    "SSP585": {"2019": [1.0, 0.0], "2024": [0.0, 1.0]},
+                },
+            },
+        },
+    }
+    random_state = np.random.default_rng(42)
+    samples = sample_cf_distribution(
+        cf,
+        parameters={},
+        n=100,
+        random_state=random_state,
+        scenario_name="SSP585",
+        scenario_idx="2024",
+    )
+    assert np.allclose(samples, 40.0)
 
 
 def test_log_normal_distribution_avoids_boundary_pile_up():

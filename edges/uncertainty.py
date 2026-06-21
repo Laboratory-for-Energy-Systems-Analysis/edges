@@ -37,8 +37,14 @@ def make_distribution_key(cf):
     :param cf: CF dictionary potentially containing an 'uncertainty' entry.
     :return: JSON string key without 'negative' flag, or None if no uncertainty.
     """
+    unc_ref = cf.get("uncertainty_ref")
+    if unc_ref is not None:
+        return f"ref:{unc_ref}"
+
     unc = cf.get("uncertainty")
     if unc:
+        if unc.get("ref") is not None:
+            return f"ref:{unc['ref']}"
         unc_copy = dict(unc)  # shallow copy
         unc_copy.pop("negative", None)  # remove if present
         return json.dumps(unc_copy, sort_keys=True)
@@ -158,12 +164,21 @@ def sample_cf_distribution(
     random_state: np.random._generator.Generator,
     use_distributions: bool = True,
     SAFE_GLOBALS: dict = None,
+    scenario_idx: int | str = 0,
+    scenario_name: str | None = None,
 ) -> np.ndarray:
     """
     Draw samples from the CF's uncertainty distribution (or constant fallback).
 
     If no uncertainty or distributions are disabled, returns a length-``n`` array
-    filled with the (possibly evaluated) deterministic CF value.
+    filled with the deterministic CF value. ``value_expression`` is preferred
+    over ``value`` when present, allowing methods to keep a numeric baseline
+    value while evaluating scenario-dependent values at runtime.
+
+    ``discrete_empirical`` distributions can define ``values_by_scenario`` and
+    ``weights_by_scenario`` mappings of ``scenario -> year/index -> sequence``.
+    These scenario/year-specific arrays are selected using ``scenario_name`` and
+    ``scenario_idx``.
 
     :param cf: CF dictionary with 'value' and optional 'uncertainty' specification.
     :param n: Number of samples to generate.
@@ -171,30 +186,78 @@ def sample_cf_distribution(
     :param random_state: RNG to use for sampling.
     :param use_distributions: If False, bypass uncertainty and return constants.
     :param SAFE_GLOBALS: Safe globals for expression evaluation.
+    :param scenario_idx: Scenario year/index used for scenario-aware uncertainty data.
+    :param scenario_name: Optional scenario name used for scenario-aware uncertainty data.
     :return: NumPy array of shape (n,) with sampled CF values.
 
     :raises ValueError: If sampling fails due to invalid distribution parameters.
     """
-    if not use_distributions or cf.get("uncertainty") is None:
-        # If value is a string (expression), evaluate once
-        value = cf["value"]
-        if isinstance(value, str):
-            value = safe_eval(
-                expr=value,
-                parameters=parameters,
-                scenario_idx=0,
-                SAFE_GLOBALS=SAFE_GLOBALS,
+
+    def _eval_atom(item):
+        if isinstance(item, str):
+            expr = item.strip()
+            if expr in parameters:
+                return parameters[expr]
+            if len(expr) > 1 and expr[0] in "+-" and expr[1:] in parameters:
+                value = float(parameters[expr[1:]])
+                return -value if expr[0] == "-" else value
+            return float(
+                safe_eval(
+                    expr=expr,
+                    parameters=parameters,
+                    scenario_idx=scenario_idx,
+                    SAFE_GLOBALS=SAFE_GLOBALS,
+                )
             )
-        return np.full(n, value, dtype=float)
+        return item
+
+    def _deterministic_value() -> float:
+        value = cf.get("value_expression")
+        if value in (None, ""):
+            value = cf["value"]
+        return float(_eval_atom(value))
+
+    if not use_distributions or cf.get("uncertainty") is None:
+        return np.full(n, _deterministic_value(), dtype=float)
 
     unc = cf["uncertainty"]
     dist_name = unc["distribution"]
     params = unc["parameters"]
 
+    def _select_scenario_values(base_name: str):
+        """Select scenario/year-specific distribution arrays when available."""
+        by_scenario = params.get(f"{base_name}_by_scenario")
+        if not isinstance(by_scenario, dict):
+            return None
+
+        selected_name = scenario_name
+        if selected_name not in by_scenario:
+            selected_name = next(iter(by_scenario), None)
+        if selected_name is None:
+            return None
+
+        by_index = by_scenario.get(selected_name)
+        if not isinstance(by_index, dict):
+            return by_index
+
+        idx = str(scenario_idx)
+        if idx in by_index:
+            return by_index[idx]
+        if by_index:
+            return list(by_index.values())[-1]
+        return None
+
     try:
         if dist_name == "discrete_empirical":
-            values = params["values"]
-            weights = np.array(params["weights"])
+            values = _select_scenario_values("values")
+            if values is None:
+                values = params["values"]
+
+            raw_weights = _select_scenario_values("weights")
+            if raw_weights is None:
+                raw_weights = params["weights"]
+
+            weights = np.array([_eval_atom(w) for w in raw_weights], dtype=float)
             if weights.sum() == 0:
                 logger.warning(
                     "All weights are zero in discrete_empirical; using equal weights."
@@ -218,17 +281,11 @@ def sample_cf_distribution(
                         random_state=random_state,
                         use_distributions=use_distributions,
                         SAFE_GLOBALS=SAFE_GLOBALS,
+                        scenario_idx=scenario_idx,
+                        scenario_name=scenario_name,
                     )[0]
                 else:
-                    if isinstance(item, str):
-                        # evaluate deterministic expression atom
-                        item = safe_eval(
-                            expr=item,
-                            parameters=parameters,
-                            scenario_idx=0,
-                            SAFE_GLOBALS=SAFE_GLOBALS,
-                        )
-                    samples[i] = item
+                    samples[i] = _eval_atom(item)
 
         elif dist_name == "uniform":
             samples = random_state.uniform(params["minimum"], params["maximum"], size=n)
@@ -301,7 +358,7 @@ def sample_cf_distribution(
             logger.warning(
                 "Unknown distribution '%s'; falling back to constant value.", dist_name
             )
-            samples = np.full(n, cf["value"], dtype=float)
+            samples = np.full(n, _deterministic_value(), dtype=float)
 
     except ValueError as e:
         logger.error(

@@ -1,0 +1,155 @@
+{
+  "country_locations": 265,
+  "geometry": {
+    "country_geometries": 176,
+    "country_geometry_methods": {
+      "ISO_A2": 170,
+      "ISO_A2_EH": 4,
+      "ecoinvent_country_name": 2
+    },
+    "countries_without_geometry": [
+      "AD",
+      "AG",
+      "AI",
+      "AS",
+      "AU-AC",
+      "AW",
+      "AX",
+      "Akrotiri",
+      "Australia, including overseas territories",
+      "BB",
+      "BH",
+      "BL",
+      "BM",
+      "BQ",
+      "BV",
+      "Bajo Nuevo",
+      "CC",
+      "CK",
+      "CV",
+      "CW",
+      "CX",
+      "Clipperton Island",
+      "Coral Sea Islands",
+      "Crimea",
+      "Cyprus No Mans Area",
+      "DM",
+      "Dhekelia Base",
+      "FM",
+      "FO",
+      "GD",
+      "GF",
+      "GG",
+      "GI",
+      "GP",
+      "GS",
+      "GU",
+      "Guantanamo Bay",
+      "HK",
+      "HM",
+      "IM",
+      "IO",
+      "JE",
+      "KI",
+      "KM",
+      "KN",
+      "KY",
+      "LC",
+      "LI",
+      "MC",
+      "MF",
+      "MH",
+      "MO",
+      "MP",
+      "MQ",
+      "MS",
+      "MT",
+      "MU",
+      "MV",
+      "NF",
+      "NR",
+      "NU",
+      "PF",
+      "PM",
+      "PN",
+      "PW",
+      "RE",
+      "SC",
+      "SG",
+      "SH",
+      "SJ",
+      "SM",
+      "ST",
+      "SX",
+      "Scarborough Reef",
+      "Serranilla Bank",
+      "Siachen Glacier",
+      "Spratly Islands",
+      "TC",
+      "TK",
+      "TO",
+      "TV",
+      "UM",
+      "VA",
+      "VC",
+      "VG",
+      "VI",
+      "WF",
+      "WS",
+      "YT"
+    ]
+  },
+  "overlay": {
+    "basins_with_geometry": 9406,
+    "basin_country_intersections": 9359,
+    "countries_with_basin_intersections": 176,
+    "basins_intersecting_countries": 8310
+  },
+  "validation": {
+    "distributions": 515,
+    "validation_points": 10815,
+    "median_relative_error": 0.045710334,
+    "p95_relative_error": 0.58362228,
+    "max_relative_error": 4.1651203,
+    "points_above_10pct_error": 3259,
+    "points_above_25pct_error": 1439
+  },
+  "outputs": {
+    "AWARE 2.0 prospective_Country_irri_yearly.json": {
+      "exchanges": 2050,
+      "parameters_per_scenario": {
+        "SSP126": 410,
+        "SSP370": 410,
+        "SSP585": 410
+      },
+      "uncertainties": 167
+    },
+    "AWARE 2.0 prospective_Country_non_irri_yearly.json": {
+      "exchanges": 2350,
+      "parameters_per_scenario": {
+        "SSP126": 470,
+        "SSP370": 470,
+        "SSP585": 470
+      },
+      "uncertainties": 174
+    },
+    "AWARE 2.0 prospective_Country_unspecified_yearly.json": {
+      "exchanges": 2360,
+      "parameters_per_scenario": {
+        "SSP126": 472,
+        "SSP370": 472,
+        "SSP585": 472
+      },
+      "uncertainties": 174
+    },
+    "AWARE 2.0 prospective_Country_all_yearly.json": {
+      "exchanges": 6760,
+      "parameters_per_scenario": {
+        "SSP126": 1352,
+        "SSP370": 1352,
+        "SSP585": 1352
+      },
+      "uncertainties": 515
+    }
+  }
+}

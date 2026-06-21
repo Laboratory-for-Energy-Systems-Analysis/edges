@@ -104,10 +104,73 @@ method calls are rejected. Python callables passed through ``allowed_functions``
 are trusted code; the expression sandbox restricts the method expression, not
 the implementation of those callables.
 
+The optional ``value_expression`` field can be used together with a numeric
+``value`` for scenario-dependent methods. ``value`` remains the numeric
+baseline value stored in the method row; ``value_expression`` is evaluated at CF
+evaluation time when parameters or scenarios are selected. If
+``value_expression`` is absent, ``value`` is used as before, so older methods
+with string expressions directly in ``value`` remain valid.
+
+This pattern is useful for prospective methods where the JSON row should remain
+readable as a baseline method, while still selecting scenario/year-specific
+parameters during evaluation:
+
+.. code-block:: json
+
+    {
+      "value": -80.5,
+      "value_expression": "-cf_irri_ad"
+    }
+
 Weight Field
 ^^^^^^^^^^^^
 
 The optional ``weight`` field is used when multiple CFs are available for a supplier-consumer pair (e.g., in regionalized methods). Weights are normalized and used to compute a weighted average.
+
+The optional ``weight_expression`` field can be used together with ``weight`` for
+scenario-dependent methods. ``weight`` remains the numeric baseline used for
+geographic availability and ordering; ``weight_expression`` is evaluated at CF
+evaluation time when aggregate fallback CFs are built from country-level rows.
+When dynamic weights are present in an aggregate fallback split, Edges
+recomputes the split shares from the evaluated weights before calculating the
+aggregate CF.
+
+Uncertainty References
+^^^^^^^^^^^^^^^^^^^^^^
+
+Large methods can define shared top-level uncertainty distributions under
+``uncertainties`` and reference them from exchange rows with
+``uncertainty_ref``. This avoids duplicating the same distribution for multiple
+matching-equivalent water flow signatures. If an exchange needs the sampled
+distribution sign flipped, set ``uncertainty_negative`` to ``1``.
+
+For ``discrete_empirical`` uncertainties, distributions can be scenario- and
+year-specific:
+
+.. code-block:: json
+
+    {
+      "distribution": "discrete_empirical",
+      "parameters": {
+        "values_by_scenario": {
+          "SSP585": {
+            "2049": [12.0, 20.0, 35.0]
+          }
+        },
+        "weights_by_scenario": {
+          "SSP585": {
+            "2049": [0.2, 0.5, 0.3]
+          }
+        }
+      }
+    }
+
+These arrays are selected by ``evaluate_cfs(scenario=..., scenario_idx=...)``.
+If the requested scenario is absent, the sampler currently falls back to the
+first scenario in the uncertainty definition; if the requested year/index is
+absent, it falls back to the last value in that scenario. Generated method files
+should therefore keep scenario and year labels consistent with the intended
+evaluation calls.
 
 Matching Logic
 --------------
