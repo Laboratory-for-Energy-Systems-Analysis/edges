@@ -1345,11 +1345,12 @@ class EdgeLCIA:
         """Resolve symbolic parameters for one scenario/index combination.
 
         Parameter blocks are expected as ``scenario -> parameter -> index ->
-        value``. The requested ``scenario_idx`` is converted to a string before
-        lookup. If the index is absent, the last value in the parameter mapping
-        is used to preserve legacy behavior. Missing explicitly requested
-        scenarios are logged once through the normal package logger and resolve
-        to an empty parameter set.
+        value``. Exact index matches are always used. Missing numeric year
+        indices are interpolated only when the method metadata declares the
+        supported interpolation policy; otherwise the last value in the
+        parameter mapping is used to preserve legacy behavior. Missing
+        explicitly requested scenarios are logged once through the normal
+        package logger and resolve to an empty parameter set.
         """
         # Determine effective scenario name
         effective_name = (
@@ -1395,7 +1396,7 @@ class EdgeLCIA:
         return resolved
 
     def _interpolation_policy(self) -> Mapping[str, Any] | None:
-        """Return the active interpolation policy if the method declares one."""
+        """Return the supported method interpolation policy, if declared."""
         metadata = getattr(self, "method_metadata", None)
         if not isinstance(metadata, Mapping):
             return None
@@ -3654,6 +3655,9 @@ class EdgeLCIA:
           (i, j, k) where k indexes Monte Carlo iterations.
         - If symbolic expressions are present, they are resolved using the parameter set
           for the selected scenario and year.
+        - Missing numeric years are interpolated only when the method metadata
+          declares the supported interpolation policy; otherwise parameter
+          lookup keeps the legacy exact-or-last fallback.
         - If deterministic, builds a 2D matrix with direct values.
 
         Notes

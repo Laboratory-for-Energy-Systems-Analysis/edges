@@ -113,10 +113,11 @@ Rows keep numeric ``value`` and ``weight`` fields for the baseline
 ``weight_expression`` select the requested scenario/year during evaluation.
 This keeps the files close to the static AWARE 2.0 structure while allowing
 scenario-dependent country averages and aggregate fallback weights.
-Requested years between five-year data points are linearly interpolated.
-Requested years outside 2019-2049 use the closest available endpoint by
-default.
-The method files document this policy with explicit interpolation metadata:
+Because the prospective AWARE method files declare the supported interpolation
+policy, requested years between five-year data points are linearly
+interpolated. Requested years outside 2019-2049 use the closest available
+endpoint by default. The method files document this policy with explicit
+metadata:
 
 .. code-block:: json
 

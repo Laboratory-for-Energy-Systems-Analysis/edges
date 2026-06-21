@@ -392,6 +392,9 @@ class CostLCIA(EdgeLCIA):
         -----
         - The resulting values populate the `characterization_matrix`, used in cost impact calculations.
         - Can be used to build scenario-based or dynamic LCC models.
+        - Missing numeric years are interpolated only when the method metadata
+          declares the supported interpolation policy; otherwise parameter
+          lookup keeps the legacy exact-or-last fallback.
         """
 
         if self.use_distributions and self.iterations > 1:

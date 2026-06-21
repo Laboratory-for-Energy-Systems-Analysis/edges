@@ -620,12 +620,13 @@ def supports_linear_nearest_year_interpolation(policy: Mapping | None) -> bool:
     if not isinstance(policy, Mapping):
         return False
 
-    return (
-        policy.get("axis") == "scenario_idx"
-        and policy.get("axis_type") == "year"
-        and policy.get("method") == "linear"
-        and policy.get("extrapolation") == "nearest"
-    )
+    expected = {
+        "axis": "scenario_idx",
+        "axis_type": "year",
+        "method": "linear",
+        "extrapolation": "nearest",
+    }
+    return all(policy.get(key) == value for key, value in expected.items())
 
 
 def interpolate_indexed_value(
@@ -640,14 +641,11 @@ def interpolate_indexed_value(
     ``indexed_values`` is normally a year-keyed mapping such as
     ``{"2019": 1.0, "2024": 2.0}``. Exact key matches are returned unchanged.
 
-    Missing numeric indices are interpolated only when ``interpolation_policy``
-    declares the supported policy ``axis=scenario_idx``, ``axis_type=year``,
-    ``method=linear``, and ``extrapolation=nearest``. Without that policy, the
-    last mapping value is returned to preserve Edges' historical fallback
-    behavior.
-
-    If interpolation is not possible, the last mapping value is returned to
-    preserve Edges' historical fallback behavior.
+    Missing numeric indices are linearly interpolated only when
+    ``interpolation_policy`` declares the supported
+    ``scenario_idx``/``year``/``linear``/``nearest`` policy. Without that
+    policy, or if interpolation is not possible, the last mapping value is
+    returned to preserve Edges' historical fallback behavior.
     """
     if not isinstance(indexed_values, Mapping) or not indexed_values:
         return default

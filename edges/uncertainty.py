@@ -9,6 +9,7 @@ from copy import deepcopy
 from scipy import stats
 import hashlib
 import logging
+from typing import Mapping
 
 from edges.utils import (
     interpolate_indexed_value,
@@ -170,7 +171,7 @@ def sample_cf_distribution(
     SAFE_GLOBALS: dict = None,
     scenario_idx: int | str = 0,
     scenario_name: str | None = None,
-    interpolation_policy: dict | None = None,
+    interpolation_policy: Mapping | None = None,
 ) -> np.ndarray:
     """
     Draw samples from the CF's uncertainty distribution (or constant fallback).
@@ -182,8 +183,9 @@ def sample_cf_distribution(
 
     ``discrete_empirical`` distributions can define ``values_by_scenario`` and
     ``weights_by_scenario`` mappings of ``scenario -> year/index -> sequence``.
-    Exact years are used as-is. Missing numeric years are linearly interpolated
-    only when the method declares the supported interpolation policy. If
+    Exact indices are used as-is. Missing numeric years are linearly
+    interpolated only when the method declares the supported interpolation
+    policy; otherwise, they use the legacy last-value fallback. If
     ``ids_by_scenario`` is present, values and weights are aligned by ID before
     interpolation.
 
