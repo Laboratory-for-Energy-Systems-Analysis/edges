@@ -5,10 +5,19 @@ from edges.utils import (
     format_data,
     make_hashable,
     get_str,
+    interpolate_indexed_value,
     safe_eval,
     safe_eval_cached,
     get_activities,
 )
+
+INTERPOLATION_POLICY = {
+    "axis": "scenario_idx",
+    "axis_type": "year",
+    "method": "linear",
+    "extrapolation": "nearest",
+    "source_years": ["2019", "2024", "2029"],
+}
 
 
 def test_format_method_name():
@@ -28,6 +37,46 @@ def test_get_str():
     assert get_str("foo") == "foo"
     assert get_str(None) == "None"
     assert get_str(("baz", "qux")) == "qux"
+
+
+def test_interpolate_indexed_value_exact_interpolated_and_clamped():
+    values = {"2019": 10.0, "2024": 20.0, "2029": 50.0}
+
+    assert interpolate_indexed_value(values, "2024") == pytest.approx(20.0)
+    assert interpolate_indexed_value(
+        values, "2026", interpolation_policy=INTERPOLATION_POLICY
+    ) == pytest.approx(32.0)
+    assert interpolate_indexed_value(
+        values, "2010", interpolation_policy=INTERPOLATION_POLICY
+    ) == pytest.approx(10.0)
+    assert interpolate_indexed_value(
+        values, "2050", interpolation_policy=INTERPOLATION_POLICY
+    ) == pytest.approx(50.0)
+
+
+def test_interpolate_indexed_value_handles_numeric_sequences():
+    values = {"2019": [0.0, 10.0], "2029": [10.0, 30.0]}
+
+    assert interpolate_indexed_value(
+        values, "2024", interpolation_policy=INTERPOLATION_POLICY
+    ) == pytest.approx([5.0, 20.0])
+
+
+def test_interpolate_indexed_value_keeps_legacy_fallback_without_policy():
+    values = {"2019": 10.0, "2024": 20.0, "2029": 50.0}
+
+    assert interpolate_indexed_value(values, "2026") == pytest.approx(50.0)
+    assert interpolate_indexed_value(
+        values,
+        "2026",
+        interpolation_policy={"method": "linear", "extrapolation": "nearest"},
+    ) == pytest.approx(50.0)
+
+
+def test_interpolate_indexed_value_keeps_legacy_fallback_for_non_numeric_index():
+    values = {"baseline": 1.0, "future": 2.0}
+
+    assert interpolate_indexed_value(values, "unknown") == pytest.approx(2.0)
 
 
 def test_safe_eval():

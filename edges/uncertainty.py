@@ -10,7 +10,11 @@ from scipy import stats
 import hashlib
 import logging
 
-from edges.utils import safe_eval
+from edges.utils import (
+    interpolate_indexed_value,
+    safe_eval,
+    supports_linear_nearest_year_interpolation,
+)
 
 logger = logging.getLogger(__name__)
 logger.addHandler(logging.NullHandler())
@@ -166,6 +170,7 @@ def sample_cf_distribution(
     SAFE_GLOBALS: dict = None,
     scenario_idx: int | str = 0,
     scenario_name: str | None = None,
+    interpolation_policy: dict | None = None,
 ) -> np.ndarray:
     """
     Draw samples from the CF's uncertainty distribution (or constant fallback).
@@ -177,8 +182,10 @@ def sample_cf_distribution(
 
     ``discrete_empirical`` distributions can define ``values_by_scenario`` and
     ``weights_by_scenario`` mappings of ``scenario -> year/index -> sequence``.
-    These scenario/year-specific arrays are selected using ``scenario_name`` and
-    ``scenario_idx``.
+    Exact years are used as-is. Missing numeric years are linearly interpolated
+    only when the method declares the supported interpolation policy. If
+    ``ids_by_scenario`` is present, values and weights are aligned by ID before
+    interpolation.
 
     :param cf: CF dictionary with 'value' and optional 'uncertainty' specification.
     :param n: Number of samples to generate.
@@ -188,6 +195,7 @@ def sample_cf_distribution(
     :param SAFE_GLOBALS: Safe globals for expression evaluation.
     :param scenario_idx: Scenario year/index used for scenario-aware uncertainty data.
     :param scenario_name: Optional scenario name used for scenario-aware uncertainty data.
+    :param interpolation_policy: Optional method-level interpolation policy.
     :return: NumPy array of shape (n,) with sampled CF values.
 
     :raises ValueError: If sampling fails due to invalid distribution parameters.
@@ -223,37 +231,173 @@ def sample_cf_distribution(
     unc = cf["uncertainty"]
     dist_name = unc["distribution"]
     params = unc["parameters"]
+    can_interpolate = supports_linear_nearest_year_interpolation(interpolation_policy)
 
-    def _select_scenario_values(base_name: str):
-        """Select scenario/year-specific distribution arrays when available."""
+    def _select_scenario_mapping(base_name: str):
         by_scenario = params.get(f"{base_name}_by_scenario")
         if not isinstance(by_scenario, dict):
-            return None
+            return None, None
 
         selected_name = scenario_name
         if selected_name not in by_scenario:
             selected_name = next(iter(by_scenario), None)
         if selected_name is None:
+            return None, None
+
+        return selected_name, by_scenario.get(selected_name)
+
+    def _numeric_bounds(indexed_values: dict):
+        if not can_interpolate:
             return None
 
-        by_index = by_scenario.get(selected_name)
-        if not isinstance(by_index, dict):
-            return by_index
+        numeric_keys = []
+        for key in indexed_values:
+            try:
+                numeric_key = float(key)
+            except (TypeError, ValueError):
+                continue
+            if np.isfinite(numeric_key):
+                numeric_keys.append((numeric_key, key))
+
+        try:
+            requested = float(scenario_idx)
+        except (TypeError, ValueError):
+            return None
+
+        if not numeric_keys or not np.isfinite(requested):
+            return None
+
+        numeric_keys.sort(key=lambda item: item[0])
+        if requested <= numeric_keys[0][0]:
+            return numeric_keys[0], numeric_keys[0], 0.0
+        if requested >= numeric_keys[-1][0]:
+            return numeric_keys[-1], numeric_keys[-1], 0.0
+
+        for lower, upper in zip(numeric_keys, numeric_keys[1:]):
+            if lower[0] <= requested <= upper[0]:
+                if upper[0] == lower[0]:
+                    return lower, lower, 0.0
+                fraction = (requested - lower[0]) / (upper[0] - lower[0])
+                return lower, upper, fraction
+
+        return None
+
+    def _align_by_id(ids, values, weights):
+        out = {}
+        for basin_id, value, weight in zip(ids, values, weights):
+            out[basin_id] = (float(_eval_atom(value)), float(_eval_atom(weight)))
+        return out
+
+    def _interpolate_id_aligned_arrays(values_by_index, weights_by_index, ids_by_index):
+        if not (
+            isinstance(values_by_index, dict)
+            and isinstance(weights_by_index, dict)
+            and isinstance(ids_by_index, dict)
+        ):
+            return None, None
 
         idx = str(scenario_idx)
-        if idx in by_index:
-            return by_index[idx]
-        if by_index:
-            return list(by_index.values())[-1]
-        return None
+        if (
+            idx in values_by_index
+            and idx in weights_by_index
+            and idx in ids_by_index
+        ):
+            return values_by_index[idx], weights_by_index[idx]
+
+        bounds = _numeric_bounds(values_by_index)
+        if bounds is None:
+            return None, None
+
+        lower, upper, fraction = bounds
+        lower_key = lower[1]
+        upper_key = upper[1]
+        lower_map = _align_by_id(
+            ids_by_index.get(lower_key, []),
+            values_by_index.get(lower_key, []),
+            weights_by_index.get(lower_key, []),
+        )
+        if lower_key == upper_key:
+            values = [value for value, _weight in lower_map.values()]
+            weights = [weight for _value, weight in lower_map.values()]
+            return values, weights
+
+        upper_map = _align_by_id(
+            ids_by_index.get(upper_key, []),
+            values_by_index.get(upper_key, []),
+            weights_by_index.get(upper_key, []),
+        )
+
+        values = []
+        weights = []
+        for basin_id in sorted(set(lower_map) | set(upper_map)):
+            lower_pair = lower_map.get(basin_id)
+            upper_pair = upper_map.get(basin_id)
+            if lower_pair is None:
+                lower_value = upper_pair[0]
+                lower_weight = 0.0
+            else:
+                lower_value, lower_weight = lower_pair
+            if upper_pair is None:
+                upper_value = lower_value
+                upper_weight = 0.0
+            else:
+                upper_value, upper_weight = upper_pair
+
+            values.append(lower_value + fraction * (upper_value - lower_value))
+            weights.append(lower_weight + fraction * (upper_weight - lower_weight))
+
+        return values, weights
+
+    def _select_discrete_empirical_arrays():
+        selected_name, values_by_index = _select_scenario_mapping("values")
+        if values_by_index is None:
+            return None, None
+
+        weights_by_scenario = params.get("weights_by_scenario")
+        weights_by_index = (
+            weights_by_scenario.get(selected_name)
+            if (
+                isinstance(weights_by_scenario, dict)
+                and selected_name in weights_by_scenario
+            )
+            else None
+        )
+        if weights_by_index is None:
+            _weight_name, weights_by_index = _select_scenario_mapping("weights")
+        if weights_by_index is None:
+            return None, None
+
+        ids_by_scenario = params.get("ids_by_scenario")
+        ids_by_index = (
+            ids_by_scenario.get(selected_name)
+            if isinstance(ids_by_scenario, dict) and selected_name in ids_by_scenario
+            else None
+        )
+        if ids_by_index is not None:
+            values, weights = _interpolate_id_aligned_arrays(
+                values_by_index, weights_by_index, ids_by_index
+            )
+            if values is not None and weights is not None:
+                return values, weights
+
+        return (
+            interpolate_indexed_value(
+                values_by_index,
+                scenario_idx,
+                interpolation_policy=interpolation_policy,
+            ),
+            interpolate_indexed_value(
+                weights_by_index,
+                scenario_idx,
+                interpolation_policy=interpolation_policy,
+            ),
+        )
 
     try:
         if dist_name == "discrete_empirical":
-            values = _select_scenario_values("values")
+            values, raw_weights = _select_discrete_empirical_arrays()
             if values is None:
                 values = params["values"]
-
-            raw_weights = _select_scenario_values("weights")
             if raw_weights is None:
                 raw_weights = params["weights"]
 
@@ -283,6 +427,7 @@ def sample_cf_distribution(
                         SAFE_GLOBALS=SAFE_GLOBALS,
                         scenario_idx=scenario_idx,
                         scenario_name=scenario_name,
+                        interpolation_policy=interpolation_policy,
                     )[0]
                 else:
                     samples[i] = _eval_atom(item)

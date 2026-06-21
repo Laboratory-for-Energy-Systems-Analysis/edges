@@ -210,6 +210,10 @@ methods because the baseline row remains readable while
 ``evaluate_cfs(scenario=..., scenario_idx=...)`` selects the requested
 scenario/year value. If aggregate fallback rows include ``weight_expression``,
 their country shares are recalculated from the evaluated weights.
+When the method declares an ``interpolation`` policy with ``method: "linear"``
+and ``extrapolation: "nearest"``, missing numeric years are linearly
+interpolated and out-of-range requests use the closest available endpoint.
+Methods without this metadata keep the legacy exact-or-last parameter fallback.
 
 ---
 

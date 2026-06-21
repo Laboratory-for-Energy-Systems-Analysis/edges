@@ -35,6 +35,8 @@ from functools import lru_cache
 from .utils import (
     format_data,
     get_flow_matrix_positions,
+    interpolate_indexed_value,
+    supports_linear_nearest_year_interpolation,
     safe_eval_cached,
     validate_parameter_lengths,
     make_hashable,
@@ -1380,12 +1382,28 @@ class EdgeLCIA:
 
         # Resolve index-aware values
         resolved = {}
+        interpolation_policy = self._interpolation_policy()
         for k, v in param_set.items():
             if isinstance(v, dict):
-                resolved[k] = v.get(str(scenario_idx), list(v.values())[-1])
+                resolved[k] = interpolate_indexed_value(
+                    v,
+                    scenario_idx,
+                    interpolation_policy=interpolation_policy,
+                )
             else:
                 resolved[k] = v
         return resolved
+
+    def _interpolation_policy(self) -> Mapping[str, Any] | None:
+        """Return the active interpolation policy if the method declares one."""
+        metadata = getattr(self, "method_metadata", None)
+        if not isinstance(metadata, Mapping):
+            return None
+
+        policy = metadata.get("interpolation")
+        if supports_linear_nearest_year_interpolation(policy):
+            return policy
+        return None
 
     def _resolve_scenario_name(self, scenario: Optional[str] = None) -> Optional[str]:
         """Return the scenario name to use for CF evaluation.
@@ -3668,6 +3686,7 @@ class EdgeLCIA:
             resolved_params = self._resolve_parameters_for_scenario(
                 scenario_idx, scenario_name
             )
+            interpolation_policy = self._interpolation_policy()
 
             self._last_eval_scenario_name = scenario_name
             self._last_eval_scenario_idx = scenario_idx
@@ -3698,6 +3717,7 @@ class EdgeLCIA:
                         SAFE_GLOBALS=self.SAFE_GLOBALS,
                         scenario_idx=scenario_idx,
                         scenario_name=scenario_name,
+                        interpolation_policy=interpolation_policy,
                     )
                 elif key in sample_cache:
                     samples = sample_cache[key]
@@ -3712,6 +3732,7 @@ class EdgeLCIA:
                         SAFE_GLOBALS=self.SAFE_GLOBALS,
                         scenario_idx=scenario_idx,
                         scenario_name=scenario_name,
+                        interpolation_policy=interpolation_policy,
                     )
                     sample_cache[key] = samples
 
@@ -4566,6 +4587,7 @@ class EdgeLCIA:
             resolved_params = self._resolve_parameters_for_scenario(
                 effective_scenario_idx, effective_scenario_name
             )
+            interpolation_policy = self._interpolation_policy()
 
             for cf in new_cf_entries:
                 matrix_type = self._matrix_type_for_direction(cf.get("direction"))
@@ -4580,6 +4602,7 @@ class EdgeLCIA:
                         SAFE_GLOBALS=self.SAFE_GLOBALS,
                         scenario_idx=effective_scenario_idx,
                         scenario_name=effective_scenario_name,
+                        interpolation_policy=interpolation_policy,
                     )
                 elif key in sample_cache:
                     samples = sample_cache[key]
@@ -4594,6 +4617,7 @@ class EdgeLCIA:
                         SAFE_GLOBALS=self.SAFE_GLOBALS,
                         scenario_idx=effective_scenario_idx,
                         scenario_name=effective_scenario_name,
+                        interpolation_policy=interpolation_policy,
                     )
                     sample_cache[key] = samples
 

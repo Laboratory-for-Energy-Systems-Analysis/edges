@@ -285,6 +285,10 @@ method files do, or keep a numeric baseline `value` and use `value_expression`
 for the dynamic scenario/year value. Regionalized methods can similarly pair
 numeric `weight` with `weight_expression`; aggregate fallback shares are
 recomputed from evaluated dynamic weights during `evaluate_cfs(...)`.
+If the method declares an `interpolation` policy with `method: "linear"` and
+`extrapolation: "nearest"`, missing numeric years are linearly interpolated and
+out-of-range years use the closest available endpoint. Methods without this
+metadata keep the legacy exact-or-last parameter fallback.
 
 
 ## Data Sources

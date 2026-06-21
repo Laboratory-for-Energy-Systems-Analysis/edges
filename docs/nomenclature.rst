@@ -122,6 +122,27 @@ parameters during evaluation:
       "value_expression": "-cf_irri_ad"
     }
 
+When parameter mappings use numeric keys such as years, Edges always supports
+exact lookups. Linear interpolation for missing intermediate years and
+nearest-year clamping outside the available range are enabled only when the
+method declares the supported ``interpolation`` metadata policy:
+
+.. code-block:: json
+
+    {
+      "interpolation": {
+        "axis": "scenario_idx",
+        "axis_type": "year",
+        "method": "linear",
+        "extrapolation": "nearest"
+      }
+    }
+
+With this policy, a request for ``2026`` will interpolate between ``2024`` and
+``2029``; a request for ``2055`` will use the closest available endpoint, e.g.
+``2049``. Without this policy, missing indices keep the legacy fallback to the
+last value in the mapping.
+
 Weight Field
 ^^^^^^^^^^^^
 
@@ -145,7 +166,9 @@ matching-equivalent water flow signatures. If an exchange needs the sampled
 distribution sign flipped, set ``uncertainty_negative`` to ``1``.
 
 For ``discrete_empirical`` uncertainties, distributions can be scenario- and
-year-specific:
+year-specific. ``ids_by_scenario`` is optional, but recommended when the values
+represent named alternatives such as watershed/basin IDs because it lets Edges
+align entries before interpolating arrays:
 
 .. code-block:: json
 
@@ -161,16 +184,24 @@ year-specific:
           "SSP585": {
             "2049": [0.2, 0.5, 0.3]
           }
+        },
+        "ids_by_scenario": {
+          "SSP585": {
+            "2049": [101, 102, 103]
+          }
         }
       }
     }
 
 These arrays are selected by ``evaluate_cfs(scenario=..., scenario_idx=...)``.
 If the requested scenario is absent, the sampler currently falls back to the
-first scenario in the uncertainty definition; if the requested year/index is
-absent, it falls back to the last value in that scenario. Generated method files
-should therefore keep scenario and year labels consistent with the intended
-evaluation calls.
+first scenario in the uncertainty definition. If the requested numeric
+year/index is absent and the method declares the supported ``interpolation``
+policy, arrays are linearly interpolated between bracketing years or clamped to
+the closest available endpoint outside the available range. Without that
+policy, missing indices keep the legacy fallback to the last value in the
+scenario mapping. Generated method files should therefore keep scenario labels
+consistent with the intended evaluation calls.
 
 Matching Logic
 --------------

@@ -58,6 +58,13 @@ PROSPECTIVE_AWARE_REFERENCE = (
     "Harnessing model ensembles to assess uncertainty and provide prospective "
     "characterization factors for AWARE2.0."
 )
+INTERPOLATION_POLICY = {
+    "axis": "scenario_idx",
+    "axis_type": "year",
+    "method": "linear",
+    "extrapolation": "nearest",
+    "source_years": YEARS,
+}
 
 STRATEGIES = [
     "map_exchanges",
@@ -436,6 +443,7 @@ def build_method_data(
             "basin CFs and basin weights allocated to countries by basin-country "
             f"geometry intersections. {PROSPECTIVE_AWARE_REFERENCE}"
         ),
+        "interpolation": INTERPOLATION_POLICY,
         "strategies": STRATEGIES,
         "parameters": parameters,
         "uncertainties": {
@@ -481,12 +489,14 @@ def build_uncertainty_refs(
             country_basins = shares_by_country[loc]
             values_by_scenario = {}
             weights_by_scenario = {}
+            ids_by_scenario = {}
             valid_points = 0
             max_relative_error = 0.0
 
             for scenario in SCENARIOS:
                 values_by_year = {}
                 weights_by_year = {}
+                ids_by_year = {}
                 for year in YEARS:
                     official_cf = country_cf.get((scenario, loc), {}).get(year)
                     official_weight = country_weight.get((scenario, loc), {}).get(year)
@@ -495,6 +505,7 @@ def build_uncertainty_refs(
 
                     values = []
                     weights = []
+                    basin_ids_for_year = []
                     for row in country_basins.itertuples(index=False):
                         key = (scenario, int(row.Basin_ID))
                         if key not in basin_cf.index or key not in basin_weight.index:
@@ -506,6 +517,7 @@ def build_uncertainty_refs(
                         allocated_weight = raw_weight * float(row.basin_country_area_share)
                         if allocated_weight <= 0:
                             continue
+                        basin_ids_for_year.append(int(row.Basin_ID))
                         values.append(cf_value)
                         weights.append(allocated_weight)
 
@@ -524,6 +536,7 @@ def build_uncertainty_refs(
 
                     values_by_year[year] = [compact_float(v) for v in values]
                     weights_by_year[year] = [compact_float(w) for w in weights]
+                    ids_by_year[year] = basin_ids_for_year
                     valid_points += 1
                     validation.append(
                         {
@@ -541,6 +554,7 @@ def build_uncertainty_refs(
                 if values_by_year:
                     values_by_scenario[scenario] = values_by_year
                     weights_by_scenario[scenario] = weights_by_year
+                    ids_by_scenario[scenario] = ids_by_year
 
             if valid_points:
                 refs[ref] = {
@@ -548,6 +562,7 @@ def build_uncertainty_refs(
                     "parameters": {
                         "values_by_scenario": values_by_scenario,
                         "weights_by_scenario": weights_by_scenario,
+                        "ids_by_scenario": ids_by_scenario,
                     },
                     "metadata": {
                         "location": loc,
@@ -673,6 +688,7 @@ def main() -> None:
             "discrimination for agricultural, non-agricultural, and unspecified "
             f"water consumption. {PROSPECTIVE_AWARE_REFERENCE}"
         ),
+        "interpolation": INTERPOLATION_POLICY,
         "strategies": STRATEGIES,
         "parameters": all_parameters,
         "uncertainties": all_uncertainties,

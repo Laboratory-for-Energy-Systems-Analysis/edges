@@ -113,6 +113,22 @@ Rows keep numeric ``value`` and ``weight`` fields for the baseline
 ``weight_expression`` select the requested scenario/year during evaluation.
 This keeps the files close to the static AWARE 2.0 structure while allowing
 scenario-dependent country averages and aggregate fallback weights.
+Requested years between five-year data points are linearly interpolated.
+Requested years outside 2019-2049 use the closest available endpoint by
+default.
+The method files document this policy with explicit interpolation metadata:
+
+.. code-block:: json
+
+    {
+      "interpolation": {
+        "axis": "scenario_idx",
+        "axis_type": "year",
+        "method": "linear",
+        "extrapolation": "nearest",
+        "source_years": ["2019", "2024", "2029", "2034", "2039", "2044", "2049"]
+      }
+    }
 
 Evaluate a specific scenario/year with:
 
@@ -134,19 +150,22 @@ coverage sample basin-specific CFs using basin weights allocated to countries
 from the AWARE basin GeoPackage.
 
 In deterministic mode, the exchange mapping can be performed once and the same
-``EdgeLCIA`` object can be re-evaluated for each scenario/year pair:
+``EdgeLCIA`` object can be re-evaluated for each scenario/year pair. Years do
+not need to be limited to the five-year source grid:
 
 .. code-block:: python
 
     for scenario in ["SSP126", "SSP370", "SSP585"]:
-        for year in ["2019", "2024", "2029", "2034", "2039", "2044", "2049"]:
+        for year in ["2019", "2026", "2031", "2049", "2055"]:
             lcia.evaluate_cfs(scenario=scenario, scenario_idx=year)
             lcia.lcia()
             print(scenario, year, lcia.score)
 
 For stochastic runs, pass ``use_distributions=True`` and ``iterations=...`` to
 ``EdgeLCIA``. Scenario/year-specific ``values_by_scenario`` and
-``weights_by_scenario`` arrays are selected during ``evaluate_cfs``.
+``weights_by_scenario`` arrays are selected during ``evaluate_cfs``. The
+prospective AWARE distributions include basin IDs, so intermediate years are
+interpolated by aligning basin-specific values and weights before sampling.
 
 ---
 

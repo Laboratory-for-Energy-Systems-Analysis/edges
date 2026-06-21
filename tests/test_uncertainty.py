@@ -2,6 +2,14 @@ import pytest
 import numpy as np
 from edges.uncertainty import sample_cf_distribution
 
+INTERPOLATION_POLICY = {
+    "axis": "scenario_idx",
+    "axis_type": "year",
+    "method": "linear",
+    "extrapolation": "nearest",
+    "source_years": ["2024", "2029"],
+}
+
 
 def test_sample_constant_cf():
     cf = {"value": 42}
@@ -221,6 +229,162 @@ def test_sample_discrete_empirical_distribution_by_scenario_and_year():
         scenario_idx="2024",
     )
     assert np.allclose(samples, 40.0)
+
+
+def test_sample_discrete_empirical_interpolates_scenario_year_arrays():
+    cf = {
+        "value": 0,
+        "uncertainty": {
+            "distribution": "discrete_empirical",
+            "parameters": {
+                "values_by_scenario": {
+                    "SSP585": {"2024": [10.0, 20.0], "2029": [20.0, 40.0]},
+                },
+                "weights_by_scenario": {
+                    "SSP585": {"2024": [1.0, 0.0], "2029": [0.0, 1.0]},
+                },
+            },
+        },
+    }
+    random_state = np.random.default_rng(42)
+    samples = sample_cf_distribution(
+        cf,
+        parameters={},
+        n=100,
+        random_state=random_state,
+        scenario_name="SSP585",
+        scenario_idx="2026.5",
+        interpolation_policy=INTERPOLATION_POLICY,
+    )
+    assert set(np.unique(samples)).issubset({15.0, 30.0})
+    assert 0 < np.mean(samples) < 30.0
+
+
+def test_sample_discrete_empirical_interpolates_by_basin_id_when_order_changes():
+    cf = {
+        "value": 0,
+        "uncertainty": {
+            "distribution": "discrete_empirical",
+            "parameters": {
+                "values_by_scenario": {
+                    "SSP585": {"2024": [10.0, 20.0], "2029": [40.0, 20.0]},
+                },
+                "weights_by_scenario": {
+                    "SSP585": {"2024": [1.0, 0.0], "2029": [0.0, 1.0]},
+                },
+                "ids_by_scenario": {
+                    "SSP585": {"2024": [1, 2], "2029": [2, 1]},
+                },
+            },
+        },
+    }
+    random_state = np.random.default_rng(42)
+    samples = sample_cf_distribution(
+        cf,
+        parameters={},
+        n=100,
+        random_state=random_state,
+        scenario_name="SSP585",
+        scenario_idx="2026.5",
+        interpolation_policy=INTERPOLATION_POLICY,
+    )
+    assert np.allclose(samples, 15.0)
+
+
+def test_sample_discrete_empirical_clamps_year_outside_available_range():
+    cf = {
+        "value": 0,
+        "uncertainty": {
+            "distribution": "discrete_empirical",
+            "parameters": {
+                "values_by_scenario": {
+                    "SSP585": {"2024": [10.0], "2029": [20.0]},
+                },
+                "weights_by_scenario": {
+                    "SSP585": {"2024": [1.0], "2029": [1.0]},
+                },
+            },
+        },
+    }
+    random_state = np.random.default_rng(42)
+    below = sample_cf_distribution(
+        cf,
+        parameters={},
+        n=10,
+        random_state=random_state,
+        scenario_name="SSP585",
+        scenario_idx="2010",
+        interpolation_policy=INTERPOLATION_POLICY,
+    )
+    above = sample_cf_distribution(
+        cf,
+        parameters={},
+        n=10,
+        random_state=random_state,
+        scenario_name="SSP585",
+        scenario_idx="2050",
+        interpolation_policy=INTERPOLATION_POLICY,
+    )
+    assert np.allclose(below, 10.0)
+    assert np.allclose(above, 20.0)
+
+
+def test_sample_discrete_empirical_keeps_legacy_fallback_without_policy():
+    cf = {
+        "value": 0,
+        "uncertainty": {
+            "distribution": "discrete_empirical",
+            "parameters": {
+                "values_by_scenario": {
+                    "SSP585": {"2024": [10.0], "2029": [20.0]},
+                },
+                "weights_by_scenario": {
+                    "SSP585": {"2024": [1.0], "2029": [1.0]},
+                },
+            },
+        },
+    }
+
+    samples = sample_cf_distribution(
+        cf,
+        parameters={},
+        n=10,
+        random_state=np.random.default_rng(42),
+        scenario_name="SSP585",
+        scenario_idx="2026",
+    )
+
+    assert np.allclose(samples, 20.0)
+
+
+def test_sample_discrete_empirical_uses_same_fallback_scenario_for_weights():
+    cf = {
+        "value": 0,
+        "uncertainty": {
+            "distribution": "discrete_empirical",
+            "parameters": {
+                "values_by_scenario": {
+                    "SSP126": {"2024": [10.0, 20.0]},
+                    "SSP585": {"2024": [30.0, 40.0]},
+                },
+                "weights_by_scenario": {
+                    "SSP585": {"2024": [0.0, 1.0]},
+                    "SSP126": {"2024": [1.0, 0.0]},
+                },
+            },
+        },
+    }
+
+    samples = sample_cf_distribution(
+        cf,
+        parameters={},
+        n=20,
+        random_state=np.random.default_rng(42),
+        scenario_name="MISSING",
+        scenario_idx="2024",
+    )
+
+    assert np.allclose(samples, 10.0)
 
 
 def test_log_normal_distribution_avoids_boundary_pile_up():

@@ -6,7 +6,7 @@ import ast
 import os
 import logging
 import sqlite3
-from typing import Any
+from typing import Any, Mapping
 
 import yaml
 import numpy as np
@@ -608,6 +608,121 @@ def get_str(loc):
     if isinstance(loc, tuple):
         return loc[1]
     return str(loc)
+
+
+def supports_linear_nearest_year_interpolation(policy: Mapping | None) -> bool:
+    """Return whether a method interpolation policy is supported by Edges.
+
+    The current implementation supports one explicit policy: linearly
+    interpolate numeric ``scenario_idx`` year keys and use the nearest endpoint
+    outside the available range.
+    """
+    if not isinstance(policy, Mapping):
+        return False
+
+    return (
+        policy.get("axis") == "scenario_idx"
+        and policy.get("axis_type") == "year"
+        and policy.get("method") == "linear"
+        and policy.get("extrapolation") == "nearest"
+    )
+
+
+def interpolate_indexed_value(
+    indexed_values: Mapping,
+    scenario_idx: int | float | str,
+    *,
+    default: Any = None,
+    interpolation_policy: Mapping | None = None,
+):
+    """Return an exact, interpolated, or legacy-fallback indexed value.
+
+    ``indexed_values`` is normally a year-keyed mapping such as
+    ``{"2019": 1.0, "2024": 2.0}``. Exact key matches are returned unchanged.
+
+    Missing numeric indices are interpolated only when ``interpolation_policy``
+    declares the supported policy ``axis=scenario_idx``, ``axis_type=year``,
+    ``method=linear``, and ``extrapolation=nearest``. Without that policy, the
+    last mapping value is returned to preserve Edges' historical fallback
+    behavior.
+
+    If interpolation is not possible, the last mapping value is returned to
+    preserve Edges' historical fallback behavior.
+    """
+    if not isinstance(indexed_values, Mapping) or not indexed_values:
+        return default
+
+    idx_key = str(scenario_idx)
+    if idx_key in indexed_values:
+        return indexed_values[idx_key]
+    if scenario_idx in indexed_values:
+        return indexed_values[scenario_idx]
+
+    def _last_value():
+        try:
+            return next(reversed(indexed_values.values()))
+        except TypeError:
+            values = list(indexed_values.values())
+            return values[-1] if values else default
+
+    if not supports_linear_nearest_year_interpolation(interpolation_policy):
+        return _last_value()
+
+    numeric_keys = []
+    for key in indexed_values:
+        try:
+            numeric_key = float(key)
+        except (TypeError, ValueError):
+            continue
+        if np.isfinite(numeric_key):
+            numeric_keys.append((numeric_key, key))
+
+    try:
+        requested = float(scenario_idx)
+    except (TypeError, ValueError):
+        return _last_value()
+
+    if not numeric_keys or not np.isfinite(requested):
+        return _last_value()
+
+    numeric_keys.sort(key=lambda item: item[0])
+    if requested <= numeric_keys[0][0]:
+        return indexed_values[numeric_keys[0][1]]
+    if requested >= numeric_keys[-1][0]:
+        return indexed_values[numeric_keys[-1][1]]
+
+    lower = upper = None
+    for left, right in zip(numeric_keys, numeric_keys[1:]):
+        if left[0] <= requested <= right[0]:
+            lower, upper = left, right
+            break
+
+    if lower is None or upper is None:
+        return _last_value()
+
+    lower_idx, lower_key = lower
+    upper_idx, upper_key = upper
+    if upper_idx == lower_idx:
+        return indexed_values[lower_key]
+
+    fraction = (requested - lower_idx) / (upper_idx - lower_idx)
+    lower_value = indexed_values[lower_key]
+    upper_value = indexed_values[upper_key]
+
+    try:
+        return float(lower_value) + fraction * (float(upper_value) - float(lower_value))
+    except (TypeError, ValueError):
+        pass
+
+    try:
+        lower_array = np.asarray(lower_value, dtype=float)
+        upper_array = np.asarray(upper_value, dtype=float)
+        if lower_array.shape == upper_array.shape:
+            return (lower_array + fraction * (upper_array - lower_array)).tolist()
+    except (TypeError, ValueError):
+        pass
+
+    return lower_value if fraction < 0.5 else upper_value
 
 
 def safe_eval(expr, parameters, SAFE_GLOBALS=None, scenario_idx: int | str = 0):

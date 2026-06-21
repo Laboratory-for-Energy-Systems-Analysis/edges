@@ -398,15 +398,23 @@ class CostLCIA(EdgeLCIA):
             coord_blocks: list[np.ndarray] = []
             data_blocks: list[np.ndarray] = []
             k_index = np.arange(self.iterations, dtype=np.int64)
+            scenario_name = self._resolve_scenario_name(scenario)
+            resolved_params = self._resolve_parameters_for_scenario(
+                scenario_idx, scenario_name
+            )
+            interpolation_policy = self._interpolation_policy()
 
             for cf in self.cfs_mapping:
                 samples = sample_cf_distribution(
                     cf=cf,
                     n=self.iterations,
-                    parameters=self.parameters,
+                    parameters=resolved_params,
                     random_state=self.random_state,
                     use_distributions=self.use_distributions,
                     SAFE_GLOBALS=self.SAFE_GLOBALS,
+                    scenario_idx=scenario_idx,
+                    scenario_name=scenario_name,
+                    interpolation_policy=interpolation_policy,
                 )
                 samples = np.asarray(samples, dtype=float)
                 positions = np.asarray(cf["positions"], dtype=np.int64)

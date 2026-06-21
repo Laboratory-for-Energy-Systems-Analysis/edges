@@ -17,6 +17,15 @@ class _HashableActivity(dict):
         return id(self)
 
 
+INTERPOLATION_POLICY = {
+    "axis": "scenario_idx",
+    "axis_type": "year",
+    "method": "linear",
+    "extrapolation": "nearest",
+    "source_years": ["2024", "2029"],
+}
+
+
 def test_mixed_supplier_matrices_allowed(monkeypatch):
     method = {
         "name": "mixed",
@@ -248,6 +257,84 @@ def test_evaluate_cfs_prefers_value_expression_over_baseline_value():
     assert lcia.characterization_matrices["biosphere"][0, 0] == pytest.approx(93.9)
 
 
+def test_evaluate_cfs_interpolates_value_expression_years():
+    lcia = EdgeLCIA.__new__(EdgeLCIA)
+    lcia.use_distributions = False
+    lcia.iterations = 1
+    lcia.scenario = "SSP126"
+    lcia.parameters = {
+        "SSP126": {
+            "cf_ad": {"2024": 80.0, "2029": 100.0},
+        }
+    }
+    lcia.SAFE_GLOBALS = {"__builtins__": None}
+    lcia.logger = logging.getLogger("test.edgelcia.robustness.interpolate_value")
+    lcia.method_metadata = {"interpolation": INTERPOLATION_POLICY}
+    lcia._last_eval_scenario_name = None
+    lcia._last_eval_scenario_idx = None
+    lcia.raw_cfs_data = [
+        {"supplier": {"matrix": "biosphere"}, "consumer": {"matrix": "technosphere"}}
+    ]
+    lcia.cfs_mapping = [
+        {
+            "supplier": {"matrix": "biosphere"},
+            "consumer": {"matrix": "technosphere"},
+            "positions": [(0, 0)],
+            "direction": "biosphere-technosphere",
+            "value": 80.0,
+            "value_expression": "cf_ad",
+        }
+    ]
+    lcia.lca = SimpleNamespace(
+        inventory=csr_matrix(([1.0], ([0], [0])), shape=(1, 1)),
+        technosphere_matrix=csr_matrix((1, 1)),
+    )
+
+    lcia.evaluate_cfs(scenario_idx="2026.5")
+
+    assert lcia.scenario_cfs[0]["value"] == pytest.approx(90.0)
+    assert lcia.characterization_matrices["biosphere"][0, 0] == pytest.approx(90.0)
+
+
+def test_evaluate_cfs_keeps_legacy_parameter_fallback_without_policy():
+    lcia = EdgeLCIA.__new__(EdgeLCIA)
+    lcia.use_distributions = False
+    lcia.iterations = 1
+    lcia.scenario = "SSP126"
+    lcia.parameters = {
+        "SSP126": {
+            "cf_ad": {"2024": 80.0, "2029": 100.0},
+        }
+    }
+    lcia.SAFE_GLOBALS = {"__builtins__": None}
+    lcia.logger = logging.getLogger("test.edgelcia.robustness.legacy_value")
+    lcia.method_metadata = {}
+    lcia._last_eval_scenario_name = None
+    lcia._last_eval_scenario_idx = None
+    lcia.raw_cfs_data = [
+        {"supplier": {"matrix": "biosphere"}, "consumer": {"matrix": "technosphere"}}
+    ]
+    lcia.cfs_mapping = [
+        {
+            "supplier": {"matrix": "biosphere"},
+            "consumer": {"matrix": "technosphere"},
+            "positions": [(0, 0)],
+            "direction": "biosphere-technosphere",
+            "value": 80.0,
+            "value_expression": "cf_ad",
+        }
+    ]
+    lcia.lca = SimpleNamespace(
+        inventory=csr_matrix(([1.0], ([0], [0])), shape=(1, 1)),
+        technosphere_matrix=csr_matrix((1, 1)),
+    )
+
+    lcia.evaluate_cfs(scenario_idx="2026.5")
+
+    assert lcia.scenario_cfs[0]["value"] == pytest.approx(100.0)
+    assert lcia.characterization_matrices["biosphere"][0, 0] == pytest.approx(100.0)
+
+
 def test_evaluate_cfs_uses_reporting_split_for_dynamic_aggregate_value():
     lcia = EdgeLCIA.__new__(EdgeLCIA)
     lcia.use_distributions = False
@@ -306,6 +393,66 @@ def test_evaluate_cfs_uses_reporting_split_for_dynamic_aggregate_value():
     assert lcia.scenario_cfs[0]["reporting_split"][0]["share"] == pytest.approx(0.25)
     assert lcia.scenario_cfs[0]["reporting_split"][1]["share"] == pytest.approx(0.75)
     assert lcia.characterization_matrices["biosphere"][0, 0] == pytest.approx(25.0)
+
+
+def test_evaluate_cfs_interpolates_dynamic_aggregate_weights():
+    lcia = EdgeLCIA.__new__(EdgeLCIA)
+    lcia.use_distributions = False
+    lcia.iterations = 1
+    lcia.scenario = "SSP126"
+    lcia.parameters = {
+        "SSP126": {
+            "cf_ch": {"2024": 10.0, "2029": 10.0},
+            "cf_de": {"2024": 30.0, "2029": 30.0},
+            "wt_ch": {"2024": 1.0, "2029": 3.0},
+            "wt_de": {"2024": 3.0, "2029": 1.0},
+        }
+    }
+    lcia.SAFE_GLOBALS = {"__builtins__": None}
+    lcia.logger = logging.getLogger("test.edgelcia.robustness.interpolate_split")
+    lcia.method_metadata = {"interpolation": INTERPOLATION_POLICY}
+    lcia._last_eval_scenario_name = None
+    lcia._last_eval_scenario_idx = None
+    lcia.raw_cfs_data = [
+        {"supplier": {"matrix": "biosphere"}, "consumer": {"matrix": "technosphere"}}
+    ]
+    lcia.cfs_mapping = [
+        {
+            "supplier": {"matrix": "biosphere"},
+            "consumer": {"matrix": "technosphere"},
+            "positions": [(0, 0)],
+            "direction": "biosphere-technosphere",
+            "value": 0.0,
+            "reporting_split": (
+                {
+                    "consumer_location": "CH",
+                    "share": 0.25,
+                    "value": 10.0,
+                    "value_expression": "cf_ch",
+                    "weight": 1.0,
+                    "weight_expression": "wt_ch",
+                },
+                {
+                    "consumer_location": "DE",
+                    "share": 0.75,
+                    "value": 30.0,
+                    "value_expression": "cf_de",
+                    "weight": 3.0,
+                    "weight_expression": "wt_de",
+                },
+            ),
+        }
+    ]
+    lcia.lca = SimpleNamespace(
+        inventory=csr_matrix(([1.0], ([0], [0])), shape=(1, 1)),
+        technosphere_matrix=csr_matrix((1, 1)),
+    )
+
+    lcia.evaluate_cfs(scenario_idx="2026.5")
+
+    assert lcia.scenario_cfs[0]["value"] == pytest.approx(20.0)
+    assert lcia.scenario_cfs[0]["reporting_split"][0]["share"] == pytest.approx(0.5)
+    assert lcia.scenario_cfs[0]["reporting_split"][1]["share"] == pytest.approx(0.5)
 
 
 def test_lcia_uncertainty_supports_mixed_supplier_methods():
