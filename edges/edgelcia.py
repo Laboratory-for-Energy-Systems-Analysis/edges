@@ -3809,9 +3809,7 @@ class EdgeLCIA:
                     resolved_params=resolved_params,
                     scenario_idx=scenario_idx,
                 )
-                split_value = self._weighted_value_from_reporting_split(
-                    evaluated_split
-                )
+                split_value = self._weighted_value_from_reporting_split(evaluated_split)
                 if split_value is None:
                     value = self._evaluate_cf_numeric_value(
                         self._raw_cf_value_for_evaluation(cf),

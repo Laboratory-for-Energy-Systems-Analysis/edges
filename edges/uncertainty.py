@@ -299,11 +299,7 @@ def sample_cf_distribution(
             return None, None
 
         idx = str(scenario_idx)
-        if (
-            idx in values_by_index
-            and idx in weights_by_index
-            and idx in ids_by_index
-        ):
+        if idx in values_by_index and idx in weights_by_index and idx in ids_by_index:
             return values_by_index[idx], weights_by_index[idx]
 
         bounds = _numeric_bounds(values_by_index)

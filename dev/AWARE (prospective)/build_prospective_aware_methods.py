@@ -25,7 +25,6 @@ import geopandas as gpd
 import numpy as np
 import pandas as pd
 
-
 ROOT = Path(__file__).resolve().parents[2]
 SRC_DIR = ROOT / "dev" / "AWARE (prospective)"
 LEGACY_DIR = ROOT / "dev" / "AWARE" / "AWARE 2.0"
@@ -41,9 +40,7 @@ BASIN_WEIGHT_XLSX = (
 BASIN_GPKG = SRC_DIR / "AWARE20_Native_CFs_geospatial.gpkg"
 COUNTRY_CLASSIFICATION_XLSX = LEGACY_DIR / "AWARE20_Countries_and_Regions.xlsx"
 NATURAL_EARTH_COUNTRIES = (
-    LEGACY_DIR
-    / "ne_110m_admin_0_countries"
-    / "ne_110m_admin_0_countries.shp"
+    LEGACY_DIR / "ne_110m_admin_0_countries" / "ne_110m_admin_0_countries.shp"
 )
 
 YEARS = ["2019", "2024", "2029", "2034", "2039", "2044", "2049"]
@@ -176,7 +173,9 @@ def make_location_slugs(locations: list[str]) -> dict[str, str]:
     return out
 
 
-def read_country_tables(country_locations: set[str]) -> dict[str, dict[str, pd.DataFrame]]:
+def read_country_tables(
+    country_locations: set[str],
+) -> dict[str, dict[str, pd.DataFrame]]:
     result: dict[str, dict[str, pd.DataFrame]] = {}
     for category, spec in CATEGORY_SPECS.items():
         cf = pd.read_excel(
@@ -241,7 +240,9 @@ def read_basin_weight_tables() -> dict[str, pd.DataFrame]:
     return out
 
 
-def load_country_geometries(country_meta: pd.DataFrame) -> tuple[gpd.GeoDataFrame, dict]:
+def load_country_geometries(
+    country_meta: pd.DataFrame,
+) -> tuple[gpd.GeoDataFrame, dict]:
     ne = gpd.read_file(NATURAL_EARTH_COUNTRIES)
     ne = ne[~ne.geometry.is_empty & ne.geometry.notna()].copy()
     ne["geometry"] = ne.geometry.make_valid()
@@ -344,7 +345,9 @@ def build_basin_country_shares(
     ].copy()
 
     total_by_basin = intersections.groupby("Basin_ID")["area_km2"].transform("sum")
-    intersections["basin_country_area_share"] = intersections["area_km2"] / total_by_basin
+    intersections["basin_country_area_share"] = (
+        intersections["area_km2"] / total_by_basin
+    )
 
     shares = intersections[
         ["location", "Basin_ID", "area_km2", "basin_country_area_share"]
@@ -375,7 +378,9 @@ def build_method_data(
     include_cpc: bool,
 ) -> dict:
     spec = CATEGORY_SPECS[category]
-    cf_lookup = table_to_lookup(country_tables[category]["cf"], ["scenario", "ecoinvent_shortname"])
+    cf_lookup = table_to_lookup(
+        country_tables[category]["cf"], ["scenario", "ecoinvent_shortname"]
+    )
     wt_lookup = table_to_lookup(
         country_tables[category]["weight"], ["scenario", "ecoinvent_shortname"]
     )
@@ -514,7 +519,9 @@ def build_uncertainty_refs(
                         raw_weight = compact_float(basin_weight.at[key, year])
                         if cf_value is None or raw_weight is None or raw_weight <= 0:
                             continue
-                        allocated_weight = raw_weight * float(row.basin_country_area_share)
+                        allocated_weight = raw_weight * float(
+                            row.basin_country_area_share
+                        )
                         if allocated_weight <= 0:
                             continue
                         basin_ids_for_year.append(int(row.Basin_ID))
@@ -525,13 +532,19 @@ def build_uncertainty_refs(
                         continue
 
                     weight_sum = sum(weights)
-                    if official_weight is not None and official_weight > 0 and weight_sum > 0:
+                    if (
+                        official_weight is not None
+                        and official_weight > 0
+                        and weight_sum > 0
+                    ):
                         scale = official_weight / weight_sum
                         weights = [w * scale for w in weights]
 
                     weighted_mean = float(np.average(values, weights=weights))
                     denominator = max(abs(float(official_cf)), 1e-12)
-                    relative_error = abs(weighted_mean - float(official_cf)) / denominator
+                    relative_error = (
+                        abs(weighted_mean - float(official_cf)) / denominator
+                    )
                     max_relative_error = max(max_relative_error, relative_error)
 
                     values_by_year[year] = [compact_float(v) for v in values]
@@ -592,8 +605,12 @@ def build_uncertainty_refs(
             "max_relative_error": compact_float(
                 validation_df["relative_error"].max(), 8
             ),
-            "points_above_10pct_error": int((validation_df["relative_error"] > 0.10).sum()),
-            "points_above_25pct_error": int((validation_df["relative_error"] > 0.25).sum()),
+            "points_above_10pct_error": int(
+                (validation_df["relative_error"] > 0.10).sum()
+            ),
+            "points_above_25pct_error": int(
+                (validation_df["relative_error"] > 0.25).sum()
+            ),
         }
 
     return refs, {"summary": validation_summary, "points": validation}
