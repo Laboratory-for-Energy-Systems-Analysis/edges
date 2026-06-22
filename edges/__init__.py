@@ -11,7 +11,7 @@ __all__ = (
     "setup_package_logging",
 )
 
-__version__ = "1.3.2"
+__version__ = "1.4.0"
 
 from .logging_config import setup_package_logging
 from .edgelcia import EdgeLCIA

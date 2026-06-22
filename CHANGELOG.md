@@ -1,6 +1,33 @@
 # Changelog
 
-## 1.3.2 - Upcoming
+## 1.4.0 - Upcoming
+
+### Added
+
+- Added prospective AWARE 2.0 built-in methods for country-average yearly
+  characterization factors across ``SSP126``, ``SSP370``, and ``SSP585``.
+  The methods include irrigation, non-irrigation, unspecified, and combined
+  CPC-discriminated variants.
+- Added basin-specific stochastic distributions for prospective AWARE methods,
+  with basin IDs retained so values and weights can be aligned before sampling.
+- Added explicit method-level interpolation metadata for prospective methods.
+  Supported policies can linearly interpolate missing numeric year indices and
+  use nearest-endpoint extrapolation outside the available source years.
+
+### Changed
+
+- Made scenario/year interpolation opt-in via method metadata. Methods without
+  a supported ``interpolation`` block, such as ``SCP_1.0``, keep the legacy
+  exact-or-last parameter fallback behavior.
+- Updated deterministic and stochastic CF evaluation to use the declared
+  interpolation policy consistently, including aggregate fallback weights and
+  uncertainty sampling.
+
+### Documentation
+
+- Added prospective AWARE documentation, an example notebook, and regression
+  coverage for deterministic interpolation, stochastic interpolation,
+  nearest-endpoint extrapolation, and no-policy fallback behavior.
 
 ### Fixes
 
