@@ -1,0 +1,511 @@
+{
+  "generated_at_utc": "2026-09-08T14:09:26.700295+00:00",
+  "edges_version": "1.4.0",
+  "ecoinvent_versions": [
+    "3.10",
+    "3.11",
+    "3.12"
+  ],
+  "functional_unit": {
+    "amount": 1.0,
+    "unit": "ton kilometer",
+    "activity": "market for transport, freight, lorry 28 metric ton, fatty acid methyl ester 100%",
+    "reference_product": "transport, freight, lorry 28 metric ton, fatty acid methyl ester 100%",
+    "location": "CH"
+  },
+  "method_version": "1.06",
+  "method_unit": "UBP",
+  "results": [
+    {
+      "version": "3.10",
+      "project": "ecoinvent-3.10-cutoff",
+      "database": "ecoinvent-3.10-cutoff",
+      "database_size": 23523,
+      "functional_unit": {
+        "amount": 1.0,
+        "unit": "ton kilometer",
+        "activity": "market for transport, freight, lorry 28 metric ton, fatty acid methyl ester 100%",
+        "reference_product": "transport, freight, lorry 28 metric ton, fatty acid methyl ester 100%",
+        "location": "CH",
+        "activity_key": [
+          "ecoinvent-3.10-cutoff",
+          "289099ebdc46571fb91a4b2b07fac10b"
+        ]
+      },
+      "total_method": [
+        "Ecological Scarcity 2021",
+        "total",
+        "UBP"
+      ],
+      "noise_method": [
+        "Ecological Scarcity 2021",
+        "Noise",
+        "UBP"
+      ],
+      "total_score_UBP": 953.2148847184701,
+      "biosphere_score_UBP": 920.766425553106,
+      "technosphere_noise_score_UBP": 32.4484591653641,
+      "noise_only_score_UBP": 32.4484591653641,
+      "total_cf_table_rows": 527428,
+      "noise_cf_table_rows": 183,
+      "noise_matched_edges": 183,
+      "noise_directly_eligible_edges": 183,
+      "noise_directly_eligible_missed": 0,
+      "noise_transport_family_matches": {
+        "aircraft freight": 8,
+        "aircraft passenger": 4,
+        "lorry": 81,
+        "passenger car": 55,
+        "rail freight": 35
+      },
+      "direct_lorry_cf_UBP_per_tkm": 31.088082901554404,
+      "direct_lorry_inventory_amount_tkm": 1.0,
+      "direct_lorry_impact_UBP": 31.088082901554404,
+      "passenger_rail_probe": {
+        "activity": "market for transport, passenger train",
+        "reference_product": "transport, passenger train",
+        "location": "GLO",
+        "unit": "person kilometer",
+        "activity_key": [
+          "ecoinvent-3.10-cutoff",
+          "b3e513de2886bdfdfc2275259dca3f06"
+        ],
+        "score_UBP": 8.549920757741093,
+        "direct_edges": 13,
+        "direct_cf_UBP_per_person_km": 8.0,
+        "direct_inventory_amount_person_km": 0.9999999759020284,
+        "noise_transport_family_matches": {
+          "aircraft freight": 8,
+          "aircraft passenger": 4,
+          "lorry": 80,
+          "passenger car": 55,
+          "rail freight": 35,
+          "rail passenger": 13
+        }
+      },
+      "applied_strategies": [
+        "map_exchanges",
+        "map_aggregate_locations",
+        "map_dynamic_locations",
+        "map_contained_locations",
+        "map_remaining_locations_to_global"
+      ],
+      "strategy_match_counts": [
+        {
+          "strategy": "map_exchanges",
+          "new_biosphere_matches": 191135,
+          "new_technosphere_matches": 183,
+          "cumulative_matches": 191318
+        },
+        {
+          "strategy": "map_aggregate_locations",
+          "new_biosphere_matches": 0,
+          "new_technosphere_matches": 0,
+          "cumulative_matches": 191318
+        },
+        {
+          "strategy": "map_dynamic_locations",
+          "new_biosphere_matches": 0,
+          "new_technosphere_matches": 0,
+          "cumulative_matches": 191318
+        },
+        {
+          "strategy": "map_contained_locations",
+          "new_biosphere_matches": 0,
+          "new_technosphere_matches": 0,
+          "cumulative_matches": 191318
+        },
+        {
+          "strategy": "map_remaining_locations_to_global",
+          "new_biosphere_matches": 0,
+          "new_technosphere_matches": 0,
+          "cumulative_matches": 191318
+        }
+      ],
+      "duplicate_method_signature_groups": 0,
+      "ignored_method_exchanges": 0,
+      "runtime": {
+        "generated_at_utc": "2026-09-08T14:09:26.389772+00:00",
+        "git_revision": "6037270c1f66c62492537f9cce6f6b0d6044a65d",
+        "python": "3.11.12",
+        "python_executable": "/Users/romain/micromamba/envs/premise-test/bin/python",
+        "platform": "macOS-15.7.7-arm64-arm-64bit",
+        "edges": "1.4.0",
+        "bw2data": "3.6.6",
+        "bw2calc": "1.8.2",
+        "brightway_25_project": false,
+        "total_method_sha256": "9a1b619027f92d83123de24e4e592218d5210dd1cb6636d3b94e7527f6070985",
+        "noise_method_sha256": "d47c73dde3984f548fa2dac9f37a5ca39b298b234674e03a99445481110b489e",
+        "warnings": {
+          "total": [
+            {
+              "category": "ResourceWarning",
+              "message": "unclosed file <_io.BufferedReader name='/Users/romain/micromamba/envs/premise-test/lib/python3.11/site-packages/constructive_geometries/data/faces.gpkg'>"
+            },
+            {
+              "category": "ResourceWarning",
+              "message": "unclosed file <_io.TextIOWrapper name='/Users/romain/micromamba/envs/premise-test/lib/python3.11/site-packages/constructive_geometries/data/faces.json' mode='r' encoding='utf-8'>"
+            }
+          ],
+          "noise": [
+            {
+              "category": "ResourceWarning",
+              "message": "unclosed file <_io.BufferedReader name='/Users/romain/micromamba/envs/premise-test/lib/python3.11/site-packages/constructive_geometries/data/faces.gpkg'>"
+            },
+            {
+              "category": "ResourceWarning",
+              "message": "unclosed file <_io.TextIOWrapper name='/Users/romain/micromamba/envs/premise-test/lib/python3.11/site-packages/constructive_geometries/data/faces.json' mode='r' encoding='utf-8'>"
+            }
+          ],
+          "passenger_rail_noise": [
+            {
+              "category": "ResourceWarning",
+              "message": "unclosed file <_io.BufferedReader name='/Users/romain/micromamba/envs/premise-test/lib/python3.11/site-packages/constructive_geometries/data/faces.gpkg'>"
+            },
+            {
+              "category": "ResourceWarning",
+              "message": "unclosed file <_io.TextIOWrapper name='/Users/romain/micromamba/envs/premise-test/lib/python3.11/site-packages/constructive_geometries/data/faces.json' mode='r' encoding='utf-8'>"
+            }
+          ]
+        }
+      },
+      "artifacts": {
+        "total_cf_table": null,
+        "noise_cf_table": "results/UBP/ecoinvent-3.10-ubp-noise-cf-table.csv"
+      },
+      "checks": "passed"
+    },
+    {
+      "version": "3.11",
+      "project": "ecoinvent-3.11-cutoff",
+      "database": "ecoinvent-3.11-cutoff",
+      "database_size": 25412,
+      "functional_unit": {
+        "amount": 1.0,
+        "unit": "ton kilometer",
+        "activity": "market for transport, freight, lorry 28 metric ton, fatty acid methyl ester 100%",
+        "reference_product": "transport, freight, lorry 28 metric ton, fatty acid methyl ester 100%",
+        "location": "CH",
+        "activity_key": [
+          "ecoinvent-3.11-cutoff",
+          "c0871401a9f4fdcba56beef25d28ed4b"
+        ]
+      },
+      "total_method": [
+        "Ecological Scarcity 2021",
+        "total",
+        "UBP"
+      ],
+      "noise_method": [
+        "Ecological Scarcity 2021",
+        "Noise",
+        "UBP"
+      ],
+      "total_score_UBP": 951.4232171667443,
+      "biosphere_score_UBP": 918.98026021549,
+      "technosphere_noise_score_UBP": 32.44295695125423,
+      "noise_only_score_UBP": 32.44295695125423,
+      "total_cf_table_rows": 565647,
+      "noise_cf_table_rows": 183,
+      "noise_matched_edges": 183,
+      "noise_directly_eligible_edges": 183,
+      "noise_directly_eligible_missed": 0,
+      "noise_transport_family_matches": {
+        "aircraft freight": 8,
+        "aircraft passenger": 4,
+        "lorry": 81,
+        "passenger car": 55,
+        "rail freight": 35
+      },
+      "direct_lorry_cf_UBP_per_tkm": 31.088082901554404,
+      "direct_lorry_inventory_amount_tkm": 1.0,
+      "direct_lorry_impact_UBP": 31.088082901554404,
+      "passenger_rail_probe": {
+        "activity": "market for transport, passenger, train, fleet average",
+        "reference_product": "transport, passenger, train, fleet average",
+        "location": "GLO",
+        "unit": "person kilometer",
+        "activity_key": [
+          "ecoinvent-3.11-cutoff",
+          "844cefb4c0b02ea6014222cc1dd14bba"
+        ],
+        "score_UBP": 8.553820856296177,
+        "direct_edges": 13,
+        "direct_cf_UBP_per_person_km": 8.0,
+        "direct_inventory_amount_person_km": 0.9999999759020284,
+        "noise_transport_family_matches": {
+          "aircraft freight": 8,
+          "aircraft passenger": 4,
+          "lorry": 80,
+          "passenger car": 55,
+          "rail freight": 35,
+          "rail passenger": 13
+        }
+      },
+      "applied_strategies": [
+        "map_exchanges",
+        "map_aggregate_locations",
+        "map_dynamic_locations",
+        "map_contained_locations",
+        "map_remaining_locations_to_global"
+      ],
+      "strategy_match_counts": [
+        {
+          "strategy": "map_exchanges",
+          "new_biosphere_matches": 200292,
+          "new_technosphere_matches": 183,
+          "cumulative_matches": 200475
+        },
+        {
+          "strategy": "map_aggregate_locations",
+          "new_biosphere_matches": 0,
+          "new_technosphere_matches": 0,
+          "cumulative_matches": 200475
+        },
+        {
+          "strategy": "map_dynamic_locations",
+          "new_biosphere_matches": 0,
+          "new_technosphere_matches": 0,
+          "cumulative_matches": 200475
+        },
+        {
+          "strategy": "map_contained_locations",
+          "new_biosphere_matches": 0,
+          "new_technosphere_matches": 0,
+          "cumulative_matches": 200475
+        },
+        {
+          "strategy": "map_remaining_locations_to_global",
+          "new_biosphere_matches": 0,
+          "new_technosphere_matches": 0,
+          "cumulative_matches": 200475
+        }
+      ],
+      "duplicate_method_signature_groups": 0,
+      "ignored_method_exchanges": 0,
+      "runtime": {
+        "generated_at_utc": "2026-09-08T14:04:45.944992+00:00",
+        "git_revision": "6037270c1f66c62492537f9cce6f6b0d6044a65d",
+        "python": "3.11.12",
+        "python_executable": "/Users/romain/micromamba/envs/edges/bin/python",
+        "platform": "macOS-15.7.7-arm64-arm-64bit",
+        "edges": "1.4.0",
+        "bw2data": "4.4.4",
+        "bw2calc": "2.3",
+        "brightway_25_project": true,
+        "total_method_sha256": "9a1b619027f92d83123de24e4e592218d5210dd1cb6636d3b94e7527f6070985",
+        "noise_method_sha256": "d47c73dde3984f548fa2dac9f37a5ca39b298b234674e03a99445481110b489e",
+        "warnings": {
+          "total": [
+            {
+              "category": "ResourceWarning",
+              "message": "unclosed file <_io.BufferedReader name='/Users/romain/micromamba/envs/edges/lib/python3.11/site-packages/constructive_geometries/data/faces.gpkg'>"
+            },
+            {
+              "category": "ResourceWarning",
+              "message": "unclosed file <_io.TextIOWrapper name='/Users/romain/micromamba/envs/edges/lib/python3.11/site-packages/constructive_geometries/data/faces.json' mode='r' encoding='utf-8'>"
+            }
+          ],
+          "noise": [
+            {
+              "category": "ResourceWarning",
+              "message": "unclosed file <_io.BufferedReader name='/Users/romain/micromamba/envs/edges/lib/python3.11/site-packages/constructive_geometries/data/faces.gpkg'>"
+            },
+            {
+              "category": "ResourceWarning",
+              "message": "unclosed file <_io.TextIOWrapper name='/Users/romain/micromamba/envs/edges/lib/python3.11/site-packages/constructive_geometries/data/faces.json' mode='r' encoding='utf-8'>"
+            }
+          ],
+          "passenger_rail_noise": [
+            {
+              "category": "ResourceWarning",
+              "message": "unclosed file <_io.BufferedReader name='/Users/romain/micromamba/envs/edges/lib/python3.11/site-packages/constructive_geometries/data/faces.gpkg'>"
+            },
+            {
+              "category": "ResourceWarning",
+              "message": "unclosed file <_io.TextIOWrapper name='/Users/romain/micromamba/envs/edges/lib/python3.11/site-packages/constructive_geometries/data/faces.json' mode='r' encoding='utf-8'>"
+            }
+          ]
+        }
+      },
+      "artifacts": {
+        "total_cf_table": null,
+        "noise_cf_table": "results/UBP/ecoinvent-3.11-ubp-noise-cf-table.csv"
+      },
+      "checks": "passed"
+    },
+    {
+      "version": "3.12",
+      "project": "ecoinvent-3.12-cutoff",
+      "database": "ecoinvent-3.12-cutoff",
+      "database_size": 26533,
+      "functional_unit": {
+        "amount": 1.0,
+        "unit": "ton kilometer",
+        "activity": "market for transport, freight, lorry 28 metric ton, fatty acid methyl ester 100%",
+        "reference_product": "transport, freight, lorry 28 metric ton, fatty acid methyl ester 100%",
+        "location": "CH",
+        "activity_key": [
+          "ecoinvent-3.12-cutoff",
+          "ec66861ea1cd46c1b281d674742c864e"
+        ]
+      },
+      "total_method": [
+        "Ecological Scarcity 2021",
+        "total",
+        "UBP"
+      ],
+      "noise_method": [
+        "Ecological Scarcity 2021",
+        "Noise",
+        "UBP"
+      ],
+      "total_score_UBP": 954.5284043611723,
+      "biosphere_score_UBP": 922.0838844820307,
+      "technosphere_noise_score_UBP": 32.44451987914158,
+      "noise_only_score_UBP": 32.44451987914158,
+      "total_cf_table_rows": 588776,
+      "noise_cf_table_rows": 183,
+      "noise_matched_edges": 183,
+      "noise_directly_eligible_edges": 183,
+      "noise_directly_eligible_missed": 0,
+      "noise_transport_family_matches": {
+        "aircraft freight": 8,
+        "aircraft passenger": 4,
+        "lorry": 81,
+        "passenger car": 55,
+        "rail freight": 35
+      },
+      "direct_lorry_cf_UBP_per_tkm": 31.088082901554404,
+      "direct_lorry_inventory_amount_tkm": 1.0,
+      "direct_lorry_impact_UBP": 31.088082901554404,
+      "passenger_rail_probe": {
+        "activity": "market for transport, passenger, train, fleet average",
+        "reference_product": "transport, passenger, train, fleet average",
+        "location": "GLO",
+        "unit": "person kilometer",
+        "activity_key": [
+          "ecoinvent-3.12-cutoff",
+          "a99f20fc81530732e4ffab37dcb9d932"
+        ],
+        "score_UBP": 8.641481388151194,
+        "direct_edges": 13,
+        "direct_cf_UBP_per_person_km": 8.0,
+        "direct_inventory_amount_person_km": 0.9999999759020284,
+        "noise_transport_family_matches": {
+          "aircraft freight": 8,
+          "aircraft passenger": 4,
+          "lorry": 80,
+          "passenger car": 55,
+          "rail freight": 35,
+          "rail passenger": 13
+        }
+      },
+      "applied_strategies": [
+        "map_exchanges",
+        "map_aggregate_locations",
+        "map_dynamic_locations",
+        "map_contained_locations",
+        "map_remaining_locations_to_global"
+      ],
+      "strategy_match_counts": [
+        {
+          "strategy": "map_exchanges",
+          "new_biosphere_matches": 204875,
+          "new_technosphere_matches": 183,
+          "cumulative_matches": 205058
+        },
+        {
+          "strategy": "map_aggregate_locations",
+          "new_biosphere_matches": 0,
+          "new_technosphere_matches": 0,
+          "cumulative_matches": 205058
+        },
+        {
+          "strategy": "map_dynamic_locations",
+          "new_biosphere_matches": 0,
+          "new_technosphere_matches": 0,
+          "cumulative_matches": 205058
+        },
+        {
+          "strategy": "map_contained_locations",
+          "new_biosphere_matches": 0,
+          "new_technosphere_matches": 0,
+          "cumulative_matches": 205058
+        },
+        {
+          "strategy": "map_remaining_locations_to_global",
+          "new_biosphere_matches": 0,
+          "new_technosphere_matches": 0,
+          "cumulative_matches": 205058
+        }
+      ],
+      "duplicate_method_signature_groups": 0,
+      "ignored_method_exchanges": 0,
+      "runtime": {
+        "generated_at_utc": "2026-09-08T14:05:55.241937+00:00",
+        "git_revision": "6037270c1f66c62492537f9cce6f6b0d6044a65d",
+        "python": "3.11.12",
+        "python_executable": "/Users/romain/micromamba/envs/edges/bin/python",
+        "platform": "macOS-15.7.7-arm64-arm-64bit",
+        "edges": "1.4.0",
+        "bw2data": "4.4.4",
+        "bw2calc": "2.3",
+        "brightway_25_project": true,
+        "total_method_sha256": "9a1b619027f92d83123de24e4e592218d5210dd1cb6636d3b94e7527f6070985",
+        "noise_method_sha256": "d47c73dde3984f548fa2dac9f37a5ca39b298b234674e03a99445481110b489e",
+        "warnings": {
+          "total": [
+            {
+              "category": "ResourceWarning",
+              "message": "unclosed file <_io.BufferedReader name='/Users/romain/micromamba/envs/edges/lib/python3.11/site-packages/constructive_geometries/data/faces.gpkg'>"
+            },
+            {
+              "category": "ResourceWarning",
+              "message": "unclosed file <_io.TextIOWrapper name='/Users/romain/micromamba/envs/edges/lib/python3.11/site-packages/constructive_geometries/data/faces.json' mode='r' encoding='utf-8'>"
+            },
+            {
+              "category": "UmfpackWarning",
+              "message": "(almost) singular matrix! (estimated cond. number: 1.33e+12)"
+            }
+          ],
+          "noise": [
+            {
+              "category": "ResourceWarning",
+              "message": "unclosed file <_io.BufferedReader name='/Users/romain/micromamba/envs/edges/lib/python3.11/site-packages/constructive_geometries/data/faces.gpkg'>"
+            },
+            {
+              "category": "ResourceWarning",
+              "message": "unclosed file <_io.TextIOWrapper name='/Users/romain/micromamba/envs/edges/lib/python3.11/site-packages/constructive_geometries/data/faces.json' mode='r' encoding='utf-8'>"
+            },
+            {
+              "category": "UmfpackWarning",
+              "message": "(almost) singular matrix! (estimated cond. number: 1.33e+12)"
+            }
+          ],
+          "passenger_rail_noise": [
+            {
+              "category": "ResourceWarning",
+              "message": "unclosed file <_io.BufferedReader name='/Users/romain/micromamba/envs/edges/lib/python3.11/site-packages/constructive_geometries/data/faces.gpkg'>"
+            },
+            {
+              "category": "ResourceWarning",
+              "message": "unclosed file <_io.TextIOWrapper name='/Users/romain/micromamba/envs/edges/lib/python3.11/site-packages/constructive_geometries/data/faces.json' mode='r' encoding='utf-8'>"
+            },
+            {
+              "category": "UmfpackWarning",
+              "message": "(almost) singular matrix! (estimated cond. number: 1.33e+12)"
+            }
+          ]
+        }
+      },
+      "artifacts": {
+        "total_cf_table": null,
+        "noise_cf_table": "results/UBP/ecoinvent-3.12-ubp-noise-cf-table.csv"
+      },
+      "checks": "passed"
+    }
+  ],
+  "matrix_summary_csv": "results/UBP/ubp-exchange-matching-summary.csv",
+  "overall_checks": "passed"
+}
