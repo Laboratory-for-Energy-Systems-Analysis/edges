@@ -539,31 +539,33 @@ def test_generate_cf_table_supports_mixed_supplier_methods(monkeypatch):
     lcia.reversed_activity = {0: "consumer-activity", 1: "tech-supplier"}
     lcia.unprocessed_biosphere_edges = []
     lcia.unprocessed_technosphere_edges = []
+    lcia.biosphere_flows = [
+        {
+            "position": 0,
+            "name": "Carbon dioxide",
+            "categories": ("air",),
+            "classifications": None,
+        }
+    ]
+    lcia.position_to_technosphere_flows_lookup = {
+        0: {
+            "name": "Consumer activity",
+            "reference product": "service",
+            "location": "DE",
+            "classifications": None,
+        },
+        1: {
+            "name": "Electricity mix",
+            "reference product": "electricity",
+            "location": "CH",
+            "classifications": None,
+        },
+    }
 
-    def _get_activity(key):
-        if key == "bio-flow":
-            return {
-                "name": "Carbon dioxide",
-                "categories": ("air",),
-                "classifications": None,
-            }
-        if key == "tech-supplier":
-            return {
-                "name": "Electricity mix",
-                "reference product": "electricity",
-                "location": "CH",
-                "classifications": None,
-            }
-        if key == "consumer-activity":
-            return {
-                "name": "Consumer activity",
-                "reference product": "service",
-                "location": "DE",
-                "classifications": None,
-            }
-        raise KeyError(key)
+    def _unexpected_get_activity(key):
+        raise AssertionError(f"CF-table reporting unexpectedly queried {key!r}")
 
-    monkeypatch.setattr(bw2data, "get_activity", _get_activity)
+    monkeypatch.setattr(bw2data, "get_activity", _unexpected_get_activity)
 
     df = lcia.generate_cf_table()
 
@@ -578,6 +580,51 @@ def test_generate_cf_table_supports_mixed_supplier_methods(monkeypatch):
     assert by_matrix.loc["technosphere", "impact"] == pytest.approx(15.0)
     assert by_matrix.loc["technosphere", "supplier location"] == "CH"
     assert by_matrix.loc["technosphere", "supplier reference product"] == "electricity"
+
+
+def test_apply_strategies_records_new_matches_by_matrix():
+    lcia = EdgeLCIA.__new__(EdgeLCIA)
+    lcia.logger = logging.getLogger("test.edgelcia.robustness.strategy.counts")
+    lcia.method_metadata = {}
+    lcia.biosphere_edges = {(0, 0)}
+    lcia.technosphere_edges = {(1, 0)}
+    lcia._seen_positions = set()
+    lcia.applied_strategies = []
+
+    def direct():
+        lcia._seen_positions.add(("biosphere-technosphere", 0, 0))
+        lcia.applied_strategies.append("map_exchanges")
+
+    def aggregate():
+        lcia._seen_positions.add(("technosphere-technosphere", 1, 0))
+        lcia.applied_strategies.append("map_aggregate_locations")
+
+    lcia.map_exchanges = direct
+    lcia.map_aggregate_locations = aggregate
+    lcia.map_dynamic_locations = lambda: None
+    lcia.map_contained_locations = lambda: None
+    lcia.map_remaining_locations_to_global = lambda: None
+    lcia._mark_fallback_cf_resolutions = lambda strategy: None
+
+    EdgeLCIA.apply_strategies(
+        lcia,
+        strategies=["map_exchanges", "map_aggregate_locations"],
+    )
+
+    assert lcia.strategy_match_counts == [
+        {
+            "strategy": "map_exchanges",
+            "new_biosphere_matches": 1,
+            "new_technosphere_matches": 0,
+            "cumulative_matches": 1,
+        },
+        {
+            "strategy": "map_aggregate_locations",
+            "new_biosphere_matches": 0,
+            "new_technosphere_matches": 1,
+            "cumulative_matches": 2,
+        },
+    ]
 
 
 def test_redo_lcia_supports_mixed_supplier_methods(monkeypatch):

@@ -19,7 +19,7 @@ import time
 import copy
 import pickle
 import hashlib
-from collections import defaultdict
+from collections import Counter, defaultdict
 import json
 from pathlib import Path
 import bw2calc
@@ -588,6 +588,7 @@ class EdgeLCIA:
         self._flows_version = None
         self._cls_hits_cache = {}
         self.applied_strategies = []
+        self.strategy_match_counts: list[dict[str, Any]] = []
         self._seen_positions: set[tuple[str, int, int]] = set()
         self._cf_avg_cache: dict[tuple, tuple] = {}
         self._cf_avg_cache_hits = 0
@@ -3552,6 +3553,7 @@ class EdgeLCIA:
 
         # ---- execute
         self.logger.info("Applying strategies: %s", strategies)
+        self.strategy_match_counts = []
         stage_labels = {
             "map_exchanges": ("Finding direct matches", 1),
             "map_aggregate_locations": ("Resolving aggregate locations", 2),
@@ -3563,6 +3565,9 @@ class EdgeLCIA:
 
         for name in strategies:
             fn = dispatch[name]
+            before = Counter(
+                direction for direction, _, _ in getattr(self, "_seen_positions", set())
+            )
             t0 = time.perf_counter()
             self.logger.info("Running %s()", name)
             self._current_strategy_name = name
@@ -3571,6 +3576,25 @@ class EdgeLCIA:
                 print(f"{stage_label.ljust(stage_label_width)} [{step}/5]")
             fn()
             self._mark_fallback_cf_resolutions(name)
+            after = Counter(
+                direction for direction, _, _ in getattr(self, "_seen_positions", set())
+            )
+            self.strategy_match_counts.append(
+                {
+                    "strategy": name,
+                    "new_biosphere_matches": max(
+                        0,
+                        after.get("biosphere-technosphere", 0)
+                        - before.get("biosphere-technosphere", 0),
+                    ),
+                    "new_technosphere_matches": max(
+                        0,
+                        after.get("technosphere-technosphere", 0)
+                        - before.get("technosphere-technosphere", 0),
+                    ),
+                    "cumulative_matches": len(getattr(self, "_seen_positions", set())),
+                }
+            )
             self.logger.info("Finished %s in %.3fs", name, time.perf_counter() - t0)
         self._current_strategy_name = None
 
@@ -5073,6 +5097,35 @@ class EdgeLCIA:
 
             return split_rows
 
+        # ``lci`` already batch-loads the metadata needed for reporting. Reuse
+        # it here instead of issuing one SQLite query per CF-table row. This is
+        # especially important for large mixed methods, whose tables can
+        # contain hundreds of thousands of repeated supplier/consumer nodes.
+        reporting_technosphere_lookup = (
+            getattr(self, "position_to_technosphere_flows_lookup", None) or {}
+        )
+        reporting_biosphere_lookup = {
+            flow["position"]: {
+                key: value for key, value in flow.items() if key != "position"
+            }
+            for flow in (getattr(self, "biosphere_flows", None) or ())
+        }
+
+        def _reporting_node(matrix_type, index):
+            lookup = (
+                reporting_biosphere_lookup
+                if matrix_type == "biosphere"
+                else reporting_technosphere_lookup
+            )
+            if index in lookup:
+                return lookup[index]
+            key = (
+                self.reversed_biosphere[index]
+                if matrix_type == "biosphere"
+                else self.reversed_activity[index]
+            )
+            return bw2data.get_activity(key)
+
         characterization_matrices = self._get_characterization_matrices()
         scenario_cfs_by_matrix = self._get_scenario_cfs_by_matrix()
         if not self.scenario_cfs and not any(
@@ -5156,12 +5209,8 @@ class EdgeLCIA:
                     positions = zip(*cm.nonzero())
 
                 for i, j in positions:
-                    consumer = bw2data.get_activity(self.reversed_activity[j])
-                    supplier = (
-                        bw2data.get_activity(self.reversed_biosphere[i])
-                        if matrix_type == "biosphere"
-                        else bw2data.get_activity(self.reversed_activity[i])
-                    )
+                    consumer = _reporting_node("technosphere", j)
+                    supplier = _reporting_node(matrix_type, i)
 
                     if isinstance(cm, sparse.COO):
                         samples = (
@@ -5247,12 +5296,8 @@ class EdgeLCIA:
                 direction = self._direction_for_matrix_type(matrix_type)
                 for cf in scenario_cfs_by_matrix.get(matrix_type, []):
                     for i, j in cf["positions"]:
-                        consumer = bw2data.get_activity(self.reversed_activity[j])
-                        supplier = (
-                            bw2data.get_activity(self.reversed_biosphere[i])
-                            if matrix_type == "biosphere"
-                            else bw2data.get_activity(self.reversed_activity[i])
-                        )
+                        consumer = _reporting_node("technosphere", j)
+                        supplier = _reporting_node(matrix_type, i)
 
                         amount = float(inventory[i, j])
                         cf_value = cf["value"]
@@ -5302,12 +5347,8 @@ class EdgeLCIA:
                 direction = self._direction_for_matrix_type(matrix_type)
 
                 for i, j in unprocess_exchanges:
-                    supplier = (
-                        bw2data.get_activity(self.reversed_biosphere[i])
-                        if matrix_type == "biosphere"
-                        else bw2data.get_activity(self.reversed_activity[i])
-                    )
-                    consumer = bw2data.get_activity(self.reversed_activity[j])
+                    supplier = _reporting_node(matrix_type, i)
+                    consumer = _reporting_node("technosphere", j)
 
                     if inventory_uncertainty:
                         amount_samples = (
