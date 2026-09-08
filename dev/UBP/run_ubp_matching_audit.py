@@ -32,7 +32,6 @@ import pandas as pd
 
 from edges import EdgeLCIA, __version__ as edges_version
 
-
 REPO_ROOT = Path(__file__).resolve().parents[2]
 DATA_DIR = REPO_ROOT / "edges" / "data"
 DEFAULT_OUTPUT_DIR = REPO_ROOT / "results" / "UBP"

@@ -23,7 +23,6 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Iterable
 
-
 METHOD_NAME = "Ecological Scarcity 2021"
 METHOD_VERSION = "1.06"
 METHOD_UNIT = "UBP"

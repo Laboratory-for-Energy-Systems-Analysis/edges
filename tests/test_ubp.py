@@ -11,7 +11,6 @@ import pytest
 from edges import EdgeLCIA, get_available_methods
 from edges.utils import format_data
 
-
 BUILDER_PATH = Path(__file__).parents[1] / "dev" / "UBP" / "build_ubp_methods.py"
 
 
