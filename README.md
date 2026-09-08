@@ -58,6 +58,7 @@ Currently, the library provides regionalized CFs for:
 * GeoPolRisk 1.0
 * GLAM3 Land use impacts on biodiversity
 * IBIF v2 biodiversity intactness (CO2, NH3, NOx, land occupation, roads, and all pressures)
+* Swiss Ecological Scarcity 2021 (UBP total and all 20 categories, including Noise)
 
 > [!NOTE]
 > Mixed CF methods combining both `biosphere` and `technosphere` supplier
@@ -116,6 +117,7 @@ act = bw2data.Database("ecoinvent-3.10-cutoff").random()
 # Define a method
 method = ('AWARE 2.0', 'Country', 'unspecified', 'yearly')
 # Prospective variant: ('AWARE 2.0 prospective', 'Country', 'all', 'yearly')
+# Swiss Ecological Scarcity total: ('Ecological Scarcity 2021', 'total', 'UBP')
 
 # Initialize the LCA object
 LCA = EdgeLCIA({act: 1}, method)

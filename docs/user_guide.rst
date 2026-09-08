@@ -55,6 +55,28 @@ You can list available method files with:
 
 Use the name in the `method=` argument when instantiating `EdgeLCIA`.
 
+Swiss Ecological Scarcity 2021 is available as a total and as 20 separate UBP
+indicators. For example:
+
+.. code-block:: python
+
+    total_ubp = EdgeLCIA(
+        demand={act: 1},
+        method=("Ecological Scarcity 2021", "total", "UBP"),
+    )
+    total_ubp.lci()
+    total_ubp.apply_strategies()
+    total_ubp.evaluate_cfs()
+    total_ubp.lcia()
+
+The total is a mixed method because its Noise category characterizes
+technosphere transport-service exchanges, while the other categories
+characterize elementary flows. The regular workflow shown above handles both
+matrices. Use a category name such as ``"Global warming"``, ``"Noise"``, or
+``"Water resources, net balance"`` in the second tuple position to calculate
+only that indicator. See :doc:`methods` for the complete category list, Noise
+unit conversions, compatibility, and validation details.
+
 .. note::
    The matcher backend is `CLIPSpy <https://clipspy.readthedocs.io/en/latest/>`_
    (Python wrapper for `CLIPS <http://www.clipsrules.net/>`_). Use the default

@@ -5,6 +5,7 @@ Welcome to edges documentation!
 ===============================
 
 If you use the `edges` package, you may want to cite it as follows:
+
 .. code-block:: bibtex
 
    @software{edges,
@@ -18,7 +19,7 @@ If you use the `edges` package, you may want to cite it as follows:
      version = {1.0.2},
      journal = {International Journal of Life Cycle Assessment},
      doi = {},
-     url = {https://github.com/Laboratory-for-Energy-Systems-Analysis/edges}
+     url = {https://github.com/Laboratory-for-Energy-Systems-Analysis/edges},
      year = {2025},
      publisher = {Zenodo},
      license = {MIT}
@@ -35,7 +36,6 @@ If you use the `edges` package, you may want to cite it as follows:
    methods
    nomenclature
    api_reference
-   api_reference_costs
 
 Indices and tables
 ==================

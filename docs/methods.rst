@@ -236,6 +236,206 @@ https://doi.org/10.1016/j.resconrec.2024.107801.
 
 ---
 
+Swiss Ecological Scarcity 2021 (UBP)
+-------------------------------------
+
+**Name**: ``Ecological Scarcity 2021_<category>_UBP.json``
+
+The Swiss Ecological Scarcity method (also called the ecological scarcity
+method, eco-factor method, or UBP method) expresses environmental pressures in
+eco-points (``UBP``). The bundled implementation is generated from the reviewed
+SimaPro 10.4 export of method version 1.06 and targets the elementary-flow and
+transport-service vocabularies of ecoinvent cutoff 3.10 through 3.12. Ecoinvent
+3.12 is the primary validation target.
+
+The following methods are available. Each category and the total use ``UBP`` as
+their result unit:
+
+- ``("Ecological Scarcity 2021", "total", "UBP")``
+- ``("Ecological Scarcity 2021", "Water resources, net balance", "UBP")``
+- ``("Ecological Scarcity 2021", "Energy resources", "UBP")``
+- ``("Ecological Scarcity 2021", "Mineral resources", "UBP")``
+- ``("Ecological Scarcity 2021", "Land use", "UBP")``
+- ``("Ecological Scarcity 2021", "Global warming", "UBP")``
+- ``("Ecological Scarcity 2021", "Ozone layer depletion", "UBP")``
+- ``("Ecological Scarcity 2021", "Main air pollutants and particulates", "UBP")``
+- ``("Ecological Scarcity 2021", "Carcinogenic substances into air", "UBP")``
+- ``("Ecological Scarcity 2021", "Heavy metals into air", "UBP")``
+- ``("Ecological Scarcity 2021", "Water pollutants", "UBP")``
+- ``("Ecological Scarcity 2021", "Persistent organic pollutants into water", "UBP")``
+- ``("Ecological Scarcity 2021", "Heavy metals into water", "UBP")``
+- ``("Ecological Scarcity 2021", "Pesticides into soil", "UBP")``
+- ``("Ecological Scarcity 2021", "Heavy metals into soil", "UBP")``
+- ``("Ecological Scarcity 2021", "Radioactive substances into air", "UBP")``
+- ``("Ecological Scarcity 2021", "Radioactive substances into water", "UBP")``
+- ``("Ecological Scarcity 2021", "Noise", "UBP")``
+- ``("Ecological Scarcity 2021", "Waste, non radioactive", "UBP")``
+- ``("Ecological Scarcity 2021", "Radioactive waste to deposit", "UBP")``
+- ``("Ecological Scarcity 2021", "Biotic resources", "UBP")``
+
+The ``total`` method is the sum of the 20 category methods using the weighting
+set in the SimaPro export (all category weights are one). It is a mixed supplier
+method: most rows characterize biosphere-to-technosphere exchanges, while Noise
+characterizes technosphere-to-technosphere transport-service exchanges.
+
+**Basic usage**:
+
+.. code-block:: python
+
+    import bw2data
+    from edges import EdgeLCIA
+
+    bw2data.projects.set_current("ecoinvent-3.12-cutoff")
+    activity = bw2data.Database("ecoinvent-3.12-cutoff").random()
+
+    lcia = EdgeLCIA(
+        demand={activity: 1},
+        method=("Ecological Scarcity 2021", "total", "UBP"),
+    )
+    lcia.lci()
+    lcia.apply_strategies()
+    lcia.evaluate_cfs()
+    lcia.lcia()
+
+    print(lcia.score)
+    print(lcia.score_by_matrix)  # biosphere and Noise/technosphere components
+    table = lcia.generate_cf_table(include_unmatched=True)
+
+A fully executed example is available as
+:download:`the annotated Ecological Scarcity 2021 notebook
+<../examples/various examples/example_Ecological_Scarcity_2021_UBP.ipynb>`.
+It calculates all 20 category scores for an exact ecoinvent activity, checks
+their sum against the total, audits exchange matching and the direct lorry
+Noise factor, and produces a category-contribution figure.
+
+Select a category tuple instead of ``total`` to calculate one indicator. For
+example:
+
+.. code-block:: python
+
+    noise = EdgeLCIA(
+        demand={activity: 1},
+        method=("Ecological Scarcity 2021", "Noise", "UBP"),
+    )
+    noise.lci()
+    noise.apply_strategies()
+    noise.evaluate_cfs()
+    noise.lcia()
+
+Regionalized source rows are represented by consumer-location conditions. The
+method declares the standard Edges fallback sequence: direct exchange mapping,
+aggregate locations, dynamic locations, contained locations, and finally the
+global fallback. Use ``generate_cf_table(include_unmatched=True)`` to inspect
+both characterized and uncharacterized exchanges for a particular database.
+Explicit zero-factor rows are retained because they override broader SimaPro
+compartment or geography rules; removing them would incorrectly inherit a
+non-zero factor in those contexts.
+
+Noise
+^^^^^
+
+SimaPro models Noise using non-material inventory indicators measured in
+``tkm``, ``personkm``, and ``km``. Ecoinvent represents the same services as
+technosphere products with units ``ton kilometer``, ``person kilometer``, and
+``kilometer``. The Noise method therefore targets leaf transport providers:
+
+======================= ===================== ==============================
+Transport family        Ecoinvent unit        Eco-factor
+======================= ===================== ==============================
+Aircraft freight        ton kilometer         40 UBP/tkm
+Aircraft passenger      person kilometer      4 UBP/person-km
+Rail freight            ton kilometer         4.8 UBP/tkm
+Rail passenger          person kilometer      8 UBP/person-km
+Passenger car           kilometer             23 UBP/vehicle-km
+Lorry freight           ton kilometer         180 / payload UBP/tkm
+======================= ===================== ==============================
+
+The lorry source factor is 180 UBP per vehicle-kilometre. It is converted to
+ecoinvent's tonne-kilometre service using the documented average payloads:
+0.98 t (3.5--7.5 t class), 3.29 t (7.5--16 t), 5.79 t (16--32 t and the
+28-metric-ton class), and 15.96 t (>32 t). Market, market-group, and aggregate
+transport datasets that purchase a service from another provider in the same
+family are excluded. This leaf-provider rule prevents double counting.
+
+Source conversion and validation
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+The licensed SimaPro CSV is not distributed with Edges. The generated JSON
+files are reproducible with ``dev/UBP/build_ubp_methods.py`` when a reviewed
+copy of ``Ecological-Scarcity-21.CSV`` is available locally:
+
+.. code-block:: console
+
+    python dev/UBP/build_ubp_methods.py validate
+    python dev/UBP/build_ubp_methods.py build
+    python dev/UBP/build_ubp_methods.py check
+
+The builder verifies the source SHA-256, method identity and version, all 20
+categories, row counts, units, weights, and duplicate source identities. It
+then audits every source row against the union of ecoinvent cutoff 3.10, 3.11,
+and 3.12, expands SimaPro compartment inheritance to exact ecoinvent flow
+signatures, validates all generated rules with the Edges loader, rejects
+duplicate effective CLIPS signatures, and proves that every generated supplier
+signature is reachable in at least one target version. Source rows for flows
+which do not exist in any supported ecoinvent version remain documented as
+source-only dispositions; they cannot characterize a flow absent from the LCI
+database. The six Noise rows are separately checked against their reviewed
+transport-family mappings and payload conversions.
+
+For the reviewed build, 13,017 biosphere source rows match the supported
+ecoinvent catalogs and 1,936 are source-only (939 of the latter have non-zero
+factors). All 14,959 source rows are accounted for, including the six Noise
+rows. An independent comparison covers 1,482 signatures from ecoinvent 3.12's
+Ecological Scarcity methods. The 96 reference-only or differently categorized
+signatures are pinned as a complete hash so an unexplained change fails the
+audit instead of silently changing coverage. Full grouped dispositions and
+counts are stored in ``dev/UBP/ubp_validation_summary.json``.
+
+Reachability is also reported independently for each database version. Of the
+27,467 biosphere rules, 27,389 are present in ecoinvent 3.10, 27,460 in 3.11,
+and 27,463 in 3.12. Each release contains 112 of the 215 version-specific Noise
+supplier signatures; the combined JSON intentionally contains both the older
+3.10 and newer 3.11/3.12 transport naming conventions. A rule absent from one
+release is not treated as an error when its supplier does not exist there. The
+canonical set of source-only groups is separately hash-pinned.
+
+Runtime matching audit
+^^^^^^^^^^^^^^^^^^^^^^
+
+The optional end-to-end audit uses exact activities in installed cutoff
+projects and opens them read-only:
+
+.. code-block:: console
+
+    python dev/UBP/run_ubp_matching_audit.py --versions 3.11 3.12
+    python dev/UBP/run_ubp_matching_audit.py --versions 3.12 --full-cf-table
+
+It calculates the total and Noise methods for one tonne-kilometre of the Swiss
+market for 28-tonne FAME lorry transport. A separate global passenger-rail
+market probe completes runtime coverage of all six Noise families. The audit
+reconciles characterized positions, CF-table impacts, matrix scores, total
+scores, and per-strategy match counts. It records activity keys, method hashes,
+software versions, project storage generation, timestamps, and solver warnings
+for each ecoinvent version.
+
+Detailed CF tables contain licensed, calculation-specific ecoinvent exchange
+metadata. They are therefore generated only with ``--full-cf-table``, written
+with gzip compression, and ignored by Git. Compact matching summaries contain
+only aggregate counts and scores.
+
+This implementation deliberately follows the SimaPro export. It includes
+``Water resources, net balance`` and ``Noise`` and therefore is not identical
+to Brightway's separately imported Ecological Scarcity method, which can use a
+``water resources, evaporated`` category and does not provide the same Noise
+mapping.
+
+**Reference**:
+
+BAFU (Hrsg.) 2021. *Ökofaktoren Schweiz 2021 gemäss der Methode der
+ökologischen Knappheit*. Umwelt-Wissen Nr. 2121. Bundesamt für Umwelt, Bern.
+
+---
+
 ImpactWorld+ 2.1
 ----------------
 

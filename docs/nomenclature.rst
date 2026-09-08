@@ -18,7 +18,7 @@ A custom LCIA method JSON file is structured as follows:
       "version": "1.0",
       "unit": "unit of the impact score",
       "description": "optional text",
-      "exchanges": [ ... list of CFs ... ]
+      "exchanges": []
     }
 
 Each **exchange** defines a characterization factor applied to a flow

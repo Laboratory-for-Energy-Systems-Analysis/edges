@@ -4,6 +4,15 @@
 
 ### Added
 
+- Added Swiss Ecological Scarcity 2021 (UBP) as 20 category methods and one
+  total method for ecoinvent cutoff 3.10--3.12. The total combines biosphere
+  eco-factors with technosphere transport-service factors for Noise.
+- Added a reproducible SimaPro-to-Edges UBP builder and validation audit with
+  source fingerprint checks, exhaustive source-row dispositions, target-flow
+  reachability checks, and duplicate effective-signature rejection.
+- Added compact end-to-end UBP matching audits for ecoinvent cutoff 3.10--3.12,
+  including matrix reconciliation, per-strategy match counts, and runtime
+  coverage of all six Noise transport families.
 - Added prospective AWARE 2.0 built-in methods for country-average yearly
   characterization factors across ``SSP126``, ``SSP370``, and ``SSP585``.
   The methods include irrigation, non-irrigation, unspecified, and combined
@@ -16,6 +25,8 @@
 
 ### Changed
 
+- Reused batch-loaded Brightway metadata when generating CF tables, avoiding
+  repeated database lookups for large mixed-matrix methods.
 - Made scenario/year interpolation opt-in via method metadata. Methods without
   a supported ``interpolation`` block, such as ``SCP_1.0``, keep the legacy
   exact-or-last parameter fallback behavior.
@@ -25,6 +36,11 @@
 
 ### Documentation
 
+- Documented the Ecological Scarcity method, all method tuples, regionalized
+  matching, Noise service-unit and lorry-payload conversions, source
+  provenance, validation workflow, and usage examples. Added an executed,
+  annotated notebook and category-contribution figure for an exact ecoinvent
+  functional unit.
 - Added prospective AWARE documentation, an example notebook, and regression
   coverage for deterministic interpolation, stochastic interpolation,
   nearest-endpoint extrapolation, and no-policy fallback behavior.
