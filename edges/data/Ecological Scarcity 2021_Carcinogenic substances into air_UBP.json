@@ -1,0 +1,934 @@
+{
+  "name": "Ecological Scarcity 2021 - Carcinogenic substances into air",
+  "unit": "UBP",
+  "version": "1.06",
+  "edges version": "2.0",
+  "description": "Carcinogenic substances into air category of Swiss Ecological Scarcity 2021, converted from the reviewed SimaPro 10.4 method export.",
+  "source": {
+    "format": "SimaPro CSV 9.0.0",
+    "exported_with": "SimaPro 10.4.0.0",
+    "sha256": "20e46d0acb9e2a676f35636e76ae0ccacacdae122e49459985608a290525147a",
+    "category": "Carcinogenic substances into air"
+  },
+  "reference": "BAFU (Hrsg.) 2021: Ökofaktoren Schweiz 2021 gemäss der Methode der ökologischen Knappheit. Umwelt-Wissen Nr. 2121.",
+  "strategies": [
+    "map_exchanges",
+    "map_aggregate_locations",
+    "map_dynamic_locations",
+    "map_contained_locations",
+    "map_remaining_locations_to_global"
+  ],
+  "exchanges": [
+    {
+      "supplier": {
+        "name": "1,2-Dibromoethane",
+        "categories": [
+          "air",
+          "non-urban air or from high stacks"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 6500000.0
+    },
+    {
+      "supplier": {
+        "name": "1,2-Dibromoethane",
+        "categories": [
+          "air"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 6500000.0
+    },
+    {
+      "supplier": {
+        "name": "Acrylonitrile",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 910000.0
+    },
+    {
+      "supplier": {
+        "name": "Acrylonitrile",
+        "categories": [
+          "air",
+          "non-urban air or from high stacks"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 910000.0
+    },
+    {
+      "supplier": {
+        "name": "Acrylonitrile",
+        "categories": [
+          "air",
+          "urban air close to ground"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 910000.0
+    },
+    {
+      "supplier": {
+        "name": "Acrylonitrile",
+        "categories": [
+          "air"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 910000.0
+    },
+    {
+      "supplier": {
+        "name": "Benz(a)anthracene",
+        "categories": [
+          "air",
+          "non-urban air or from high stacks"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 110000000.0
+    },
+    {
+      "supplier": {
+        "name": "Benz(a)anthracene",
+        "categories": [
+          "air"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 110000000.0
+    },
+    {
+      "supplier": {
+        "name": "Benzene",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 69000.0
+    },
+    {
+      "supplier": {
+        "name": "Benzene",
+        "categories": [
+          "air",
+          "non-urban air or from high stacks"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 69000.0
+    },
+    {
+      "supplier": {
+        "name": "Benzene",
+        "categories": [
+          "air",
+          "urban air close to ground"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 69000.0
+    },
+    {
+      "supplier": {
+        "name": "Benzene",
+        "categories": [
+          "air"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 69000.0
+    },
+    {
+      "supplier": {
+        "name": "Benzo(a)pyrene",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1100000000.0
+    },
+    {
+      "supplier": {
+        "name": "Benzo(a)pyrene",
+        "categories": [
+          "air",
+          "non-urban air or from high stacks"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1100000000.0
+    },
+    {
+      "supplier": {
+        "name": "Benzo(a)pyrene",
+        "categories": [
+          "air",
+          "urban air close to ground"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1100000000.0
+    },
+    {
+      "supplier": {
+        "name": "Benzo(a)pyrene",
+        "categories": [
+          "air"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1100000000.0
+    },
+    {
+      "supplier": {
+        "name": "Benzo(b)fluoranthene",
+        "categories": [
+          "air",
+          "non-urban air or from high stacks"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 110000000.0
+    },
+    {
+      "supplier": {
+        "name": "Benzo(b)fluoranthene",
+        "categories": [
+          "air"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 110000000.0
+    },
+    {
+      "supplier": {
+        "name": "Benzo(k)fluoranthene",
+        "categories": [
+          "air",
+          "non-urban air or from high stacks"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 11000000.0
+    },
+    {
+      "supplier": {
+        "name": "Benzo(k)fluoranthene",
+        "categories": [
+          "air"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 11000000.0
+    },
+    {
+      "supplier": {
+        "name": "Butadiene",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 300000.0
+    },
+    {
+      "supplier": {
+        "name": "Butadiene",
+        "categories": [
+          "air",
+          "non-urban air or from high stacks"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 300000.0
+    },
+    {
+      "supplier": {
+        "name": "Butadiene",
+        "categories": [
+          "air",
+          "urban air close to ground"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 300000.0
+    },
+    {
+      "supplier": {
+        "name": "Butadiene",
+        "categories": [
+          "air"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 300000.0
+    },
+    {
+      "supplier": {
+        "name": "Chrysene",
+        "categories": [
+          "air",
+          "non-urban air or from high stacks"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1100000.0
+    },
+    {
+      "supplier": {
+        "name": "Chrysene",
+        "categories": [
+          "air"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1100000.0
+    },
+    {
+      "supplier": {
+        "name": "Dibenz(a,h)anthracene",
+        "categories": [
+          "air",
+          "non-urban air or from high stacks"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1100000000.0
+    },
+    {
+      "supplier": {
+        "name": "Dibenz(a,h)anthracene",
+        "categories": [
+          "air"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1100000000.0
+    },
+    {
+      "supplier": {
+        "name": "Dioxins, measured as 2,3,7,8-tetrachlorodibenzo-p-dioxin",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 9200000000000.0
+    },
+    {
+      "supplier": {
+        "name": "Dioxins, measured as 2,3,7,8-tetrachlorodibenzo-p-dioxin",
+        "categories": [
+          "air",
+          "non-urban air or from high stacks"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 9200000000000.0
+    },
+    {
+      "supplier": {
+        "name": "Dioxins, measured as 2,3,7,8-tetrachlorodibenzo-p-dioxin",
+        "categories": [
+          "air",
+          "urban air close to ground"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 9200000000000.0
+    },
+    {
+      "supplier": {
+        "name": "Dioxins, measured as 2,3,7,8-tetrachlorodibenzo-p-dioxin",
+        "categories": [
+          "air"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 9200000000000.0
+    },
+    {
+      "supplier": {
+        "name": "Epichlorohydrin",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 120000.0
+    },
+    {
+      "supplier": {
+        "name": "Epichlorohydrin",
+        "categories": [
+          "air",
+          "non-urban air or from high stacks"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 120000.0
+    },
+    {
+      "supplier": {
+        "name": "Epichlorohydrin",
+        "categories": [
+          "air",
+          "urban air close to ground"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 120000.0
+    },
+    {
+      "supplier": {
+        "name": "Epichlorohydrin",
+        "categories": [
+          "air"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 120000.0
+    },
+    {
+      "supplier": {
+        "name": "Ethylene dichloride",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 140000.0
+    },
+    {
+      "supplier": {
+        "name": "Ethylene dichloride",
+        "categories": [
+          "air",
+          "non-urban air or from high stacks"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 140000.0
+    },
+    {
+      "supplier": {
+        "name": "Ethylene dichloride",
+        "categories": [
+          "air",
+          "urban air close to ground"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 140000.0
+    },
+    {
+      "supplier": {
+        "name": "Ethylene dichloride",
+        "categories": [
+          "air"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 140000.0
+    },
+    {
+      "supplier": {
+        "name": "Ethylene oxide",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 270000.0
+    },
+    {
+      "supplier": {
+        "name": "Ethylene oxide",
+        "categories": [
+          "air",
+          "non-urban air or from high stacks"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 270000.0
+    },
+    {
+      "supplier": {
+        "name": "Ethylene oxide",
+        "categories": [
+          "air",
+          "urban air close to ground"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 270000.0
+    },
+    {
+      "supplier": {
+        "name": "Ethylene oxide",
+        "categories": [
+          "air"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 270000.0
+    },
+    {
+      "supplier": {
+        "name": "Indeno(1,2,3-cd)pyrene",
+        "categories": [
+          "air",
+          "non-urban air or from high stacks"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 110000000.0
+    },
+    {
+      "supplier": {
+        "name": "Indeno(1,2,3-cd)pyrene",
+        "categories": [
+          "air"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 110000000.0
+    },
+    {
+      "supplier": {
+        "name": "PAH, polycyclic aromatic hydrocarbons",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 12000.0
+    },
+    {
+      "supplier": {
+        "name": "PAH, polycyclic aromatic hydrocarbons",
+        "categories": [
+          "air",
+          "non-urban air or from high stacks"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 12000.0
+    },
+    {
+      "supplier": {
+        "name": "PAH, polycyclic aromatic hydrocarbons",
+        "categories": [
+          "air",
+          "urban air close to ground"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 12000.0
+    },
+    {
+      "supplier": {
+        "name": "PAH, polycyclic aromatic hydrocarbons",
+        "categories": [
+          "air"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 12000.0
+    },
+    {
+      "supplier": {
+        "name": "Propylene oxide",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 96000.0
+    },
+    {
+      "supplier": {
+        "name": "Propylene oxide",
+        "categories": [
+          "air",
+          "non-urban air or from high stacks"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 96000.0
+    },
+    {
+      "supplier": {
+        "name": "Propylene oxide",
+        "categories": [
+          "air",
+          "urban air close to ground"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 96000.0
+    },
+    {
+      "supplier": {
+        "name": "Propylene oxide",
+        "categories": [
+          "air"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 96000.0
+    },
+    {
+      "supplier": {
+        "name": "Vinyl chloride",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1300000.0
+    },
+    {
+      "supplier": {
+        "name": "Vinyl chloride",
+        "categories": [
+          "air",
+          "non-urban air or from high stacks"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1300000.0
+    },
+    {
+      "supplier": {
+        "name": "Vinyl chloride",
+        "categories": [
+          "air",
+          "urban air close to ground"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1300000.0
+    },
+    {
+      "supplier": {
+        "name": "Vinyl chloride",
+        "categories": [
+          "air"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1300000.0
+    },
+    {
+      "supplier": {
+        "name": "o-Nitrotoluene",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 2200000.0
+    },
+    {
+      "supplier": {
+        "name": "o-Nitrotoluene",
+        "categories": [
+          "air",
+          "non-urban air or from high stacks"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 2200000.0
+    },
+    {
+      "supplier": {
+        "name": "o-Nitrotoluene",
+        "categories": [
+          "air",
+          "urban air close to ground"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 2200000.0
+    },
+    {
+      "supplier": {
+        "name": "o-Nitrotoluene",
+        "categories": [
+          "air"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 2200000.0
+    }
+  ]
+}

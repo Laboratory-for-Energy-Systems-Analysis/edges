@@ -1,0 +1,1327 @@
+{
+  "name": "Ecological Scarcity 2021 - Radioactive substances into water",
+  "unit": "UBP",
+  "version": "1.06",
+  "edges version": "2.0",
+  "description": "Radioactive substances into water category of Swiss Ecological Scarcity 2021, converted from the reviewed SimaPro 10.4 method export.",
+  "source": {
+    "format": "SimaPro CSV 9.0.0",
+    "exported_with": "SimaPro 10.4.0.0",
+    "sha256": "20e46d0acb9e2a676f35636e76ae0ccacacdae122e49459985608a290525147a",
+    "category": "Radioactive substances into water"
+  },
+  "reference": "BAFU (Hrsg.) 2021: Ökofaktoren Schweiz 2021 gemäss der Methode der ökologischen Knappheit. Umwelt-Wissen Nr. 2121.",
+  "strategies": [
+    "map_exchanges",
+    "map_aggregate_locations",
+    "map_dynamic_locations",
+    "map_contained_locations",
+    "map_remaining_locations_to_global"
+  ],
+  "exchanges": [
+    {
+      "supplier": {
+        "name": "Actinides, radioactive, unspecified",
+        "categories": [
+          "water",
+          "ground-"
+        ],
+        "unit": "kilo Becquerel",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.0
+    },
+    {
+      "supplier": {
+        "name": "Actinides, radioactive, unspecified",
+        "categories": [
+          "water",
+          "ground-, long-term"
+        ],
+        "unit": "kilo Becquerel",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.0
+    },
+    {
+      "supplier": {
+        "name": "Actinides, radioactive, unspecified",
+        "categories": [
+          "water",
+          "ocean"
+        ],
+        "unit": "kilo Becquerel",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1800.0
+    },
+    {
+      "supplier": {
+        "name": "Actinides, radioactive, unspecified",
+        "categories": [
+          "water",
+          "surface water"
+        ],
+        "unit": "kilo Becquerel",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.0
+    },
+    {
+      "supplier": {
+        "name": "Actinides, radioactive, unspecified",
+        "categories": [
+          "water"
+        ],
+        "unit": "kilo Becquerel",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.0
+    },
+    {
+      "supplier": {
+        "name": "Americium-241",
+        "categories": [
+          "water",
+          "ocean"
+        ],
+        "unit": "kilo Becquerel",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 3900.0
+    },
+    {
+      "supplier": {
+        "name": "Antimony-124",
+        "categories": [
+          "water",
+          "ground-"
+        ],
+        "unit": "kilo Becquerel",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.0
+    },
+    {
+      "supplier": {
+        "name": "Antimony-124",
+        "categories": [
+          "water",
+          "ground-, long-term"
+        ],
+        "unit": "kilo Becquerel",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.0
+    },
+    {
+      "supplier": {
+        "name": "Antimony-124",
+        "categories": [
+          "water",
+          "ocean"
+        ],
+        "unit": "kilo Becquerel",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.0
+    },
+    {
+      "supplier": {
+        "name": "Antimony-124",
+        "categories": [
+          "water",
+          "surface water"
+        ],
+        "unit": "kilo Becquerel",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.01
+    },
+    {
+      "supplier": {
+        "name": "Antimony-124",
+        "categories": [
+          "water"
+        ],
+        "unit": "kilo Becquerel",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.01
+    },
+    {
+      "supplier": {
+        "name": "Antimony-125",
+        "categories": [
+          "water",
+          "ocean"
+        ],
+        "unit": "kilo Becquerel",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1.9
+    },
+    {
+      "supplier": {
+        "name": "Caesium-134",
+        "categories": [
+          "water",
+          "ground-"
+        ],
+        "unit": "kilo Becquerel",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.0
+    },
+    {
+      "supplier": {
+        "name": "Caesium-134",
+        "categories": [
+          "water",
+          "ground-, long-term"
+        ],
+        "unit": "kilo Becquerel",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.0
+    },
+    {
+      "supplier": {
+        "name": "Caesium-134",
+        "categories": [
+          "water",
+          "ocean"
+        ],
+        "unit": "kilo Becquerel",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 10.0
+    },
+    {
+      "supplier": {
+        "name": "Caesium-134",
+        "categories": [
+          "water",
+          "surface water"
+        ],
+        "unit": "kilo Becquerel",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1.8
+    },
+    {
+      "supplier": {
+        "name": "Caesium-134",
+        "categories": [
+          "water"
+        ],
+        "unit": "kilo Becquerel",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1.8
+    },
+    {
+      "supplier": {
+        "name": "Caesium-137",
+        "categories": [
+          "water",
+          "ground-"
+        ],
+        "unit": "kilo Becquerel",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.0
+    },
+    {
+      "supplier": {
+        "name": "Caesium-137",
+        "categories": [
+          "water",
+          "ground-, long-term"
+        ],
+        "unit": "kilo Becquerel",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.0
+    },
+    {
+      "supplier": {
+        "name": "Caesium-137",
+        "categories": [
+          "water",
+          "ocean"
+        ],
+        "unit": "kilo Becquerel",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 10.0
+    },
+    {
+      "supplier": {
+        "name": "Caesium-137",
+        "categories": [
+          "water",
+          "surface water"
+        ],
+        "unit": "kilo Becquerel",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 2.1
+    },
+    {
+      "supplier": {
+        "name": "Caesium-137",
+        "categories": [
+          "water"
+        ],
+        "unit": "kilo Becquerel",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 2.1
+    },
+    {
+      "supplier": {
+        "name": "Carbon-14",
+        "categories": [
+          "water",
+          "ocean"
+        ],
+        "unit": "kilo Becquerel",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 150.0
+    },
+    {
+      "supplier": {
+        "name": "Cobalt-58",
+        "categories": [
+          "water",
+          "ground-"
+        ],
+        "unit": "kilo Becquerel",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.0
+    },
+    {
+      "supplier": {
+        "name": "Cobalt-58",
+        "categories": [
+          "water",
+          "ground-, long-term"
+        ],
+        "unit": "kilo Becquerel",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.0
+    },
+    {
+      "supplier": {
+        "name": "Cobalt-58",
+        "categories": [
+          "water",
+          "ocean"
+        ],
+        "unit": "kilo Becquerel",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.0
+    },
+    {
+      "supplier": {
+        "name": "Cobalt-58",
+        "categories": [
+          "water",
+          "surface water"
+        ],
+        "unit": "kilo Becquerel",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.00053
+    },
+    {
+      "supplier": {
+        "name": "Cobalt-58",
+        "categories": [
+          "water"
+        ],
+        "unit": "kilo Becquerel",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.00053
+    },
+    {
+      "supplier": {
+        "name": "Cobalt-60",
+        "categories": [
+          "water",
+          "ground-"
+        ],
+        "unit": "kilo Becquerel",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.0
+    },
+    {
+      "supplier": {
+        "name": "Cobalt-60",
+        "categories": [
+          "water",
+          "ground-, long-term"
+        ],
+        "unit": "kilo Becquerel",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.0
+    },
+    {
+      "supplier": {
+        "name": "Cobalt-60",
+        "categories": [
+          "water",
+          "ocean"
+        ],
+        "unit": "kilo Becquerel",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 50.0
+    },
+    {
+      "supplier": {
+        "name": "Cobalt-60",
+        "categories": [
+          "water",
+          "surface water"
+        ],
+        "unit": "kilo Becquerel",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.55
+    },
+    {
+      "supplier": {
+        "name": "Cobalt-60",
+        "categories": [
+          "water"
+        ],
+        "unit": "kilo Becquerel",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.55
+    },
+    {
+      "supplier": {
+        "name": "Curium alpha",
+        "categories": [
+          "water",
+          "ocean"
+        ],
+        "unit": "kilo Becquerel",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 7200.0
+    },
+    {
+      "supplier": {
+        "name": "Iodine-129",
+        "categories": [
+          "water",
+          "ocean"
+        ],
+        "unit": "kilo Becquerel",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 13000.0
+    },
+    {
+      "supplier": {
+        "name": "Iodine-131",
+        "categories": [
+          "water",
+          "ground-"
+        ],
+        "unit": "kilo Becquerel",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.0
+    },
+    {
+      "supplier": {
+        "name": "Iodine-131",
+        "categories": [
+          "water",
+          "ground-, long-term"
+        ],
+        "unit": "kilo Becquerel",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.0
+    },
+    {
+      "supplier": {
+        "name": "Iodine-131",
+        "categories": [
+          "water",
+          "ocean"
+        ],
+        "unit": "kilo Becquerel",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.0
+    },
+    {
+      "supplier": {
+        "name": "Iodine-131",
+        "categories": [
+          "water",
+          "surface water"
+        ],
+        "unit": "kilo Becquerel",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.0063
+    },
+    {
+      "supplier": {
+        "name": "Iodine-131",
+        "categories": [
+          "water"
+        ],
+        "unit": "kilo Becquerel",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.0063
+    },
+    {
+      "supplier": {
+        "name": "Manganese-54",
+        "categories": [
+          "water",
+          "ground-"
+        ],
+        "unit": "kilo Becquerel",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.0
+    },
+    {
+      "supplier": {
+        "name": "Manganese-54",
+        "categories": [
+          "water",
+          "ground-, long-term"
+        ],
+        "unit": "kilo Becquerel",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.0
+    },
+    {
+      "supplier": {
+        "name": "Manganese-54",
+        "categories": [
+          "water",
+          "ocean"
+        ],
+        "unit": "kilo Becquerel",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.0
+    },
+    {
+      "supplier": {
+        "name": "Manganese-54",
+        "categories": [
+          "water",
+          "surface water"
+        ],
+        "unit": "kilo Becquerel",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.0039
+    },
+    {
+      "supplier": {
+        "name": "Manganese-54",
+        "categories": [
+          "water"
+        ],
+        "unit": "kilo Becquerel",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.0039
+    },
+    {
+      "supplier": {
+        "name": "Plutonium-alpha",
+        "categories": [
+          "water",
+          "ocean"
+        ],
+        "unit": "kilo Becquerel",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 940.0
+    },
+    {
+      "supplier": {
+        "name": "Radioactive species, Nuclides, unspecified",
+        "categories": [
+          "water",
+          "ground-"
+        ],
+        "unit": "kilo Becquerel",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.0
+    },
+    {
+      "supplier": {
+        "name": "Radioactive species, Nuclides, unspecified",
+        "categories": [
+          "water",
+          "ground-, long-term"
+        ],
+        "unit": "kilo Becquerel",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.0
+    },
+    {
+      "supplier": {
+        "name": "Radioactive species, Nuclides, unspecified",
+        "categories": [
+          "water",
+          "ocean"
+        ],
+        "unit": "kilo Becquerel",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 820.0
+    },
+    {
+      "supplier": {
+        "name": "Radioactive species, Nuclides, unspecified",
+        "categories": [
+          "water",
+          "surface water"
+        ],
+        "unit": "kilo Becquerel",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.37
+    },
+    {
+      "supplier": {
+        "name": "Radioactive species, Nuclides, unspecified",
+        "categories": [
+          "water"
+        ],
+        "unit": "kilo Becquerel",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.37
+    },
+    {
+      "supplier": {
+        "name": "Radioactive species, alpha emitters",
+        "categories": [
+          "water",
+          "ground-"
+        ],
+        "unit": "kilo Becquerel",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.0
+    },
+    {
+      "supplier": {
+        "name": "Radioactive species, alpha emitters",
+        "categories": [
+          "water",
+          "ground-, long-term"
+        ],
+        "unit": "kilo Becquerel",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.0
+    },
+    {
+      "supplier": {
+        "name": "Radioactive species, alpha emitters",
+        "categories": [
+          "water",
+          "ocean"
+        ],
+        "unit": "kilo Becquerel",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.0
+    },
+    {
+      "supplier": {
+        "name": "Radioactive species, alpha emitters",
+        "categories": [
+          "water",
+          "surface water"
+        ],
+        "unit": "kilo Becquerel",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.00039
+    },
+    {
+      "supplier": {
+        "name": "Radioactive species, alpha emitters",
+        "categories": [
+          "water"
+        ],
+        "unit": "kilo Becquerel",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.00039
+    },
+    {
+      "supplier": {
+        "name": "Radium-226",
+        "categories": [
+          "water",
+          "ground-"
+        ],
+        "unit": "kilo Becquerel",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.0
+    },
+    {
+      "supplier": {
+        "name": "Radium-226",
+        "categories": [
+          "water",
+          "ground-, long-term"
+        ],
+        "unit": "kilo Becquerel",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.0
+    },
+    {
+      "supplier": {
+        "name": "Radium-226",
+        "categories": [
+          "water",
+          "ocean"
+        ],
+        "unit": "kilo Becquerel",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.0
+    },
+    {
+      "supplier": {
+        "name": "Radium-226",
+        "categories": [
+          "water",
+          "surface water"
+        ],
+        "unit": "kilo Becquerel",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.0016
+    },
+    {
+      "supplier": {
+        "name": "Radium-226",
+        "categories": [
+          "water"
+        ],
+        "unit": "kilo Becquerel",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.0016
+    },
+    {
+      "supplier": {
+        "name": "Ruthenium-106",
+        "categories": [
+          "water",
+          "ocean"
+        ],
+        "unit": "kilo Becquerel",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 18.0
+    },
+    {
+      "supplier": {
+        "name": "Silver-110",
+        "categories": [
+          "water",
+          "ground-"
+        ],
+        "unit": "kilo Becquerel",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.0
+    },
+    {
+      "supplier": {
+        "name": "Silver-110",
+        "categories": [
+          "water",
+          "ground-, long-term"
+        ],
+        "unit": "kilo Becquerel",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.0
+    },
+    {
+      "supplier": {
+        "name": "Silver-110",
+        "categories": [
+          "water",
+          "ocean"
+        ],
+        "unit": "kilo Becquerel",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.0
+    },
+    {
+      "supplier": {
+        "name": "Silver-110",
+        "categories": [
+          "water",
+          "surface water"
+        ],
+        "unit": "kilo Becquerel",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.0063
+    },
+    {
+      "supplier": {
+        "name": "Silver-110",
+        "categories": [
+          "water"
+        ],
+        "unit": "kilo Becquerel",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.0063
+    },
+    {
+      "supplier": {
+        "name": "Strontium-90",
+        "categories": [
+          "water",
+          "ocean"
+        ],
+        "unit": "kilo Becquerel",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.51
+    },
+    {
+      "supplier": {
+        "name": "Tritium",
+        "categories": [
+          "water",
+          "ground-"
+        ],
+        "unit": "kilo Becquerel",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.0
+    },
+    {
+      "supplier": {
+        "name": "Tritium",
+        "categories": [
+          "water",
+          "ground-, long-term"
+        ],
+        "unit": "kilo Becquerel",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.0
+    },
+    {
+      "supplier": {
+        "name": "Tritium",
+        "categories": [
+          "water",
+          "ocean"
+        ],
+        "unit": "kilo Becquerel",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.0088
+    },
+    {
+      "supplier": {
+        "name": "Tritium",
+        "categories": [
+          "water",
+          "surface water"
+        ],
+        "unit": "kilo Becquerel",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 5.5e-06
+    },
+    {
+      "supplier": {
+        "name": "Tritium",
+        "categories": [
+          "water"
+        ],
+        "unit": "kilo Becquerel",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 5.5e-06
+    },
+    {
+      "supplier": {
+        "name": "Uranium-234",
+        "categories": [
+          "water",
+          "ground-"
+        ],
+        "unit": "kilo Becquerel",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.0
+    },
+    {
+      "supplier": {
+        "name": "Uranium-234",
+        "categories": [
+          "water",
+          "ground-, long-term"
+        ],
+        "unit": "kilo Becquerel",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.0
+    },
+    {
+      "supplier": {
+        "name": "Uranium-234",
+        "categories": [
+          "water",
+          "ocean"
+        ],
+        "unit": "kilo Becquerel",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 2.9
+    },
+    {
+      "supplier": {
+        "name": "Uranium-234",
+        "categories": [
+          "water",
+          "surface water"
+        ],
+        "unit": "kilo Becquerel",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.03
+    },
+    {
+      "supplier": {
+        "name": "Uranium-234",
+        "categories": [
+          "water"
+        ],
+        "unit": "kilo Becquerel",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.03
+    },
+    {
+      "supplier": {
+        "name": "Uranium-235",
+        "categories": [
+          "water",
+          "ground-"
+        ],
+        "unit": "kilo Becquerel",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.0
+    },
+    {
+      "supplier": {
+        "name": "Uranium-235",
+        "categories": [
+          "water",
+          "ground-, long-term"
+        ],
+        "unit": "kilo Becquerel",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.0
+    },
+    {
+      "supplier": {
+        "name": "Uranium-235",
+        "categories": [
+          "water",
+          "ocean"
+        ],
+        "unit": "kilo Becquerel",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 3.2
+    },
+    {
+      "supplier": {
+        "name": "Uranium-235",
+        "categories": [
+          "water",
+          "surface water"
+        ],
+        "unit": "kilo Becquerel",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.029
+    },
+    {
+      "supplier": {
+        "name": "Uranium-235",
+        "categories": [
+          "water"
+        ],
+        "unit": "kilo Becquerel",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.029
+    },
+    {
+      "supplier": {
+        "name": "Uranium-238",
+        "categories": [
+          "water",
+          "ground-"
+        ],
+        "unit": "kilo Becquerel",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.0
+    },
+    {
+      "supplier": {
+        "name": "Uranium-238",
+        "categories": [
+          "water",
+          "ground-, long-term"
+        ],
+        "unit": "kilo Becquerel",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.0
+    },
+    {
+      "supplier": {
+        "name": "Uranium-238",
+        "categories": [
+          "water",
+          "ocean"
+        ],
+        "unit": "kilo Becquerel",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 2.9
+    },
+    {
+      "supplier": {
+        "name": "Uranium-238",
+        "categories": [
+          "water",
+          "surface water"
+        ],
+        "unit": "kilo Becquerel",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.029
+    },
+    {
+      "supplier": {
+        "name": "Uranium-238",
+        "categories": [
+          "water"
+        ],
+        "unit": "kilo Becquerel",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.029
+    }
+  ]
+}

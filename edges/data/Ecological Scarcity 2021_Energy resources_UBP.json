@@ -1,0 +1,218 @@
+{
+  "name": "Ecological Scarcity 2021 - Energy resources",
+  "unit": "UBP",
+  "version": "1.06",
+  "edges version": "2.0",
+  "description": "Energy resources category of Swiss Ecological Scarcity 2021, converted from the reviewed SimaPro 10.4 method export.",
+  "source": {
+    "format": "SimaPro CSV 9.0.0",
+    "exported_with": "SimaPro 10.4.0.0",
+    "sha256": "20e46d0acb9e2a676f35636e76ae0ccacacdae122e49459985608a290525147a",
+    "category": "Energy resources"
+  },
+  "reference": "BAFU (Hrsg.) 2021: Ökofaktoren Schweiz 2021 gemäss der Methode der ökologischen Knappheit. Umwelt-Wissen Nr. 2121.",
+  "strategies": [
+    "map_exchanges",
+    "map_aggregate_locations",
+    "map_dynamic_locations",
+    "map_contained_locations",
+    "map_remaining_locations_to_global"
+  ],
+  "exchanges": [
+    {
+      "supplier": {
+        "name": "Coal, brown",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 80.0
+    },
+    {
+      "supplier": {
+        "name": "Coal, hard",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 160.0
+    },
+    {
+      "supplier": {
+        "name": "Energy, geothermal, converted",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "unit": "megajoule",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 2.8
+    },
+    {
+      "supplier": {
+        "name": "Energy, gross calorific value, in biomass",
+        "categories": [
+          "natural resource",
+          "biotic"
+        ],
+        "unit": "megajoule",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 2.8
+    },
+    {
+      "supplier": {
+        "name": "Energy, gross calorific value, in biomass, primary forest",
+        "categories": [
+          "natural resource",
+          "biotic"
+        ],
+        "unit": "megajoule",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 8.3
+    },
+    {
+      "supplier": {
+        "name": "Energy, kinetic (in wind), converted",
+        "categories": [
+          "natural resource",
+          "in air"
+        ],
+        "unit": "megajoule",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 2.6
+    },
+    {
+      "supplier": {
+        "name": "Energy, potential (in hydropower reservoir), converted",
+        "categories": [
+          "natural resource",
+          "in water"
+        ],
+        "unit": "megajoule",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 2.6
+    },
+    {
+      "supplier": {
+        "name": "Energy, solar, converted",
+        "categories": [
+          "natural resource",
+          "in air"
+        ],
+        "unit": "megajoule",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 2.5
+    },
+    {
+      "supplier": {
+        "name": "Gas, mine, off-gas, process, coal mining",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "unit": "standard cubic meter",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 330.0
+    },
+    {
+      "supplier": {
+        "name": "Gas, natural",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "unit": "standard cubic meter",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 330.0
+    },
+    {
+      "supplier": {
+        "name": "Oil, crude",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 380.0
+    },
+    {
+      "supplier": {
+        "name": "Peat",
+        "categories": [
+          "natural resource",
+          "biotic"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 80.0
+    },
+    {
+      "supplier": {
+        "name": "Uranium",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 4600000.0
+    }
+  ]
+}

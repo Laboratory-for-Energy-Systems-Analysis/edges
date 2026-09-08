@@ -1,0 +1,5828 @@
+{
+  "name": "Ecological Scarcity 2021 - Pesticides into soil",
+  "unit": "UBP",
+  "version": "1.06",
+  "edges version": "2.0",
+  "description": "Pesticides into soil category of Swiss Ecological Scarcity 2021, converted from the reviewed SimaPro 10.4 method export.",
+  "source": {
+    "format": "SimaPro CSV 9.0.0",
+    "exported_with": "SimaPro 10.4.0.0",
+    "sha256": "20e46d0acb9e2a676f35636e76ae0ccacacdae122e49459985608a290525147a",
+    "category": "Pesticides into soil"
+  },
+  "reference": "BAFU (Hrsg.) 2021: Ökofaktoren Schweiz 2021 gemäss der Methode der ökologischen Knappheit. Umwelt-Wissen Nr. 2121.",
+  "strategies": [
+    "map_exchanges",
+    "map_aggregate_locations",
+    "map_dynamic_locations",
+    "map_contained_locations",
+    "map_remaining_locations_to_global"
+  ],
+  "exchanges": [
+    {
+      "supplier": {
+        "name": "1-naphthylacetic acid",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 22000.0
+    },
+    {
+      "supplier": {
+        "name": "2,4-D",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 2500000.0
+    },
+    {
+      "supplier": {
+        "name": "2-Phenylphenol",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 110000.0
+    },
+    {
+      "supplier": {
+        "name": "6-benzyladenine",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 18.0
+    },
+    {
+      "supplier": {
+        "name": "8-Quinolinol",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1200.0
+    },
+    {
+      "supplier": {
+        "name": "Abamectin",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 2800000.0
+    },
+    {
+      "supplier": {
+        "name": "Acephate",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 28000000.0
+    },
+    {
+      "supplier": {
+        "name": "Acetamide",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 2900000.0
+    },
+    {
+      "supplier": {
+        "name": "Acetamiprid",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 2800000.0
+    },
+    {
+      "supplier": {
+        "name": "Acetic acid",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 630.0
+    },
+    {
+      "supplier": {
+        "name": "Acetochlor",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1400000.0
+    },
+    {
+      "supplier": {
+        "name": "Acibenzolar-S-methyl",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 2800000.0
+    },
+    {
+      "supplier": {
+        "name": "Aclonifen",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 8800000.0
+    },
+    {
+      "supplier": {
+        "name": "Alachlor",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 2000000.0
+    },
+    {
+      "supplier": {
+        "name": "Aldicarb",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 10000000.0
+    },
+    {
+      "supplier": {
+        "name": "Aldrin",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 28000000.0
+    },
+    {
+      "supplier": {
+        "name": "Alpha-cypermethrin",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 7100000.0
+    },
+    {
+      "supplier": {
+        "name": "Aluminium phosphide",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 2800000.0
+    },
+    {
+      "supplier": {
+        "name": "Ametryn",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 2700000.0
+    },
+    {
+      "supplier": {
+        "name": "Amidosulfuron",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 2800000.0
+    },
+    {
+      "supplier": {
+        "name": "Amitraz",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 120000.0
+    },
+    {
+      "supplier": {
+        "name": "Anthraquinone",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 4900.0
+    },
+    {
+      "supplier": {
+        "name": "Asulam",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 250000.0
+    },
+    {
+      "supplier": {
+        "name": "Atrazine",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 11000000.0
+    },
+    {
+      "supplier": {
+        "name": "Azadirachtin",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 330000.0
+    },
+    {
+      "supplier": {
+        "name": "Azinphos-methyl",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 10000000.0
+    },
+    {
+      "supplier": {
+        "name": "Azoxystrobin",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 2800000.0
+    },
+    {
+      "supplier": {
+        "name": "Beflubutamid",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 2800000.0
+    },
+    {
+      "supplier": {
+        "name": "Benalaxyl-M",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 2800000.0
+    },
+    {
+      "supplier": {
+        "name": "Benazolin",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 18000.0
+    },
+    {
+      "supplier": {
+        "name": "Benomyl",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1200000.0
+    },
+    {
+      "supplier": {
+        "name": "Bensulfuron methyl ester",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 760000.0
+    },
+    {
+      "supplier": {
+        "name": "Bensultap",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 4800.0
+    },
+    {
+      "supplier": {
+        "name": "Bentazone",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1300000.0
+    },
+    {
+      "supplier": {
+        "name": "Benthiavalicarb",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 2800000.0
+    },
+    {
+      "supplier": {
+        "name": "Benzoic acid",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 110000.0
+    },
+    {
+      "supplier": {
+        "name": "Beta-cyfluthrin",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 11000000.0
+    },
+    {
+      "supplier": {
+        "name": "Bifenox",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 160000.0
+    },
+    {
+      "supplier": {
+        "name": "Bifenthrin",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 2000000.0
+    },
+    {
+      "supplier": {
+        "name": "Bitertanol",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 2300000.0
+    },
+    {
+      "supplier": {
+        "name": "Boscalid",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 2800000.0
+    },
+    {
+      "supplier": {
+        "name": "Bromopropylate",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1300000.0
+    },
+    {
+      "supplier": {
+        "name": "Bromoxynil",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1100000.0
+    },
+    {
+      "supplier": {
+        "name": "Bromuconazole",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 2800000.0
+    },
+    {
+      "supplier": {
+        "name": "Bupirimate",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 430000.0
+    },
+    {
+      "supplier": {
+        "name": "Buprofezin",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 13000000.0
+    },
+    {
+      "supplier": {
+        "name": "Butralin",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 900000.0
+    },
+    {
+      "supplier": {
+        "name": "Captan",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 590000.0
+    },
+    {
+      "supplier": {
+        "name": "Carbaryl",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 6800000.0
+    },
+    {
+      "supplier": {
+        "name": "Carbendazim",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 11000000.0
+    },
+    {
+      "supplier": {
+        "name": "Carbetamide",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 62000.0
+    },
+    {
+      "supplier": {
+        "name": "Carbofuran",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 22000000.0
+    },
+    {
+      "supplier": {
+        "name": "Carbosulfan",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 13000000.0
+    },
+    {
+      "supplier": {
+        "name": "Carboxin",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 120000.0
+    },
+    {
+      "supplier": {
+        "name": "Carfentrazone-ethyl",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 2800000.0
+    },
+    {
+      "supplier": {
+        "name": "Chlorfenvinphos",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 28000000.0
+    },
+    {
+      "supplier": {
+        "name": "Chloridazon",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 870000.0
+    },
+    {
+      "supplier": {
+        "name": "Chlorimuron-ethyl",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 2800000.0
+    },
+    {
+      "supplier": {
+        "name": "Chlormequat chloride",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 43000.0
+    },
+    {
+      "supplier": {
+        "name": "Chlormequat",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1200000.0
+    },
+    {
+      "supplier": {
+        "name": "Chlorothalonil",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 11000000.0
+    },
+    {
+      "supplier": {
+        "name": "Chlorotoluron",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 280000.0
+    },
+    {
+      "supplier": {
+        "name": "Chlorpropham",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1900000.0
+    },
+    {
+      "supplier": {
+        "name": "Chlorpyrifos methyl",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 19000000.0
+    },
+    {
+      "supplier": {
+        "name": "Chlorpyrifos",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 19000000.0
+    },
+    {
+      "supplier": {
+        "name": "Chlorsulfuron",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 2200000.0
+    },
+    {
+      "supplier": {
+        "name": "Chlorthal",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 2800000.0
+    },
+    {
+      "supplier": {
+        "name": "Choline chloride",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 3600.0
+    },
+    {
+      "supplier": {
+        "name": "Cinidon-ethyl",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 2800000.0
+    },
+    {
+      "supplier": {
+        "name": "Clethodim",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 2800000.0
+    },
+    {
+      "supplier": {
+        "name": "Clodinafop-propargyl",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 2800000.0
+    },
+    {
+      "supplier": {
+        "name": "Clofentezine",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 2800000.0
+    },
+    {
+      "supplier": {
+        "name": "Clomazone",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 430000.0
+    },
+    {
+      "supplier": {
+        "name": "Clopyralid",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 67000.0
+    },
+    {
+      "supplier": {
+        "name": "Cloquintocet-mexyl",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 2800000.0
+    },
+    {
+      "supplier": {
+        "name": "Cloransulam-methyl",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 2800000.0
+    },
+    {
+      "supplier": {
+        "name": "Clothianidin",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 2800000.0
+    },
+    {
+      "supplier": {
+        "name": "Copper oxychloride",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1200000.0
+    },
+    {
+      "supplier": {
+        "name": "Copper sulfate",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1200000.0
+    },
+    {
+      "supplier": {
+        "name": "Cupric hydroxide",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1200000.0
+    },
+    {
+      "supplier": {
+        "name": "Cyanamide",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 96000.0
+    },
+    {
+      "supplier": {
+        "name": "Cyanazine",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 19000000.0
+    },
+    {
+      "supplier": {
+        "name": "Cyazofamid",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 2800000.0
+    },
+    {
+      "supplier": {
+        "name": "Cyclanilide",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 2800000.0
+    },
+    {
+      "supplier": {
+        "name": "Cycloxydim",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 2800000.0
+    },
+    {
+      "supplier": {
+        "name": "Cyflufenamid",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 2800000.0
+    },
+    {
+      "supplier": {
+        "name": "Cymoxanil",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 110000.0
+    },
+    {
+      "supplier": {
+        "name": "Cypermethrin",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 11000000.0
+    },
+    {
+      "supplier": {
+        "name": "Cyproconazole",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 350000.0
+    },
+    {
+      "supplier": {
+        "name": "Cyprodinil",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 2800000.0
+    },
+    {
+      "supplier": {
+        "name": "DNOC",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1400000.0
+    },
+    {
+      "supplier": {
+        "name": "Daminozide",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 18000.0
+    },
+    {
+      "supplier": {
+        "name": "Dazomet",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 92000.0
+    },
+    {
+      "supplier": {
+        "name": "Deltamethrin",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1200000.0
+    },
+    {
+      "supplier": {
+        "name": "Desmedipham",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 180000.0
+    },
+    {
+      "supplier": {
+        "name": "Diafenthiuron",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 2800000.0
+    },
+    {
+      "supplier": {
+        "name": "Diazinon",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 28000000.0
+    },
+    {
+      "supplier": {
+        "name": "Dicamba",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 370000.0
+    },
+    {
+      "supplier": {
+        "name": "Dichlobenil",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 44000.0
+    },
+    {
+      "supplier": {
+        "name": "Dichlorprop-P",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 2800000.0
+    },
+    {
+      "supplier": {
+        "name": "Dichlorvos",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 10000000.0
+    },
+    {
+      "supplier": {
+        "name": "Diclofop-methyl",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 68000.0
+    },
+    {
+      "supplier": {
+        "name": "Dicofol",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 28000000.0
+    },
+    {
+      "supplier": {
+        "name": "Dicrotophos",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 28000000.0
+    },
+    {
+      "supplier": {
+        "name": "Diethofencarb",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 28000.0
+    },
+    {
+      "supplier": {
+        "name": "Difenoconazole",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 2800000.0
+    },
+    {
+      "supplier": {
+        "name": "Diflubenzuron",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 2200000.0
+    },
+    {
+      "supplier": {
+        "name": "Diflufenican",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 37000.0
+    },
+    {
+      "supplier": {
+        "name": "Diflufenzopyr-sodium",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 2800000.0
+    },
+    {
+      "supplier": {
+        "name": "Dimefuron",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 2800000.0
+    },
+    {
+      "supplier": {
+        "name": "Dimethachlor",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 190000.0
+    },
+    {
+      "supplier": {
+        "name": "Dimethenamid-P",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 2800000.0
+    },
+    {
+      "supplier": {
+        "name": "Dimethenamide",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 8500000.0
+    },
+    {
+      "supplier": {
+        "name": "Dimethoate",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 3100000.0
+    },
+    {
+      "supplier": {
+        "name": "Dimethomorph",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 2800000.0
+    },
+    {
+      "supplier": {
+        "name": "Dinocap",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 49000.0
+    },
+    {
+      "supplier": {
+        "name": "Dinoseb",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 20000000.0
+    },
+    {
+      "supplier": {
+        "name": "Diquat dibromide",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 28000000.0
+    },
+    {
+      "supplier": {
+        "name": "Diquat",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 28000000.0
+    },
+    {
+      "supplier": {
+        "name": "Dithianon",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 2900000.0
+    },
+    {
+      "supplier": {
+        "name": "Diuron",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 9300000.0
+    },
+    {
+      "supplier": {
+        "name": "Dodemorph",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 54000.0
+    },
+    {
+      "supplier": {
+        "name": "Dodine",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 9300.0
+    },
+    {
+      "supplier": {
+        "name": "EPTC",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 2300000.0
+    },
+    {
+      "supplier": {
+        "name": "Endosulfan",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 3200000.0
+    },
+    {
+      "supplier": {
+        "name": "Endothall",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 570000.0
+    },
+    {
+      "supplier": {
+        "name": "Epoxiconazole",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 2800000.0
+    },
+    {
+      "supplier": {
+        "name": "Esfenvalerate",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 11000000.0
+    },
+    {
+      "supplier": {
+        "name": "Ethalfluralin",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1200000.0
+    },
+    {
+      "supplier": {
+        "name": "Ethephon",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 2300000.0
+    },
+    {
+      "supplier": {
+        "name": "Ethofumesate",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 230000.0
+    },
+    {
+      "supplier": {
+        "name": "Ethoprop",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 28000000.0
+    },
+    {
+      "supplier": {
+        "name": "Etofenprox",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 65000.0
+    },
+    {
+      "supplier": {
+        "name": "Etoxazole",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 2800000.0
+    },
+    {
+      "supplier": {
+        "name": "Etridiazole",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 380000.0
+    },
+    {
+      "supplier": {
+        "name": "Famoxadone",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 2800000.0
+    },
+    {
+      "supplier": {
+        "name": "Fatty acids, c9-13-neo-",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 11000.0
+    },
+    {
+      "supplier": {
+        "name": "Fenamidone",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 2800000.0
+    },
+    {
+      "supplier": {
+        "name": "Fenazaquin",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 2800000.0
+    },
+    {
+      "supplier": {
+        "name": "Fenbuconazole",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 2800000.0
+    },
+    {
+      "supplier": {
+        "name": "Fenbutatin oxide",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 160000.0
+    },
+    {
+      "supplier": {
+        "name": "Fenhexamid",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 2800000.0
+    },
+    {
+      "supplier": {
+        "name": "Fenitrothion",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1400000.0
+    },
+    {
+      "supplier": {
+        "name": "Fenoxaprop ethyl ester",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 8500.0
+    },
+    {
+      "supplier": {
+        "name": "Fenoxaprop",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 2800000.0
+    },
+    {
+      "supplier": {
+        "name": "Fenoxaprop-P ethyl ester",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 770.0
+    },
+    {
+      "supplier": {
+        "name": "Fenoxycarb",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 2800000.0
+    },
+    {
+      "supplier": {
+        "name": "Fenpiclonil",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 3600000.0
+    },
+    {
+      "supplier": {
+        "name": "Fenpropathrin",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 28000000.0
+    },
+    {
+      "supplier": {
+        "name": "Fenpropidin",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 2800000.0
+    },
+    {
+      "supplier": {
+        "name": "Fenpropimorph",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 2800000.0
+    },
+    {
+      "supplier": {
+        "name": "Fenpyroximate",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 2800000.0
+    },
+    {
+      "supplier": {
+        "name": "Fentin acetate",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 28000000.0
+    },
+    {
+      "supplier": {
+        "name": "Fentin hydroxide",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 28000000.0
+    },
+    {
+      "supplier": {
+        "name": "Ferrous sulfate",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 740000.0
+    },
+    {
+      "supplier": {
+        "name": "Fipronil",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 28000000.0
+    },
+    {
+      "supplier": {
+        "name": "Flamprop-m-isopropyl",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 2800000.0
+    },
+    {
+      "supplier": {
+        "name": "Flazasulfuron",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 2800000.0
+    },
+    {
+      "supplier": {
+        "name": "Flonicamid",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 2800000.0
+    },
+    {
+      "supplier": {
+        "name": "Florasulam",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 2800000.0
+    },
+    {
+      "supplier": {
+        "name": "Fluazifop-P-butyl",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 17000.0
+    },
+    {
+      "supplier": {
+        "name": "Fluazinam",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 290000.0
+    },
+    {
+      "supplier": {
+        "name": "Flucarbazone sodium salt",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 2800000.0
+    },
+    {
+      "supplier": {
+        "name": "Fludioxonil",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 2800000.0
+    },
+    {
+      "supplier": {
+        "name": "Flufenacet",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 2800000.0
+    },
+    {
+      "supplier": {
+        "name": "Flumetsulam",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 2800000.0
+    },
+    {
+      "supplier": {
+        "name": "Flumioxazin",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 2800000.0
+    },
+    {
+      "supplier": {
+        "name": "Fluometuron",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 10000000.0
+    },
+    {
+      "supplier": {
+        "name": "Fluoroglycofen-ethyl",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 2800000.0
+    },
+    {
+      "supplier": {
+        "name": "Fluoxastrobin",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 2800000.0
+    },
+    {
+      "supplier": {
+        "name": "Flupyrsulfuron-methyl sodium",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 2800000.0
+    },
+    {
+      "supplier": {
+        "name": "Fluquinconazole",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 2800000.0
+    },
+    {
+      "supplier": {
+        "name": "Flurenol",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 2800000.0
+    },
+    {
+      "supplier": {
+        "name": "Flurochloridone",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 490000.0
+    },
+    {
+      "supplier": {
+        "name": "Fluroxypyr",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 720000.0
+    },
+    {
+      "supplier": {
+        "name": "Flurtamone",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 2800000.0
+    },
+    {
+      "supplier": {
+        "name": "Flusilazole",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 2800000.0
+    },
+    {
+      "supplier": {
+        "name": "Flutolanil",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 2200000.0
+    },
+    {
+      "supplier": {
+        "name": "Folpet",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 5000000.0
+    },
+    {
+      "supplier": {
+        "name": "Fomesafen",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 28000000.0
+    },
+    {
+      "supplier": {
+        "name": "Foramsulfuron",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 2800000.0
+    },
+    {
+      "supplier": {
+        "name": "Fosetyl-Al",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 3100.0
+    },
+    {
+      "supplier": {
+        "name": "Fuberidazole",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 50000.0
+    },
+    {
+      "supplier": {
+        "name": "Gibberellic acid",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 40000.0
+    },
+    {
+      "supplier": {
+        "name": "Glufosinate",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 2800000.0
+    },
+    {
+      "supplier": {
+        "name": "Glyphosate",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 280000.0
+    },
+    {
+      "supplier": {
+        "name": "Halosulfuron-methyl",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 2800000.0
+    },
+    {
+      "supplier": {
+        "name": "Haloxyfop-ethoxyethyl",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1200.0
+    },
+    {
+      "supplier": {
+        "name": "Heptenophos",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 380000.0
+    },
+    {
+      "supplier": {
+        "name": "Hexaconazole",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 2800000.0
+    },
+    {
+      "supplier": {
+        "name": "Hexythiazox",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 610000.0
+    },
+    {
+      "supplier": {
+        "name": "Hymexazol",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 49000.0
+    },
+    {
+      "supplier": {
+        "name": "Imazalil",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 50000.0
+    },
+    {
+      "supplier": {
+        "name": "Imazamox",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 2800000.0
+    },
+    {
+      "supplier": {
+        "name": "Imazapyr",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1200.0
+    },
+    {
+      "supplier": {
+        "name": "Imazethapyr",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 370000.0
+    },
+    {
+      "supplier": {
+        "name": "Imidacloprid",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 4900000.0
+    },
+    {
+      "supplier": {
+        "name": "Indoxacarb",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 2800000.0
+    },
+    {
+      "supplier": {
+        "name": "Iodosulfuron",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 2800000.0
+    },
+    {
+      "supplier": {
+        "name": "Iodosulfuron-methyl-sodium",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 2800000.0
+    },
+    {
+      "supplier": {
+        "name": "Ioxynil",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 210000.0
+    },
+    {
+      "supplier": {
+        "name": "Iprodione",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 3500000.0
+    },
+    {
+      "supplier": {
+        "name": "Iprovalicarb",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 2800000.0
+    },
+    {
+      "supplier": {
+        "name": "Isoproturon",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1800000.0
+    },
+    {
+      "supplier": {
+        "name": "Isoxadifen-ethyl",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 2800000.0
+    },
+    {
+      "supplier": {
+        "name": "Isoxaflutole",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 2800000.0
+    },
+    {
+      "supplier": {
+        "name": "Kaolin",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 2800000.0
+    },
+    {
+      "supplier": {
+        "name": "Kresoxim-methyl",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1200000.0
+    },
+    {
+      "supplier": {
+        "name": "Lactofen",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 2800000.0
+    },
+    {
+      "supplier": {
+        "name": "Lambda-cyhalothrin",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 11000000.0
+    },
+    {
+      "supplier": {
+        "name": "Laminarin",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.0
+    },
+    {
+      "supplier": {
+        "name": "Lenacil",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 5600000.0
+    },
+    {
+      "supplier": {
+        "name": "Lindane",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 28000000.0
+    },
+    {
+      "supplier": {
+        "name": "Linuron",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 21000000.0
+    },
+    {
+      "supplier": {
+        "name": "Lufenuron",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 2800000.0
+    },
+    {
+      "supplier": {
+        "name": "MCPA",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 28000000.0
+    },
+    {
+      "supplier": {
+        "name": "MCPB",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 430000.0
+    },
+    {
+      "supplier": {
+        "name": "MSMA",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 100000.0
+    },
+    {
+      "supplier": {
+        "name": "Magnesium phosphide",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 2800000.0
+    },
+    {
+      "supplier": {
+        "name": "Malathion",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 100000.0
+    },
+    {
+      "supplier": {
+        "name": "Maleic hydrazide",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 35000.0
+    },
+    {
+      "supplier": {
+        "name": "Mancozeb",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 2900000.0
+    },
+    {
+      "supplier": {
+        "name": "Mandipropamid",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 2800000.0
+    },
+    {
+      "supplier": {
+        "name": "Maneb",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1600000.0
+    },
+    {
+      "supplier": {
+        "name": "Mecoprop",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 2800000.0
+    },
+    {
+      "supplier": {
+        "name": "Mecoprop-P",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 36000.0
+    },
+    {
+      "supplier": {
+        "name": "Mefenpyr-diethyl",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 2800000.0
+    },
+    {
+      "supplier": {
+        "name": "Mepanipyrim",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 2800000.0
+    },
+    {
+      "supplier": {
+        "name": "Mepiquat chloride",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 45.0
+    },
+    {
+      "supplier": {
+        "name": "Mepronil",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 2800000.0
+    },
+    {
+      "supplier": {
+        "name": "Mesosulfuron-methyl (prop)",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 2800000.0
+    },
+    {
+      "supplier": {
+        "name": "Mesotrione",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 2800000.0
+    },
+    {
+      "supplier": {
+        "name": "Metalaxil",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 930000.0
+    },
+    {
+      "supplier": {
+        "name": "Metalaxyl-M",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 510000.0
+    },
+    {
+      "supplier": {
+        "name": "Metaldehyde",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 2800000.0
+    },
+    {
+      "supplier": {
+        "name": "Metam-sodium",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 11000000.0
+    },
+    {
+      "supplier": {
+        "name": "Metamitron",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 14000.0
+    },
+    {
+      "supplier": {
+        "name": "Metazachlor",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 63000.0
+    },
+    {
+      "supplier": {
+        "name": "Metconazole",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 2800000.0
+    },
+    {
+      "supplier": {
+        "name": "Methabenzthiazuron",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1200000.0
+    },
+    {
+      "supplier": {
+        "name": "Methamidophos",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 18000000.0
+    },
+    {
+      "supplier": {
+        "name": "Methidathion",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 28000000.0
+    },
+    {
+      "supplier": {
+        "name": "Methiocarb",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 11000000.0
+    },
+    {
+      "supplier": {
+        "name": "Methomyl",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 6800000.0
+    },
+    {
+      "supplier": {
+        "name": "Methoxyfenozide",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 2800000.0
+    },
+    {
+      "supplier": {
+        "name": "Methyl parathion",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 2500000.0
+    },
+    {
+      "supplier": {
+        "name": "Metobromuron",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 120000.0
+    },
+    {
+      "supplier": {
+        "name": "Metolachlor",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1800000.0
+    },
+    {
+      "supplier": {
+        "name": "Metosulam",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 2800000.0
+    },
+    {
+      "supplier": {
+        "name": "Metoxuron",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 13000.0
+    },
+    {
+      "supplier": {
+        "name": "Metrafenone",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 2800000.0
+    },
+    {
+      "supplier": {
+        "name": "Metribuzin",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1300000.0
+    },
+    {
+      "supplier": {
+        "name": "Metsulfuron-methyl",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1100000.0
+    },
+    {
+      "supplier": {
+        "name": "Monocrotophos",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 28000000.0
+    },
+    {
+      "supplier": {
+        "name": "Monolinuron",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 2700000.0
+    },
+    {
+      "supplier": {
+        "name": "Myclobutanil",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 790000.0
+    },
+    {
+      "supplier": {
+        "name": "Naled",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 450000.0
+    },
+    {
+      "supplier": {
+        "name": "Napropamide",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 500000.0
+    },
+    {
+      "supplier": {
+        "name": "Nicosulfuron",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 2800000.0
+    },
+    {
+      "supplier": {
+        "name": "Nitrothal-isopropyl",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 78000.0
+    },
+    {
+      "supplier": {
+        "name": "Nonanoic acid",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 10000.0
+    },
+    {
+      "supplier": {
+        "name": "Norflurazon",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 2200000.0
+    },
+    {
+      "supplier": {
+        "name": "Novaluron",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 2800000.0
+    },
+    {
+      "supplier": {
+        "name": "Oils, unspecified",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 11000.0
+    },
+    {
+      "supplier": {
+        "name": "Orbencarb",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 400000.0
+    },
+    {
+      "supplier": {
+        "name": "Oryzalin",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 11000000.0
+    },
+    {
+      "supplier": {
+        "name": "Oxadiargyl",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 2800000.0
+    },
+    {
+      "supplier": {
+        "name": "Oxadixyl",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 88000.0
+    },
+    {
+      "supplier": {
+        "name": "Oxamyl",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 3000000.0
+    },
+    {
+      "supplier": {
+        "name": "Oxydemeton-methyl",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 580000.0
+    },
+    {
+      "supplier": {
+        "name": "Oxyfluorfen",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 5700000.0
+    },
+    {
+      "supplier": {
+        "name": "Paraquat",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 7900000.0
+    },
+    {
+      "supplier": {
+        "name": "Parathion",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 11000000.0
+    },
+    {
+      "supplier": {
+        "name": "Penconazole",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 5200000.0
+    },
+    {
+      "supplier": {
+        "name": "Pencycuron",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 10000.0
+    },
+    {
+      "supplier": {
+        "name": "Pendimethalin",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 3300000.0
+    },
+    {
+      "supplier": {
+        "name": "Permethrin",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 410000.0
+    },
+    {
+      "supplier": {
+        "name": "Pethoxamid",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 2800000.0
+    },
+    {
+      "supplier": {
+        "name": "Phenmedipham",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 89000.0
+    },
+    {
+      "supplier": {
+        "name": "Phorate",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 28000000.0
+    },
+    {
+      "supplier": {
+        "name": "Phosalone",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1700000.0
+    },
+    {
+      "supplier": {
+        "name": "Phosmet",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 11000000.0
+    },
+    {
+      "supplier": {
+        "name": "Picloram",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 690000.0
+    },
+    {
+      "supplier": {
+        "name": "Picoxystrobin",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 2800000.0
+    },
+    {
+      "supplier": {
+        "name": "Pinoxaden",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 2800000.0
+    },
+    {
+      "supplier": {
+        "name": "Piperonyl butoxide",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 470000.0
+    },
+    {
+      "supplier": {
+        "name": "Pirimicarb",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 440000.0
+    },
+    {
+      "supplier": {
+        "name": "Pirimiphos methyl",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 18000000.0
+    },
+    {
+      "supplier": {
+        "name": "Potassium bicarbonate",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.0
+    },
+    {
+      "supplier": {
+        "name": "Prochloraz",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 15000000.0
+    },
+    {
+      "supplier": {
+        "name": "Procymidone",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 740000.0
+    },
+    {
+      "supplier": {
+        "name": "Profenofos",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 11000000.0
+    },
+    {
+      "supplier": {
+        "name": "Prohexadione calcium",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 40000.0
+    },
+    {
+      "supplier": {
+        "name": "Prometryn",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 11000000.0
+    },
+    {
+      "supplier": {
+        "name": "Pronamide",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 18000000.0
+    },
+    {
+      "supplier": {
+        "name": "Propachlor",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 540000.0
+    },
+    {
+      "supplier": {
+        "name": "Propamocarb HCl",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 2700.0
+    },
+    {
+      "supplier": {
+        "name": "Propamocarb",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 370.0
+    },
+    {
+      "supplier": {
+        "name": "Propanil",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 420000.0
+    },
+    {
+      "supplier": {
+        "name": "Propaquizafop",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 2800000.0
+    },
+    {
+      "supplier": {
+        "name": "Propargite",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 650000.0
+    },
+    {
+      "supplier": {
+        "name": "Propiconazole",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 5100000.0
+    },
+    {
+      "supplier": {
+        "name": "Propineb",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1700000.0
+    },
+    {
+      "supplier": {
+        "name": "Propoxycarbazone-sodium (prop)",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 2800000.0
+    },
+    {
+      "supplier": {
+        "name": "Proquinazid",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 2800000.0
+    },
+    {
+      "supplier": {
+        "name": "Prosulfocarb",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 17000.0
+    },
+    {
+      "supplier": {
+        "name": "Prosulfuron",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 9800000.0
+    },
+    {
+      "supplier": {
+        "name": "Prothioconazole",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 2800000.0
+    },
+    {
+      "supplier": {
+        "name": "Pymetrozine",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 2800000.0
+    },
+    {
+      "supplier": {
+        "name": "Pyraclostrobin",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 2800000.0
+    },
+    {
+      "supplier": {
+        "name": "Pyraflufen-ethyl",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 2800000.0
+    },
+    {
+      "supplier": {
+        "name": "Pyrethrin I",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 11000000.0
+    },
+    {
+      "supplier": {
+        "name": "Pyrethrin II",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 11000000.0
+    },
+    {
+      "supplier": {
+        "name": "Pyridate",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 220.0
+    },
+    {
+      "supplier": {
+        "name": "Pyrifenox",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1000000.0
+    },
+    {
+      "supplier": {
+        "name": "Pyrimethanil",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 68000.0
+    },
+    {
+      "supplier": {
+        "name": "Pyriproxyfen",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1200000.0
+    },
+    {
+      "supplier": {
+        "name": "Pyrithiobac sodium salt",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 2800000.0
+    },
+    {
+      "supplier": {
+        "name": "Quinclorac",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 740000.0
+    },
+    {
+      "supplier": {
+        "name": "Quinmerac",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1900.0
+    },
+    {
+      "supplier": {
+        "name": "Quinoclamine",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1800000.0
+    },
+    {
+      "supplier": {
+        "name": "Quinoxyfen",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 2800000.0
+    },
+    {
+      "supplier": {
+        "name": "Quizalofop-ethyl",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 9800000.0
+    },
+    {
+      "supplier": {
+        "name": "Rimsulfuron",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 2800000.0
+    },
+    {
+      "supplier": {
+        "name": "Rotenone",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1100000.0
+    },
+    {
+      "supplier": {
+        "name": "S-Metolachlor",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1800000.0
+    },
+    {
+      "supplier": {
+        "name": "Sethoxydim",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 75000.0
+    },
+    {
+      "supplier": {
+        "name": "Silthiofam",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 2800000.0
+    },
+    {
+      "supplier": {
+        "name": "Simazine",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 28000000.0
+    },
+    {
+      "supplier": {
+        "name": "Sodium fluorosilicate",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 2800000.0
+    },
+    {
+      "supplier": {
+        "name": "Spinosad",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 2800000.0
+    },
+    {
+      "supplier": {
+        "name": "Spirodiclofen",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 2800000.0
+    },
+    {
+      "supplier": {
+        "name": "Spiroxamine",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 2800000.0
+    },
+    {
+      "supplier": {
+        "name": "Starane",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 15000.0
+    },
+    {
+      "supplier": {
+        "name": "Sulcotrione",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 2800000.0
+    },
+    {
+      "supplier": {
+        "name": "Sulfentrazone",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 2800000.0
+    },
+    {
+      "supplier": {
+        "name": "Sulfosate",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 2800000.0
+    },
+    {
+      "supplier": {
+        "name": "Sulfosulfuron",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 2800000.0
+    },
+    {
+      "supplier": {
+        "name": "Sulfur",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 9300.0
+    },
+    {
+      "supplier": {
+        "name": "Sulfuric acid",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 82000.0
+    },
+    {
+      "supplier": {
+        "name": "Tebuconazole",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 2800000.0
+    },
+    {
+      "supplier": {
+        "name": "Tebufenozide",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1600000.0
+    },
+    {
+      "supplier": {
+        "name": "Tebufenpyrad",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 2800000.0
+    },
+    {
+      "supplier": {
+        "name": "Tebupirimfos",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 2800000.0
+    },
+    {
+      "supplier": {
+        "name": "Tebutam",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 2800000.0
+    },
+    {
+      "supplier": {
+        "name": "Teflubenzuron",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 11000000.0
+    },
+    {
+      "supplier": {
+        "name": "Tefluthrin",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1100000.0
+    },
+    {
+      "supplier": {
+        "name": "Tembotrione",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 2800000.0
+    },
+    {
+      "supplier": {
+        "name": "Tepraloxydim",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 2800000.0
+    },
+    {
+      "supplier": {
+        "name": "Terbacil",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 10000000.0
+    },
+    {
+      "supplier": {
+        "name": "Terbufos",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 28000000.0
+    },
+    {
+      "supplier": {
+        "name": "Terbuthylazin",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 11000000.0
+    },
+    {
+      "supplier": {
+        "name": "Terbutryn",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 28000000.0
+    },
+    {
+      "supplier": {
+        "name": "Thiabendazole",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 4600000.0
+    },
+    {
+      "supplier": {
+        "name": "Thiacloprid",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 2800000.0
+    },
+    {
+      "supplier": {
+        "name": "Thiamethoxam",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 2800000.0
+    },
+    {
+      "supplier": {
+        "name": "Thidiazuron",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1400000.0
+    },
+    {
+      "supplier": {
+        "name": "Thifensulfuron-methyl",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 7900000.0
+    },
+    {
+      "supplier": {
+        "name": "Thiobencarb",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 300000.0
+    },
+    {
+      "supplier": {
+        "name": "Thiophanate-methyl",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 9700.0
+    },
+    {
+      "supplier": {
+        "name": "Thiram",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 5000000.0
+    },
+    {
+      "supplier": {
+        "name": "Tolclofos-methyl",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1300000.0
+    },
+    {
+      "supplier": {
+        "name": "Tralkoxydim",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 2800000.0
+    },
+    {
+      "supplier": {
+        "name": "Tralomethrin",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 87000.0
+    },
+    {
+      "supplier": {
+        "name": "Triadimenol",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1800000.0
+    },
+    {
+      "supplier": {
+        "name": "Triallate",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 11000000.0
+    },
+    {
+      "supplier": {
+        "name": "Triasulfuron",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 19000000.0
+    },
+    {
+      "supplier": {
+        "name": "Triazamate",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 2800000.0
+    },
+    {
+      "supplier": {
+        "name": "Triazoxide",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 2800000.0
+    },
+    {
+      "supplier": {
+        "name": "Tribenuron",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 2800000.0
+    },
+    {
+      "supplier": {
+        "name": "Tribenuron-methyl",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 2900000.0
+    },
+    {
+      "supplier": {
+        "name": "Tribufos",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 28000000.0
+    },
+    {
+      "supplier": {
+        "name": "Trichlorfon",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 11000000.0
+    },
+    {
+      "supplier": {
+        "name": "Triclopyr",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 650000.0
+    },
+    {
+      "supplier": {
+        "name": "Tridemorph",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 2800000.0
+    },
+    {
+      "supplier": {
+        "name": "Trifloxystrobin",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 2800000.0
+    },
+    {
+      "supplier": {
+        "name": "Triflumizole",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 3100000.0
+    },
+    {
+      "supplier": {
+        "name": "Trifluralin",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 12000000.0
+    },
+    {
+      "supplier": {
+        "name": "Triflusulfuron-methyl",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 2800000.0
+    },
+    {
+      "supplier": {
+        "name": "Trinexapac-ethyl",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 78000.0
+    },
+    {
+      "supplier": {
+        "name": "Vamidothion",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 460000.0
+    },
+    {
+      "supplier": {
+        "name": "Vinclozolin",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 2500000.0
+    },
+    {
+      "supplier": {
+        "name": "Zeta-cypermethrin",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 11000000.0
+    },
+    {
+      "supplier": {
+        "name": "Zineb",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 500000.0
+    },
+    {
+      "supplier": {
+        "name": "Ziram",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 2000000.0
+    },
+    {
+      "supplier": {
+        "name": "Zoxamide",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 2800000.0
+    },
+    {
+      "supplier": {
+        "name": "tau-Fluvalinate",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 2800000.0
+    }
+  ]
+}

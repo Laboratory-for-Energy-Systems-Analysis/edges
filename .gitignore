@@ -18,6 +18,19 @@ data/logs/
 # ignore .env file in tests
 tests/*.env
 
+# Licensed local input used to generate the bundled Ecological Scarcity files
+/dev/UBP/Ecological-Scarcity-21.CSV
+
+# Licensed, calculation-specific ecoinvent audit details (compact summaries stay visible)
+/results/UBP/*-cf-table.csv
+/results/UBP/*-cf-table.csv.gz
+
+# Local notebook, profiling, and pytest diagnostics
+.ipynb_checkpoints/
+*.prof
+/.pytest-debug/
+/pytest-debug/
+
 *.pyc
 
 *.xml

@@ -1,0 +1,629 @@
+{
+  "name": "Ecological Scarcity 2021 - Heavy metals into air",
+  "unit": "UBP",
+  "version": "1.06",
+  "edges version": "2.0",
+  "description": "Heavy metals into air category of Swiss Ecological Scarcity 2021, converted from the reviewed SimaPro 10.4 method export.",
+  "source": {
+    "format": "SimaPro CSV 9.0.0",
+    "exported_with": "SimaPro 10.4.0.0",
+    "sha256": "20e46d0acb9e2a676f35636e76ae0ccacacdae122e49459985608a290525147a",
+    "category": "Heavy metals into air"
+  },
+  "reference": "BAFU (Hrsg.) 2021: Ökofaktoren Schweiz 2021 gemäss der Methode der ökologischen Knappheit. Umwelt-Wissen Nr. 2121.",
+  "strategies": [
+    "map_exchanges",
+    "map_aggregate_locations",
+    "map_dynamic_locations",
+    "map_contained_locations",
+    "map_remaining_locations_to_global"
+  ],
+  "exchanges": [
+    {
+      "supplier": {
+        "name": "Cadmium II",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 59000000.0
+    },
+    {
+      "supplier": {
+        "name": "Cadmium II",
+        "categories": [
+          "air",
+          "lower stratosphere + upper troposphere"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 59000000.0
+    },
+    {
+      "supplier": {
+        "name": "Cadmium II",
+        "categories": [
+          "air",
+          "non-urban air or from high stacks"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 59000000.0
+    },
+    {
+      "supplier": {
+        "name": "Cadmium II",
+        "categories": [
+          "air",
+          "urban air close to ground"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 59000000.0
+    },
+    {
+      "supplier": {
+        "name": "Cadmium II",
+        "categories": [
+          "air"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 59000000.0
+    },
+    {
+      "supplier": {
+        "name": "Chromium III",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 230000.0
+    },
+    {
+      "supplier": {
+        "name": "Chromium III",
+        "categories": [
+          "air",
+          "lower stratosphere + upper troposphere"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 230000.0
+    },
+    {
+      "supplier": {
+        "name": "Chromium III",
+        "categories": [
+          "air",
+          "non-urban air or from high stacks"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 230000.0
+    },
+    {
+      "supplier": {
+        "name": "Chromium III",
+        "categories": [
+          "air",
+          "urban air close to ground"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 230000.0
+    },
+    {
+      "supplier": {
+        "name": "Chromium III",
+        "categories": [
+          "air"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 230000.0
+    },
+    {
+      "supplier": {
+        "name": "Chromium VI",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 7500000.0
+    },
+    {
+      "supplier": {
+        "name": "Chromium VI",
+        "categories": [
+          "air",
+          "non-urban air or from high stacks"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 7500000.0
+    },
+    {
+      "supplier": {
+        "name": "Chromium VI",
+        "categories": [
+          "air",
+          "urban air close to ground"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 7500000.0
+    },
+    {
+      "supplier": {
+        "name": "Chromium VI",
+        "categories": [
+          "air"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 7500000.0
+    },
+    {
+      "supplier": {
+        "name": "Copper ion",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1700000.0
+    },
+    {
+      "supplier": {
+        "name": "Copper ion",
+        "categories": [
+          "air",
+          "lower stratosphere + upper troposphere"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1700000.0
+    },
+    {
+      "supplier": {
+        "name": "Copper ion",
+        "categories": [
+          "air",
+          "non-urban air or from high stacks"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1700000.0
+    },
+    {
+      "supplier": {
+        "name": "Copper ion",
+        "categories": [
+          "air",
+          "urban air close to ground"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1700000.0
+    },
+    {
+      "supplier": {
+        "name": "Copper ion",
+        "categories": [
+          "air"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1700000.0
+    },
+    {
+      "supplier": {
+        "name": "Copper",
+        "categories": [
+          "air",
+          "non-urban air or from high stacks"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1700000.0
+    },
+    {
+      "supplier": {
+        "name": "Copper",
+        "categories": [
+          "air"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1700000.0
+    },
+    {
+      "supplier": {
+        "name": "Lead II",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 8700000.0
+    },
+    {
+      "supplier": {
+        "name": "Lead II",
+        "categories": [
+          "air",
+          "lower stratosphere + upper troposphere"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 8700000.0
+    },
+    {
+      "supplier": {
+        "name": "Lead II",
+        "categories": [
+          "air",
+          "non-urban air or from high stacks"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 8700000.0
+    },
+    {
+      "supplier": {
+        "name": "Lead II",
+        "categories": [
+          "air",
+          "urban air close to ground"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 8700000.0
+    },
+    {
+      "supplier": {
+        "name": "Lead II",
+        "categories": [
+          "air"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 8700000.0
+    },
+    {
+      "supplier": {
+        "name": "Mercury II",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 720000000.0
+    },
+    {
+      "supplier": {
+        "name": "Mercury II",
+        "categories": [
+          "air",
+          "lower stratosphere + upper troposphere"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 720000000.0
+    },
+    {
+      "supplier": {
+        "name": "Mercury II",
+        "categories": [
+          "air",
+          "non-urban air or from high stacks"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 720000000.0
+    },
+    {
+      "supplier": {
+        "name": "Mercury II",
+        "categories": [
+          "air",
+          "urban air close to ground"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 720000000.0
+    },
+    {
+      "supplier": {
+        "name": "Mercury II",
+        "categories": [
+          "air"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 720000000.0
+    },
+    {
+      "supplier": {
+        "name": "Nickel II",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 5200000.0
+    },
+    {
+      "supplier": {
+        "name": "Nickel II",
+        "categories": [
+          "air",
+          "lower stratosphere + upper troposphere"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 5200000.0
+    },
+    {
+      "supplier": {
+        "name": "Nickel II",
+        "categories": [
+          "air",
+          "non-urban air or from high stacks"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 5200000.0
+    },
+    {
+      "supplier": {
+        "name": "Nickel II",
+        "categories": [
+          "air",
+          "urban air close to ground"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 5200000.0
+    },
+    {
+      "supplier": {
+        "name": "Nickel II",
+        "categories": [
+          "air"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 5200000.0
+    },
+    {
+      "supplier": {
+        "name": "Zinc II",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 4700000.0
+    },
+    {
+      "supplier": {
+        "name": "Zinc II",
+        "categories": [
+          "air",
+          "lower stratosphere + upper troposphere"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 4700000.0
+    },
+    {
+      "supplier": {
+        "name": "Zinc II",
+        "categories": [
+          "air",
+          "non-urban air or from high stacks"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 4700000.0
+    },
+    {
+      "supplier": {
+        "name": "Zinc II",
+        "categories": [
+          "air",
+          "urban air close to ground"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 4700000.0
+    },
+    {
+      "supplier": {
+        "name": "Zinc II",
+        "categories": [
+          "air"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 4700000.0
+    }
+  ]
+}

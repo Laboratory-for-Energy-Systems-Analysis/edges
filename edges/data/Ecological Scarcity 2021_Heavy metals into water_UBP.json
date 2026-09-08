@@ -1,0 +1,1014 @@
+{
+  "name": "Ecological Scarcity 2021 - Heavy metals into water",
+  "unit": "UBP",
+  "version": "1.06",
+  "edges version": "2.0",
+  "description": "Heavy metals into water category of Swiss Ecological Scarcity 2021, converted from the reviewed SimaPro 10.4 method export.",
+  "source": {
+    "format": "SimaPro CSV 9.0.0",
+    "exported_with": "SimaPro 10.4.0.0",
+    "sha256": "20e46d0acb9e2a676f35636e76ae0ccacacdae122e49459985608a290525147a",
+    "category": "Heavy metals into water"
+  },
+  "reference": "BAFU (Hrsg.) 2021: Ökofaktoren Schweiz 2021 gemäss der Methode der ökologischen Knappheit. Umwelt-Wissen Nr. 2121.",
+  "strategies": [
+    "map_exchanges",
+    "map_aggregate_locations",
+    "map_dynamic_locations",
+    "map_contained_locations",
+    "map_remaining_locations_to_global"
+  ],
+  "exchanges": [
+    {
+      "supplier": {
+        "name": "Arsenic ion",
+        "categories": [
+          "water",
+          "ground-"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.0
+    },
+    {
+      "supplier": {
+        "name": "Arsenic ion",
+        "categories": [
+          "water",
+          "ground-, long-term"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.0
+    },
+    {
+      "supplier": {
+        "name": "Arsenic ion",
+        "categories": [
+          "water",
+          "ocean"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 6200000.0
+    },
+    {
+      "supplier": {
+        "name": "Arsenic ion",
+        "categories": [
+          "water",
+          "surface water"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 6200000.0
+    },
+    {
+      "supplier": {
+        "name": "Arsenic ion",
+        "categories": [
+          "water"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 6200000.0
+    },
+    {
+      "supplier": {
+        "name": "Cadmium II",
+        "categories": [
+          "water",
+          "ground-"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.0
+    },
+    {
+      "supplier": {
+        "name": "Cadmium II",
+        "categories": [
+          "water",
+          "ground-, long-term"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.0
+    },
+    {
+      "supplier": {
+        "name": "Cadmium II",
+        "categories": [
+          "water",
+          "ocean"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1100000.0
+    },
+    {
+      "supplier": {
+        "name": "Cadmium II",
+        "categories": [
+          "water",
+          "surface water"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1100000.0
+    },
+    {
+      "supplier": {
+        "name": "Cadmium II",
+        "categories": [
+          "water"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1100000.0
+    },
+    {
+      "supplier": {
+        "name": "Chromium III",
+        "categories": [
+          "water",
+          "ground-"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.0
+    },
+    {
+      "supplier": {
+        "name": "Chromium III",
+        "categories": [
+          "water",
+          "ground-, long-term"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.0
+    },
+    {
+      "supplier": {
+        "name": "Chromium III",
+        "categories": [
+          "water",
+          "ocean"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 610.0
+    },
+    {
+      "supplier": {
+        "name": "Chromium III",
+        "categories": [
+          "water",
+          "surface water"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 610.0
+    },
+    {
+      "supplier": {
+        "name": "Chromium III",
+        "categories": [
+          "water"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 610.0
+    },
+    {
+      "supplier": {
+        "name": "Chromium VI",
+        "categories": [
+          "water",
+          "ground-"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.0
+    },
+    {
+      "supplier": {
+        "name": "Chromium VI",
+        "categories": [
+          "water",
+          "ground-, long-term"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.0
+    },
+    {
+      "supplier": {
+        "name": "Chromium VI",
+        "categories": [
+          "water",
+          "ocean"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 9700000.0
+    },
+    {
+      "supplier": {
+        "name": "Chromium VI",
+        "categories": [
+          "water",
+          "surface water"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 9700000.0
+    },
+    {
+      "supplier": {
+        "name": "Chromium VI",
+        "categories": [
+          "water"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 9700000.0
+    },
+    {
+      "supplier": {
+        "name": "Copper ion",
+        "categories": [
+          "water",
+          "ground-"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.0
+    },
+    {
+      "supplier": {
+        "name": "Copper ion",
+        "categories": [
+          "water",
+          "ground-, long-term"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.0
+    },
+    {
+      "supplier": {
+        "name": "Copper ion",
+        "categories": [
+          "water",
+          "ocean"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 4200.0
+    },
+    {
+      "supplier": {
+        "name": "Copper ion",
+        "categories": [
+          "water",
+          "surface water"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 4200.0
+    },
+    {
+      "supplier": {
+        "name": "Copper ion",
+        "categories": [
+          "water"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 4200.0
+    },
+    {
+      "supplier": {
+        "name": "Copper",
+        "categories": [
+          "water",
+          "surface water"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 4200.0
+    },
+    {
+      "supplier": {
+        "name": "Copper",
+        "categories": [
+          "water"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 4200.0
+    },
+    {
+      "supplier": {
+        "name": "Dichromate",
+        "categories": [
+          "water",
+          "ground-"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.0
+    },
+    {
+      "supplier": {
+        "name": "Dichromate",
+        "categories": [
+          "water",
+          "ground-, long-term"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.0
+    },
+    {
+      "supplier": {
+        "name": "Dichromate",
+        "categories": [
+          "water",
+          "ocean"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 9700000.0
+    },
+    {
+      "supplier": {
+        "name": "Dichromate",
+        "categories": [
+          "water",
+          "surface water"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 9700000.0
+    },
+    {
+      "supplier": {
+        "name": "Dichromate",
+        "categories": [
+          "water"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 9700000.0
+    },
+    {
+      "supplier": {
+        "name": "Iron ion",
+        "categories": [
+          "water",
+          "ground-"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.0
+    },
+    {
+      "supplier": {
+        "name": "Iron ion",
+        "categories": [
+          "water",
+          "ground-, long-term"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.0
+    },
+    {
+      "supplier": {
+        "name": "Iron ion",
+        "categories": [
+          "water",
+          "ocean"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 18000.0
+    },
+    {
+      "supplier": {
+        "name": "Iron ion",
+        "categories": [
+          "water",
+          "surface water"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 18000.0
+    },
+    {
+      "supplier": {
+        "name": "Iron ion",
+        "categories": [
+          "water"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 18000.0
+    },
+    {
+      "supplier": {
+        "name": "Lead II",
+        "categories": [
+          "water",
+          "ground-"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.0
+    },
+    {
+      "supplier": {
+        "name": "Lead II",
+        "categories": [
+          "water",
+          "ground-, long-term"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.0
+    },
+    {
+      "supplier": {
+        "name": "Lead II",
+        "categories": [
+          "water",
+          "ocean"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 12000.0
+    },
+    {
+      "supplier": {
+        "name": "Lead II",
+        "categories": [
+          "water",
+          "surface water"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 12000.0
+    },
+    {
+      "supplier": {
+        "name": "Lead II",
+        "categories": [
+          "water"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 12000.0
+    },
+    {
+      "supplier": {
+        "name": "Manganese II",
+        "categories": [
+          "water",
+          "ground-"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.0
+    },
+    {
+      "supplier": {
+        "name": "Manganese II",
+        "categories": [
+          "water",
+          "ground-, long-term"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.0
+    },
+    {
+      "supplier": {
+        "name": "Manganese II",
+        "categories": [
+          "water",
+          "ocean"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1200.0
+    },
+    {
+      "supplier": {
+        "name": "Manganese II",
+        "categories": [
+          "water",
+          "surface water"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1200.0
+    },
+    {
+      "supplier": {
+        "name": "Manganese II",
+        "categories": [
+          "water"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1200.0
+    },
+    {
+      "supplier": {
+        "name": "Manganese",
+        "categories": [
+          "water",
+          "ground-"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.0
+    },
+    {
+      "supplier": {
+        "name": "Manganese",
+        "categories": [
+          "water",
+          "ground-, long-term"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.0
+    },
+    {
+      "supplier": {
+        "name": "Manganese",
+        "categories": [
+          "water",
+          "ocean"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1200.0
+    },
+    {
+      "supplier": {
+        "name": "Manganese",
+        "categories": [
+          "water",
+          "surface water"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1200.0
+    },
+    {
+      "supplier": {
+        "name": "Manganese",
+        "categories": [
+          "water"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1200.0
+    },
+    {
+      "supplier": {
+        "name": "Mercury II",
+        "categories": [
+          "water",
+          "ground-"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.0
+    },
+    {
+      "supplier": {
+        "name": "Mercury II",
+        "categories": [
+          "water",
+          "ground-, long-term"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.0
+    },
+    {
+      "supplier": {
+        "name": "Mercury II",
+        "categories": [
+          "water",
+          "ocean"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 4300000.0
+    },
+    {
+      "supplier": {
+        "name": "Mercury II",
+        "categories": [
+          "water",
+          "surface water"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 4300000.0
+    },
+    {
+      "supplier": {
+        "name": "Mercury II",
+        "categories": [
+          "water"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 4300000.0
+    },
+    {
+      "supplier": {
+        "name": "Nickel II",
+        "categories": [
+          "water",
+          "ground-"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.0
+    },
+    {
+      "supplier": {
+        "name": "Nickel II",
+        "categories": [
+          "water",
+          "ground-, long-term"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.0
+    },
+    {
+      "supplier": {
+        "name": "Nickel II",
+        "categories": [
+          "water",
+          "ocean"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 120000.0
+    },
+    {
+      "supplier": {
+        "name": "Nickel II",
+        "categories": [
+          "water",
+          "surface water"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 120000.0
+    },
+    {
+      "supplier": {
+        "name": "Nickel II",
+        "categories": [
+          "water"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 120000.0
+    },
+    {
+      "supplier": {
+        "name": "Zinc II",
+        "categories": [
+          "water",
+          "ground-"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.0
+    },
+    {
+      "supplier": {
+        "name": "Zinc II",
+        "categories": [
+          "water",
+          "ground-, long-term"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.0
+    },
+    {
+      "supplier": {
+        "name": "Zinc II",
+        "categories": [
+          "water",
+          "ocean"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 61000.0
+    },
+    {
+      "supplier": {
+        "name": "Zinc II",
+        "categories": [
+          "water",
+          "surface water"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 61000.0
+    },
+    {
+      "supplier": {
+        "name": "Zinc II",
+        "categories": [
+          "water"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 61000.0
+    }
+  ]
+}

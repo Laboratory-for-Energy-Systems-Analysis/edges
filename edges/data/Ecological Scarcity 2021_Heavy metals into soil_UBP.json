@@ -1,0 +1,539 @@
+{
+  "name": "Ecological Scarcity 2021 - Heavy metals into soil",
+  "unit": "UBP",
+  "version": "1.06",
+  "edges version": "2.0",
+  "description": "Heavy metals into soil category of Swiss Ecological Scarcity 2021, converted from the reviewed SimaPro 10.4 method export.",
+  "source": {
+    "format": "SimaPro CSV 9.0.0",
+    "exported_with": "SimaPro 10.4.0.0",
+    "sha256": "20e46d0acb9e2a676f35636e76ae0ccacacdae122e49459985608a290525147a",
+    "category": "Heavy metals into soil"
+  },
+  "reference": "BAFU (Hrsg.) 2021: Ökofaktoren Schweiz 2021 gemäss der Methode der ökologischen Knappheit. Umwelt-Wissen Nr. 2121.",
+  "strategies": [
+    "map_exchanges",
+    "map_aggregate_locations",
+    "map_dynamic_locations",
+    "map_contained_locations",
+    "map_remaining_locations_to_global"
+  ],
+  "exchanges": [
+    {
+      "supplier": {
+        "name": "Cadmium II",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 37000000.0
+    },
+    {
+      "supplier": {
+        "name": "Cadmium II",
+        "categories": [
+          "soil",
+          "forestry"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 37000000.0
+    },
+    {
+      "supplier": {
+        "name": "Cadmium II",
+        "categories": [
+          "soil",
+          "industrial"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.0
+    },
+    {
+      "supplier": {
+        "name": "Cadmium II",
+        "categories": [
+          "soil"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 37000000.0
+    },
+    {
+      "supplier": {
+        "name": "Chromium III",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 100000.0
+    },
+    {
+      "supplier": {
+        "name": "Chromium III",
+        "categories": [
+          "soil",
+          "forestry"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 100000.0
+    },
+    {
+      "supplier": {
+        "name": "Chromium III",
+        "categories": [
+          "soil",
+          "industrial"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.0
+    },
+    {
+      "supplier": {
+        "name": "Chromium III",
+        "categories": [
+          "soil"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 100000.0
+    },
+    {
+      "supplier": {
+        "name": "Chromium VI",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 330000000.0
+    },
+    {
+      "supplier": {
+        "name": "Chromium VI",
+        "categories": [
+          "soil",
+          "forestry"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 330000000.0
+    },
+    {
+      "supplier": {
+        "name": "Chromium VI",
+        "categories": [
+          "soil",
+          "industrial"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.0
+    },
+    {
+      "supplier": {
+        "name": "Chromium VI",
+        "categories": [
+          "soil"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 330000000.0
+    },
+    {
+      "supplier": {
+        "name": "Copper ion",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 770000.0
+    },
+    {
+      "supplier": {
+        "name": "Copper ion",
+        "categories": [
+          "soil",
+          "forestry"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 770000.0
+    },
+    {
+      "supplier": {
+        "name": "Copper ion",
+        "categories": [
+          "soil",
+          "industrial"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.0
+    },
+    {
+      "supplier": {
+        "name": "Copper ion",
+        "categories": [
+          "soil"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 770000.0
+    },
+    {
+      "supplier": {
+        "name": "Copper",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 770000.0
+    },
+    {
+      "supplier": {
+        "name": "Copper",
+        "categories": [
+          "soil",
+          "forestry"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 770000.0
+    },
+    {
+      "supplier": {
+        "name": "Copper",
+        "categories": [
+          "soil"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 770000.0
+    },
+    {
+      "supplier": {
+        "name": "Lead II",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 460000.0
+    },
+    {
+      "supplier": {
+        "name": "Lead II",
+        "categories": [
+          "soil",
+          "forestry"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 460000.0
+    },
+    {
+      "supplier": {
+        "name": "Lead II",
+        "categories": [
+          "soil",
+          "industrial"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.0
+    },
+    {
+      "supplier": {
+        "name": "Lead II",
+        "categories": [
+          "soil"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 460000.0
+    },
+    {
+      "supplier": {
+        "name": "Mercury II",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 200000000.0
+    },
+    {
+      "supplier": {
+        "name": "Mercury II",
+        "categories": [
+          "soil",
+          "forestry"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 200000000.0
+    },
+    {
+      "supplier": {
+        "name": "Mercury II",
+        "categories": [
+          "soil",
+          "industrial"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.0
+    },
+    {
+      "supplier": {
+        "name": "Mercury II",
+        "categories": [
+          "soil"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 200000000.0
+    },
+    {
+      "supplier": {
+        "name": "Nickel II",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 4100000.0
+    },
+    {
+      "supplier": {
+        "name": "Nickel II",
+        "categories": [
+          "soil",
+          "forestry"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 4100000.0
+    },
+    {
+      "supplier": {
+        "name": "Nickel II",
+        "categories": [
+          "soil",
+          "industrial"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.0
+    },
+    {
+      "supplier": {
+        "name": "Nickel II",
+        "categories": [
+          "soil"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 4100000.0
+    },
+    {
+      "supplier": {
+        "name": "Zinc II",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 2200000.0
+    },
+    {
+      "supplier": {
+        "name": "Zinc II",
+        "categories": [
+          "soil",
+          "forestry"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 2200000.0
+    },
+    {
+      "supplier": {
+        "name": "Zinc II",
+        "categories": [
+          "soil",
+          "industrial"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.0
+    },
+    {
+      "supplier": {
+        "name": "Zinc II",
+        "categories": [
+          "soil"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 2200000.0
+    }
+  ]
+}

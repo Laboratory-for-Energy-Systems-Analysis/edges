@@ -1,0 +1,803 @@
+{
+  "name": "Ecological Scarcity 2021 - Mineral resources",
+  "unit": "UBP",
+  "version": "1.06",
+  "edges version": "2.0",
+  "description": "Mineral resources category of Swiss Ecological Scarcity 2021, converted from the reviewed SimaPro 10.4 method export.",
+  "source": {
+    "format": "SimaPro CSV 9.0.0",
+    "exported_with": "SimaPro 10.4.0.0",
+    "sha256": "20e46d0acb9e2a676f35636e76ae0ccacacdae122e49459985608a290525147a",
+    "category": "Mineral resources"
+  },
+  "reference": "BAFU (Hrsg.) 2021: Ökofaktoren Schweiz 2021 gemäss der Methode der ökologischen Knappheit. Umwelt-Wissen Nr. 2121.",
+  "strategies": [
+    "map_exchanges",
+    "map_aggregate_locations",
+    "map_dynamic_locations",
+    "map_contained_locations",
+    "map_remaining_locations_to_global"
+  ],
+  "exchanges": [
+    {
+      "supplier": {
+        "name": "Aluminium",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.0038
+    },
+    {
+      "supplier": {
+        "name": "Antimony",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 150000.0
+    },
+    {
+      "supplier": {
+        "name": "Borax",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 42.0
+    },
+    {
+      "supplier": {
+        "name": "Cadmium",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 540000.0
+    },
+    {
+      "supplier": {
+        "name": "Cerium",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 2.9
+    },
+    {
+      "supplier": {
+        "name": "Chromium",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 120.0
+    },
+    {
+      "supplier": {
+        "name": "Cinnabar",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 350000.0
+    },
+    {
+      "supplier": {
+        "name": "Cobalt",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 37.0
+    },
+    {
+      "supplier": {
+        "name": "Colemanite",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 39.0
+    },
+    {
+      "supplier": {
+        "name": "Copper",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 3200.0
+    },
+    {
+      "supplier": {
+        "name": "Diatomite",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.0
+    },
+    {
+      "supplier": {
+        "name": "Europium",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 43.0
+    },
+    {
+      "supplier": {
+        "name": "Fluorine",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1.9
+    },
+    {
+      "supplier": {
+        "name": "Fluorspar",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.0
+    },
+    {
+      "supplier": {
+        "name": "Gadolinium",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 9.5
+    },
+    {
+      "supplier": {
+        "name": "Gallium",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.063
+    },
+    {
+      "supplier": {
+        "name": "Gold",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 200000000.0
+    },
+    {
+      "supplier": {
+        "name": "Gravel",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 28.0
+    },
+    {
+      "supplier": {
+        "name": "Gypsum",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.0
+    },
+    {
+      "supplier": {
+        "name": "Hafnium",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.58
+    },
+    {
+      "supplier": {
+        "name": "Helium, in natural gas",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.0
+    },
+    {
+      "supplier": {
+        "name": "Indium",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 16000.0
+    },
+    {
+      "supplier": {
+        "name": "Iron",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.1
+    },
+    {
+      "supplier": {
+        "name": "Kieserite",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.0
+    },
+    {
+      "supplier": {
+        "name": "Lanthanum",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 3.8
+    },
+    {
+      "supplier": {
+        "name": "Lead",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 2800.0
+    },
+    {
+      "supplier": {
+        "name": "Lithium",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 3.8
+    },
+    {
+      "supplier": {
+        "name": "Magnesite",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.026
+    },
+    {
+      "supplier": {
+        "name": "Manganese",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 3.7
+    },
+    {
+      "supplier": {
+        "name": "Molybdenum",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 26000.0
+    },
+    {
+      "supplier": {
+        "name": "Neodymium",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 3.2
+    },
+    {
+      "supplier": {
+        "name": "Nickel",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 120.0
+    },
+    {
+      "supplier": {
+        "name": "Palladium",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 140000000.0
+    },
+    {
+      "supplier": {
+        "name": "Phosphorus",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 11.0
+    },
+    {
+      "supplier": {
+        "name": "Platinum",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 140000000.0
+    },
+    {
+      "supplier": {
+        "name": "Praseodymium",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 14.0
+    },
+    {
+      "supplier": {
+        "name": "Rhenium",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 160000000.0
+    },
+    {
+      "supplier": {
+        "name": "Rhodium",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 420.0
+    },
+    {
+      "supplier": {
+        "name": "Samarium",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 11.0
+    },
+    {
+      "supplier": {
+        "name": "Sand, unspecified",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 28.0
+    },
+    {
+      "supplier": {
+        "name": "Silver",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1300000.0
+    },
+    {
+      "supplier": {
+        "name": "Sodium chloride",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.0
+    },
+    {
+      "supplier": {
+        "name": "Sodium sulfate",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.0
+    },
+    {
+      "supplier": {
+        "name": "Stibnite",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 8400.0
+    },
+    {
+      "supplier": {
+        "name": "Sulfur",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 23.0
+    },
+    {
+      "supplier": {
+        "name": "Talc",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.0
+    },
+    {
+      "supplier": {
+        "name": "Tantalum",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 190.0
+    },
+    {
+      "supplier": {
+        "name": "Tellurium",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 25000000.0
+    },
+    {
+      "supplier": {
+        "name": "Tin",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 12000.0
+    },
+    {
+      "supplier": {
+        "name": "Ulexite",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 39.0
+    },
+    {
+      "supplier": {
+        "name": "Zinc",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 410.0
+    },
+    {
+      "supplier": {
+        "name": "Zirconium",
+        "categories": [
+          "natural resource",
+          "in ground"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 3.9
+    }
+  ]
+}

@@ -1,0 +1,1307 @@
+{
+  "name": "Ecological Scarcity 2021 - Persistent organic pollutants into water",
+  "unit": "UBP",
+  "version": "1.06",
+  "edges version": "2.0",
+  "description": "Persistent organic pollutants into water category of Swiss Ecological Scarcity 2021, converted from the reviewed SimaPro 10.4 method export.",
+  "source": {
+    "format": "SimaPro CSV 9.0.0",
+    "exported_with": "SimaPro 10.4.0.0",
+    "sha256": "20e46d0acb9e2a676f35636e76ae0ccacacdae122e49459985608a290525147a",
+    "category": "Persistent organic pollutants into water"
+  },
+  "reference": "BAFU (Hrsg.) 2021: Ökofaktoren Schweiz 2021 gemäss der Methode der ökologischen Knappheit. Umwelt-Wissen Nr. 2121.",
+  "strategies": [
+    "map_exchanges",
+    "map_aggregate_locations",
+    "map_dynamic_locations",
+    "map_contained_locations",
+    "map_remaining_locations_to_global"
+  ],
+  "exchanges": [
+    {
+      "supplier": {
+        "name": "Anthracene",
+        "categories": [
+          "water",
+          "ground-"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.0
+    },
+    {
+      "supplier": {
+        "name": "Anthracene",
+        "categories": [
+          "water",
+          "ground-, long-term"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.0
+    },
+    {
+      "supplier": {
+        "name": "Anthracene",
+        "categories": [
+          "water",
+          "ocean"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.0
+    },
+    {
+      "supplier": {
+        "name": "Anthracene",
+        "categories": [
+          "water",
+          "surface water"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 660000000.0
+    },
+    {
+      "supplier": {
+        "name": "Anthracene",
+        "categories": [
+          "water"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 660000000.0
+    },
+    {
+      "supplier": {
+        "name": "Benzo(a)pyrene",
+        "categories": [
+          "water",
+          "surface water"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 19000000.0
+    },
+    {
+      "supplier": {
+        "name": "Benzo(a)pyrene",
+        "categories": [
+          "water"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 19000000.0
+    },
+    {
+      "supplier": {
+        "name": "Benzo(b)fluoranthene",
+        "categories": [
+          "water",
+          "surface water"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1200000000.0
+    },
+    {
+      "supplier": {
+        "name": "Benzo(b)fluoranthene",
+        "categories": [
+          "water"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1200000000.0
+    },
+    {
+      "supplier": {
+        "name": "Benzo(k)fluoranthene",
+        "categories": [
+          "water",
+          "ground-"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.0
+    },
+    {
+      "supplier": {
+        "name": "Benzo(k)fluoranthene",
+        "categories": [
+          "water",
+          "ground-, long-term"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.0
+    },
+    {
+      "supplier": {
+        "name": "Benzo(k)fluoranthene",
+        "categories": [
+          "water",
+          "ocean"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.0
+    },
+    {
+      "supplier": {
+        "name": "Benzo(k)fluoranthene",
+        "categories": [
+          "water",
+          "surface water"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 2400000000.0
+    },
+    {
+      "supplier": {
+        "name": "Benzo(k)fluoranthene",
+        "categories": [
+          "water"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 2400000000.0
+    },
+    {
+      "supplier": {
+        "name": "Butyl benzyl phthalate",
+        "categories": [
+          "water",
+          "ground-"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.0
+    },
+    {
+      "supplier": {
+        "name": "Butyl benzyl phthalate",
+        "categories": [
+          "water",
+          "ground-, long-term"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.0
+    },
+    {
+      "supplier": {
+        "name": "Butyl benzyl phthalate",
+        "categories": [
+          "water",
+          "ocean"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 220.0
+    },
+    {
+      "supplier": {
+        "name": "Butyl benzyl phthalate",
+        "categories": [
+          "water",
+          "surface water"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 150000000.0
+    },
+    {
+      "supplier": {
+        "name": "Butyl benzyl phthalate",
+        "categories": [
+          "water"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 150000000.0
+    },
+    {
+      "supplier": {
+        "name": "Captan",
+        "categories": [
+          "water",
+          "surface water"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 7800000.0
+    },
+    {
+      "supplier": {
+        "name": "Captan",
+        "categories": [
+          "water"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 7800000.0
+    },
+    {
+      "supplier": {
+        "name": "Dibutyl phthalate",
+        "categories": [
+          "water",
+          "ground-"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.0
+    },
+    {
+      "supplier": {
+        "name": "Dibutyl phthalate",
+        "categories": [
+          "water",
+          "ground-, long-term"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.0
+    },
+    {
+      "supplier": {
+        "name": "Dibutyl phthalate",
+        "categories": [
+          "water",
+          "ocean"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.0
+    },
+    {
+      "supplier": {
+        "name": "Dibutyl phthalate",
+        "categories": [
+          "water",
+          "surface water"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 100000000.0
+    },
+    {
+      "supplier": {
+        "name": "Dibutyl phthalate",
+        "categories": [
+          "water"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 100000000.0
+    },
+    {
+      "supplier": {
+        "name": "Dichloromethane",
+        "categories": [
+          "water",
+          "ground-"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.0
+    },
+    {
+      "supplier": {
+        "name": "Dichloromethane",
+        "categories": [
+          "water",
+          "ground-, long-term"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.0
+    },
+    {
+      "supplier": {
+        "name": "Dichloromethane",
+        "categories": [
+          "water",
+          "ocean"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.0
+    },
+    {
+      "supplier": {
+        "name": "Dichloromethane",
+        "categories": [
+          "water",
+          "surface water"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 440000.0
+    },
+    {
+      "supplier": {
+        "name": "Dichloromethane",
+        "categories": [
+          "water"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 440000.0
+    },
+    {
+      "supplier": {
+        "name": "Dimethyl phthalate",
+        "categories": [
+          "water",
+          "ocean"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 6.5
+    },
+    {
+      "supplier": {
+        "name": "Dioctyl phthalate",
+        "categories": [
+          "water",
+          "ground-"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.0
+    },
+    {
+      "supplier": {
+        "name": "Dioctyl phthalate",
+        "categories": [
+          "water",
+          "ground-, long-term"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.0
+    },
+    {
+      "supplier": {
+        "name": "Dioctyl phthalate",
+        "categories": [
+          "water",
+          "ocean"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 12.0
+    },
+    {
+      "supplier": {
+        "name": "Dioctyl phthalate",
+        "categories": [
+          "water",
+          "surface water"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 410000000.0
+    },
+    {
+      "supplier": {
+        "name": "Dioctyl phthalate",
+        "categories": [
+          "water"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 410000000.0
+    },
+    {
+      "supplier": {
+        "name": "Dioxins, measured as 2,3,7,8-tetrachlorodibenzo-p-dioxin",
+        "categories": [
+          "water",
+          "ground-"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.0
+    },
+    {
+      "supplier": {
+        "name": "Dioxins, measured as 2,3,7,8-tetrachlorodibenzo-p-dioxin",
+        "categories": [
+          "water",
+          "ground-, long-term"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.0
+    },
+    {
+      "supplier": {
+        "name": "Dioxins, measured as 2,3,7,8-tetrachlorodibenzo-p-dioxin",
+        "categories": [
+          "water",
+          "ocean"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.0
+    },
+    {
+      "supplier": {
+        "name": "Dioxins, measured as 2,3,7,8-tetrachlorodibenzo-p-dioxin",
+        "categories": [
+          "water",
+          "surface water"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 3300000000.0
+    },
+    {
+      "supplier": {
+        "name": "Dioxins, measured as 2,3,7,8-tetrachlorodibenzo-p-dioxin",
+        "categories": [
+          "water"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 3300000000.0
+    },
+    {
+      "supplier": {
+        "name": "Diuron",
+        "categories": [
+          "water",
+          "surface water"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 5500000.0
+    },
+    {
+      "supplier": {
+        "name": "Diuron",
+        "categories": [
+          "water"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 5500000.0
+    },
+    {
+      "supplier": {
+        "name": "Ethyl benzene",
+        "categories": [
+          "water",
+          "ground-"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.0
+    },
+    {
+      "supplier": {
+        "name": "Ethyl benzene",
+        "categories": [
+          "water",
+          "ground-, long-term"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.0
+    },
+    {
+      "supplier": {
+        "name": "Ethyl benzene",
+        "categories": [
+          "water",
+          "ocean"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.0
+    },
+    {
+      "supplier": {
+        "name": "Ethyl benzene",
+        "categories": [
+          "water",
+          "surface water"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 13000000.0
+    },
+    {
+      "supplier": {
+        "name": "Ethyl benzene",
+        "categories": [
+          "water"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 13000000.0
+    },
+    {
+      "supplier": {
+        "name": "Ethylene dichloride",
+        "categories": [
+          "water",
+          "ground-"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.0
+    },
+    {
+      "supplier": {
+        "name": "Ethylene dichloride",
+        "categories": [
+          "water",
+          "ground-, long-term"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.0
+    },
+    {
+      "supplier": {
+        "name": "Ethylene dichloride",
+        "categories": [
+          "water",
+          "ocean"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.0
+    },
+    {
+      "supplier": {
+        "name": "Ethylene dichloride",
+        "categories": [
+          "water",
+          "surface water"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 480000.0
+    },
+    {
+      "supplier": {
+        "name": "Ethylene dichloride",
+        "categories": [
+          "water"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 480000.0
+    },
+    {
+      "supplier": {
+        "name": "Ethylene oxide",
+        "categories": [
+          "water",
+          "ground-"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.0
+    },
+    {
+      "supplier": {
+        "name": "Ethylene oxide",
+        "categories": [
+          "water",
+          "ground-, long-term"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.0
+    },
+    {
+      "supplier": {
+        "name": "Ethylene oxide",
+        "categories": [
+          "water",
+          "ocean"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.0
+    },
+    {
+      "supplier": {
+        "name": "Ethylene oxide",
+        "categories": [
+          "water",
+          "surface water"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 760000.0
+    },
+    {
+      "supplier": {
+        "name": "Ethylene oxide",
+        "categories": [
+          "water"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 760000.0
+    },
+    {
+      "supplier": {
+        "name": "Folpet",
+        "categories": [
+          "water",
+          "surface water"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 8500000.0
+    },
+    {
+      "supplier": {
+        "name": "Folpet",
+        "categories": [
+          "water"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 8500000.0
+    },
+    {
+      "supplier": {
+        "name": "Indeno(1,2,3-cd)pyrene",
+        "categories": [
+          "water",
+          "ground-"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.0
+    },
+    {
+      "supplier": {
+        "name": "Indeno(1,2,3-cd)pyrene",
+        "categories": [
+          "water",
+          "ground-, long-term"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.0
+    },
+    {
+      "supplier": {
+        "name": "Indeno(1,2,3-cd)pyrene",
+        "categories": [
+          "water",
+          "ocean"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.0
+    },
+    {
+      "supplier": {
+        "name": "Indeno(1,2,3-cd)pyrene",
+        "categories": [
+          "water",
+          "surface water"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 7700000000.0
+    },
+    {
+      "supplier": {
+        "name": "Indeno(1,2,3-cd)pyrene",
+        "categories": [
+          "water"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 7700000000.0
+    },
+    {
+      "supplier": {
+        "name": "Naphthalene",
+        "categories": [
+          "water",
+          "surface water"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 19000000.0
+    },
+    {
+      "supplier": {
+        "name": "Octhilinone",
+        "categories": [
+          "water",
+          "surface water"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 4600000.0
+    },
+    {
+      "supplier": {
+        "name": "Octhilinone",
+        "categories": [
+          "water"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 4600000.0
+    },
+    {
+      "supplier": {
+        "name": "Sulfluramid",
+        "categories": [
+          "water",
+          "surface water"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 3200000000.0
+    },
+    {
+      "supplier": {
+        "name": "Sulfluramid",
+        "categories": [
+          "water"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 3200000000.0
+    },
+    {
+      "supplier": {
+        "name": "Tetrachloroethylene",
+        "categories": [
+          "water",
+          "ground-"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.0
+    },
+    {
+      "supplier": {
+        "name": "Tetrachloroethylene",
+        "categories": [
+          "water",
+          "ground-, long-term"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.0
+    },
+    {
+      "supplier": {
+        "name": "Tetrachloroethylene",
+        "categories": [
+          "water",
+          "ocean"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.0
+    },
+    {
+      "supplier": {
+        "name": "Tetrachloroethylene",
+        "categories": [
+          "water",
+          "surface water"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 20000000.0
+    },
+    {
+      "supplier": {
+        "name": "Tetrachloroethylene",
+        "categories": [
+          "water"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 20000000.0
+    },
+    {
+      "supplier": {
+        "name": "Toluene",
+        "categories": [
+          "water",
+          "ground-"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.0
+    },
+    {
+      "supplier": {
+        "name": "Toluene",
+        "categories": [
+          "water",
+          "ground-, long-term"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.0
+    },
+    {
+      "supplier": {
+        "name": "Toluene",
+        "categories": [
+          "water",
+          "ocean"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.0
+    },
+    {
+      "supplier": {
+        "name": "Toluene",
+        "categories": [
+          "water",
+          "surface water"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 6100000.0
+    },
+    {
+      "supplier": {
+        "name": "Toluene",
+        "categories": [
+          "water"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 6100000.0
+    },
+    {
+      "supplier": {
+        "name": "Trichloroethylene",
+        "categories": [
+          "water",
+          "ocean"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.0
+    },
+    {
+      "supplier": {
+        "name": "Xylenes, unspecified",
+        "categories": [
+          "water",
+          "ground-"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.0
+    },
+    {
+      "supplier": {
+        "name": "Xylenes, unspecified",
+        "categories": [
+          "water",
+          "ground-, long-term"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.0
+    },
+    {
+      "supplier": {
+        "name": "Xylenes, unspecified",
+        "categories": [
+          "water",
+          "ocean"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 0.0
+    },
+    {
+      "supplier": {
+        "name": "Xylenes, unspecified",
+        "categories": [
+          "water",
+          "surface water"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 14000000.0
+    },
+    {
+      "supplier": {
+        "name": "Xylenes, unspecified",
+        "categories": [
+          "water"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 14000000.0
+    }
+  ]
+}

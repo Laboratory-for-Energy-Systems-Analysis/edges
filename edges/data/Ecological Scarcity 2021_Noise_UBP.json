@@ -1,0 +1,2603 @@
+{
+  "name": "Ecological Scarcity 2021 - Noise",
+  "unit": "UBP",
+  "version": "1.06",
+  "edges version": "2.0",
+  "description": "Noise category of Swiss Ecological Scarcity 2021, converted from the reviewed SimaPro 10.4 method export.",
+  "source": {
+    "format": "SimaPro CSV 9.0.0",
+    "exported_with": "SimaPro 10.4.0.0",
+    "sha256": "20e46d0acb9e2a676f35636e76ae0ccacacdae122e49459985608a290525147a",
+    "category": "Noise"
+  },
+  "reference": "BAFU (Hrsg.) 2021: Ökofaktoren Schweiz 2021 gemäss der Methode der ökologischen Knappheit. Umwelt-Wissen Nr. 2121.",
+  "strategies": [
+    "map_exchanges",
+    "map_aggregate_locations",
+    "map_dynamic_locations",
+    "map_contained_locations",
+    "map_remaining_locations_to_global"
+  ],
+  "exchanges": [
+    {
+      "supplier": {
+        "name": "transport, freight train",
+        "reference product": "transport, freight train",
+        "unit": "ton kilometer",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 4.8
+    },
+    {
+      "supplier": {
+        "name": "transport, freight train, diesel",
+        "reference product": "transport, freight train",
+        "unit": "ton kilometer",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 4.8
+    },
+    {
+      "supplier": {
+        "name": "transport, freight train, diesel, with particle filter",
+        "reference product": "transport, freight train",
+        "unit": "ton kilometer",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 4.8
+    },
+    {
+      "supplier": {
+        "name": "transport, freight train, electricity",
+        "reference product": "transport, freight train",
+        "unit": "ton kilometer",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 4.8
+    },
+    {
+      "supplier": {
+        "name": "transport, freight train, steam",
+        "reference product": "transport, freight train",
+        "unit": "ton kilometer",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 4.8
+    },
+    {
+      "supplier": {
+        "name": "transport, freight, aircraft, belly-freight, long haul",
+        "reference product": "transport, freight, aircraft, long haul",
+        "unit": "ton kilometer",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 40.0
+    },
+    {
+      "supplier": {
+        "name": "transport, freight, aircraft, belly-freight, medium haul",
+        "reference product": "transport, freight, aircraft, medium haul",
+        "unit": "ton kilometer",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 40.0
+    },
+    {
+      "supplier": {
+        "name": "transport, freight, aircraft, belly-freight, short haul",
+        "reference product": "transport, freight, aircraft, short haul",
+        "unit": "ton kilometer",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 40.0
+    },
+    {
+      "supplier": {
+        "name": "transport, freight, aircraft, belly-freight, very short haul",
+        "reference product": "transport, freight, aircraft, very short haul",
+        "unit": "ton kilometer",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 40.0
+    },
+    {
+      "supplier": {
+        "name": "transport, freight, aircraft, dedicated freight, long haul",
+        "reference product": "transport, freight, aircraft, long haul",
+        "unit": "ton kilometer",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 40.0
+    },
+    {
+      "supplier": {
+        "name": "transport, freight, aircraft, dedicated freight, medium haul",
+        "reference product": "transport, freight, aircraft, medium haul",
+        "unit": "ton kilometer",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 40.0
+    },
+    {
+      "supplier": {
+        "name": "transport, freight, aircraft, dedicated freight, short haul",
+        "reference product": "transport, freight, aircraft, short haul",
+        "unit": "ton kilometer",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 40.0
+    },
+    {
+      "supplier": {
+        "name": "transport, freight, aircraft, dedicated freight, very short haul",
+        "reference product": "transport, freight, aircraft, very short haul",
+        "unit": "ton kilometer",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 40.0
+    },
+    {
+      "supplier": {
+        "name": "transport, freight, lorry 16-32 metric ton, EURO1",
+        "reference product": "transport, freight, lorry 16-32 metric ton, EURO1",
+        "unit": "ton kilometer",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 31.088082901554404
+    },
+    {
+      "supplier": {
+        "name": "transport, freight, lorry 16-32 metric ton, EURO2",
+        "reference product": "transport, freight, lorry 16-32 metric ton, EURO2",
+        "unit": "ton kilometer",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 31.088082901554404
+    },
+    {
+      "supplier": {
+        "name": "transport, freight, lorry 16-32 metric ton, EURO3",
+        "reference product": "transport, freight, lorry 16-32 metric ton, EURO3",
+        "unit": "ton kilometer",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 31.088082901554404
+    },
+    {
+      "supplier": {
+        "name": "transport, freight, lorry 16-32 metric ton, EURO4",
+        "reference product": "transport, freight, lorry 16-32 metric ton, EURO4",
+        "unit": "ton kilometer",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 31.088082901554404
+    },
+    {
+      "supplier": {
+        "name": "transport, freight, lorry 16-32 metric ton, EURO5",
+        "reference product": "transport, freight, lorry 16-32 metric ton, EURO5",
+        "unit": "ton kilometer",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 31.088082901554404
+    },
+    {
+      "supplier": {
+        "name": "transport, freight, lorry 16-32 metric ton, EURO6",
+        "reference product": "transport, freight, lorry 16-32 metric ton, EURO6",
+        "unit": "ton kilometer",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 31.088082901554404
+    },
+    {
+      "supplier": {
+        "name": "transport, freight, lorry 16-32 metric ton, unregulated",
+        "reference product": "transport, freight, lorry 16-32 metric ton, unregulated",
+        "unit": "ton kilometer",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 31.088082901554404
+    },
+    {
+      "supplier": {
+        "name": "transport, freight, lorry 28 metric ton, fatty acid methyl ester 100%",
+        "reference product": "transport, freight, lorry 28 metric ton, fatty acid methyl ester 100%",
+        "unit": "ton kilometer",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 31.088082901554404
+    },
+    {
+      "supplier": {
+        "name": "transport, freight, lorry 3.5-7.5 metric ton, EURO1",
+        "reference product": "transport, freight, lorry 3.5-7.5 metric ton, EURO1",
+        "unit": "ton kilometer",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 183.67346938775512
+    },
+    {
+      "supplier": {
+        "name": "transport, freight, lorry 3.5-7.5 metric ton, EURO2",
+        "reference product": "transport, freight, lorry 3.5-7.5 metric ton, EURO2",
+        "unit": "ton kilometer",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 183.67346938775512
+    },
+    {
+      "supplier": {
+        "name": "transport, freight, lorry 3.5-7.5 metric ton, EURO3",
+        "reference product": "transport, freight, lorry 3.5-7.5 metric ton, EURO3",
+        "unit": "ton kilometer",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 183.67346938775512
+    },
+    {
+      "supplier": {
+        "name": "transport, freight, lorry 3.5-7.5 metric ton, EURO4",
+        "reference product": "transport, freight, lorry 3.5-7.5 metric ton, EURO4",
+        "unit": "ton kilometer",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 183.67346938775512
+    },
+    {
+      "supplier": {
+        "name": "transport, freight, lorry 3.5-7.5 metric ton, EURO5",
+        "reference product": "transport, freight, lorry 3.5-7.5 metric ton, EURO5",
+        "unit": "ton kilometer",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 183.67346938775512
+    },
+    {
+      "supplier": {
+        "name": "transport, freight, lorry 3.5-7.5 metric ton, EURO6",
+        "reference product": "transport, freight, lorry 3.5-7.5 metric ton, EURO6",
+        "unit": "ton kilometer",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 183.67346938775512
+    },
+    {
+      "supplier": {
+        "name": "transport, freight, lorry 3.5-7.5 metric ton, unregulated",
+        "reference product": "transport, freight, lorry 3.5-7.5 metric ton, unregulated",
+        "unit": "ton kilometer",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 183.67346938775512
+    },
+    {
+      "supplier": {
+        "name": "transport, freight, lorry 7.5-16 metric ton, EURO1",
+        "reference product": "transport, freight, lorry 7.5-16 metric ton, EURO1",
+        "unit": "ton kilometer",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 54.7112462006079
+    },
+    {
+      "supplier": {
+        "name": "transport, freight, lorry 7.5-16 metric ton, EURO2",
+        "reference product": "transport, freight, lorry 7.5-16 metric ton, EURO2",
+        "unit": "ton kilometer",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 54.7112462006079
+    },
+    {
+      "supplier": {
+        "name": "transport, freight, lorry 7.5-16 metric ton, EURO3",
+        "reference product": "transport, freight, lorry 7.5-16 metric ton, EURO3",
+        "unit": "ton kilometer",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 54.7112462006079
+    },
+    {
+      "supplier": {
+        "name": "transport, freight, lorry 7.5-16 metric ton, EURO4",
+        "reference product": "transport, freight, lorry 7.5-16 metric ton, EURO4",
+        "unit": "ton kilometer",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 54.7112462006079
+    },
+    {
+      "supplier": {
+        "name": "transport, freight, lorry 7.5-16 metric ton, EURO5",
+        "reference product": "transport, freight, lorry 7.5-16 metric ton, EURO5",
+        "unit": "ton kilometer",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 54.7112462006079
+    },
+    {
+      "supplier": {
+        "name": "transport, freight, lorry 7.5-16 metric ton, EURO6",
+        "reference product": "transport, freight, lorry 7.5-16 metric ton, EURO6",
+        "unit": "ton kilometer",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 54.7112462006079
+    },
+    {
+      "supplier": {
+        "name": "transport, freight, lorry 7.5-16 metric ton, unregulated",
+        "reference product": "transport, freight, lorry 7.5-16 metric ton, unregulated",
+        "unit": "ton kilometer",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 54.7112462006079
+    },
+    {
+      "supplier": {
+        "name": "transport, freight, lorry >32 metric ton, EURO1",
+        "reference product": "transport, freight, lorry >32 metric ton, EURO1",
+        "unit": "ton kilometer",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 11.278195488721805
+    },
+    {
+      "supplier": {
+        "name": "transport, freight, lorry >32 metric ton, EURO2",
+        "reference product": "transport, freight, lorry >32 metric ton, EURO2",
+        "unit": "ton kilometer",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 11.278195488721805
+    },
+    {
+      "supplier": {
+        "name": "transport, freight, lorry >32 metric ton, EURO3",
+        "reference product": "transport, freight, lorry >32 metric ton, EURO3",
+        "unit": "ton kilometer",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 11.278195488721805
+    },
+    {
+      "supplier": {
+        "name": "transport, freight, lorry >32 metric ton, EURO4",
+        "reference product": "transport, freight, lorry >32 metric ton, EURO4",
+        "unit": "ton kilometer",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 11.278195488721805
+    },
+    {
+      "supplier": {
+        "name": "transport, freight, lorry >32 metric ton, EURO5",
+        "reference product": "transport, freight, lorry >32 metric ton, EURO5",
+        "unit": "ton kilometer",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 11.278195488721805
+    },
+    {
+      "supplier": {
+        "name": "transport, freight, lorry >32 metric ton, EURO6",
+        "reference product": "transport, freight, lorry >32 metric ton, EURO6",
+        "unit": "ton kilometer",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 11.278195488721805
+    },
+    {
+      "supplier": {
+        "name": "transport, freight, lorry >32 metric ton, unregulated",
+        "reference product": "transport, freight, lorry >32 metric ton, unregulated",
+        "unit": "ton kilometer",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 11.278195488721805
+    },
+    {
+      "supplier": {
+        "name": "transport, freight, lorry with ref. machine, 3.5-7.5 ton, diesel, EURO 3, R134a refrigerant, freezing",
+        "reference product": "transport, freight, lorry with ref. machine, 3.5-7.5 ton, diesel, EURO 3, R134a refrigerant, freezing",
+        "unit": "ton kilometer",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 183.67346938775512
+    },
+    {
+      "supplier": {
+        "name": "transport, freight, lorry with ref. machine, 3.5-7.5 ton, diesel, EURO 4, R134a refrigerant, freezing",
+        "reference product": "transport, freight, lorry with ref. machine, 3.5-7.5 ton, diesel, EURO 4, R134a refrigerant, freezing",
+        "unit": "ton kilometer",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 183.67346938775512
+    },
+    {
+      "supplier": {
+        "name": "transport, freight, lorry with ref. machine, 3.5-7.5 ton, diesel, EURO 5, R134a refrigerant, freezing",
+        "reference product": "transport, freight, lorry with ref. machine, 3.5-7.5 ton, diesel, EURO 5, R134a refrigerant, freezing",
+        "unit": "ton kilometer",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 183.67346938775512
+    },
+    {
+      "supplier": {
+        "name": "transport, freight, lorry with ref. machine, 3.5-7.5 ton, diesel, EURO 6, R134a refrigerant, freezing",
+        "reference product": "transport, freight, lorry with ref. machine, 3.5-7.5 ton, diesel, EURO 6, R134a refrigerant, freezing",
+        "unit": "ton kilometer",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 183.67346938775512
+    },
+    {
+      "supplier": {
+        "name": "transport, freight, lorry with refrigeration machine, 3.5-7.5 ton, EURO3, R134a refrigerant, cooling",
+        "reference product": "transport, freight, lorry with refrigeration machine, 3.5-7.5 ton, EURO3, R134a refrigerant, cooling",
+        "unit": "ton kilometer",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 183.67346938775512
+    },
+    {
+      "supplier": {
+        "name": "transport, freight, lorry with refrigeration machine, 3.5-7.5 ton, EURO3, R134a refrigerant, freezing",
+        "reference product": "transport, freight, lorry with refrigeration machine, 3.5-7.5 ton, EURO3, R134a refrigerant, freezing",
+        "unit": "ton kilometer",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 183.67346938775512
+    },
+    {
+      "supplier": {
+        "name": "transport, freight, lorry with refrigeration machine, 3.5-7.5 ton, EURO3, carbon dioxide, liquid refrigerant, cooling",
+        "reference product": "transport, freight, lorry with refrigeration machine, 3.5-7.5 ton, EURO3, carbon dioxide, liquid refrigerant, cooling",
+        "unit": "ton kilometer",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 183.67346938775512
+    },
+    {
+      "supplier": {
+        "name": "transport, freight, lorry with refrigeration machine, 3.5-7.5 ton, EURO3, carbon dioxide, liquid refrigerant, freezing",
+        "reference product": "transport, freight, lorry with refrigeration machine, 3.5-7.5 ton, EURO3, carbon dioxide, liquid refrigerant, freezing",
+        "unit": "ton kilometer",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 183.67346938775512
+    },
+    {
+      "supplier": {
+        "name": "transport, freight, lorry with refrigeration machine, 3.5-7.5 ton, EURO4, R134a refrigerant, cooling",
+        "reference product": "transport, freight, lorry with refrigeration machine, 3.5-7.5 ton, EURO4, R134a refrigerant, cooling",
+        "unit": "ton kilometer",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 183.67346938775512
+    },
+    {
+      "supplier": {
+        "name": "transport, freight, lorry with refrigeration machine, 3.5-7.5 ton, EURO4, R134a refrigerant, freezing",
+        "reference product": "transport, freight, lorry with refrigeration machine, 3.5-7.5 ton, EURO4, R134a refrigerant, freezing",
+        "unit": "ton kilometer",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 183.67346938775512
+    },
+    {
+      "supplier": {
+        "name": "transport, freight, lorry with refrigeration machine, 3.5-7.5 ton, EURO4, carbon dioxide, liquid refrigerant, cooling",
+        "reference product": "transport, freight, lorry with refrigeration machine, 3.5-7.5 ton, EURO4, carbon dioxide, liquid refrigerant, cooling",
+        "unit": "ton kilometer",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 183.67346938775512
+    },
+    {
+      "supplier": {
+        "name": "transport, freight, lorry with refrigeration machine, 3.5-7.5 ton, EURO4, carbon dioxide, liquid refrigerant, freezing",
+        "reference product": "transport, freight, lorry with refrigeration machine, 3.5-7.5 ton, EURO4, carbon dioxide, liquid refrigerant, freezing",
+        "unit": "ton kilometer",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 183.67346938775512
+    },
+    {
+      "supplier": {
+        "name": "transport, freight, lorry with refrigeration machine, 3.5-7.5 ton, EURO5, R134a refrigerant, cooling",
+        "reference product": "transport, freight, lorry with refrigeration machine, 3.5-7.5 ton, EURO5, R134a refrigerant, cooling",
+        "unit": "ton kilometer",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 183.67346938775512
+    },
+    {
+      "supplier": {
+        "name": "transport, freight, lorry with refrigeration machine, 3.5-7.5 ton, EURO5, R134a refrigerant, freezing",
+        "reference product": "transport, freight, lorry with refrigeration machine, 3.5-7.5 ton, EURO5, R134a refrigerant, freezing",
+        "unit": "ton kilometer",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 183.67346938775512
+    },
+    {
+      "supplier": {
+        "name": "transport, freight, lorry with refrigeration machine, 3.5-7.5 ton, EURO5, carbon dioxide, liquid refrigerant, cooling",
+        "reference product": "transport, freight, lorry with refrigeration machine, 3.5-7.5 ton, EURO5, carbon dioxide, liquid refrigerant, cooling",
+        "unit": "ton kilometer",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 183.67346938775512
+    },
+    {
+      "supplier": {
+        "name": "transport, freight, lorry with refrigeration machine, 3.5-7.5 ton, EURO5, carbon dioxide, liquid refrigerant, freezing",
+        "reference product": "transport, freight, lorry with refrigeration machine, 3.5-7.5 ton, EURO5, carbon dioxide, liquid refrigerant, freezing",
+        "unit": "ton kilometer",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 183.67346938775512
+    },
+    {
+      "supplier": {
+        "name": "transport, freight, lorry with refrigeration machine, 3.5-7.5 ton, EURO6, R134a refrigerant, cooling",
+        "reference product": "transport, freight, lorry with refrigeration machine, 3.5-7.5 ton, EURO6, R134a refrigerant, cooling",
+        "unit": "ton kilometer",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 183.67346938775512
+    },
+    {
+      "supplier": {
+        "name": "transport, freight, lorry with refrigeration machine, 3.5-7.5 ton, EURO6, R134a refrigerant, freezing",
+        "reference product": "transport, freight, lorry with refrigeration machine, 3.5-7.5 ton, EURO6, R134a refrigerant, freezing",
+        "unit": "ton kilometer",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 183.67346938775512
+    },
+    {
+      "supplier": {
+        "name": "transport, freight, lorry with refrigeration machine, 3.5-7.5 ton, EURO6, carbon dioxide, liquid refrigerant, cooling",
+        "reference product": "transport, freight, lorry with refrigeration machine, 3.5-7.5 ton, EURO6, carbon dioxide, liquid refrigerant, cooling",
+        "unit": "ton kilometer",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 183.67346938775512
+    },
+    {
+      "supplier": {
+        "name": "transport, freight, lorry with refrigeration machine, 3.5-7.5 ton, EURO6, carbon dioxide, liquid refrigerant, freezing",
+        "reference product": "transport, freight, lorry with refrigeration machine, 3.5-7.5 ton, EURO6, carbon dioxide, liquid refrigerant, freezing",
+        "unit": "ton kilometer",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 183.67346938775512
+    },
+    {
+      "supplier": {
+        "name": "transport, freight, lorry with refrigeration machine, 3.5-7.5 ton, diesel, EURO 3, CO2, liq. ref., cooling",
+        "reference product": "transport, freight, lorry with refrigeration machine, 3.5-7.5 ton, diesel, EURO 3, CO2, liq. ref., cooling",
+        "unit": "ton kilometer",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 183.67346938775512
+    },
+    {
+      "supplier": {
+        "name": "transport, freight, lorry with refrigeration machine, 3.5-7.5 ton, diesel, EURO 3, CO2, liq. ref., freezing",
+        "reference product": "transport, freight, lorry with refrigeration machine, 3.5-7.5 ton, diesel, EURO 3, CO2, liq. ref., freezing",
+        "unit": "ton kilometer",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 183.67346938775512
+    },
+    {
+      "supplier": {
+        "name": "transport, freight, lorry with refrigeration machine, 3.5-7.5 ton, diesel, EURO 3, R134a refrigerant, cooling",
+        "reference product": "transport, freight, lorry with refrigeration machine, 3.5-7.5 ton, diesel, EURO 3, R134a refrigerant, cooling",
+        "unit": "ton kilometer",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 183.67346938775512
+    },
+    {
+      "supplier": {
+        "name": "transport, freight, lorry with refrigeration machine, 3.5-7.5 ton, diesel, EURO 4, CO2, liq. ref., cooling",
+        "reference product": "transport, freight, lorry with refrigeration machine, 3.5-7.5 ton, diesel, EURO 4, CO2, liq. ref., cooling",
+        "unit": "ton kilometer",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 183.67346938775512
+    },
+    {
+      "supplier": {
+        "name": "transport, freight, lorry with refrigeration machine, 3.5-7.5 ton, diesel, EURO 4, CO2, liq. ref., freezing",
+        "reference product": "transport, freight, lorry with refrigeration machine, 3.5-7.5 ton, diesel, EURO 4, CO2, liq. ref., freezing",
+        "unit": "ton kilometer",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 183.67346938775512
+    },
+    {
+      "supplier": {
+        "name": "transport, freight, lorry with refrigeration machine, 3.5-7.5 ton, diesel, EURO 4, R134a refrigerant, cooling",
+        "reference product": "transport, freight, lorry with refrigeration machine, 3.5-7.5 ton, diesel, EURO 4, R134a refrigerant, cooling",
+        "unit": "ton kilometer",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 183.67346938775512
+    },
+    {
+      "supplier": {
+        "name": "transport, freight, lorry with refrigeration machine, 3.5-7.5 ton, diesel, EURO 5, CO2, liq. ref., cooling",
+        "reference product": "transport, freight, lorry with refrigeration machine, 3.5-7.5 ton, diesel, EURO 5, CO2, liq. ref., cooling",
+        "unit": "ton kilometer",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 183.67346938775512
+    },
+    {
+      "supplier": {
+        "name": "transport, freight, lorry with refrigeration machine, 3.5-7.5 ton, diesel, EURO 5, CO2, liq. ref., freezing",
+        "reference product": "transport, freight, lorry with refrigeration machine, 3.5-7.5 ton, diesel, EURO 5, CO2, liq. ref., freezing",
+        "unit": "ton kilometer",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 183.67346938775512
+    },
+    {
+      "supplier": {
+        "name": "transport, freight, lorry with refrigeration machine, 3.5-7.5 ton, diesel, EURO 5, R134a refrigerant, cooling",
+        "reference product": "transport, freight, lorry with refrigeration machine, 3.5-7.5 ton, diesel, EURO 5, R134a refrigerant, cooling",
+        "unit": "ton kilometer",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 183.67346938775512
+    },
+    {
+      "supplier": {
+        "name": "transport, freight, lorry with refrigeration machine, 3.5-7.5 ton, diesel, EURO 6, CO2, liq. ref., cooling",
+        "reference product": "transport, freight, lorry with refrigeration machine, 3.5-7.5 ton, diesel, EURO 6, CO2, liq. ref., cooling",
+        "unit": "ton kilometer",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 183.67346938775512
+    },
+    {
+      "supplier": {
+        "name": "transport, freight, lorry with refrigeration machine, 3.5-7.5 ton, diesel, EURO 6, CO2, liq. ref., freezing",
+        "reference product": "transport, freight, lorry with refrigeration machine, 3.5-7.5 ton, diesel, EURO 6, CO2, liq. ref., freezing",
+        "unit": "ton kilometer",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 183.67346938775512
+    },
+    {
+      "supplier": {
+        "name": "transport, freight, lorry with refrigeration machine, 3.5-7.5 ton, diesel, EURO 6, R134a refrigerant, cooling",
+        "reference product": "transport, freight, lorry with refrigeration machine, 3.5-7.5 ton, diesel, EURO 6, R134a refrigerant, cooling",
+        "unit": "ton kilometer",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 183.67346938775512
+    },
+    {
+      "supplier": {
+        "name": "transport, freight, lorry with refrigeration machine, 7.5-16 ton, EURO3, R134a refrigerant, cooling",
+        "reference product": "transport, freight, lorry with refrigeration machine, 7.5-16 ton, EURO3, R134a refrigerant, cooling",
+        "unit": "ton kilometer",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 54.7112462006079
+    },
+    {
+      "supplier": {
+        "name": "transport, freight, lorry with refrigeration machine, 7.5-16 ton, EURO3, R134a refrigerant, freezing",
+        "reference product": "transport, freight, lorry with refrigeration machine, 7.5-16 ton, EURO3, R134a refrigerant, freezing",
+        "unit": "ton kilometer",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 54.7112462006079
+    },
+    {
+      "supplier": {
+        "name": "transport, freight, lorry with refrigeration machine, 7.5-16 ton, EURO3, carbon dioxide, liquid refrigerant, cooling",
+        "reference product": "transport, freight, lorry with refrigeration machine, 7.5-16 ton, EURO3, carbon dioxide, liquid refrigerant, cooling",
+        "unit": "ton kilometer",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 54.7112462006079
+    },
+    {
+      "supplier": {
+        "name": "transport, freight, lorry with refrigeration machine, 7.5-16 ton, EURO3, carbon dioxide, liquid refrigerant, freezing",
+        "reference product": "transport, freight, lorry with refrigeration machine, 7.5-16 ton, EURO3, carbon dioxide, liquid refrigerant, freezing",
+        "unit": "ton kilometer",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 54.7112462006079
+    },
+    {
+      "supplier": {
+        "name": "transport, freight, lorry with refrigeration machine, 7.5-16 ton, EURO4, R134a refrigerant, cooling",
+        "reference product": "transport, freight, lorry with refrigeration machine, 7.5-16 ton, EURO4, R134a refrigerant, cooling",
+        "unit": "ton kilometer",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 54.7112462006079
+    },
+    {
+      "supplier": {
+        "name": "transport, freight, lorry with refrigeration machine, 7.5-16 ton, EURO4, R134a refrigerant, freezing",
+        "reference product": "transport, freight, lorry with refrigeration machine, 7.5-16 ton, EURO4, R134a refrigerant, freezing",
+        "unit": "ton kilometer",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 54.7112462006079
+    },
+    {
+      "supplier": {
+        "name": "transport, freight, lorry with refrigeration machine, 7.5-16 ton, EURO4, carbon dioxide, liquid refrigerant, cooling",
+        "reference product": "transport, freight, lorry with refrigeration machine, 7.5-16 ton, EURO4, carbon dioxide, liquid refrigerant, cooling",
+        "unit": "ton kilometer",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 54.7112462006079
+    },
+    {
+      "supplier": {
+        "name": "transport, freight, lorry with refrigeration machine, 7.5-16 ton, EURO4, carbon dioxide, liquid refrigerant, freezing",
+        "reference product": "transport, freight, lorry with refrigeration machine, 7.5-16 ton, EURO4, carbon dioxide, liquid refrigerant, freezing",
+        "unit": "ton kilometer",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 54.7112462006079
+    },
+    {
+      "supplier": {
+        "name": "transport, freight, lorry with refrigeration machine, 7.5-16 ton, EURO5, R134a refrigerant, cooling",
+        "reference product": "transport, freight, lorry with refrigeration machine, 7.5-16 ton, EURO5, R134a refrigerant, cooling",
+        "unit": "ton kilometer",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 54.7112462006079
+    },
+    {
+      "supplier": {
+        "name": "transport, freight, lorry with refrigeration machine, 7.5-16 ton, EURO5, R134a refrigerant, freezing",
+        "reference product": "transport, freight, lorry with refrigeration machine, 7.5-16 ton, EURO5, R134a refrigerant, freezing",
+        "unit": "ton kilometer",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 54.7112462006079
+    },
+    {
+      "supplier": {
+        "name": "transport, freight, lorry with refrigeration machine, 7.5-16 ton, EURO5, carbon dioxide, liquid refrigerant, cooling",
+        "reference product": "transport, freight, lorry with refrigeration machine, 7.5-16 ton, EURO5, carbon dioxide, liquid refrigerant, cooling",
+        "unit": "ton kilometer",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 54.7112462006079
+    },
+    {
+      "supplier": {
+        "name": "transport, freight, lorry with refrigeration machine, 7.5-16 ton, EURO5, carbon dioxide, liquid refrigerant, freezing",
+        "reference product": "transport, freight, lorry with refrigeration machine, 7.5-16 ton, EURO5, carbon dioxide, liquid refrigerant, freezing",
+        "unit": "ton kilometer",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 54.7112462006079
+    },
+    {
+      "supplier": {
+        "name": "transport, freight, lorry with refrigeration machine, 7.5-16 ton, EURO6, R134a refrigerant, cooling",
+        "reference product": "transport, freight, lorry with refrigeration machine, 7.5-16 ton, EURO6, R134a refrigerant, cooling",
+        "unit": "ton kilometer",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 54.7112462006079
+    },
+    {
+      "supplier": {
+        "name": "transport, freight, lorry with refrigeration machine, 7.5-16 ton, EURO6, R134a refrigerant, freezing",
+        "reference product": "transport, freight, lorry with refrigeration machine, 7.5-16 ton, EURO6, R134a refrigerant, freezing",
+        "unit": "ton kilometer",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 54.7112462006079
+    },
+    {
+      "supplier": {
+        "name": "transport, freight, lorry with refrigeration machine, 7.5-16 ton, EURO6, carbon dioxide, liquid refrigerant, cooling",
+        "reference product": "transport, freight, lorry with refrigeration machine, 7.5-16 ton, EURO6, carbon dioxide, liquid refrigerant, cooling",
+        "unit": "ton kilometer",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 54.7112462006079
+    },
+    {
+      "supplier": {
+        "name": "transport, freight, lorry with refrigeration machine, 7.5-16 ton, EURO6, carbon dioxide, liquid refrigerant, freezing",
+        "reference product": "transport, freight, lorry with refrigeration machine, 7.5-16 ton, EURO6, carbon dioxide, liquid refrigerant, freezing",
+        "unit": "ton kilometer",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 54.7112462006079
+    },
+    {
+      "supplier": {
+        "name": "transport, freight, lorry with refrigeration machine, 7.5-16 ton, diesel, EURO 3, R134a refrigerant, cooling",
+        "reference product": "transport, freight, lorry with refrigeration machine, 7.5-16 ton, diesel, EURO 3, R134a refrigerant, cooling",
+        "unit": "ton kilometer",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 54.7112462006079
+    },
+    {
+      "supplier": {
+        "name": "transport, freight, lorry with refrigeration machine, 7.5-16 ton, diesel, EURO 3, R134a refrigerant, freezing",
+        "reference product": "transport, freight, lorry with refrigeration machine, 7.5-16 ton, diesel, EURO 3, R134a refrigerant, freezing",
+        "unit": "ton kilometer",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 54.7112462006079
+    },
+    {
+      "supplier": {
+        "name": "transport, freight, lorry with refrigeration machine, 7.5-16 ton, diesel, EURO 3,CO2, liq. ref., cooling",
+        "reference product": "transport, freight, lorry with refrigeration machine, 7.5-16 ton, diesel, EURO 3, CO2, liq. ref., cooling",
+        "unit": "ton kilometer",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 54.7112462006079
+    },
+    {
+      "supplier": {
+        "name": "transport, freight, lorry with refrigeration machine, 7.5-16 ton, diesel, EURO 3,CO2, liq. ref., freezing",
+        "reference product": "transport, freight, lorry with refrigeration machine, 7.5-16 ton, diesel, EURO 3, CO2, liq. ref., freezing",
+        "unit": "ton kilometer",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 54.7112462006079
+    },
+    {
+      "supplier": {
+        "name": "transport, freight, lorry with refrigeration machine, 7.5-16 ton, diesel, EURO 4, CO2, liq. ref., cooling",
+        "reference product": "transport, freight, lorry with refrigeration machine, 7.5-16 ton, diesel, EURO 4, CO2, liq. ref., cooling",
+        "unit": "ton kilometer",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 54.7112462006079
+    },
+    {
+      "supplier": {
+        "name": "transport, freight, lorry with refrigeration machine, 7.5-16 ton, diesel, EURO 4, CO2, liq. ref., freezing",
+        "reference product": "transport, freight, lorry with refrigeration machine, 7.5-16 ton, diesel, EURO 4, CO2, liq. ref., freezing",
+        "unit": "ton kilometer",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 54.7112462006079
+    },
+    {
+      "supplier": {
+        "name": "transport, freight, lorry with refrigeration machine, 7.5-16 ton, diesel, EURO 4, R134a refrigerant, cooling",
+        "reference product": "transport, freight, lorry with refrigeration machine, 7.5-16 ton, diesel, EURO 4, R134a refrigerant, cooling",
+        "unit": "ton kilometer",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 54.7112462006079
+    },
+    {
+      "supplier": {
+        "name": "transport, freight, lorry with refrigeration machine, 7.5-16 ton, diesel, EURO 4, R134a refrigerant, freezing",
+        "reference product": "transport, freight, lorry with refrigeration machine, 7.5-16 ton, diesel, EURO 4, R134a refrigerant, freezing",
+        "unit": "ton kilometer",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 54.7112462006079
+    },
+    {
+      "supplier": {
+        "name": "transport, freight, lorry with refrigeration machine, 7.5-16 ton, diesel, EURO 5, CO2, liq. ref., cooling",
+        "reference product": "transport, freight, lorry with refrigeration machine, 7.5-16 ton, diesel, EURO 5, CO2, liq. ref., cooling",
+        "unit": "ton kilometer",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 54.7112462006079
+    },
+    {
+      "supplier": {
+        "name": "transport, freight, lorry with refrigeration machine, 7.5-16 ton, diesel, EURO 5, CO2, liq. ref., freezing",
+        "reference product": "transport, freight, lorry with refrigeration machine, 7.5-16 ton, diesel, EURO 5, CO2, liq. ref., freezing",
+        "unit": "ton kilometer",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 54.7112462006079
+    },
+    {
+      "supplier": {
+        "name": "transport, freight, lorry with refrigeration machine, 7.5-16 ton, diesel, EURO 5, R134a refrigerant, cooling",
+        "reference product": "transport, freight, lorry with refrigeration machine, 7.5-16 ton, diesel, EURO 5, R134a refrigerant, cooling",
+        "unit": "ton kilometer",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 54.7112462006079
+    },
+    {
+      "supplier": {
+        "name": "transport, freight, lorry with refrigeration machine, 7.5-16 ton, diesel, EURO 5, R134a refrigerant, freezing",
+        "reference product": "transport, freight, lorry with refrigeration machine, 7.5-16 ton, diesel, EURO 5, R134a refrigerant, freezing",
+        "unit": "ton kilometer",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 54.7112462006079
+    },
+    {
+      "supplier": {
+        "name": "transport, freight, lorry with refrigeration machine, 7.5-16 ton, diesel, EURO 6, CO2, liq. ref., cooling",
+        "reference product": "transport, freight, lorry with refrigeration machine, 7.5-16 ton, diesel, EURO 6, CO2, liq. ref., cooling",
+        "unit": "ton kilometer",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 54.7112462006079
+    },
+    {
+      "supplier": {
+        "name": "transport, freight, lorry with refrigeration machine, 7.5-16 ton, diesel, EURO 6, CO2, liq. ref., freezing",
+        "reference product": "transport, freight, lorry with refrigeration machine, 7.5-16 ton, diesel, EURO 6, CO2, liq. ref., freezing",
+        "unit": "ton kilometer",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 54.7112462006079
+    },
+    {
+      "supplier": {
+        "name": "transport, freight, lorry with refrigeration machine, 7.5-16 ton, diesel, EURO 6, R134a refrigerant, freezing",
+        "reference product": "transport, freight, lorry with refrigeration machine, 7.5-16 ton, diesel, EURO 6, R134a refrigerant, freezing",
+        "unit": "ton kilometer",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 54.7112462006079
+    },
+    {
+      "supplier": {
+        "name": "transport, freight, lorry with refrigeration machine. 7.5-16 ton, diesel, EURO 6, R134a refrigerant, cooling",
+        "reference product": "transport, freight, lorry with refrigeration machine, 7.5-16 ton, diesel, EURO 6, R134a refrigerant, cooling",
+        "unit": "ton kilometer",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 54.7112462006079
+    },
+    {
+      "supplier": {
+        "name": "transport, freight, lorry, 16-32 metric ton, diesel, EURO 1",
+        "reference product": "transport, freight, lorry, 16-32 metric ton, diesel, EURO 1",
+        "unit": "ton kilometer",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 31.088082901554404
+    },
+    {
+      "supplier": {
+        "name": "transport, freight, lorry, 16-32 metric ton, diesel, EURO 2",
+        "reference product": "transport, freight, lorry, 16-32 metric ton, diesel, EURO 2",
+        "unit": "ton kilometer",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 31.088082901554404
+    },
+    {
+      "supplier": {
+        "name": "transport, freight, lorry, 16-32 metric ton, diesel, EURO 3",
+        "reference product": "transport, freight, lorry, 16-32 metric ton, diesel, EURO 3",
+        "unit": "ton kilometer",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 31.088082901554404
+    },
+    {
+      "supplier": {
+        "name": "transport, freight, lorry, 16-32 metric ton, diesel, EURO 4",
+        "reference product": "transport, freight, lorry, 16-32 metric ton, diesel, EURO 4",
+        "unit": "ton kilometer",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 31.088082901554404
+    },
+    {
+      "supplier": {
+        "name": "transport, freight, lorry, 16-32 metric ton, diesel, EURO 5",
+        "reference product": "transport, freight, lorry, 16-32 metric ton, diesel, EURO 5",
+        "unit": "ton kilometer",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 31.088082901554404
+    },
+    {
+      "supplier": {
+        "name": "transport, freight, lorry, 16-32 metric ton, diesel, EURO 6",
+        "reference product": "transport, freight, lorry, 16-32 metric ton, diesel, EURO 6",
+        "unit": "ton kilometer",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 31.088082901554404
+    },
+    {
+      "supplier": {
+        "name": "transport, freight, lorry, 16-32 metric ton, diesel, unregulated",
+        "reference product": "transport, freight, lorry, 16-32 metric ton, diesel, unregulated",
+        "unit": "ton kilometer",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 31.088082901554404
+    },
+    {
+      "supplier": {
+        "name": "transport, freight, lorry, 3.5-7.5 metric ton, diesel, EURO 1",
+        "reference product": "transport, freight, lorry, 3.5-7.5 metric ton, diesel, EURO 1",
+        "unit": "ton kilometer",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 183.67346938775512
+    },
+    {
+      "supplier": {
+        "name": "transport, freight, lorry, 3.5-7.5 metric ton, diesel, EURO 2",
+        "reference product": "transport, freight, lorry, 3.5-7.5 metric ton, diesel, EURO 2",
+        "unit": "ton kilometer",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 183.67346938775512
+    },
+    {
+      "supplier": {
+        "name": "transport, freight, lorry, 3.5-7.5 metric ton, diesel, EURO 3",
+        "reference product": "transport, freight, lorry, 3.5-7.5 metric ton, diesel, EURO 3",
+        "unit": "ton kilometer",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 183.67346938775512
+    },
+    {
+      "supplier": {
+        "name": "transport, freight, lorry, 3.5-7.5 metric ton, diesel, EURO 4",
+        "reference product": "transport, freight, lorry, 3.5-7.5 metric ton, diesel, EURO 4",
+        "unit": "ton kilometer",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 183.67346938775512
+    },
+    {
+      "supplier": {
+        "name": "transport, freight, lorry, 3.5-7.5 metric ton, diesel, EURO 5",
+        "reference product": "transport, freight, lorry, 3.5-7.5 metric ton, diesel, EURO 5",
+        "unit": "ton kilometer",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 183.67346938775512
+    },
+    {
+      "supplier": {
+        "name": "transport, freight, lorry, 3.5-7.5 metric ton, diesel, EURO 6",
+        "reference product": "transport, freight, lorry, 3.5-7.5 metric ton, diesel, EURO 6",
+        "unit": "ton kilometer",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 183.67346938775512
+    },
+    {
+      "supplier": {
+        "name": "transport, freight, lorry, 3.5-7.5 metric ton, diesel, unregulated",
+        "reference product": "transport, freight, lorry, 3.5-7.5 metric ton, diesel, unregulated",
+        "unit": "ton kilometer",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 183.67346938775512
+    },
+    {
+      "supplier": {
+        "name": "transport, freight, lorry, 7.5-16 metric ton, diesel, EURO 1",
+        "reference product": "transport, freight, lorry, 7.5-16 metric ton, diesel, EURO 1",
+        "unit": "ton kilometer",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 54.7112462006079
+    },
+    {
+      "supplier": {
+        "name": "transport, freight, lorry, 7.5-16 metric ton, diesel, EURO 2",
+        "reference product": "transport, freight, lorry, 7.5-16 metric ton, diesel, EURO 2",
+        "unit": "ton kilometer",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 54.7112462006079
+    },
+    {
+      "supplier": {
+        "name": "transport, freight, lorry, 7.5-16 metric ton, diesel, EURO 3",
+        "reference product": "transport, freight, lorry, 7.5-16 metric ton, diesel, EURO 3",
+        "unit": "ton kilometer",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 54.7112462006079
+    },
+    {
+      "supplier": {
+        "name": "transport, freight, lorry, 7.5-16 metric ton, diesel, EURO 4",
+        "reference product": "transport, freight, lorry, 7.5-16 metric ton, diesel, EURO 4",
+        "unit": "ton kilometer",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 54.7112462006079
+    },
+    {
+      "supplier": {
+        "name": "transport, freight, lorry, 7.5-16 metric ton, diesel, EURO 5",
+        "reference product": "transport, freight, lorry, 7.5-16 metric ton, diesel, EURO 5",
+        "unit": "ton kilometer",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 54.7112462006079
+    },
+    {
+      "supplier": {
+        "name": "transport, freight, lorry, 7.5-16 metric ton, diesel, EURO 6",
+        "reference product": "transport, freight, lorry, 7.5-16 metric ton, diesel, EURO 6",
+        "unit": "ton kilometer",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 54.7112462006079
+    },
+    {
+      "supplier": {
+        "name": "transport, freight, lorry, 7.5-16 metric ton, diesel, unregulated",
+        "reference product": "transport, freight, lorry, 7.5-16 metric ton, diesel, unregulated",
+        "unit": "ton kilometer",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 54.7112462006079
+    },
+    {
+      "supplier": {
+        "name": "transport, freight, lorry, >32 metric ton, diesel, EURO 1",
+        "reference product": "transport, freight, lorry, >32 metric ton, diesel, EURO 1",
+        "unit": "ton kilometer",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 11.278195488721805
+    },
+    {
+      "supplier": {
+        "name": "transport, freight, lorry, >32 metric ton, diesel, EURO 2",
+        "reference product": "transport, freight, lorry, >32 metric ton, diesel, EURO 2",
+        "unit": "ton kilometer",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 11.278195488721805
+    },
+    {
+      "supplier": {
+        "name": "transport, freight, lorry, >32 metric ton, diesel, EURO 3",
+        "reference product": "transport, freight, lorry, >32 metric ton, diesel, EURO 3",
+        "unit": "ton kilometer",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 11.278195488721805
+    },
+    {
+      "supplier": {
+        "name": "transport, freight, lorry, >32 metric ton, diesel, EURO 4",
+        "reference product": "transport, freight, lorry, >32 metric ton, diesel, EURO 4",
+        "unit": "ton kilometer",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 11.278195488721805
+    },
+    {
+      "supplier": {
+        "name": "transport, freight, lorry, >32 metric ton, diesel, EURO 5",
+        "reference product": "transport, freight, lorry, >32 metric ton, diesel, EURO 5",
+        "unit": "ton kilometer",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 11.278195488721805
+    },
+    {
+      "supplier": {
+        "name": "transport, freight, lorry, >32 metric ton, diesel, EURO 6",
+        "reference product": "transport, freight, lorry, >32 metric ton, diesel, EURO 6",
+        "unit": "ton kilometer",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 11.278195488721805
+    },
+    {
+      "supplier": {
+        "name": "transport, freight, lorry, >32 metric ton, diesel, unregulated",
+        "reference product": "transport, freight, lorry, >32 metric ton, diesel, unregulated",
+        "unit": "ton kilometer",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 11.278195488721805
+    },
+    {
+      "supplier": {
+        "name": "transport, freight, train, diesel",
+        "reference product": "transport, freight, train, fleet average",
+        "unit": "ton kilometer",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 4.8
+    },
+    {
+      "supplier": {
+        "name": "transport, freight, train, diesel, with particle filter",
+        "reference product": "transport, freight, train, fleet average",
+        "unit": "ton kilometer",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 4.8
+    },
+    {
+      "supplier": {
+        "name": "transport, freight, train, electric",
+        "reference product": "transport, freight, train, fleet average",
+        "unit": "ton kilometer",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 4.8
+    },
+    {
+      "supplier": {
+        "name": "transport, freight, train, fleet average",
+        "reference product": "transport, freight, train, fleet average",
+        "unit": "ton kilometer",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 4.8
+    },
+    {
+      "supplier": {
+        "name": "transport, freight, train, steam",
+        "reference product": "transport, freight, train, fleet average",
+        "unit": "ton kilometer",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 4.8
+    },
+    {
+      "supplier": {
+        "name": "transport, passenger aircraft, long haul",
+        "reference product": "transport, passenger aircraft, long haul",
+        "unit": "person kilometer",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 4.0
+    },
+    {
+      "supplier": {
+        "name": "transport, passenger aircraft, medium haul",
+        "reference product": "transport, passenger aircraft, medium haul",
+        "unit": "person kilometer",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 4.0
+    },
+    {
+      "supplier": {
+        "name": "transport, passenger aircraft, short haul",
+        "reference product": "transport, passenger aircraft, short haul",
+        "unit": "person kilometer",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 4.0
+    },
+    {
+      "supplier": {
+        "name": "transport, passenger aircraft, very short haul",
+        "reference product": "transport, passenger aircraft, very short haul",
+        "unit": "person kilometer",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 4.0
+    },
+    {
+      "supplier": {
+        "name": "transport, passenger car, electric",
+        "reference product": "transport, passenger car, electric",
+        "unit": "kilometer",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 23.0
+    },
+    {
+      "supplier": {
+        "name": "transport, passenger car, large size, diesel, EURO 3",
+        "reference product": "transport, passenger car, large size, diesel, EURO 3",
+        "unit": "kilometer",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 23.0
+    },
+    {
+      "supplier": {
+        "name": "transport, passenger car, large size, diesel, EURO 4",
+        "reference product": "transport, passenger car, large size, diesel, EURO 4",
+        "unit": "kilometer",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 23.0
+    },
+    {
+      "supplier": {
+        "name": "transport, passenger car, large size, diesel, EURO 5",
+        "reference product": "transport, passenger car, large size, diesel, EURO 5",
+        "unit": "kilometer",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 23.0
+    },
+    {
+      "supplier": {
+        "name": "transport, passenger car, large size, natural gas, EURO 3",
+        "reference product": "transport, passenger car, large size, natural gas, EURO 3",
+        "unit": "kilometer",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 23.0
+    },
+    {
+      "supplier": {
+        "name": "transport, passenger car, large size, natural gas, EURO 4",
+        "reference product": "transport, passenger car, large size, natural gas, EURO 4",
+        "unit": "kilometer",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 23.0
+    },
+    {
+      "supplier": {
+        "name": "transport, passenger car, large size, natural gas, EURO 5",
+        "reference product": "transport, passenger car, large size, natural gas, EURO 5",
+        "unit": "kilometer",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 23.0
+    },
+    {
+      "supplier": {
+        "name": "transport, passenger car, large size, petrol, EURO 3",
+        "reference product": "transport, passenger car, large size, petrol, EURO 3",
+        "unit": "kilometer",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 23.0
+    },
+    {
+      "supplier": {
+        "name": "transport, passenger car, large size, petrol, EURO 4",
+        "reference product": "transport, passenger car, large size, petrol, EURO 4",
+        "unit": "kilometer",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 23.0
+    },
+    {
+      "supplier": {
+        "name": "transport, passenger car, large size, petrol, EURO 5",
+        "reference product": "transport, passenger car, large size, petrol, EURO 5",
+        "unit": "kilometer",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 23.0
+    },
+    {
+      "supplier": {
+        "name": "transport, passenger car, medium size, diesel, EURO 3",
+        "reference product": "transport, passenger car, medium size, diesel, EURO 3",
+        "unit": "kilometer",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 23.0
+    },
+    {
+      "supplier": {
+        "name": "transport, passenger car, medium size, diesel, EURO 4",
+        "reference product": "transport, passenger car, medium size, diesel, EURO 4",
+        "unit": "kilometer",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 23.0
+    },
+    {
+      "supplier": {
+        "name": "transport, passenger car, medium size, diesel, EURO 5",
+        "reference product": "transport, passenger car, medium size, diesel, EURO 5",
+        "unit": "kilometer",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 23.0
+    },
+    {
+      "supplier": {
+        "name": "transport, passenger car, medium size, liquefied petroleum gas (LPG), EURO 5",
+        "reference product": "transport, passenger car, medium size, liquefied petroleum gas, EURO 5",
+        "unit": "kilometer",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 23.0
+    },
+    {
+      "supplier": {
+        "name": "transport, passenger car, medium size, natural gas, EURO 3",
+        "reference product": "transport, passenger car, medium size, natural gas, EURO 3",
+        "unit": "kilometer",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 23.0
+    },
+    {
+      "supplier": {
+        "name": "transport, passenger car, medium size, natural gas, EURO 4",
+        "reference product": "transport, passenger car, medium size, natural gas, EURO 4",
+        "unit": "kilometer",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 23.0
+    },
+    {
+      "supplier": {
+        "name": "transport, passenger car, medium size, natural gas, EURO 5",
+        "reference product": "transport, passenger car, medium size, natural gas, EURO 5",
+        "unit": "kilometer",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 23.0
+    },
+    {
+      "supplier": {
+        "name": "transport, passenger car, medium size, petrol, EURO 3",
+        "reference product": "transport, passenger car, medium size, petrol, EURO 3",
+        "unit": "kilometer",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 23.0
+    },
+    {
+      "supplier": {
+        "name": "transport, passenger car, medium size, petrol, EURO 4",
+        "reference product": "transport, passenger car, medium size, petrol, EURO 4",
+        "unit": "kilometer",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 23.0
+    },
+    {
+      "supplier": {
+        "name": "transport, passenger car, medium size, petrol, EURO 5",
+        "reference product": "transport, passenger car, medium size, petrol, EURO 5",
+        "unit": "kilometer",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 23.0
+    },
+    {
+      "supplier": {
+        "name": "transport, passenger car, small size, diesel, EURO 3",
+        "reference product": "transport, passenger car, small size, diesel, EURO 3",
+        "unit": "kilometer",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 23.0
+    },
+    {
+      "supplier": {
+        "name": "transport, passenger car, small size, diesel, EURO 4",
+        "reference product": "transport, passenger car, small size, diesel, EURO 4",
+        "unit": "kilometer",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 23.0
+    },
+    {
+      "supplier": {
+        "name": "transport, passenger car, small size, diesel, EURO 5",
+        "reference product": "transport, passenger car, small size, diesel, EURO 5",
+        "unit": "kilometer",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 23.0
+    },
+    {
+      "supplier": {
+        "name": "transport, passenger car, small size, natural gas, EURO 3",
+        "reference product": "transport, passenger car, small size, natural gas, EURO 3",
+        "unit": "kilometer",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 23.0
+    },
+    {
+      "supplier": {
+        "name": "transport, passenger car, small size, natural gas, EURO 4",
+        "reference product": "transport, passenger car, small size, natural gas, EURO 4",
+        "unit": "kilometer",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 23.0
+    },
+    {
+      "supplier": {
+        "name": "transport, passenger car, small size, natural gas, EURO 5",
+        "reference product": "transport, passenger car, small size, natural gas, EURO 5",
+        "unit": "kilometer",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 23.0
+    },
+    {
+      "supplier": {
+        "name": "transport, passenger car, small size, petrol, EURO 3",
+        "reference product": "transport, passenger car, small size, petrol, EURO 3",
+        "unit": "kilometer",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 23.0
+    },
+    {
+      "supplier": {
+        "name": "transport, passenger car, small size, petrol, EURO 4",
+        "reference product": "transport, passenger car, small size, petrol, EURO 4",
+        "unit": "kilometer",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 23.0
+    },
+    {
+      "supplier": {
+        "name": "transport, passenger car, small size, petrol, EURO 5",
+        "reference product": "transport, passenger car, small size, petrol, EURO 5",
+        "unit": "kilometer",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 23.0
+    },
+    {
+      "supplier": {
+        "name": "transport, passenger train",
+        "reference product": "transport, passenger train",
+        "unit": "person kilometer",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 8.0
+    },
+    {
+      "supplier": {
+        "name": "transport, passenger train, high-speed",
+        "reference product": "transport, passenger train",
+        "unit": "person kilometer",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 8.0
+    },
+    {
+      "supplier": {
+        "name": "transport, passenger train, long-distance",
+        "reference product": "transport, passenger train",
+        "unit": "person kilometer",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 8.0
+    },
+    {
+      "supplier": {
+        "name": "transport, passenger train, regional",
+        "reference product": "transport, passenger train",
+        "unit": "person kilometer",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 8.0
+    },
+    {
+      "supplier": {
+        "name": "transport, passenger train, urban",
+        "reference product": "transport, passenger train",
+        "unit": "person kilometer",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 8.0
+    },
+    {
+      "supplier": {
+        "name": "transport, passenger, aircraft, long haul",
+        "reference product": "transport, passenger, aircraft, long haul",
+        "unit": "person kilometer",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 4.0
+    },
+    {
+      "supplier": {
+        "name": "transport, passenger, aircraft, medium haul",
+        "reference product": "transport, passenger, aircraft, medium haul",
+        "unit": "person kilometer",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 4.0
+    },
+    {
+      "supplier": {
+        "name": "transport, passenger, aircraft, short haul",
+        "reference product": "transport, passenger, aircraft, short haul",
+        "unit": "person kilometer",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 4.0
+    },
+    {
+      "supplier": {
+        "name": "transport, passenger, aircraft, very short haul",
+        "reference product": "transport, passenger, aircraft, very short haul",
+        "unit": "person kilometer",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 4.0
+    },
+    {
+      "supplier": {
+        "name": "transport, passenger, car, diesel, large size, EURO 3",
+        "reference product": "transport, passenger, car, diesel, large size, EURO 3",
+        "unit": "kilometer",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 23.0
+    },
+    {
+      "supplier": {
+        "name": "transport, passenger, car, diesel, large size, EURO 4",
+        "reference product": "transport, passenger, car, diesel, large size, EURO 4",
+        "unit": "kilometer",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 23.0
+    },
+    {
+      "supplier": {
+        "name": "transport, passenger, car, diesel, large size, EURO 5",
+        "reference product": "transport, passenger, car, diesel, large size, EURO 5",
+        "unit": "kilometer",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 23.0
+    },
+    {
+      "supplier": {
+        "name": "transport, passenger, car, diesel, medium size, EURO 3",
+        "reference product": "transport, passenger, car, diesel, medium size, EURO 3",
+        "unit": "kilometer",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 23.0
+    },
+    {
+      "supplier": {
+        "name": "transport, passenger, car, diesel, medium size, EURO 4",
+        "reference product": "transport, passenger, car, diesel, medium size, EURO 4",
+        "unit": "kilometer",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 23.0
+    },
+    {
+      "supplier": {
+        "name": "transport, passenger, car, diesel, medium size, EURO 5",
+        "reference product": "transport, passenger, car, diesel, medium size, EURO 5",
+        "unit": "kilometer",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 23.0
+    },
+    {
+      "supplier": {
+        "name": "transport, passenger, car, diesel, small size, EURO 3",
+        "reference product": "transport, passenger, car, diesel, small size, EURO 3",
+        "unit": "kilometer",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 23.0
+    },
+    {
+      "supplier": {
+        "name": "transport, passenger, car, diesel, small size, EURO 4",
+        "reference product": "transport, passenger, car, diesel, small size, EURO 4",
+        "unit": "kilometer",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 23.0
+    },
+    {
+      "supplier": {
+        "name": "transport, passenger, car, diesel, small size, EURO 5",
+        "reference product": "transport, passenger, car, diesel, small size, EURO 5",
+        "unit": "kilometer",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 23.0
+    },
+    {
+      "supplier": {
+        "name": "transport, passenger, car, electric",
+        "reference product": "transport, passenger, car, electric",
+        "unit": "kilometer",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 23.0
+    },
+    {
+      "supplier": {
+        "name": "transport, passenger, car, liquefied petroleum gas, medium size, EURO 5",
+        "reference product": "transport, passenger, car, liquefied petroleum gas, medium size, EURO 5",
+        "unit": "kilometer",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 23.0
+    },
+    {
+      "supplier": {
+        "name": "transport, passenger, car, natural gas, large size, EURO 3",
+        "reference product": "transport, passenger, car, natural gas, large size, EURO 3",
+        "unit": "kilometer",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 23.0
+    },
+    {
+      "supplier": {
+        "name": "transport, passenger, car, natural gas, large size, EURO 4",
+        "reference product": "transport, passenger, car, natural gas, large size, EURO 4",
+        "unit": "kilometer",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 23.0
+    },
+    {
+      "supplier": {
+        "name": "transport, passenger, car, natural gas, large size, EURO 5",
+        "reference product": "transport, passenger, car, natural gas, large size, EURO 5",
+        "unit": "kilometer",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 23.0
+    },
+    {
+      "supplier": {
+        "name": "transport, passenger, car, natural gas, medium size, EURO 3",
+        "reference product": "transport, passenger, car, natural gas, medium size, EURO 3",
+        "unit": "kilometer",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 23.0
+    },
+    {
+      "supplier": {
+        "name": "transport, passenger, car, natural gas, medium size, EURO 4",
+        "reference product": "transport, passenger, car, natural gas, medium size, EURO 4",
+        "unit": "kilometer",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 23.0
+    },
+    {
+      "supplier": {
+        "name": "transport, passenger, car, natural gas, medium size, EURO 5",
+        "reference product": "transport, passenger, car, natural gas, medium size, EURO 5",
+        "unit": "kilometer",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 23.0
+    },
+    {
+      "supplier": {
+        "name": "transport, passenger, car, natural gas, small size, EURO 3",
+        "reference product": "transport, passenger, car, natural gas, small size, EURO 3",
+        "unit": "kilometer",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 23.0
+    },
+    {
+      "supplier": {
+        "name": "transport, passenger, car, natural gas, small size, EURO 4",
+        "reference product": "transport, passenger, car, natural gas, small size, EURO 4",
+        "unit": "kilometer",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 23.0
+    },
+    {
+      "supplier": {
+        "name": "transport, passenger, car, natural gas, small size, EURO 5",
+        "reference product": "transport, passenger, car, natural gas, small size, EURO 5",
+        "unit": "kilometer",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 23.0
+    },
+    {
+      "supplier": {
+        "name": "transport, passenger, car, petrol, large size, EURO 3",
+        "reference product": "transport, passenger, car, petrol, large size, EURO 3",
+        "unit": "kilometer",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 23.0
+    },
+    {
+      "supplier": {
+        "name": "transport, passenger, car, petrol, large size, EURO 4",
+        "reference product": "transport, passenger, car, petrol, large size, EURO 4",
+        "unit": "kilometer",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 23.0
+    },
+    {
+      "supplier": {
+        "name": "transport, passenger, car, petrol, large size, EURO 5",
+        "reference product": "transport, passenger, car, petrol, large size, EURO 5",
+        "unit": "kilometer",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 23.0
+    },
+    {
+      "supplier": {
+        "name": "transport, passenger, car, petrol, medium size, EURO 3",
+        "reference product": "transport, passenger, car, petrol, medium size, EURO 3",
+        "unit": "kilometer",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 23.0
+    },
+    {
+      "supplier": {
+        "name": "transport, passenger, car, petrol, medium size, EURO 4",
+        "reference product": "transport, passenger, car, petrol, medium size, EURO 4",
+        "unit": "kilometer",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 23.0
+    },
+    {
+      "supplier": {
+        "name": "transport, passenger, car, petrol, medium size, EURO 5",
+        "reference product": "transport, passenger, car, petrol, medium size, EURO 5",
+        "unit": "kilometer",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 23.0
+    },
+    {
+      "supplier": {
+        "name": "transport, passenger, car, petrol, small size, EURO 3",
+        "reference product": "transport, passenger, car, petrol, small size, EURO 3",
+        "unit": "kilometer",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 23.0
+    },
+    {
+      "supplier": {
+        "name": "transport, passenger, car, petrol, small size, EURO 4",
+        "reference product": "transport, passenger, car, petrol, small size, EURO 4",
+        "unit": "kilometer",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 23.0
+    },
+    {
+      "supplier": {
+        "name": "transport, passenger, car, petrol, small size, EURO 5",
+        "reference product": "transport, passenger, car, petrol, small size, EURO 5",
+        "unit": "kilometer",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 23.0
+    },
+    {
+      "supplier": {
+        "name": "transport, passenger, train, electric high-speed",
+        "reference product": "transport, passenger, train, fleet average",
+        "unit": "person kilometer",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 8.0
+    },
+    {
+      "supplier": {
+        "name": "transport, passenger, train, electric, long-distance",
+        "reference product": "transport, passenger, train, fleet average",
+        "unit": "person kilometer",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 8.0
+    },
+    {
+      "supplier": {
+        "name": "transport, passenger, train, electric, regional",
+        "reference product": "transport, passenger, train, fleet average",
+        "unit": "person kilometer",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 8.0
+    },
+    {
+      "supplier": {
+        "name": "transport, passenger, train, electric, urban",
+        "reference product": "transport, passenger, train, fleet average",
+        "unit": "person kilometer",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 8.0
+    },
+    {
+      "supplier": {
+        "name": "transport, passenger, train, fleet average",
+        "reference product": "transport, passenger, train, fleet average",
+        "unit": "person kilometer",
+        "matrix": "technosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 8.0
+    }
+  ]
+}
