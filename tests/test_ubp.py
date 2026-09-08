@@ -345,7 +345,8 @@ def test_total_method_against_ecoinvent_311_when_available(request):
     lcia.lcia()
 
     assert math.isfinite(lcia.score)
-    assert lcia.score == pytest.approx(951.4232171667443, rel=1e-8)
+    # Allow small numerical differences between legacy Brightway and bw25.
+    assert lcia.score == pytest.approx(951.4232171667443, rel=1e-7)
     assert lcia.score_by_matrix["technosphere"] == pytest.approx(
         32.44295695125423, rel=1e-8
     )

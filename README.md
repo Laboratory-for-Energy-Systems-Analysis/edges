@@ -5,7 +5,7 @@
 </p>
 
 
-[![PyPI version](https://badge.fury.io/py/edges.svg)](https://badge.fury.io/py/csc-brightway)
+[![PyPI version](https://badge.fury.io/py/edges.svg)](https://pypi.org/project/edges/)
 
 ``edges`` is a library allowing flexible Life Cycle Impact Assessment (LCIA) 
 for the ``brightway2``/``brightway25`` LCA framework.

@@ -16,7 +16,7 @@ readme = "README.md"
 dynamic = ["dependencies", "version"]
 classifiers = [
     "Intended Audience :: Science/Research",
-    "License :: OSI Approved :: BSD License",
+    "License :: OSI Approved :: MIT License",
     "Natural Language :: English",
     "Programming Language :: Python :: 3",
     "Operating System :: OS Independent",
@@ -25,9 +25,9 @@ classifiers = [
 requires-python = ">=3.10, <3.13"
 
 [project.urls]
-source = "https://github.com/Laboratory-for-Energy-Systems-Analysis/clear-scope"
-homepage = "https://github.com/Laboratory-for-Energy-Systems-Analysis/clear-scope"
-tracker = "https://github.com/Laboratory-for-Energy-Systems-Analysis/clear-scope/issues"
+source = "https://github.com/Laboratory-for-Energy-Systems-Analysis/edges"
+homepage = "https://github.com/Laboratory-for-Energy-Systems-Analysis/edges"
+tracker = "https://github.com/Laboratory-for-Energy-Systems-Analysis/edges/issues"
 
 [project.optional-dependencies]
 testing = [
@@ -40,7 +40,7 @@ docs = [
 ]
 
 [tool.setuptools]
-license-files = ["LICENSE"]
+license-files = ["LICENSE.md"]
 include-package-data = true
 packages = ["edges", "edges.rete"]
 

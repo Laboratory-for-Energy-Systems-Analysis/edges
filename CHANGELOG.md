@@ -1,6 +1,6 @@
 # Changelog
 
-## 1.4.0 - Upcoming
+## 1.4.1 - 2026-09-08
 
 ### Added
 
@@ -13,6 +13,39 @@
 - Added compact end-to-end UBP matching audits for ecoinvent cutoff 3.10--3.12,
   including matrix reconciliation, per-strategy match counts, and runtime
   coverage of all six Noise transport families.
+
+### Changed
+
+- Reused batch-loaded Brightway metadata when generating CF tables, avoiding
+  repeated database lookups for large mixed-matrix methods.
+
+### Tests
+
+- Relaxed the UBP total-score regression tolerance to accommodate small
+  numerical differences between legacy Brightway and Brightway 2.5.
+
+### Documentation
+
+- Documented the Ecological Scarcity method, all method tuples, regionalized
+  matching, Noise service-unit and lorry-payload conversions, source
+  provenance, and validation workflow.
+- Added a guided Ecological Scarcity notebook with executed figures showing
+  contributions by flow, process, location, and indicator, plus the Noise
+  share of the total. The optional 20-indicator breakdown reconciles with
+  the total score.
+- Updated the documentation version and software citation for 1.4.1.
+
+### Packaging
+
+- Corrected package repository links and the README's PyPI badge target.
+- Included the existing MIT license file in distributions and aligned the
+  Python package license classifier with it.
+- Included the changelog in the source distribution.
+
+## 1.4.0 - 2026-06-22
+
+### Added
+
 - Added prospective AWARE 2.0 built-in methods for country-average yearly
   characterization factors across ``SSP126``, ``SSP370``, and ``SSP585``.
   The methods include irrigation, non-irrigation, unspecified, and combined
@@ -25,8 +58,6 @@
 
 ### Changed
 
-- Reused batch-loaded Brightway metadata when generating CF tables, avoiding
-  repeated database lookups for large mixed-matrix methods.
 - Made scenario/year interpolation opt-in via method metadata. Methods without
   a supported ``interpolation`` block, such as ``SCP_1.0``, keep the legacy
   exact-or-last parameter fallback behavior.
@@ -36,11 +67,6 @@
 
 ### Documentation
 
-- Documented the Ecological Scarcity method, all method tuples, regionalized
-  matching, Noise service-unit and lorry-payload conversions, source
-  provenance, validation workflow, and usage examples. Added an executed,
-  annotated notebook and category-contribution figure for an exact ecoinvent
-  functional unit.
 - Added prospective AWARE documentation, an example notebook, and regression
   coverage for deterministic interpolation, stochastic interpolation,
   nearest-endpoint extrapolation, and no-policy fallback behavior.
