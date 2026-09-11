@@ -60,6 +60,10 @@ Currently, the library provides regionalized CFs for:
 * IBIF v2 biodiversity intactness (CO2, NH3, NOx, land occupation, roads, and all pressures)
 * Swiss Ecological Scarcity 2021 (UBP total and all 20 categories, including Noise)
 
+For UBP comparisons across software, see the
+[SimaPro comparison evidence and modelling differences](dev/UBP/README.md#comparison-with-supplied-simapro-results).
+Agreement with another implementation is a diagnostic check, not proof of correctness.
+
 > [!NOTE]
 > Mixed CF methods combining both `biosphere` and `technosphere` supplier
 > matrices in a single method file are supported. ``lci()`` builds both edge

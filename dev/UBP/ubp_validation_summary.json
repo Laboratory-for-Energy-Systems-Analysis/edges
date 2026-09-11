@@ -7,9 +7,9 @@
     "rows": 14959,
     "nonzero_rows": 10067,
     "zero_rows": 4892,
-    "matched_biosphere_rows": 13017,
-    "source_only_biosphere_rows": 1936,
-    "source_only_nonzero_rows": 939,
+    "matched_biosphere_rows": 13020,
+    "source_only_biosphere_rows": 1933,
+    "source_only_nonzero_rows": 936,
     "source_only_reason": "No compatible name/CAS, compartment and unit signature exists in the union of ecoinvent cutoff 3.10, 3.11 and 3.12.",
     "source_only_groups": [
       {
@@ -776,16 +776,6 @@
         "category": "Global warming",
         "compartment": "Air",
         "subcompartment": "(unspecified)",
-        "base_name": "Carbon dioxide, land transformation",
-        "source_unit": "kg",
-        "rows": 1,
-        "nonzero_rows": 1,
-        "locations": []
-      },
-      {
-        "category": "Global warming",
-        "compartment": "Air",
-        "subcompartment": "(unspecified)",
         "base_name": "Carbon dioxide, peat oxidation",
         "source_unit": "kg",
         "rows": 1,
@@ -916,16 +906,6 @@
         "category": "Global warming",
         "compartment": "Air",
         "subcompartment": "(unspecified)",
-        "base_name": "Methane, biogenic",
-        "source_unit": "kg",
-        "rows": 1,
-        "nonzero_rows": 1,
-        "locations": []
-      },
-      {
-        "category": "Global warming",
-        "compartment": "Air",
-        "subcompartment": "(unspecified)",
         "base_name": "Methane, dibromo-",
         "source_unit": "kg",
         "rows": 1,
@@ -950,16 +930,6 @@
         "source_unit": "kg",
         "rows": 1,
         "nonzero_rows": 0,
-        "locations": []
-      },
-      {
-        "category": "Global warming",
-        "compartment": "Air",
-        "subcompartment": "(unspecified)",
-        "base_name": "Methane, land transformation",
-        "source_unit": "kg",
-        "rows": 1,
-        "nonzero_rows": 1,
         "locations": []
       },
       {
@@ -11050,7 +11020,7 @@
         "locations": []
       }
     ],
-    "source_only_groups_sha256": "a6c4a7074335c16b03bfe64b7bf2e4ff4708bac2aabb90694601dd05180083dc",
+    "source_only_groups_sha256": "19836938228bc65a6da370be4b81cfe63fccb8c02598b694980a88e5acb2dc08",
     "noise_technosphere_rows": 6,
     "accounted_rows": 14959
   },
@@ -11077,7 +11047,7 @@
       "version": "3.12",
       "project": "ecoinvent-3.12-cutoff",
       "activity_database": "ecoinvent-3.12-cutoff",
-      "biosphere_database": "biosphere",
+      "biosphere_database": "ecoinvent-3.12-biosphere",
       "activities": 26533,
       "biosphere_flows": 9850,
       "catalog_access": "read-only SQLite"
@@ -11090,7 +11060,7 @@
       "Energy resources": 13,
       "Mineral resources": 52,
       "Land use": 1040,
-      "Global warming": 59,
+      "Global warming": 71,
       "Ozone layer depletion": 76,
       "Main air pollutants and particulates": 10738,
       "Carcinogenic substances into air": 62,
@@ -11107,8 +11077,8 @@
       "Radioactive waste to deposit": 2,
       "Biotic resources": 2
     },
-    "total_exchanges": 27682,
-    "total_biosphere_exchanges": 27467,
+    "total_exchanges": 27694,
+    "total_biosphere_exchanges": 27479,
     "total_technosphere_exchanges": 215,
     "noise_leaf_signatures": {
       "aircraft freight": 8,
@@ -11145,32 +11115,32 @@
     "rule_reachability_by_version": {
       "3.10": {
         "biosphere_rules_absent": 78,
-        "biosphere_rules_reachable": 27389,
-        "biosphere_rules_total": 27467,
+        "biosphere_rules_reachable": 27401,
+        "biosphere_rules_total": 27479,
         "technosphere_rules_absent": 103,
         "technosphere_rules_reachable": 112,
         "technosphere_rules_total": 215
       },
       "3.11": {
         "biosphere_rules_absent": 7,
-        "biosphere_rules_reachable": 27460,
-        "biosphere_rules_total": 27467,
+        "biosphere_rules_reachable": 27472,
+        "biosphere_rules_total": 27479,
         "technosphere_rules_absent": 103,
         "technosphere_rules_reachable": 112,
         "technosphere_rules_total": 215
       },
       "3.12": {
         "biosphere_rules_absent": 4,
-        "biosphere_rules_reachable": 27463,
-        "biosphere_rules_total": 27467,
+        "biosphere_rules_reachable": 27475,
+        "biosphere_rules_total": 27479,
         "technosphere_rules_absent": 103,
         "technosphere_rules_reachable": 112,
         "technosphere_rules_total": 215
       }
     },
     "ecoinvent_312_reference_signatures": 1482,
-    "ecoinvent_312_reference_only_signatures": 96,
-    "ecoinvent_312_reference_gap_sha256": "5c3882def52d9f8629a7fbb68c314bd2bbfbc7874ec0ab35b8ba0646f8596b83"
+    "ecoinvent_312_reference_only_signatures": 84,
+    "ecoinvent_312_reference_gap_sha256": "37e63ecb9ff60c23c0cf095a4cbe8d74957d142200fbd26bfaf9d507f8ee6dcf"
   },
   "status": "pass"
 }

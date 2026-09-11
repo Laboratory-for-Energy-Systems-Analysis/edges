@@ -56508,6 +56508,65 @@
     },
     {
       "supplier": {
+        "name": "Carbon dioxide, from soil or biomass stock",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1000.0
+    },
+    {
+      "supplier": {
+        "name": "Carbon dioxide, from soil or biomass stock",
+        "categories": [
+          "air",
+          "non-urban air or from high stacks"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1000.0
+    },
+    {
+      "supplier": {
+        "name": "Carbon dioxide, from soil or biomass stock",
+        "categories": [
+          "air",
+          "urban air close to ground"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1000.0
+    },
+    {
+      "supplier": {
+        "name": "Carbon dioxide, from soil or biomass stock",
+        "categories": [
+          "air"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1000.0
+    },
+    {
+      "supplier": {
         "name": "Carbon monoxide, fossil",
         "categories": [
           "air",
@@ -66388,6 +66447,124 @@
         "matrix": "technosphere"
       },
       "value": 30000.0
+    },
+    {
+      "supplier": {
+        "name": "Methane, from soil or biomass stock",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 30000.0
+    },
+    {
+      "supplier": {
+        "name": "Methane, from soil or biomass stock",
+        "categories": [
+          "air",
+          "non-urban air or from high stacks"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 30000.0
+    },
+    {
+      "supplier": {
+        "name": "Methane, from soil or biomass stock",
+        "categories": [
+          "air",
+          "urban air close to ground"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 30000.0
+    },
+    {
+      "supplier": {
+        "name": "Methane, from soil or biomass stock",
+        "categories": [
+          "air"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 30000.0
+    },
+    {
+      "supplier": {
+        "name": "Methane, non-fossil",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 28000.0
+    },
+    {
+      "supplier": {
+        "name": "Methane, non-fossil",
+        "categories": [
+          "air",
+          "non-urban air or from high stacks"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 28000.0
+    },
+    {
+      "supplier": {
+        "name": "Methane, non-fossil",
+        "categories": [
+          "air",
+          "urban air close to ground"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 28000.0
+    },
+    {
+      "supplier": {
+        "name": "Methane, non-fossil",
+        "categories": [
+          "air"
+        ],
+        "unit": "kilogram",
+        "matrix": "biosphere"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 28000.0
     },
     {
       "supplier": {

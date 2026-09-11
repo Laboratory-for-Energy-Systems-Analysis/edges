@@ -1,5 +1,24 @@
 # Changelog
 
+## Unreleased
+
+### Fixed
+
+- Corrected three carbon-origin aliases in the UBP builder and regenerated the
+  Global warming and total methods from the verified source CSV. The rebuild
+  adds 12 rules for biogenic methane and land-transformation CO₂/methane across
+  four air compartments, preserving every existing rule. Added regression tests
+  and refreshed the pinned source validation summary.
+- Recognize both original and version-prefixed ecoinvent 3.12 method tuples in
+  the independent UBP reference-coverage audit.
+
+### Documentation
+
+- Documented the findings from three local SimaPro UBP result exports.
+  Separate confirmed mapping errors from differences in
+  characterization, land-use regionalization, long-term emissions and Noise;
+  agreement with SimaPro is not treated as proof of correctness.
+
 ## 1.4.1 - 2026-09-08
 
 ### Added

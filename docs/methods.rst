@@ -357,6 +357,41 @@ ecoinvent's tonne-kilometre service using the documented average payloads:
 transport datasets that purchase a service from another provider in the same
 family are excluded. This leaf-provider rule prevents double counting.
 
+Interpreting comparisons with SimaPro
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Results from another implementation are useful diagnostic evidence, but agreement
+alone does not establish correctness. Compare the functional unit, database version,
+long-term-emission setting, geographic treatment and Noise coverage before changing
+characterization factors.
+
+Three supplied SimaPro V1.06 workbooks closely match ecoinvent 3.12 cutoff inventories.
+They reveal three missing carbon-origin aliases in the Edges builder, independently
+confirmed by the original method CSV and ecoinvent's factors. The corrected
+Global warming and total methods have been rebuilt from the verified CSV, adding
+12 carbon rules across four air compartments. Every existing rule is preserved,
+and the aliases and bundled factors are covered by regression tests.
+
+Other differences require separate interpretation. Both Edges and the independent
+ecoinvent method characterize chromium(III) into air and nitrogen into surface water,
+whereas these contributions are absent from the supplied SimaPro results. This does
+not prove either implementation correct. Edges also applies regional land factors
+and transport-service Noise factors, while these exports use unregionalized land
+flows and show zero Noise impact. Removing these contributions simply to reproduce
+the exports would change the method's modelling assumptions.
+
+The comparison findings and their limitations are documented in
+``dev/UBP/README.md``. Wider adjustments that reproduce the SimaPro scores are
+explicitly diagnostic. Input workbooks, calculation outputs and reports remain
+local and are not distributed with the package.
+
+Regional land factors come from country-suffixed flow names in the source CSV.
+The builder converts those suffixes into consumer-location conditions on the
+underlying biosphere flow. This assumes that the activity location represents
+where land occupation occurs. The supplied SimaPro results are consistent with
+unregionalized land-flow matching; this does not establish that the SimaPro
+method lacks regional factors or cannot apply them.
+
 Source conversion and validation
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -382,18 +417,18 @@ source-only dispositions; they cannot characterize a flow absent from the LCI
 database. The six Noise rows are separately checked against their reviewed
 transport-family mappings and payload conversions.
 
-For the reviewed build, 13,017 biosphere source rows match the supported
-ecoinvent catalogs and 1,936 are source-only (939 of the latter have non-zero
+For the reviewed build, 13,020 biosphere source rows match the supported
+ecoinvent catalogs and 1,933 are source-only (936 of the latter have non-zero
 factors). All 14,959 source rows are accounted for, including the six Noise
 rows. An independent comparison covers 1,482 signatures from ecoinvent 3.12's
-Ecological Scarcity methods. The 96 reference-only or differently categorized
+Ecological Scarcity methods. The 84 reference-only or differently categorized
 signatures are pinned as a complete hash so an unexplained change fails the
 audit instead of silently changing coverage. Full grouped dispositions and
 counts are stored in ``dev/UBP/ubp_validation_summary.json``.
 
 Reachability is also reported independently for each database version. Of the
-27,467 biosphere rules, 27,389 are present in ecoinvent 3.10, 27,460 in 3.11,
-and 27,463 in 3.12. Each release contains 112 of the 215 version-specific Noise
+27,479 biosphere rules, 27,401 are present in ecoinvent 3.10, 27,472 in 3.11,
+and 27,475 in 3.12. Each release contains 112 of the 215 version-specific Noise
 supplier signatures; the combined JSON intentionally contains both the older
 3.10 and newer 3.11/3.12 transport naming conventions. A rule absent from one
 release is not treated as an error when its supplier does not exist there. The

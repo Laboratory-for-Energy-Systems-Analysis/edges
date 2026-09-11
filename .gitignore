@@ -20,6 +20,10 @@ tests/*.env
 
 # Licensed local input used to generate the bundled Ecological Scarcity files
 /dev/UBP/Ecological-Scarcity-21.CSV
+/dev/UBP/results_*.[xX][lL][sS][xX]
+
+# Local SimaPro comparisons, intermediate data, figures, and reports
+/results/UBP/simapro-*/
 
 # Licensed, calculation-specific ecoinvent audit details (compact summaries stay visible)
 /results/UBP/*-cf-table.csv
@@ -30,6 +34,7 @@ tests/*.env
 *.prof
 /.pytest-debug/
 /pytest-debug/
+/tests/.pytest-debug/
 
 *.pyc
 

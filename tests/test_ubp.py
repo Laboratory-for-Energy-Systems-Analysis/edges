@@ -83,6 +83,104 @@ def test_reviewed_name_aliases(source, target):
     assert target in ubp._name_candidates(source)
 
 
+@pytest.mark.parametrize("prefix", [(), ("ecoinvent-3.12",)])
+def test_reference_category_accepts_versioned_method_names(prefix):
+    method = prefix + (
+        "Ecological Scarcity 2021",
+        "climate change",
+        "global warming potential (GWP100)",
+    )
+    assert ubp.reference_category(method) == "Global warming"
+    assert ubp.reference_category(list(method)) == "Global warming"
+
+
+@pytest.mark.parametrize(
+    "method",
+    [
+        (),
+        ("Other method", "climate change", "global warming potential (GWP100)"),
+        (
+            "ecoinvent-3.11",
+            "Ecological Scarcity 2021",
+            "climate change",
+            "global warming potential (GWP100)",
+        ),
+        (
+            "ecoinvent-3.12",
+            "Ecological Scarcity 2021 no LT",
+            "climate change no LT",
+            "global warming potential (GWP100) no LT",
+        ),
+        ("Ecological Scarcity 2021", "water use", "water resources, evaporated"),
+    ],
+)
+def test_reference_category_does_not_mix_in_other_methods(method):
+    assert ubp.reference_category(method) is None
+
+
+@pytest.mark.parametrize(
+    "source,target,value",
+    [
+        (
+            "Carbon dioxide, land transformation",
+            "Carbon dioxide, from soil or biomass stock",
+            1000.0,
+        ),
+        ("Methane, biogenic", "Methane, non-fossil", 28000.0),
+        (
+            "Methane, land transformation",
+            "Methane, from soil or biomass stock",
+            30000.0,
+        ),
+    ],
+)
+def test_carbon_flow_aliases_do_not_select_other_carbon_origins(source, target, value):
+    """Shared CAS numbers must not drop or misassign carbon-origin-specific CFs."""
+    row = ubp.SourceRow(
+        row_id="Global warming:1",
+        category="Global warming",
+        compartment="Air",
+        subcompartment="(unspecified)",
+        substance=source,
+        cas="124-38-9" if source.startswith("Carbon dioxide") else "74-82-8",
+        value=value,
+        unit="kg",
+        line=1,
+    )
+    prefix = "Carbon dioxide" if source.startswith("Carbon dioxide") else "Methane"
+    flows = [
+        ubp.FlowRecord(
+            name=name,
+            categories=("air",),
+            unit="kilogram",
+            cas=row.cas,
+            versions=("3.12",),
+        )
+        for name in (
+            f"{prefix}, fossil",
+            f"{prefix}, non-fossil",
+            f"{prefix}, from soil or biomass stock",
+        )
+    ]
+    parsed = ubp.ParsedMethod(
+        name=ubp.METHOD_NAME,
+        version="1.06",
+        description="Carbon-origin mapping regression",
+        category_units={"Global warming": "UBP"},
+        category_weights={"Global warming": 1.0},
+        rows=[row],
+        source_sha256="test-fixture",
+    )
+
+    categories, dispositions = ubp.build_biosphere_exchanges(parsed, flows, set())
+
+    assert len(categories["Global warming"]) == 1
+    exchange = categories["Global warming"][0]
+    assert exchange["supplier"]["name"] == target
+    assert exchange["value"] == value
+    assert dispositions[row.row_id]["resolution"] == "exact-name"
+
+
 @pytest.mark.parametrize(
     "marker,payload",
     [
@@ -241,6 +339,35 @@ def test_reviewed_numeric_anchors_are_preserved():
     ) == {330.0}
 
 
+@pytest.mark.parametrize(
+    "name,factor",
+    [
+        ("Carbon dioxide, from soil or biomass stock", 1000.0),
+        ("Methane, non-fossil", 28000.0),
+        ("Methane, from soil or biomass stock", 30000.0),
+    ],
+)
+def test_bundled_carbon_origins_have_source_factors_in_all_supported_compartments(
+    name, factor
+):
+    methods = load_bundled_methods()
+    expected_categories = {
+        ("air",),
+        ("air", "low population density, long-term"),
+        ("air", "non-urban air or from high stacks"),
+        ("air", "urban air close to ground"),
+    }
+    for category in ("Global warming", "total"):
+        rows = [
+            r for r in methods[category]["exchanges"] if r["supplier"]["name"] == name
+        ]
+        assert {tuple(r["supplier"]["categories"]) for r in rows} == expected_categories
+        assert len(rows) == len(expected_categories)
+        assert all(
+            r["value"] == factor and r["supplier"]["unit"] == "kilogram" for r in rows
+        )
+
+
 def test_noise_json_covers_every_reviewed_transport_family():
     noise = load_bundled_methods()["Noise"]
     families = Counter(
@@ -299,7 +426,9 @@ def test_total_method_against_ecoinvent_311_when_available(request):
     from packaging.version import Version
 
     original_project = bd.projects.current
-    request.addfinalizer(lambda: bd.projects.set_current(original_project))
+    request.addfinalizer(
+        lambda: bd.projects.set_current(original_project, writable=False, update=False)
+    )
 
     version = bd.__version__
     if isinstance(version, tuple):
@@ -313,7 +442,7 @@ def test_total_method_against_ecoinvent_311_when_available(request):
     for project in (test_project, database_name):
         if project not in project_names:
             continue
-        bd.projects.set_current(project)
+        bd.projects.set_current(project, writable=False, update=False)
         if database_name in bd.databases:
             selected_project = project
             break
@@ -346,7 +475,7 @@ def test_total_method_against_ecoinvent_311_when_available(request):
 
     assert math.isfinite(lcia.score)
     # Allow small numerical differences between legacy Brightway and bw25.
-    assert lcia.score == pytest.approx(951.4232171667443, rel=1e-7)
+    assert lcia.score == pytest.approx(951.572600991, rel=1e-7)
     assert lcia.score_by_matrix["technosphere"] == pytest.approx(
         32.44295695125423, rel=1e-8
     )

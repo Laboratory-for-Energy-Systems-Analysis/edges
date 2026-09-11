@@ -33,15 +33,15 @@ EXPECTED_SOURCE_SHA256 = (
 EXPECTED_CATEGORY_COUNT = 20
 EXPECTED_ROW_COUNT = 14959
 EXPECTED_NONZERO_COUNT = 10067
-# The 3.12 implementation contains 96 signatures absent from, or categorized
+# The 3.12 implementation contains 84 signatures absent from, or categorized
 # differently by, the reviewed SimaPro 1.06 export. Pinning their full set turns
 # this independent comparison into a regression check without importing their
 # factors into the SimaPro-derived method.
 EXPECTED_REFERENCE_GAPS_SHA256 = (
-    "5c3882def52d9f8629a7fbb68c314bd2bbfbc7874ec0ab35b8ba0646f8596b83"
+    "37e63ecb9ff60c23c0cf095a4cbe8d74957d142200fbd26bfaf9d507f8ee6dcf"
 )
 EXPECTED_SOURCE_ONLY_GROUPS_SHA256 = (
-    "a6c4a7074335c16b03bfe64b7bf2e4ff4708bac2aabb90694601dd05180083dc"
+    "19836938228bc65a6da370be4b81cfe63fccb8c02598b694980a88e5acb2dc08"
 )
 
 DEFAULT_TARGETS = (
@@ -52,7 +52,12 @@ DEFAULT_TARGETS = (
         "ecoinvent-3.10-biosphere",
     ),
     ("3.11", "ecoinvent-3.11-cutoff", "ecoinvent-3.11-cutoff", "biosphere-3.11"),
-    ("3.12", "ecoinvent-3.12-cutoff", "ecoinvent-3.12-cutoff", "biosphere"),
+    (
+        "3.12",
+        "ecoinvent-3.12-cutoff",
+        "ecoinvent-3.12-cutoff",
+        "ecoinvent-3.12-biosphere",
+    ),
 )
 
 STRATEGIES = [
@@ -98,6 +103,11 @@ SUBCOMPARTMENT_MAP = {
 }
 
 NAME_ALIASES = {
+    # SimaPro separates biogenic and land-transformation emissions by name.
+    # Their shared CAS numbers cannot disambiguate the ecoinvent carbon flows.
+    "Carbon dioxide, land transformation": "Carbon dioxide, from soil or biomass stock",
+    "Methane, biogenic": "Methane, non-fossil",
+    "Methane, land transformation": "Methane, from soil or biomass stock",
     "COD (Chemical Oxygen Demand)": "COD, Chemical Oxygen Demand",
     "4-Methyl-2-pentanone": "Methyl isobutyl ketone",
     "AOX, Adsorbable Organic Halogen": "AOX, Adsorbable Organic Halides",
@@ -694,6 +704,15 @@ def load_brightway_targets(targets=DEFAULT_TARGETS):
     return flows, activities, locations, leaf_noise, noise_aggregators, target_metadata
 
 
+def reference_category(method_name: list[str] | tuple[str, ...]) -> str | None:
+    """Recognize original and version-prefixed ecoinvent 3.12 method tuples."""
+    if method_name and method_name[0] == "ecoinvent-3.12":
+        method_name = method_name[1:]
+    if not method_name or method_name[0] != METHOD_NAME:
+        return None
+    return REFERENCE_LEAF_TO_CATEGORY.get(method_name[-1])
+
+
 def load_ecoinvent_312_reference_signatures() -> dict[str, set[tuple]]:
     """Load supplier signatures from ecoinvent's official 3.12 UBP methods.
 
@@ -728,9 +747,7 @@ def load_ecoinvent_312_reference_signatures() -> dict[str, set[tuple]]:
     output: dict[str, set[tuple]] = defaultdict(set)
     try:
         for method_name, metadata in methods:
-            if not method_name or method_name[0] != METHOD_NAME:
-                continue
-            category = REFERENCE_LEAF_TO_CATEGORY.get(method_name[-1])
+            category = reference_category(method_name)
             if category is None:
                 continue
             data_path = (
