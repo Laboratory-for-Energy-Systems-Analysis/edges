@@ -1,7 +1,0 @@
-version,project,database,matrix,inventory_edges,matched_edges,unmatched_edges,directly_eligible_edges,directly_eligible_missed,matching_rate_all_inventory_percent,score_UBP,cf_table_impact_sum_UBP
-3.10,ecoinvent-3.10-cutoff,ecoinvent-3.10-cutoff,biosphere,353804,191135,162669,191135,0,54.022848808945064,920.766425553106,920.7664255531053
-3.10,ecoinvent-3.10-cutoff,ecoinvent-3.10-cutoff,technosphere,173624,183,173441,183,0,0.10540017509100125,32.4484591653641,32.44845916536409
-3.11,ecoinvent-3.11-cutoff,ecoinvent-3.11-cutoff,biosphere,401594,200292,201302,200292,0,49.87425110932932,918.98026021549,918.98026021549
-3.11,ecoinvent-3.11-cutoff,ecoinvent-3.11-cutoff,technosphere,164053,183,163870,183,0,0.1115493163794627,32.44295695125423,32.44295695125423
-3.12,ecoinvent-3.12-cutoff,ecoinvent-3.12-cutoff,biosphere,409088,204875,204213,204875,0,50.080911686483105,922.0838844820308,922.0838844820308
-3.12,ecoinvent-3.12-cutoff,ecoinvent-3.12-cutoff,technosphere,179688,183,179505,183,0,0.1018431948711099,32.44451987914158,32.44451987914159
