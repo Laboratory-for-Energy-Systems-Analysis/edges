@@ -104,7 +104,14 @@ def map_exchanges_clips(lcia: "EdgeLCIA"):
             f"{sorted(unsupported)}"
         )
 
-    rules = compile_rules(lcia.raw_cfs_data)
+    tech_nodes, bio_nodes = _get_or_build_nodes(lcia)
+    rules = compile_rules(
+        lcia.raw_cfs_data,
+        supplier_names_by_matrix={
+            "biosphere": {str(node.get("name")).strip() for node in bio_nodes},
+            "technosphere": {str(node.get("name")).strip() for node in tech_nodes},
+        },
+    )
     rules_sig = _rules_signature(rules)
     cache_key = _engine_cache_key(lcia, rules_sig)
     rules_by_id = {int(r["id"]): r for r in rules}
@@ -119,8 +126,6 @@ def map_exchanges_clips(lcia: "EdgeLCIA"):
         )
         direction_by_id[rid] = direction
         is_bio_rule_by_id[rid] = direction.startswith("biosphere-")
-
-    tech_nodes, bio_nodes = _get_or_build_nodes(lcia)
 
     # Consumers are always technosphere in the current matching model.
     tech_edges = set(lcia.technosphere_edges or set())
