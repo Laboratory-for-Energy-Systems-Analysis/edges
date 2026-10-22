@@ -16,7 +16,7 @@ If you use the `edges` package, you may want to cite it as follows:
         Philippe Loubet and Christian Bauer
      },
      title = {Contextual LCIA Without the Overhead: An Exchange-based Framework for Flexible Impact Assessment},
-     version = {1.4.1},
+     version = {1.5.0},
      journal = {International Journal of Life Cycle Assessment},
      doi = {},
      url = {https://github.com/Laboratory-for-Energy-Systems-Analysis/edges},

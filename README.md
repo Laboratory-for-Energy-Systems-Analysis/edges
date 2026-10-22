@@ -56,6 +56,7 @@ Currently, the library provides regionalized CFs for:
 * AWARE 2.0 (water scarcity impacts)
 * ImpactWorld+ 2.1
 * GeoPolRisk 1.0
+* GLAM 1.0 (32 curated practitioner methods from V1.0.2024.10)
 * GLAM3 Land use impacts on biodiversity
 * IBIF v2 biodiversity intactness (CO2, NH3, NOx, land occupation, roads, and all pressures)
 * Swiss Ecological Scarcity 2021 (UBP total and all 20 categories, including Noise)
@@ -63,6 +64,34 @@ Currently, the library provides regionalized CFs for:
 For UBP comparisons across software, see the
 [SimaPro comparison evidence and modelling differences](dev/UBP/README.md#comparison-with-supplied-simapro-results).
 Agreement with another implementation is a diagnostic check, not proof of correctness.
+
+The 32 curated GLAM practitioner methods are bundled in `edges/data/` and
+listed by `get_available_methods()`. For example, select
+`("GLAM 1.0", "Terrestrial acidification", "damage")` as the method in the
+LCIA workflow below. Indicators, scenarios and assessment levels are separate
+alternatives with their own output units; do not add their scores together.
+The existing `GLAM3` biodiversity collection remains separately available.
+
+The methods contain 222,676 rules with exact elementary-flow names, category
+paths and input units from the ecoinvent 3.10--3.12 reference catalogs.
+Unsupported identities, compartments and unit conversions are excluded.
+Each JSON retains a one-sentence indicator description, full author/year/DOI
+citations and two-space indentation. Exchanges contain only `supplier`,
+`consumer` and `value`; detailed provenance stays in external audit files.
+
+All 288 practitioner validation cases passed across electricity, wheat and
+copper inventories in ecoinvent cutoff 3.10, 3.11 and 3.12. Independent checks
+verified direct CF values and exact final exchange sets after geographic
+fallback, with no missing, extra or duplicate mapped edges. These checks ran
+sequentially with one numerical thread and a 2 GiB memory guard; moving the
+unchanged JSON files into the package preserves that evidence.
+
+The [GLAM build and coverage audit](dev/GLAM/README.rst) documents source
+conversions, approved mapping assumptions and nine climate substances without
+published CFs, whose flows remain uncharacterized. The 195 optional native
+research methods remain under `dev/GLAM/methods_native/`, outside the installed
+package, and can be loaded by filepath. Their full runtime validation is
+separate from the practitioner release checks.
 
 > [!NOTE]
 > Mixed CF methods combining both `biosphere` and `technosphere` supplier
@@ -122,6 +151,7 @@ act = bw2data.Database("ecoinvent-3.10-cutoff").random()
 method = ('AWARE 2.0', 'Country', 'unspecified', 'yearly')
 # Prospective variant: ('AWARE 2.0 prospective', 'Country', 'all', 'yearly')
 # Swiss Ecological Scarcity total: ('Ecological Scarcity 2021', 'total', 'UBP')
+# GLAM practitioner: ('GLAM 1.0', 'Terrestrial acidification', 'damage')
 
 # Initialize the LCA object
 LCA = EdgeLCIA({act: 1}, method)

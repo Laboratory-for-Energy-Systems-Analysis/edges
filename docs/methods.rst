@@ -623,6 +623,54 @@ https://www.ipcc.ch/assessment-report/ar6/
 
 ---
 
+GLAM 1.0 practitioner methods (V1.0.2024.10)
+--------------------------------------------
+
+The repository's ``dev/GLAM`` workflow converts the ecoinvent-compatible factors in the
+`official GLAM package <https://www.lifecycleinitiative.org/wp-content/uploads/2024/10/V1.0.2024.10.zip>`_
+into 32 curated practitioner JSON files bundled under ``edges/data`` and
+195 optional native JSON files under ``dev/GLAM/methods_native``. Practitioner
+methods are listed by ``get_available_methods()`` and loaded by method tuple.
+Native files remain outside the installed package and are loaded by filepath.
+Filenames use the same readable family/indicator/level convention as
+``edges/data``, for example ``GLAM 1.0_Freshwater ecotoxicity_damage.json``.
+Species, calculation approach, scenario and output-scale suffixes distinguish
+variants where needed; the complete source release remains in JSON metadata.
+
+The ``practitioner`` profile uses ``lciamethods_CF_GLAM``; the ``native`` profile
+preserves the original model's ``lciamethods_CF`` variants, including additional
+species groups, scenarios and assessment detail. Practitioner is the default
+collection; native is retained separately for research use. Filter
+``get_available_methods()`` on the ``"GLAM 1.0"`` family to select a bundled
+indicator. Developers can also use ``results/GLAM/manifest.json`` to inspect
+source variants. Profiles, scenarios, species groups, midpoint
+indicators and damage indicators are separate alternatives; output units remain
+those of the selected source indicator.
+
+Mapping corrections resolve source identity inconsistencies for ammonia,
+sulfur dioxide, nitric oxide and CFC-113. Nitrogen-oxide acidification factors
+use ecoinvent's NO2-equivalent mass basis. Generic ``Sulfur oxides`` factors
+are excluded because their mass basis is unspecified; explicit ``Sulfur dioxide``
+factors are retained. Definitions without compatible biosphere names,
+compartments or units are also excluded.
+
+.. code-block:: python
+
+    from edges import EdgeLCIA, get_available_methods
+
+    methods = [m for m in get_available_methods() if m[0] == "GLAM 1.0"]
+    lcia = EdgeLCIA(
+        {activity: 1},
+        method=("GLAM 1.0", "Terrestrial acidification", "damage"),
+    )
+    lcia.lci()
+    lcia.apply_strategies()
+    lcia.evaluate_cfs()
+    lcia.lcia()
+
+
+---
+
 GLAM3 - Land use impacts on biodiversity
 ----------------------------------------
 
