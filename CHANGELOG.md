@@ -1,6 +1,19 @@
 # Changelog
 
-## Unreleased
+## 1.5.0 - 2026-10-22
+
+### Added
+
+- Bundled 32 curated GLAM practitioner methods from V1.0.2024.10.
+- Retained 195 native research variants separately under `dev/GLAM/methods_native/`.
+  Development links preserve existing practitioner audit paths without
+  duplicating the packaged files.
+
+### Changed
+
+- Skip exact supplier-name rules absent from the current inventory before
+  compiling CLIPS rules, reducing matching time and memory use while preserving
+  rule indices, wildcard matching, geographic near misses and remapping.
 
 ### Fixed
 
@@ -14,10 +27,23 @@
 
 ### Documentation
 
+- Documented built-in GLAM method selection, optional native variants, source
+  provenance and the approved mapping scope and source-coverage limitations.
+- Updated the documentation version and software citation for 1.5.0.
 - Documented the findings from three local SimaPro UBP result exports.
   Separate confirmed mapping errors from differences in
   characterization, land-use regionalization, long-term emissions and Noise;
   agreement with SimaPro is not treated as proof of correctness.
+
+### Validation
+
+- Completed 288 practitioner LCIA cases across ecoinvent cutoff 3.10, 3.11
+  and 3.12, using electricity, wheat and copper inventories. Independent checks
+  verified direct CF values and exact final exchange sets after geographic
+  fallback, with no missing, unexpected or duplicate mapped edges.
+- Ran practitioner validation sequentially in fresh workers with one numerical
+  thread and a 2 GiB RSS guard. Native runtime validation remains outside the
+  packaged release scope.
 
 ## 1.4.1 - 2026-09-08
 
