@@ -1,0 +1,2584 @@
+{
+  "name": "GLAM 1.0.2024.10 | EQ_Climate_Change_FW_TR_MA | practitioner | Damage level | Terrestrial | Aggregated | Average | rcp45 | Global PDF*y",
+  "version": "1.0.2024.10",
+  "unit": "Global PDF*y",
+  "profile": "practitioner",
+  "description": "Estimates potential biodiversity loss in terrestrial ecosystems caused by greenhouse-gas emissions and the resulting climate change.",
+  "source_url": "https://www.lifecycleinitiative.org/wp-content/uploads/2024/10/V1.0.2024.10.zip",
+  "source_workbook": "GLAM_template_EQ_Climate_Change_FW_TR_MA.xlsx",
+  "source_sheet": "lciamethods_CF_GLAM",
+  "indicator": {
+    "LCIAMethod_type": "Damage level",
+    "LCIAMethod_realm": "Terrestrial",
+    "Species": "Aggregated",
+    "LCIAMethod_mathematicalApproach": "Average",
+    "Scenario": "rcp45",
+    "output_unit": "Global PDF*y"
+  },
+  "source_cf_units": [
+    "Global PDF*y/kg"
+  ],
+  "coverage": {
+    "retained_GLAM_only": 170,
+    "mapped_to_ecoinvent": 43
+  },
+  "status": "converted",
+  "strategies": [
+    "map_exchanges"
+  ],
+  "references": [
+    "Verones, Francesca; Barbarossa, Valerio; Boulay, Anne-Marie; Corella-Puertas, Elena; Douziech, Mélanie; Golsteijn, Laura; Hajjar, Carla; Hélias, Arnaud; Henderson, Andrew D.; Kuipers, Koen; Lebrun, Marion; Link, Andreas; Marques, Alexandra; Michelsen, Ottar; Núñez, Montse; Pierrat, Eléonore; Pfister, Stephan; Posthuma, Leo; Rosa, Francesca; Saadi, Nadim; Scherer, Laura; Stanford-Clark, Chloe; Owsianiak, Mikolaj; Zelm, Rosalie van; Vázquez-Rowe, Ian; Zhou, Jinhui; Dorber, Martin (2026). A global consensus life cycle impact assessment method - GLAM: impacts on ecosystem quality. The International Journal of Life Cycle Assessment, 31, 10, 181. https://doi.org/10.1007/s11367-026-02748-4",
+    "Iordan, Cristina-Maria; Kuipers, Koen J.J.; Huang, Bo; Hu, Xiangping; Verones, Francesca; Cherubini, Francesco (2023). Spatially and taxonomically explicit characterisation factors for greenhouse gas emission impacts on biodiversity. Resources, Conservation and Recycling, 198, 107159, 107159. https://doi.org/10.1016/j.resconrec.2023.107159"
+  ],
+  "exchanges": [
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "1,1,1,2-Tetrafluoroethane",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 8.2764e-14
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "1,1,1-Trichloroethane",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 9.0953e-16
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "1,1,1-Trifluoroethane",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 2.6614e-13
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "1,1-Dichloro-1-fluoroethane",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 4.9653e-14
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "1,1-Difluoroethane",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 9.4157e-15
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "1,2-Dichloro-1,1,2,2-tetrafluoroethane",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 3.999e-13
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "1-Chloro-1,1-difluoroethane",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1.2615e-13
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "2,2-Dichloro-1,1,1-trifluoroethane",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 5.4452e-15
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "2-Chloro-1,1,1,2-tetrafluoroethane",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 3.3667e-14
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Bromochlorodifluoromethane",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1.095e-13
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Bromomethane",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1.6825e-16
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Bromotrifluoromethane",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 3.2894e-13
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Carbon dioxide, fossil",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 4.816e-17
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Carbon dioxide, from soil or biomass stock",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 4.816e-17
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Carbon dioxide, non-fossil",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 4.816e-17
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Carbon tetrachloride",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1.0453e-13
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Chlorodifluoromethane",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1.1414e-13
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Chloroform",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 2.01e-15
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Chlorotrifluoromethane",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 5.9528e-13
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Dichlorodifluoromethane",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 5.0437e-13
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Dichlorofluoromethane",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1.0061e-14
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Dichloromethane",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1.0594e-15
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Difluoromethane",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 4.2648e-14
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Dinitrogen monoxide",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1.3688e-14
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Ethylene dichloride",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 2.766e-16
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Hexafluoroethane",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 4.7332e-13
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Methane, bromo-, Halon 1001",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1.6825e-16
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Methane, bromochlorodifluoro-, Halon 1211",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1.095e-13
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Methane, bromotrifluoro-, Halon 1301",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 3.2894e-13
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Methane, fossil",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1.8955e-15
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Methane, from soil or biomass stock",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1.8955e-15
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Methane, non-fossil",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1.8955e-15
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Methylchloride",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 6.5032e-15
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Monochloropentafluoroethane",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 3.2839e-13
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Nitrogen fluoride",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 6.905e-13
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Pentafluoroethane",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1.9276e-13
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Sulfur hexafluoride",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 2.3355e-13
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Tetrafluoromethane",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 2.6795e-13
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Trichlorofluoromethane",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 2.5803e-13
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Trifluoromethane",
+        "categories": [
+          "air",
+          "low population density, long-term"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 5.8075e-13
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Carbon dioxide, fossil",
+        "categories": [
+          "air",
+          "lower stratosphere + upper troposphere"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 4.816e-17
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "1,1,1,2-Tetrafluoroethane",
+        "categories": [
+          "air",
+          "non-urban air or from high stacks"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 8.2764e-14
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "1,1,1-Trichloroethane",
+        "categories": [
+          "air",
+          "non-urban air or from high stacks"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 9.0953e-16
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "1,1,1-Trifluoroethane",
+        "categories": [
+          "air",
+          "non-urban air or from high stacks"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 2.6614e-13
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "1,1-Dichloro-1-fluoroethane",
+        "categories": [
+          "air",
+          "non-urban air or from high stacks"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 4.9653e-14
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "1,1-Difluoroethane",
+        "categories": [
+          "air",
+          "non-urban air or from high stacks"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 9.4157e-15
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "1,2-Dichloro-1,1,2,2-tetrafluoroethane",
+        "categories": [
+          "air",
+          "non-urban air or from high stacks"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 3.999e-13
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "1-Chloro-1,1-difluoroethane",
+        "categories": [
+          "air",
+          "non-urban air or from high stacks"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1.2615e-13
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "2,2-Dichloro-1,1,1-trifluoroethane",
+        "categories": [
+          "air",
+          "non-urban air or from high stacks"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 5.4452e-15
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "2-Chloro-1,1,1,2-tetrafluoroethane",
+        "categories": [
+          "air",
+          "non-urban air or from high stacks"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 3.3667e-14
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Bromochlorodifluoromethane",
+        "categories": [
+          "air",
+          "non-urban air or from high stacks"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1.095e-13
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Bromomethane",
+        "categories": [
+          "air",
+          "non-urban air or from high stacks"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1.6825e-16
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Bromotrifluoromethane",
+        "categories": [
+          "air",
+          "non-urban air or from high stacks"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 3.2894e-13
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Carbon dioxide, fossil",
+        "categories": [
+          "air",
+          "non-urban air or from high stacks"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 4.816e-17
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Carbon dioxide, from soil or biomass stock",
+        "categories": [
+          "air",
+          "non-urban air or from high stacks"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 4.816e-17
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Carbon dioxide, non-fossil",
+        "categories": [
+          "air",
+          "non-urban air or from high stacks"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 4.816e-17
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Carbon tetrachloride",
+        "categories": [
+          "air",
+          "non-urban air or from high stacks"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1.0453e-13
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Chlorodifluoromethane",
+        "categories": [
+          "air",
+          "non-urban air or from high stacks"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1.1414e-13
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Chloroform",
+        "categories": [
+          "air",
+          "non-urban air or from high stacks"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 2.01e-15
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Chlorotrifluoromethane",
+        "categories": [
+          "air",
+          "non-urban air or from high stacks"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 5.9528e-13
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Dichlorodifluoromethane",
+        "categories": [
+          "air",
+          "non-urban air or from high stacks"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 5.0437e-13
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Dichlorofluoromethane",
+        "categories": [
+          "air",
+          "non-urban air or from high stacks"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1.0061e-14
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Dichloromethane",
+        "categories": [
+          "air",
+          "non-urban air or from high stacks"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1.0594e-15
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Difluoromethane",
+        "categories": [
+          "air",
+          "non-urban air or from high stacks"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 4.2648e-14
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Dinitrogen monoxide",
+        "categories": [
+          "air",
+          "non-urban air or from high stacks"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1.3688e-14
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Ethylene dichloride",
+        "categories": [
+          "air",
+          "non-urban air or from high stacks"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 2.766e-16
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Hexafluoroethane",
+        "categories": [
+          "air",
+          "non-urban air or from high stacks"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 4.7332e-13
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Methane, bromo-, Halon 1001",
+        "categories": [
+          "air",
+          "non-urban air or from high stacks"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1.6825e-16
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Methane, bromochlorodifluoro-, Halon 1211",
+        "categories": [
+          "air",
+          "non-urban air or from high stacks"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1.095e-13
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Methane, bromotrifluoro-, Halon 1301",
+        "categories": [
+          "air",
+          "non-urban air or from high stacks"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 3.2894e-13
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Methane, fossil",
+        "categories": [
+          "air",
+          "non-urban air or from high stacks"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1.8955e-15
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Methane, from soil or biomass stock",
+        "categories": [
+          "air",
+          "non-urban air or from high stacks"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1.8955e-15
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Methane, non-fossil",
+        "categories": [
+          "air",
+          "non-urban air or from high stacks"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1.8955e-15
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Methylchloride",
+        "categories": [
+          "air",
+          "non-urban air or from high stacks"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 6.5032e-15
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Monochloropentafluoroethane",
+        "categories": [
+          "air",
+          "non-urban air or from high stacks"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 3.2839e-13
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Nitrogen fluoride",
+        "categories": [
+          "air",
+          "non-urban air or from high stacks"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 6.905e-13
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Pentafluoroethane",
+        "categories": [
+          "air",
+          "non-urban air or from high stacks"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1.9276e-13
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Sulfur hexafluoride",
+        "categories": [
+          "air",
+          "non-urban air or from high stacks"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 2.3355e-13
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Sulfuryl fluoride",
+        "categories": [
+          "air",
+          "non-urban air or from high stacks"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1.0124e-12
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Tetrafluoromethane",
+        "categories": [
+          "air",
+          "non-urban air or from high stacks"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 2.6795e-13
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Trichlorofluoromethane",
+        "categories": [
+          "air",
+          "non-urban air or from high stacks"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 2.5803e-13
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Trifluoromethane",
+        "categories": [
+          "air",
+          "non-urban air or from high stacks"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 5.8075e-13
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "1,1,1,2-Tetrafluoroethane",
+        "categories": [
+          "air",
+          "urban air close to ground"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 8.2764e-14
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "1,1,1-Trichloroethane",
+        "categories": [
+          "air",
+          "urban air close to ground"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 9.0953e-16
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "1,1,1-Trifluoroethane",
+        "categories": [
+          "air",
+          "urban air close to ground"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 2.6614e-13
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "1,1-Dichloro-1-fluoroethane",
+        "categories": [
+          "air",
+          "urban air close to ground"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 4.9653e-14
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "1,1-Difluoroethane",
+        "categories": [
+          "air",
+          "urban air close to ground"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 9.4157e-15
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "1,2-Dichloro-1,1,2,2-tetrafluoroethane",
+        "categories": [
+          "air",
+          "urban air close to ground"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 3.999e-13
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "1-Chloro-1,1-difluoroethane",
+        "categories": [
+          "air",
+          "urban air close to ground"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1.2615e-13
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "2,2-Dichloro-1,1,1-trifluoroethane",
+        "categories": [
+          "air",
+          "urban air close to ground"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 5.4452e-15
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "2-Chloro-1,1,1,2-tetrafluoroethane",
+        "categories": [
+          "air",
+          "urban air close to ground"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 3.3667e-14
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Bromochlorodifluoromethane",
+        "categories": [
+          "air",
+          "urban air close to ground"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1.095e-13
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Bromomethane",
+        "categories": [
+          "air",
+          "urban air close to ground"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1.6825e-16
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Bromotrifluoromethane",
+        "categories": [
+          "air",
+          "urban air close to ground"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 3.2894e-13
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Carbon dioxide, fossil",
+        "categories": [
+          "air",
+          "urban air close to ground"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 4.816e-17
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Carbon dioxide, from soil or biomass stock",
+        "categories": [
+          "air",
+          "urban air close to ground"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 4.816e-17
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Carbon dioxide, non-fossil",
+        "categories": [
+          "air",
+          "urban air close to ground"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 4.816e-17
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Carbon tetrachloride",
+        "categories": [
+          "air",
+          "urban air close to ground"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1.0453e-13
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Chlorodifluoromethane",
+        "categories": [
+          "air",
+          "urban air close to ground"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1.1414e-13
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Chloroform",
+        "categories": [
+          "air",
+          "urban air close to ground"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 2.01e-15
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Chlorotrifluoromethane",
+        "categories": [
+          "air",
+          "urban air close to ground"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 5.9528e-13
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Dichlorodifluoromethane",
+        "categories": [
+          "air",
+          "urban air close to ground"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 5.0437e-13
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Dichlorofluoromethane",
+        "categories": [
+          "air",
+          "urban air close to ground"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1.0061e-14
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Dichloromethane",
+        "categories": [
+          "air",
+          "urban air close to ground"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1.0594e-15
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Difluoromethane",
+        "categories": [
+          "air",
+          "urban air close to ground"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 4.2648e-14
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Dinitrogen monoxide",
+        "categories": [
+          "air",
+          "urban air close to ground"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1.3688e-14
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Ethylene dichloride",
+        "categories": [
+          "air",
+          "urban air close to ground"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 2.766e-16
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Hexafluoroethane",
+        "categories": [
+          "air",
+          "urban air close to ground"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 4.7332e-13
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Methane, bromo-, Halon 1001",
+        "categories": [
+          "air",
+          "urban air close to ground"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1.6825e-16
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Methane, bromochlorodifluoro-, Halon 1211",
+        "categories": [
+          "air",
+          "urban air close to ground"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1.095e-13
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Methane, bromotrifluoro-, Halon 1301",
+        "categories": [
+          "air",
+          "urban air close to ground"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 3.2894e-13
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Methane, fossil",
+        "categories": [
+          "air",
+          "urban air close to ground"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1.8955e-15
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Methane, from soil or biomass stock",
+        "categories": [
+          "air",
+          "urban air close to ground"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1.8955e-15
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Methane, non-fossil",
+        "categories": [
+          "air",
+          "urban air close to ground"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1.8955e-15
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Methylchloride",
+        "categories": [
+          "air",
+          "urban air close to ground"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 6.5032e-15
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Monochloropentafluoroethane",
+        "categories": [
+          "air",
+          "urban air close to ground"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 3.2839e-13
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Nitrogen fluoride",
+        "categories": [
+          "air",
+          "urban air close to ground"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 6.905e-13
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Pentafluoroethane",
+        "categories": [
+          "air",
+          "urban air close to ground"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1.9276e-13
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Sulfur hexafluoride",
+        "categories": [
+          "air",
+          "urban air close to ground"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 2.3355e-13
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Tetrafluoromethane",
+        "categories": [
+          "air",
+          "urban air close to ground"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 2.6795e-13
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Trichlorofluoromethane",
+        "categories": [
+          "air",
+          "urban air close to ground"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 2.5803e-13
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Trifluoromethane",
+        "categories": [
+          "air",
+          "urban air close to ground"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 5.8075e-13
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "1,1,1,2-Tetrafluoroethane",
+        "categories": [
+          "air"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 8.2764e-14
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "1,1,1-Trichloroethane",
+        "categories": [
+          "air"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 9.0953e-16
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "1,1,1-Trifluoroethane",
+        "categories": [
+          "air"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 2.6614e-13
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "1,1,2,2-Tetrafluoroethene",
+        "categories": [
+          "air"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 5.4515e-17
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "1,1-Dichloro-1-fluoroethane",
+        "categories": [
+          "air"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 4.9653e-14
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "1,1-Difluoroethane",
+        "categories": [
+          "air"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 9.4157e-15
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "1,2-Dichloro-1,1,2,2-tetrafluoroethane",
+        "categories": [
+          "air"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 3.999e-13
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "1-Chloro-1,1-difluoroethane",
+        "categories": [
+          "air"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1.2615e-13
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "2,2-Dichloro-1,1,1-trifluoroethane",
+        "categories": [
+          "air"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 5.4452e-15
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "2-Chloro-1,1,1,2-tetrafluoroethane",
+        "categories": [
+          "air"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 3.3667e-14
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Bromochlorodifluoromethane",
+        "categories": [
+          "air"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1.095e-13
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Bromomethane",
+        "categories": [
+          "air"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1.6825e-16
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Bromotrifluoromethane",
+        "categories": [
+          "air"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 3.2894e-13
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Carbon dioxide, fossil",
+        "categories": [
+          "air"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 4.816e-17
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Carbon dioxide, from soil or biomass stock",
+        "categories": [
+          "air"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 4.816e-17
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Carbon dioxide, non-fossil",
+        "categories": [
+          "air"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 4.816e-17
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Carbon tetrachloride",
+        "categories": [
+          "air"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1.0453e-13
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Chlorodifluoromethane",
+        "categories": [
+          "air"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1.1414e-13
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Chloroform",
+        "categories": [
+          "air"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 2.01e-15
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Chloromethane",
+        "categories": [
+          "air"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 6.5032e-15
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Chlorotrifluoromethane",
+        "categories": [
+          "air"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 5.9528e-13
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Dichlorodifluoromethane",
+        "categories": [
+          "air"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 5.0437e-13
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Dichlorofluoromethane",
+        "categories": [
+          "air"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1.0061e-14
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Dichloromethane",
+        "categories": [
+          "air"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1.0594e-15
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Difluoromethane",
+        "categories": [
+          "air"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 4.2648e-14
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Dinitrogen monoxide",
+        "categories": [
+          "air"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1.3688e-14
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Ethylene dichloride",
+        "categories": [
+          "air"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 2.766e-16
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Hexafluoroethane",
+        "categories": [
+          "air"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 4.7332e-13
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Methane, bromo-, Halon 1001",
+        "categories": [
+          "air"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1.6825e-16
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Methane, bromochlorodifluoro-, Halon 1211",
+        "categories": [
+          "air"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1.095e-13
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Methane, bromotrifluoro-, Halon 1301",
+        "categories": [
+          "air"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 3.2894e-13
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Methane, fossil",
+        "categories": [
+          "air"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1.8955e-15
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Methane, from soil or biomass stock",
+        "categories": [
+          "air"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1.8955e-15
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Methane, non-fossil",
+        "categories": [
+          "air"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1.8955e-15
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Methylchloride",
+        "categories": [
+          "air"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 6.5032e-15
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Monochloropentafluoroethane",
+        "categories": [
+          "air"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 3.2839e-13
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Nitrogen fluoride",
+        "categories": [
+          "air"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 6.905e-13
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Pentafluoroethane",
+        "categories": [
+          "air"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1.9276e-13
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Perfluoropentane",
+        "categories": [
+          "air"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 3.7012e-13
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Sulfur hexafluoride",
+        "categories": [
+          "air"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 2.3355e-13
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Sulfuryl fluoride",
+        "categories": [
+          "air"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1.0124e-12
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Tetrafluoromethane",
+        "categories": [
+          "air"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 2.6795e-13
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Trichlorofluoromethane",
+        "categories": [
+          "air"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 2.5803e-13
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Trifluoromethane",
+        "categories": [
+          "air"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 5.8075e-13
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Vinylidene fluoride",
+        "categories": [
+          "air"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": 1.703e-16
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Carbon dioxide, in air",
+        "categories": [
+          "natural resource",
+          "in air"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": -4.816e-17
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Carbon dioxide, non-fossil, resource correction",
+        "categories": [
+          "natural resource",
+          "in air"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": -4.816e-17
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Carbon dioxide, to soil or biomass stock",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": -4.816e-17
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Carbon dioxide, to soil or biomass stock",
+        "categories": [
+          "soil",
+          "forestry"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": -4.816e-17
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Carbon dioxide, to soil or biomass stock",
+        "categories": [
+          "soil",
+          "industrial"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": -4.816e-17
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Carbon dioxide, to soil or biomass stock",
+        "categories": [
+          "soil"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere"
+      },
+      "value": -4.816e-17
+    }
+  ]
+}

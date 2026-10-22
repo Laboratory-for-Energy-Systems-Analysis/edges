@@ -1,0 +1,2921 @@
+{
+  "name": "GLAM 1.0.2024.10 | EQ_Marine_Eutrophication | practitioner | Damage level | Marine | Aggregated | Average/Marginal |  | Global PDF*y",
+  "version": "1.0.2024.10",
+  "unit": "Global PDF*y",
+  "profile": "practitioner",
+  "description": "Estimates potential marine species loss caused by nitrogen enrichment and the resulting oxygen depletion.",
+  "source_url": "https://www.lifecycleinitiative.org/wp-content/uploads/2024/10/V1.0.2024.10.zip",
+  "source_workbook": "GLAM_template_EQ_Marine_Eutrophication.xlsx",
+  "source_sheet": "lciamethods_CF_GLAM",
+  "indicator": {
+    "LCIAMethod_type": "Damage level",
+    "LCIAMethod_realm": "Marine",
+    "Species": "Aggregated",
+    "LCIAMethod_mathematicalApproach": "Average/Marginal",
+    "Scenario": "",
+    "output_unit": "Global PDF*y"
+  },
+  "source_cf_units": [
+    "Global PDF*y/kg"
+  ],
+  "coverage": {
+    "retained_GLAM_only": 1260,
+    "mapped_to_ecoinvent": 360,
+    "resolved_alias_precedence": 169
+  },
+  "status": "converted",
+  "strategies": [
+    "map_exchanges",
+    "map_contained_locations",
+    "map_remaining_locations_to_global"
+  ],
+  "references": [
+    "Verones, Francesca; Barbarossa, Valerio; Boulay, Anne-Marie; Corella-Puertas, Elena; Douziech, Mélanie; Golsteijn, Laura; Hajjar, Carla; Hélias, Arnaud; Henderson, Andrew D.; Kuipers, Koen; Lebrun, Marion; Link, Andreas; Marques, Alexandra; Michelsen, Ottar; Núñez, Montse; Pierrat, Eléonore; Pfister, Stephan; Posthuma, Leo; Rosa, Francesca; Saadi, Nadim; Scherer, Laura; Stanford-Clark, Chloe; Owsianiak, Mikolaj; Zelm, Rosalie van; Vázquez-Rowe, Ian; Zhou, Jinhui; Dorber, Martin (2026). A global consensus life cycle impact assessment method - GLAM: impacts on ecosystem quality. The International Journal of Life Cycle Assessment, 31, 10, 181. https://doi.org/10.1007/s11367-026-02748-4",
+    "Cosme, Nuno; Jones, Miranda C.; Cheung, William W.L.; Larsen, Henrik Fred (2017). Spatial differentiation of marine eutrophication damage indicators based on species density. Ecological Indicators, 73, 676-685. https://doi.org/10.1016/j.ecolind.2016.10.026",
+    "Cosme, Nuno; Hauschild, Michael Zwicky (2016). Effect Factors for marine eutrophication in LCIA based on species sensitivity to hypoxia. Ecological Indicators, 69, 453-462. https://doi.org/10.1016/j.ecolind.2016.04.006",
+    "Cosme, Nuno; Koski, Marja; Hauschild, Michael Z. (2015). Exposure factors for marine eutrophication impacts assessment based on a mechanistic biological model. Ecological Modelling, 317, 50-63. https://doi.org/10.1016/j.ecolmodel.2015.09.005",
+    "Verones, Francesca; Kuipers, Koen; Núñez, Montserrat; Rosa, Francesca; Scherer, Laura; Marques, Alexandra; Michelsen, Ottar; Barbarossa, Valerio; Jaffe, Benjamin; Pfister, Stephan; Dorber, Martin (2022). Global extinction probabilities of terrestrial, freshwater, and marine species groups for use in Life Cycle Assessment. Ecological Indicators, 142, 109204, 109204. https://doi.org/10.1016/j.ecolind.2022.109204"
+  ],
+  "exchanges": [
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Nitrogen",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere",
+        "location": "AD"
+      },
+      "value": 4.6217e-14
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Nitrogen",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere",
+        "location": "AE"
+      },
+      "value": 8.4604e-22
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Nitrogen",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere",
+        "location": "AF"
+      },
+      "value": 1.3428e-14
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Nitrogen",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere",
+        "location": "AL"
+      },
+      "value": 7.883e-13
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Nitrogen",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere",
+        "location": "AM"
+      },
+      "value": 0.0
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Nitrogen",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere",
+        "location": "AO"
+      },
+      "value": 2.5031e-14
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Nitrogen",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere",
+        "location": "AR"
+      },
+      "value": 5.0261e-15
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Nitrogen",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere",
+        "location": "AT"
+      },
+      "value": 3.3148e-13
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Nitrogen",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere",
+        "location": "AU"
+      },
+      "value": 7.3892e-15
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Nitrogen",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere",
+        "location": "AZ"
+      },
+      "value": 0.0
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Nitrogen",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere",
+        "location": "BA"
+      },
+      "value": 6.1088e-14
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Nitrogen",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere",
+        "location": "BD"
+      },
+      "value": 1.5503e-12
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Nitrogen",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere",
+        "location": "BE"
+      },
+      "value": 1.3835e-16
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Nitrogen",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere",
+        "location": "BF"
+      },
+      "value": 5.4348e-15
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Nitrogen",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere",
+        "location": "BG"
+      },
+      "value": 6.2701e-16
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Nitrogen",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere",
+        "location": "BH"
+      },
+      "value": 0.0
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Nitrogen",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere",
+        "location": "BI"
+      },
+      "value": 7.6817e-15
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Nitrogen",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere",
+        "location": "BJ"
+      },
+      "value": 5.9154e-14
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Nitrogen",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere",
+        "location": "BN"
+      },
+      "value": 1.0762e-13
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Nitrogen",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere",
+        "location": "BO"
+      },
+      "value": 4.1067e-15
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Nitrogen",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere",
+        "location": "BR"
+      },
+      "value": 3.9894e-14
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Nitrogen",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere",
+        "location": "BS"
+      },
+      "value": 1.0809e-16
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Nitrogen",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere",
+        "location": "BT"
+      },
+      "value": 1.5508e-12
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Nitrogen",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere",
+        "location": "BW"
+      },
+      "value": 7.5927e-14
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Nitrogen",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere",
+        "location": "BY"
+      },
+      "value": 7.3144e-17
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Nitrogen",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere",
+        "location": "BZ"
+      },
+      "value": 8.5967e-14
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Nitrogen",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere",
+        "location": "CA"
+      },
+      "value": 1.658e-14
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Nitrogen",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere",
+        "location": "CD"
+      },
+      "value": 2.3103e-14
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Nitrogen",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere",
+        "location": "CF"
+      },
+      "value": 6.4685e-15
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Nitrogen",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere",
+        "location": "CG"
+      },
+      "value": 9.1869e-15
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Nitrogen",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere",
+        "location": "CH"
+      },
+      "value": 1.3835e-16
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Nitrogen",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere",
+        "location": "CI"
+      },
+      "value": 1.0882e-13
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Nitrogen",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere",
+        "location": "CL"
+      },
+      "value": 8.9759e-15
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Nitrogen",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere",
+        "location": "CM"
+      },
+      "value": 8.9005e-15
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Nitrogen",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere",
+        "location": "CN"
+      },
+      "value": 1.2001e-13
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Nitrogen",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere",
+        "location": "CO"
+      },
+      "value": 8.5491e-15
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Nitrogen",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere",
+        "location": "CR"
+      },
+      "value": 7.5805e-13
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Nitrogen",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere",
+        "location": "CU"
+      },
+      "value": 3.0546e-14
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Nitrogen",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere",
+        "location": "CY"
+      },
+      "value": 3.2191e-16
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Nitrogen",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere",
+        "location": "CZ"
+      },
+      "value": 1.5533e-17
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Nitrogen",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere",
+        "location": "DE"
+      },
+      "value": 9.3597e-14
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Nitrogen",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere",
+        "location": "DJ"
+      },
+      "value": 4.3597e-13
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Nitrogen",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere",
+        "location": "DK"
+      },
+      "value": 1.9875e-14
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Nitrogen",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere",
+        "location": "DO"
+      },
+      "value": 6.4773e-15
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Nitrogen",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere",
+        "location": "DZ"
+      },
+      "value": 4.8402e-17
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Nitrogen",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere",
+        "location": "EC"
+      },
+      "value": 2.0987e-14
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Nitrogen",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere",
+        "location": "EE"
+      },
+      "value": 9.0825e-15
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Nitrogen",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere",
+        "location": "EG"
+      },
+      "value": 1.4412e-16
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Nitrogen",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere",
+        "location": "EH"
+      },
+      "value": 9.0603e-20
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Nitrogen",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere",
+        "location": "ER"
+      },
+      "value": 5.6327e-14
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Nitrogen",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere",
+        "location": "ES"
+      },
+      "value": 3.8762e-14
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Nitrogen",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere",
+        "location": "ET"
+      },
+      "value": 2.0055e-13
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Nitrogen",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere",
+        "location": "FI"
+      },
+      "value": 3.9507e-13
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Nitrogen",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere",
+        "location": "FJ"
+      },
+      "value": 3.1245e-14
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Nitrogen",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere",
+        "location": "FR"
+      },
+      "value": 7.627e-15
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Nitrogen",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere",
+        "location": "GA"
+      },
+      "value": 1.736e-14
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Nitrogen",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere",
+        "location": "GB"
+      },
+      "value": 1.2834e-13
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Nitrogen",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere",
+        "location": "GE"
+      },
+      "value": 2.5088e-14
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Nitrogen",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere",
+        "location": "GH"
+      },
+      "value": 2.552e-14
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Nitrogen",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere",
+        "location": "GLO"
+      },
+      "value": 5.9045e-14
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Nitrogen",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere",
+        "location": "GM"
+      },
+      "value": 3.3393e-13
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Nitrogen",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere",
+        "location": "GN"
+      },
+      "value": 1.5006e-14
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Nitrogen",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere",
+        "location": "GQ"
+      },
+      "value": 1.9376e-13
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Nitrogen",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere",
+        "location": "GR"
+      },
+      "value": 2.6045e-14
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Nitrogen",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere",
+        "location": "GT"
+      },
+      "value": 5.1526e-14
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Nitrogen",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere",
+        "location": "GW"
+      },
+      "value": 9.0156e-14
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Nitrogen",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere",
+        "location": "GY"
+      },
+      "value": 4.743e-15
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Nitrogen",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere",
+        "location": "HN"
+      },
+      "value": 1.4551e-13
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Nitrogen",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere",
+        "location": "HR"
+      },
+      "value": 6.2726e-13
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Nitrogen",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere",
+        "location": "HT"
+      },
+      "value": 3.2757e-14
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Nitrogen",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere",
+        "location": "HU"
+      },
+      "value": 8.7662e-15
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Nitrogen",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere",
+        "location": "ID"
+      },
+      "value": 5.7247e-13
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Nitrogen",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere",
+        "location": "IE"
+      },
+      "value": 1.5287e-14
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Nitrogen",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere",
+        "location": "IL"
+      },
+      "value": 5.0031e-13
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Nitrogen",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere",
+        "location": "IN"
+      },
+      "value": 7.1075e-13
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Nitrogen",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere",
+        "location": "IQ"
+      },
+      "value": 3.8318e-14
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Nitrogen",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere",
+        "location": "IR"
+      },
+      "value": 8.7909e-16
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Nitrogen",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere",
+        "location": "IS"
+      },
+      "value": 1.7031e-14
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Nitrogen",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere",
+        "location": "IT"
+      },
+      "value": 2.3277e-13
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Nitrogen",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere",
+        "location": "JM"
+      },
+      "value": 3.3175e-14
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Nitrogen",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere",
+        "location": "JO"
+      },
+      "value": 4.544e-14
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Nitrogen",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere",
+        "location": "JP"
+      },
+      "value": 2.1171e-13
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Nitrogen",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere",
+        "location": "KE"
+      },
+      "value": 2.2063e-14
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Nitrogen",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere",
+        "location": "KG"
+      },
+      "value": 0.0
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Nitrogen",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere",
+        "location": "KH"
+      },
+      "value": 2.0016e-14
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Nitrogen",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere",
+        "location": "KP"
+      },
+      "value": 1.0889e-12
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Nitrogen",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere",
+        "location": "KR"
+      },
+      "value": 1.7786e-13
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Nitrogen",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere",
+        "location": "KW"
+      },
+      "value": 3.9667e-14
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Nitrogen",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere",
+        "location": "KZ"
+      },
+      "value": 1.2896e-23
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Nitrogen",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere",
+        "location": "LA"
+      },
+      "value": 9.7744e-14
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Nitrogen",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere",
+        "location": "LB"
+      },
+      "value": 1.9807e-13
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Nitrogen",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere",
+        "location": "LI"
+      },
+      "value": 1.3835e-16
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Nitrogen",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere",
+        "location": "LK"
+      },
+      "value": 3.7004e-13
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Nitrogen",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere",
+        "location": "LR"
+      },
+      "value": 1.9116e-13
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Nitrogen",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere",
+        "location": "LS"
+      },
+      "value": 7.8604e-15
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Nitrogen",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere",
+        "location": "LT"
+      },
+      "value": 1.3424e-16
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Nitrogen",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere",
+        "location": "LU"
+      },
+      "value": 1.3835e-16
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Nitrogen",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere",
+        "location": "LV"
+      },
+      "value": 1.5674e-16
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Nitrogen",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere",
+        "location": "LY"
+      },
+      "value": 7.3601e-15
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Nitrogen",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere",
+        "location": "MA"
+      },
+      "value": 6.7592e-17
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Nitrogen",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere",
+        "location": "MC"
+      },
+      "value": 3.063e-15
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Nitrogen",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere",
+        "location": "MD"
+      },
+      "value": 2.1139e-15
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Nitrogen",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere",
+        "location": "ME"
+      },
+      "value": 5.1492e-14
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Nitrogen",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere",
+        "location": "MG"
+      },
+      "value": 4.1798e-14
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Nitrogen",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere",
+        "location": "MK"
+      },
+      "value": 3.3581e-15
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Nitrogen",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere",
+        "location": "ML"
+      },
+      "value": 7.2997e-17
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Nitrogen",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere",
+        "location": "MM"
+      },
+      "value": 1.0252e-12
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Nitrogen",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere",
+        "location": "MN"
+      },
+      "value": 4.7852e-20
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Nitrogen",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere",
+        "location": "MR"
+      },
+      "value": 7.24e-17
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Nitrogen",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere",
+        "location": "MU"
+      },
+      "value": 0.0
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Nitrogen",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere",
+        "location": "MW"
+      },
+      "value": 2.6699e-14
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Nitrogen",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere",
+        "location": "MX"
+      },
+      "value": 2.9155e-14
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Nitrogen",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere",
+        "location": "MY"
+      },
+      "value": 1.7631e-12
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Nitrogen",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere",
+        "location": "MZ"
+      },
+      "value": 7.0085e-14
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Nitrogen",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere",
+        "location": "NA"
+      },
+      "value": 6.3758e-14
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Nitrogen",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere",
+        "location": "NE"
+      },
+      "value": 0.0
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Nitrogen",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere",
+        "location": "NG"
+      },
+      "value": 6.2064e-13
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Nitrogen",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere",
+        "location": "NI"
+      },
+      "value": 1.7494e-13
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Nitrogen",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere",
+        "location": "NL"
+      },
+      "value": 1.5006e-13
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Nitrogen",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere",
+        "location": "NO"
+      },
+      "value": 3.8054e-13
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Nitrogen",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere",
+        "location": "NP"
+      },
+      "value": 1.5508e-12
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Nitrogen",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere",
+        "location": "NZ"
+      },
+      "value": 1.522e-14
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Nitrogen",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere",
+        "location": "OM"
+      },
+      "value": 0.0
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Nitrogen",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere",
+        "location": "PA"
+      },
+      "value": 9.0603e-13
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Nitrogen",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere",
+        "location": "PE"
+      },
+      "value": 5.9946e-15
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Nitrogen",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere",
+        "location": "PG"
+      },
+      "value": 5.117e-16
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Nitrogen",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere",
+        "location": "PH"
+      },
+      "value": 1.8027e-12
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Nitrogen",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere",
+        "location": "PK"
+      },
+      "value": 2.2923e-14
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Nitrogen",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere",
+        "location": "PL"
+      },
+      "value": 4.6163e-15
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Nitrogen",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere",
+        "location": "PS-Gaza"
+      },
+      "value": 1.1309e-18
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Nitrogen",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere",
+        "location": "PS-West Bank"
+      },
+      "value": 5.0031e-13
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Nitrogen",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere",
+        "location": "PT"
+      },
+      "value": 3.9859e-14
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Nitrogen",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere",
+        "location": "PY"
+      },
+      "value": 1.7923e-16
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Nitrogen",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere",
+        "location": "QA"
+      },
+      "value": 0.0
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Nitrogen",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere",
+        "location": "RO"
+      },
+      "value": 5.8661e-16
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Nitrogen",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere",
+        "location": "RS"
+      },
+      "value": 3.3661e-15
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Nitrogen",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere",
+        "location": "RU"
+      },
+      "value": 1.1598e-14
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Nitrogen",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere",
+        "location": "RW"
+      },
+      "value": 7.6817e-15
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Nitrogen",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere",
+        "location": "SA"
+      },
+      "value": 4.4554e-16
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Nitrogen",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere",
+        "location": "SB"
+      },
+      "value": 0.0
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Nitrogen",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere",
+        "location": "SD"
+      },
+      "value": 6.3657e-15
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Nitrogen",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere",
+        "location": "SE"
+      },
+      "value": 7.3475e-13
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Nitrogen",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere",
+        "location": "SG"
+      },
+      "value": 7.0543e-14
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Nitrogen",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere",
+        "location": "SI"
+      },
+      "value": 1.7655e-12
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Nitrogen",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere",
+        "location": "SK"
+      },
+      "value": 2.053e-17
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Nitrogen",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere",
+        "location": "SL"
+      },
+      "value": 6.0397e-13
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Nitrogen",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere",
+        "location": "SM"
+      },
+      "value": 2.0467e-15
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Nitrogen",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere",
+        "location": "SN"
+      },
+      "value": 3.1932e-15
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Nitrogen",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere",
+        "location": "SO"
+      },
+      "value": 3.0949e-15
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Nitrogen",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere",
+        "location": "SR"
+      },
+      "value": 5.2069e-15
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Nitrogen",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere",
+        "location": "SS"
+      },
+      "value": 7.6817e-15
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Nitrogen",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere",
+        "location": "SV"
+      },
+      "value": 5.4427e-14
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Nitrogen",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere",
+        "location": "SY"
+      },
+      "value": 7.703e-14
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Nitrogen",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere",
+        "location": "SZ"
+      },
+      "value": 5.5421e-15
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Nitrogen",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere",
+        "location": "TD"
+      },
+      "value": 7.639e-17
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Nitrogen",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere",
+        "location": "TG"
+      },
+      "value": 5.9154e-14
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Nitrogen",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere",
+        "location": "TH"
+      },
+      "value": 1.6022e-13
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Nitrogen",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere",
+        "location": "TJ"
+      },
+      "value": 1.349e-14
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Nitrogen",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere",
+        "location": "TL"
+      },
+      "value": 4.1647e-13
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Nitrogen",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere",
+        "location": "TM"
+      },
+      "value": 0.0
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Nitrogen",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere",
+        "location": "TN"
+      },
+      "value": 2.2207e-18
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Nitrogen",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere",
+        "location": "TR"
+      },
+      "value": 1.358e-13
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Nitrogen",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere",
+        "location": "TT"
+      },
+      "value": 1.4211e-14
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Nitrogen",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere",
+        "location": "TZ"
+      },
+      "value": 2.6338e-14
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Nitrogen",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere",
+        "location": "UA"
+      },
+      "value": 5.9054e-15
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Nitrogen",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere",
+        "location": "UG"
+      },
+      "value": 1.8469e-16
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Nitrogen",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere",
+        "location": "US"
+      },
+      "value": 5.3167e-14
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Nitrogen",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere",
+        "location": "UY"
+      },
+      "value": 9.2336e-16
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Nitrogen",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere",
+        "location": "UZ"
+      },
+      "value": 0.0
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Nitrogen",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere",
+        "location": "VE"
+      },
+      "value": 8.4545e-15
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Nitrogen",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere",
+        "location": "VN"
+      },
+      "value": 1.4703e-13
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Nitrogen",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere",
+        "location": "VU"
+      },
+      "value": 1.2297e-14
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Nitrogen",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere",
+        "location": "YE"
+      },
+      "value": 2.568e-17
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Nitrogen",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere",
+        "location": "ZA"
+      },
+      "value": 5.5627e-15
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Nitrogen",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere",
+        "location": "ZM"
+      },
+      "value": 2.6699e-14
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Nitrogen",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere",
+        "location": "ZW"
+      },
+      "value": 7.7746e-14
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Nitrogen",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere",
+        "location": "xAB"
+      },
+      "value": 1.8469e-16
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Nitrogen",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere",
+        "location": "xAC"
+      },
+      "value": 6.6668e-14
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Nitrogen",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere",
+        "location": "xJK"
+      },
+      "value": 1.349e-14
+    },
+    {
+      "supplier": {
+        "matrix": "biosphere",
+        "name": "Nitrogen",
+        "categories": [
+          "soil",
+          "agricultural"
+        ],
+        "unit": "kilogram"
+      },
+      "consumer": {
+        "matrix": "technosphere",
+        "location": "xxx"
+      },
+      "value": 1.1772e-12
+    }
+  ]
+}
