@@ -246,6 +246,13 @@ def format_data(data: dict, weight: str) -> tuple[list, dict[Any, Any]]:
                 if field == "categories":
                     cf[category][field] = tuple(value)
 
+    domestic_pairs = data.get("domestic_pairs")
+    if "domestic_pairs" in data and domestic_pairs != "zero":
+        raise ValueError(
+            f"Invalid 'domestic_pairs' value {domestic_pairs!r}: the only "
+            "supported value is 'zero' (omit the key to keep the default behaviour)."
+        )
+
     check_presence_of_required_fields(data["exchanges"])
 
     formatted_exchanges = add_population_and_gdp_data(

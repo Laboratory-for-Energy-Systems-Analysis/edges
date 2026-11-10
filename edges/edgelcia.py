@@ -2152,7 +2152,50 @@ class EdgeLCIA:
 
         from .rete.adapter import map_exchanges_clips
 
-        return map_exchanges_clips(self)
+        result = map_exchanges_clips(self)
+        self._apply_domestic_pairs_zero()
+        return result
+
+    def _apply_domestic_pairs_zero(self) -> None:
+        """
+        Give domestic technosphere exchanges an explicit CF of 0.
+
+        Active only when the method declares ``"domestic_pairs": "zero"``. Runs right
+        after direct matching, on the exchanges whose non-location fields matched a CF
+        but whose location did not (``eligible_edges_for_next_tech``). Among those, an
+        exchange whose consumer is a country and whose supplier is that country or
+        lies inside it receives CF = 0. Zero entries are recorded in ``cfs_mapping``
+        so the exchange stays visible in results and is marked processed; leaving it
+        unmatched would let the later strategies assign a global average.
+        """
+        metadata = getattr(self, "method_metadata", None) or {}
+        if metadata.get("domestic_pairs") != "zero":
+            return
+
+        direction = "technosphere-technosphere"
+        candidates = self._filter_edges_by_location_rejects(
+            self.unprocessed_technosphere_edges, direction
+        )
+        for supplier_idx, consumer_idx in candidates:
+            consumer_info = self._get_consumer_info(consumer_idx)
+            consumer_loc = (consumer_info or {}).get("location")
+            supplier_info = self._get_supplier_info(supplier_idx, direction)
+            supplier_loc = supplier_info.get("location") if supplier_info else None
+            if not consumer_loc or not supplier_loc:
+                continue
+            if not self.geo.is_domestic_pair(supplier_loc, consumer_loc):
+                continue
+            add_cf_entry(
+                cfs_mapping=self.cfs_mapping,
+                supplier_info=dict(supplier_info),
+                consumer_info=dict(consumer_info),
+                direction=direction,
+                indices=[(supplier_idx, consumer_idx)],
+                value=0,
+                uncertainty=None,
+                seen_positions=self._seen_positions,
+            )
+        self._update_unprocessed_edges()
 
     def map_aggregate_locations(self) -> None:
         """

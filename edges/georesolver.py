@@ -231,6 +231,67 @@ class GeoResolver:
         # Deduplicate and enforce deterministic ordering
         return sorted(set(results))
 
+    def is_country(self, location: str) -> bool:
+        """
+        Return True when ``location`` is unambiguously a country, as written.
+
+        A country is a bare-string key of the Geomatcher topology (the ISO codes of
+        the constructive_geometries ``world`` namespace, never ``GLO``) that no
+        namespaced region shares a name with. Strings that only resolve to a country
+        through country_converter remapping (IAM ``CHN`` -> ``CN``, ``NAM`` -> ``NA``)
+        are not bare keys and so are not countries. Codes that are both a country and
+        a region name (IMAGE ``ME`` is also Montenegro) are ambiguous and are not
+        treated as countries: they keep the method's normal fallback.
+
+        :param location: Location code.
+        :return: Whether the code is an unambiguous country.
+        """
+        loc = self._normalize_location(get_str(location))
+        if not loc or loc == "GLO" or loc not in self.geo.topology:
+            return False
+        if not isinstance(loc, str):
+            return False
+        return self._resolve_geomatcher_keys(loc) == (loc,)
+
+    def is_domestic_pair(self, supplier_location: str, consumer_location: str) -> bool:
+        """
+        Return True when the consumer is a country and the supplier is that country
+        or lies inside it (e.g. ``US-TX`` -> ``US``).
+
+        Every geometry key the supplier string resolves to must lie inside the
+        consumer country, so IAM regions that merely map onto a country code
+        (``CHN`` -> ``CN``) are not domestic. Results are cached per pair.
+
+        :param supplier_location: Supplier location code.
+        :param consumer_location: Consumer location code.
+        :return: Whether the pair is domestic.
+        """
+        pair = (get_str(supplier_location), get_str(consumer_location))
+        cache = self.__dict__.setdefault("_domestic_pair_cache", {})
+        if pair not in cache:
+            cache[pair] = self._is_domestic_pair_uncached(*pair)
+        return cache[pair]
+
+    def _is_domestic_pair_uncached(self, supplier: str, consumer: str) -> bool:
+        if not self.is_country(consumer):
+            return False
+        supplier = self._normalize_location(supplier)
+        consumer = self._normalize_location(consumer)
+        if not supplier:
+            return False
+        if supplier == consumer:
+            return True
+        keys = self._resolve_geomatcher_keys(supplier)
+        if not keys:
+            return False
+        for key in keys:
+            try:
+                if consumer not in set(self.geo.within(key, include_self=True)):
+                    return False
+            except KeyError:
+                return False
+        return True
+
     @lru_cache(maxsize=2048)
     def _cached_lookup(
         self, location: str, containing: bool, exceptions: tuple | None = None
