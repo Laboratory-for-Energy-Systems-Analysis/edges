@@ -2,8 +2,24 @@
 
 ## Unreleased
 
+### Added
+
+- Added the opt-in method-level key `"domestic_pairs": "zero"`. A technosphere
+  exchange whose consumer is a country and whose supplier is that country, or
+  lies inside it (e.g. `US-TX` to `US`), now receives an explicit CF of 0 rather
+  than the global-average fallback. Region-to-region and cross-border pairs, and
+  methods without the key, are unchanged. Invalid values raise a `ValueError`.
+  Multi-country IAM regions (`CHN`, `NAM`, `Australia_NZ`) and the ambiguous
+  code `ME` are not treated as countries. Zeroed pairs are counted under `map_exchanges`
+  in `strategy_match_counts`.
+
 ### Fixed
 
+- GeoPolRisk country pairs: domestic exchanges (US to US, JP to JP, ...) no longer
+  receive a weighted global-average CF. In the method, only imports carry supply
+  risk, so `GeoPolRisk_paired_2024.json` now sets `"domestic_pairs": "zero"`
+  (issue #33), and its method `version` is bumped from 1.1 to 1.2. The
+  country-pair notebook under `dev/GeoPolRisk` writes the key too.
 - Corrected three carbon-origin aliases in the UBP builder and regenerated the
   Global warming and total methods from the verified source CSV. The rebuild
   adds 12 rules for biogenic methane and land-transformation CO₂/methane across
