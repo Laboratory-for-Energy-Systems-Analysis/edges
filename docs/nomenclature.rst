@@ -25,6 +25,31 @@ Each **exchange** defines a characterization factor applied to a flow
 from a **supplier** (typically a biosphere flow or technosphere process)
 to a **consumer** (typically a technosphere process).
 
+Optional method-level keys
+^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+- ``strategies`` *(list of str)*: mapping strategies applied by
+  ``apply_strategies()``, in order.
+- ``domestic_pairs`` *(str)*: set to ``"zero"`` for paired supplier/consumer
+  methods in which domestic supply carries no impact (e.g. GeoPolRisk, where only
+  imports contribute to supply risk). A technosphere exchange whose consumer is a
+  country and whose supplier is that country, or lies inside it (e.g. ``US-TX``
+  to ``US``), then receives an explicit CF of ``0`` instead of falling through to
+  the global-average fallback. Explicit CF rows for the pair still take
+  precedence, and region-to-region pairs (``RER`` to ``RER``) or cross-border pairs
+  are unchanged. The rule is applied at the end of ``map_exchanges()``. When the key is absent,
+  behaviour is unchanged. Any other value raises a ``ValueError``.
+
+  A consumer counts as a country only if its code, as written, is an ISO key of
+  the geography topology and no IAM region shares that name. Multi-country IAM
+  regions (``CHN``, ``NAM``, ``Australia_NZ``) are never treated as countries,
+  nor as domestic suppliers into a country, because they are not contained in it.
+  Single-country region names (e.g. gcam ``Brazil``, image ``JAP``, remind-eu
+  ``DEU``) are contained in their country and do count as domestic suppliers into
+  it. The only ambiguous country code is ``ME`` (Montenegro and the IMAGE "Middle
+  East" region); it is not treated as a country and keeps the normal fallback CF
+  instead of 0.
+
 Exchange Structure
 ------------------
 
