@@ -4,7 +4,7 @@ import sys
 sys.path.insert(0, os.path.abspath("../.."))
 
 project = "edges"
-release = "1.5.0"
+release = "1.5.1"
 version = ".".join(release.split(".")[:2])
 copyright = "2025"
 author = "Paul Scherrer Institute"

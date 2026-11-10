@@ -1,19 +1,6 @@
 # Changelog
 
-## 1.5.0 - 2026-10-22
-
-### Added
-
-- Bundled 32 curated GLAM practitioner methods from V1.0.2024.10.
-- Retained 195 native research variants separately under `dev/GLAM/methods_native/`.
-  Development links preserve existing practitioner audit paths without
-  duplicating the packaged files.
-
-### Changed
-
-- Skip exact supplier-name rules absent from the current inventory before
-  compiling CLIPS rules, reducing matching time and memory use while preserving
-  rule indices, wildcard matching, geographic near misses and remapping.
+## 1.5.1 - 2026-11-10
 
 ### Added
 
@@ -35,8 +22,37 @@
 - GeoPolRisk country pairs: domestic exchanges (US to US, JP to JP, ...) no longer
   receive a weighted global-average CF. In the method, only imports carry supply
   risk, so `GeoPolRisk_paired_2024.json` now sets `"domestic_pairs": "zero"`
-  (issue #33), and its method `version` is bumped from 1.1 to 1.2. The
-  country-pair notebook under `dev/GeoPolRisk` writes the key too.
+  (issue #33). Its method version advances from 1.1 to 1.3, and the country-pair
+  generator writes the same policy and version.
+
+### Validation
+
+- Added regression coverage for domestic and subnational suppliers, explicit
+  domestic overrides, all six shipped wildcard materials, non-location matching
+  constraints, uncertainty sampling and incremental `redo_lcia()` reuse.
+
+### Documentation
+
+- Documented the domestic-zero policy and its precedence in the README and
+  method schema. Updated the documentation release and software citation to 1.5.1.
+
+## 1.5.0 - 2026-10-22
+
+### Added
+
+- Bundled 32 curated GLAM practitioner methods from V1.0.2024.10.
+- Retained 195 native research variants separately under `dev/GLAM/methods_native/`.
+  Development links preserve existing practitioner audit paths without
+  duplicating the packaged files.
+
+### Changed
+
+- Skip exact supplier-name rules absent from the current inventory before
+  compiling CLIPS rules, reducing matching time and memory use while preserving
+  rule indices, wildcard matching, geographic near misses and remapping.
+
+### Fixed
+
 - Corrected three carbon-origin aliases in the UBP builder and regenerated the
   Global warming and total methods from the verified source CSV. The rebuild
   adds 12 rules for biogenic methane and land-transformation CO₂/methane across
