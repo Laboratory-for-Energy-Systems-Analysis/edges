@@ -42,6 +42,12 @@ Furthermore, ``edges`` supports the calculation of weighted CFs for both static 
 (e.g., RER) and dynamic regions (e.g., RoW), enhancing its ability to model complex 
 and region-specific scenarios.
 
+Paired methods can set `"domestic_pairs": "zero"` to assign zero to domestic
+technosphere exchanges whose consumer is a country and whose supplier lies entirely
+within it. Explicit CF rows with location criteria on both sides take precedence;
+rows with an omitted or `__ANY__` location on either side yield to domestic zeroing.
+Cross-border and region-to-region exchanges retain their usual matching behavior.
+
 ## Key Features
 
 * Edge-based CFs: Assign CFs specifically to individual exchanges between processes. 

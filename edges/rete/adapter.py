@@ -145,6 +145,20 @@ def map_exchanges_clips(lcia: "EdgeLCIA"):
     full_tech_matches: set[tuple[int, int]] = set()
     no_loc_bio_matches: set[tuple[int, int]] = set()
     no_loc_tech_matches: set[tuple[int, int]] = set()
+    # Defer geographic defaults for domestic pairs so they cannot claim an edge
+    # before an explicit pair rule or the domestic-zero policy. CLIPS still
+    # performs all non-location matching, including exclusions and units.
+    domestic_defaults = set()
+    if (getattr(lcia, "method_metadata", None) or {}).get("domestic_pairs") == "zero":
+        domestic_defaults = {
+            rid
+            for rid, rule in rules_by_id.items()
+            if not is_bio_rule_by_id[rid]
+            and any(
+                (rule.get(side) or {}).get("location") in (None, "__ANY__")
+                for side in ("supplier", "consumer")
+            )
+        }
 
     def _on_match(rule_id: int, supplier_id: int, consumer_id: int):
         rule = rules_by_id[rule_id]
@@ -153,6 +167,15 @@ def map_exchanges_clips(lcia: "EdgeLCIA"):
         direction = direction_by_id[rule_id]
 
         pair = (int(supplier_id), int(consumer_id))
+        if rule_id in domestic_defaults:
+            supplier = lcia._get_supplier_info(pair[0], direction)
+            consumer = lcia._get_consumer_info(pair[1])
+            if lcia.geo.is_domestic_pair(
+                (supplier or {}).get("location"),
+                (consumer or {}).get("location"),
+            ):
+                no_loc_tech_matches.add(pair)
+                return
         if is_bio_rule_by_id[rule_id]:
             full_bio_matches.add(pair)
         else:

@@ -1,7 +1,7 @@
 {
   "name": "GeoPolRisk - country pairs",
   "unit": "kg copper-eq.",
-  "version": "1.2",
+  "version": "1.3",
   "domestic_pairs": "zero",
   "strategies": [
     "map_exchanges",

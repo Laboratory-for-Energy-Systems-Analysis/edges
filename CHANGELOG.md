@@ -28,6 +28,10 @@
 
 ### Fixed
 
+- Domestic zeroing now takes precedence over CF rows with omitted or `__ANY__`
+  locations, including the six geographic defaults in GeoPolRisk. Explicit
+  location-pair rules still take precedence, and cross-border CFs are unchanged.
+  The paired GeoPolRisk method and its generator now use method version 1.3.
 - GeoPolRisk country pairs: domestic exchanges (US to US, JP to JP, ...) no longer
   receive a weighted global-average CF. In the method, only imports carry supply
   risk, so `GeoPolRisk_paired_2024.json` now sets `"domestic_pairs": "zero"`

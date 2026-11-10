@@ -9,8 +9,11 @@ CF of 0 instead. Region-to-region pairs and cross-border pairs are untouched.
 """
 
 import copy
+import json
+from pathlib import Path
 
 import bw2data
+import numpy as np
 import pytest
 from bw2data import __version__
 from packaging.version import Version
@@ -69,6 +72,17 @@ ACTIVITIES = [
 GLOBAL_AVERAGE = 0.5 * 0.2 + 0.5 * 0.003
 
 
+def _shipped_wildcards():
+    path = Path(__file__).parents[1] / "edges/data/GeoPolRisk_paired_2024.json"
+    method = json.loads(path.read_text())
+    method["exchanges"] = [
+        row
+        for row in method["exchanges"]
+        if row["supplier"].get("location") == "__ANY__"
+    ]
+    return method
+
+
 @pytest.fixture(scope="module", autouse=True)
 def domestic_db():
     bw2data.projects.set_current(PROJECT)
@@ -89,6 +103,35 @@ def domestic_db():
             "reference product": product,
             "exchanges": exchanges,
         }
+    for i, row in enumerate(_shipped_wildcards()["exchanges"]):
+        supplier = row["supplier"]
+        code = f"GPR_{i}"
+        name = supplier["name"]
+        data[(DB_NAME, code)] = {
+            "name": supplier["reference product"] if name == "__ANY__" else name,
+            "reference product": supplier["reference product"],
+            "unit": "kg",
+            "location": "US",
+            "exchanges": [
+                {"amount": 1, "type": "production", "input": (DB_NAME, code)}
+            ],
+        }
+        for location in ("US", "CA"):
+            consumer_code = f"GPR_consumer_{i}_{location}"
+            data[(DB_NAME, consumer_code)] = {
+                "name": consumer_code,
+                "reference product": "electricity",
+                "unit": "kg",
+                "location": location,
+                "exchanges": [
+                    {
+                        "amount": 1,
+                        "type": "production",
+                        "input": (DB_NAME, consumer_code),
+                    },
+                    {"amount": 1, "type": "technosphere", "input": (DB_NAME, code)},
+                ],
+            }
     bw2data.Database(DB_NAME).write(data)
     yield
     del bw2data.databases[DB_NAME]
@@ -236,3 +279,102 @@ def test_domestic_and_import_suppliers_into_one_consumer_are_decided_separately(
     cfs = _cfs(consumer, _method(domestic_pairs="zero"))
     assert cfs[("US-TX", "US")] == 0.0
     assert cfs[("BR", "US")] == pytest.approx(GLOBAL_AVERAGE)
+
+
+@pytest.mark.parametrize(
+    "supplier_loc,consumer_loc",
+    [
+        ("__ANY__", "__ANY__"),
+        (None, None),
+        ("US", "__ANY__"),
+        ("__ANY__", "US"),
+        ("US", None),
+        (None, "US"),
+    ],
+)
+def test_domestic_zero_overrides_geographic_defaults(supplier_loc, consumer_loc):
+    row = _row(supplier_loc, consumer_loc, 9)
+    for side in ("supplier", "consumer"):
+        if row[side]["location"] is None:
+            del row[side]["location"]
+    method = _method(domestic_pairs="zero", exchanges=[row])
+    assert _cfs("EL_US", method)[("US", "US")] == 0
+    # An explicit pair must win even in the presence of the default.
+    method["exchanges"].append(_row("US", "US", 0.5))
+    assert _cfs("EL_US", method)[("US", "US")] == pytest.approx(0.5)
+
+
+@pytest.mark.parametrize("index", range(6))
+def test_shipped_geopolrisk_defaults_preserve_imports_but_zero_domestic(index):
+    method = _shipped_wildcards()
+    expected = method["exchanges"][index]["value"]
+    for location, value in (("US", 0), ("CA", expected)):
+        act = bw2data.get_activity((DB_NAME, f"GPR_consumer_{index}_{location}"))
+        lca = EdgeLCIA(demand={act: 1}, method=copy.deepcopy(method))
+        lca.lci()
+        lca.apply_strategies()
+        lca.evaluate_cfs()
+        lca.lcia()
+        assert lca.score == pytest.approx(value)
+        assert len(lca.cfs_mapping) == 1
+
+
+def test_wildcard_domestic_cf_is_unchanged_without_flag():
+    cfs = _cfs("EL_US", _method(exchanges=[_row("__ANY__", "__ANY__", 9)]))
+    assert set(cfs.values()) == {9}
+
+
+@pytest.mark.parametrize(
+    "criterion",
+    [
+        {"unit": "megajoule"},
+        {"excludes": ["NG_"]},
+    ],
+)
+def test_domestic_defaults_still_require_non_location_match(criterion):
+    row = _row("__ANY__", "__ANY__", 9)
+    row["supplier"].update(criterion)
+    assert _cfs("EL_US", _method(domestic_pairs="zero", exchanges=[row])) == {}
+
+
+@pytest.mark.parametrize("stochastic", [False, True])
+def test_domestic_wildcards_keep_zero_on_redo_and_uncertainty(stochastic):
+    row = _row("__ANY__", "__ANY__", 9)
+    row["uncertainty"] = {
+        "distribution": "uniform",
+        "parameters": {"minimum": 8, "maximum": 10},
+    }
+    method = _method(domestic_pairs="zero", exchanges=[row])
+    act = bw2data.get_activity((DB_NAME, "EL_JP"))
+    lca = EdgeLCIA(
+        demand={act: 1},
+        method=method,
+        use_distributions=stochastic,
+        iterations=5,
+        random_seed=42,
+    )
+    lca.lci()
+    lca.apply_strategies()
+    lca.evaluate_cfs()
+    lca.lcia()
+    assert np.all(np.asarray(lca.score) == 0)
+    domestic = bw2data.get_activity((DB_NAME, "EL_US"))
+    lca.redo_lcia(demand={domestic: 1})
+    assert np.all(np.asarray(lca.score) == 0)
+    mixed = bw2data.get_activity((DB_NAME, "EL_US_MIXED"))
+    lca.redo_lcia(demand={mixed: 1})
+    fresh = EdgeLCIA(
+        demand={mixed: 1},
+        method=copy.deepcopy(method),
+        use_distributions=stochastic,
+        iterations=5,
+        random_seed=42,
+    )
+    fresh.lci()
+    fresh.apply_strategies()
+    fresh.evaluate_cfs()
+    fresh.lcia()
+    np.testing.assert_allclose(lca.score, fresh.score)
+    assert np.all(np.asarray(lca.score) > 0)
+    positions = [(e["direction"], p) for e in lca.cfs_mapping for p in e["positions"]]
+    assert len(positions) == len(set(positions))

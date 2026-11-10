@@ -35,8 +35,10 @@ Optional method-level keys
   imports contribute to supply risk). A technosphere exchange whose consumer is a
   country and whose supplier is that country, or lies inside it (e.g. ``US-TX``
   to ``US``), then receives an explicit CF of ``0`` instead of falling through to
-  the global-average fallback. Explicit CF rows for the pair still take
-  precedence, and region-to-region pairs (``RER`` to ``RER``) or cross-border pairs
+  the global-average fallback. Explicit CF rows with location criteria on both
+  sides still take precedence. Rows with an omitted or ``__ANY__`` location on
+  either side yield to the domestic-zero rule. Region-to-region pairs
+  (``RER`` to ``RER``) or cross-border pairs
   are unchanged. The rule is applied at the end of ``map_exchanges()``. When the key is absent,
   behaviour is unchanged. Any other value raises a ``ValueError``.
 

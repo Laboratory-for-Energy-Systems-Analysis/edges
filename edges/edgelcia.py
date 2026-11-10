@@ -1850,8 +1850,9 @@ class EdgeLCIA:
         Restrict fallback strategies to edges explicitly rejected by direct matching.
 
         `map_exchanges()` populates `eligible_edges_for_next_*` with location-mismatch
-        candidates. An empty set means "nothing should enter later location fallback
-        stages", while `None` means the direct matcher hasn't provided a restriction.
+        candidates and deferred domestic geographic defaults. An empty set means
+        "nothing should enter later location fallback stages", while `None` means
+        the direct matcher hasn't provided a restriction.
         """
 
         attr = (
@@ -2162,7 +2163,8 @@ class EdgeLCIA:
 
         Active only when the method declares ``"domestic_pairs": "zero"``. Runs right
         after direct matching, on the exchanges whose non-location fields matched a CF
-        but whose location did not (``eligible_edges_for_next_tech``). Among those, an
+        but whose location did not, or whose geographic default was deferred
+        (``eligible_edges_for_next_tech``). Among those, an
         exchange whose consumer is a country and whose supplier is that country or
         lies inside it receives CF = 0. Zero entries are recorded in ``cfs_mapping``
         so the exchange stays visible in results and is marked processed; leaving it
