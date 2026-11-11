@@ -27,7 +27,7 @@ requirements:
     - python >=3.10, <3.13
     - pip
     - numpy
-    - pandas
+    - pandas <3
     - scipy
     - pyyaml
     - country_converter>=1.3.1

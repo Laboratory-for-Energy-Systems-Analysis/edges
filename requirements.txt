@@ -1,5 +1,6 @@
 numpy<2.4
-pandas
+# country_converter 1.3.2 cannot construct ISO2 regexes with pandas 3.
+pandas<3
 scipy
 pyyaml
 country_converter>=1.3.1

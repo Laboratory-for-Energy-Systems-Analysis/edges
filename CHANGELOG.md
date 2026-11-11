@@ -1,5 +1,18 @@
 # Changelog
 
+## 1.5.2 - 2026-11-11
+
+### Fixed
+
+- Constrain pandas to versions below 3 in Python and conda packages. With
+  country_converter 1.3.2, pandas 3 turns an ISO2 entry into a missing value,
+  causing geography resolution to fail while constructing regular expressions.
+- Constrain the testing extra to pytest below 9.2 while pytest-forked cannot
+  serialize its new NodeId report objects. The incompatible combination caused
+  every forked test to exit with status 3, blocking the 1.5.1 publishing workflow.
+- Install the testing extra in CI so local and CI test dependency constraints
+  stay aligned. Retain subprocess isolation on Unix and native Windows testing.
+
 ## 1.5.1 - 2026-11-10
 
 ### Added

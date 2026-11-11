@@ -62,8 +62,7 @@ jobs:
           python -m pip install -U pip
           python -c "import os, subprocess, sys; stack=os.environ['BW_STACK']; pkgs=['brightway25'] if stack == 'bw25' else ['numpy<2.0.0', 'bw2calc<2.0.0', 'bw2data<4.0.0', 'bw2io<0.9.0', 'bw2analyzer<0.11']; subprocess.check_call([sys.executable, '-m', 'pip', 'install', *pkgs])"
           pip install -r requirements.txt
-          pip install pytest pytest-forked
-          pip install -e . --verbose
+          pip install -e ".[testing]" --verbose
 
       - name: Set up test database
         env:
