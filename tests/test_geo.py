@@ -145,3 +145,26 @@ def test_georesolver_skips_unresolvable_placeholders_without_output(capsys):
     captured = capsys.readouterr()
     assert captured.out == ""
     assert captured.err == ""
+
+
+def test_missing_geographies_entries_are_all_strings():
+    """YAML 1.1 reads an unquoted NO (Norway) as boolean False."""
+    from edges.utils import load_missing_geographies
+
+    regions = load_missing_geographies()
+    bad = {
+        (region, repr(member))
+        for region, members in regions.items()
+        for member in members
+        if not isinstance(member, str)
+    }
+    assert not bad
+    assert all(isinstance(region, str) for region in regions)
+    assert "NO" in regions["Europe"]
+
+
+def test_georesolver_europe_includes_norway():
+    geo = GeoResolver(weights={"NO": 1.0, "SE": 1.0})
+    result = geo.resolve("Europe", containing=False)
+    assert "NO" in result
+    assert "SE" in result
